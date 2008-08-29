@@ -1,0 +1,63 @@
+#!/bin/bash
+
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Server'
+RMOD_NAME='Samba'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Windows file sharing system'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+
+#TEMP
+MIRROIR="A"
+DISPLAY=localhost:5.0
+
+#VARIABLES
+
+NTOP_PWD="cooperation"
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+
+DEBIAN_FRONTEND="dialog"
+apt-get install --assume-yes --force-yes samba
+
+#samba config
+
+mv /etc/samba /var/share/etc/
+
+ln -s /var/share/etc/samba /etc/samba
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+
+echo "I: Install Samba"
+INSTALL
+echo "I: End of install Samba"

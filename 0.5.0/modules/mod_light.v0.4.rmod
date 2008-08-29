@@ -1,0 +1,28 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='OS'
+RMOD_NAME='light OS'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Installs'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+
+
+
+apt-get remove --assume-yes --force-yes language* 
+
+
+
+apt-get install --assume-yes --force-yes deborphan
+
+
+
+apt-get autoremove --purge --assume-yes --force-yes openoffice.org* 
+apt-get autoremove --purge --assume-yes --force-yes `deborphan --guess-all`
+

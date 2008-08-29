@@ -1,0 +1,12 @@
+Cooperation-iws - Intranet Nomad Web Server creator
+	(c) Cooperation-iws Team, 2008
+	http://cooperation-iws.gensys-net.eu
+
+CREDITS:
+
+	oliv - development
+	
+		
+	Cooperation-iws is based on:
+		Frafa Live USB Scripts: http://frafa.free.fr/dotclear
+		Reconstructor Live CD scripts: http://reconstructor.aperantis.com

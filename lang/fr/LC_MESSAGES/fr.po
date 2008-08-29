@@ -1,0 +1,2377 @@
+# French translations for Reconstructor package.
+# Copyright (C) 2006 Reconstructor Project
+# This file is distributed under the same license as the Reconstructor package.
+# Evan Hazlett <ejhazlett@gmail.com>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Reconstructor 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-12-28 15:07+EST\n"
+"PO-Revision-Date: 2006-10-11 17:36+0100\n"
+"Last-Translator: \n"
+"Language-Team: French <denis.devedjian@gmail.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: glade/gui.glade.h:1
+msgid ""
+"<b>** Warning: </b> This will launch an interactive editor which will add a "
+"user to your current system.  This is a <b>beta</b> feature.  Use at your "
+"own risk..."
+msgstr ""
+"<b>** Attention: </b> Ceci va lancer un editeur intéractif qui créera un "
+"compte d'utilisateur supplémentaire sur votre système actuel. Cette "
+"fonctionnalité est en cours de développement. Aucune garantie n'est assurée "
+"concernant son fonctionnement."
+
+#: glade/gui.glade.h:2
+msgid ""
+"<b>**</b> This will clear <b><i>all</i></b> existing interactive settings, "
+"including removing the user account."
+msgstr ""
+"<b>**</b> Ceci va effacer <b><i>tous</i></b> les paramètres intéractifs "
+"existants, y compris le compte d'utilisateur."
+
+#: glade/gui.glade.h:3
+#, fuzzy
+msgid ""
+"<b>Alternate CD</b>\n"
+"\n"
+"This will create a custom cd working directory. \n"
+"If the boxes are checked, directories will be overwritten.\n"
+"\n"
+"<b>To keep existing working directories, uncheck the boxes.</b>\n"
+msgstr ""
+"\n"
+"Ceci va créer un répertoire de travail personnalisé pour la création de "
+"CD. \n"
+"Si les cases sont cochées, les répertoires existants seront écrasés.\n"
+"\n"
+"<b>Pour conserver les répertoires de travail existants, décochez les cases.</"
+"b>\n"
+"\n"
+
+#: glade/gui.glade.h:10
+msgid "<b>Customization</b> (Optional)"
+msgstr "<b>Personnalisation</b> (Optionnel)"
+
+#: glade/gui.glade.h:11
+#, fuzzy
+msgid "<b>Live CD</b>"
+
+msgstr ""
+"<b>Live CD</b>\n"
+"\n"
+"Ceci va créer un répertoire de travail personnalisé pour la création de "
+"CD. \n"
+"Si les cases sont cochées, les répertoires existants seront écrasés.\n"
+"\n"
+"<b>Pour conserver les répertoires de travail existants, décochez les cases.</b>"
+
+
+#: glade/gui.glade.h:18
+#, fuzzy
+msgid ""
+"<b>Note:</b> <b>Dapper</b>: The image must be a .png and must be 640x400 and "
+"16 colors (indexed). <b>Edgy</b>: The image must be a .png and no more than "
+"256 colors (indexed). Otherwise, the bootsplash will be black."
+msgstr ""
+"<b>Note:</b> Cette image <b>doit</b> être un fichier .png et <b>doit</b> "
+"mesurer 640x400 pixels et être créée en 16 colours (indexée). Sinon, l'écran "
+"de démarrage restera noir."
+
+#: glade/gui.glade.h:19
+msgid ""
+"<b>Note:</b> This will replace <b>both</b> the Live CD\n"
+"splash and the installed usplash image."
+msgstr ""
+"<b>Note:</b> Ceci va remplacer <b>à la fois</b> le splash du CD amorçable\n"
+"et l'image usplash installée."
+
+#: glade/gui.glade.h:21
+msgid "<b>Packages</b>"
+msgstr ""
+
+#: glade/gui.glade.h:22
+#, fuzzy
+msgid "<b>Select components to build.</b>"
+msgstr "<b>Sélectionnez les composants en reconstruire.</b>"
+
+#: glade/gui.glade.h:23
+msgid ""
+"<b>Warning:</b> These are advanced settings for system optimization. Use "
+"with caution."
+msgstr ""
+"<b>Attention:</b> Ces réglages avancés touchent à l'optimisation du système. "
+"A utiliser avec précaution."
+
+#: glade/gui.glade.h:24
+msgid "Add"
+msgstr "Ajouter"
+
+#: glade/gui.glade.h:25
+msgid "Add module to library"
+msgstr "Ajouter le module à la bibliothèque"
+
+#: glade/gui.glade.h:26
+msgid "Allow Root Login"
+msgstr "Permettre l'identification en root (administrateur)"
+
+#: glade/gui.glade.h:27
+#, fuzzy
+msgid "Alt. Build"
+msgstr "Construire"
+
+#: glade/gui.glade.h:28
+#, fuzzy
+msgid "Alt. Packages"
+msgstr "Selectionnez le paquet d'icones"
+
+#: glade/gui.glade.h:29
+#, fuzzy
+msgid "Alt. Setup"
+msgstr "Installation"
+
+#: glade/gui.glade.h:30
+msgid "Alternate (Install CD)"
+msgstr ""
+
+#: glade/gui.glade.h:31
+msgid "Alternate Base:"
+msgstr ""
+
+#: glade/gui.glade.h:32
+#, fuzzy
+msgid ""
+"Alternate CD\n"
+"ISO Filename:"
+msgstr "Nom du fichier de l'image ISO du CD amorçable"
+
+#: glade/gui.glade.h:34
+#, fuzzy
+msgid "Alternate CD (ISO)"
+msgstr "Sélectionnez l'image ISO du CD amorçable"
+
+#: glade/gui.glade.h:35
+#, fuzzy
+msgid "Alternate CD (ISO) Filename"
+msgstr "Nom du fichier de l'image ISO du CD amorçable"
+
+#: glade/gui.glade.h:36
+msgid "Application Font:"
+msgstr "Police des applications:"
+
+#: glade/gui.glade.h:37
+msgid "Apply"
+msgstr "Appliquer"
+
+#: glade/gui.glade.h:38
+#, fuzzy
+msgid "Apply Changes"
+msgstr "Modification des logiciels..."
+
+#: glade/gui.glade.h:39
+msgid "Apply Software Changes..."
+msgstr "Modification des logiciels..."
+
+#: glade/gui.glade.h:40
+msgid "Apt"
+msgstr "Apt"
+
+#: glade/gui.glade.h:41 reconstructor.py:4112
+msgid "Architecture:"
+msgstr "Architecture:"
+
+#: glade/gui.glade.h:42
+msgid "Back"
+msgstr "Précédent"
+
+#: glade/gui.glade.h:43
+msgid "Background Color:"
+msgstr "Couleur de fond:"
+
+#: glade/gui.glade.h:44
+msgid "Bluetooth Subsystem"
+msgstr "Sous-système Bluetooth"
+
+#: glade/gui.glade.h:45
+msgid "Boot Screen"
+msgstr "Ecran de démarrage"
+
+#: glade/gui.glade.h:46
+msgid "Burn ISO"
+msgstr "Graver l'ISO"
+
+#: glade/gui.glade.h:47
+msgid "Clear"
+msgstr "Effacer"
+
+#: glade/gui.glade.h:48
+msgid "Clear Boot Modules"
+msgstr "Annuler les Modules liés au Boot"
+
+#: glade/gui.glade.h:49
+msgid "Common Unix Printing System"
+msgstr "Système d'impression Unix (CUPS)"
+
+#: glade/gui.glade.h:50
+msgid "Create Initial Ramdisk (initrd) Directory (must do at least once)"
+msgstr "Créer le répertoire initrd (ceci doit être fait au moins une fois)"
+
+#: glade/gui.glade.h:51
+msgid "Create Remaster Directory (must do at least once)"
+msgstr ""
+"Créer le répertoire de recompilation (ceci doit être fait au moins une fois)"
+
+#: glade/gui.glade.h:52
+msgid "Create Root(custom) Directory (must do at least once)"
+msgstr ""
+"Créer un répertoire racine personnalisé (ceci doit être fait au moins une "
+"fois)"
+
+#: glade/gui.glade.h:53
+#, fuzzy
+msgid "Create the Alternate CD ISO"
+msgstr "Sélectionnez l'image ISO du CD amorçable"
+
+#: glade/gui.glade.h:54
+msgid "Create the Live CD ISO"
+msgstr "Créer l'image ISO du CD amorçable"
+
+#: glade/gui.glade.h:55
+msgid ""
+"Create the initial ramdisk (initrd) (MUST do if customized boot splash.)"
+msgstr ""
+"Créer l'initrd (Ceci DOIT être fait si vous avez personnalisé l'écran de "
+"démarrage.)"
+
+#: glade/gui.glade.h:56
+msgid ""
+"Create the live cd squash root (Note: You MUST select this if you have made "
+"customizations.)"
+msgstr ""
+"Créer le répertoire squash du CD amorçable (Note: Ceci DOIT être selectionné "
+"si vous avez apporté des modifications.)"
+
+#: glade/gui.glade.h:57
+msgid "Custom Repositories (one repository per line)"
+msgstr "Dépôts personnalisés (un dépôt par ligne)"
+
+#: glade/gui.glade.h:58
+msgid "Custom apt-get (install):"
+msgstr "apt-get personnalisé (installer) :"
+
+#: glade/gui.glade.h:59
+msgid "Custom apt-get (remove):"
+msgstr "apt-get personnalisé (désinstaller):"
+
+#: glade/gui.glade.h:60
+msgid "Deletes all interactive settings"
+msgstr "Effacer tous les réglages intéractifs"
+
+#: glade/gui.glade.h:61
+#, fuzzy
+msgid "Description (title) of Alt CD"
+msgstr "Description (titre) du CD amorçable"
+
+#: glade/gui.glade.h:62
+msgid "Description (title) of Live CD"
+msgstr "Description (titre) du CD amorçable"
+
+#: glade/gui.glade.h:63
+msgid "Description:"
+msgstr "Description:"
+
+#: glade/gui.glade.h:64
+msgid "Desktop"
+msgstr "Bureau"
+
+#: glade/gui.glade.h:65
+#, fuzzy
+msgid "Desktop (Live CD)"
+msgstr "Fichiers du CD amorçable"
+
+#: glade/gui.glade.h:66
+msgid "Desktop Font:"
+msgstr "Police sur le bureau:"
+
+#: glade/gui.glade.h:67
+msgid "Disc Type"
+msgstr ""
+
+#: glade/gui.glade.h:68
+msgid "Document Font:"
+msgstr "Police de caractère des documents:"
+
+#: glade/gui.glade.h:69
+msgid "Edit"
+msgstr "Modifier"
+
+#: glade/gui.glade.h:70
+msgid "Enable"
+msgstr "Activer"
+
+#: glade/gui.glade.h:71
+msgid "Enable XDMCP (hostname chooser)"
+msgstr "Activer XDMCP (choix de la machine distante)"
+
+#: glade/gui.glade.h:72
+msgid "Estimated ISO Size:"
+msgstr "Taille estimée de l'ISO:"
+
+#: glade/gui.glade.h:73
+msgid "Festival Speech Synthesis System"
+msgstr "Système de synthèse vocale Festival"
+
+#: glade/gui.glade.h:74
+msgid "File synchronization"
+msgstr "Synchronisation de fichiers"
+
+#: glade/gui.glade.h:75
+msgid "Filename:"
+msgstr "Nom du fichier:"
+
+#: glade/gui.glade.h:76
+msgid "Files from Live CD"
+msgstr "Fichiers du CD amorçable"
+
+#: glade/gui.glade.h:77
+msgid "Finish"
+msgstr "Terminer"
+
+#: glade/gui.glade.h:78
+msgid "Fixed Font:"
+msgstr "Police à taille fixe:"
+
+#: glade/gui.glade.h:79
+#, fuzzy
+msgid ""
+"For comments, questions, etc. contact us at http://reconstructor.aperantis."
+"com"
+msgstr ""
+"Contactez moi pour toute information, commentaires, etc.http://reconstructor."
+"aperantis.com"
+
+#: glade/gui.glade.h:80
+#, fuzzy
+msgid "For customizing Initrd"
+msgstr "Pour personnaliser initrd (Optionnel)"
+
+#: glade/gui.glade.h:81
+msgid "GDM Theme:"
+msgstr "Thème GDM:"
+
+#: glade/gui.glade.h:82
+msgid "Generate"
+msgstr "Générer"
+
+#: glade/gui.glade.h:83
+msgid "Generate Usplash Library (.so) from .png"
+msgstr "Générer la bibliothèque Usplash (.so) à partir du .png"
+
+#: glade/gui.glade.h:84
+msgid "Gnome"
+msgstr "Gnome"
+
+#: glade/gui.glade.h:85
+msgid "HP Linux Printing"
+msgstr "Impression Linux HP"
+
+#: glade/gui.glade.h:86
+msgid "Hostname:"
+msgstr "Nom de la machine:"
+
+#: glade/gui.glade.h:87
+msgid "Icons:"
+msgstr "Icones:"
+
+#: glade/gui.glade.h:88
+msgid "Import GDM Theme"
+msgstr "Importer le thème GDM"
+
+#: glade/gui.glade.h:89
+#, fuzzy
+msgid "Import GPG Key"
+msgstr "Importer le thème GDM"
+
+#: glade/gui.glade.h:90
+msgid "Import Icons"
+msgstr "Importer les icones"
+
+#: glade/gui.glade.h:91
+msgid "Import Theme"
+msgstr "Importer le theme"
+
+#: glade/gui.glade.h:92
+msgid "Imports an APT Repository GPG key"
+msgstr ""
+
+#: glade/gui.glade.h:93
+msgid "Initial Ramdisk (initrd)"
+msgstr "initrd"
+
+#: glade/gui.glade.h:94
+msgid "Interactive Editor"
+msgstr "Editeur intéractif"
+
+#: glade/gui.glade.h:95
+msgid "Launch Interactive Editor"
+msgstr "Lancer l'éditeur intéractif"
+
+#: glade/gui.glade.h:96
+msgid "Launches a chroot'd terminal for advanced customization"
+msgstr "Lance un terminal chrooté pour une personnalisation avancée"
+
+#: glade/gui.glade.h:97
+msgid "List .deb packages to be included on the alternate cd, one per line."
+msgstr ""
+
+#: glade/gui.glade.h:98
+msgid "List extra packages to be included, each separated by a space."
+msgstr ""
+
+#: glade/gui.glade.h:99
+msgid "List package names separated by a space (i.e.- package1 package2 )"
+msgstr ""
+"Liste des noms des paquets séparés par un espace (i.e.- paquet1 paquet2 )"
+
+#: glade/gui.glade.h:100
+#, fuzzy
+msgid "Live Build"
+msgstr "Construire"
+
+#: glade/gui.glade.h:101
+msgid "Live CD"
+msgstr "CD amorçable"
+
+#: glade/gui.glade.h:102
+msgid "Live CD (ISO)"
+msgstr "CD amorçable (ISO)"
+
+#: glade/gui.glade.h:103
+#, fuzzy
+msgid "Live CD (ISO) Filename"
+msgstr "Nom du fichier de l'image ISO du CD amorçable"
+
+#: glade/gui.glade.h:104
+msgid "Live CD ISO Filename:"
+msgstr "Nom du fichier de l'image ISO du CD amorçable"
+
+#: glade/gui.glade.h:105
+msgid "Live CD Splash:"
+msgstr "Image de présentation (splash) du CD amorçable:"
+
+#: glade/gui.glade.h:106
+msgid "Live CD Text Color:\t"
+msgstr "Couleur du texte du CD amorçable:\t"
+
+#: glade/gui.glade.h:107
+msgid "Live CD splash image (.pcx)"
+msgstr "Image splash du CD amorçable (.pcx)"
+
+#: glade/gui.glade.h:108
+#, fuzzy
+msgid "Live Customize"
+msgstr "Personnaliser"
+
+#: glade/gui.glade.h:109
+#, fuzzy
+msgid "Live Setup"
+msgstr "Installation"
+
+#: glade/gui.glade.h:110
+msgid "Login"
+msgstr "Identifiant"
+
+#: glade/gui.glade.h:111
+msgid "Modules"
+msgstr "Modules"
+
+#: glade/gui.glade.h:112
+msgid "Next"
+msgstr "Suivant"
+
+#: glade/gui.glade.h:113
+msgid "Note: Will replace current repositories."
+msgstr "Note: Ceci remplacera les dépôts actuels"
+
+#: glade/gui.glade.h:114
+msgid "Optimization"
+msgstr "Optimisation"
+
+#: glade/gui.glade.h:115
+msgid "Optimize Shutdown"
+msgstr "Optimiser l'arrêt du système"
+
+#: glade/gui.glade.h:116
+msgid "Optimizes redundant shutdown scripts. (See docs for more info.)"
+msgstr ""
+"Optimiser les scripts d'arrêt du système redondants (Voir la documentation "
+"pour plus d'info.)"
+
+#: glade/gui.glade.h:117
+msgid "PPP Link"
+msgstr "Lien PPP"
+
+#: glade/gui.glade.h:118
+msgid "Password:"
+msgstr "Mot de passe:"
+
+#: glade/gui.glade.h:119
+msgid "Play Login Sounds"
+msgstr "Jouer les sons de connexion"
+
+#: glade/gui.glade.h:120
+msgid "Please select the apt repositories you want available for the Live CD."
+msgstr ""
+"Veuillez sélectionner les dépôts APT que vous souhaitez rendre disponible "
+"depuis le CD"
+
+#: glade/gui.glade.h:121
+msgid ""
+"Please select the type of disc you would like to create.  Select Live to "
+"create an Ubuntu Desktop Live CD.  Select Alternate to create and Ubuntu "
+"Alternate Install CD.\n"
+msgstr ""
+
+#: glade/gui.glade.h:123
+msgid "RAID Monitor"
+msgstr "Moniteur RAID"
+
+#: glade/gui.glade.h:124
+msgid "Remove Win32 versions of Firefox, Thunderbird, etc."
+msgstr "Supprimer les versions Win32 de Firefox, Thunderbird, etc."
+
+#: glade/gui.glade.h:125
+msgid "Removes Windows versions of Gtk+, Firefox, Thunderbird, etc. (~40 MB)"
+msgstr ""
+"Supprime les versions Windows de Gtk+, Firefox, Thunderbird, etc. (~40 MB)"
+
+#: glade/gui.glade.h:126
+msgid "Restore"
+msgstr "Restaurer"
+
+#: glade/gui.glade.h:127
+msgid "Restores original shutdown scripts."
+msgstr "Restaurer les scripts d'arrêt du système originaux."
+
+#: glade/gui.glade.h:128
+msgid "Root Login"
+msgstr "Identifiant root"
+
+#: glade/gui.glade.h:129
+msgid "Root filesystem used by the Live CD"
+msgstr "Racine du système de fichier utilisé par le CD amorçable"
+
+#: glade/gui.glade.h:130
+msgid "Select Live CD Text Color"
+msgstr "Selectionnez la couleur du texte du CD amorçable"
+
+#: glade/gui.glade.h:131
+msgid "Select Login (GDM) Background Color"
+msgstr "Selectionnez la couleur de fond du gestionnaire de connexion (GDM)"
+
+#: glade/gui.glade.h:132
+msgid ""
+"Select the daemons you want started on boot. <b>System critical daemons have "
+"been left out.</b>"
+msgstr ""
+"Sélectionnez les services que vous voulez lancer au démarrage. <b>Les "
+"services critiques pour le système ont été préservés.</b>"
+
+#: glade/gui.glade.h:133
+msgid "Selects the Live CD Text (boot options) color"
+msgstr "Selectionnez la couleur du texte des options de démarrage"
+
+#: glade/gui.glade.h:134
+msgid "Selects the Login (GDM) Background Color"
+msgstr "Sélectionnez la couleur de fond de l'écran de connexion (GDM)"
+
+#: glade/gui.glade.h:135
+msgid "Shutdown"
+msgstr "Arrêt du système"
+
+#: glade/gui.glade.h:136
+msgid "Sounds"
+msgstr "Sons"
+
+#: glade/gui.glade.h:137
+msgid "Splash Screen:"
+msgstr "Ecran de bienvenue:"
+
+#: glade/gui.glade.h:138
+msgid "SquashFS Root"
+msgstr "Racine SquashFS"
+
+#: glade/gui.glade.h:140
+msgid ""
+"Standard\n"
+"Server\n"
+"Desktop"
+msgstr ""
+
+#: glade/gui.glade.h:143
+msgid "Startup"
+msgstr "Démarrage"
+
+#: glade/gui.glade.h:144
+msgid "Terminal:"
+msgstr "Terminal"
+
+#: glade/gui.glade.h:145
+msgid "Theme"
+msgstr "Thème"
+
+#: glade/gui.glade.h:146
+msgid "Theme:"
+msgstr "Thème:"
+
+#: glade/gui.glade.h:147
+msgid "Title Bar Font:"
+msgstr "Police de la barre de titre:"
+
+#: glade/gui.glade.h:148
+msgid "Tweaks system to extend battery life"
+msgstr "Modifications visant à étendre la durée de vie de la batterie"
+
+#: glade/gui.glade.h:149
+msgid "Ubuntu Apt archive for Community Maintained software"
+msgstr "Dépôt apt contenant des logiciels maintenus par la communauté"
+
+#: glade/gui.glade.h:150
+msgid "Ubuntu Apt archive for Officially Supported software"
+msgstr "Dépôt apt contenant des logiciels supportés officiellement"
+
+#: glade/gui.glade.h:151
+msgid "Ubuntu Apt archive for Restricted Copyright software"
+msgstr "Dépôt apt contenant des logiciels avec des licences contraignantes"
+
+#: glade/gui.glade.h:152
+msgid "Ubuntu Apt archive for non-free software"
+msgstr "Dépôt apt contenant des logiciels non-libres"
+
+#: glade/gui.glade.h:153
+msgid "Ubuntu Live CD Version:"
+msgstr "Version du CD amorçable Ubuntu:"
+
+#: glade/gui.glade.h:154
+msgid "Ubuntu Multiverse (non-free, unsupported)"
+msgstr "Dépôt 'Multiverse' (logiciels non-libres, non-supportés)"
+
+#: glade/gui.glade.h:155
+msgid "Ubuntu Official (free, supported)"
+msgstr "Dépôt Officiel (logiciels libres, supportés)"
+
+#: glade/gui.glade.h:156
+msgid "Ubuntu Restricted (non-free, supported)"
+msgstr "Dépôt 'Restricted' (logiciels non-libres, supportés)"
+
+#: glade/gui.glade.h:157
+msgid "Ubuntu Universe (free, unsupported)"
+msgstr "Dépôt 'Universe' (logiciels libres, non-supportés)"
+
+#: glade/gui.glade.h:158
+msgid "Update"
+msgstr "Mise à jour"
+
+#: glade/gui.glade.h:159
+msgid "Update Module"
+msgstr "Mise à jour du module"
+
+#: glade/gui.glade.h:160
+msgid ""
+"Use the following to set user information and the live cd hostname. (useful "
+"for ssh, etc.)"
+msgstr ""
+"Entrez ici les informations relatives à l'utilisateur et au nom de machine "
+"utilisé par le cd amorçable. (utile pour ssh, etc.)"
+
+#: glade/gui.glade.h:161
+msgid "User Full Name:"
+msgstr "Nom complet de l'utilisateur:"
+
+#: glade/gui.glade.h:162
+msgid "Username:"
+msgstr "Nom d'utilisateur:"
+
+#: glade/gui.glade.h:163
+msgid "Usplash .so file for boot splash"
+msgstr "Fichier .so pour l'écran de présentation Usplash"
+
+#: glade/gui.glade.h:164
+msgid "Usplash Filename:"
+msgstr "Nom de fichier Usplash:"
+
+#: glade/gui.glade.h:165
+msgid "Usplash Generation"
+msgstr "Génération d'Usplash:"
+
+#: glade/gui.glade.h:166
+msgid "View"
+msgstr "Voir"
+
+#: glade/gui.glade.h:167
+msgid "View the source of the module"
+msgstr "Voir la source du module"
+
+#: glade/gui.glade.h:168
+msgid "Wallpaper:"
+msgstr "Fond d'écran:"
+
+#: glade/gui.glade.h:169
+msgid "Welcome"
+msgstr "Bienvenue"
+
+#: glade/gui.glade.h:170
+msgid ""
+"Welcome to the Ubuntu Live CD Creator.\n"
+"\n"
+"This allows you to create your own custom Ubuntu-based\n"
+"live cd.  Using the Ubuntu Espresso Live CD installer, you\n"
+"can also install your custom version to the hard drive.\n"
+"\n"
+"To continue, click Next..."
+msgstr ""
+"Bienvenue dans le créateur de CD amorçable Ubuntu.\n"
+"\n"
+"Ce logiciel vous permet de créer votre propre CD amorçable\n"
+"basé sur Ubuntu. Grace à Espresso, le système d'installation depuis le CD "
+"d'Ubuntu, vous\n"
+"pouvez installer votre version personnalisée sur disque dur.\n"
+"\n"
+"Pour continuer, cliquez sur Suivant..."
+
+#: glade/gui.glade.h:177
+msgid "Window Borders:"
+msgstr "Bordure de fenêtre:"
+
+#: glade/gui.glade.h:178
+msgid "Working Directory:"
+msgstr "Répertoire de travail:"
+
+#: glade/gui.glade.h:179
+msgid ""
+"You can leave the ISO filename blank,\n"
+"and use a Live CD disc instead."
+msgstr ""
+"Vous pouvez laisser le nom de fichier de l'image ISO vierge,\n"
+"et utiliser un CD amorçable à la place."
+
+#: glade/gui.glade.h:181
+msgid "bluez-utils"
+msgstr "bluez-utils"
+
+#: glade/gui.glade.h:182
+msgid "cupsys"
+msgstr "cupsys"
+
+#: glade/gui.glade.h:183
+msgid "festival"
+msgstr "festival"
+
+#: glade/gui.glade.h:184
+msgid "hplip"
+msgstr "hplip"
+
+#: glade/gui.glade.h:185
+msgid "laptop-mode"
+msgstr "laptop-mode"
+
+#: glade/gui.glade.h:186
+msgid "mdadm"
+msgstr "mdadm"
+
+#: glade/gui.glade.h:187
+msgid "nVidia Graphics Card services"
+msgstr "Services des cartes graphiques nVidia"
+
+#: glade/gui.glade.h:188
+msgid "nvidia-kernel"
+msgstr "noyau nvidia"
+
+#: glade/gui.glade.h:189
+msgid "ppp"
+msgstr "ppp"
+
+#: glade/gui.glade.h:190
+msgid "rsync"
+msgstr "rsync"
+
+#: glade/gui.glade.h:191
+msgid ""
+"x86\n"
+"PowerPC\n"
+"IA_64"
+msgstr ""
+"x86\n"
+"PowerPC\n"
+"IA_64"
+
+#: lib/Reconstructor/PackageHelper.py:29
+msgid "Package Helper"
+msgstr ""
+
+#: lib/Reconstructor/PackageHelper.py:33
+msgid "Run PackageHelper tests here..."
+msgstr ""
+
+#: reconstructor.py:254
+msgid "INFO: Running Debug..."
+msgstr "INFO: Lancement en mode debug..."
+
+#: reconstructor.py:267
+msgid "INFO: Manually Installing .deb archives in cache..."
+msgstr "INFO: Installation manuelle des .deb dans le cache en cours..."
+
+#: reconstructor.py:270
+msgid "INFO: Enabling Experimental Features..."
+msgstr "INFO: Activation des fonctionnalités expérimentales..."
+
+#: reconstructor.py:273
+msgid "INFO: Updating..."
+msgstr "INFO: mise à jour en cours..."
+
+#: reconstructor.py:298
+#, fuzzy
+msgid "INFO: Creating mount directory..."
+msgstr "INFO: Création du répertoire initrd..."
+
+#: reconstructor.py:324
+msgid "Ubuntu Custom"
+msgstr "Ubuntu personnalisée"
+
+#: reconstructor.py:342
+msgid "Checking dependencies..."
+msgstr "Vérification des dépendances..."
+
+#: reconstructor.py:345
+msgid "squashfs-tools NOT FOUND (needed for Root FS extraction)"
+msgstr ""
+"squashfs-tools NON TROUVE (requis pour l'extraction de la racine du système "
+"de fichier)"
+
+#: reconstructor.py:348
+msgid "chroot NOT FOUND (needed for Root FS customization)"
+msgstr ""
+"chroot NON TROUVE (requis pour la personnalisation de la racine du système "
+"de fichiers)"
+
+#: reconstructor.py:351
+#, fuzzy
+msgid "mkisofs NOT FOUND (needed for ISO generation)"
+msgstr "mkisofs NON TROUVE (requis pour la création de l'ISO)"
+
+#: reconstructor.py:354
+#, fuzzy
+msgid ""
+"gcc NOT FOUND (needed for Usplash generation and VMWare/Qemu installation)"
+msgstr ""
+"gcc NON TROUVE (requis pour la génération d'Usplash et pour l'installation "
+"de VMWare/Qemu)"
+
+#: reconstructor.py:357
+msgid "make NOT FOUND (needed for VMWare/Qemu installation)"
+msgstr "make NON TROUVE (requis pour l'installation de VMWare/Qemu)"
+
+#: reconstructor.py:360
+msgid "rsync NOT FOUND (needed for Remastering ISO)"
+msgstr "rsync NON TROUVE (requis pour la création de l'ISO)"
+
+#: reconstructor.py:364
+#, fuzzy
+msgid "libbogl-dev NOT FOUND (needed for Dapper Usplash Generation)"
+msgstr "libbogl-dev NON TROUVE (requis pour la génération d'Usplash)"
+
+#: reconstructor.py:368
+#, fuzzy
+msgid "usplash-dev NOT FOUND (needed for Usplash Generation)"
+msgstr "libbogl-dev NON TROUVE (requis pour la génération d'Usplash)"
+
+#: reconstructor.py:372
+#, fuzzy
+msgid "gpg NOT FOUND (needed for Alternate Key Signing)"
+msgstr "rsync NON TROUVE (requis pour la création de l'ISO)"
+
+#: reconstructor.py:376
+#, fuzzy
+msgid "dpkg-dev NOT FOUND (needed for Alternate Key Package Building)"
+msgstr "libbogl-dev NON TROUVE (requis pour la génération d'Usplash)"
+
+#: reconstructor.py:380
+#, fuzzy
+msgid "fakeroot NOT FOUND (needed for Alternate Key Package Building)"
+msgstr ""
+"chroot NON TROUVE (requis pour la personnalisation de la racine du système "
+"de fichiers)"
+
+#: reconstructor.py:384
+#, fuzzy
+msgid "apt-utils NOT FOUND (needed for Extra Repository Generation)"
+msgstr "libbogl-dev NON TROUVE (requis pour la génération d'Usplash)"
+
+#: reconstructor.py:387
+msgid ""
+"\n"
+"The following dependencies are not met: "
+msgstr ""
+"\n"
+"Les dépendances suivantes ne sont pas satisfaites:"
+
+#: reconstructor.py:389
+msgid "Please install the dependencies and restart reconstructor."
+msgstr "Veuillez installer les dépendances et relancer reconstructor."
+
+#: reconstructor.py:397
+msgid ""
+"  <b>Reconstructor may not work correctly.</b>\n"
+"The following dependencies are not met: "
+msgstr ""
+"  <b>Il est possible que Reconstructor ne fonctionne pas correctement.</b>\n"
+"Les dépendances suivantes ne sont pas satisfaites:"
+
+#: reconstructor.py:401
+msgid "Install the dependencies and restart reconstructor?"
+msgstr "Installer les dépendances et relancer les lives-scripts de Cooperation-iws?"
+
+#: reconstructor.py:415
+msgid "Installing dependencies: "
+msgstr "Installation des dépendances:"
+
+#: reconstructor.py:423
+msgid "Ok."
+msgstr "Ok."
+
+#: reconstructor.py:483
+msgid "Update cancelled..."
+msgstr "Mise à jour annulée..."
+
+#: reconstructor.py:536
+msgid "New version available..."
+msgstr "Nouvelle version disponible..."
+
+#: reconstructor.py:538
+msgid "Download and Install Update (y/n):"
+msgstr "Télécharger et installer la mise à jour (y/n):"
+
+#: reconstructor.py:541 reconstructor.py:550
+msgid "Getting update..."
+msgstr "Téléchargement des mises à jour..."
+
+#: reconstructor.py:543 reconstructor.py:552
+msgid ""
+"\n"
+"Installing update..."
+msgstr ""
+"\n"
+"Installation des mises à jour..."
+
+#: reconstructor.py:545 reconstructor.py:554
+msgid "Updated.  Please restart reconstructor.\n"
+msgstr "Mise à jour effectuer. Veuillez relancer Reconstructor.\n"
+
+#: reconstructor.py:547
+msgid "Update cancelled."
+msgstr "Mise-à-jour annulée..."
+
+#: reconstructor.py:556
+msgid "Reconstructor is at the latest version.\n"
+msgstr "Reconstructor est à jour.\n"
+
+#: reconstructor.py:573
+msgid "Found Gnome Desktop Environment..."
+msgstr "L'environnement de bureau Gnome a été trouvé..."
+
+#: reconstructor.py:588
+msgid "Loading modules..."
+msgstr "Chargement des modules..."
+
+#: reconstructor.py:737
+msgid "Category"
+msgstr "Catégorie."
+
+#: reconstructor.py:745
+msgid "Execute"
+msgstr "Lancer"
+
+#: reconstructor.py:752
+msgid "Run on boot"
+msgstr "Lancer au démarrage"
+
+#: reconstructor.py:757
+msgid "Module"
+msgstr "Module"
+
+#: reconstructor.py:765
+msgid " Module Version"
+msgstr " Version du Module"
+
+#: reconstructor.py:770
+msgid "Author"
+msgstr "Auteur"
+
+#: reconstructor.py:777
+msgid "Description"
+msgstr "Description"
+
+#: reconstructor.py:783
+msgid "Run in Chroot"
+msgstr "Lancer dans l'environnement Chroot"
+
+#: reconstructor.py:793
+msgid "Update URL"
+msgstr "Mise à jour de l'URL"
+
+#: reconstructor.py:803
+msgid "Path"
+msgstr "Chemin d'accès"
+
+#: reconstructor.py:824
+msgid "Installing Module: "
+msgstr "Installation du Module:"
+
+#: reconstructor.py:915
+msgid "Error installing module: "
+msgstr "Erreur lors de l'installation du module:"
+
+#: reconstructor.py:924
+msgid "Updating not available for module: "
+msgstr "La mise à jour n'est pas disponible pour le module: "
+
+#: reconstructor.py:928 reconstructor.py:1065
+msgid "Checking updates for module: "
+msgstr "Vérification des mises à jour disponibles pour le module: "
+
+#: reconstructor.py:977
+msgid "Found new version: "
+msgstr "Nouvelle version trouvée : "
+
+#: reconstructor.py:996
+msgid "New version available: "
+msgstr "Nouvelle version disponible : "
+
+#: reconstructor.py:1012
+msgid "Updating..."
+msgstr "Mise à jour en cours..."
+
+#: reconstructor.py:1020
+msgid "Module updated."
+msgstr "Module mis à jour."
+
+#: reconstructor.py:1023
+msgid "Module update cancelled."
+msgstr "Mise à jour du module annulée"
+
+#: reconstructor.py:1027
+msgid "Module is at the latest version."
+msgstr "Le Module est à jour."
+
+#: reconstructor.py:1029
+msgid "Could not find a valid update for module: "
+msgstr "Pas de mise à jour valide trouvée pour le module: "
+
+#: reconstructor.py:1045 reconstructor.py:1125
+msgid "Error updating module: "
+msgstr "Erreur lors de la mise à jour du module:"
+
+#: reconstructor.py:1113
+msgid "Updating Module: "
+msgstr "Mise à jour du Module:"
+
+#: reconstructor.py:1117
+msgid "Module is at the latest version.\n"
+msgstr "Le Module est à jour.\n"
+
+#: reconstructor.py:1256
+msgid "Copied module: "
+msgstr "Module copié: "
+
+#: reconstructor.py:1272
+msgid "Clearing all run on boot modules and scripts..."
+msgstr "Nettoyage de tous les modules et scripts se lancant au démarrage..."
+
+#: reconstructor.py:1276
+msgid "Error clearing run on boot modules: "
+msgstr "Erreur lors du nettoyage des modules se lancant au démarrage:"
+
+#: reconstructor.py:1440 reconstructor.py:1498
+msgid "  <b>Please fix the errors below before continuing.</b>   "
+msgstr ""
+"  <b>Veuillez corriger les problèmes ci-dessous avant de continuer.</b>   "
+
+#: reconstructor.py:1441 reconstructor.py:1499
+msgid ""
+"  There is no remaster directory.  Please select create remaster option.  "
+msgstr ""
+"Le répertoire de recompilation n'existe pas. Merci de sélectionner l'option "
+"correspondante."
+
+#: reconstructor.py:1442
+msgid "  There is no root directory.  Please select create root option.  "
+msgstr ""
+"Le répertoire de travail n'existe pas. Merci de sélectionner l'option "
+"correspondante."
+
+#: reconstructor.py:1443 reconstructor.py:1500
+msgid "  There is no initrd directory.  Please select create initrd option.  "
+msgstr ""
+"Le répertoire initrd n'existe pas. Merci de sélectionner l'option "
+"correspondante."
+
+#: reconstructor.py:1538
+msgid "Disc Type:"
+msgstr ""
+
+#: reconstructor.py:1565 reconstructor.py:1640 reconstructor.py:1711
+#: reconstructor.py:1772 reconstructor.py:3057 reconstructor.py:3336
+msgid "  <b>Continue?</b>  "
+msgstr "     <b>Continuer ?</b>     "
+
+#: reconstructor.py:1566 reconstructor.py:1677 reconstructor.py:1712
+#: reconstructor.py:1803 reconstructor.py:3058 reconstructor.py:3337
+msgid "     This may take a few minutes.  Please wait...     "
+msgstr ""
+"     Cette opération peut durer quelques minutes. Veuillez patienter...     "
+
+#: reconstructor.py:1616 reconstructor.py:1748
+msgid "  <b>You must enter a working directory.</b>  "
+msgstr "  <b>Vous devez spécifier un répertoire de travail.</b>  "
+
+#: reconstructor.py:1643 reconstructor.py:1775
+msgid "Be sure to click <b>Apply</b> to apply changes before continuing."
+msgstr ""
+"Assurez vous d'avoir cliqué sur <b>Appliquer</b> pour appliquer les "
+"changements avant de continuer."
+
+#: reconstructor.py:1676
+msgid "  <b>Build Live CD?</b>  "
+msgstr "  <b>Créer le CD amorçable?</b>  "
+
+#: reconstructor.py:1802
+#, fuzzy
+msgid "  <b>Build Alternate CD?</b>  "
+msgstr "  <b>Créer le CD amorçable?</b>  "
+
+#: reconstructor.py:1826
+msgid "Exiting..."
+msgstr "Fermeture en cours..."
+
+#: reconstructor.py:1859
+msgid "Installing VMWare Player..."
+msgstr "Installation de VMWare Player..."
+
+#: reconstructor.py:1865
+msgid "Downloading VMWare Player archive..."
+msgstr "Telechargement de l'archive de VMWare Player"
+
+#: reconstructor.py:1869
+msgid "Extracting VMWare Player archive..."
+msgstr "Extraction de l'archive de VMWare Player"
+
+#: reconstructor.py:1871
+msgid "Installing dependencies for VMWare Player..."
+msgstr "Installation des dépendances de VMWare Player..."
+
+#: reconstructor.py:1889 reconstructor.py:1962
+msgid "Cleaning Up Temporary Files..."
+msgstr "Suppression des fichiers temporaires..."
+
+#: reconstructor.py:1894
+msgid "Error installing VMWare Player: "
+msgstr "Erreur lors de l'installation de VMWare Player:"
+
+#: reconstructor.py:1901
+msgid "Installing Qemu Emulator with KQemu Accelerator module..."
+msgstr "Installation de l'émulateur Qemu avec son module d'accélération KQemu"
+
+#: reconstructor.py:1908
+msgid "Downloading Qemu archive..."
+msgstr "Telechargement de l'archive de Qemu"
+
+#: reconstructor.py:1914
+msgid "Downloading KQemu module archive..."
+msgstr "Telechargement de l'archive du module KQemu"
+
+#: reconstructor.py:1919
+msgid "Extracting Qemu into /usr/local..."
+msgstr "Extraction de Qemu dans /usr/local..."
+
+#: reconstructor.py:1921
+msgid "Extracting KQemu module..."
+msgstr "Extraction du module KQemu..."
+
+#: reconstructor.py:1923
+msgid "Installing dependencies for KQemu Compilation..."
+msgstr "Installation des dépendances nécessaires à la compilation de KQemu..."
+
+#: reconstructor.py:1930
+msgid "Installing KQemu module..."
+msgstr "Installation du module KQemu..."
+
+#: reconstructor.py:1940
+msgid "Setting KQemu module to load on startup..."
+msgstr "Paramètrage du module KQemu pour le lancer au démarrage..."
+
+#: reconstructor.py:1966
+msgid "Error Installing QEmu: "
+msgstr "Erreur lors de l'installation de QEmu:"
+
+#: reconstructor.py:1973
+msgid "Installing Java..."
+msgstr "Installation de Java..."
+
+#: reconstructor.py:1986
+msgid "Error installing Java: "
+msgstr "Erreur lors de l'installation de Java:"
+
+#: reconstructor.py:1993
+msgid "Installing Flash..."
+msgstr "Installation de Flash..."
+
+#: reconstructor.py:2006
+msgid "Error installing Flash: "
+msgstr "Erreur lors de l'installation de Flash:"
+
+#: reconstructor.py:2013
+msgid "Generating Usplash library..."
+msgstr "Génération de la bibliothèque Usplash..."
+
+#: reconstructor.py:2036
+#, fuzzy
+msgid "Generating .c source files..."
+msgstr "Generation du script de lancement des modules au démarrage"
+
+#: reconstructor.py:2041
+#, fuzzy
+msgid "Compiling .c source files..."
+msgstr "Copie des fichiers en cours..."
+
+#: reconstructor.py:2047
+#, fuzzy
+msgid "Compiling to .so..."
+msgstr "Copie des informations DNS (réseaux)..."
+
+#: reconstructor.py:2056
+msgid "Error generating Usplash library: "
+msgstr "Erreur lors de la génération de la bibliothèque Usplash:"
+
+#: reconstructor.py:2065 reconstructor.py:3958 reconstructor.py:4038
+msgid "Copying DNS info..."
+msgstr "Copie des informations DNS (réseaux)..."
+
+#: reconstructor.py:2068 reconstructor.py:3961 reconstructor.py:4041
+msgid "Mounting /proc filesystem..."
+msgstr "Montage du système de fichier /proc..."
+
+#: reconstructor.py:2071 reconstructor.py:3964 reconstructor.py:4044
+msgid "Copying apt.conf configuration..."
+msgstr "Copie de la configuration d'apt.conf"
+
+#: reconstructor.py:2074 reconstructor.py:3967 reconstructor.py:4047
+msgid "Copying wgetrc configuration..."
+msgstr "Copie de la configuration de wgetrc..."
+
+#: reconstructor.py:2084
+msgid "Launching Terminal for advanced customization..."
+msgstr "Lancement d'un terminal pour une personnalisation avancée..."
+
+#: reconstructor.py:2088 reconstructor.py:2105 reconstructor.py:3977
+#: reconstructor.py:4078
+msgid "Restoring wgetrc configuration..."
+msgstr "Restauration de la configuration de wgetrc..."
+
+#: reconstructor.py:2091 reconstructor.py:2108 reconstructor.py:3980
+#: reconstructor.py:4081
+msgid "Removing apt.conf configuration..."
+msgstr "Suppression de la configuration d'apt.conf"
+
+#: reconstructor.py:2094 reconstructor.py:2111 reconstructor.py:3983
+#: reconstructor.py:4084
+msgid "Removing DNS info..."
+msgstr "Suppression des informations DNS (réseaux)..."
+
+#: reconstructor.py:2097 reconstructor.py:2114 reconstructor.py:3986
+#: reconstructor.py:4087
+msgid "Umounting /proc..."
+msgstr "Démontage de /proc..."
+
+#: reconstructor.py:2119
+msgid "Error launching terminal: "
+msgstr "Erreur lors du lancement du terminal:"
+
+#: reconstructor.py:2147 reconstructor.py:2179
+msgid "Live CD Username: "
+msgstr "Nom d'utilisateur du CD: "
+
+#: reconstructor.py:2153 reconstructor.py:2185
+msgid "Live CD User Full name: "
+msgstr "Nom complet de l'utilisateur du CD: "
+
+#: reconstructor.py:2159 reconstructor.py:2191
+msgid "Live CD Hostname: "
+msgstr "Nom de machine utilisé par le CD: "
+
+#: reconstructor.py:2218
+msgid "Unknown Ubuntu Version.  Cannot set user/host info."
+msgstr ""
+"Version d'Ubuntu inconnue. Reconstructor ne peut pas paramétrer les "
+"informations d'utilisateurs et le nom de machine."
+
+#: reconstructor.py:2230
+msgid "Setting Live CD Password... "
+msgstr "Paramètrage du mot de passe du CD: "
+
+#: reconstructor.py:2247
+msgid "Error setting user info: "
+msgstr ""
+"Erreur lors du paramétrage des informations relatives à l'utilisateur: "
+
+#: reconstructor.py:2255 reconstructor.py:2268
+msgid "Burning ISO..."
+msgstr "Gravure de l'ISO..."
+
+#: reconstructor.py:2258 reconstructor.py:2271
+msgid "Error: nautilus-cd-burner is needed for burning iso files... "
+msgstr ""
+"Erreur: L'application nautilus-cd-burner est nécessaire à la gravure des "
+"fichiers ISO"
+
+#: reconstructor.py:2261 reconstructor.py:2274
+msgid "Error burning ISO: "
+msgstr "Erreur lors de la gravure de l'ISO:"
+
+#: reconstructor.py:2280
+msgid "Loading Boot Menu Color..."
+msgstr "Chargement de la couleur du menu de démarrage..."
+
+#: reconstructor.py:2301
+msgid "Live CD Text Color: "
+msgstr "Couleur du texte du CD amorçable:"
+
+#: reconstructor.py:2305
+msgid "Error getting boot menu color: "
+msgstr "Problème lors de la selection de la couleur du menu de démarrage:"
+
+#: reconstructor.py:2311
+msgid "Loading GDM Background Color..."
+msgstr "Chargement de la couleur de fond de GDM..."
+
+#: reconstructor.py:2326
+msgid "GDM background color not found in gdm.conf-custom. Using gdm.conf..."
+msgstr ""
+"La couleur de fond de GDM n'a pas été trouvée dans gdm.conf-custom. gdm.conf "
+"est utilisé à la place..."
+
+#: reconstructor.py:2344
+msgid "GDM Background Color: "
+msgstr "Couleur de fond de GDM:"
+
+#: reconstructor.py:2350
+msgid "Error getting GDM background color: "
+msgstr "Erreur lors de la capture de la couleur de fond de GDM:"
+
+#: reconstructor.py:2357
+msgid "Optimizing Startup..."
+msgstr "Optimisation du démarrage..."
+
+#: reconstructor.py:2363
+msgid "Enabling Startup Daemon: ppp"
+msgstr "Activation du service de démarrage: ppp"
+
+#: reconstructor.py:2369
+msgid "Disabling Startup Daemon: ppp"
+msgstr "Désactivation du service de démarrage: ppp"
+
+#: reconstructor.py:2376
+msgid "Enabling Startup Daemon: hplip"
+msgstr "Activation du service de démarrage: hplip"
+
+#: reconstructor.py:2382
+msgid "Disabling Startup Daemon: hplip"
+msgstr "Désactivation du service de démarrage: hplip"
+
+#: reconstructor.py:2389
+msgid "Enabling Startup Daemon: cupsys"
+msgstr "Activation du service de démarrage: cupsys"
+
+#: reconstructor.py:2395
+msgid "Disabling Startup Daemon: cupsys"
+msgstr "Désactivation du service de démarrage: cupsys"
+
+#: reconstructor.py:2402
+msgid "Enabling Startup Daemon: festival"
+msgstr "Activation du service de démarrage: festival"
+
+#: reconstructor.py:2408
+msgid "Disabling Startup Daemon: festival"
+msgstr "Désactivation du service de démarrage: festival"
+
+#: reconstructor.py:2415
+msgid "Enabling Startup Daemon: laptop-mode"
+msgstr "Activation du service de démarrage: laptop-mode"
+
+#: reconstructor.py:2421
+msgid "Disabling Startup Daemon: laptop-mode"
+msgstr "Désactivation du service de démarrage: laptop-mode"
+
+#: reconstructor.py:2428
+msgid "Enabling Startup Daemon: nvidia-kernel"
+msgstr "Activation du service de démarrage: noyau-nvidia"
+
+#: reconstructor.py:2434
+msgid "Disabling Startup Daemon: nvidia-kernel"
+msgstr "Désactivation du service de démarrage: noyau-nvidia"
+
+#: reconstructor.py:2441
+msgid "Enabling Startup Daemon: rsync"
+msgstr "Activation du service de démarrage: rsync"
+
+#: reconstructor.py:2447
+msgid "Disabling Startup Daemon: rsync"
+msgstr "Désactivation du service de démarrage: rsync"
+
+#: reconstructor.py:2454
+msgid "Enabling Startup Daemon: bluez-utils"
+msgstr "Activation du service de démarrage: bluez-utils"
+
+#: reconstructor.py:2460
+msgid "Disabling Startup Daemon: bluez-utils"
+msgstr "Désactivation du service de démarrage: bluez-utils"
+
+#: reconstructor.py:2467
+msgid "Enabling Startup Daemon: mdadm"
+msgstr "Activation du service de démarrage: mdadm"
+
+#: reconstructor.py:2473
+msgid "Disabling Startup Daemon: mdadm"
+msgstr "Désactivation du service de démarrage: mdadm"
+
+#: reconstructor.py:2491
+msgid "Error setting startup daemons: "
+msgstr "Erreur lors de la personnalisation des services de démarrage:"
+
+#: reconstructor.py:2498
+msgid "Optimizing shutdown scripts..."
+msgstr "Optimisation des scripts d'arrêt du système..."
+
+#: reconstructor.py:2503
+msgid "Error optimizing shutdown scripts: "
+msgstr "Erreur lors de l'optimisation des scripts d'arrêt du système..."
+
+#: reconstructor.py:2510
+msgid "Restoring original shutdown scripts..."
+msgstr "Restauration des scripts originaux d'arrêt du système..."
+
+#: reconstructor.py:2519
+msgid "Error restoring original shutdown scripts: "
+msgstr ""
+"Erreur lors de la restauration des scripts originaux d'arrêt du système..."
+
+#: reconstructor.py:2525
+msgid "Loading GDM Themes..."
+msgstr "Chargement des themes GDM..."
+
+#: reconstructor.py:2549
+msgid "Error loading GDM Themes: "
+msgstr "Erreur lors du chargement des themes GDM:"
+
+#: reconstructor.py:2554
+msgid "Loading Gnome Themes and Icons..."
+msgstr "Chargement des themes GDM et des icones..."
+
+#: reconstructor.py:2607
+msgid "Error loading Gnome themes: "
+msgstr "Erreur lors du chargement des themes Gnome:"
+
+#: reconstructor.py:2619
+#, fuzzy
+msgid "Calculating Live ISO Size..."
+msgstr "Calcul de la taille de l'image ISO..."
+
+#: reconstructor.py:2645 reconstructor.py:2669
+msgid "Error calculating estimated iso size: "
+msgstr "Problème lors du calcul de la taille de l'image ISO:"
+
+#: reconstructor.py:2655
+#, fuzzy
+msgid "Calculating Alternate ISO Size..."
+msgstr "Calcul de la taille de l'image ISO..."
+
+#: reconstructor.py:2674
+msgid "Beginning Interactive Editing..."
+msgstr "Début de l'édition intéractive..."
+
+#: reconstructor.py:2689
+msgid "Starting Xnest in the background..."
+msgstr "Démarrage d'Xnest en tâche de fond..."
+
+#: reconstructor.py:2692
+msgid "Error starting Xnest: "
+msgstr "Erreur lors du chargement d'Xnest:"
+
+#: reconstructor.py:2697
+msgid "Starting Gnome-Session...."
+msgstr "Démarrage de Gnome-Session...."
+
+#: reconstructor.py:2702
+msgid "Error starting Gnome-Session: "
+msgstr "Erreur lors du démarrage de Gnome-Session...."
+
+#: reconstructor.py:2708
+msgid "Clearing Interactive Settings..."
+msgstr "Effacement des paramètres intéractifs"
+
+#: reconstructor.py:2709
+msgid "Removing 'reconstructor' user..."
+msgstr "Suppression de l'utilisateur 'reconstructor'..."
+
+#: reconstructor.py:2711
+msgid "Removing 'reconstructor' home directory..."
+msgstr ""
+"Suppression du repertoire personnel de l'utilisateur 'reconstructor'..."
+
+#: reconstructor.py:2716
+msgid "Error clearing interactive settings: "
+msgstr "Erreur lors de l'effacement des paramètres intéractifs:"
+
+#: reconstructor.py:2748 reconstructor.py:3245
+msgid "Select Working Directory"
+msgstr "Sélectionnez le répertoire de travail"
+
+#: reconstructor.py:2765
+msgid "Select Live CD ISO"
+msgstr "Sélectionnez l'image ISO du CD amorçable"
+
+#: reconstructor.py:2782
+#, fuzzy
+msgid "Select Live CD Filename"
+msgstr "Choisissez un nom pour la nouvelle image CD"
+
+#: reconstructor.py:2800
+#, fuzzy
+msgid "Select Alternate CD Filename"
+msgstr "Sélectionnez l'image ISO du CD amorçable"
+
+#: reconstructor.py:2834
+msgid "Select Usplash"
+msgstr "Sélectionnez Usplash"
+
+#: reconstructor.py:2851
+msgid "Select Live CD Splash Image"
+msgstr "Sélectionnez l'image de présentation (splash) du CD amorçable"
+
+#: reconstructor.py:2872
+msgid "Select Wallpaper"
+msgstr "Sélectionnez le fond d'écran"
+
+#: reconstructor.py:2892
+msgid "Select Splash Screen"
+msgstr "Sélectionnez l'écran de bienvenue"
+
+#: reconstructor.py:2915 reconstructor.py:2926 reconstructor.py:2937
+#: reconstructor.py:2948
+msgid "Select Font"
+msgstr "Sélectionnez la police de caractère"
+
+#: reconstructor.py:2958
+msgid "Importing Theme..."
+msgstr "Importation du thème..."
+
+#: reconstructor.py:2965
+msgid "Select Theme Package"
+msgstr "Selectionnez le paquet du thème"
+
+#: reconstructor.py:2985 reconstructor.py:3016 reconstructor.py:3046
+msgid "Import Cancelled..."
+msgstr "Importation annulée..."
+
+#: reconstructor.py:2989
+msgid "Importing Icons..."
+msgstr "Importation des icones"
+
+#: reconstructor.py:2996
+msgid "Select Icon Package"
+msgstr "Selectionnez le paquet d'icones"
+
+#: reconstructor.py:3020
+msgid "Importing GDM Theme..."
+msgstr "Importation du thème GDM"
+
+#: reconstructor.py:3027
+msgid "Select GDM Theme Package"
+msgstr "Sélectionnez le paquet du thème GDM"
+
+#: reconstructor.py:3094
+msgid "  <b>Delete?</b>  "
+msgstr "  <b>Supprimer?</b>     "
+
+#: reconstructor.py:3117
+msgid "Select PNG Image"
+msgstr "Sélectionnez une image PNG"
+
+#: reconstructor.py:3137
+msgid "Save Usplash As..."
+msgstr "Enregistrer l'Usplash sous..."
+
+#: reconstructor.py:3178
+msgid "Error: Cannot burn iso... Unknown disc type..."
+msgstr ""
+
+#: reconstructor.py:3190
+msgid "Select Reconstructor Module"
+msgstr "Sélectionnez le module Reconstructor"
+
+#: reconstructor.py:3199
+msgid "Module installation cancelled..."
+msgstr "Installation du module annulée..."
+
+#: reconstructor.py:3230
+msgid "  <b>Clear all run on boot modules?</b>  "
+msgstr "  <b>Nettoyer tous les modules se lancant au démarrage ?</b>  "
+
+#: reconstructor.py:3262
+#, fuzzy
+msgid "Select Alternate CD ISO"
+msgstr "Sélectionnez l'image ISO du CD amorçable"
+
+#: reconstructor.py:3284 reconstructor.py:3310
+#, fuzzy
+msgid "Select GPG Key File"
+msgstr "Sélectionnez une image PNG"
+
+#: reconstructor.py:3290 reconstructor.py:3316
+#, fuzzy
+msgid "Importing GPG Key..."
+msgstr "Importation du thème GDM"
+
+#: reconstructor.py:3295 reconstructor.py:3319
+msgid "GPG Key successfully imported..."
+msgstr ""
+
+#: reconstructor.py:3297 reconstructor.py:3321
+#, fuzzy
+msgid "Error importing GPG key: "
+msgstr "Erreur lors du chargement d'Xnest:"
+
+#: reconstructor.py:3357 reconstructor.py:3372
+msgid "INFO: Saving working directory information..."
+msgstr "INFO: Sauvegarde des informations du répertoire de travail en cours..."
+
+#: reconstructor.py:3386
+msgid "INFO: Setting up working directory..."
+msgstr "INFO: Préparation du répertoire de travail..."
+
+#: reconstructor.py:3404 reconstructor.py:3455 reconstructor.py:3512
+msgid "  <b>Please insert Ubuntu Live CD and click OK</b>  "
+msgstr "  <b>Veuillez insérer le CD amorçable Ubuntu et cliquer sur OK</b>  "
+
+#: reconstructor.py:3412
+msgid "Using Live CD for remastering..."
+msgstr "Utilisation du CD amorçable pour faire le travail..."
+
+#: reconstructor.py:3420 reconstructor.py:3612
+msgid "Using ISO for remastering..."
+msgstr "Utilisation de l'image ISO du CD amorçable pour faire le travail..."
+
+#: reconstructor.py:3423
+msgid "Copying files..."
+msgstr "Copie des fichiers en cours..."
+
+#: reconstructor.py:3427 reconstructor.py:3638
+msgid "Finished copying files..."
+msgstr "Fichiers copiés avec succès."
+
+#: reconstructor.py:3438
+msgid "INFO: Creating Custom Root directory..."
+msgstr "INFO: Création du répertoire de travail racine."
+
+#: reconstructor.py:3442
+msgid "INFO: Removing existing tmpsquash directory..."
+msgstr "INFO: Suppression du répertoire tmpsquash existant..."
+
+#: reconstructor.py:3462
+msgid "Using Live CD for squashfs root..."
+msgstr "Utilisation du CD amorçable comme racine de squashfs..."
+
+#: reconstructor.py:3470
+msgid "Using ISO for squashfs root..."
+msgstr "Utilisation de l'image ISO du CD amorçable comme racine de squashfs..."
+
+#: reconstructor.py:3476
+msgid "Mounting squashfs..."
+msgstr "Montage de squashfs..."
+
+#: reconstructor.py:3478
+msgid "Extracting squashfs root..."
+msgstr "Extraction de la racine squashfs..."
+
+#: reconstructor.py:3484
+msgid "Unmounting tmpsquash..."
+msgstr "Démontage de tmpsquash..."
+
+#: reconstructor.py:3487
+#, fuzzy
+msgid "Unmounting cdrom..."
+msgstr "Démontage de /cdrom..."
+
+#: reconstructor.py:3490
+msgid "Removing tmpsquash..."
+msgstr "Suppression de tmpsquash..."
+
+#: reconstructor.py:3493
+msgid "Setting proper permissions..."
+msgstr "Attribution des droits sur les fichiers..."
+
+#: reconstructor.py:3496
+msgid "Finished extracting squashfs root..."
+msgstr "Extraction de squashfs terminée avec succès..."
+
+#: reconstructor.py:3500
+msgid "INFO: Removing existing Initrd directory..."
+msgstr "INFO: Suppression du répertoire initrd..."
+
+#: reconstructor.py:3502
+msgid "INFO: Creating Initrd directory..."
+msgstr "INFO: Création du répertoire initrd..."
+
+#: reconstructor.py:3519
+msgid "Using Live CD for initrd..."
+msgstr "Utilisation du CD amorçable pour initrd..."
+
+#: reconstructor.py:3527 reconstructor.py:3672
+msgid "Using ISO for initrd..."
+msgstr "Utilisation de l'image ISO du CD amorçable pour initrd..."
+
+#: reconstructor.py:3531
+msgid "Extracting Initial Ram Disk (initrd)..."
+msgstr "Extraction d'initrd..."
+
+#: reconstructor.py:3549
+msgid "Finished setting up working directory..."
+msgstr "Préparation du répertoire de travail terminée..."
+
+#: reconstructor.py:3554
+#, fuzzy
+msgid "INFO: Setting up alternate working directory..."
+msgstr "INFO: Préparation du répertoire de travail..."
+
+#: reconstructor.py:3578
+#, fuzzy
+msgid "Cleaning alternate temporary directory..."
+msgstr "INFO: Création du répertoire initrd..."
+
+#: reconstructor.py:3596 reconstructor.py:3657
+#, fuzzy
+msgid "  <b>Please insert Ubuntu Alternate CD and click OK</b>  "
+msgstr "  <b>Veuillez insérer le CD amorçable Ubuntu et cliquer sur OK</b>  "
+
+#: reconstructor.py:3604
+#, fuzzy
+msgid "Using Alternate CD for remastering..."
+msgstr "Utilisation du CD amorçable pour faire le travail..."
+
+#: reconstructor.py:3616
+#, fuzzy
+msgid "Copying alternate remaster directory..."
+msgstr "INFO: Suppression du répertoire de travail 'Remastering' existant..."
+
+#: reconstructor.py:3645
+#, fuzzy
+msgid "INFO: Removing existing Alternate Initrd directory..."
+msgstr "INFO: Suppression du répertoire initrd..."
+
+#: reconstructor.py:3647
+#, fuzzy
+msgid "INFO: Creating Alternate Initrd directory..."
+msgstr "INFO: Création du répertoire initrd..."
+
+#: reconstructor.py:3664
+#, fuzzy
+msgid "Using Alternate CD for initrd..."
+msgstr "Utilisation du CD amorçable pour initrd..."
+
+#: reconstructor.py:3676
+#, fuzzy
+msgid "Extracting Alternate Initial Ram Disk (initrd)..."
+msgstr "Extraction d'initrd..."
+
+#: reconstructor.py:3686
+#, fuzzy
+msgid "Finished setting up alternate working directory..."
+msgstr "Préparation du répertoire de travail terminée..."
+
+#: reconstructor.py:3693
+msgid "INFO: Customizing..."
+msgstr "INFO: Personnalisation en cours..."
+
+#: reconstructor.py:3696
+msgid "User passwords do not match."
+msgstr "Les mots de passe saisient ne concordent pas."
+
+#: reconstructor.py:3704
+msgid "  <b>Passwords do not match</b>  "
+msgstr "  <b>Les mots de passe saisient ne concordent pas.</b>"
+
+#: reconstructor.py:3705
+msgid "     Please make sure passwords match and try again...     "
+msgstr ""
+"     Vérifiez que les mots de passe concordent et réessayez     Please make "
+"sure passwords match and try again...     "
+
+#: reconstructor.py:3735
+msgid "Customizing Live CD Splash Image..."
+msgstr ""
+"Personnalisation de l'image de présentation (splash) du CD amorçable..."
+
+#: reconstructor.py:3739
+msgid "Setting Live CD Text color..."
+msgstr "Paramètrage de la couleur du texte du CD amorçable..."
+
+#: reconstructor.py:3762
+msgid "Customizing boot usplash..."
+msgstr "Personnalisation du thème usplash de démarrage..."
+
+#: reconstructor.py:3770
+msgid "Customizing Gnome wallpaper..."
+msgstr "Personnalisation du fond d'écran Gnome..."
+
+#: reconstructor.py:3778
+msgid "Setting Gnome application font..."
+msgstr "Paramètrage de la police de caractère des applications Gnome..."
+
+#: reconstructor.py:3781
+msgid "Setting Gnome document font..."
+msgstr "Paramètrage de la police de caractère des documents Gnome..."
+
+#: reconstructor.py:3784
+msgid "Setting Gnome desktop font..."
+msgstr "Paramètrage de la police de caractère du bureau Gnome"
+
+#: reconstructor.py:3787
+msgid "Setting Gnome title bar font..."
+msgstr "Paramètrage de la police de caractère des titres de fenêtres Gnome..."
+
+#: reconstructor.py:3790
+msgid "Setting Gnome fixed font..."
+msgstr "Paramètrage de la police de caractère à taille de Gnome"
+
+#: reconstructor.py:3796
+msgid "Setting Gnome theme..."
+msgstr "Paramètrage du thème Gnome..."
+
+#: reconstructor.py:3800
+msgid "Setting Gnome window borders..."
+msgstr "Paramètrage des bordures de fenêtre Gnome..."
+
+#: reconstructor.py:3804
+msgid "Setting Gnome icons..."
+msgstr "Paramètrage des icones Gnome..."
+
+#: reconstructor.py:3809
+msgid "Configuring GDM..."
+msgstr "Configuration de GDM..."
+
+#: reconstructor.py:3812
+msgid "Setting GDM Security..."
+msgstr "Paramètrage de la sécurité de GDM..."
+
+#: reconstructor.py:3818
+msgid "Setting GDM XDMCP..."
+msgstr "Paramètrage du protocole XDMCP pour GDM..."
+
+#: reconstructor.py:3831
+msgid "Setting GDM Theme..."
+msgstr "Paramètrage du thème GDM..."
+
+#: reconstructor.py:3833
+msgid "Setting GDM Sounds..."
+msgstr "Paramètrage des sons utilisés par GDM..."
+
+#: reconstructor.py:3839
+msgid "Backing up GDM configuration..."
+msgstr "Sauvegarde de la configuration de GDM..."
+
+#: reconstructor.py:3842
+msgid "Saving GDM configuration..."
+msgstr "Enregistrement de la configuration de GDM..."
+
+#: reconstructor.py:3850
+msgid "Customizing Gnome Splash Screen..."
+msgstr "Personnalisation de l'écran de bienvenue Gnome..."
+
+#: reconstructor.py:3861 reconstructor.py:4130 reconstructor.py:4315
+msgid "Backing up old apt config..."
+msgstr "Sauvegarde de l'ancienne configuration d'apt..."
+
+#: reconstructor.py:3871 reconstructor.py:4124
+msgid ""
+"Unable to detect codename for Ubuntu CD Version - APT Repositories will NOT "
+"be modified..."
+msgstr ""
+
+#: reconstructor.py:3876
+#, fuzzy
+msgid "Adding Official Apt Repository..."
+msgstr "Ajout du dépôt Ubuntu officiel..."
+
+#: reconstructor.py:3878 reconstructor.py:4145
+msgid "Adding Ubuntu Official Security Repository..."
+msgstr "Ajout du dépôt Ubuntu de sécurité officiel..."
+
+#: reconstructor.py:3884 reconstructor.py:4151
+msgid "Adding Ubuntu Restricted Apt Repository..."
+msgstr "Ajout du dépôt Ubuntu 'Restricted'..."
+
+#: reconstructor.py:3889 reconstructor.py:4156
+msgid "Adding Ubuntu Universe Apt Repository..."
+msgstr "Ajout du dépôt Ubuntu 'Universe'..."
+
+#: reconstructor.py:3891 reconstructor.py:4158
+msgid "Adding Ubuntu Universe Security Repository..."
+msgstr "Ajout du dépôt Ubuntu 'Universe' de sécurité..."
+
+#: reconstructor.py:3897 reconstructor.py:4164
+msgid "Adding Ubuntu Multiverse Apt Repository..."
+msgstr "Ajout du dépôt Ubuntu 'Multiverse'..."
+
+#: reconstructor.py:3901 reconstructor.py:4168
+msgid "Adding Ubuntu Official Updates Apt Repository..."
+msgstr "Ajout du dépôt contenant les mises-à-jour officielles d'Ubuntu..."
+
+#: reconstructor.py:3907 reconstructor.py:4174
+msgid "Adding Custom Apt Repositories..."
+msgstr "Ajout de dépôt Apt personnalisé..."
+
+#: reconstructor.py:3914
+msgid "Removing existing template..."
+msgstr "Suppression du thème (template) existant..."
+
+#: reconstructor.py:3916
+msgid "Copying User Template..."
+msgstr "Copie du thème (template) de l'utilisateur..."
+
+#: reconstructor.py:3921
+msgid "Error copying template: "
+msgstr "Erreur lors de la copie du thème (template):"
+
+#: reconstructor.py:3937
+msgid "Running modules..."
+msgstr "Lancement des modules..."
+
+#: reconstructor.py:3994
+msgid "Copying modules that run on boot..."
+msgstr "Copie des modules se lancant au démarrage..."
+
+#: reconstructor.py:4009
+msgid "Generating boot module script..."
+msgstr "Generation du script de lancement des modules au démarrage"
+
+#: reconstructor.py:4027
+msgid ""
+"Manually installing all existing .deb archives in /var/cache/apt/archives..."
+msgstr ""
+"Installation manuelles de tous les .deb existant dans /var/cache/apt/"
+"archives..."
+
+#: reconstructor.py:4053
+msgid "Updating APT Information..."
+msgstr "Mise à jour des informations de la base APT..."
+
+#: reconstructor.py:4062
+msgid "Installing Custom Software..."
+msgstr "Installation des logiciels choisis par l'utilisateur..."
+
+#: reconstructor.py:4070
+msgid "Removing Custom Software..."
+msgstr "Suppression des logiciels choisis par l'utilisateur..."
+
+#: reconstructor.py:4110
+#, fuzzy
+msgid "Distribution:"
+msgstr "Description:"
+
+#: reconstructor.py:4111
+#, fuzzy
+msgid "Version:"
+msgstr " Version du Module"
+
+#: reconstructor.py:4143
+msgid "Adding Ubuntu Official Apt Repository..."
+msgstr "Ajout du dépôt Ubuntu officiel..."
+
+#: reconstructor.py:4180 reconstructor.py:4325
+#, fuzzy
+msgid "Updating apt (apt-get update)..."
+msgstr "Mettre à jour (apt-get upgrade)"
+
+#: reconstructor.py:4182
+#, fuzzy
+msgid "Downloading extra packages..."
+msgstr "Telechargement de l'archive de Qemu"
+
+#: reconstructor.py:4186 reconstructor.py:4331
+#, fuzzy
+msgid "Restoring original apt configuration..."
+msgstr "Restauration de la configuration de wgetrc..."
+
+#: reconstructor.py:4201
+msgid "Copying downloaded archives into pool..."
+msgstr ""
+
+#: reconstructor.py:4203
+#, fuzzy
+msgid "Cleaning temporary apt cache..."
+msgstr "Suppression des fichiers temporaires..."
+
+#: reconstructor.py:4211
+#, fuzzy
+msgid "Creating Release file..."
+msgstr "Création d'initrd..."
+
+#: reconstructor.py:4225
+msgid "No GPG Key found... Creating..."
+msgstr ""
+
+#: reconstructor.py:4235
+msgid "GPG Key Generation Finished..."
+msgstr ""
+
+#: reconstructor.py:4239
+#, fuzzy
+msgid "Error Creating GPG Key:"
+msgstr "Erreur lors du chargement d'Xnest:"
+
+#: reconstructor.py:4244
+#, fuzzy
+msgid "Creating apt.conf..."
+msgstr "Création de l'image ISO..."
+
+#: reconstructor.py:4255
+msgid "Creating apt-ftparchive-deb.conf..."
+msgstr ""
+
+#: reconstructor.py:4270
+msgid "Creating apt-ftparchive-udeb.conf..."
+msgstr ""
+
+#: reconstructor.py:4285
+msgid "Creating apt-ftparchive-extras.conf..."
+msgstr ""
+
+#: reconstructor.py:4295
+#, fuzzy
+msgid "Checking Indices..."
+msgstr "Vérification des dépendances..."
+
+#: reconstructor.py:4320
+#, fuzzy
+msgid "Removing existing ubuntu-keyring source..."
+msgstr "Suppression du thème (template) existant..."
+
+#: reconstructor.py:4328
+msgid "Getting Ubuntu Keyring source..."
+msgstr ""
+
+#: reconstructor.py:4341
+#, fuzzy
+msgid "Importing Ubuntu Key..."
+msgstr "Importation du thème..."
+
+#: reconstructor.py:4345
+#, fuzzy
+msgid "Exporting new key..."
+msgstr "Importation du thème..."
+
+#: reconstructor.py:4347
+#, fuzzy
+msgid "Building new key package..."
+msgstr "Construction de l'image ISO PowerPC..."
+
+#: reconstructor.py:4351
+#, fuzzy
+msgid "Removing old ubuntu keyring package..."
+msgstr "Suppression d'Evolution..."
+
+#: reconstructor.py:4354
+msgid "Copying new ubuntu keyring package..."
+msgstr ""
+
+#: reconstructor.py:4358
+#, fuzzy
+msgid "Generating package lists..."
+msgstr "Génération de la bibliothèque Usplash..."
+
+#: reconstructor.py:4368
+#, fuzzy
+msgid "Removing current Release file..."
+msgstr "Suppression du thème (template) existant..."
+
+#: reconstructor.py:4370
+#, fuzzy
+msgid "Generating new Release file..."
+msgstr "Génération de la bibliothèque Usplash..."
+
+#: reconstructor.py:4372
+msgid "GPG signing new Release file..."
+msgstr ""
+
+#: reconstructor.py:4390
+msgid "Creating preseed for Ubuntu..."
+msgstr ""
+
+#: reconstructor.py:4394
+msgid "Creating preseed for Kubuntu..."
+msgstr ""
+
+#: reconstructor.py:4398
+msgid "Creating preseed for Xubuntu..."
+msgstr ""
+
+#: reconstructor.py:4402
+msgid "Error: Unknown distribution. Skipping preseed creation..."
+msgstr ""
+
+#: reconstructor.py:4414
+#, fuzzy
+msgid "Creating isolinux.cfg..."
+msgstr "Création d'initrd..."
+
+#: reconstructor.py:4420
+msgid "No extra packages found..."
+msgstr ""
+
+#: reconstructor.py:4425
+#, fuzzy
+msgid "Finished customizing alternate install..."
+msgstr "Préparation du répertoire de travail terminée..."
+
+#: reconstructor.py:4447 reconstructor.py:4544
+msgid "INFO: Starting Build..."
+msgstr "INFO: Début de la création du CD..."
+
+#: reconstructor.py:4453 reconstructor.py:4550
+msgid "Creating Initrd..."
+msgstr "Création d'initrd..."
+
+#: reconstructor.py:4460
+msgid "Creating SquashFS root..."
+msgstr "Création de la racine SquashFS..."
+
+#: reconstructor.py:4461
+msgid "Updating File lists..."
+msgstr "Mise-à-jour des listes de fichiers..."
+
+#: reconstructor.py:4467
+msgid "Removing existing SquashFS root..."
+msgstr "Suppression de la racine existante de SquashFS..."
+
+#: reconstructor.py:4469
+msgid "Building SquashFS root..."
+msgstr "Création de la racine SquashFS..."
+
+#: reconstructor.py:4478
+msgid "Removing Win32 versions of Firefox, Thunderbird, etc. ..."
+msgstr "Suppression des versions Win32 de Firefox, Thunderbird, etc. ..."
+
+#: reconstructor.py:4490 reconstructor.py:4557
+msgid "Creating ISO..."
+msgstr "Création de l'image ISO..."
+
+#: reconstructor.py:4494 reconstructor.py:4561
+msgid "Updating md5 sums..."
+msgstr "Mise-à-jour des sommes de contrôle md5..."
+
+#: reconstructor.py:4498 reconstructor.py:4565
+msgid "Removing existing ISO..."
+msgstr "Suppression de l'image ISO existante..."
+
+#: reconstructor.py:4507 reconstructor.py:4574
+msgid "Building x86 ISO..."
+msgstr "Construction de l'image ISO x86..."
+
+#: reconstructor.py:4510 reconstructor.py:4577
+msgid "Building PowerPC ISO..."
+msgstr "Construction de l'image ISO PowerPC..."
+
+#: reconstructor.py:4513 reconstructor.py:4580
+msgid "Building IA_64 ISO..."
+msgstr "Construction de l'image ISO IA_64..."
+
+#: reconstructor.py:4519 reconstructor.py:4586
+msgid "     <b>Finished.</b>     "
+msgstr "     <b>Terminé.</b>     "
+
+#: reconstructor.py:4520 reconstructor.py:4587
+msgid "      <b>Finished.</b> ISO located at: "
+msgstr "      <b>Terminé.</b> L'ISO se trouve sur: "
+
+#: reconstructor.py:4699
+msgid "  <b>You must run with root privledges.</b>"
+msgstr ""
+"  <b>Vous devez lancer l'application avec les droits d'accès administrateur."
+"</b>  "
+
+#: reconstructor.py:4700
+msgid ""
+"Open a Terminal, change to the directory with reconstructor, \n"
+"and type <b>sudo python reconstructor.py</b>  "
+msgstr ""
+"Lancez un terminal, allez dans le répertoire de reconstructor, \n"
+"et entrez <b>sudo python reconstructor.py</b>  "
+
+###Cooperation-iws personal
+#Glade Vbox 13
+msgid ""
+"<b>Welcome to Cooperation-iws, the Intranet Nomad Web Server creator.</b>\n"
+"\n"
+"To continue, click Next ...."
+msgstr ""
+"<b>Bienvenue sur les live-scripts de Cooperation-iws, créateurs de Serveur Web Intranet Nomade.</b>\n"
+"\n"
+"Pour continuer, cliquer sur suivant ..."
+
+#Glade Vbox 12
+msgid ""
+"Please select the type of install you want to proceed"
+msgstr ""
+"Choissez le type d'installation à laquelle vous allez procéder"
+
+#Glade Vbox 12
+msgid ""
+"Customize Live CD and create Live USB"
+msgstr ""
+"Personnaliser le Live CD et créer le Live USB"
+
+#Glade Vbox 12
+msgid ""
+"Transform Cooperation-iws Live CD to Live USB"
+msgstr ""
+"Transformer un Live CD de Cooperation-iws en Live USB"
+
+#Glade Vbox 18
+msgid ""
+"Disable Autologin"
+msgstr ""
+"Désactiver l'autologin"
+
+#Glade Vbox 19
+msgid ""
+"Choose the mirror from which you will be fetching sources from web applications:"
+msgstr ""
+"Choisissez le mirroir à partir duquel vous allez récuprérer les applications web:"
+
+#Glade Vbox 19
+msgid ""
+"Web fetching"
+msgstr ""
+"Récupération sur le web"
+
+#Glade Vbox 19
+msgid ""
+"Free.fr mirror fetching"
+msgstr ""
+"Récupération à partir du mirroir Free.fr"
+
+#Glade Vbox 19
+msgid ""
+"Berlios 1 mirror fetching"
+msgstr ""
+"Récupération à partir du mirroir Berlios 1"
+
+#Glade Vbox 19
+msgid ""
+"Berlios 2 mirror fetching"
+msgstr ""
+"Récupération à partir du mirroir Berlios 2"
+
+#Glade Vbox 19
+msgid ""
+"Choose the type of install for the web applications:"
+msgstr ""
+"Choisissez le type d'installtion des applications web:"
+
+#Glade Vbox 8
+msgid ""
+"Default install"
+msgstr ""
+"Installation par défaut"
+
+#Glade Vbox 19
+msgid ""
+"Custom Install (You may choose quantity and names of web applications)"
+msgstr ""
+"Installation personnalisée (Vous pouvez choisir la quantité et le nom des applications à installer)"
+
+
+#Glade Vbox 7
+msgid ""
+"Build Live USB"
+msgstr ""
+"créer un Live USB"
+
+#Glade Vbox 7
+msgid ""
+"Path of Usb Key (e.g. /dev/sde ):"
+msgstr ""
+"Chemin de la clef Usb (ex: /dev/sde ):"
+
+#Glade Vbox 7
+msgid ""
+"Automatically detect Usb Key:"
+msgstr ""
+"Détecter automatiquement la clef Usb:"
+
+#Glade Vbox 7
+msgid ""
+"Keyboard Language of Live Usb:"
+msgstr ""
+"Langue du clavier du Live Usb:"
+
+#Glade Vbox 7
+msgid ""
+"Language of Live Usb:"
+msgstr ""
+"Langue du Live Usb:"
+
+#Glade Vbox 7
+msgid ""
+"For comments, questions, etc. contact us at http://cooperation-iws.gensys-net.eu"
+msgstr ""
+"Pour tout commentaire, question, etc. contactez nous sur http://cooperation-iws.gensys-net.eu"
+
+#Glade Vbox 7
+msgid ""
+"Filename of the iso:"
+msgstr ""
+"Nom du fichier iso:"
+
+#Glade Vbox 7
+msgid ""
+"Fill in the right parameters:"
+msgstr ""
+"Saisissez les bons paramètres:"
+
+
+#Glade Vbox 7
+msgid ""
+"<b>Select components to build the Live Usb</b>"
+msgstr ""
+"<b>Sélectionner les composants pour installer le Live Usb</b>"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
