@@ -100,6 +100,7 @@ echo "I: Install Trac"
 
 
 aptitude install -y trac
+apt-get install --yes --force-yes python-pygments enscript
 
 mkdir /var/trac
 cd /var/trac
