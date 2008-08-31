@@ -252,6 +252,7 @@ for (( count=1; count<=$NB_DOTCLEAR; count++ ))
 do
 echo "
 #Dotclear
+sed -i \"39s/localhost/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" \$WWW_DIRECTORY/${NOM_DOTCLEAR[$count]}/inc/config.php
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done
