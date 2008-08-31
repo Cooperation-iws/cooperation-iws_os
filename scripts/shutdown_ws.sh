@@ -104,7 +104,8 @@ killall -9 mysqld_safe
 
 echo "I: empty temporary directory"
 rm -r /tmp/*
-rm -r /var/cache/apt/*
+rm /var/cache/apt/archives/*
+rm /var/cache/apt/archives/partial/*
 
 echo "I: config persistent directory"
 
