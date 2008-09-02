@@ -10,6 +10,7 @@ RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Wiki CMS from Wikipedia'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
 DL_DIR=$(cat /tmp/web_install-path)

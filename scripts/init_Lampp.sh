@@ -39,10 +39,7 @@ LANG_UI="EN"
 fi
 echo $LANG_UI > /tmp/lang-wui
 
-killall -9 httpd
-killall -9 apache2
-killall -9 mysqld
-killall -9 mysqld_safe
+APACHE=$(cat /tmp/apache)
 
 
 function ADD_USER()
@@ -69,8 +66,17 @@ deb http://ftp.crihan.fr/ubuntu/ hardy-security restricted main universe multive
 " > /etc/apt/sources.list
 
 apt-get update
+apt-get install --yes --force-yes build-essential 
 
-apt-get install --yes --force-yes  apache2 apache2-doc apache2-mpm-prefork apache2-utils apache2.2-common mysql-server php5 libapache2-mod-php5 php5-mysql phpmyadmin php-pear php5-cli php5-gd php5-xsl php5-curl libapache2-mod-python php-pear libphp-adodb build-essential libexpat1 ssl-cert php5-imagick php5-imap php5-mcrypt php5-memcache php5-mhash php5-ming php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl php5-cli imagemagick
+if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
+
+killall -9 httpd
+killall -9 apache2
+killall -9 mysqld
+killall -9 mysqld_safe
+
+
+apt-get install --yes --force-yes  apache2 apache2-doc apache2-mpm-prefork apache2-utils apache2.2-common mysql-server php5 libapache2-mod-php5 php5-mysql phpmyadmin php-pear php5-cli php5-gd php5-xsl php5-curl libapache2-mod-python php-pear libphp-adodb libexpat1 ssl-cert php5-imagick php5-imap php5-mcrypt php5-memcache php5-mhash php5-ming php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl php5-cli imagemagick
 
 
 echo "
@@ -105,23 +111,6 @@ sed -i -e  "s/post_max_size = 8M/post_max_size = 32M/" /etc/php5/apache2/php.ini
 mkdir $WWW_DIRECTORY/admin/
 rm $WWW_DIRECTORY/index.html
 
-
-echo "I: config rc.local"
-echo "#!/bin/sh
-
-" > /etc/rc.local
-
-echo "I: create persistent directory"
-mkdir $LAMPP_DIRECTORY/share/
-mkdir $LAMPP_DIRECTORY/share/lampp
-mkdir $LAMPP_DIRECTORY/share/etc
-
-echo "I: post install script creation"
-echo "#!/bin/bash
-WWW_DIRECTORY=\"/var/www\"
-" > $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
-
-
 echo "I: config Cooperation-iws wui"
 cd $DL_DIR
 wget $URL_FREE/cooperation-wui-0.5.0.tar.gz
@@ -147,5 +136,26 @@ echo "<?php include('cooperation-wui.header.php'); ?>
 #ADMIN
 
 cp -Rf $WWW_DIRECTORY/cooperation-wui.frame.php $WWW_DIRECTORY/admin/.
+
+fi
+
+
+
+echo "I: config rc.local"
+echo "#!/bin/sh
+
+" > /etc/rc.local
+
+echo "I: create persistent directory"
+mkdir $LAMPP_DIRECTORY/share/
+mkdir $LAMPP_DIRECTORY/share/lampp
+mkdir $LAMPP_DIRECTORY/share/etc
+
+echo "I: post install script creation"
+echo "#!/bin/bash
+WWW_DIRECTORY=\"/var/www\"
+" > $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+
+
 
 

@@ -147,7 +147,8 @@ class Reconstructor:
         self.modVersionKey = 'RMOD_VERSION'
         self.modRunInChrootKey = 'RMOD_RUN_IN_CHROOT'
         self.modUpdateUrlKey = 'RMOD_UPDATE_URL'
-        self.modules =  {}
+        self.modReqApache='RMOD_REQ_APACHE'
+	self.modules =  {}
 
         self.regexUbuntuVersion = '^DISTRIB_RELEASE=([0-9.]+)\n'
         self.regexModEngine = '^RMOD_ENGINE=([A-Za-z0-9.\s\w]+)\n'
@@ -158,7 +159,8 @@ class Reconstructor:
         self.regexModDescription = '^RMOD_DESCRIPTION=([A-Za-z0-9.\-\&\*\_\,\/\\(\)\'\"\s\w]+)\n'
         self.regexModVersion = '^RMOD_VERSION=([A-Za-z0-9.\s\w]+)\s'
         self.regexModRunInChroot = '^RMOD_RUN_IN_CHROOT=([A-Za-z0-9\w]+)\s'
-        self.regexModUpdateUrl = '^RMOD_UPDATE_URL=([A-Za-z0-9:.\-\&\*\_\,\/\\(\)\'\"\s\w]+)\n'
+	self.regexModReqApache = '^RMOD_REQ_APACHE=([A-Za-z0-9\w]+)\s'        
+	self.regexModUpdateUrl = '^RMOD_UPDATE_URL=([A-Za-z0-9:.\-\&\*\_\,\/\\(\)\'\"\s\w]+)\n'
         self.regexUbuntuAltCdVersion = '^[a-zA-Z0-9-.]*\s+([0-9.]+)\s+'
         self.regexUbuntuAltCdInfo = '([\w-]+)\s+(\d+.\d+)\s+\D+Release\s(\w+)\s+'
         self.regexUbuntuAltPackages = '^Package:\s+(\S*)\n'
@@ -183,6 +185,7 @@ class Reconstructor:
         self.moduleColumnRunInChroot = 7
         self.moduleColumnUpdateUrl = 8
         self.moduleColumnPath = 9
+        self.moduleColumnReqApache = 10
         self.execModulesEnabled = False
         self.bootModulesEnabled = False
         # time command for timing operations
@@ -635,7 +638,8 @@ class Reconstructor:
         modAuthor = ''
         modDescription = ''
         modRunInChroot = None
-        modUpdateUrl = ''
+	modReqApache = None      
+	modUpdateUrl = ''
 
       # HACK: regex through module to get info
         reModCategory = re.compile(self.regexModCategory, re.IGNORECASE)
@@ -645,6 +649,7 @@ class Reconstructor:
         reModAuthor = re.compile(self.regexModAuthor, re.IGNORECASE)
         reModDescription = re.compile(self.regexModDescription, re.IGNORECASE)
         reModRunInChroot = re.compile(self.regexModRunInChroot, re.IGNORECASE)
+        reModReqApache = re.compile(self.regexModReqApache, re.IGNORECASE)
         reModUpdateUrl = re.compile(self.regexModUpdateUrl, re.IGNORECASE)
 
         for line in fMod:
@@ -662,9 +667,14 @@ class Reconstructor:
                 modDescription = reModDescription.match(line).group(1)
             if reModRunInChroot.match(line) != None:
                 modRunInChroot = reModRunInChroot.match(line).group(1)
+            if reModReqApache.match(line) != None:
+                modReqApache = reModReqApache.match(line).group(1)
             if reModUpdateUrl.match(line) != None:
                 modUpdateUrl = reModUpdateUrl.match(line).group(1)
         fMod.close()
+	
+	
+		
 
         # remove single and double quotes if any
         modCategory = modCategory.replace("'", "")
@@ -689,6 +699,7 @@ class Reconstructor:
         properties[self.modRunInChrootKey] = modRunInChroot
         properties[self.modVersionKey] = modVersion
         properties[self.modUpdateUrlKey] = modUpdateUrl
+	properties[self.modReqApache] = modReqApache
 
         return properties
 
@@ -698,7 +709,7 @@ class Reconstructor:
         # generate model for treeview
         # create treestore of (install(bool), modulename, version, author, description, runInChroot(hidden), filepath(hidden))
         self.treeModel = None
-        self.treeModel = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.treeModel = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN)
         # load categories self.treeModel
         # root categories
         self.iterCategorySoftware = self.treeModel.insert_before(None, None)
@@ -750,6 +761,7 @@ class Reconstructor:
                         self.treeModel.set_value(iter, self.moduleColumnRunInChroot, bool(modProps[self.modRunInChrootKey]))
                         self.treeModel.set_value(iter, self.moduleColumnUpdateUrl, modProps[self.modUpdateUrlKey])
                         self.treeModel.set_value(iter, self.moduleColumnPath, modPath)
+                       	self.treeModel.set_value(iter, self.moduleColumnReqApache, bool(modProps[self.modReqApache]))
                         #print modName, modVersion, modAuthor, modDescription, modUseXterm, modRunInChroot, modPath
                         # set default sort by category
                         self.treeModel.set_sort_column_id(self.moduleColumnName, gtk.SORT_ASCENDING)
@@ -834,7 +846,19 @@ class Reconstructor:
                         else:
                             columnModPath.set_property('visible', False)
                         view.append_column(columnModPath)
-                        self.wTree.get_widget("scrolledwindowModules").add(view)
+			# module req Apache column
+                        rendererModReqApache = gtk.CellRendererToggle()
+                        modReqApacheText = _('Require Apache')
+                        columnModReqApache = gtk.TreeViewColumn(modReqApacheText, rendererModReqApache, active=self.moduleColumnReqApache)
+                        # show column if running debug
+                        if self.runningDebug == True:
+                            columnModReqApache.set_property('visible', True)
+                        else:
+                            columnModReqApache.set_property('visible', False)
+                        view.append_column(columnModReqApache)
+                                               
+
+			self.wTree.get_widget("scrolledwindowModules").add(view)
                         view.show()
                         # expand Software section
                         view.expand_to_path('0')
@@ -891,7 +915,8 @@ class Reconstructor:
                     self.treeModel.set_value(iter, self.moduleColumnRunInChroot, bool(modProps[self.modRunInChrootKey]))
                     self.treeModel.set_value(iter, self.moduleColumnUpdateUrl, modProps[self.modUpdateUrlKey])
                     self.treeModel.set_value(iter, self.moduleColumnPath, modPath)
-
+		    self.treeModel.set_value(iter, self.moduleColumnReqApache, bool(modProps[self.modReqApache]))
+                    
         except Exception, detail:
             errText = _('Error installing module: ')
             print errText, modulePath + ': ', detail
@@ -1157,8 +1182,15 @@ class Reconstructor:
         modExecute = model.get_value(iter, self.moduleColumnExecute)
         modPath = model.get_value(iter, self.moduleColumnPath)
         modRunInChroot = model.get_value(iter, self.moduleColumnRunInChroot)
+        modReqApache = model.get_value(iter, self.moduleColumnReqApache)
         # check for module and skip category
-	
+ 	if modExecute == True:	
+		if modReqApache == True:       
+                	ReqApache="A"
+			fReqApache=open(os.path.join(self.customDir, "root/tmp/apache"), 'w')
+            		fReqApache.write(ReqApache)
+            		fReqApache.close()
+	    
 	if modPath != None:
             # check for execute
             if modExecute == True:
@@ -3677,12 +3709,12 @@ class Reconstructor:
         # get ubuntu version
         self.loadCdVersion()
         # get current boot options menu text color
-        self.loadBootMenuColor()
+        #self.loadBootMenuColor()
         # get current gdm background color
-        self.loadGdmBackgroundColor()
+        #self.loadGdmBackgroundColor()
         # load comboboxes for customization
-        self.loadGdmThemes()
-        self.loadGnomeThemes()
+        #self.loadGdmThemes()
+        #self.loadGnomeThemes()
         #self.hideWorking()
         self.setDefaultCursor()
         self.setPage(self.pageLiveCustomize)
