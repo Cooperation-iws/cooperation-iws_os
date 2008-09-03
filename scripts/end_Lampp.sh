@@ -6,6 +6,7 @@ LAMPP_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 
+APACHE=$(cat /tmp/apache)
 
 
 echo "I: config post install script"
@@ -18,20 +19,6 @@ read ok < /dev/tty
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
 chmod +x $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
-
-
-
-
-
-echo "I: displacing /etc directories"
-
-mv /etc/apache2 /var/share/etc/
-
-ln -s /var/share/etc/apache2 /etc/apache2
-
-mv /etc/php5 /var/share/etc/
-
-ln -s /var/share/etc/php5 /etc/php5
 
 echo "I: configuring casper"
 sed -i -e "405s/\/home/\/var/" /usr/share/initramfs-tools/scripts/casper
@@ -76,5 +63,20 @@ fi
 chmod +x /usr/share/initramfs-tools/scripts/casper-bottom/00cpvar
 
 
+
+if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
+
+
+echo "I: displacing /etc directories"
+
+mv /etc/apache2 /var/share/etc/
+
+ln -s /var/share/etc/apache2 /etc/apache2
+
+mv /etc/php5 /var/share/etc/
+
+ln -s /var/share/etc/php5 /etc/php5
+
+fi
 
 echo "I: End of Customization"

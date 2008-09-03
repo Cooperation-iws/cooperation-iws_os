@@ -2,6 +2,7 @@
 
 WWW_DIRECTORY="/var/www"
 
+APACHE=$(cat /tmp/apache)
 
 
 echo "I: making initramfs"
@@ -11,6 +12,7 @@ NB_KERNEL=$(ls /lib/modules | wc -l)
 NB_KERNEL=$(expr $NB_KERNEL-1)
 mkinitramfs -o /initrd.gz ${KERNEL[$NB_KERNEL]}
 
+if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
 
 echo "I: Configuring cooperation-iws wui"
 
@@ -39,20 +41,6 @@ mv $WWW_DIRECTORY/admin/cooperation-wui.frame.php $WWW_DIRECTORY/admin/index.php
 
 
 
-echo "I: config rc.local"
-
-echo "#!/bin/bash
-
-exit 0" > /var/share/etc/rc.ciws
-
-chmod +x /var/share/etc/rc.ciws
-
-echo "
-/var/share/etc/rc.ciws
-exit 0
-
-" >> /etc/rc.local
-chmod +x /etc/rc.local
 
 
 echo "I: Securing Lampp Server"
@@ -100,6 +88,22 @@ killall -9 apache2
 killall -9 mysqld
 killall -9 mysqld_safe
 
+fi
+
+echo "I: config rc.local"
+
+echo "#!/bin/bash
+
+exit 0" > /var/share/etc/rc.ciws
+
+chmod +x /var/share/etc/rc.ciws
+
+echo "
+/var/share/etc/rc.ciws
+exit 0
+
+" >> /etc/rc.local
+chmod +x /etc/rc.local
 
 
 echo "I: empty temporary directory"
