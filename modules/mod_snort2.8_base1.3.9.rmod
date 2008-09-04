@@ -494,8 +494,7 @@ pear install Image_Graph-alpha
 
 function CREATE_WUI
 {
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_BASE\">$NOM_BASE</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_BASE\">$NOM_BASE</a><br>
 ">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________

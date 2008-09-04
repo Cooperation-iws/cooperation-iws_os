@@ -246,8 +246,7 @@ function CREATE_WUI
 for (( count=1; count<=$NB_LIFETYPE; count++ ))
 
 do
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"/${NOM_LIFETYPE[$count]}\">${NOM_LIFETYPE[$count]}</a> | <a href=\"/${NOM_LIFETYPE[$count]}\">Admin</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_LIFETYPE[$count]}\">${NOM_LIFETYPE[$count]}</a> | <a href=\"/${NOM_LIFETYPE[$count]}\">Admin</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
 done
 

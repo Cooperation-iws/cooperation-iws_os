@@ -226,8 +226,7 @@ cat $WWW_DIRECTORY/$NOM_MOODLE/install.php | sed -i -e "63s/'moodle'/'$NOM_MOODL
 
 function CREATE_WUI
 {
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"/$NOM_MOODLE\">$NOM_MOODLE</a> | <a href=\"/$NOM_MOODLE/login/\">Admin</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_MOODLE\">$NOM_MOODLE</a> | <a href=\"/$NOM_MOODLE/login/\">Admin</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________

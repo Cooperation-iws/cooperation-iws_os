@@ -229,9 +229,7 @@ chown -R www-data $WWW_DIRECTORY/admin/$NOM_CACTI/
 
 function CREATE_WUI
 {
-echo "
-<hr width="10%">
-$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_CACTI\" >$NOM_CACTI</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_CACTI\" >$NOM_CACTI</a><br>
 ">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________

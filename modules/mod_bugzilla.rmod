@@ -223,8 +223,7 @@ sed -i -e '/<\/VirtualHost>/i\
 
 function CREATE_WUI
 {
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"/${NOM_BUGZILLA}\">${NOM_BUGZILLA}</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_BUGZILLA}\">${NOM_BUGZILLA}</a><br>
 ">> $WWW_DIRECTORY/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________

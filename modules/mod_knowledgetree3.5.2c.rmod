@@ -306,8 +306,7 @@ function CREATE_WUI
 for (( count=1; count<=$NB_KT; count++ ))
 
 do
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"/${NOM_KT[$count]}\">${NOM_KT[$count]}</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_KT[$count]}\">${NOM_KT[$count]}</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
 done
 }

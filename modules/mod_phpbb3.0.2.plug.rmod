@@ -208,8 +208,7 @@ chown -R www-data:www-data $WWW_DIRECTORY/$NOM_PHPBB3
 
 function CREATE_WUI
 {
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"/$NOM_PHPBB3\">$NOM_PHPBB3</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_PHPBB3\">$NOM_PHPBB3</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
 
 }

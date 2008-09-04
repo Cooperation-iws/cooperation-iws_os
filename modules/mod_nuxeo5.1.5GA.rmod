@@ -377,8 +377,7 @@ sleep 3
 
 function CREATE_WUI
 {
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"http://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:8080/nuxeo\">Nuxeo</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"http://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:8080/nuxeo\">Nuxeo</a><br>
 ">> $DOSSIER_CHROOT/var/www/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________

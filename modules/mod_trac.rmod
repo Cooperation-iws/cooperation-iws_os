@@ -163,11 +163,9 @@ echo "I: End of install Trac"
 
 function CREATE_WUI
 {
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"/svn/project/\">Svn</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/svn/project/\">Svn</a><br>
 ">> $WWW_DIRECTORY/cooperation-wui.frame.php
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"/tracproject/\">Trac</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/tracproject/\">Trac</a><br>
 ">> $WWW_DIRECTORY/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________

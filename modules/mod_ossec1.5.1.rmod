@@ -247,8 +247,7 @@ echo "
 
 function CREATE_WUI
 {
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_OSSEC\">$NOM_OSSEC</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_OSSEC\">$NOM_OSSEC</a><br>
 ">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________

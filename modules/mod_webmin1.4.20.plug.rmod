@@ -238,8 +238,7 @@ dpkg -i webmin_1.420_all.deb
 
 function CREATE_WUI
 {
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"https://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:10000\">Webmin</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"https://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:10000\">Webmin</a><br>
 ">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________

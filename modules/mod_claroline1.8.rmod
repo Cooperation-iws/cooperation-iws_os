@@ -217,8 +217,7 @@ chown -R www-data $WWW_DIRECTORY/$NOM_CLAROLINE/
 
 function CREATE_WUI
 {
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"/$NOM_CLAROLINE\" >$NOM_CLAROLINE</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_CLAROLINE\" >$NOM_CLAROLINE</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________

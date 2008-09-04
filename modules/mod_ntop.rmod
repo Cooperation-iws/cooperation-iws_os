@@ -58,8 +58,7 @@ echo "
 
 function CREATE_WUI
 {
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"http://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:3000\">Ntop</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"http://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:3000\">Ntop</a><br>
 ">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________

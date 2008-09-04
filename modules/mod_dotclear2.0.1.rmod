@@ -233,8 +233,7 @@ function CREATE_WUI
 for (( count=1; count<=$NB_DOTCLEAR; count++ ))
 
 do
-echo "<hr width=\"10%\">
-$RMOD_DESCRIPTION | <a href=\"/${NOM_DOTCLEAR[$count]}\">${NOM_DOTCLEAR[$count]}</a> | <a href=\"/${NOM_DOTCLEAR[$count]}/admin/\">Admin</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_DOTCLEAR[$count]}\">${NOM_DOTCLEAR[$count]}</a> | <a href=\"/${NOM_DOTCLEAR[$count]}/admin/\">Admin</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
 
 done
