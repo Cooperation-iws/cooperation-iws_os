@@ -127,11 +127,7 @@ cp -Rf $DL_DIR/cooperation-wui/cooperation-wui.layout.css $WWW_DIRECTORY/.
 cp -Rf $DL_DIR/cooperation-wui/cooperation-wui.layout.css $WWW_DIRECTORY/admin/.
 
 
-echo "<?php include('cooperation-wui.header.php'); ?>
-
-<center>
-<img src=\"cooperation.header.jpg\"><br><br>
-"> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo ""> $WWW_DIRECTORY/cooperation-wui.frame.php
 
 #ADMIN
 
