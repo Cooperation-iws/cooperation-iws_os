@@ -1,0 +1,60 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='OpenXchangeCVS'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Egroupware'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+#VARIABLES
+#MYSQL PASSWORD
+OPENXCHANGE_MYSQL_PWD="OPENXCHANGE_MYSQL_PWD"
+HOSTNAME="127.0.0.1"
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+/etc/init.d/cyrus2.2 stop
+/etc/init.d/saslauthd stop
+/etc/init.d/postfix stop
+/etc/init.d/munin-node stop
+
+apt-get autoremove --assume-yes --force-yes java-gcj-compat
+apt-get autoremove --assume-yes --force-yes gcj
+
+ln -s / /cow
+
+cd $DL_DIR
+wget http://213.165.93.78/~mbraun/ox/ubuntu_hardy/hyperion-ubuntu_hardy.sh
+wget http://213.165.93.78/~mbraun/ox/ubuntu_hardy/hyperion-ubuntu_hardy.tar.gz
+chmod +x hyperion-ubuntu_hardy.sh
+./hyperion-ubuntu_hardy.sh
+
+}
+
+INSTALL

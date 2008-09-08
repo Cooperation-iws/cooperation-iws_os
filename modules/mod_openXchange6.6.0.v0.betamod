@@ -1,0 +1,314 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='OpenXchange6.6.0'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Egroupware'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+#VARIABLES
+#MYSQL PASSWORD
+OPENXCHANGE_MYSQL_PWD="OPENXCHANGE_MYSQL_PWD"
+HOSTNAME="127.0.0.1"
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+/etc/init.d/cyrus2.2 stop
+/etc/init.d/saslauthd stop
+/etc/init.d/postfix stop
+/etc/init.d/munin-node stop
+
+
+
+apt-get autoremove --assume-yes --force-yes java-gcj-compat
+apt-get autoremove --assume-yes --force-yes gcj
+
+ln -s / /cow
+
+echo "
+deb http://download.opensuse.org/repositories/server:/OX:/ox6-sp4-beta/xUbuntu_8.04/ /
+" >> /etc/apt/sources.list
+aptitude update
+
+aptitude install -y mysql-server  open-xchange-admin-client \
+open-xchange-admin-doc open-xchange-admin-plugin-hosting-doc \
+open-xchange-admin-plugin-hosting open-xchange-admin-soap open-xchange-admin \
+open-xchange-authentication-database open-xchange-axis2 open-xchange-cache \
+open-xchange-charset open-xchange-common open-xchange-configjump-generic \
+open-xchange-configread open-xchange-control open-xchange-data-conversion-ical4j \
+open-xchange-global open-xchange-group-managerequest open-xchange-gui \
+open-xchange-i18n open-xchange-imap open-xchange-jcharset open-xchange-mailfilter \
+open-xchange-management open-xchange-monitoring open-xchange-online-help-he-de \
+open-xchange-online-help-he-en open-xchange-online-help-he-fr \
+open-xchange-passwordchange-database open-xchange-passwordchange-servlet \
+open-xchange-push-udp open-xchange-resource-managerequest open-xchange-server \
+open-xchange-sessiond open-xchange-settings-extensions open-xchange-smtp \
+open-xchange-spamhandler-default open-xchange
+
+apt-get install cvs sun-java5-jdk sun-java5-bin apache2 mysql-server mysql-client cyrus-imapd-2.2 cyrus-pop3d-2.2 gettext libapache2-mod-jk sasl2-bin libpam-mysql libnss-mysql-bg postfix-mysql ant ant-optional cyrus-admin-2.2 libgnujaf-java libcommons-cli-java libcommons-codec-java libcommons-httpclient-java libcommons-logging-java libslide-webdavclient-java libjdom1-java junit libmysql-java libservlet2.4-java mailutils libsasl2-modules munin munin-node
+
+
+apt-get install --assume-yes --force-yes cyrus-imapd-2.2 cyrus-admin-2.2 sasl2-bin libsasl2-modules libpam-mysql libnss-mysql-bg libsasl2-modules-sql 
+
+apt-get install --assume-yes --force-yes postfix postfix-mysql procmail
+
+sed -i "s/unixhierarchysep: no/unixhierarchysep: yes/" /etc/imapd.conf
+sed -i "s/sasl_pwcheck_method: auxprop/sasl_pwcheck_method: saslauthd/" /etc/imapd.conf
+sed -i "s/#sasl_mech_list: PLAIN/sasl_mech_list: PLAIN LOGIN/" /etc/imapd.conf
+sed -i "s/#admins: cyrus/admins: oxadmin/" /etc/imapd.conf
+sed -i "s/#loginrealms: example.com/loginrealms: localdomain/" /etc/imapd.conf
+sed -i "s/autocreatequota: 0m/autocreatequota: 1024/" /etc/imapd.conf
+
+/etc/init.d/cyrus2.2 restart
+
+
+echo "
+auth       optional     pam_mysql.so host=/var/run/mysqld/mysqld.sock user=openexchange passwd=$OPENXCHANGE_MYSQL_PWD db=oxdatabase_6 [table=login2user LEFT JOIN user ON login2user.id=user.id AND login2user.cid=user.cid] [where=user.cid=1] usercolumn=login2user.uid passwdcolumn=user.userPassword crypt=1
+account    required     pam_mysql.so host=/var/run/mysqld/mysqld.sock user=openexchange passwd=$OPENXCHANGE_MYSQL_PWD db=oxdatabase_6 [table=login2user LEFT JOIN user ON login2user.id=user.id AND login2user.cid=user.cid]  [where=user.cid=1] usercolumn=login2user.uid passwdcolumn=user.userPassword crypt=1
+
+" >/etc/pam.d/imap 
+
+echo "
+auth       optional     pam_mysql.so host=/var/run/mysqld/mysqld.sock user=openexchange passwd=$OPENXCHANGE_MYSQL_PWD db=oxdatabase_6 [table=login2user LEFT JOIN user ON login2user.id=user.id AND login2user.cid=user.cid] [where=user.cid=1] usercolumn=login2user.uid passwdcolumn=user.userPassword crypt=1
+account    required     pam_mysql.so host=/var/run/mysqld/mysqld.sock user=openexchange passwd=$OPENXCHANGE_MYSQL_PWD db=oxdatabase_6 [table=login2user LEFT JOIN user ON login2user.id=user.id AND login2user.cid=user.cid]  [where=user.cid=1] usercolumn=login2user.uid passwdcolumn=user.userPassword crypt=1
+
+" > /etc/pam.d/pop 
+
+echo "
+auth       optional     pam_mysql.so host=/var/run/mysqld/mysqld.sock user=openexchange passwd=$OPENXCHANGE_MYSQL_PWD db=oxdatabase_6 [table=login2user LEFT JOIN user ON login2user.id=user.id AND login2user.cid=user.cid] [where=user.cid=1] usercolumn=login2user.uid passwdcolumn=user.userPassword crypt=1
+account    required     pam_mysql.so host=/var/run/mysqld/mysqld.sock user=openexchange passwd=$OPENXCHANGE_MYSQL_PWD db=oxdatabase_6 [table=login2user LEFT JOIN user ON login2user.id=user.id AND login2user.cid=user.cid]  [where=user.cid=1] usercolumn=login2user.uid passwdcolumn=user.userPassword crypt=1
+
+" > /etc/pam.d/sieve
+
+
+echo "
+getpwnam    SELECT login2user.uid,'x',user.uidNumber,user.gidNumber,prg_contacts.field01,user.homeDirectory,user.loginShell FROM login2user,user,prg_contacts WHERE login2user.cid=1 AND login2user.id=user.id AND login2user.id=prg_contacts.userid AND login2user.uid='%1\$s' LIMIT 1
+getpwuid    SELECT login2user.uid,'x',user.uidNumber,user.gidNumber,prg_contacts.field01,user.homeDirectory,user.loginShell FROM login2user,user,prg_contacts WHERE user.cid=1 AND login2user.id=user.id AND prg_contacts.userid=user.id AND user.uidNumber='%1\$u' LIMIT 1
+getspnam    SELECT login2user.uid,'x',user.uidNumber,user.gidNumber,user.shadowLastChange,0,0,-1,-1,'A' FROM login2user,user WHERE login2user.cid=1 AND login2user.id=user.id AND login2user.uid='%1\$s' LIMIT 1
+getpwent    SELECT login2user.uid,'x',user.uidNumber,user.gidNumber,prg_contacts.field01,user.homeDirectory,user.loginShell FROM login2user,user,prg_contacts WHERE login2user.cid=1 AND login2user.id=user.id AND login2user.id=prg_contacts.userid
+getspent    SELECT login2user.uid,user.userPassword,user.shadowLastChange,0,0,-1,-1,'A' FROM login2user,user WHERE login2user.cid=1 AND login2user.id=user.id;
+getgrnam    SELECT identifier,'x',gidNumber FROM groups WHERE groups.cid=1 AND identifier='%1\$s' LIMIT 1
+getgrgid    SELECT identifier,'x',gidNumber FROM groups WHERE groups.cid=1 AND gidNumber='%1\$u' LIMIT 1
+getgrent    SELECT identifier,'x',gidNumber FROM groups WHERE groups.cid=1
+memsbygid   SELECT login2user.uid FROM login2user,groups,groups_member WHERE groups.cid=1 AND groups.id=groups_member.id AND groups_member.member=login2user.id AND groups.gidNumber='%1\$u'
+gidsbymem   SELECT groups.gidNumber FROM groups,groups_member,user,login2user WHERE groups.cid=1 AND groups_member.member=user.id AND user.id=login2user.id AND groups.id=groups_member.id AND login2user.uid='%1\$s';
+host        localhost
+database    oxdatabase_6
+username    openexchange
+password    $OPENXCHANGE_MYSQL_PWD
+
+" > /etc/libnss-mysql.cfg 
+
+
+echo "
+username    openexchange
+password    $OPENXCHANGE_MYSQL_PWD
+" > /etc/libnss-mysql-root.cfg
+
+echo "
+passwd:         files mysql
+group:          files mysql
+
+" > /etc/nsswitch.conf 
+
+
+mkdir -p /var/spool/postfix/var/run/saslauthd
+
+sed -i "s/START=no/START=yes/" /etc/default/saslauthd
+sed -i "s/OPTIONS=\"-c -m \/var\/run\/saslauthd\"/OPTIONS=\"-c -m \/var\/spool\/postfix\/var\/run\/saslauthd -r\"/" /etc/default/saslauthd
+adduser postfix sasl 
+
+
+
+sed -i "s/lmtp      unix  -       -       -       -       -       lmtp/lmtp      unix  -       -       n       -       -       lmtp/" /etc/postfix/master.cf
+
+echo "mailbox_transport = lmtp:unix:/var/run/cyrus/socket/lmtp
+virtual_alias_domains = mysql:/etc/postfix/ox_domains.cf
+virtual_alias_maps = mysql:/etc/postfix/ox_user_aliases.cf, mysql:/etc/postfix/ox_aliases.cf, mysql:/etc/postfix/ox_resource_aliases.cf, mysql:/etc/postfix/ox_group_aliases.cf
+smtpd_sender_restrictions = check_sender_access mysql:/etc/postfix/ox_externaldomaincheck.cf
+smtpd_restriction_classes = local_only 
+local_only = check_recipient_access mysql:/etc/postfix/ox_domains.cf, reject
+smtpd_recipient_restrictions = check_sender_access mysql:/etc/postfix/ox_senderrestrictions.cf, permit_sasl_authenticated, permit_mynetworks, reject_unauth_destination" > /etc/postfix/main.cf 
+
+#echo "localhost" > /etc/mailname
+
+echo "hosts = 127.0.0.1
+user = openexchange
+password = $OPENXCHANGE_MYSQL_PWD
+dbname = oxdatabase_6
+query = SELECT destination FROM address_mappings WHERE cid=1 AND address=\"%s\";" > /etc/postfix/ox_aliases.cf 
+
+
+echo "hosts = 127.0.0.1
+user = openexchange
+password = $OPENXCHANGE_MYSQL_PWD
+dbname = oxdatabase_6
+query = SELECT login2user.uid FROM login2user,user,user_attribute
+        WHERE login2user.cid=1
+        AND user_attribute.name=\"alias\"
+        AND login2user.id=user_attribute.id
+        AND login2user.id=user.id
+        AND user_attribute.value=\"%s\";" > /etc/postfix/ox_user_aliases.cf 
+
+echo "hosts = 127.0.0.1
+user = openexchange
+password = $OPENXCHANGE_MYSQL_PWD
+dbname = oxdatabase_6
+query = SELECT restriction FROM mail_domains WHERE cid=1 AND domainName=\"%s\";" > /etc/postfix/ox_domains.cf
+
+echo "hosts = 127.0.0.1
+user = openexchange
+password = $OPENXCHANGE_MYSQL_PWD
+dbname = open-xchange-db
+query = SELECT smtpSenderRule FROM mail_domains WHERE cid=1 AND domainName=\"%s\";" > /etc/postfix/ox_externaldomaincheck.cf 
+
+echo "hosts = 127.0.0.1
+user = openexchange
+password = $OPENXCHANGE_MYSQL_PWD
+dbname = oxdatabase_6
+query = SELECT className FROM user_mail_restrictions WHERE cid=1 AND address=\"%s\";" > /etc/postfix/ox_senderrestrictions.cf 
+
+echo "hosts = 127.0.0.1
+user = openexchange
+password = $OPENXCHANGE_MYSQL_PWD
+dbname = oxdatabase_6
+query = SELECT login2user.uid FROM group_address_mappings,groups_member
+        LEFT JOIN login2user ON login2user.id=groups_member.member WHERE
+        groups_member.id=group_address_mappings.id AND
+        group_address_mappings.address=\"%s\" AND
+        group_address_mappings.cid=1;" > /etc/postfix/ox_group_aliases.cf 
+
+echo "hosts = 127.0.0.1
+user = openexchange
+password = $OPENXCHANGE_MYSQL_PWD
+dbname = oxdatabase_6
+query = SELECT destination FROM resource_address_mappings,resource WHERE
+        resource.mail=\"%s\" AND
+        resource_address_mappings.cid=1 AND
+        resource_address_mappings.cid=resource.cid AND
+        resource_address_mappings.id=resource.id;" > /etc/postfix/ox_resource_aliases.cf 
+
+usermod -G mail postfix
+
+newaliases
+
+/etc/init.d/postfix restart
+
+echo "GRANT ALL PRIVILEGES ON *.* TO 'openexchange'@'localhost' IDENTIFIED BY '$OPENXCHANGE_MYSQL_PWD';" > /tmp/openXchange_pri.sql
+$BIN_MYSQL -u root < /tmp/openXchange_pri.sql mysql
+
+/opt/open-xchange/sbin/initconfigdb --configdb-pass=$OPENXCHANGE_MYSQL_PWD
+
+
+
+
+
+/opt/open-xchange/sbin/oxinstaller --servername=oxserver --configdb-pass=$OPENXCHANGE_MYSQL_PWD --master-pass=admin_master_password
+
+/etc/init.d/open-xchange-groupware restart
+/etc/init.d/open-xchange-admin start
+
+
+a2enmod proxy
+a2enmod proxy_ajp
+a2enmod expires
+a2enmod deflate
+a2enmod headers
+
+echo "
+<Proxy *>
+Order deny,allow
+allow from all
+</Proxy>
+
+ProxyPass /axis2 ajp://127.0.0.1:8009/axis2 smax=0 ttl=60 retry=5
+ProxyPass /ajax ajp://127.0.0.1:8009/ajax smax=0 ttl=60 retry=5
+ProxyPass /servlet ajp://127.0.0.1:8009/servlet smax=0 ttl=60 retry=5
+ProxyPass /infostore ajp://127.0.0.1:8009/infostore smax=0 ttl=60 retry=5
+" > /etc/apache2/conf.d/proxy_ajp.conf
+
+sed -i "14G" /etc/apache2/sites-available/default
+sed -i "14G" /etc/apache2/sites-available/default
+sed -i "15s/^/RedirectMatch \^\/\$ \/ox6/" /etc/apache2/sites-available/default
+sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
+
+echo '
+ExpiresActive On
+	ExpiresByType image/gif "access plus 23 hours"
+	ExpiresByType image/png "access plus 23 hours"
+	ExpiresByType image/jpg "access plus 23 hours"
+	ExpiresByType image/jpeg "access plus 23 hours"
+	ExpiresByType text/javascript "access plus 23 hours"
+	ExpiresByType text/css "access plus 23 hours"
+	ExpiresByType text/html "access plus 23 hours"
+	ExpiresByType application/x-javascript "access plus 23 hours"
+	<Files ~ "\.(js|css|gif|jpe?g|png)$">
+		Header append Cache-Control "public"
+	</Files>
+
+ 	DeflateFilterNote ratio
+	AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/x-javascript
+	BrowserMatch ^Mozilla/4 gzip-only-text/html
+	BrowserMatch ^Mozilla/4\.0[678] no-gzip
+	BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+	Header append Vary User-Agent env=!dont-vary
+</VirtualHost>
+' >> /etc/apache2/sites-available/default
+
+/etc/init.d/apache2 restart
+/etc/init.d/postfix restart
+/etc/init.d/saslauthd start
+/etc/init.d/open-xchange-groupware restart
+
+/opt/open-xchange/sbin/registerserver -n oxserver -A oxadminmaster -P admin_master_password
+
+mkdir /var/opt/filestore
+chown open-xchange:open-xchange /var/opt/filestore
+
+/opt/open-xchange/sbin/registerfilestore -A oxadminmaster -P admin_master_password \
+-t file:///var/opt/filestore
+
+/opt/open-xchange/sbin/registerdatabase -A oxadminmaster -P admin_master_password \
+-n oxdatabase -p $OPENXCHANGE_MYSQL_PWD -m true
+
+
+
+/opt/open-xchange/sbin/createcontext -A oxadminmaster -P admin_master_password -c 1 \
+-u oxadmin -d "Context Admin" -g Admin -s User -p admin_password -L defaultcontext \
+-e oxadmin@localdomain -q 1024 --access-combination-name=all
+
+/opt/open-xchange/sbin/createuser -c 1 -A oxadmin -P admin_password -u testuser \
+-d "Test User" -g Test -s User -p secret -e testuser@localdomain \
+--imaplogin testuser --imapserver 127.0.0.1 --smtpserver 127.0.0.1
+
+
+
+}
+
+INSTALL

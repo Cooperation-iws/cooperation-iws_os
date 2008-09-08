@@ -1636,7 +1636,13 @@ class Reconstructor:
 	   	# backup
 	   	os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "root/etc/wgetrc.orig") + '\"')
 	   	os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "root/etc/wgetrc"))
-	   
+	   	print _("Copying hostname configuration...")
+           	# backup
+           	os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hosts") + '\" \"' + os.path.join(self.customDir, "root/etc/hosts.orig") + '\"')
+            	os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hostname") + '\" \"' + os.path.join(self.customDir, "root/etc/hostname.orig") + '\"')
+            	os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "root/etc/hosts"))
+            	os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "root/etc/hostname"))
+           
            	#execute shutdown web server script
 		print _("Execute shutdown actions...")
 		os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws last config\" -x chroot \"' + os.path.join(self.customDir,"root/") +'\" /tmp/shutdown_ws.sh')
@@ -1650,7 +1656,11 @@ class Reconstructor:
             	#print _("Removing apt.conf configuration...")
             	#os.popen('rm -Rf \"' + os.path.join(self.customDir, "root/etc/apt/apt.conf.d/*") + '\"')
             	# remove dns info
-            	print _("Removing DNS info...")
+		print _("Restoring hostname configuration...")
+                os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "root/etc/hosts") + '\"')
+                os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "root/etc/hostname") + '\"')
+                       	
+		print _("Removing DNS info...")
             	os.popen('rm -Rf \"' + os.path.join(self.customDir, "root/etc/resolv.conf") + '\"')
             	# umount /proc
             	print _("Umounting /proc...")
@@ -2052,7 +2062,14 @@ class Reconstructor:
             # backup
             os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "root/etc/wgetrc.orig") + '\"')
             os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "root/etc/wgetrc"))
-            # HACK: create temporary script for chrooting
+            print _("Copying hostname configuration...")
+            # backup
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hosts") + '\" \"' + os.path.join(self.customDir, "root/etc/hosts.orig") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hostname") + '\" \"' + os.path.join(self.customDir, "root/etc/hostname.orig") + '\"')
+            os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "root/etc/hosts"))
+            os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "root/etc/hostname"))
+           
+	    # HACK: create temporary script for chrooting
             scr = '#!/bin/sh\n#\n#\t(c) cooperation-iws, 2008\n#\nexport HOME=/root\nchroot ' + os.path.join(self.customDir, "root/") + '\n'
             fchroot = open(os.path.join(self.customDir, "scriptChroot.sh"), 'w')
             fchroot.write(scr)
@@ -2075,7 +2092,11 @@ class Reconstructor:
             #print _("Removing apt.conf configuration...")
             #os.popen('rm -Rf \"' + os.path.join(self.customDir, "root/etc/apt/apt.conf") + '\"')
             # remove dns info
-            print _("Removing DNS info...")
+            print _("Restoring hostname configuration...")
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "root/etc/hosts") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "root/etc/hostname") + '\"')
+           
+	    print _("Removing DNS info...")
             os.popen('rm -Rf \"' + os.path.join(self.customDir, "root/etc/resolv.conf") + '\"')
             # umount /proc
             print _("Umounting /proc...")
@@ -2124,7 +2145,13 @@ class Reconstructor:
             # backup
             os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "root/etc/wgetrc.orig") + '\"')
             os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "root/etc/wgetrc"))
-            # HACK: create temporary script for chrooting
+            print _("Copying hostname configuration...")
+            # backup
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hosts") + '\" \"' + os.path.join(self.customDir, "root/etc/hosts.orig") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hostname") + '\" \"' + os.path.join(self.customDir, "root/etc/hostname.orig") + '\"')
+            os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "root/etc/hosts"))
+            os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "root/etc/hostname"))
+	    # HACK: create temporary script for chrooting
             scr = '#!/bin/sh\n#\n#\t(c) cooperation-iws, 2008\n#\nchroot ' + os.path.join(self.customDir, "root") + " /var/share/lampp/config_post_install.sh" + '\n'
             fchroot = open(os.path.join(self.customDir, "scriptPostInstall.sh"), 'w')
             fchroot.write(scr)
@@ -2147,7 +2174,11 @@ class Reconstructor:
             #print _("Removing apt.conf configuration...")
             #os.popen('rm -Rf \"' + os.path.join(self.customDir, "root/etc/apt/apt.conf") + '\"')
             # remove dns info
-            print _("Removing DNS info...")
+            print _("Restoring hostname configuration...")
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "root/etc/hosts") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "root/etc/hostname") + '\"')
+           
+	    print _("Removing DNS info...")
             os.popen('rm -Rf \"' + os.path.join(self.customDir, "root/etc/resolv.conf") + '\"')
             # umount /proc
             print _("Umounting /proc...")
@@ -2164,7 +2195,11 @@ class Reconstructor:
             #print _("Removing apt.conf configuration...")
             #os.popen('rm -Rf \"' + os.path.join(self.customDir, "root/etc/apt/apt.conf") + '\"')
             # remove dns info
-            print _("Removing DNS info...")
+            print _("Restoring hostname configuration...")
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "root/etc/hosts") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "root/etc/hostname") + '\"')
+           
+	    print _("Removing DNS info...")
             os.popen('rm -Rf \"' + os.path.join(self.customDir, "root/etc/resolv.conf") + '\"')
             # umount /proc
             print _("Umounting /proc...")
@@ -3955,6 +3990,12 @@ class Reconstructor:
             # backup
             os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "root/etc/wgetrc.orig") + '\"')
             os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "root/etc/wgetrc"))
+            print _("Copying hostname configuration...")
+            # backup
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hosts") + '\" \"' + os.path.join(self.customDir, "root/etc/hosts.orig") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hostname") + '\" \"' + os.path.join(self.customDir, "root/etc/hostname.orig") + '\"')
+            os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "root/etc/hosts"))
+            os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "root/etc/hostname"))
             # run module script
             os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws Modules\" -x chroot \"' + os.path.join(self.customDir, "root/") + '\" /tmp/module-exec.sh')
             os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws Modules\" -x bash \"' + os.path.join(self.customDir, "scripts/module-exec.sh")+ '\"')
@@ -3965,6 +4006,9 @@ class Reconstructor:
             # restore wgetrc
             print _("Restoring wgetrc configuration...")
             os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "root/etc/wgetrc") + '\"')
+            print _("Restoring hostname configuration...")
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "root/etc/hosts") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "root/etc/hostname") + '\"')
             # remove apt.conf
             #print _("Removing apt.conf configuration...")
             #os.popen('rm -Rf \"' + os.path.join(self.customDir, "root/etc/apt/apt.conf.d/*") + '\"')
@@ -4005,7 +4049,14 @@ class Reconstructor:
             # backup
             os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "root/etc/wgetrc.orig") + '\"')
             os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "root/etc/wgetrc"))
-            # update ONLY if repositories are selected
+            print _("Copying hostname configuration...")
+            # backup
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hosts") + '\" \"' + os.path.join(self.customDir, "root/etc/hosts.orig") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hostname") + '\" \"' + os.path.join(self.customDir, "root/etc/hostname.orig") + '\"')
+            os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "root/etc/hosts"))
+            os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "root/etc/hostname"))
+         
+	    # update ONLY if repositories are selected
             if self.checkCustomRepos() == True:
                 print _("Updating APT Information...")
                 # update apt
@@ -4038,7 +4089,11 @@ class Reconstructor:
             #print _("Removing apt.conf configuration...")
             #os.popen('rm -Rf \"' + os.path.join(self.customDir, "root/etc/apt/apt.conf") + '\"')
             # remove dns info
-            print _("Removing DNS info...")
+            print _("Restoring hostname configuration...")
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "root/etc/hosts") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "root/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "root/etc/hostname") + '\"')
+           
+	    print _("Removing DNS info...")
             os.popen('rm -Rf \"' + os.path.join(self.customDir, "root/etc/resolv.conf") + '\"')
             # umount /proc
             print _("Umounting /proc...")
