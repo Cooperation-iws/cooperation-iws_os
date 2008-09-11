@@ -2,10 +2,10 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Claroline1.8'
+RMOD_NAME='OpenGoo 0.8'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='E-learning portal'
+RMOD_DESCRIPTION='Office suite'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -27,7 +27,7 @@ INSTALL=$(cat /tmp/def_install)
 
 #VARIABLES
 #MYSQL PASSWORD
-CLAROLINE_MYSQL_PWD="CLAROLINE_MYSQL_PWD"
+OPENGOO_MYSQL_PWD="OPENGOO_MYSQL_PWD"
 #_______________________________________________________________________________________________
 #__________________________________________LANGFR______________________________________________
 
@@ -84,30 +84,14 @@ fi
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-wget http://downloads.sourceforge.net/claroline/claroline1811.tar.gz
-tar -xzf claroline1811.tar.gz
-mv claroline1811 claroline
-#rm moodle-latest-19.zip
+wget http://heanet.dl.sourceforge.net/sourceforge/opengoo/opengoo_0.8.zip
+unzip -q opengoo_0.8.zip
 
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_WEB___________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_LOCAL_____________________________________
-
-function WGET_MIRROIR_LOCAL
-{
-
-cd $DL_DIR
-wget http://$MIRROIR_URL/mirroir/moodle-latest-19.zip
-unzip moodle-latest-19.zip
-#rm moodle-latest-19.zip
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -115,10 +99,8 @@ unzip moodle-latest-19.zip
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/claroline1811.tar.gz
-tar -xzf claroline1811.tar.gz
-mv claroline1811 claroline
-#rm moodle-latest-19.zip
+wget $URL_FREE/opengoo_0.8.zip
+unzip -q opengoo_0.8.zip
 
 }
 
@@ -138,11 +120,6 @@ if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 
 WGET_MIRROIR_FREE
 fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
-
-
-WGET_MIRROIR_LOCAL
-fi
 
 }
 
@@ -156,20 +133,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_CLAROLINE="Claroline"
+NOM_OPENGOO="Opengoo"
 else 
 
-NOM_CLAROLINE=$(zenity --entry --text "$MESS_NAME CLAROLINE")
+NOM_OPENGOO=$(zenity --entry --text "$MESS_NAME OPENGOO")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_CLAROLINE | grep "[^a-zA-Z0-9]") 
+while (echo $NOM_OPENGOO | grep "[^a-zA-Z0-9]") 
 do
-NOM_CLAROLINE=$(zenity --entry --text "$MESS_NAME CLAROLINE")
+NOM_OPENGOO=$(zenity --entry --text "$MESS_NAME OPENGOO")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_CLAROLINE=$NOM_CLAROLINE
+export NOM_OPENGOO=$NOM_OPENGOO
 
 }
 #_______________________________________________________________________________________________
@@ -182,29 +159,27 @@ export NOM_CLAROLINE=$NOM_CLAROLINE
 
 function INSTALL
 {
-echo "I: Download Claroline"
+echo "I: Download Opengoo"
 DOWNLOAD
 
-##CLAROLINE
+##OPENGOO
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_CLAROLINE
-cp -Rf claroline/* $WWW_DIRECTORY/$NOM_CLAROLINE/.
+mkdir $WWW_DIRECTORY/$NOM_OPENGOO
+cp -Rf opengoo/* $WWW_DIRECTORY/$NOM_OPENGOO/.
 
-echo "create database ${NOM_CLAROLINE[$count]};
-grant all on ${NOM_CLAROLINE[$count]}.* to ${NOM_CLAROLINE[$count]}@localhost identified by '$CLAROLINE_MYSQL_PWD';
-flush privileges;" > CLAROLINE_db.sql
+echo "create database ${NOM_OPENGOO};
+grant all on ${NOM_OPENGOO}.* to ${NOM_OPENGOO[$count]}@localhost identified by '$OPENGOO_MYSQL_PWD';
+flush privileges;" > OPENGOO_db.sql
 
-$BIN_MYSQL -u root < CLAROLINE_db.sql mysql
-rm CLAROLINE_db.sql
+$BIN_MYSQL -u root < OPENGOO_db.sql mysql
+rm OPENGOO_db.sql
+
+sed -i "58s/'database_user'/'database_user', '$NOM_OPENGOO'/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/installation/steps/SystemConfigStep.class.php
+sed -i "59s/'database_pass'/'database_pass', '$OPENGOO_MYSQL_PWD'/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/installation/steps/SystemConfigStep.class.php
+sed -i "60s/'database_name'/'database_name', '$NOM_OPENGOO'/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/installation/steps/SystemConfigStep.class.php
 
 
-sed -i "954s/'.htmlspecialchars(\$dbHostForm).'/localhost/" $WWW_DIRECTORY/$NOM_CLAROLINE/claroline/install/index.php
-sed -i "965s/'.htmlspecialchars(\$dbUsernameForm).'/$NOM_CLAROLINE/" $WWW_DIRECTORY/$NOM_CLAROLINE/claroline/install/index.php
-sed -i "976s/'.htmlspecialchars(\$dbPassForm).'/$CLAROLINE_MYSQL_PWD/" $WWW_DIRECTORY/$NOM_CLAROLINE/claroline/install/index.php
-sed -i "1108s/'.htmlspecialchars(\$dbNameForm).'/$NOM_CLAROLINE/" $WWW_DIRECTORY/$NOM_CLAROLINE/claroline/install/index.php
-sed -i "1166s/'.htmlspecialchars(\$dbStatsForm).'/$NOM_CLAROLINE/" $WWW_DIRECTORY/$NOM_CLAROLINE/claroline/install/index.php
-
-chown -R www-data $WWW_DIRECTORY/$NOM_CLAROLINE/
+chown -R www-data $WWW_DIRECTORY/$NOM_OPENGOO/
 
 
 }
@@ -217,7 +192,7 @@ chown -R www-data $WWW_DIRECTORY/$NOM_CLAROLINE/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_CLAROLINE\" >$NOM_CLAROLINE</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_OPENGOO\" >$NOM_OPENGOO</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________
@@ -232,8 +207,8 @@ function CREATE_INSTALL_SCRIPT
 
 echo "
 
-#Claroline
-sed -i \"s/http:\/\/localhost/http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/${NOM_CLAROLINE}/config/config.php
+#Opengoo
+sed -i \"s/http:\/\/localhost/http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/$NOM_OPENGOO/config/config.php
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
@@ -242,10 +217,10 @@ sed -i \"s/http:\/\/localhost/http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
-echo "I: Install Claroline"
+echo "I: Install Opengoo"
 CHOICE_LANG
 CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 CREATE_INSTALL_SCRIPT
-echo "I: End of install Claroline"
+echo "I: End of install Opengoo"

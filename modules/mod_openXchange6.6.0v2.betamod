@@ -140,6 +140,9 @@ chown -R cyrus:mail /var/spool/cyrus/
 chown -R cyrus:mail /var/spool/sieve/
 chown -R cyrus:mail /var/lib/cyrus/
 
+
+
+
 echo "Restarting services..."
 /etc/init.d/mysql restart
 /etc/init.d/cyrus2.2 restart
