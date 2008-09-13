@@ -21,7 +21,7 @@ echo "<?php include('cooperation-wui.header.php'); ?>
 <img src=\"cooperation.header.jpg\"><br><br>
 " > $WWW_DIRECTORY/index.php
 
-cat $WWW_DIRECTORY/cooperation-wui.frame.php | sort | sed -i "s/^/<hr width=\"10%\">/" >> $WWW_DIRECTORY/index.php
+cat $WWW_DIRECTORY/cooperation-wui.frame.php | sort | sed '/^$/d' | sed "s/^/<hr width=\"10%\">/" >> $WWW_DIRECTORY/index.php
 
 echo "
 <hr width=\"20%\">
@@ -38,7 +38,7 @@ echo "<?php include('cooperation-wui.header.php'); ?>
 <img src=\"cooperation.header.jpg\"><br><br>
 " > $WWW_DIRECTORY/admin/index.php
 
-cat $WWW_DIRECTORY/admin/cooperation-wui.frame.php | sort | sed -i "s/^/<hr width=\"10%\">/" >> $WWW_DIRECTORY/admin/index.php
+cat $WWW_DIRECTORY/admin/cooperation-wui.frame.php | sort | sed '/^$/d' | sed "s/^/<hr width=\"10%\">/" >> $WWW_DIRECTORY/admin/index.php
 
 echo "<hr width=\"10%\">
 <a href=\"/phpmyadmin\">Phpmyadmin</a><br>
