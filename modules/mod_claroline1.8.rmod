@@ -95,21 +95,6 @@ mv claroline1811 claroline
 #________________________________________FIN_WGET_MIRROIR_WEB___________________________________
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_LOCAL_____________________________________
-
-function WGET_MIRROIR_LOCAL
-{
-
-cd $DL_DIR
-wget http://$MIRROIR_URL/mirroir/moodle-latest-19.zip
-unzip moodle-latest-19.zip
-#rm moodle-latest-19.zip
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
-
-#_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
 
 function WGET_MIRROIR_FREE
@@ -137,11 +122,6 @@ fi
 if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 
 WGET_MIRROIR_FREE
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
-
-
-WGET_MIRROIR_LOCAL
 fi
 
 }
@@ -190,8 +170,8 @@ cd $DL_DIR
 mkdir $WWW_DIRECTORY/$NOM_CLAROLINE
 cp -Rf claroline/* $WWW_DIRECTORY/$NOM_CLAROLINE/.
 
-echo "create database ${NOM_CLAROLINE[$count]};
-grant all on ${NOM_CLAROLINE[$count]}.* to ${NOM_CLAROLINE[$count]}@localhost identified by '$CLAROLINE_MYSQL_PWD';
+echo "create database ${NOM_CLAROLINE};
+grant all on ${NOM_CLAROLINE}.* to ${NOM_CLAROLINE}@localhost identified by '$CLAROLINE_MYSQL_PWD';
 flush privileges;" > CLAROLINE_db.sql
 
 $BIN_MYSQL -u root < CLAROLINE_db.sql mysql
