@@ -1,13 +1,11 @@
 #!/bin/bash
-
-
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Snif'
+RMOD_NAME='eyeOS 1.6.0.3-1'
 RMOD_AUTHOR='Oliv'
-RMOD_VERSION=0.2
-RMOD_DESCRIPTION='Files display'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Web desktop'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -19,6 +17,8 @@ SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
+
+
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
@@ -26,6 +26,8 @@ URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 
 #VARIABLES
+#MYSQL PASSWORD
+IMAGEEDITOR_MYSQL_PWD="IMAGEEDITOR_MYSQL_PWD"
 #_______________________________________________________________________________________________
 #__________________________________________LANGFR______________________________________________
 
@@ -36,6 +38,7 @@ function LANGFR
 MESS_NAME="Entrez le nom de l'installation "
 MESS_HOW_MANY="Combien de" 
 MESS_DO_YOU_WANT="voulez vous installez ?"
+MESS_URL="Quelle est l'url à partir de laquelle vous avez effectuée l'installation des applications web?"
 }
 #_______________________________________________________________________________________________
 #__________________________________________FIN_LANGFR___________________________________________
@@ -50,6 +53,8 @@ function LANGEN
 MESS_NAME="Enter the name of the install "
 MESS_HOW_MANY="How many"
 MESS_DO_YOU_WANT="do you want to install ?"
+MESS_URL="What's the url from where you install web applications ?"
+
 }
 #_______________________________________________________________________________________________
 #__________________________________________FIN_LANGEN___________________________________________
@@ -79,13 +84,9 @@ fi
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-MESSAGE="snif download"
-echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
-wget http://www.bitfolge.de/download/snif_152.zip
-mkdir snif
-cd snif
-unzip ../snif_152.zip
-rm -r subdir
+wget http://www.ajaxprogrammer.com/examples/post_35/ImageEditor_v1_5.zip
+unzip -q ImageEditor_v1_5.zip
+mv ImageEditor_v1_5 ImageEditor
 }
 
 #_______________________________________________________________________________________________
@@ -98,13 +99,10 @@ rm -r subdir
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-MESSAGE="snif download"
-echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
-wget $URL_FREE/snif_152.zip
-mkdir snif
-cd snif
-unzip ../snif_152.zip
-rm -r subdir
+wget $URL_FREE/ImageEditor_v1_5.zip
+unzip -q ImageEditor_v1_5.zip
+mv ImageEditor_v1_5 ImageEditor
+
 }
 
 #_______________________________________________________________________________________________
@@ -136,37 +134,21 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NB_SNIF=1
-NOM_SNIF[1]="Snif"
-
+NOM_IMAGEEDITOR="ImageEditor"
 else 
 
-NB_SNIF=$(zenity --entry --text "Combien de Snif voulez vous installez ?")
+NOM_IMAGEEDITOR=$(zenity --entry --text "$MESS_NAME IMAGEEDITOR")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NB_SNIF| grep "[^0-9]") 
+while (echo $NOM_IMAGEEDITOR | grep "[^a-zA-Z0-9]") 
 do
-NB_SNIF=$(zenity --entry --text "Combien de Snif voulez vous installez ?")
+NOM_IMAGEEDITOR=$(zenity --entry --text "$MESS_NAME IMAGEEDITOR")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
-
-for (( count=1; count<=$NB_SNIF; count++ ))
-do
-NOM_SNIF[$count]=$(zenity --entry --text "$MESS_NAME $count SNIF")
-test $? -ne 0 && break # Bouton Annuler
-while (echo ${NOM_SNIF[$count]} | grep "[^a-zA-Z0-9]") 
-do
-NOM_SNIF[$count]=$(zenity --entry --text "$MESS_NAME $count SNIF")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
-
-done 
-
-
+ 
 
 fi
+export NOM_IMAGEEDITOR=$NOM_IMAGEEDITOR
 
-export NB_SNIF=$NB_SNIF
-export NOM_SNIF=$NOM_SNIF
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
@@ -178,45 +160,18 @@ export NOM_SNIF=$NOM_SNIF
 
 function INSTALL
 {
-MESSAGE="I: Download Snif"
-
+echo "I: Download ImageEditor"
 DOWNLOAD
 
-#SNIF
-MESSAGE="Snif paramétrage"
-echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
-
-for (( count=1; count<=$NB_SNIF; count++ ))
-do
+##IMAGEEDITOR
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${NOM_SNIF[$count]}
-cp -Rf snif/* $WWW_DIRECTORY/${NOM_SNIF[$count]}/.
-
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1967s/444444/cf3a12/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1971s/000000/9499ac/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1978s/444444/aa3b3b/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1987s/eeeeee/e7d9d9/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1990s/dddddd/ffffff/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "498s/false/true/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "512s/30/0/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
+mkdir $WWW_DIRECTORY/$NOM_IMAGEEDITOR
+cp -Rf ImageEditor/* $WWW_DIRECTORY/$NOM_IMAGEEDITOR/.
 
 
 
-echo "Configure Samba Server to share this directory ?"
-echo "[Y/n]"
-read r < /dev/tty
+chown -R www-data $WWW_DIRECTORY/$NOM_IMAGEEDITOR/
 
-if [ "$(echo $r | awk  '{print $1}')" != "n" ]; then
-echo "[${NOM_SNIF[$count]}]
-	comment = ${NOM_SNIF[$count]}
-	writeable = yes
-	public = yes
-	path = /var/www/${NOM_SNIF[$count]}
-" >> /var/share/etc/samba/smb.conf
-chmod 777 $WWW_DIRECTORY/${NOM_SNIF[$count]}
-fi
-
-done
 
 }
 
@@ -228,19 +183,34 @@ done
 
 function CREATE_WUI
 {
-for (( count=1; count<=$NB_SNIF; count++ ))
-
-do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_SNIF[$count]}\">${NOM_SNIF[$count]}</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_IMAGEEDITOR\" >$NOM_IMAGEEDITOR</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
-done
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
-echo "I: Install Snif"
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+
+echo "
+
+#ImageEditor
+
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install ImageEditor"
 CHOICE_LANG
 CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
-echo "I: End of Install Snif"
+CREATE_INSTALL_SCRIPT
+echo "I: End of install ImageEditor"
