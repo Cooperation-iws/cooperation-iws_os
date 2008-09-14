@@ -189,7 +189,6 @@ sed -i "8s/..\/..\/ext\//..\/ext\//" $WWW_DIRECTORY/$NOM_AKOIE/akoie/config.inc.
 
 mv $WWW_DIRECTORY/$NOM_AKOIE/test.html $WWW_DIRECTORY/$NOM_AKOIE/index.html
 
-sed -i "s/<\/body>/<br><center><h1>Upload your image in $WWW_DIRECTORY\/$NOM_AKOIE\/images\/<\/h1><\/center> <\/body>/" $WWW_DIRECTORY/$NOM_AKOIE/index.html
 
 chown -R www-data $WWW_DIRECTORY/$NOM_AKOIE/
 
