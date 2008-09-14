@@ -137,7 +137,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_SNIF=1
-NOM_SNIF[1]="snif"
+NOM_SNIF[1]="Snif"
 
 else 
 

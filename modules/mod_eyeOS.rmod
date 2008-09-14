@@ -2,10 +2,10 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='OpenGoo 0.8'
+RMOD_NAME='eyeOS 1.6.0.3-1'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Office suite'
+RMOD_DESCRIPTION='Web desktop'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -27,7 +27,7 @@ INSTALL=$(cat /tmp/def_install)
 
 #VARIABLES
 #MYSQL PASSWORD
-OPENGOO_MYSQL_PWD="OPENGOO_MYSQL_PWD"
+EYEOS_MYSQL_PWD="EYEOS_MYSQL_PWD"
 #_______________________________________________________________________________________________
 #__________________________________________LANGFR______________________________________________
 
@@ -84,8 +84,8 @@ fi
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-wget http://heanet.dl.sourceforge.net/sourceforge/opengoo/opengoo_0.8.zip
-unzip -q opengoo_0.8.zip
+wget http://surfnet.dl.sourceforge.net/sourceforge/eyeos/eyeOS_1.6.0.3-1.tar.gz
+tar -xzf eyeOS_1.6.0.3-1.tar.gz
 
 }
 
@@ -99,8 +99,8 @@ unzip -q opengoo_0.8.zip
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/opengoo_0.8.zip
-unzip -q opengoo_0.8.zip
+wget $URL_FREE/eyeOS_1.6.0.3-1.tar.gz
+tar -xzf eyeOS_1.6.0.3-1.tar.gz
 
 }
 
@@ -133,20 +133,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_OPENGOO="Opengoo"
+NOM_EYEOS="Eyeos"
 else 
 
-NOM_OPENGOO=$(zenity --entry --text "$MESS_NAME OPENGOO")
+NOM_EYEOS=$(zenity --entry --text "$MESS_NAME EYEOS")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_OPENGOO | grep "[^a-zA-Z0-9]") 
+while (echo $NOM_EYEOS | grep "[^a-zA-Z0-9]") 
 do
-NOM_OPENGOO=$(zenity --entry --text "$MESS_NAME OPENGOO")
+NOM_EYEOS=$(zenity --entry --text "$MESS_NAME EYEOS")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_OPENGOO=$NOM_OPENGOO
+export NOM_EYEOS=$NOM_EYEOS
 
 }
 #_______________________________________________________________________________________________
@@ -159,27 +159,17 @@ export NOM_OPENGOO=$NOM_OPENGOO
 
 function INSTALL
 {
-echo "I: Download Opengoo"
+echo "I: Download Eyeos"
 DOWNLOAD
 
-##OPENGOO
+##EYEOS
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_OPENGOO
-cp -Rf opengoo/* $WWW_DIRECTORY/$NOM_OPENGOO/.
-
-echo "create database ${NOM_OPENGOO};
-grant all on ${NOM_OPENGOO}.* to ${NOM_OPENGOO}@localhost identified by '$OPENGOO_MYSQL_PWD';
-flush privileges;" > OPENGOO_db.sql
-
-$BIN_MYSQL -u root < OPENGOO_db.sql mysql
-rm OPENGOO_db.sql
-
-sed -i "23s/'database_user'/'database_user', '$NOM_OPENGOO'/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/installation/templates/system_config_form.php
-sed -i "28s/'database_pass'/'database_pass', '$OPENGOO_MYSQL_PWD'/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/installation/templates/system_config_form.php
-sed -i "33s/'database_name'/'database_name', '$NOM_OPENGOO'/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/installation/templates/system_config_form.php
+mkdir $WWW_DIRECTORY/$NOM_EYEOS
+cp -Rf eyeOS/* $WWW_DIRECTORY/$NOM_EYEOS/.
 
 
-chown -R www-data $WWW_DIRECTORY/$NOM_OPENGOO/
+
+chown -R www-data $WWW_DIRECTORY/$NOM_EYEOS/
 
 
 }
@@ -192,7 +182,7 @@ chown -R www-data $WWW_DIRECTORY/$NOM_OPENGOO/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_OPENGOO\" >$NOM_OPENGOO</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_EYEOS\" >$NOM_EYEOS</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________
@@ -207,8 +197,7 @@ function CREATE_INSTALL_SCRIPT
 
 echo "
 
-#Opengoo
-sed -i \"s/http:\/\/localhost/http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/$NOM_OPENGOO/config/config.php
+#Eyeos
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
@@ -217,10 +206,10 @@ sed -i \"s/http:\/\/localhost/http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
-echo "I: Install Opengoo"
+echo "I: Install Eyeos"
 CHOICE_LANG
 CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 CREATE_INSTALL_SCRIPT
-echo "I: End of install Opengoo"
+echo "I: End of install Eyeos"

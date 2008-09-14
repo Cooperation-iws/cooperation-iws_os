@@ -368,7 +368,7 @@ map to guest = bad user
 	writeable = yes
 	public = yes
 	path = /var/www
-	valid users = root
+	valid users = www-data
 
 EOT
 
@@ -377,7 +377,7 @@ echo "You will be asked to enter your samba password"
 echo "-------------------Press enter------------------------------"
 read r </dev/tty
 
-smbpasswd -a root
+smbpasswd -a www-data
 
 
 }
