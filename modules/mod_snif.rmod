@@ -204,15 +204,31 @@ cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "512s/30/0/" $WWW_D
 
 echo "Configure Samba Server to share this directory ?"
 echo "[Y/n]"
-read r < /dev/tty
+read r1 < /dev/tty
 
-if [ "$(echo $r | awk  '{print $1}')" != "n" ]; then
+if [ "$(echo $r1 | awk  '{print $1}')" != "n" ]; then
+echo "Protect this directory with a password ?"
+echo "[N/y]"
+read r2 < /dev/tty
+if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
 echo "[${NOM_SNIF[$count]}]
 	comment = ${NOM_SNIF[$count]}
 	writeable = yes
 	public = yes
 	path = /var/www/${NOM_SNIF[$count]}
+	valid users = www-data
 " >> /var/share/etc/samba/smb.conf
+smbpasswd -a www-data
+else
+echo "[${NOM_SNIF[$count]}]
+	comment = ${NOM_SNIF[$count]}
+	writeable = yes
+	public = yes
+	path = /var/www/${NOM_SNIF[$count]}
+	
+" >> /var/share/etc/samba/smb.conf
+fi
+
 chmod 777 $WWW_DIRECTORY/${NOM_SNIF[$count]}
 fi
 

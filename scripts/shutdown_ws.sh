@@ -116,8 +116,8 @@ chmod +x /etc/rc.local
 
 echo "I: empty temporary directory"
 rm -r /tmp/*
-rm /var/cache/apt/archives/*
-rm /var/cache/apt/archives/partial/*
+rm /var/cache/apt/archives/* > /dev/null 2>&1 
+rm /var/cache/apt/archives/partial/* > /dev/null 2>&1 
 
 echo "I: config persistent directory"
 
