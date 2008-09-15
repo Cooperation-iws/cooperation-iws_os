@@ -1,0 +1,253 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Moinmoin'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Wiki CMS'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+#VARIABLES
+#MYSQL PASSWORD
+MOINMOIN_MYSQL_PWD="MOINMOIN_MYSQL_PWD"
+
+#_______________________________________________________________________________________________
+#__________________________________________LANGFR______________________________________________
+
+
+function LANGFR
+
+{
+MESS_NAME="Entrez le nom de l'installation "
+MESS_HOW_MANY="Combien de" 
+MESS_DO_YOU_WANT="voulez vous installez ?"
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGFR___________________________________________
+
+#_______________________________________________________________________________________________
+#__________________________________________LANGEN______________________________________________
+
+
+function LANGEN
+
+{
+MESS_NAME="Enter the name of the install "
+MESS_HOW_MANY="How many"
+MESS_DO_YOU_WANT="do you want to install ?"
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGEN___________________________________________
+
+
+#_______________________________________________________________________________________________
+#__________________________________________CHOICE_LANG___________________________________________
+
+function CHOICE_LANG
+{
+if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
+LANGFR
+
+else
+LANGEN
+
+fi
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_CHOICE_LANG______________________________________
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_WEB_______________________________________
+
+
+function WGET_MIRROIR_WEB
+{
+cd $DL_DIR
+
+wget http://www.splitbrain.org/_media/projects/dokuwiki/dokuwiki-2008-05-05.tgz
+tar -xzf dokuwiki-2008-05-05.tgz
+mv dokuwiki-2008-05-05 dokuwiki
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_LOCAL_____________________________________
+
+function WGET_MIRROIR_LOCAL
+{
+
+cd $DL_DIR
+MESSAGE="#Moinmoin download"
+echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
+wget http://$MIRROIR_URL/mirroir/wordpress-2.5.1.tar.gz
+tar -xzvf wordpress-2.5.1.tar.gz
+#rm wordpress-2.3.3-fr_FR.zip
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/dokuwiki-2008-05-05.tgz
+tar -xzf dokuwiki-2008-05-05.tgz
+mv dokuwiki-2008-05-05 dokuwiki
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________DOWNLOAD_______________________________________________
+
+function DOWNLOAD
+{
+if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
+
+WGET_MIRROIR_WEB
+fi
+if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
+
+WGET_MIRROIR_FREE
+fi
+if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
+
+
+WGET_MIRROIR_LOCAL
+fi
+
+}
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_DOWNLOAD___________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
+
+function CHOOSE_PARAMETERS_GUI
+{
+NB_MOINMOIN=1
+NOM_MOINMOIN[1]="Moinmoin"
+
+export NB_MOINMOIN=$NB_MOINMOIN
+export NOM_MOINMOIN=$NOM_MOINMOIN
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo "I: Download Moinmoin"
+
+apt-get install --assume-yes --force-yes python-moinmoin
+
+mkdir -p /var/www/moin/mywiki
+cp -r /usr/share/moin/server/moin.cgi /var/www/moin/mywiki
+mkdir -p /var/lib/moin/mywiki
+cp -r /usr/share/moin/data /usr/share/moin/underlay /var/lib/moin/mywiki
+chown -R www-data:www-data /var/lib/moin/mywiki /var/www/moin/mywiki
+chown -R www-data:www-data /usr/share/moin/underlay
+
+cp /etc/moin/mywiki.py /etc/moin/mywiki.py.original 
+
+
+sed -i "92s/./\/usr\/share\/moin/" /etc/moin/farmconfig.py
+sed -i "33s/\/org/\/var\/lib\/moin/" /etc/moin/mywiki.py
+
+sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
+
+echo "
+Alias /wiki \"/usr/share/moin/htdocs/\"
+ScriptAlias /$NOM_MOINMOIN \"/var/www/moin/mywiki/moin.cgi\" 
+</VirtualHost>
+" >> /etc/apache2/sites-available/default
+
+mv /etc/moin /var/share/etc/
+
+ln -s /var/share/etc/moin /etc/moin
+
+/etc/init.d/apache2 restart
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_MOINMOIN}\">${NOM_MOINMOIN}</a><br>
+" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+
+echo "
+#Moinmoin
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Moinmoin"
+CHOICE_LANG
+CHOOSE_PARAMETERS_GUI
+INSTALL
+CREATE_WUI
+
+CREATE_INSTALL_SCRIPT
+echo "I: End of install Moinmoin"
