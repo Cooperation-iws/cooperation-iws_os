@@ -24,7 +24,7 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
-#VARIABLES
+#VARIABLE
 #MYSQL PASSWORD
 MOINMOIN_MYSQL_PWD="MOINMOIN_MYSQL_PWD"
 
