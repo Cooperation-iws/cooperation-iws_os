@@ -159,7 +159,7 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 NB_MOINMOIN=1
-NOM_MOINMOIN[1]="Moinmoin"
+NOM_MOINMOIN="Moinmoin"
 
 export NB_MOINMOIN=$NB_MOINMOIN
 export NOM_MOINMOIN=$NOM_MOINMOIN
@@ -190,7 +190,7 @@ chown -R www-data:www-data /usr/share/moin/underlay
 cp /etc/moin/mywiki.py /etc/moin/mywiki.py.original 
 
 
-sed -i "92s/./\/usr\/share\/moin/" /etc/moin/farmconfig.py
+sed -i "92s/'.\//'\/usr\/share\/moin\//" /etc/moin/farmconfig.py
 sed -i "33s/\/org/\/var\/lib\/moin/" /etc/moin/mywiki.py
 
 sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
