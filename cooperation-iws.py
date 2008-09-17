@@ -61,7 +61,7 @@ class Reconstructor:
         self.updateIconFile = os.getcwd() + '/glade/update.png'
 
 
-
+	self.hosting = "http://cooperation.gensys.free.fr/v0.3"
 	self.mirrorFree = "http://cooperation.gensys.free.fr/mirroir/v0.5"
 	self.mirrorBerlios1 = "http://download.berlios.de/ciws"
 	self.mirrorBerlios2 = "http://download2.berlios.de/ciws"
@@ -1993,13 +1993,15 @@ class Reconstructor:
             pass
 
     # Usplash Generation
-    def generateUsplash(self, pngFilename, outputFilename):
+    def generateUsplash(self):
         try:
             print _('Generating Usplash library...')
             if self.cdUbuntuVersion == self.dapperVersion:
                 # create tmp working dir
                 os.popen('mkdir /tmp/usplash')
-                # copy png to tmp dir
+                os.popen('wget '+ self.hosting+'/background/splash.jpg -O /tmp/usplash/splash.jpg')
+		pngFilename = '/tmp/usplash/splash.jpg'                
+		# copy png to tmp dir
                 os.popen('cp ' + pngFilename + ' /tmp/usplash/usplash-artwork.png')
                 # generate usplash
                 os.popen('cd /tmp/usplash ; pngtobogl usplash-artwork.png > usplash-artwork.c')
@@ -2031,7 +2033,7 @@ class Reconstructor:
                 # compile to shared library
                 print _("Compiling to .so...")
                 #os.popen('gcc -g -Wall -fPIC -shared -o \"' + outputFilename + '\" ' + '/tmp/usplash/usplash_artwork.o /tmp/usplash/throbber_back.o /tmp/usplash/throbber_fore.o /tmp/usplash/usplash-theme.o')
-                os.popen('cd /tmp/usplash ; gcc -g -Wall -fPIC -shared -o \"' + outputFilename + '\" ' + '*.o')
+                #os.popen('cd /tmp/usplash ; gcc -g -Wall -fPIC -shared -o \"' + outputFilename + '\" ' + '*.o')
                 # cleanup
                 os.popen('rm -Rf /tmp/usplash')
 
@@ -3293,51 +3295,31 @@ class Reconstructor:
             warnDlg.destroy()
 
     def on_buttonUsplashGenerate_clicked(self,widget):
-        pngFile = None
-        outputFile = None
-        # filter only tar.gz files
-        dlgFilter = gtk.FileFilter()
-        dlgFilter.set_name("PNG Images (.png)")
-        dlgFilter.add_pattern("*.png")
-        # create dialog
-        dlgTitle = _('Select PNG Image')
-        dlg = gtk.FileChooserDialog(title=dlgTitle, parent=self.wTree.get_widget("windowMain"), action=gtk.FILE_CHOOSER_ACTION_OPEN, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OPEN, gtk.RESPONSE_OK), backend=None)
-        dlg.add_filter(dlgFilter)
-        dlg.set_select_multiple(False)
-        dlg.set_current_folder(os.environ['HOME'])
-        response = dlg.run()
-        if response == gtk.RESPONSE_OK :
-            # set var
-            pngFile = dlg.get_filename()
-            dlg.destroy()
-        elif response == gtk.RESPONSE_CANCEL :
-            dlg.destroy()
+	pngFile = None
+	outputFile = None
+	# filter only iso files
+	soFilter = gtk.FileFilter()
+	soFilter.set_name("Usplash Library Files")
+	soFilter.add_pattern("*.so")
+	# create dialog
+	dlgTitle = _('Save Usplash As...')
+	soDlg = gtk.FileChooserDialog(title=dlgTitle, parent=self.wTree.get_widget("windowMain"), action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK), backend=None)
+	soDlg.add_filter(soFilter)
+	soDlg.set_select_multiple(False)
+	soDlg.set_current_folder(os.environ['HOME'])
+	response = soDlg.run()
+	if response == gtk.RESPONSE_OK :
+		outputFile = soDlg.get_filename()
+		soDlg.destroy()
+	elif response == gtk.RESPONSE_CANCEL :
+		soDlg.destroy()
 
-        # if pngFile is selected, launch dialog for output file
-        if pngFile != None:
-            # filter only iso files
-            soFilter = gtk.FileFilter()
-            soFilter.set_name("Usplash Library Files")
-            soFilter.add_pattern("*.so")
-            # create dialog
-            dlgTitle = _('Save Usplash As...')
-            soDlg = gtk.FileChooserDialog(title=dlgTitle, parent=self.wTree.get_widget("windowMain"), action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK), backend=None)
-            soDlg.add_filter(soFilter)
-            soDlg.set_select_multiple(False)
-            soDlg.set_current_folder(os.environ['HOME'])
-            response = soDlg.run()
-            if response == gtk.RESPONSE_OK :
-                outputFile = soDlg.get_filename()
-                soDlg.destroy()
-            elif response == gtk.RESPONSE_CANCEL :
-                soDlg.destroy()
-
-        if pngFile != None and outputFile != None:
-            # generate .so
-            self.generateUsplash(pngFile, outputFile)
-            # check for file and assign .so splash image field
-            if os.path.exists(outputFile):
-                self.wTree.get_widget("entryUsplashFilename").set_text(outputFile)
+	if pngFile != None and outputFile != None:
+		# generate .so
+		self.generateUsplash(pngFile, outputFile)
+		# check for file and assign .so splash image field
+		if os.path.exists(outputFile):
+			self.wTree.get_widget("entryUsplashFilename").set_text(outputFile)
 
     def on_buttonOptimizeShutdownRestore_clicked(self, widget):
         self.setBusyCursor()
