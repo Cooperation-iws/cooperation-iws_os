@@ -2,10 +2,10 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Dekiwiki'
+RMOD_NAME='Elgg 1.0'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Wiki CMS'
+RMOD_DESCRIPTION='Social network'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -24,9 +24,9 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
-#VARIABLE
+#VARIABLES
 #MYSQL PASSWORD
-DEKIWIKI_MYSQL_PWD="DEKIWIKI_MYSQL_PWD"
+ELGG_MYSQL_PWD="ELGG_MYSQL_PWD"
 
 #_______________________________________________________________________________________________
 #__________________________________________LANGFR______________________________________________
@@ -85,32 +85,15 @@ function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
 
-wget http://www.splitbrain.org/_media/projects/dokuwiki/dokuwiki-2008-05-05.tgz
-tar -xzf dokuwiki-2008-05-05.tgz
-mv dokuwiki-2008-05-05 dokuwiki
+wget http://elgg.org/getelgg.php?forward=elgg1.0.zip
+unzip -q elgg1.0.zip
+mv elgg1.0 elgg
 
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_WEB___________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_LOCAL_____________________________________
-
-function WGET_MIRROIR_LOCAL
-{
-
-cd $DL_DIR
-MESSAGE="#Dekiwiki download"
-echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
-wget http://$MIRROIR_URL/mirroir/wordpress-2.5.1.tar.gz
-tar -xzvf wordpress-2.5.1.tar.gz
-#rm wordpress-2.3.3-fr_FR.zip
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -118,9 +101,9 @@ tar -xzvf wordpress-2.5.1.tar.gz
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/dokuwiki-2008-05-05.tgz
-tar -xzf dokuwiki-2008-05-05.tgz
-mv dokuwiki-2008-05-05 dokuwiki
+wget $URL_FREE/elgg1.0.zip
+unzip -q elgg1.0.zip
+mv elgg1.0 elgg
 
 
 }
@@ -141,11 +124,7 @@ if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 
 WGET_MIRROIR_FREE
 fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
 
-
-WGET_MIRROIR_LOCAL
-fi
 
 }
 
@@ -158,11 +137,12 @@ fi
 
 function CHOOSE_PARAMETERS_GUI
 {
-NB_DEKIWIKI=1
-NOM_DEKIWIKI="Dekiwiki"
 
-export NB_DEKIWIKI=$NB_DEKIWIKI
-export NOM_DEKIWIKI=$NOM_DEKIWIKI
+NB_ELGG=1
+NOM_ELGG="Elgg"
+
+export NB_ELGG=$NB_ELGG
+export NOM_ELGG=$NOM_ELGG
 
 }
 #_______________________________________________________________________________________________
@@ -176,51 +156,31 @@ export NOM_DEKIWIKI=$NOM_DEKIWIKI
 function INSTALL
 {
 
-echo "I: Download Dekiwiki"
+echo "I: Download Elgg"
+DOWNLOAD
 
-echo "deb http://repo.mindtouch.com xUbuntu_8.04/" >> /etc/apt/sources.list
 
-apt-get update
+mkdir $WWW_DIRECTORY/${NOM_ELGG}
+cd $DL_DIR
+cp -Rf elgg/* $WWW_DIRECTORY/${NOM_ELGG}/.
 
-apt-get install --assume-yes --force-yes html2ps poppler-utils wv gs tidy links msttcorefonts cabextract
+echo "create database ${NOM_ELGG};
+grant all on ${NOM_ELGG}.* to ${NOM_ELGG}@localhost identified by '$ELGG_MYSQL_PWD';
+flush privileges;" > ELGG_db.sql
 
-apt-get install --assume-yes --force-yes dekiwiki
+$BIN_MYSQL -u root < ELGG_db.sql mysql
+rm ELGG_db.sql
 
-sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
+mv $WWW_DIRECTORY/${NOM_ELGG}/engine/settings.example.php $WWW_DIRECTORY/${NOM_ELGG}/engine/settings.php
 
-cat << EOT >> /etc/apache2/sites-available/default
-RewriteEngine On
-	
-	# deki-api uses encoded slashes in query parameters so AllowEncodedSlashes must be On
-	AllowEncodedSlashes On   
+sed -i "s/{{CONFIG_DBUSER}}/${NOM_ELGG}/" $WWW_DIRECTORY/${NOM_ELGG}/engine/settings.php
+sed -i "s/{{CONFIG_DBPASS}}/$ELGG_MYSQL_PWD/" $WWW_DIRECTORY/${NOM_ELGG}/engine/settings.php
+sed -i "s/{{CONFIG_DBNAME}}/${NOM_ELGG}/" $WWW_DIRECTORY/${NOM_ELGG}/engine/settings.php
+sed -i "s/{{CONFIG_DBPREFIX}}/elgg_/" $WWW_DIRECTORY/${NOM_ELGG}/engine/settings.php
 
-	# FIXME:
-	# Some php flags we need. These are only needed until all
-        # the short php open tags are changed to long in the source code.
-	php_flag short_open_tag on
-	# Allow short open tags and turn off E_NOTICE messages
-	php_value error_reporting "E_ALL & ~E_NOTICE"
-	# Setting php memory parameters
-	# php_value memory_limit "128M"
-        # php_value post_max_size "64M"
-        # php_value upload_max_filesize "64M"
 
-	# mod_proxy rules
-	ProxyPass /dekiwki/@api http://localhost:8081 retry=1
-	ProxyPassReverse /dekiwki/@api http://localhost:8081
-	SetEnv force-proxy-request-1.0 1
-	SetEnv proxy-nokeepalive 1
-
-        <Proxy *>
-          AddDefaultCharset off
-          Order deny,allow
-          Deny from all
-          Allow from all
-        </Proxy>
-</VirtualHost>
-EOT
-/etc/init.d/apache2 restart
-
+chown -R www-data $WWW_DIRECTORY/${NOM_ELGG}
+  
 
 }
 
@@ -233,9 +193,8 @@ EOT
 function CREATE_WUI
 {
 
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_DEKIWIKI}\">${NOM_DEKIWIKI}</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_ELGG}\">${NOM_ELGG}</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
-
 
 }
 #_______________________________________________________________________________________________
@@ -248,16 +207,9 @@ echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_DEKIWIKI}\">${NOM_DEKIWIKI}</a><br>
 function CREATE_INSTALL_SCRIPT
 {
 
-echo "
-#Dekiwiki
-cd /var/www/dekiwiki/config
-mkdir /etc/dekiwiki
-cp -p mindtouch.host.conf /etc/dekiwiki
-cp -p mindtouch.deki.startup.xml /etc/dekiwiki
-cp -p LocalSettings.php /var/www/dekiwiki/
-mv /etc/dekiwiki /var/share/etc/
 
-ln -s /var/share/etc/dekiwiki /etc/dekiwiki
+echo "
+#Elgg
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
@@ -266,11 +218,11 @@ ln -s /var/share/etc/dekiwiki /etc/dekiwiki
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
-echo "I: Install Dekiwiki"
+echo "I: Install Elgg"
 CHOICE_LANG
 CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 
 CREATE_INSTALL_SCRIPT
-echo "I: End of install Dekiwiki"
+echo "I: End of install Elgg"

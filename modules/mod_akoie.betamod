@@ -84,15 +84,8 @@ fi
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-wget http://garr.dl.sourceforge.net/sourceforge/akoie/akoie-0.5.zip
-mkdir Akoie
-cd Akoie
-unzip -q ../akoie-0.5.zip
-
-cd $DL_DIR
-wget http://extjs.com/products/extjs/download.php?dl=extjs22
-unzip -q ext-2.2.zip
-mv ext-2.2 ext
+wget $URL_FREE/akoie-custom-0.5.tar.gz
+tar -xzf akoie-custom-0.5.tar.gz
 }
 
 #_______________________________________________________________________________________________
@@ -105,15 +98,8 @@ mv ext-2.2 ext
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/akoie-0.5.zip
-mkdir Akoie
-cd Akoie
-unzip -q ../akoie-0.5.zip
-
-cd $DL_DIR
-wget $URL_FREE/ext-2.2.zip
-unzip -q ext-2.2.zip
-mv ext-2.2 ext
+wget $URL_FREE/akoie-custom-0.5.tar.gz
+tar -xzf akoie-custom-0.5.tar.gz
 }
 
 #_______________________________________________________________________________________________
@@ -178,16 +164,11 @@ DOWNLOAD
 cd $DL_DIR
 mkdir $WWW_DIRECTORY/$NOM_AKOIE
 cp -Rf Akoie/* $WWW_DIRECTORY/$NOM_AKOIE/.
-mkdir $WWW_DIRECTORY/$NOM_AKOIE/ext
-cp -Rf ext/* $WWW_DIRECTORY/$NOM_AKOIE/ext/.
 
 apt-get install --assume-yes --force-yes imagemagick 
 
-sed -i "2s/akoie/$NOM_AKOIE/" $WWW_DIRECTORY/$NOM_AKOIE/akoie/config.inc.php
-sed -i "8s/..\/..\/ext\//..\/ext\//" $WWW_DIRECTORY/$NOM_AKOIE/akoie/config.inc.php
 
 
-mv $WWW_DIRECTORY/$NOM_AKOIE/test.html $WWW_DIRECTORY/$NOM_AKOIE/index.html
 
 
 chown -R www-data $WWW_DIRECTORY/$NOM_AKOIE/
