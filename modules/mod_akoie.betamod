@@ -167,7 +167,32 @@ cp -Rf Akoie/* $WWW_DIRECTORY/$NOM_AKOIE/.
 
 apt-get install --assume-yes --force-yes imagemagick 
 
+echo "Configure Samba Server to share upoad images directory ?"
+echo "[Y/n]"
+read r1 < /dev/tty
 
+if [ "$(echo $r1 | awk  '{print $1}')" != "n" ]; then
+echo "Protect this directory with a password ?"
+echo "[N/y]"
+read r2 < /dev/tty
+if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
+echo "[$NOM_AKOIE]
+	comment = $NOM_AKOIE
+	writeable = yes
+	public = yes
+	path = /var/www/$NOM_AKOIE/images/album
+	valid users = www-data
+" >> /var/share/etc/samba/smb.conf
+smbpasswd -a www-data
+else
+echo "[$NOM_AKOIE]
+	comment = $NOM_AKOIE
+	writeable = yes
+	public = yes
+	path = /var/www/$NOM_AKOIE/images/album
+	
+" >> /var/share/etc/samba/smb.conf
+fi
 
 
 
