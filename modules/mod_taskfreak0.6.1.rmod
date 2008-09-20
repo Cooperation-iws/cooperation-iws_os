@@ -1,13 +1,11 @@
 #!/bin/bash
-
-
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Snif'
+RMOD_NAME='Taskfreak1.8'
 RMOD_AUTHOR='Oliv'
-RMOD_VERSION=0.2
-RMOD_DESCRIPTION='Files display'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='E-learning portal'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -19,6 +17,8 @@ SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
+
+
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
@@ -26,6 +26,8 @@ URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 
 #VARIABLES
+#MYSQL PASSWORD
+TASKFREAK_MYSQL_PWD="TASKFREAK_MYSQL_PWD"
 #_______________________________________________________________________________________________
 #__________________________________________LANGFR______________________________________________
 
@@ -36,6 +38,7 @@ function LANGFR
 MESS_NAME="Entrez le nom de l'installation "
 MESS_HOW_MANY="Combien de" 
 MESS_DO_YOU_WANT="voulez vous installez ?"
+MESS_URL="Quelle est l'url à partir de laquelle vous avez effectuée l'installation des applications web?"
 }
 #_______________________________________________________________________________________________
 #__________________________________________FIN_LANGFR___________________________________________
@@ -50,6 +53,8 @@ function LANGEN
 MESS_NAME="Enter the name of the install "
 MESS_HOW_MANY="How many"
 MESS_DO_YOU_WANT="do you want to install ?"
+MESS_URL="What's the url from where you install web applications ?"
+
 }
 #_______________________________________________________________________________________________
 #__________________________________________FIN_LANGEN___________________________________________
@@ -79,18 +84,14 @@ fi
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-MESSAGE="snif download"
-echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
-wget http://www.bitfolge.de/download/snif_152.zip
-mkdir snif
-cd snif
-unzip ../snif_152.zip
-rm -r subdir
+wget http://www.taskfreak.com/files/stable/taskfreak-multi-mysql-0.6.1.tgz
+tar -xzf taskfreak-multi-mysql-0.6.1.tgz
+#rm moodle-latest-19.zip
+
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_WEB___________________________________
-
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -98,13 +99,10 @@ rm -r subdir
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-MESSAGE="snif download"
-echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
-wget $URL_FREE/snif_152.zip
-mkdir snif
-cd snif
-unzip ../snif_152.zip
-rm -r subdir
+wget $URL_FREE/taskfreak-multi-mysql-0.6.1.tgz
+tar -xzf taskfreak-multi-mysql-0.6.1.tgz
+#rm moodle-latest-19.zip
+
 }
 
 #_______________________________________________________________________________________________
@@ -136,37 +134,21 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NB_SNIF=1
-NOM_SNIF[1]="Snif"
-
+NOM_TASKFREAK="Taskfreak"
 else 
 
-NB_SNIF=$(zenity --entry --text "Combien de Snif voulez vous installez ?")
+NOM_TASKFREAK=$(zenity --entry --text "$MESS_NAME TASKFREAK")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NB_SNIF| grep "[^0-9]") 
+while (echo $NOM_TASKFREAK | grep "[^a-zA-Z0-9]") 
 do
-NB_SNIF=$(zenity --entry --text "Combien de Snif voulez vous installez ?")
+NOM_TASKFREAK=$(zenity --entry --text "$MESS_NAME TASKFREAK")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
-
-for (( count=1; count<=$NB_SNIF; count++ ))
-do
-NOM_SNIF[$count]=$(zenity --entry --text "$MESS_NAME $count SNIF")
-test $? -ne 0 && break # Bouton Annuler
-while (echo ${NOM_SNIF[$count]} | grep "[^a-zA-Z0-9]") 
-do
-NOM_SNIF[$count]=$(zenity --entry --text "$MESS_NAME $count SNIF")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
-
-done 
-
-
+ 
 
 fi
+export NOM_TASKFREAK=$NOM_TASKFREAK
 
-export NB_SNIF=$NB_SNIF
-export NOM_SNIF=$NOM_SNIF
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
@@ -178,62 +160,28 @@ export NOM_SNIF=$NOM_SNIF
 
 function INSTALL
 {
-MESSAGE="I: Download Snif"
-
+echo "I: Download Taskfreak"
 DOWNLOAD
 
-#SNIF
-MESSAGE="Snif paramétrage"
-echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
-
-for (( count=1; count<=$NB_SNIF; count++ ))
-do
+##TASKFREAK
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${NOM_SNIF[$count]}
-cp -Rf snif/* $WWW_DIRECTORY/${NOM_SNIF[$count]}/.
+mkdir $WWW_DIRECTORY/$NOM_TASKFREAK
+cp -Rf taskfreak/* $WWW_DIRECTORY/$NOM_TASKFREAK/.
 
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1967s/444444/cf3a12/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1971s/000000/9499ac/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1978s/444444/aa3b3b/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1987s/eeeeee/e7d9d9/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1990s/dddddd/ffffff/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "498s/false/true/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "512s/30/0/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
+echo "create database ${NOM_TASKFREAK};
+grant all on ${NOM_TASKFREAK}.* to ${NOM_TASKFREAK}@localhost identified by '$TASKFREAK_MYSQL_PWD';
+flush privileges;" > TASKFREAK_db.sql
 
+$BIN_MYSQL -u root < TASKFREAK_db.sql mysql
+rm TASKFREAK_db.sql
 
 
-echo "Configure Samba Server to share this directory ?"
-echo "[Y/n]"
-read r1 < /dev/tty
+sed -i "14s/root/$NOM_TASKFREAK/" $WWW_DIRECTORY/$NOM_TASKFREAK/include/config.php
+sed -i "15s/''/'$TASKFREAK_MYSQL_PWD'/" $WWW_DIRECTORY/$NOM_TASKFREAK/include/config.php
+sed -i "16s/taskfreak_strict/$NOM_TASKFREAK/" $WWW_DIRECTORY/$NOM_TASKFREAK/include/config.php
 
-if [ "$(echo $r1 | awk  '{print $1}')" != "n" ]; then
-echo "Protect this directory with a password ?"
-echo "[N/y]"
-read r2 < /dev/tty
-if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
-echo "[${NOM_SNIF[$count]}]
-	comment = ${NOM_SNIF[$count]}
-	writeable = yes
-	public = yes
-	path = /var/www/${NOM_SNIF[$count]}
-	
-" >> /var/share/etc/samba/smb.conf
+chown -R www-data $WWW_DIRECTORY/$NOM_TASKFREAK/
 
-else
-echo "[${NOM_SNIF[$count]}]
-	comment = ${NOM_SNIF[$count]}
-	writeable = yes
-	public = yes
-	path = /var/www/${NOM_SNIF[$count]}
-	valid users = www-data
-" >> /var/share/etc/samba/smb.conf
-smbpasswd -a www-data
-fi
-
-chmod 777 $WWW_DIRECTORY/${NOM_SNIF[$count]}
-fi
-
-done
 
 }
 
@@ -245,19 +193,34 @@ done
 
 function CREATE_WUI
 {
-for (( count=1; count<=$NB_SNIF; count++ ))
-
-do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_SNIF[$count]}\">${NOM_SNIF[$count]}</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_TASKFREAK\" >$NOM_TASKFREAK</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
-done
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
-echo "I: Install Snif"
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+
+echo "
+
+#Taskfreak
+
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Taskfreak"
 CHOICE_LANG
 CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
-echo "I: End of Install Snif"
+CREATE_INSTALL_SCRIPT
+echo "I: End of install Taskfreak"

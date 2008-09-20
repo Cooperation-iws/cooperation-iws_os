@@ -72,7 +72,7 @@ class Reconstructor:
         self.donateUrl = "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=ejhazlett%40gmail%2ecom&item_name=Reconstructor%20Donation&item_number=R_DONATE_001&no_shipping=2&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8"
         #self.devRevision = time.strftime("%y%m%d", time.gmtime())
         self.devRevision = "080716"
-        self.appVersion = "0.5.0"
+        self.appVersion = "0.5.1"
         self.cdUbuntuVersion = ''
         self.altCdUbuntuVersion = ''
         self.altCdUbuntuArch = ''

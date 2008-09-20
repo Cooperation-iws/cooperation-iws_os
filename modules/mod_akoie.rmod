@@ -181,20 +181,21 @@ echo "[$NOM_AKOIE]
 	writeable = yes
 	public = yes
 	path = /var/www/$NOM_AKOIE/images/album
-	valid users = www-data
+	
 " >> /var/share/etc/samba/smb.conf
-smbpasswd -a www-data
+
 else
 echo "[$NOM_AKOIE]
 	comment = $NOM_AKOIE
 	writeable = yes
 	public = yes
 	path = /var/www/$NOM_AKOIE/images/album
-	
+	valid users = www-data
 " >> /var/share/etc/samba/smb.conf
+smbpasswd -a www-data
 fi
 
-
+fi
 
 chown -R www-data $WWW_DIRECTORY/$NOM_AKOIE/
 
