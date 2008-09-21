@@ -1,0 +1,428 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Twiki4.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Wiki CMS'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+#VARIABLES
+#MYSQL PASSWORD
+TWIKI_MYSQL_PWD="TWIKI_MYSQL_PWD"
+#_______________________________________________________________________________________________
+#__________________________________________LANGFR______________________________________________
+
+
+function LANGFR
+
+{
+MESS_NAME="Entrez le nom de l'installation "
+MESS_HOW_MANY="Combien de" 
+MESS_DO_YOU_WANT="voulez vous installez ?"
+MESS_URL="Quelle est l'url à partir de laquelle vous avez effectuée l'installation des applications web?"
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGFR___________________________________________
+
+#_______________________________________________________________________________________________
+#__________________________________________LANGEN______________________________________________
+
+
+function LANGEN
+
+{
+MESS_NAME="Enter the name of the install "
+MESS_HOW_MANY="How many"
+MESS_DO_YOU_WANT="do you want to install ?"
+MESS_URL="What's the url from where you install web applications ?"
+
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGEN___________________________________________
+
+
+#_______________________________________________________________________________________________
+#__________________________________________CHOICE_LANG___________________________________________
+
+function CHOICE_LANG
+{
+if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
+LANGFR
+
+else
+LANGEN
+
+fi
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_CHOICE_LANG______________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_WEB_______________________________________
+
+
+function WGET_MIRROIR_WEB
+{
+cd $DL_DIR
+wget $URL_FREE/TWiki-4.2.3.tgz
+mkdir Twiki
+tar -xzf TWiki-4.2.3.tgz -C Twiki
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/TWiki-4.2.3.tgz
+mkdir Twiki
+tar -xzf TWiki-4.2.3.tgz -C Twiki
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________DOWNLOAD_______________________________________________
+
+function DOWNLOAD
+{
+if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
+
+WGET_MIRROIR_WEB
+fi
+if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
+
+WGET_MIRROIR_FREE
+fi
+
+}
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_DOWNLOAD___________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
+
+function CHOOSE_PARAMETERS_GUI
+{
+if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
+NOM_TWIKI="Twiki"
+else 
+
+NOM_TWIKI=$(zenity --entry --text "$MESS_NAME TWIKI")
+test $? -ne 0 && break # Bouton Annuler
+while (echo $NOM_TWIKI | grep "[^a-zA-Z0-9]") 
+do
+NOM_TWIKI=$(zenity --entry --text "$MESS_NAME TWIKI")
+test $? -ne 0 && break # Bouton Annulerdone
+done 
+ 
+
+fi
+export NOM_TWIKI=$NOM_TWIKI
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Twiki"
+DOWNLOAD
+
+##TWIKI
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/$NOM_TWIKI
+cp -Rf Twiki/* $WWW_DIRECTORY/$NOM_TWIKI/.
+
+apt-get install cron grep  
+apt-get install rcs
+apt-get install libcgi-session-perl
+apt-get install libdigest-sha1-perl
+apt-get install libhtml-parser-perl
+apt-get install patch
+
+sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
+
+cat << EOT >> /etc/apache2/sites-available/default
+# Autogenerated httpd.conf file for TWiki.
+# Generated at http://twiki.org/cgi-bin/view/TWiki/ApacheConfigGenerator
+# For TWiki version 4.2.X
+
+# We set an environment variable called blockAccess.
+#
+# Setting a BrowserMatchNoCase to ^$ is important. It prevents TWiki from
+# including its own topics as URLs and also prevents other TWikis from
+# doing the same. This is important to prevent the most obvious
+# Denial of Service attacks.
+#
+# You can expand this by adding more BrowserMatchNoCase statements to
+# block evil browser agents trying the impossible task of mirroring a twiki
+#
+# Example:
+# BrowserMatchNoCase ^SiteSucker blockAccess
+# BrowserMatchNoCase ^$ blockAccess
+
+BrowserMatchNoCase ^Accoona blockAccess
+BrowserMatchNoCase ^ActiveAgent blockAccess
+BrowserMatchNoCase ^Attache blockAccess
+BrowserMatchNoCase BecomeBot blockAccess
+BrowserMatchNoCase ^bot blockAccess
+BrowserMatchNoCase Charlotte/ blockAccess
+BrowserMatchNoCase ^ConveraCrawler blockAccess
+BrowserMatchNoCase ^CrownPeak-HttpAgent blockAccess
+BrowserMatchNoCase ^EmailCollector blockAccess
+BrowserMatchNoCase ^EmailSiphon blockAccess
+BrowserMatchNoCase ^e-SocietyRobot blockAccess
+BrowserMatchNoCase ^Exabot blockAccess
+BrowserMatchNoCase ^FAST blockAccess
+BrowserMatchNoCase ^FDM blockAccess
+BrowserMatchNoCase ^GetRight/6.0a blockAccess
+BrowserMatchNoCase ^GetWebPics blockAccess
+BrowserMatchNoCase ^Gigabot blockAccess
+BrowserMatchNoCase ^gonzo1 blockAccess
+BrowserMatchNoCase ^Google\sSpider blockAccess
+BrowserMatchNoCase ^ichiro blockAccess
+BrowserMatchNoCase ^ie_crawler blockAccess
+BrowserMatchNoCase ^iGetter blockAccess
+BrowserMatchNoCase ^IRLbot blockAccess
+BrowserMatchNoCase Jakarta blockAccess
+BrowserMatchNoCase ^Java blockAccess
+BrowserMatchNoCase ^KrakSpider blockAccess
+BrowserMatchNoCase ^larbin blockAccess
+BrowserMatchNoCase ^LeechGet blockAccess
+BrowserMatchNoCase ^LinkWalker blockAccess
+BrowserMatchNoCase ^Lsearch blockAccess
+BrowserMatchNoCase ^Microsoft blockAccess
+BrowserMatchNoCase ^MJ12bot blockAccess
+BrowserMatchNoCase MSIECrawler blockAccess
+BrowserMatchNoCase ^MSRBOT blockAccess
+BrowserMatchNoCase ^noxtrumbot blockAccess
+BrowserMatchNoCase ^NutchCVS blockAccess
+BrowserMatchNoCase ^RealDownload blockAccess
+BrowserMatchNoCase ^Rome blockAccess
+BrowserMatchNoCase ^Roverbot blockAccess
+BrowserMatchNoCase ^schibstedsokbot blockAccess
+BrowserMatchNoCase ^Seekbot blockAccess
+BrowserMatchNoCase ^SiteSnagger blockAccess
+BrowserMatchNoCase ^SiteSucker blockAccess
+BrowserMatchNoCase ^Snapbot blockAccess
+BrowserMatchNoCase ^sogou blockAccess
+BrowserMatchNoCase ^SpiderKU blockAccess
+BrowserMatchNoCase ^SpiderMan blockAccess
+BrowserMatchNoCase ^Squid blockAccess
+BrowserMatchNoCase ^Teleport blockAccess
+BrowserMatchNoCase ^User-Agent\: blockAccess
+BrowserMatchNoCase VoilaBot blockAccess
+BrowserMatchNoCase ^voyager blockAccess
+BrowserMatchNoCase ^W3C blockAccess
+BrowserMatchNoCase ^w3search blockAccess
+BrowserMatchNoCase ^Web\sDownloader blockAccess
+BrowserMatchNoCase ^WebCopier blockAccess
+BrowserMatchNoCase ^WebDevil blockAccess
+BrowserMatchNoCase ^WebSec blockAccess
+BrowserMatchNoCase ^WebVac blockAccess
+BrowserMatchNoCase ^Webwhacker blockAccess
+BrowserMatchNoCase ^Webzip blockAccess
+BrowserMatchNoCase ^Wells blockAccess
+BrowserMatchNoCase ^WhoWhere blockAccess
+BrowserMatchNoCase www\.netforex\.org blockAccess
+BrowserMatchNoCase ^WX_mail blockAccess
+BrowserMatchNoCase ^yacybot blockAccess
+BrowserMatchNoCase ^ZIBB blockAccess
+BrowserMatchNoCase ^$ blockAccess
+
+
+# The ScriptAlias defines the bin directory as a directory where CGI
+# scripts are allowed.
+# The first parameter will be part of the URL to your installation e.g.
+# http://my.co.uk/twiki/bin/view/...
+# The second parameter must point to the physical path on your disc.
+ScriptAlias /$NOM_TWIKI/bin "$WWW_DIRECTORY/$NOM_TWIKI/bin"
+
+# The Alias defines a url that points to the root of the twiki installation.
+# It is used to access files in the pub directory (attachments etc)
+# It must come _after_ the ScriptAlias.
+Alias /$NOM_TWIKI "$WWW_DIRECTORY/$NOM_TWIKI"
+
+# This specifies the options on the TWiki scripts directory. The ExecCGI
+# and SetHandler tell apache that it contains scripts. "Allow from all"
+# lets any IP address access this URL.
+<Directory "$WWW_DIRECTORY/$NOM_TWIKI/bin">
+    AllowOverride None
+    Order Allow,Deny
+    Allow from all
+    Deny from env=blockAccess
+
+    Options ExecCGI FollowSymLinks
+    SetHandler cgi-script
+</Directory>
+<location /$NOM_TWIKI/bin/configure>
+    # Password file for TWiki users
+    AuthUserFile $WWW_DIRECTORY/$NOM_TWIKI/data/.htpasswd
+    AuthName 'Enter your WikiName: (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
+    AuthType Basic
+
+    # File to return on access control error (e.g. wrong password)
+    ErrorDocument 401 /twiki/bin/view/TWiki/TWikiRegistration
+
+# Limit access to configure to specific IP addresses and or users.
+# Make sure configure is not open to the general public.
+# It exposes system details that can help attackers.
+    SetHandler cgi-script
+     Require valid-user
+</location>
+
+# This sets the options on the pub directory, which contains attachments and
+# other files like CSS stylesheets and icons. AllowOverride None stops a
+# user installing a .htaccess file that overrides these options.
+# Note that files in pub are *not* protected by TWiki Access Controls,
+# so if you want to control access to files attached to topics you need to
+# block access to the specific directories same way as the ApacheConfigGenerator
+# blocks access to the pub directory of the Trash web
+<Directory "$WWW_DIRECTORY/$NOM_TWIKI/pub">
+    Options None
+    AllowOverride None
+    Order Allow,Deny
+    Allow from all
+    Deny from env=blockAccess
+
+    # Disable execusion of PHP scripts
+    php_admin_flag engine off
+
+    # This line will redefine the mime type for the most common types of scripts
+    AddType text/plain .shtml .php .php3 .phtml .phtm .pl .py .cgi
+#
+#add an Expires header that is sufficiently in the future that the browser does not even ask if its uptodate
+# reducing the load on the server significantly
+#IF you can, you should enable this - it _will_ improve your twiki experience, even if you set it to under one day.
+# you may need to enable expires_module in your main apache config
+#LoadModule expires_module libexec/httpd/mod_expires.so
+#AddModule mod_expires.c
+#<ifmodule mod_expires.c>
+#  <filesmatch "\.(jpg|gif|png|css|js)$">
+#       ExpiresActive on
+#       ExpiresDefault "access plus 11 days"
+#   </filesmatch>
+#</ifmodule>
+#
+
+</Directory>
+
+# Security note: All other directories should be set so
+# that they are *not* visible as URLs, so we set them as =deny from all=.
+<Directory "$WWW_DIRECTORY/$NOM_TWIKI/twiki/data">
+    deny from all
+</Directory>
+
+<Directory "$WWW_DIRECTORY/$NOM_TWIKI/templates">
+    deny from all
+</Directory>
+
+<Directory "$WWW_DIRECTORY/$NOM_TWIKI/lib">
+    deny from all
+</Directory>
+
+<Directory "$WWW_DIRECTORY/$NOM_TWIKI/locale">
+    deny from all
+</Directory>
+
+<Directory "$WWW_DIRECTORY/$NOM_TWIKI/tools">
+    deny from all
+</Directory>
+
+<Directory "$WWW_DIRECTORY/$NOM_TWIKI/working">
+    deny from all
+</Directory>
+
+
+
+</VirtualHost>
+EOT
+
+
+echo "
+----------------Cooperation-iws SVN-------------------
+----------Enter the admin password for Twiki------------"
+
+htpasswd -cm $WWW_DIRECTORY/$NOM_TWIKI/data/.htpasswd admin
+
+/etc/init.d/apache2 restart
+
+chown -R www-data $WWW_DIRECTORY/$NOM_TWIKI/
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_TWIKI/bin/view\" >$NOM_TWIKI</a> | <a href=\"/$NOM_TWIKI/\" >Admin</a><br>
+" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+
+echo "
+
+#Twiki
+
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Twiki"
+CHOICE_LANG
+CHOOSE_PARAMETERS_GUI
+INSTALL
+CREATE_WUI
+CREATE_INSTALL_SCRIPT
+echo "I: End of install Twiki"

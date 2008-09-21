@@ -204,10 +204,25 @@ RewriteEngine On
 	# php_value memory_limit "128M"
         # php_value post_max_size "64M"
         # php_value upload_max_filesize "64M"
+	RewriteEngine On
+	RewriteRule ^/dekiwiki/$ /dekiwiki/index.php?title= [L,QSA,NE]
+
+	RewriteCond %{REQUEST_URI} ^/dekiwiki/@gui/[^.]+$
+	RewriteRule ^/dekiwiki/@gui/(.*)$ /dekiwiki/proxy.php?path=$1 [L,QSA,NE]
+
+	RewriteCond %{REQUEST_URI} !^/dekiwiki/(@api|editor|skins|config|@gui|deki-cp)/
+	RewriteCond %{REQUEST_URI} !^/dekiwiki/index\.php
+	RewriteCond %{REQUEST_URI} !^/dekiwiki/favicon\.ico$
+	RewriteCond %{REQUEST_URI} !^/dekiwiki/robots\.txt$
+	RewriteCond %{REQUEST_URI} !^/dekiwiki/error/(.*)\.var$
+	RewriteCond %{QUERY_STRING} ^dekiwiki/$ [OR] %{REQUEST_URI} ^/dekiwiki/Special:Search
+	RewriteRule ^/dekiwiki/(.*)$ /dekiwiki/index.php?title=$1 [L,QSA,NE]
+
+
 
 	# mod_proxy rules
-	ProxyPass /dekiwki/@api http://localhost:8081 retry=1
-	ProxyPassReverse /dekiwki/@api http://localhost:8081
+	ProxyPass /dekiwiki/@api http://localhost:8081 retry=1
+	ProxyPassReverse /dekiwiki/@api http://localhost:8081
 	SetEnv force-proxy-request-1.0 1
 	SetEnv proxy-nokeepalive 1
 
@@ -258,6 +273,9 @@ cp -p LocalSettings.php /var/www/dekiwiki/
 mv /etc/dekiwiki /var/share/etc/
 
 ln -s /var/share/etc/dekiwiki /etc/dekiwiki
+
+/etc/init.d/dekiwiki start
+
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
