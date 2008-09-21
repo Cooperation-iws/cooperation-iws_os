@@ -1,0 +1,226 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Achievo1.3.4'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Project manager'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+#VARIABLES
+#MYSQL PASSWORD
+ACHIEVO_MYSQL_PWD="ACHIEVO_MYSQL_PWD"
+#_______________________________________________________________________________________________
+#__________________________________________LANGFR______________________________________________
+
+
+function LANGFR
+
+{
+MESS_NAME="Entrez le nom de l'installation "
+MESS_HOW_MANY="Combien de" 
+MESS_DO_YOU_WANT="voulez vous installez ?"
+MESS_URL="Quelle est l'url à partir de laquelle vous avez effectuée l'installation des applications web?"
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGFR___________________________________________
+
+#_______________________________________________________________________________________________
+#__________________________________________LANGEN______________________________________________
+
+
+function LANGEN
+
+{
+MESS_NAME="Enter the name of the install "
+MESS_HOW_MANY="How many"
+MESS_DO_YOU_WANT="do you want to install ?"
+MESS_URL="What's the url from where you install web applications ?"
+
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGEN___________________________________________
+
+
+#_______________________________________________________________________________________________
+#__________________________________________CHOICE_LANG___________________________________________
+
+function CHOICE_LANG
+{
+if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
+LANGFR
+
+else
+LANGEN
+
+fi
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_CHOICE_LANG______________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_WEB_______________________________________
+
+
+function WGET_MIRROIR_WEB
+{
+cd $DL_DIR
+wget http://www.achievo.org/downloads/achievo/achievo-1.3.4.tar.gz
+tar -xzf achievo-1.3.4.tar.gz
+mv achievo-1.3.4 achievo
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/achievo-1.3.4.tar.gz
+tar -xzf achievo-1.3.4.tar.gz
+mv achievo-1.3.4 achievo
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________DOWNLOAD_______________________________________________
+
+function DOWNLOAD
+{
+if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
+
+WGET_MIRROIR_WEB
+fi
+if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
+
+WGET_MIRROIR_FREE
+fi
+
+}
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_DOWNLOAD___________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
+
+function CHOOSE_PARAMETERS_GUI
+{
+if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
+NOM_ACHIEVO="Achievo"
+else 
+
+NOM_ACHIEVO=$(zenity --entry --text "$MESS_NAME ACHIEVO")
+test $? -ne 0 && break # Bouton Annuler
+while (echo $NOM_ACHIEVO | grep "[^a-zA-Z0-9]") 
+do
+NOM_ACHIEVO=$(zenity --entry --text "$MESS_NAME ACHIEVO")
+test $? -ne 0 && break # Bouton Annulerdone
+done 
+ 
+
+fi
+export NOM_ACHIEVO=$NOM_ACHIEVO
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Achievo"
+DOWNLOAD
+
+##ACHIEVO
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/$NOM_ACHIEVO
+cp -Rf achievo/* $WWW_DIRECTORY/$NOM_ACHIEVO/.
+
+echo "create database ${NOM_ACHIEVO};
+grant all on ${NOM_ACHIEVO}.* to ${NOM_ACHIEVO}@localhost identified by '$ACHIEVO_MYSQL_PWD';
+flush privileges;" > ACHIEVO_db.sql
+
+$BIN_MYSQL -u root < ACHIEVO_db.sql mysql
+rm ACHIEVO_db.sql
+
+
+sed -i "26s/achievo_1_3/$NOM_ACHIEVO/" $WWW_DIRECTORY/$NOM_ACHIEVO/config.inc.php
+sed -i "28s/demo/$ACHIEVO_MYSQL_PWD/" $WWW_DIRECTORY/$NOM_ACHIEVO/config.inc.php
+sed -i "27s/demo/$NOM_ACHIEVO/" $WWW_DIRECTORY/$NOM_ACHIEVO/config.inc.php
+sed -i "92s/demo/cooperation/" $WWW_DIRECTORY/$NOM_ACHIEVO/config.inc.php
+
+chown -R www-data $WWW_DIRECTORY/$NOM_ACHIEVO/
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_ACHIEVO\" >$NOM_ACHIEVO</a><br>
+" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+
+echo "
+
+#Achievo
+
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Achievo"
+CHOICE_LANG
+CHOOSE_PARAMETERS_GUI
+INSTALL
+CREATE_WUI
+CREATE_INSTALL_SCRIPT
+echo "I: End of install Achievo"
