@@ -13,14 +13,14 @@ LIVEUSER=$(cat /tmp/user)
 
 echo "I: config nx"
 cd /tmp
-wget http://64.34.161.181/download/3.2.0/Linux/nxclient_3.2.0-9_i386.deb
-wget http://64.34.161.181/download/3.2.0/Linux/nxnode_3.2.0-8_i386.deb
-wget http://64.34.161.181/download/3.2.0/Linux/FE/nxserver_3.2.0-11_i386.deb
-dpkg -i nxclient_3.2.0-9_i386.deb
-dpkg -i nxnode_3.2.0-8_i386.deb
-dpkg -i nxserver_3.2.0-11_i386.deb
-/usr/NX/bin/nxserver --useradd '$LIVEUSER' --system --administrator
-userdel -r '$LIVEUSER'
+wget http://64.34.161.181/download/3.2.0/Linux/nxclient_3.2.0-14_i386.deb
+wget http://64.34.161.181/download/3.2.0/Linux/nxnode_3.2.0-13_i386.deb
+wget http://64.34.161.181/download/3.2.0/Linux/FE/nxserver_3.2.0-16_i386.deb
+dpkg -i nxclient_3.2.0-14_i386.deb
+dpkg -i nxnode_3.2.0-13_i386.deb
+dpkg -i nxserver_3.2.0-16_i386.deb
+/usr/NX/bin/nxserver --useradd $LIVEUSER --system --administrator
+userdel -r $LIVEUSER
 
 
 

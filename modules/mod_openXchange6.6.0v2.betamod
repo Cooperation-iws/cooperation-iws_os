@@ -29,7 +29,7 @@ INSTALL=$(cat /tmp/def_install)
 #MYSQL PASSWORD
 OPENXCHANGE_MYSQL_PWD="OPENXCHANGE_MYSQL_PWD"
 HOSTNAME="127.0.0.1"
-DOMAIN="localdomain"
+DOMAIN="localhost"
 
 
 #_______________________________________________________________________________________________
@@ -108,7 +108,7 @@ cp $DL_DIR/hyperion-install/config/postfix/*.cf /etc/postfix/
 awk '{gsub("hyperion.example.com", "'"$DOMAIN"'", $0); print > FILENAME}' /etc/apache2/sites-available/default
 awk '{gsub("oxadmin@example.com", "oxadmin@" "'"$DOMAIN"'", $0); print > FILENAME}' /etc/apache2/sites-available/default
 awk '{gsub("example.com",  "'"$DOMAIN"'", $0); print > FILENAME}' /etc/imapd.conf
-awk '{gsub("example.com", '$DOMAIN', $0); print > FILENAME}' /etc/postfix/main.cf
+awk '{gsub("example.com", "'"$DOMAIN"'", $0); print > FILENAME}' /etc/postfix/main.cf
 awk '{gsub("secret", "'"$OPENXCHANGE_MYSQL_PWD"'", $0); print > FILENAME}' /etc/postfix/ox_aliases.cf
 awk '{gsub("secret", "'"$OPENXCHANGE_MYSQL_PWD"'", $0); print > FILENAME}' /etc/postfix/ox_resource_aliases.cf
 awk '{gsub("secret", "'"$OPENXCHANGE_MYSQL_PWD"'", $0); print > FILENAME}' /etc/postfix/ox_user_aliases.cf
@@ -154,6 +154,8 @@ apache2ctl restart
 
 echo "GRANT ALL PRIVILEGES ON *.* TO 'openexchange'@'localhost' IDENTIFIED BY '$OPENXCHANGE_MYSQL_PWD';" > /tmp/openXchange_pri.sql
 $BIN_MYSQL -u root < /tmp/openXchange_pri.sql mysql
+
+sed -i "3s/SHA/CRYPT/" /opt/open-xchange/etc/admindaemon/User.properties
 
 /opt/open-xchange/sbin/initconfigdb --configdb-pass=$OPENXCHANGE_MYSQL_PWD
 

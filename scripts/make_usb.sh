@@ -121,69 +121,25 @@ cd "${WORKING_DIRECTORY}${INITIAL_REMASTER}"
 cp -Rf ./* ./.disk "${WORKING_DIRECTORY}${USB_REMASTER}"
 cp $INITRD_VMLINUZ_PATH/$NOM_VMLINUZ $INITRD_VMLINUZ_PATH/$NOM_INITRD install/mt86plus "${WORKING_DIRECTORY}${USB_REMASTER}"
 
-#COMPIL_SYSLINUX
-cp -f /usr/lib/syslinux/vesamenu.c32 ${WORKING_DIRECTORY}${USB_REMASTER}/vesamenu.c32
-cp -f /usr/lib/syslinux/menu.c32 ${WORKING_DIRECTORY}${USB_REMASTER}/menu.c32
-cp -f /usr/lib/syslinux/chain.c32 ${WORKING_DIRECTORY}${USB_REMASTER}/chain.c32
-cp -f /usr/lib/syslinux/mboot.c32 ${WORKING_DIRECTORY}${USB_REMASTER}/mboot.c32
-
-wget ${HEBERGEMENT}/background/splash.jpg -O ${WORKING_DIRECTORY}${USB_REMASTER}/splash.jpg
 
 cp isolinux/f[0-9].txt ${WORKING_DIRECTORY}${USB_REMASTER}
 cp isolinux/f10.txt ${WORKING_DIRECTORY}${USB_REMASTER}
 
-preseed=$(cat ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg | sed '/.*preseed\//!d; s///;q' | sed '/ .*/!d; s///;q')
-
-
 APPEND_OPT="file=/preseed/${preseed} verbose splash"
+sed -i "7G" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
+sed -i "7G" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
+sed -i "7G" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
+sed -i "7G" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
+sed -i "8s/^/LABEL persistent/" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
+sed -i "9s/^/menu label Persistent mode/" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
+sed -i "10s/^/kernel \/$NOM_VMLINUZ/" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
+sed -i "11s/^/append  locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup\/layoutcode=${LANGUAGE[3]} console-setup\/variantcode=nodeadkeys boot=casper persistent initrd=\/$NOM_INITRD root=\/dev\/ram $APPEND_OPT --/" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
 
+sed -i "s/kernel \/casper\/vmlinuz/kernel \/$NOM_VMLINUZ/g" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
+sed -i "s/initrd=\/casper\/initrd.gz/initrd=\/$NOM_INITRD/g" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
+sed -i "s/\/install\/mt86plus/\/mt86plus/g" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
 
-
-FICHIER_EXTLINUX="default vesamenu.c32
-#default menu.c32
-#default chain.c32
-prompt 0
-timeout 300
-
-F1 f1.txt
-F2 f2.txt
-F3 f3.txt
-F4 f4.txt
-F5 f5.txt
-F6 f6.txt
-F7 f7.txt
-F8 f8.txt
-F9 f9.txt
-F0 f10.txt
-
-MENU BACKGROUND /splash.jpg
-
-#MENU INCLUDE /info.txt
-
-MENU TITLE LiveUSB Custom, Press [tab] shows options
-MENU DEFAULT persistent
-
-LABEL persistent
-  menu label Mode persistent 
-  kernel /$NOM_VMLINUZ
-  append  locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup/layoutcode=${LANGUAGE[3]} console-setup/variantcode=nodeadkeys boot=casper persistent initrd=/$NOM_INITRD root=/dev/ram $APPEND_OPT --
-
-LABEL live
-  menu label Mode live (lecture seule)
-  kernel /$NOM_VMLINUZ
-  append  locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup/layoutcode=${LANGUAGE[3]} console-setup/variantcode=nodeadkeys boot=casper initrd=/$NOM_INITRD root=/dev/ram $APPEND_OPT --
-
-MENU SEPARATOR
-
-LABEL live_1
-  menu label Mode live qemu generic.all_generic_ide=1
-  kernel /$NOM_VMLINUZ
-  append  locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup/layoutcode=${LANGUAGE[3]} console-setup/variantcode=nodeadkeys boot=casper initrd=/$NOM_INITRD root=/dev/ram generic.all_generic_ide=1 $APPEND_OPT --
-
-MENU TABMSG Press [Tab] to show boot option
-"
-
-echo -e "${FICHIER_EXTLINUX}" | tee ${WORKING_DIRECTORY}${USB_REMASTER}/extlinux.conf
+cp ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg ${WORKING_DIRECTORY}${USB_REMASTER}/extlinux.conf
 
 rm -Rf ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux
 rm ${WORKING_DIRECTORY}${USB_REMASTER}/$INITRD_VMLINUZ_PATH/initrd*
@@ -192,6 +148,49 @@ cd $WORKING_DIRECTORY
 
 
 TAILLE=$(($(du -sB 1 ${WORKING_DIRECTORY}${USB_REMASTER} | awk '{print $1}')/1000/1000)) #
+
+#modifying initrd
+
+mkdir $WORKING_DIRECTORY/initrd
+cd $WORKING_DIRECTORY/initrd
+cat $WORKING_DIRECTORY${USB_REMASTER}/initrd.gz | gzip -d | cpio -i
+
+
+cd $WORKING_DIRECTORY/initrd
+find | cpio -H newc -o | gzip > ../initrd.gz
+
+echo "#!/bin/sh
+
+PREREQ=\"\"
+DESCRIPTION=\"removing prompt at shutdown...\"
+. /scripts/casper-functions
+
+prereqs()
+{
+       echo \"\$PREREQ\"
+}
+
+case \$1 in
+# get pre-requisites
+prereqs)
+       prereqs
+       exit 0
+       ;;
+esac
+
+if [ \"$(ls -l /root/etc/rc0.d/*casper*)\" ]; then
+log_begin_msg \"\$DESCRIPTION\"
+rm /root/etc/rc0.d/*casper* 
+rm /root/etc/rc6.d/*casper*
+log_end_msg
+fi
+" > scripts/casper-bottom/99rmenterprompt
+
+chmod +x scripts/casper-bottom/99rmenterprompt
+
+mv -f ../initrd.gz $WORKING_DIRECTORY${USB_REMASTER}/initrd.gz
+
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_TRANSFORM__________________________________________

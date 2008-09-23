@@ -3766,7 +3766,7 @@ class Reconstructor:
 # ---------- Customize Live ---------- #
     def customize(self):
         print _("INFO: Customizing...")
-	
+	user = 'ubuntu'
         # check user entered password first, so user doesn't have to wait
         if self.checkUserPassword() == True : 
 		if self.wTree.get_widget("entryLiveCdUsername").get_text() == '' or self.checkUserName() == True:
@@ -3777,7 +3777,8 @@ class Reconstructor:
 		    host = self.wTree.get_widget("entryLiveCdHostname").get_text()
 		    # set live cd info
 		    self.setLiveCdInfo(username=user, userFullname=userFull, userPassword=password, hostname=host)
-	 	else:
+	 	    
+		else:
 		    print _('Username do not match.')
 		    # show warning dlg
 		    warnDlg = gtk.Dialog(title=self.appName, parent=None, flags=0, buttons=(gtk.STOCK_OK, gtk.RESPONSE_OK))
@@ -3833,8 +3834,29 @@ class Reconstructor:
             self.wTree.get_widget("notebookCustomize").set_current_page(-1)
             # return - don't continue until error fixed
             return            
-
+	
+	fWorkDir=open(os.path.join(self.customDir, "root/tmp/user"), 'w')
+        fWorkDir.write(user)
+       	fWorkDir.close()
         
+	
+	#Splash screen
+	scriptCustomSplash = '#!/bin/sh\n\n'
+	scriptCustomSplash += 'cd /tmp\n'
+	scriptCustomSplash += 'wget '+ os.path.join(self.mirrorFree, "splash.pcx") + ' \n'  
+	scriptCustomSplash += 'cp /tmp/splash.pcx ' + os.path.join(self.customDir, "remaster/isolinux/") + ' \n'
+	scriptCustomSplash += 'sed -i "s/Xubuntu/Cooperation-iws/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' \n'
+	scriptCustomSplash += 'sed -i "s/Kubuntu/Cooperation-iws/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' \n'
+	scriptCustomSplash += 'sed -i "s/Ubuntu/Cooperation-iws/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' \n'
+	scriptCustomSplash += 'sed -i "2G" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' \n'
+	scriptCustomSplash += 'sed -i "2G" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' \n'
+	scriptCustomSplash += 'sed -i "3s/^/GFXBOOT-BACKGROUND 0x000000/" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' \n'
+	fscriptCustomExec=open(os.path.join(self.customDir, "scriptSplash.sh"), 'w')
+        fscriptCustomExec.write(scriptCustomSplash)
+        fscriptCustomExec.close()
+        os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptSplash.sh"))
+        os.popen('bash \"' + os.path.join(self.customDir, "scriptSplash.sh") + '\" > /dev/null 2>&1')
+	    
 	#XNEST
 	scriptCustomExec = '#!/bin/sh\n\n'
 	scriptCustomExec += 'bash \"' + self.scriptDir + 'xnest.sh\"' + ' ;\n'
