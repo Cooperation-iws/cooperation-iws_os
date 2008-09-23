@@ -91,9 +91,29 @@ cp logo.png /usr/share/gdm/themes/xubuntu/logo.png
 cp background.png /usr/share/gdm/themes/Human
 cp logo.png /usr/share/gdm/themes/Human/ubuntu.png
 cp wallpaper.png /usr/share/backgrounds/warty-final-ubuntu.png
-cp wallpaper.png /usr/share/xfce4/backdrops/xubuntu-jmak.png
+cp wallpaper.png /usr/share/xfce4/backdrops/xubuntu-jmak.png 
+
+echo "I: installing liveusb installer"
+
+wget $URL_FREE/cooperation-iws-liveusb-0.1.deb
+dpkg -i cooperation-iws-liveusb-0.1.deb
 
 mkdir /etc/skel/Desktop
+cat << EOT > /etc/skel/Desktop/LiveUsbinstaller.desktop
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Live usb installer
+Type=Application
+Terminal=false
+Icon[fr_BE]=gnome-panel-launcher
+Name[fr_BE]=Live usb installer
+Exec=/usr/bin/liveusb
+Icon=ubiquity
+GenericName[fr_BE]=
+EOT
+
+
 cat << EOT > /etc/skel/Desktop/Cooperation-iws.desktop
 [Desktop Entry]
 Version=1.0

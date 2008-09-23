@@ -175,6 +175,7 @@ if [ "$(echo $r1 | awk  '{print $1}')" != "n" ]; then
 echo "Protect this directory with a password ?"
 echo "[N/y]"
 read r2 < /dev/tty
+
 if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
 echo "[$NOM_AKOIE]
 	comment = $NOM_AKOIE

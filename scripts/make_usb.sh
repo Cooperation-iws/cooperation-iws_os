@@ -125,19 +125,51 @@ cp $INITRD_VMLINUZ_PATH/$NOM_VMLINUZ $INITRD_VMLINUZ_PATH/$NOM_INITRD install/mt
 cp isolinux/f[0-9].txt ${WORKING_DIRECTORY}${USB_REMASTER}
 cp isolinux/f10.txt ${WORKING_DIRECTORY}${USB_REMASTER}
 
-APPEND_OPT="file=/preseed/${preseed} verbose splash"
-sed -i "7G" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
-sed -i "7G" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
-sed -i "7G" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
-sed -i "7G" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
-sed -i "8s/^/LABEL persistent/" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
-sed -i "9s/^/menu label Persistent mode/" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
-sed -i "10s/^/kernel \/$NOM_VMLINUZ/" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
-sed -i "11s/^/append  locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup\/layoutcode=${LANGUAGE[3]} console-setup\/variantcode=nodeadkeys boot=casper persistent initrd=\/$NOM_INITRD root=\/dev\/ram $APPEND_OPT --/" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
+cat << EOT > ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg 
+DEFAULT /$NOM_VMLINUZ
+GFXBOOT bootlogo
+GFXBOOT-BACKGROUND 0x000000
+GFXBOOT-BACKGROUND 0x000000
+APPEND  file=/preseed/xubuntu.seed boot=casper initrd=/initrd.gz quiet splash --
+LABEL persistent
+  menu label ^Try Cooperation-iws with persistent mode
+  kernel /$NOM_VMLINUZ
+  append  locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup/layoutcode=${LANGUAGE[3]} console-setup/variantcode=nodeadkeys boot=casper persistent initrd=/$NOM_INITRD root=/dev/ram $APPEND_OPT --
+LABEL live
+  menu label ^Try Cooperation-iws without any change to your computer
+  kernel /$NOM_VMLINUZ
+  append  file=/preseed/xubuntu.seed boot=casper initrd=/$NOM_INITRD quiet splash --
+LABEL live-install
+  menu label ^Install Cooperation-iws
+  kernel /$NOM_VMLINUZ
+  append  file=/preseed/xubuntu.seed boot=casper only-ubiquity initrd=/$NOM_INITRD quiet splash --
+LABEL check
+  menu label ^Check CD for defects
+  kernel /$NOM_VMLINUZ
+  append  boot=casper integrity-check initrd=/$NOM_INITRD quiet splash --
+LABEL memtest
+  menu label Test ^memory
+  kernel /mt86plus
+  append -
+LABEL hd
+  menu label ^Boot from first hard disk
+  localboot 0x80
+  append -
+DISPLAY isolinux.txt
+TIMEOUT 300
+PROMPT 1
+F1 f1.txt
+F2 f2.txt
+F3 f3.txt
+F4 f4.txt
+F5 f5.txt
+F6 f6.txt
+F7 f7.txt
+F8 f8.txt
+F9 f9.txt
+F0 f10.txt
+EOT
 
-sed -i "s/kernel \/casper\/vmlinuz/kernel \/$NOM_VMLINUZ/g" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
-sed -i "s/initrd=\/casper\/initrd.gz/initrd=\/$NOM_INITRD/g" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
-sed -i "s/\/install\/mt86plus/\/mt86plus/g" ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg
 
 cp ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg ${WORKING_DIRECTORY}${USB_REMASTER}/extlinux.conf
 
@@ -156,8 +188,6 @@ cd $WORKING_DIRECTORY/initrd
 cat $WORKING_DIRECTORY${USB_REMASTER}/initrd.gz | gzip -d | cpio -i
 
 
-cd $WORKING_DIRECTORY/initrd
-find | cpio -H newc -o | gzip > ../initrd.gz
 
 echo "#!/bin/sh
 
@@ -178,7 +208,7 @@ prereqs)
        ;;
 esac
 
-if [ \"$(ls -l /root/etc/rc0.d/*casper*)\" ]; then
+if [ \"\$(ls -l /root/etc/rc0.d/*casper*)\" ]; then
 log_begin_msg \"\$DESCRIPTION\"
 rm /root/etc/rc0.d/*casper* 
 rm /root/etc/rc6.d/*casper*
@@ -187,6 +217,8 @@ fi
 " > scripts/casper-bottom/99rmenterprompt
 
 chmod +x scripts/casper-bottom/99rmenterprompt
+cd $WORKING_DIRECTORY/initrd
+find | cpio -H newc -o | gzip > ../initrd.gz
 
 mv -f ../initrd.gz $WORKING_DIRECTORY${USB_REMASTER}/initrd.gz
 
@@ -389,6 +421,7 @@ done) | zenity --progress --width 600 --auto-close
 COPIE
 
 MESSAGE="$MESS_POSE_MBR"
+sudo apt-get install --assume-yes --force-yes syslinux mtools
 extlinux -i $WORKING_DIRECTORY/liveusb
 umount $WORKING_DIRECTORY/liveusb
 sleep 2

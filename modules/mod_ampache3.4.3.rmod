@@ -179,6 +179,9 @@ sed -i "66s/ampache/$NOM_AMPACHE/" $WWW_DIRECTORY/$NOM_AMPACHE/templates/show_in
 sed -i "78s/name=\"local_pass\"/name=\"local_pass\" value=\"$AMPACHE_MYSQL_PWD\"/" $WWW_DIRECTORY/$NOM_AMPACHE/templates/show_install.inc.php
 sed -i "74s/root/$NOM_AMPACHE/" $WWW_DIRECTORY/$NOM_AMPACHE/templates/show_install.inc.php
 sed -i "94s/value=\"1\"/value=\"0\"/" $WWW_DIRECTORY/$NOM_AMPACHE/templates/show_install.inc.php
+
+
+
 cat << EOT > $WWW_DIRECTORY/$NOM_AMPACHE/config/ampache.cfg.php
 ;#<?php exit(); ?>##
 ;###################

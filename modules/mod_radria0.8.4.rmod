@@ -206,7 +206,6 @@ function CREATE_INSTALL_SCRIPT
 echo "
 
 #Radria
-sed -i \"s/http:\/\/localhost/http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/${NOM_RADRIA}/config/config.php
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 

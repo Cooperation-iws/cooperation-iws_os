@@ -62,6 +62,58 @@ MESS_URL="What's the url from where you install web applications ?"
 
 
 #_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_WEB_______________________________________
+
+
+function WGET_MIRROIR_WEB
+{
+cd $DL_DIR
+wget http://kent.dl.sourceforge.net/sourceforge/postfixadmin/postfixadmin-2.2.1.1.tar.gz
+sleep 3
+tar -xzf postfixadmin-2.2.1.1.tar.gz
+mv postfixadmin-2.2.1.1 postfixadmin
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/postfixadmin-2.2.1.1.tar.gz
+tar -xzf postfixadmin-2.2.1.1.tar.gz
+mv postfixadmin-2.2.1.1 postfixadmin
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________DOWNLOAD_______________________________________________
+
+function DOWNLOAD
+{
+if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
+
+WGET_MIRROIR_WEB
+fi
+if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
+
+WGET_MIRROIR_FREE
+fi
+
+}
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_DOWNLOAD___________________________________________
+
+#_______________________________________________________________________________________________
 #__________________________________________CHOICE_LANG___________________________________________
 
 function CHOICE_LANG
@@ -113,6 +165,8 @@ export NOM_MAILSERVER=$NOM_MAILSERVER
 
 function INSTALL
 {
+DOWNLOAD
+
 cat << EOT > MAILSERVER_db.sql
 create database $NOM_MAILSERVER;
 GRANT ALL PRIVILEGES ON $NOM_MAILSERVER.* TO $NOM_MAILSERVER@'localhost' IDENTIFIED BY '$MAILSERVER_MYSQL_PWD';
@@ -121,10 +175,7 @@ EOT
 $BIN_MYSQL -u root < MAILSERVER_db.sql mysql
 
 cd $DL_DIR
-wget http://kent.dl.sourceforge.net/sourceforge/postfixadmin/postfixadmin-2.2.1.1.tar.gz
-sleep 3
-tar -xzf postfixadmin-2.2.1.1.tar.gz
-mv postfixadmin-2.2.1.1 postfixadmin
+
 POSTFIXADMIN="Postfixadmin"
 mkdir $WWW_DIRECTORY/$POSTFIXADMIN/
 cp -r postfixadmin/* $WWW_DIRECTORY/$POSTFIXADMIN/.
@@ -366,10 +417,29 @@ postalias /etc/aliases
 echo "
 #Postfix hack
 postalias /etc/aliases
-rm /var/vmail/*/
+rm /var/vmail/*/*/dovecot.index.log
+/etc/init.d/postfix restart
+/etc/init.d/dovecot restart
+
 " >> /etc/rc.local
 
 squirrelmail-configure
+
+
+mv /etc/postfix /var/share/etc/
+
+ln -s /var/share/etc/postfix /etc/postfix
+
+mv /etc/dovecot /var/share/etc/
+
+ln -s /var/share/etc/dovecot /etc/dovecot
+
+mv /usr/share/squirrelmail /var/share/
+
+ln -s /var/share/squirrelmail /usr/share/squirrelmail
+
+
+
 /etc/init.d/apache2 restart
 
 /etc/init.d/postfix restart
@@ -385,9 +455,10 @@ squirrelmail-configure
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/Squirrelmail\" >Squirelmail</a><br>
-$RMOD_DESCRIPTION | <a href=\"/admin/Postfixadmin\" >Postfixadmin</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/Squirrelmail\" >Squirrelmail</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "$RMOD_DESCRIPTION | <a href=\"/Postfixadmin\" >Postfixadmin</a><br>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

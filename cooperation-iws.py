@@ -3945,6 +3945,16 @@ class Reconstructor:
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "root/tmp/")):
                 for execMod in execModFiles:
                     ext = os.path.basename(execMod)
+                    if re.search('.smod', ext):
+                        modExecScrChroot += 'echo -------------------------------------------------\n'
+                        modExecScrChroot += 'echo ------------Cooperation-iws----------------------\n'
+                        modExecScrChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
+                        modExecScrChroot += 'echo -------------------------------------------------\n'
+                        modExecScrChroot += 'echo -------------------------------------------------\n'
+                        modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
+	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "root/tmp/")):
+                for execMod in execModFiles:
+                    ext = os.path.basename(execMod)
                     if re.search('.rmod', ext):
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'echo ------------Cooperation-iws----------------------\n'

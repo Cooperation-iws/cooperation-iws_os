@@ -30,7 +30,7 @@ echo $CHROOT_DIRECTORY > /tmp/chroot-dir
 URL_FREE="http://cooperation.gensys.free.fr/mirroir/v0.3.0"
 URL_BERLIOS1="http://download.berlios.de/ciws"
 URL_BERLIOS2="http://download2.berlios.de/ciws"
-VERSION="0.5.0"
+VERSION="0.5.1"
 
 if [ "$(echo $LANG | grep 'fr')" ]; then
 LANG_UI="FR"
