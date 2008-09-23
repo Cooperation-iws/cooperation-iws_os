@@ -1,0 +1,401 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Mail server'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Mail server'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+#VARIABLES
+#MYSQL PASSWORD
+MAILSERVER_MYSQL_PWD="MAILSERVER_MYSQL_PWD"
+HOSTNAME="127.0.0.1"
+#_______________________________________________________________________________________________
+#__________________________________________LANGFR______________________________________________
+
+
+function LANGFR
+
+{
+MESS_NAME="Entrez le nom de l'installation "
+MESS_HOW_MANY="Combien de" 
+MESS_DO_YOU_WANT="voulez vous installez ?"
+MESS_URL="Quelle est l'url à partir de laquelle vous avez effectuée l'installation des applications web?"
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGFR___________________________________________
+
+#_______________________________________________________________________________________________
+#__________________________________________LANGEN______________________________________________
+
+
+function LANGEN
+
+{
+MESS_NAME="Enter the name of the install "
+MESS_HOW_MANY="How many"
+MESS_DO_YOU_WANT="do you want to install ?"
+MESS_URL="What's the url from where you install web applications ?"
+
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGEN___________________________________________
+
+
+#_______________________________________________________________________________________________
+#__________________________________________CHOICE_LANG___________________________________________
+
+function CHOICE_LANG
+{
+if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
+LANGFR
+
+else
+LANGEN
+
+fi
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_CHOICE_LANG______________________________________
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
+
+function CHOOSE_PARAMETERS_GUI
+{
+if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
+NOM_MAILSERVER="Mail"
+else 
+
+NOM_MAILSERVER=$(zenity --entry --text "$MESS_NAME MAILSERVER")
+test $? -ne 0 && break # Bouton Annuler
+while (echo $NOM_MAILSERVER | grep "[^a-zA-Z0-9]") 
+do
+NOM_MAILSERVER=$(zenity --entry --text "$MESS_NAME MAILSERVER")
+test $? -ne 0 && break # Bouton Annulerdone
+done 
+ 
+
+fi
+export NOM_MAILSERVER=$NOM_MAILSERVER
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+cat << EOT > MAILSERVER_db.sql
+create database $NOM_MAILSERVER;
+GRANT ALL PRIVILEGES ON $NOM_MAILSERVER.* TO $NOM_MAILSERVER@'localhost' IDENTIFIED BY '$MAILSERVER_MYSQL_PWD';
+EOT
+
+$BIN_MYSQL -u root < MAILSERVER_db.sql mysql
+
+cd $DL_DIR
+wget http://kent.dl.sourceforge.net/sourceforge/postfixadmin/postfixadmin-2.2.1.1.tar.gz
+sleep 3
+tar -xzf postfixadmin-2.2.1.1.tar.gz
+mv postfixadmin-2.2.1.1 postfixadmin
+POSTFIXADMIN="Postfixadmin"
+mkdir $WWW_DIRECTORY/$POSTFIXADMIN/
+cp -r postfixadmin/* $WWW_DIRECTORY/$POSTFIXADMIN/.
+#user
+sed -i "52s/postfix/$NOM_MAILSERVER/" $WWW_DIRECTORY/$POSTFIXADMIN/config.inc.php
+#password
+sed -i "53s/postfixadmin/$MAILSERVER_MYSQL_PWD/" $WWW_DIRECTORY/$POSTFIXADMIN/config.inc.php
+#databasename
+sed -i "54s/postfix/$NOM_MAILSERVER/" $WWW_DIRECTORY/$POSTFIXADMIN/config.inc.php
+
+sed -i "37s/''/'http:\/\/'.\$HTTP_SERVER_VARS[\"SERVER_NAME\"].'\/$POSTFIXADMIN\/'/" $WWW_DIRECTORY/$POSTFIXADMIN/config.inc.php
+sed -i "31s/false/true/" $WWW_DIRECTORY/$POSTFIXADMIN/config.inc.php
+
+
+
+apt-get install --assume-yes --force-yes postfix postfix-mysql squirrelmail squirrelmail-locales php-pear php5-cli
+
+cat << EOT > /etc/postfix/main.cf
+smtpd_banner = \$myhostname ESMTP \$mail_name 
+biff = no
+append_dot_mydomain = no
+#delay_warning_time = 4h
+myhostname = localhost
+myorigin = localhost
+mydestination = localhost
+relayhost =
+mynetworks = 127.0.0.0/8
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+# Virtual mailbox settings
+virtual_mailbox_domains = proxy:mysql:/etc/postfix/mysql_virtual_domains_maps.cf
+virtual_mailbox_base = /var/vmail
+virtual_mailbox_maps = proxy:mysql:/etc/postfix/mysql_virtual_mailbox_maps.cf
+virtual_alias_maps = proxy:mysql:/etc/postfix/mysql_virtual_alias_maps.cf
+virtual_minimum_uid = 150
+virtual_uid_maps = static:150
+virtual_gid_maps = static:8
+virtual_transport = dovecot
+dovecot_destination_recipient_limit = 1
+# SASL Authentication
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_exceptions_networks = \$mynetworks
+smtpd_sasl_security_options = noanonymous
+broken_sasl_auth_clients = yes
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination, permit
+
+EOT
+
+useradd -r -u 150 -g mail -d /var/vmail -s /sbin/nologin -c "Virtual mailbox" vmail
+mkdir /var/vmail
+chmod 770 /var/vmail/
+chown vmail:mail /var/vmail/
+
+cat << EOT > /etc/postfix/mysql_virtual_alias_maps.cf
+user = $NOM_MAILSERVER
+password = $MAILSERVER_MYSQL_PWD
+hosts = localhost
+dbname = $NOM_MAILSERVER
+table = alias
+select_field = goto
+where_field = address
+additional_conditions = and active = '1'
+#query = SELECT goto FROM alias WHERE address=%s AND active = 1?
+EOT
+
+cat << EOT > /etc/postfix/mysql_virtual_domains_maps.cf
+user = $NOM_MAILSERVER
+password = $MAILSERVER_MYSQL_PWD
+hosts = localhost
+dbname = $NOM_MAILSERVER
+table = domain
+select_field = domain
+where_field = domain
+additional_conditions = and backupmx = '0' and active = '1'
+#query = SELECT domain FROM domain WHERE domain=%s AND backupmx = 0? AND active = 1?
+EOT
+
+cat << EOT > /etc/postfix/mysql_virtual_mailbox_limit_maps.cf
+user = $NOM_MAILSERVER
+password = $MAILSERVER_MYSQL_PWD
+hosts = localhost
+dbname = $NOM_MAILSERVER
+table = mailbox
+select_field = quota
+where_field = username
+additional_conditions = and active = '1'
+#query = SELECT quota FROM mailbox WHERE username=%s AND active = 1?
+EOT
+
+cat << EOT > /etc/postfix/mysql_virtual_mailbox_maps.cf
+user = $NOM_MAILSERVER
+password = $MAILSERVER_MYSQL_PWD
+hosts = localhost
+dbname = $NOM_MAILSERVER
+table = mailbox
+select_field = CONCAT(domain,'/',maildir)
+where_field = username
+additional_conditions = and active = '1'
+#query = SELECT CONCAT(domain,/',maildir) FROM mailbox WHERE username=%s AND active = 1?
+
+EOT
+
+cat << EOT >> /etc/postfix/master.cf
+dovecot unix - n n - - pipe
+ flags=DRhu user=vmail:mail argv=/usr/lib/dovecot/deliver -d \$(recipient)
+
+EOT
+
+apt-get install --assume-yes --force-yes dovecot-imapd dovecot-pop3d
+
+cat << EOT > /etc/dovecot/dovecot.conf
+## Dovecot configuration file
+#
+base_dir = /var/run/dovecot/
+#
+# imap imaps pop3 pop3s (use imaps and pop3s if configured for SSL)
+protocols = imap pop3
+#
+# Uncomment the ssl_listen statements and comment out listen if using SSL
+protocol imap {
+listen = *:143
+# ssl_listen = *:993
+}
+protocol pop3 {
+listen = *:110
+# ssl_listen = *:995
+}
+#
+log_timestamp = "%Y-%m-%d %H:%M:%S "
+syslog_facility = mail
+#
+# Uncomment these if using SSL
+#ssl_cert_file = /etc/ssl/mycompany/mailserver/mail-cert.pem
+#ssl_key_file = /etc/ssl/mycompany/mailserver/mail-key.pem
+#ssl_ca_file = /etc/ssl/mycompany/ca/mycompany.pem
+#ssl_verify_client_cert = yes
+#ssl_parameters_regenerate = 168
+#verbose_ssl = no
+#
+# Where the mailboxes are located
+mail_location = maildir:/var/vmail/%d/%u
+#
+mail_extra_groups = mail
+mail_debug = no
+first_valid_uid = 150
+last_valid_uid = 150
+maildir_copy_with_hardlinks = yes
+#
+protocol imap {
+login_executable = /usr/lib/dovecot/imap-login
+mail_executable = /usr/lib/dovecot/imap
+imap_max_line_length = 65536
+}
+protocol pop3 {
+login_executable = /usr/lib/dovecot/pop3-login
+mail_executable = /usr/lib/dovecot/pop3
+pop3_uidl_format = %08Xu%08Xv
+}
+protocol lda {
+postmaster_address = postmaster@mydomain.com
+sendmail_path = /usr/lib/sendmail
+auth_socket_path = /var/run/dovecot/auth-master
+}
+#
+auth_verbose = no
+auth_debug = no
+auth_debug_passwords = no
+#
+auth default {
+mechanisms = plain
+passdb sql {
+args = /etc/dovecot/dovecot-sql.conf
+}
+userdb sql {
+args = /etc/dovecot/dovecot-sql.conf
+}
+user = nobody
+socket listen {
+master {
+path = /var/run/dovecot/auth-master
+mode = 0660
+user = vmail
+group = mail
+}
+client {
+path = /var/spool/postfix/private/auth
+mode = 0660
+user = postfix
+group = postfix
+}
+}
+#
+# If you want client certificates, use these lines
+# ssl_require_client_cert = yes
+# ssl_username_from_cert = yes
+}
+EOT
+
+sed -i "28s/#driver =/driver = mysql/" /etc/dovecot/dovecot-sql.conf
+sed -i "57s/#connect = dbname=virtual user=virtual/connect = host=localhost dbname=$NOM_MAILSERVER user=$NOM_MAILSERVER password=$MAILSERVER_MYSQL_PWD/" /etc/dovecot/dovecot-sql.conf
+sed -i "64s/#default_pass_scheme = PLAIN-MD5/default_pass_scheme = MD5-CRYPT/" /etc/dovecot/dovecot-sql.conf
+sed -i "112s/^/user_query = SELECT '\/var\/vmail\/%d\/%n' as home, 'maildir:\/var\/vmail\/%d\/%n' as mail, 150 AS uid, 8 AS gid, concat('dirsize:storage=', quota) AS quota FROM mailbox WHERE username = '%u' AND active = '1'/" /etc/dovecot/dovecot-sql.conf
+sed -i "92s/^/password_query = SELECT username as user, password FROM mailbox WHERE username = '%u' AND active = '1'/" /etc/dovecot/dovecot-sql.conf
+chmod 600 /etc/dovecot/*.conf
+chown vmail /etc/dovecot/*.conf
+
+sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
+cat << EOT >> /etc/apache2/sites-available/default
+Alias /Squirrelmail /usr/share/squirrelmail
+
+<Directory /usr/share/squirrelmail>
+  Options Indexes FollowSymLinks
+  <IfModule mod_php4.c>
+    php_flag register_globals off
+  </IfModule>
+  <IfModule mod_php5.c>
+    php_flag register_globals off
+  </IfModule>
+  <IfModule mod_dir.c>
+    DirectoryIndex index.php
+  </IfModule>
+
+  # access to configtest is limited by default to prevent information leak
+  <Files configtest.php>
+    order deny,allow
+    deny from all
+    allow from 127.0.0.1
+  </Files>
+</Directory>
+</VirtualHost>
+EOT
+
+
+postalias /etc/aliases
+
+echo "
+#Postfix hack
+postalias /etc/aliases
+rm /var/vmail/*/
+" >> /etc/rc.local
+
+squirrelmail-configure
+/etc/init.d/apache2 restart
+
+/etc/init.d/postfix restart
+/etc/init.d/dovecot restart
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "$RMOD_DESCRIPTION | <a href=\"/Squirrelmail\" >Squirelmail</a><br>
+$RMOD_DESCRIPTION | <a href=\"/admin/Postfixadmin\" >Postfixadmin</a><br>
+" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+echo "I: Install Claroline"
+CHOICE_LANG
+CHOOSE_PARAMETERS_GUI
+INSTALL
+CREATE_WUI
+
+echo "I: End of install Claroline"
