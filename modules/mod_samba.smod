@@ -363,11 +363,11 @@ map to guest = bad user
 ;   postexec = /bin/umount /cdrom
 
 
-[www]
-	comment = www
+[var]
+	comment = var
 	writeable = yes
 	public = yes
-	path = /var/www
+	path = /var/
 	valid users = www-data
 
 EOT

@@ -213,7 +213,7 @@ function CREATE_INSTALL_SCRIPT
 echo "
 
 #Claroline
-
+sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/$NOM_CLAROLINE/platform/conf/claro_main.conf.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
 }

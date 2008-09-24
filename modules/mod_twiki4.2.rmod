@@ -382,6 +382,9 @@ htpasswd -cm $WWW_DIRECTORY/$NOM_TWIKI/data/.htpasswd admin
 
 /etc/init.d/apache2 restart
 
+sed -i "s/\$TWiki::cfg{SMTP}{MAILHOST} = '';/\$TWiki::cfg{SMTP}{MAILHOST} = 'localhost';/" $WWW_DIRECTORY/$NOM_TWIKI/lib/LocalSite.cfg
+sed -i "s/\$TWiki::cfg{SMTP}{SENDERHOST} = '';/\$TWiki::cfg{SMTP}{SENDERHOST} = 'localhost';/" $WWW_DIRECTORY/$NOM_TWIKI/lib/LocalSite.cfg
+
 chown -R www-data $WWW_DIRECTORY/$NOM_TWIKI/
 
 

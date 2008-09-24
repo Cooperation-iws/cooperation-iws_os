@@ -191,6 +191,8 @@ cp /etc/moin/mywiki.py /etc/moin/mywiki.py.original
 
 
 sed -i "92s/'.\//'\/usr\/share\/moin\//" /etc/moin/farmconfig.py
+sed -i "123s/#mail_smarthost = \"\"/mail_smarthost = \"localhost\"/" /etc/moin/farmconfig.py
+sed -i "126s/#mail_from = u\"\"/mail_from = u\"admin@ciws.com\"/" /etc/moin/farmconfig.py
 sed -i "33s/\/org/\/var\/lib\/moin/" /etc/moin/mywiki.py
 
 sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default

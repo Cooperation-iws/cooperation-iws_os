@@ -247,6 +247,7 @@ sed -i "14s/dms/${NOM_KT[$count]}/" $WWW_DIRECTORY/${NOM_KT[$count]}/config/conf
 sed -i "15s/djw9281js/$KT_MYSQL_PWD/" $WWW_DIRECTORY/${NOM_KT[$count]}/config/config.ini
 sed -i "18s/dmsadmin/${NOM_KT[$count]}/" $WWW_DIRECTORY/${NOM_KT[$count]}/config/config.ini
 sed -i "19s/js9281djw/$KT_MYSQL_PWD/" $WWW_DIRECTORY/${NOM_KT[$count]}/config/config.ini
+sed -i "168s/none/localhost/" $WWW_DIRECTORY/${NOM_KT[$count]}/config/config.ini
 sed -i "39s/^/\$checkup=true;/" $WWW_DIRECTORY/${NOM_KT[$count]}/setup/precheckup.php
 sed -i "36s/config\/dmsDefaults.php/\/var\/www\/${NOM_KT[$count]}\/config\/dmsDefaults.php/" $WWW_DIRECTORY/${NOM_KT[$count]}/lib/validation/customerrorhandler.php
 

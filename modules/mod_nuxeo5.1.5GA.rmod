@@ -345,6 +345,9 @@ sed -i "2s/HSQL/MySQL/"  $LAMPP_DIRECTORY/$NOM_NUXEO/server/default/deploy/nuxeo
 
 sed -i "23s/HSQLDialect/MySQLDialect/"  $LAMPP_DIRECTORY/$NOM_NUXEO/server/default/deploy/nuxeo.ear/platform/nuxeo-platform-search-compass-plugin-5.1.5.jar/compass.cfg.xml
 
+sed -i "27s/pop3.nosuchhost.nosuchdomain.com/localhost/" $LAMPP_DIRECTORY/$NOM_NUXEO/server/default/deploy/mail-service.xml
+sed -i "30s/smtp.nosuchhost.nosuchdomain.com/localhost/" $LAMPP_DIRECTORY/$NOM_NUXEO/server/default/deploy/mail-service.xml
+sed -i "33s/nobody@nosuchhost.nosuchdomain.com/admin@ciws.com/" $LAMPP_DIRECTORY/$NOM_NUXEO/server/default/deploy/mail-service.xml
 
 
 echo "#!/bin/sh

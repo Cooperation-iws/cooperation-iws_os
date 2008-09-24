@@ -76,12 +76,12 @@ User				www-data
 #Group				nogroup
 
 # Normally, we want files to be overwriteable.
-<Directory /var/www/*>
+<Directory /var/*>
   AllowOverwrite		on
 </Directory>
 
 # only for the web servers content
-DefaultRoot /var/www
+DefaultRoot /var
 
 # nobody gets the password "lampp"
 UserPassword www-data 9DyPIRj6JheLk
