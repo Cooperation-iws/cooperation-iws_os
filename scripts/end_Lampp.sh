@@ -52,6 +52,10 @@ esac
 
 if [ ! -d /root/var/lib ]; then
 log_begin_msg \"\$DESCRIPTION\"
+echo \"
+rm /etc/rc0.d/*casper* 
+rm /etc/rc6.d/*casper*
+\" > /root/etc/ciws/share/etc/rc.ciws
 
 cp -a /root/etc/ciws/* /root/var/.
 log_end_msg	

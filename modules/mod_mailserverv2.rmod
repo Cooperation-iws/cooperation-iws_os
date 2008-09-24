@@ -177,8 +177,8 @@ $BIN_MYSQL -u root < MAILSERVER_db.sql mysql
 cd $DL_DIR
 
 POSTFIXADMIN="Postfixadmin"
-mkdir $WWW_DIRECTORY/$POSTFIXADMIN/
-cp -r postfixadmin/* $WWW_DIRECTORY/$POSTFIXADMIN/.
+mkdir $WWW_DIRECTORY/admin/$POSTFIXADMIN/
+cp -r postfixadmin/* $WWW_DIRECTORY/admin/$POSTFIXADMIN/.
 #user
 sed -i "52s/postfix/$NOM_MAILSERVER/" $WWW_DIRECTORY/$POSTFIXADMIN/config.inc.php
 #password
@@ -457,16 +457,16 @@ function CREATE_WUI
 {
 echo "$RMOD_DESCRIPTION | <a href=\"/Squirrelmail\" >Squirrelmail</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
-echo "$RMOD_DESCRIPTION | <a href=\"/Postfixadmin\" >Postfixadmin</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/admin/$POSTFIXADMIN\" >$POSTFIXADMIN</a><br>
 " >> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
-echo "I: Install Claroline"
+echo "I: Install Mail server"
 CHOICE_LANG
 CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 
-echo "I: End of install Claroline"
+echo "I: End of install Mail server"

@@ -102,7 +102,7 @@ echo "I: config rc.local"
 
 echo "#!/bin/bash
 
-exit 0" > /var/share/etc/rc.ciws
+" > /var/share/etc/rc.ciws
 
 chmod +x /var/share/etc/rc.ciws
 

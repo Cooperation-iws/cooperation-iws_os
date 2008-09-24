@@ -249,125 +249,19 @@ To continue, click Next ....</property>
                           <placeholder/>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="labelCustomDirectory">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="xpad">10</property>
-                            <property name="label" translatable="yes">Working Directory:</property>
-                          </widget>
-                          <packing>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="labelIsoFilename">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="xpad">10</property>
-                            <property name="label" translatable="yes">Live CD ISO Filename:</property>
-                          </widget>
-                          <packing>
-                            <property name="top_attach">5</property>
-                            <property name="bottom_attach">6</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="labelIsoInfo">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">You can leave the ISO filename blank,
-and use a Live CD instead.</property>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">6</property>
-                            <property name="bottom_attach">7</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="buttonBrowseWorkingDir">
-                            <property name="width_request">32</property>
+                          <widget class="GtkCheckButton" id="checkbuttonCreateRemaster">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label">...</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_buttonBrowseWorkingDir_clicked2"/>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                            <property name="x_padding">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="buttonBrowseIsoFilename">
-                            <property name="width_request">32</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="label">...</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_buttonBrowseIsoFilename_clicked2"/>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="top_attach">5</property>
-                            <property name="bottom_attach">6</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                            <property name="x_padding">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkEntry" id="entryWorkingDir2">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkEntry" id="entryIsoFilename2">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">5</property>
-                            <property name="bottom_attach">6</property>
-                            <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkCheckButton" id="checkbuttonCreateInitRd">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip" translatable="yes">For customizing Initrd</property>
-                            <property name="label" translatable="yes">Create Initial Ramdisk (initrd) Directory (must do at least once)</property>
+                            <property name="tooltip" translatable="yes">Files from Live CD</property>
+                            <property name="label" translatable="yes">Create Remaster Directory (must do at least once)</property>
                             <property name="use_underline">True</property>
                             <property name="response_id">0</property>
                             <property name="draw_indicator">True</property>
                           </widget>
                           <packing>
                             <property name="right_attach">2</property>
-                            <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
                             <property name="x_options">GTK_SHRINK | GTK_FILL</property>
                             <property name="y_options"></property>
                             <property name="x_padding">10</property>
@@ -393,22 +287,128 @@ and use a Live CD instead.</property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkCheckButton" id="checkbuttonCreateRemaster">
+                          <widget class="GtkCheckButton" id="checkbuttonCreateInitRd">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="tooltip" translatable="yes">Files from Live CD</property>
-                            <property name="label" translatable="yes">Create Remaster Directory (must do at least once)</property>
+                            <property name="tooltip" translatable="yes">For customizing Initrd</property>
+                            <property name="label" translatable="yes">Create Initial Ramdisk (initrd) Directory (must do at least once)</property>
                             <property name="use_underline">True</property>
                             <property name="response_id">0</property>
                             <property name="draw_indicator">True</property>
                           </widget>
                           <packing>
                             <property name="right_attach">2</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
                             <property name="x_options">GTK_SHRINK | GTK_FILL</property>
                             <property name="y_options"></property>
                             <property name="x_padding">10</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkEntry" id="entryIsoFilename2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">5</property>
+                            <property name="bottom_attach">6</property>
+                            <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkEntry" id="entryWorkingDir2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkButton" id="buttonBrowseIsoFilename">
+                            <property name="width_request">32</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="label">...</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_buttonBrowseIsoFilename_clicked2"/>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">5</property>
+                            <property name="bottom_attach">6</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                            <property name="x_padding">5</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkButton" id="buttonBrowseWorkingDir">
+                            <property name="width_request">32</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="label">...</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_buttonBrowseWorkingDir_clicked2"/>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                            <property name="x_padding">5</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="labelIsoInfo">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">You can leave the ISO filename blank,
+and use a Live CD instead.</property>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">6</property>
+                            <property name="bottom_attach">7</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="labelIsoFilename">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="xpad">10</property>
+                            <property name="label" translatable="yes">Live CD ISO Filename:</property>
+                          </widget>
+                          <packing>
+                            <property name="top_attach">5</property>
+                            <property name="bottom_attach">6</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="labelCustomDirectory">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="xpad">10</property>
+                            <property name="label" translatable="yes">Working Directory:</property>
+                          </widget>
+                          <packing>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
                           </packing>
                         </child>
                       </widget>
@@ -487,6 +487,18 @@ and use a Live CD instead.</property>
                       </packing>
                     </child>
                     <child>
+                      <widget class="GtkLabel" id="labelSoftwareEstimatedSize">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Estimated ISO Size:</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="pack_type">GTK_PACK_END</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <widget class="GtkButton" id="buttonSoftwareCalculateIsoSize">
                         <property name="width_request">24</property>
                         <property name="height_request">24</property>
@@ -505,18 +517,6 @@ and use a Live CD instead.</property>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="padding">5</property>
-                        <property name="pack_type">GTK_PACK_END</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelSoftwareEstimatedSize">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Estimated ISO Size:</property>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="pack_type">GTK_PACK_END</property>
                         <property name="position">1</property>
                       </packing>
@@ -590,66 +590,14 @@ and use a Live CD instead.</property>
                               <placeholder/>
                             </child>
                             <child>
-                              <widget class="GtkCheckButton" id="checkbuttonDisableAutologin">
+                              <widget class="GtkEntry" id="entryLiveCdHostname">
+                                <property name="width_request">200</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">For customizing Initrd</property>
-                                <property name="label" translatable="yes">Disable Autologin</property>
-                                <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
-                                <property name="draw_indicator">True</property>
                               </widget>
                               <packing>
-                                <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="labelLiveCdUsername">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Username:</property>
-                              </widget>
-                              <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="labelLiveCdUserFullname">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">User Full Name:</property>
-                              </widget>
-                              <packing>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="labelLiveCdPassword">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Password:</property>
-                              </widget>
-                              <packing>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="labelLiveCdHostname">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Hostname:</property>
-                              </widget>
-                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
                                 <property name="top_attach">4</property>
                                 <property name="bottom_attach">5</property>
                                 <property name="x_options">GTK_FILL</property>
@@ -657,31 +605,31 @@ and use a Live CD instead.</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox20">
+                              <widget class="GtkEntry" id="entryLiveCdUsername">
+                                <property name="width_request">200</property>
                                 <property name="visible">True</property>
-                                <child>
-                                  <widget class="GtkEntry" id="entryLiveCdUserPassword">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="visibility">False</property>
-                                    <property name="invisible_char">*</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
+                                <property name="can_focus">True</property>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkEntry" id="entryLiveCdUserFullname">
+                                <property name="width_request">200</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
                               </packing>
                             </child>
                             <child>
@@ -713,14 +661,66 @@ and use a Live CD instead.</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkEntry" id="entryLiveCdUserFullname">
-                                <property name="width_request">200</property>
+                              <widget class="GtkHBox" id="hbox20">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <child>
+                                  <widget class="GtkEntry" id="entryLiveCdUserPassword">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="visibility">False</property>
+                                    <property name="invisible_char">*</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
+                                <property name="top_attach">2</property>
+                                <property name="bottom_attach">3</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="labelLiveCdHostname">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Hostname:</property>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">4</property>
+                                <property name="bottom_attach">5</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="labelLiveCdPassword">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Password:</property>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">2</property>
+                                <property name="bottom_attach">3</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="labelLiveCdUserFullname">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">User Full Name:</property>
+                              </widget>
+                              <packing>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
@@ -728,29 +728,29 @@ and use a Live CD instead.</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkEntry" id="entryLiveCdUsername">
-                                <property name="width_request">200</property>
+                              <widget class="GtkLabel" id="labelLiveCdUsername">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Username:</property>
                               </widget>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"></property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkEntry" id="entryLiveCdHostname">
-                                <property name="width_request">200</property>
+                              <widget class="GtkCheckButton" id="checkbuttonDisableAutologin">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="tooltip" translatable="yes">For customizing Initrd</property>
+                                <property name="label" translatable="yes">Disable Autologin</property>
+                                <property name="use_underline">True</property>
+                                <property name="response_id">0</property>
+                                <property name="draw_indicator">True</property>
                               </widget>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
+                                <property name="top_attach">5</property>
+                                <property name="bottom_attach">6</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"></property>
                               </packing>
@@ -968,7 +968,7 @@ and use a Live CD instead.</property>
                           <widget class="GtkViewport" id="viewport3">
                             <property name="visible">True</property>
                             <child>
-                              <widget class="GtkVBox" id="vbox19">
+                              <widget class="GtkVBox" id="vbox1">
                                 <property name="visible">True</property>
                                 <child>
                                   <widget class="GtkScrolledWindow" id="scrolledwindowModules">
@@ -990,26 +990,14 @@ and use a Live CD instead.</property>
                                     <property name="column_spacing">10</property>
                                     <property name="row_spacing">5</property>
                                     <child>
-                                      <widget class="GtkLabel" id="labelCustomAptInstall">
+                                      <widget class="GtkEntry" id="entryCustomAptInstall">
                                         <property name="visible">True</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Custom apt-get (install):</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="tooltip" translatable="yes">List package names separated by a space (i.e.- package1 package2 )</property>
                                       </widget>
                                       <packing>
-                                        <property name="x_options">GTK_FILL</property>
-                                        <property name="y_options"></property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkLabel" id="labelCustomAptRemove">
-                                        <property name="visible">True</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Custom apt-get (remove):</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="top_attach">1</property>
-                                        <property name="bottom_attach">2</property>
-                                        <property name="x_options">GTK_FILL</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
                                         <property name="y_options"></property>
                                       </packing>
                                     </child>
@@ -1028,14 +1016,26 @@ and use a Live CD instead.</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkEntry" id="entryCustomAptInstall">
+                                      <widget class="GtkLabel" id="labelCustomAptRemove">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="tooltip" translatable="yes">List package names separated by a space (i.e.- package1 package2 )</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">Custom apt-get (remove):</property>
                                       </widget>
                                       <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="x_options">GTK_FILL</property>
+                                        <property name="y_options"></property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="labelCustomAptInstall">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">Custom apt-get (install):</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="x_options">GTK_FILL</property>
                                         <property name="y_options"></property>
                                       </packing>
                                     </child>
@@ -1287,19 +1287,19 @@ and use a Live CD instead.</property>
                       <placeholder/>
                     </child>
                     <child>
-                      <widget class="GtkCheckButton" id="checkbuttonBuildSquashRoot">
+                      <widget class="GtkCheckButton" id="checkbuttonBuildUsb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes">Create the live cd squash root (Note: You MUST select this if you have made customizations.)</property>
-                        <property name="label" translatable="yes">SquashFS Root</property>
+                        <property name="tooltip" translatable="yes">Create the Live CD ISO</property>
+                        <property name="label" translatable="yes">Build Live USB</property>
                         <property name="use_underline">True</property>
                         <property name="response_id">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_checkbuttonBuildUsb_toggled"/>
                       </widget>
                       <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                         <property name="x_padding">10</property>
@@ -1328,19 +1328,19 @@ and use a Live CD instead.</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkCheckButton" id="checkbuttonBuildUsb">
+                      <widget class="GtkCheckButton" id="checkbuttonBuildSquashRoot">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes">Create the Live CD ISO</property>
-                        <property name="label" translatable="yes">Build Live USB</property>
+                        <property name="tooltip" translatable="yes">Create the live cd squash root (Note: You MUST select this if you have made customizations.)</property>
+                        <property name="label" translatable="yes">SquashFS Root</property>
                         <property name="use_underline">True</property>
                         <property name="response_id">0</property>
+                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="on_checkbuttonBuildUsb_toggled"/>
                       </widget>
                       <packing>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                         <property name="x_padding">10</property>
@@ -1383,90 +1383,34 @@ and use a Live CD instead.</property>
                       <placeholder/>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="labelbuildLiveCdFilename">
+                      <widget class="GtkHBox" id="hbox18">
                         <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Filename:</property>
-                      </widget>
-                      <packing>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelLiveCdDescription">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Description:</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkEntry" id="entryLiveIsoFilename">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes">Live CD (ISO) Filename</property>
+                        <child>
+                          <widget class="GtkCheckButton" id="checkbuttonLiveCdRemoveWin32Programs">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip" translatable="yes">Removes Windows versions of Gtk+, Firefox, Thunderbird, etc. (~40 MB)</property>
+                            <property name="label" translatable="yes">Remove Win32 versions of Firefox, Thunderbird, etc.</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <property name="draw_indicator">True</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
-                        <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                        <property name="y_options"></property>
-                        <property name="y_padding">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkEntry" id="entryLiveCdDescription">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes">Description (title) of Live CD</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="y_options"></property>
-                        <property name="y_padding">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="buttonBrowseLiveCdFilename">
-                        <property name="width_request">32</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label">...</property>
-                        <property name="use_underline">True</property>
-                        <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_buttonBrowseLiveCdFilename_clicked"/>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="right_attach">3</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                        <property name="x_padding">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelLiveCdArch">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Architecture:</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="y_options">GTK_FILL</property>
                       </packing>
                     </child>
                     <child>
@@ -1498,34 +1442,90 @@ PowerPC</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkHBox" id="hbox18">
+                      <widget class="GtkLabel" id="labelLiveCdArch">
                         <property name="visible">True</property>
-                        <child>
-                          <widget class="GtkCheckButton" id="checkbuttonLiveCdRemoveWin32Programs">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip" translatable="yes">Removes Windows versions of Gtk+, Firefox, Thunderbird, etc. (~40 MB)</property>
-                            <property name="label" translatable="yes">Remove Win32 versions of Firefox, Thunderbird, etc.</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <property name="draw_indicator">True</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Architecture:</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="buttonBrowseLiveCdFilename">
+                        <property name="width_request">32</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="label">...</property>
+                        <property name="use_underline">True</property>
+                        <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_buttonBrowseLiveCdFilename_clicked"/>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="right_attach">3</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                        <property name="x_padding">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkEntry" id="entryLiveCdDescription">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes">Description (title) of Live CD</property>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="y_options"></property>
+                        <property name="y_padding">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkEntry" id="entryLiveIsoFilename">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes">Live CD (ISO) Filename</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
+                        <property name="y_options"></property>
+                        <property name="y_padding">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="labelLiveCdDescription">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Description:</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="labelbuildLiveCdFilename">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Filename:</property>
+                      </widget>
+                      <packing>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                   </widget>
@@ -1536,7 +1536,7 @@ PowerPC</property>
                 <child>
                   <widget class="GtkTable" id="tableBuildUsb">
                     <property name="visible">True</property>
-                    <property name="n_rows">10</property>
+                    <property name="n_rows">4</property>
                     <property name="n_columns">3</property>
                     <child>
                       <placeholder/>
@@ -1551,120 +1551,137 @@ PowerPC</property>
                       <placeholder/>
                     </child>
                     <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <widget class="GtkEntry" id="entryKeyUsb2">
+                      <widget class="GtkHBox" id="hbox6">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes">Description (title) of Live CD</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                        <property name="y_padding">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelKeyUsbDescription">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Path of Usb Key (e.g. /dev/sde ):</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelSoftwareDetectUsb">
-                        <property name="width_request">80</property>
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Automatically detect Usb Key:</property>
-                      </widget>
-                      <packing>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="buttonSoftwareDetectUsb">
-                        <property name="width_request">24</property>
-                        <property name="height_request">24</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_buttonSoftwareDetectUsb_clicked2"/>
                         <child>
-                          <widget class="GtkImage" id="image4">
+                          <widget class="GtkComboBox" id="comboboxLiveUsbBootLang2">
+                            <property name="width_request">128</property>
                             <property name="visible">True</property>
-                            <property name="stock">gtk-refresh</property>
+                            <property name="items" translatable="yes">fr
+af
+ar
+as
+be
+bg
+bn
+br
+bs
+ca
+cs
+cy
+da
+de
+dz
+el
+en
+eo
+es
+et
+eu
+fa
+fi
+ga
+gl
+gu
+he
+hi
+hr
+hu
+it
+ja
+ka
+km
+kn
+ko
+ku
+lo
+lt
+lv
+mk
+ml
+mr
+nb
+ne
+nl
+nn
+no
+nr
+ns
+nso
+or
+pa
+pl
+pt
+ro
+ru
+rw
+sk
+sl
+sr
+ss
+st
+sv
+sw
+ta
+te
+tg
+th
+ti
+tn
+tr
+ts
+uk
+ur
+uz
+ve
+vi
+xh
+za
+zh
+zu
+</property>
                           </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options">GTK_FILL</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="labelLiveUsbBootLang">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Language of Live Usb:</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="labelLiveUsbKeybLang">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Keyboard Language of Live Usb:</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                       </packing>
@@ -1778,139 +1795,68 @@ zu
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="labelLiveUsbKeybLang">
+                      <widget class="GtkButton" id="buttonSoftwareDetectUsb">
+                        <property name="width_request">24</property>
+                        <property name="height_request">24</property>
                         <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Keyboard Language of Live Usb:</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelLiveUsbBootLang">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Language of Live Usb:</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkHBox" id="hbox6">
-                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_buttonSoftwareDetectUsb_clicked2"/>
                         <child>
-                          <widget class="GtkComboBox" id="comboboxLiveUsbBootLang2">
-                            <property name="width_request">128</property>
+                          <widget class="GtkImage" id="image4">
                             <property name="visible">True</property>
-                            <property name="items" translatable="yes">fr
-af
-ar
-as
-be
-bg
-bn
-br
-bs
-ca
-cs
-cy
-da
-de
-dz
-el
-en
-eo
-es
-et
-eu
-fa
-fi
-ga
-gl
-gu
-he
-hi
-hr
-hu
-it
-ja
-ka
-km
-kn
-ko
-ku
-lo
-lt
-lv
-mk
-ml
-mr
-nb
-ne
-nl
-nn
-no
-nr
-ns
-nso
-or
-pa
-pl
-pt
-ro
-ru
-rw
-sk
-sl
-sr
-ss
-st
-sv
-sw
-ta
-te
-tg
-th
-ti
-tn
-tr
-ts
-uk
-ur
-uz
-ve
-vi
-xh
-za
-zh
-zu
-</property>
+                            <property name="stock">gtk-refresh</property>
                           </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="labelSoftwareDetectUsb">
+                        <property name="width_request">80</property>
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Automatically detect Usb Key:</property>
+                      </widget>
+                      <packing>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="labelKeyUsbDescription">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Path of Usb Key (e.g. /dev/sde ):</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkEntry" id="entryKeyUsb2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes">Description (title) of Live CD</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                        <property name="y_padding">5</property>
                       </packing>
                     </child>
                   </widget>
@@ -2029,150 +1975,6 @@ If the boxes are checked, directories will be overwritten.
                           <placeholder/>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="labelAltWorkingDir">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="xpad">10</property>
-                            <property name="label" translatable="yes">Working Directory:</property>
-                          </widget>
-                          <packing>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="labelAltIsoFilename">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="xpad">10</property>
-                            <property name="label" translatable="yes">Alternate CD
-ISO Filename:</property>
-                          </widget>
-                          <packing>
-                            <property name="top_attach">5</property>
-                            <property name="bottom_attach">6</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="labelAltSetupIsoInfo">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">You can leave the ISO filename blank,
-and use an Alternate CD instead.</property>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">6</property>
-                            <property name="bottom_attach">7</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="buttonBrowseAltWorkingDir">
-                            <property name="width_request">32</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="label">...</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_buttonBrowseAltWorkingDir_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                            <property name="x_padding">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="buttonBrowseAltIsoFilename">
-                            <property name="width_request">32</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="label">...</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_buttonBrowseAltIsoFilename_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="top_attach">5</property>
-                            <property name="bottom_attach">6</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                            <property name="x_padding">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkEntry" id="entryAltWorkingDir">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkEntry" id="entryAltIsoFilename">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">5</property>
-                            <property name="bottom_attach">6</property>
-                            <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkCheckButton" id="checkbuttonAltCreateRemasterDir">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Create Remaster Directory (must do at least once)</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="clicked" handler="on_checkbuttonAltCreateRemasterDir_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_SHRINK | GTK_FILL</property>
-                            <property name="y_options"></property>
-                            <property name="x_padding">10</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkCheckButton" id="checkbuttonAltCreateInitrdDir">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Create Initial Ramdisk (initrd) Directory (must do at least once)</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <property name="draw_indicator">True</property>
-                          </widget>
-                          <packing>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                            <property name="x_padding">10</property>
-                          </packing>
-                        </child>
-                        <child>
                           <widget class="GtkHBox" id="hboxAltBase">
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
@@ -2208,6 +2010,150 @@ Desktop</property>
                             <property name="bottom_attach">3</property>
                             <property name="x_options">GTK_FILL</property>
                             <property name="y_options">GTK_FILL</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkCheckButton" id="checkbuttonAltCreateInitrdDir">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="label" translatable="yes">Create Initial Ramdisk (initrd) Directory (must do at least once)</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <property name="draw_indicator">True</property>
+                          </widget>
+                          <packing>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                            <property name="x_padding">10</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkCheckButton" id="checkbuttonAltCreateRemasterDir">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="label" translatable="yes">Create Remaster Directory (must do at least once)</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="clicked" handler="on_checkbuttonAltCreateRemasterDir_clicked"/>
+                          </widget>
+                          <packing>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                            <property name="x_options">GTK_SHRINK | GTK_FILL</property>
+                            <property name="y_options"></property>
+                            <property name="x_padding">10</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkEntry" id="entryAltIsoFilename">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">5</property>
+                            <property name="bottom_attach">6</property>
+                            <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkEntry" id="entryAltWorkingDir">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkButton" id="buttonBrowseAltIsoFilename">
+                            <property name="width_request">32</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="label">...</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_buttonBrowseAltIsoFilename_clicked"/>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">5</property>
+                            <property name="bottom_attach">6</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                            <property name="x_padding">5</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkButton" id="buttonBrowseAltWorkingDir">
+                            <property name="width_request">32</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="label">...</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_buttonBrowseAltWorkingDir_clicked"/>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                            <property name="x_padding">5</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="labelAltSetupIsoInfo">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">You can leave the ISO filename blank,
+and use an Alternate CD instead.</property>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">6</property>
+                            <property name="bottom_attach">7</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="labelAltIsoFilename">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="xpad">10</property>
+                            <property name="label" translatable="yes">Alternate CD
+ISO Filename:</property>
+                          </widget>
+                          <packing>
+                            <property name="top_attach">5</property>
+                            <property name="bottom_attach">6</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="labelAltWorkingDir">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="xpad">10</property>
+                            <property name="label" translatable="yes">Working Directory:</property>
+                          </widget>
+                          <packing>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
                           </packing>
                         </child>
                       </widget>
@@ -2270,6 +2216,21 @@ Desktop</property>
                       </packing>
                     </child>
                     <child>
+                      <widget class="GtkLabel" id="labelAltIsoSize">
+                        <property name="width_request">80</property>
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">2</property>
+                        <property name="justify">GTK_JUSTIFY_CENTER</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="pack_type">GTK_PACK_END</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <widget class="GtkButton" id="buttonAltIsoCalculate">
                         <property name="width_request">24</property>
                         <property name="height_request">24</property>
@@ -2288,21 +2249,6 @@ Desktop</property>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="padding">5</property>
-                        <property name="pack_type">GTK_PACK_END</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelAltIsoSize">
-                        <property name="width_request">80</property>
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">2</property>
-                        <property name="justify">GTK_JUSTIFY_CENTER</property>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="pack_type">GTK_PACK_END</property>
                         <property name="position">1</property>
                       </packing>
@@ -2412,71 +2358,19 @@ Desktop</property>
                                   <placeholder/>
                                 </child>
                                 <child>
-                                  <widget class="GtkCheckButton" id="checkbuttonAltUbuntuMultiverseRepo">
+                                  <widget class="GtkLabel" id="label20">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="tooltip" translatable="yes">Ubuntu Apt archive for non-free software</property>
-                                    <property name="label" translatable="yes">Ubuntu Multiverse (non-free, unsupported)</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="response_id">0</property>
-                                    <property name="draw_indicator">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0.10000000149011612</property>
+                                    <property name="xpad">10</property>
+                                    <property name="label">(i.e.- deb http://us.archive.ubuntu.com/ubuntu/ edgy main restricted )</property>
                                   </widget>
                                   <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                    <property name="x_options">GTK_FILL</property>
-                                    <property name="y_options"></property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkCheckButton" id="checkbuttonAltUbuntuUniverseRepo">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="tooltip" translatable="yes">Ubuntu Apt archive for Community Maintained software</property>
-                                    <property name="label" translatable="yes">Ubuntu Universe (free, unsupported)</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="response_id">0</property>
-                                    <property name="draw_indicator">True</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                    <property name="x_options">GTK_FILL</property>
-                                    <property name="y_options"></property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkCheckButton" id="checkbuttonAltUbuntuOfficialRepo">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="tooltip" translatable="yes">Ubuntu Apt archive for Officially Supported software</property>
-                                    <property name="label" translatable="yes">Ubuntu Official (free, supported)</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="response_id">0</property>
-                                    <property name="draw_indicator">True</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="x_options">GTK_FILL</property>
-                                    <property name="y_options"></property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkCheckButton" id="checkbuttonAltUbuntuRestrictedRepo">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="tooltip" translatable="yes">Ubuntu Apt archive for Restricted Copyright software</property>
-                                    <property name="label" translatable="yes">Ubuntu Restricted (non-free, supported)</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="response_id">0</property>
-                                    <property name="draw_indicator">True</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
-                                    <property name="x_options">GTK_FILL</property>
-                                    <property name="y_options"></property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">3</property>
+                                    <property name="bottom_attach">4</property>
+                                    <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
+                                    <property name="y_options">GTK_FILL</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -2504,19 +2398,71 @@ Desktop</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkLabel" id="label20">
+                                  <widget class="GtkCheckButton" id="checkbuttonAltUbuntuRestrictedRepo">
                                     <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="yalign">0.10000000149011612</property>
-                                    <property name="xpad">10</property>
-                                    <property name="label">(i.e.- deb http://us.archive.ubuntu.com/ubuntu/ edgy main restricted )</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip" translatable="yes">Ubuntu Apt archive for Restricted Copyright software</property>
+                                    <property name="label" translatable="yes">Ubuntu Restricted (non-free, supported)</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="response_id">0</property>
+                                    <property name="draw_indicator">True</property>
                                   </widget>
                                   <packing>
-                                    <property name="right_attach">3</property>
-                                    <property name="top_attach">3</property>
-                                    <property name="bottom_attach">4</property>
-                                    <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                                    <property name="y_options">GTK_FILL</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkCheckButton" id="checkbuttonAltUbuntuOfficialRepo">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip" translatable="yes">Ubuntu Apt archive for Officially Supported software</property>
+                                    <property name="label" translatable="yes">Ubuntu Official (free, supported)</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="response_id">0</property>
+                                    <property name="draw_indicator">True</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkCheckButton" id="checkbuttonAltUbuntuUniverseRepo">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip" translatable="yes">Ubuntu Apt archive for Community Maintained software</property>
+                                    <property name="label" translatable="yes">Ubuntu Universe (free, unsupported)</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="response_id">0</property>
+                                    <property name="draw_indicator">True</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkCheckButton" id="checkbuttonAltUbuntuMultiverseRepo">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip" translatable="yes">Ubuntu Apt archive for non-free software</property>
+                                    <property name="label" translatable="yes">Ubuntu Multiverse (non-free, unsupported)</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="response_id">0</property>
+                                    <property name="draw_indicator">True</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options"></property>
                                   </packing>
                                 </child>
                               </widget>
@@ -2546,7 +2492,7 @@ Desktop</property>
                               <widget class="GtkVBox" id="vbox28">
                                 <property name="visible">True</property>
                                 <child>
-                                  <widget class="GtkLabel" id="labelAltPackages">
+                                  <widget class="GtkLabel" id="labelAltPackages1">
                                     <property name="visible">True</property>
                                     <property name="xalign">0.05000000074505806</property>
                                     <property name="label" translatable="yes">List extra packages to be included, each separated by a space.</property>
@@ -2666,7 +2612,7 @@ Desktop</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="labelAltPackages">
+              <widget class="GtkLabel" id="labelAltPackages2">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Alt. Packages</property>
               </widget>
@@ -2703,23 +2649,6 @@ Desktop</property>
                       <placeholder/>
                     </child>
                     <child>
-                      <widget class="GtkCheckButton" id="checkbuttonAltBuildInitrd">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes">Create the initial ramdisk (initrd) (MUST do if customized boot splash.)</property>
-                        <property name="label" translatable="yes">Initial Ramdisk (initrd)</property>
-                        <property name="use_underline">True</property>
-                        <property name="response_id">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                      </widget>
-                      <packing>
-                        <property name="y_options"></property>
-                        <property name="x_padding">10</property>
-                        <property name="y_padding">5</property>
-                      </packing>
-                    </child>
-                    <child>
                       <widget class="GtkCheckButton" id="checkbuttonAltBuildIso">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -2735,6 +2664,23 @@ Desktop</property>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                        <property name="x_padding">10</property>
+                        <property name="y_padding">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckButton" id="checkbuttonAltBuildInitrd">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes">Create the initial ramdisk (initrd) (MUST do if customized boot splash.)</property>
+                        <property name="label" translatable="yes">Initial Ramdisk (initrd)</property>
+                        <property name="use_underline">True</property>
+                        <property name="response_id">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                      </widget>
+                      <packing>
                         <property name="y_options"></property>
                         <property name="x_padding">10</property>
                         <property name="y_padding">5</property>
@@ -2767,93 +2713,6 @@ Desktop</property>
                       <placeholder/>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="labelAltBuildFilename">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Filename:</property>
-                      </widget>
-                      <packing>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelAltBuildCdDesc">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Description:</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkEntry" id="entryAltBuildIsoFilename">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes">Alternate CD (ISO) Filename</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                        <property name="y_options"></property>
-                        <property name="y_padding">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkEntry" id="entryBuildAltCdDescription">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes">Description (title) of Alt CD</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="y_options"></property>
-                        <property name="y_padding">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="buttonBrowseAltCdFilename">
-                        <property name="width_request">32</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label">...</property>
-                        <property name="use_underline">True</property>
-                        <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_buttonBrowseAltCdFilename_clicked"/>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="right_attach">3</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                        <property name="x_padding">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelAltBuildArch">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Architecture:</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
                       <widget class="GtkHBox" id="hbox39">
                         <property name="visible">True</property>
                         <child>
@@ -2881,6 +2740,93 @@ PowerPC</property>
                         <property name="y_options">GTK_FILL</property>
                       </packing>
                     </child>
+                    <child>
+                      <widget class="GtkLabel" id="labelAltBuildArch">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Architecture:</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="buttonBrowseAltCdFilename">
+                        <property name="width_request">32</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="label">...</property>
+                        <property name="use_underline">True</property>
+                        <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_buttonBrowseAltCdFilename_clicked"/>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="right_attach">3</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                        <property name="x_padding">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkEntry" id="entryBuildAltCdDescription">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes">Description (title) of Alt CD</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="y_options"></property>
+                        <property name="y_padding">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkEntry" id="entryAltBuildIsoFilename">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes">Alternate CD (ISO) Filename</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
+                        <property name="y_options"></property>
+                        <property name="y_padding">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="labelAltBuildCdDesc">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Description:</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="labelAltBuildFilename">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Filename:</property>
+                      </widget>
+                      <packing>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
                   </widget>
                   <packing>
                     <property name="position">2</property>
@@ -2893,7 +2839,7 @@ PowerPC</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="labelAltBuild">
+              <widget class="GtkLabel" id="labelAltBuild1">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Alt. Build</property>
               </widget>
@@ -3069,68 +3015,53 @@ Reconstructor Team: http://reconstructor.aperantis.com/
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
                   <widget class="GtkTable" id="tableLiveCd2">
                     <property name="visible">True</property>
-                    <property name="n_rows">4</property>
-                    <property name="n_columns">4</property>
+                    <property name="n_rows">2</property>
+                    <property name="n_columns">3</property>
                     <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelbuildLiveCdFilename">
+                      <widget class="GtkLabel" id="labelbuildWorkingDirectory">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Filename of the iso:</property>
+                        <property name="label" translatable="yes">Working Directory:</property>
                       </widget>
                       <packing>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="buttonBrowseLiveCdFilename">
+                      <widget class="GtkEntry" id="entryWorkingDir">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="buttonBrowseWorkingDir1">
                         <property name="width_request">32</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="label">...</property>
                         <property name="use_underline">True</property>
                         <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_buttonBrowseIsoFilename_clicked"/>
+                        <signal name="clicked" handler="on_buttonBrowseWorkingDir_clicked"/>
                       </widget>
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="right_attach">3</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                         <property name="x_padding">5</property>
@@ -3151,202 +3082,175 @@ Reconstructor Team: http://reconstructor.aperantis.com/
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="buttonBrowseWorkingDir">
+                      <widget class="GtkButton" id="buttonBrowseLiveCdFilename1">
                         <property name="width_request">32</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="label">...</property>
                         <property name="use_underline">True</property>
                         <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_buttonBrowseWorkingDir_clicked"/>
+                        <signal name="clicked" handler="on_buttonBrowseIsoFilename_clicked"/>
                       </widget>
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="right_attach">3</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                         <property name="x_padding">5</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkEntry" id="entryWorkingDir">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelbuildWorkingDirectory">
+                      <widget class="GtkLabel" id="labelbuildLiveCdFilename1">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Working Directory:</property>
+                        <property name="label" translatable="yes">Filename of the iso:</property>
                       </widget>
                       <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
                   </widget>
                   <packing>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
                 <child>
                   <widget class="GtkTable" id="tableBuildUsb2">
                     <property name="visible">True</property>
-                    <property name="n_rows">10</property>
-                    <property name="n_columns">3</property>
+                    <property name="n_rows">4</property>
+                    <property name="n_columns">2</property>
                     <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <widget class="GtkEntry" id="entryKeyUsb">
+                      <widget class="GtkHBox" id="hbox25">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes">Description (title) of Live CD</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                        <property name="y_padding">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelKeyUsbDescription">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Path of Usb Key (e.g. /dev/sde ):</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelSoftwareDetectUsb">
-                        <property name="width_request">80</property>
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Automatically detect Usb Key:</property>
-                      </widget>
-                      <packing>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="buttonSoftwareDetectUsb">
-                        <property name="width_request">24</property>
-                        <property name="height_request">24</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_buttonSoftwareDetectUsb_clicked"/>
                         <child>
-                          <widget class="GtkImage" id="image5">
+                          <widget class="GtkComboBox" id="comboboxLiveUsbBootLang">
+                            <property name="width_request">128</property>
                             <property name="visible">True</property>
-                            <property name="stock">gtk-refresh</property>
+                            <property name="items" translatable="yes">fr
+af
+ar
+as
+be
+bg
+bn
+br
+bs
+ca
+cs
+cy
+da
+de
+dz
+el
+en
+eo
+es
+et
+eu
+fa
+fi
+ga
+gl
+gu
+he
+hi
+hr
+hu
+it
+ja
+ka
+km
+kn
+ko
+ku
+lo
+lt
+lv
+mk
+ml
+mr
+nb
+ne
+nl
+nn
+no
+nr
+ns
+nso
+or
+pa
+pl
+pt
+ro
+ru
+rw
+sk
+sl
+sr
+ss
+st
+sv
+sw
+ta
+te
+tg
+th
+ti
+tn
+tr
+ts
+uk
+ur
+uz
+ve
+vi
+xh
+za
+zh
+zu
+</property>
                           </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                          </packing>
                         </child>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options">GTK_FILL</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="labelLiveUsbBootLang1">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Language of Live Usb:</property>
+                        <property name="wrap_mode">PANGO_WRAP_CHAR</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="labelLiveUsbKeybLang1">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Keyboard Language of Live Usb:</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                       </packing>
@@ -3446,9 +3350,6 @@ zu
                             <property name="expand">False</property>
                           </packing>
                         </child>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
@@ -3460,146 +3361,74 @@ zu
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="labelLiveUsbKeybLang">
+                      <widget class="GtkButton" id="buttonSoftwareDetectUsb1">
+                        <property name="width_request">24</property>
+                        <property name="height_request">24</property>
                         <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Keyboard Language of Live Usb:</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelLiveUsbBootLang">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Language of Live Usb:</property>
-                        <property name="wrap_mode">PANGO_WRAP_CHAR</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkHBox" id="hbox25">
-                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_buttonSoftwareDetectUsb_clicked"/>
                         <child>
-                          <widget class="GtkComboBox" id="comboboxLiveUsbBootLang">
-                            <property name="width_request">128</property>
+                          <widget class="GtkImage" id="image5">
                             <property name="visible">True</property>
-                            <property name="items" translatable="yes">fr
-af
-ar
-as
-be
-bg
-bn
-br
-bs
-ca
-cs
-cy
-da
-de
-dz
-el
-en
-eo
-es
-et
-eu
-fa
-fi
-ga
-gl
-gu
-he
-hi
-hr
-hu
-it
-ja
-ka
-km
-kn
-ko
-ku
-lo
-lt
-lv
-mk
-ml
-mr
-nb
-ne
-nl
-nn
-no
-nr
-ns
-nso
-or
-pa
-pl
-pt
-ro
-ru
-rw
-sk
-sl
-sr
-ss
-st
-sv
-sw
-ta
-te
-tg
-th
-ti
-tn
-tr
-ts
-uk
-ur
-uz
-ve
-vi
-xh
-za
-zh
-zu
-</property>
+                            <property name="stock">gtk-refresh</property>
                           </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="labelSoftwareDetectUsb1">
+                        <property name="width_request">80</property>
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Automatically detect Usb Key:</property>
+                      </widget>
+                      <packing>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="labelKeyUsbDescription1">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="label" translatable="yes">Path of Usb Key (e.g. /dev/sde ):</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkEntry" id="entryKeyUsb">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes">Description (title) of Live CD</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                        <property name="y_padding">5</property>
                       </packing>
                     </child>
                   </widget>
                   <packing>
                     <property name="pack_type">GTK_PACK_END</property>
-                    <property name="position">3</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </widget>
@@ -3608,9 +3437,14 @@ zu
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <widget class="GtkLabel" id="labelLiveBuild1">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Live Build</property>
+              </widget>
               <packing>
                 <property name="type">tab</property>
+                <property name="position">9</property>
+                <property name="tab_fill">False</property>
               </packing>
             </child>
           </widget>

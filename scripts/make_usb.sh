@@ -2,7 +2,7 @@
 
 WORKING_DIRECTORY=$(cat /tmp/working-directory)
 INITIAL_REMASTER="/remaster"
-USB_REMASTER="/remaster_usb"
+USB_REMASTER="/liveusb"
 HEBERGEMENT="http://cooperation.gensys.free.fr/v0.3"
 LANGUAGE[3]=$(cat /tmp/usb-keyblang)
 LANGUAGE[4]=$(cat /tmp/usb-bootlang)
@@ -118,23 +118,20 @@ fi
 mkdir "${WORKING_DIRECTORY}${USB_REMASTER}"
 
 cd "${WORKING_DIRECTORY}${INITIAL_REMASTER}"
-cp -Rf ./* ./.disk "${WORKING_DIRECTORY}${USB_REMASTER}"
-cp $INITRD_VMLINUZ_PATH/$NOM_VMLINUZ $INITRD_VMLINUZ_PATH/$NOM_INITRD install/mt86plus "${WORKING_DIRECTORY}${USB_REMASTER}"
 
+cp -rf casper dists install pics pool preseed .disk "${WORKING_DIRECTORY}${USB_REMASTER}/"
+cp -rf isolinux/* ${WORKING_DIRECTORY}${USB_REMASTER}
+mv ${WORKING_DIRECTORY}${USB_REMASTER}/casper/$NOM_VMLINUZ "${WORKING_DIRECTORY}${USB_REMASTER}/"
+mv ${WORKING_DIRECTORY}${USB_REMASTER}/casper/$NOM_INITRD "${WORKING_DIRECTORY}${USB_REMASTER}/"
 
-cp isolinux/f[0-9].txt ${WORKING_DIRECTORY}${USB_REMASTER}
-cp isolinux/f10.txt ${WORKING_DIRECTORY}${USB_REMASTER}
-
-cat << EOT > ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg 
-DEFAULT /$NOM_VMLINUZ
+cat << EOT > ${WORKING_DIRECTORY}${USB_REMASTER}/syslinux.cfg 
+DEFAULT persistent
 GFXBOOT bootlogo
-GFXBOOT-BACKGROUND 0x000000
-GFXBOOT-BACKGROUND 0x000000
-APPEND  file=/preseed/xubuntu.seed boot=casper initrd=/initrd.gz quiet splash --
+APPEND  file=/preseed/xubuntu.seed boot=casper initrd=/$NOM_INITRD quiet splash --
 LABEL persistent
   menu label ^Try Cooperation-iws with persistent mode
   kernel /$NOM_VMLINUZ
-  append  locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup/layoutcode=${LANGUAGE[3]} console-setup/variantcode=nodeadkeys boot=casper persistent initrd=/$NOM_INITRD root=/dev/ram $APPEND_OPT --
+  append  locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup/layoutcode=${LANGUAGE[3]} console-setup/variantcode=nodeadkeys boot=casper persistent initrd=/$NOM_INITRD root=/dev/ram quiet splash --
 LABEL live
   menu label ^Try Cooperation-iws without any change to your computer
   kernel /$NOM_VMLINUZ
@@ -171,56 +168,7 @@ F0 f10.txt
 EOT
 
 
-cp ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux/isolinux.cfg ${WORKING_DIRECTORY}${USB_REMASTER}/extlinux.conf
 
-rm -Rf ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux
-rm ${WORKING_DIRECTORY}${USB_REMASTER}/$INITRD_VMLINUZ_PATH/initrd*
-rm ${WORKING_DIRECTORY}${USB_REMASTER}/$INITRD_VMLINUZ_PATH/vmlinuz*
-cd $WORKING_DIRECTORY
-
-
-TAILLE=$(($(du -sB 1 ${WORKING_DIRECTORY}${USB_REMASTER} | awk '{print $1}')/1000/1000)) #
-
-#modifying initrd
-
-mkdir $WORKING_DIRECTORY/initrd
-cd $WORKING_DIRECTORY/initrd
-cat $WORKING_DIRECTORY${USB_REMASTER}/initrd.gz | gzip -d | cpio -i
-
-
-
-echo "#!/bin/sh
-
-PREREQ=\"\"
-DESCRIPTION=\"removing prompt at shutdown...\"
-. /scripts/casper-functions
-
-prereqs()
-{
-       echo \"\$PREREQ\"
-}
-
-case \$1 in
-# get pre-requisites
-prereqs)
-       prereqs
-       exit 0
-       ;;
-esac
-
-if [ \"\$(ls -l /root/etc/rc0.d/*casper*)\" ]; then
-log_begin_msg \"\$DESCRIPTION\"
-rm /root/etc/rc0.d/*casper* 
-rm /root/etc/rc6.d/*casper*
-log_end_msg
-fi
-" > scripts/casper-bottom/99rmenterprompt
-
-chmod +x scripts/casper-bottom/99rmenterprompt
-cd $WORKING_DIRECTORY/initrd
-find | cpio -H newc -o | gzip > ../initrd.gz
-
-mv -f ../initrd.gz $WORKING_DIRECTORY${USB_REMASTER}/initrd.gz
 
 
 }
@@ -233,7 +181,7 @@ mv -f ../initrd.gz $WORKING_DIRECTORY${USB_REMASTER}/initrd.gz
 
 function FORMAT()
 {
-
+TAILLE=$(($(du -sB 1 ${WORKING_DIRECTORY}${INITIAL_REMASTER} | awk '{print $1}')/1000/1000))
 #umount all partitions
 i=1
 while (( i > 0 ))
@@ -254,7 +202,7 @@ parted -s ${USB_KEY} mklabel msdos
 parted -s ${USB_KEY} mkpart primary ext2 1 100% # mkpartfs
 sleep 10
 umount ${USB_KEY}1
-mke2fs -j -L extlinux-ro ${USB_KEY}1 #formate et pose label
+mkfs.vfat -F 16 -n ciws-ro ${USB_KEY}1 #formate et pose label
 sleep 3
 
 #calcul taille dispo sur sdx1 et cible
@@ -316,7 +264,7 @@ sleep 15
 
 #formate et pose label
 #mkfs.ext3 -L extlinux-ro ${USB_KEY}1
-mke2fs -j -L extlinux-ro ${USB_KEY}1
+mkfs.vfat -F 16 -n ciws-ro ${USB_KEY}1
 sleep 15
 
 #formate et pose label
@@ -357,14 +305,14 @@ sleep 2
 
 function COPIE_LIVE
 {
-mkdir $WORKING_DIRECTORY/liveusb
+mkdir $WORKING_DIRECTORY$USB_REMASTER
 test -z "${USB_KEY}" && exit 0
 #test -z "${LISTE}" && exit 0
 sleep 4
 #test du disque avant install!!!
-SDT1=`blkid ${USB_KEY}1 | grep 'TYPE=\"ext3\"'`
+SDT1=`blkid ${USB_KEY}1 | grep 'TYPE=\"vfat\"'`
 SDT2=`blkid ${USB_KEY}2 | grep 'TYPE=\"ext3\"'`
-SDT3=`blkid ${USB_KEY}1 | grep 'LABEL=\"extlinux-ro\"'`
+SDT3=`blkid ${USB_KEY}1 | grep 'LABEL=\"ciws-ro\"'`
 SDT4=`blkid ${USB_KEY}2 | grep "LABEL=\"$PERSISTENT_LABEL\""`
 if [ -z "${SDT1}" ]; then 
 sleep 2
@@ -389,7 +337,7 @@ fi
 #on demonte
 if [ -n "$(mount | grep ${USB_KEY}1)" ]; then umount ${USB_KEY}1 ; fi ;
 #on monte la part ext3 /dev/sdx1 de la clé
-mount -t ext3 -o rw,users ${USB_KEY}1 $WORKING_DIRECTORY/liveusb
+mount -t vfat -o rw,users ${USB_KEY}1 $WORKING_DIRECTORY$USB_REMASTER
 sleep 2
 
 function DECIMALE()
@@ -407,10 +355,10 @@ EOF
 }
 function COPIE()
 {
-TAILLE=$(($(du -sB 1 ${WORKING_DIRECTORY}${USB_REMASTER} | awk '{print $1}')/1000/1000));T1=1;
-`rsync -aH --exclude="*~" ${WORKING_DIRECTORY}${USB_REMASTER}/. $WORKING_DIRECTORY/liveusb/.`& sleep 1;
+TAILLE=$(($(du -sB 1 ${WORKING_DIRECTORY}${INITIAL_REMASTER} | awk '{print $1}')/1000/1000));T1=1;
+TRANSFORM & sleep 1;
 (i=0 ; while [ $i -lt ${TAILLE} ] ; do
-T1=$(($(du -sB 1 $WORKING_DIRECTORY/liveusb | awk '{print $1}')/1000/1000))
+T1=$(($(du -sB 1 $WORKING_DIRECTORY$USB_REMASTER | awk '{print $1}')/1000/1000))
 i=$T1;
 T2=`DECIMALE -p 2 $T1/$TAILLE*100`;
 TEXT="$MESS_COP_KEY_1  ${USB_KEY}1 $MESS_COP_KEY_2 (${T2}%)  ${TAILLE}Mb"
@@ -419,13 +367,12 @@ sleep 1 ;
 done) | zenity --progress --width 600 --auto-close
 }
 COPIE
-
+sleep 8
 MESSAGE="$MESS_POSE_MBR"
-sudo apt-get install --assume-yes --force-yes syslinux mtools
-extlinux -i $WORKING_DIRECTORY/liveusb
-umount $WORKING_DIRECTORY/liveusb
+syslinux -f ${USB_KEY}1
+umount $WORKING_DIRECTORY$USB_REMASTER
 sleep 2
-cat /usr/lib/syslinux/mbr.bin > ${USB_KEY}
+lilo -M ${USB_KEY}
 sleep 2
 sleep 2
 }
@@ -437,6 +384,11 @@ echo "
 ------------Making your Usb key------------
 "
 LANG_CHOICE_INIT
-TRANSFORM
 FORMAT
+TRANSFORM
 COPIE_LIVE
+echo "
+--------------Cooperation-iws--------------
+------------Press Enter------------
+"
+read r < /dev/tty
