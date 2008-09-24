@@ -405,9 +405,6 @@ class Reconstructor:
 	if commands.getoutput('which syslinux') == '':
             print _('syslinux NOT FOUND (needed for Remastering ISO)')
             dependList += 'syslinux\n'
-	if commands.getoutput('which lilo') == '':
-            print _('lilo NOT FOUND (needed for Remastering ISO)')
-            dependList += 'lilo\n'
 	if commands.getoutput('which mtools') == '':
             print _('mtools NOT FOUND (needed for Remastering ISO)')
             dependList += 'mtools\n'
@@ -466,7 +463,7 @@ class Reconstructor:
                 #print 'apt-get install -y ' + dependList.replace('\n', ' ')
                 installTxt = _('Installing dependencies: ')
                 print installTxt + dependList.replace('\n', ' ')
-                os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws install dependancies\" -x apt-get install -y ' + dependList.replace('\n', ' '))
+                os.popen('apt-get install -y ' + dependList.replace('\n', ' '))
                 sys.exit(0)
             else:
                 warnDlg.destroy()

@@ -372,7 +372,7 @@ MESSAGE="$MESS_POSE_MBR"
 syslinux -f ${USB_KEY}1
 umount $WORKING_DIRECTORY$USB_REMASTER
 sleep 2
-lilo -M ${USB_KEY}
+#lilo -M ${USB_KEY}
 sleep 2
 sleep 2
 }
