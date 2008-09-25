@@ -3849,7 +3849,6 @@ class Reconstructor:
 	scriptCustomSplash += 'sed -i "s/Ubuntu/Cooperation-iws/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' \n'
 	scriptCustomSplash += 'sed -i "2G" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' \n'
 	scriptCustomSplash += 'sed -i "2G" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' \n'
-	scriptCustomSplash += 'sed -i "3s/^/GFXBOOT-BACKGROUND 0x000000/" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' \n'
 	fscriptCustomExec=open(os.path.join(self.customDir, "scriptSplash.sh"), 'w')
         fscriptCustomExec.write(scriptCustomSplash)
         fscriptCustomExec.close()

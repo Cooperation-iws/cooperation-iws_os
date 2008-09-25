@@ -270,7 +270,7 @@ flush privileges;" > wordpress_db.sql
 
 $BIN_MYSQL -u root < wordpress_db.sql mysql
 rm wordpress_db.sql
-cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php | sed -i -e  "72s/value=\"wordpress\"/value=\"${NOM_WORDPRESS[$count]}\"/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php
+cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php | sed -i -e  "s/value=\"wordpress\"/value=\"${NOM_WORDPRESS[$count]}\"/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php
 cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php | sed -i -e  "s/value=\"username\"/value=\"${NOM_WORDPRESS[$count]}\"/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php
 cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php | sed -i -e  "s/value=\"password\"/value=\"$WORDPRESS_MYSQL_PWD\"/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php
 

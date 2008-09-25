@@ -132,4 +132,39 @@ Exec=firefox http://localhost
 Icon=/usr/share/pixmaps/firefox-3.0.png
 EOT
 
+
+cat << EOT > /etc/skel/Desktop/PASSWORDS.txt
+Default login / password are : admin /cooperation
+
+Except for ftp serveur: www-data / cooperation
+
+Mantis : administrator / root
+
+Taskfreak: admin / ciws
+
+Lifetype, Achievo: administrator / cooperation
+
+Phpmyadmin / Mysql Serveur / Webmin / EyeOS: root / cooperation
+
+Mail server / Squirrelmail: admin@ciws.com / cooperation
+
+-------------------------------------------------------------
+
+Les login / mot de passe par défaut sont : admin /cooperation
+
+Excepter pour le serveur ftp: www-data / cooperation
+
+Mantis : administrator / root
+
+Taskfreak: admin / ciws
+
+Lifetype / Achievo: administrator / cooperation
+
+Phpmyadmin / Mysql Serveur / Webmin /EyeOS : root / cooperation
+
+Serveur Mail / Squirrelmail: admin@ciws.com / cooperation
+EOT
+
+chmod 777 /etc/skel/Desktop/PASSWORDS.txt
+
 echo "I: End of Customization"
