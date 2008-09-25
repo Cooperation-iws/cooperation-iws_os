@@ -17,12 +17,6 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 apt-get remove --assume-yes --force-yes language* 
 
-
-
-apt-get install --assume-yes --force-yes deborphan
-
-
-
 apt-get autoremove --purge --assume-yes --force-yes openoffice.org* 
-apt-get autoremove --purge --assume-yes --force-yes `deborphan --guess-all`
+
 

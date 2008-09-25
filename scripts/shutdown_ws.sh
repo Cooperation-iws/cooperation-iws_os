@@ -21,7 +21,7 @@ echo "<?php include('cooperation-wui.header.php'); ?>
 <img src=\"cooperation.header.jpg\"><br><br>
 " > $WWW_DIRECTORY/index.php
 
-cat $WWW_DIRECTORY/cooperation-wui.frame.php | sort | sed '/^$/d' | sed "s/^/<hr width=\"10%\">/" >> $WWW_DIRECTORY/index.php
+cat $WWW_DIRECTORY/cooperation-wui.frame.php | sort | sed '/^$/d' | sed "s/^/<hr width=\"10%\">/" | sed "s/000Cooperation-iws/Cooperation-iws/">> $WWW_DIRECTORY/index.php
 
 echo "
 <hr width=\"20%\">
@@ -95,6 +95,9 @@ echo "I: shuting down servers"
 killall -9 apache2
 killall -9 mysqld
 killall -9 mysqld_safe
+/etc/init.d/webmin stop 1>&2 2>/dev/null
+/etc/init.d/postfix stop 1>&2 2>/dev/null
+/etc/init.d/dovecot stop 1>&2 2>/dev/null
 
 fi
 

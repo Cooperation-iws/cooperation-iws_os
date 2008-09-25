@@ -91,16 +91,17 @@ wget $URL_FREE/background.png
 wget $URL_FREE/logo.png
 wget $URL_FREE/wallpaper.png
 cp background.png /usr/share/gdm/themes/xubuntu
-cp logo.png /usr/share/gdm/themes/xubuntu/logo.png
+cp logo.png /usr/share/gdm/themes/xubuntu/logo.png 1>&2 2>/dev/null
 cp background.png /usr/share/gdm/themes/Human
 cp logo.png /usr/share/gdm/themes/Human/ubuntu.png
-cp wallpaper.png /usr/share/backgrounds/warty-final-ubuntu.png
-cp wallpaper.png /usr/share/xfce4/backdrops/xubuntu-jmak.png 
+cp wallpaper.png /usr/share/backgrounds/warty-final-ubuntu.png 
+cp wallpaper.png /usr/share/xfce4/backdrops/xubuntu-jmak.png  1>&2 2>/dev/null
 
 echo "I: installing liveusb installer"
 
 wget $URL_FREE/cooperation-iws-liveusb-0.1.deb
 dpkg -i cooperation-iws-liveusb-0.1.deb
+apt-get -f install --assume-yes --force-yes
 
 mkdir /etc/skel/Desktop
 cat << EOT > /etc/skel/Desktop/LiveUsbinstaller.desktop

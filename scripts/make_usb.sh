@@ -115,7 +115,7 @@ sleep 2
 exit 0
 fi
 
-mkdir "${WORKING_DIRECTORY}${USB_REMASTER}"
+
 
 cd "${WORKING_DIRECTORY}${INITIAL_REMASTER}"
 
@@ -305,7 +305,7 @@ sleep 2
 
 function COPIE_LIVE
 {
-mkdir $WORKING_DIRECTORY$USB_REMASTER
+
 test -z "${USB_KEY}" && exit 0
 #test -z "${LISTE}" && exit 0
 sleep 4

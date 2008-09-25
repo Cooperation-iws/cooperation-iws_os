@@ -79,14 +79,6 @@ killall -9 mysqld_safe
 apt-get install --yes --force-yes  apache2 apache2-doc apache2-mpm-prefork apache2-utils apache2.2-common mysql-server php5 libapache2-mod-php5 php5-mysql phpmyadmin php-pear php5-cli php5-gd php5-xsl php5-curl libapache2-mod-python php-pear libphp-adodb libexpat1 ssl-cert php5-imagick php5-imap php5-mcrypt php5-memcache php5-mhash php5-ming php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl php5-cli imagemagick
 
 
-echo "
-<Location /mpinfo>
-   SetHandler mod_python
-   PythonInterpreter main_interpreter
-   PythonHandler mod_python.testhandler
-</Location>
-" > /etc/apache2/conf.d/modpython-mpinfo
-chmod 644 /etc/apache2/conf.d/modpython-mpinfo
 
 
 

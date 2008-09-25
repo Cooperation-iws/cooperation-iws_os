@@ -735,8 +735,8 @@ class Reconstructor:
         for root, dirs, files in os.walk(self.moduleDir):
                 for f in files:
                     r, ext = os.path.splitext(f)
-                    if ext == '.rmod':
-                        print 'Module: ' + f.replace('.rmod', '') + ' found...'
+                    if ext == '.rmod' or ext == '.smod':
+                        print 'Module: ' + f.replace('.?mod', '') + ' found...'
 
                         modPath = os.path.join(self.moduleDir, f)
 
@@ -875,7 +875,7 @@ class Reconstructor:
             # if not updating, copy to modules dir
             if updating == False:
                 r, ext = os.path.splitext(modulePath)
-                if ext == '.rmod':
+                if ext == '.rmod' or ext == '.smod':
                     installText = _('Installing Module: ')
                     print installText + os.path.basename(modulePath)
                     shutil.copy(modulePath, self.moduleDir)
