@@ -30,7 +30,8 @@ echo $CHROOT_DIRECTORY > /tmp/chroot-dir
 URL_FREE="http://cooperation.gensys.free.fr/mirroir/v0.3.0"
 URL_BERLIOS1="http://download.berlios.de/ciws"
 URL_BERLIOS2="http://download2.berlios.de/ciws"
-VERSION="0.5.1"
+VERSION="0.5.2"
+CASPER_PATH=$(cat /tmp/casper_path)
 
 if [ "$(echo $LANG | grep 'fr')" ]; then
 LANG_UI="FR"
@@ -58,13 +59,26 @@ sleep 2
 }
 #ADD_USER
 
-
+if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ]; then
 echo "
 deb http://ftp.crihan.fr/ubuntu/ hardy restricted main universe multiverse
 deb http://ftp.crihan.fr/ubuntu/ hardy-updates restricted main universe multiverse
 deb http://ftp.crihan.fr/ubuntu/ hardy-security restricted main universe multiverse
 " > /etc/apt/sources.list
-
+else
+echo "
+deb http://ftp.fr.debian.org/debian/ lenny main contrib non-free
+deb-src http://ftp.fr.debian.org/debian/ lenny main contrib 
+# Dépôts Multimédia
+# Dépôts Multimédia
+deb http://www.debian-multimedia.org lenny main non-free
+deb-src http://www.debian-multimedia.org lenny main 
+#Dépots sécurité
+deb http://security.debian.org/ lenny/updates main contrib non-free
+deb-src http://security.debian.org/ lenny/updates main contrib 
+" > /etc/apt/sources.list
+export DEBIAN_FRONTEND="dialog"
+fi
 apt-get update
 apt-get install --yes --force-yes build-essential 
 

@@ -11,7 +11,7 @@ RMOD_DESCRIPTION='Data management portal'
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 LAMPP_DIRECTORY=$(cat /tmp/working-directory)
-DOSSIER_CHROOT=$LAMPP_DIRECTORY"/root"
+DOSSIER_CHROOT=$LAMPP_DIRECTORY"/chroot"
 WWW_DIRECTORY=$DOSSIER_CHROOT"/var/www"
 DL_DIR=$LAMPP_DIRECTORY"/DL"
 BIN_MYSQL="/usr/bin/mysql"

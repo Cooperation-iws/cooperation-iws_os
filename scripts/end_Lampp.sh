@@ -9,7 +9,7 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 APACHE=$(cat /tmp/apache)
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
-
+CASPER_PATH=$(cat /tmp/casper_path)
 
 echo "I: config post install script"
 echo "
@@ -22,20 +22,28 @@ read ok < /dev/tty
 
 chmod +x $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
-echo "I: configuring casper"
-sed -i -e "405s/\/home/\/var/" /usr/share/initramfs-tools/scripts/casper
-sed -i -e "412s/\/home/\/var/" /usr/share/initramfs-tools/scripts/casper
-sed -i -e "13s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/casper
-sed -i -e "15s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/casper
+echo "I: configuring $CASPER_PATH"
+if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ]; then
+sed -i -e "405s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "412s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "13s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "15s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+
+else
+sed -i -e "1210s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "1218s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "14s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "16s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 
 
+fi
 
 
 echo "#!/bin/sh
 
 PREREQ=\"\"
 DESCRIPTION=\"Copying Ciws persistence...\"
-. /scripts/casper-functions
+. /scripts/$CASPER_PATH-functions
 
 prereqs()
 {
@@ -53,16 +61,16 @@ esac
 if [ ! -d /root/var/lib ]; then
 log_begin_msg \"\$DESCRIPTION\"
 echo \"
-rm /etc/rc0.d/*casper* 
-rm /etc/rc6.d/*casper*
+rm /etc/rc0.d/*$CASPER_PATH* 
+rm /etc/rc6.d/*$CASPER_PATH*
 \" >> /root/etc/ciws/share/etc/rc.ciws
 
 cp -a /root/etc/ciws/* /root/var/.
 log_end_msg	
 fi
-" > /usr/share/initramfs-tools/scripts/casper-bottom/00cpvar
+" > /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/00cpvar
 
-chmod +x /usr/share/initramfs-tools/scripts/casper-bottom/00cpvar
+chmod +x /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/00cpvar
 
 
 
@@ -80,8 +88,9 @@ mv /etc/php5 /var/share/etc/
 ln -s /var/share/etc/php5 /etc/php5
 
 fi
-
+if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ]; then
 echo "I: installing usplash theme"
+
 cd /tmp
 wget $URL_FREE/usplash-theme-ciws_0.1-1_i386.deb 
 dpkg -i usplash-theme-ciws_0.1-1_i386.deb 
@@ -96,6 +105,7 @@ cp background.png /usr/share/gdm/themes/Human
 cp logo.png /usr/share/gdm/themes/Human/ubuntu.png
 cp wallpaper.png /usr/share/backgrounds/warty-final-ubuntu.png 
 cp wallpaper.png /usr/share/xfce4/backdrops/xubuntu-jmak.png  1>&2 2>/dev/null
+
 
 echo "I: installing liveusb installer"
 
@@ -131,7 +141,7 @@ Name[fr_BE]=Cooperation-iws
 Exec=firefox http://localhost
 Icon=/usr/share/pixmaps/firefox-3.0.png
 EOT
-
+fi
 
 cat << EOT > /etc/skel/Desktop/PASSWORDS.txt
 Default login / password are : admin /cooperation

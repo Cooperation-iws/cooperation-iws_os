@@ -11,6 +11,7 @@ KERNEL=(${KERNEL[@]})
 NB_KERNEL=$(ls /lib/modules | wc -l)
 NB_KERNEL=$(expr $NB_KERNEL-1)
 mkinitramfs -o /initrd.gz ${KERNEL[$NB_KERNEL]}
+cp /boot/vmlinuz-${KERNEL[$NB_KERNEL]} /vmlinuz
 
 if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
 

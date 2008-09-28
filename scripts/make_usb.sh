@@ -98,11 +98,14 @@ fi
 
 function TRANSFORM()
 {
-
+if [ ! -e "$WORKING_DIRECTORY${INITIAL_REMASTER}/live" ]; then 
 INITRD_VMLINUZ_PATH="casper"
+else
+INITRD_VMLINUZ_PATH="live"
+fi
 
-NOM_INITRD=$(basename $(ls -a $WORKING_DIRECTORY${INITIAL_REMASTER}/$INITRD_VMLINUZ_PATH/initrd.*))
-NOM_VMLINUZ=$(basename $(ls -a $WORKING_DIRECTORY${INITIAL_REMASTER}/$INITRD_VMLINUZ_PATH/vmlinuz))
+NOM_INITRD="initrd.gz"
+NOM_VMLINUZ="vmlinuz"
 
 if [ ! -e "$WORKING_DIRECTORY${INITIAL_REMASTER}/$INITRD_VMLINUZ_PATH/filesystem.squashfs" ]; then 
 echo "
@@ -118,32 +121,36 @@ fi
 
 
 cd "${WORKING_DIRECTORY}${INITIAL_REMASTER}"
-
-cp -rf casper dists install pics pool preseed .disk "${WORKING_DIRECTORY}${USB_REMASTER}/"
+if [ ! -e "$WORKING_DIRECTORY${INITIAL_REMASTER}/live" ]; then 
+cp -rf dists install pics pool preseed .disk "${WORKING_DIRECTORY}${USB_REMASTER}/" 1>&2 2>/dev/null
+else 
+cp -rf doc "${WORKING_DIRECTORY}${USB_REMASTER}/" 1>&2 2>/dev/null
+fi
+cp -rf $INITRD_VMLINUZ_PATH  "${WORKING_DIRECTORY}${USB_REMASTER}/" 
 cp -rf isolinux/* ${WORKING_DIRECTORY}${USB_REMASTER}
-mv ${WORKING_DIRECTORY}${USB_REMASTER}/casper/$NOM_VMLINUZ "${WORKING_DIRECTORY}${USB_REMASTER}/"
-mv ${WORKING_DIRECTORY}${USB_REMASTER}/casper/$NOM_INITRD "${WORKING_DIRECTORY}${USB_REMASTER}/"
+mv ${WORKING_DIRECTORY}${USB_REMASTER}/$INITRD_VMLINUZ_PATH/$NOM_VMLINUZ "${WORKING_DIRECTORY}${USB_REMASTER}/"
+mv ${WORKING_DIRECTORY}${USB_REMASTER}/$INITRD_VMLINUZ_PATH/$NOM_INITRD "${WORKING_DIRECTORY}${USB_REMASTER}/"
 
-cat << EOT > ${WORKING_DIRECTORY}${USB_REMASTER}/syslinux.cfg 
+cat << EOT > ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux.cfg 
 DEFAULT persistent
 GFXBOOT bootlogo
-APPEND  file=/preseed/xubuntu.seed boot=casper initrd=/$NOM_INITRD quiet splash --
+APPEND  file=/preseed/xubuntu.seed boot=$INITRD_VMLINUZ_PATH initrd=/$NOM_INITRD quiet splash --
 LABEL persistent
   menu label ^Try Cooperation-iws with persistent mode
   kernel /$NOM_VMLINUZ
-  append  locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup/layoutcode=${LANGUAGE[3]} console-setup/variantcode=nodeadkeys boot=casper persistent initrd=/$NOM_INITRD root=/dev/ram quiet splash --
+  append  locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup/layoutcode=${LANGUAGE[3]} console-setup/variantcode=nodeadkeys boot=$INITRD_VMLINUZ_PATH persistent initrd=/$NOM_INITRD root=/dev/ram quiet splash --
 LABEL live
   menu label ^Try Cooperation-iws without any change to your computer
   kernel /$NOM_VMLINUZ
-  append  file=/preseed/xubuntu.seed boot=casper initrd=/$NOM_INITRD quiet splash --
+  append  file=/preseed/xubuntu.seed boot=$INITRD_VMLINUZ_PATH initrd=/$NOM_INITRD quiet splash --
 LABEL live-install
   menu label ^Install Cooperation-iws
   kernel /$NOM_VMLINUZ
-  append  file=/preseed/xubuntu.seed boot=casper only-ubiquity initrd=/$NOM_INITRD quiet splash --
+  append  file=/preseed/xubuntu.seed boot=$INITRD_VMLINUZ_PATH only-ubiquity initrd=/$NOM_INITRD quiet splash --
 LABEL check
   menu label ^Check CD for defects
   kernel /$NOM_VMLINUZ
-  append  boot=casper integrity-check initrd=/$NOM_INITRD quiet splash --
+  append  boot=$INITRD_VMLINUZ_PATH integrity-check initrd=/$NOM_INITRD quiet splash --
 LABEL memtest
   menu label Test ^memory
   kernel /mt86plus
@@ -168,7 +175,7 @@ F0 f10.txt
 EOT
 
 
-
+mv ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux.cfg  ${WORKING_DIRECTORY}${USB_REMASTER}/syslinux.cfg 
 
 
 }
@@ -337,6 +344,7 @@ fi
 #on demonte
 if [ -n "$(mount | grep ${USB_KEY}1)" ]; then umount ${USB_KEY}1 ; fi ;
 #on monte la part ext3 /dev/sdx1 de la clé
+mkdir $WORKING_DIRECTORY$USB_REMASTER
 mount -t vfat -o rw,users ${USB_KEY}1 $WORKING_DIRECTORY$USB_REMASTER
 sleep 2
 
@@ -385,7 +393,6 @@ echo "
 "
 LANG_CHOICE_INIT
 FORMAT
-TRANSFORM
 COPIE_LIVE
 echo "
 --------------Cooperation-iws--------------
