@@ -3885,7 +3885,7 @@ class Reconstructor:
 	if self.wTree.get_widget("radiobuttonMirrorTypeBerlios2").get_active() == True:
  	    mirrorWebApp = "B"
 	    mirrorUrl = self.mirrorBerlios2
-	if self.wTree.get_widget("radiobuttonMirrorTypeBerlios1").get_active() == True:
+	if self.wTree.get_widget("radiobuttonMirrorTypeWeb").get_active() == True:
  	    mirrorWebApp = "A"
 	    mirrorUrl = self.mirrorFree
 	fMirrorWebApp=open(os.path.join(self.customDir, "root/tmp/mirroir"), 'w')
