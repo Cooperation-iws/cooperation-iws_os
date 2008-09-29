@@ -1110,8 +1110,6 @@ class Reconstructor:
             setup = True
         elif self.createCustomRoot == True:
             setup = True
-        elif self.createInitrdRoot == True:
-            setup = True
         else:
             # nothing to be done
             setup = False
@@ -1241,10 +1239,12 @@ class Reconstructor:
         if os.path.exists(os.path.join(self.customDir, "chroot")) == False:
             if self.wTree.get_widget("checkbuttonCreateRoot").get_active() == False:
                 rootExists = False
-        if os.path.exists(os.path.join(self.customDir, "initrd")) == False:
-            if self.wTree.get_widget("checkbuttonCreateInitRd").get_active() == False:
-                initrdExists = False
-        workingDirOk = True
+	if os.path.exists(os.path.join(self.customDir, "remaster/casper")) == False:
+		self.casperPath = 'live'
+	else :
+		self.casperPath = 'casper'        
+
+	workingDirOk = True
         if remasterExists == False:
             workingDirOk = False
         if rootExists == False:
@@ -1377,7 +1377,7 @@ class Reconstructor:
                 else:
                     if self.checkWorkingDir() == True:
                         # get ubuntu version
-                        self.loadCdVersion()
+                        #self.loadCdVersion()
                         # load desktop environments
                        
                        
@@ -2692,7 +2692,7 @@ class Reconstructor:
         
 
         # get ubuntu version
-        self.loadCdVersion()
+        #self.loadCdVersion()
         # get current boot options menu text color
         #self.loadBootMenuColor()
         # get current gdm background color
@@ -2845,7 +2845,7 @@ class Reconstructor:
 	scriptCustomSplash += 'rm -r ' + os.path.join(self.customDir, "remaster/isolinux/") + ' \n'
 	scriptCustomSplash += 'wget '+ os.path.join(self.mirrorFree, "isolinux-ciws.tar.gz") + ' \n'  
 	scriptCustomSplash += 'tar -xzf isolinux-ciws.tar.gz -C ' + os.path.join(self.customDir, "remaster/")+' \n'  
-	scriptCustomSplash += 'sed -i "s/boot=casper/boot='+self.casperPath+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")+' \n'  
+	scriptCustomSplash += 'sed -i "s/casper/'+self.casperPath+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")+' \n'  
 	fscriptCustomExec=open(os.path.join(self.customDir, "scriptSplash.sh"), 'w')
         fscriptCustomExec.write(scriptCustomSplash)
         fscriptCustomExec.close()

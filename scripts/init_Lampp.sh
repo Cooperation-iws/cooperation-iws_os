@@ -27,7 +27,7 @@ LAMPP_DIRECTORY="/var"
 echo $LAMPP_DIRECTORY > /tmp/lampp-dir
 CHROOT_DIRECTORY="root"
 echo $CHROOT_DIRECTORY > /tmp/chroot-dir
-URL_FREE="http://cooperation.gensys.free.fr/mirroir/v0.3.0"
+URL_FREE="http://cooperation.gensys.free.fr/mirroir/v0.5"
 URL_BERLIOS1="http://download.berlios.de/ciws"
 URL_BERLIOS2="http://download2.berlios.de/ciws"
 VERSION="0.5.2"

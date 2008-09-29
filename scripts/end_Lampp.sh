@@ -88,6 +88,9 @@ mv /etc/php5 /var/share/etc/
 ln -s /var/share/etc/php5 /etc/php5
 
 fi
+echo "I: preparing for Artwork"
+mkdir /etc/skel/Desktop
+
 if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ]; then
 echo "I: installing usplash theme"
 
@@ -113,7 +116,7 @@ wget $URL_FREE/cooperation-iws-liveusb-0.1.deb
 dpkg -i cooperation-iws-liveusb-0.1.deb
 apt-get -f install --assume-yes --force-yes
 
-mkdir /etc/skel/Desktop
+
 cat << EOT > /etc/skel/Desktop/LiveUsbinstaller.desktop
 [Desktop Entry]
 Version=1.0
@@ -141,6 +144,33 @@ Name[fr_BE]=Cooperation-iws
 Exec=firefox http://localhost
 Icon=/usr/share/pixmaps/firefox-3.0.png
 EOT
+else
+apt-get install --assume-yes --force-yes usplash
+cd /tmp
+wget $URL_FREE/usplash-theme-ciws_0.1-1_i386.deb 
+dpkg -i usplash-theme-ciws_0.1-1_i386.deb 
+update-alternatives --install /usr/lib/usplash/usplash-artwork.so usplash-artwork.so /usr/lib/usplash/usplash-theme-ciws.so 10
+update-alternatives --config usplash-artwork.so
+wget $URL_FREE/background.png
+wget $URL_FREE/logo.png
+wget $URL_FREE/wallpaper.png
+cp wallpaper.png /usr/share/gdm/themes/debian-moreblue-orbit
+sed -i "s/background.svg/wallpaper.png/" /usr/share/gdm/themes/debian-moreblue-orbit/debian-moreblue-orbit.xml
+cp wallpaper.png /usr/share/images/desktop-base/
+rm /etc/alternatives/desktop-background
+ln -s  /usr/share/images/desktop-base/wallpaper.png /etc/alternatives/desktop-background
+rm /etc/alternatives/desktop-splash
+ln -s  /usr/share/images/desktop-base/wallpaper.png /etc/alternatives/desktop-splash
+
+
+echo "I: installing liveusb installer"
+
+wget $URL_FREE/cooperation-iws-liveusb-0.2.deb
+dpkg -i cooperation-iws-liveusb-0.2.deb
+apt-get -f install --assume-yes --force-yes
+
+
+
 fi
 
 cat << EOT > /etc/skel/Desktop/PASSWORDS.txt
