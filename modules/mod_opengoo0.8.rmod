@@ -177,6 +177,7 @@ rm OPENGOO_db.sql
 sed -i "23s/'database_user'/'database_user', '$NOM_OPENGOO'/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/installation/templates/system_config_form.php
 sed -i "28s/'database_pass'/'database_pass', '$OPENGOO_MYSQL_PWD'/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/installation/templates/system_config_form.php
 sed -i "33s/'database_name'/'database_name', '$NOM_OPENGOO'/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/installation/templates/system_config_form.php
+sed -i "17s/gmt/GMT/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/include.php 
 
 
 chown -R www-data $WWW_DIRECTORY/$NOM_OPENGOO/

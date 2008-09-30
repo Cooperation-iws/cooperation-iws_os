@@ -152,7 +152,8 @@ echo "I: create persistent directory"
 mkdir $LAMPP_DIRECTORY/share/
 mkdir $LAMPP_DIRECTORY/share/lampp
 mkdir $LAMPP_DIRECTORY/share/etc
-
+mkdir $LAMPP_DIRECTORY/share/usr
+mkdir $LAMPP_DIRECTORY/share/usr/share
 echo "I: post install script creation"
 echo "#!/bin/bash
 WWW_DIRECTORY=\"/var/www\"

@@ -189,8 +189,8 @@ apt-get install --assume-yes --force-yes rrdtool snmp snmpd
 
 #Cacti config
 
-echo "*/5 * * * * www-data /usr/bin/php $WWW_DIRECTORY/admin/$NOM_CACTI/poller.php > /dev/null 2>&1" >> $DOSSIER_CHROOT/etc/cron.d/cacti
-sudo chmod +x $DOSSIER_CHROOT/etc/cron.d/cacti
+echo "*/5 * * * * www-data /usr/bin/php $WWW_DIRECTORY/admin/$NOM_CACTI/poller.php > /dev/null 2>&1" >> /etc/cron.d/cacti
+sudo chmod +x /etc/cron.d/cacti
 
 #Cacti 
 

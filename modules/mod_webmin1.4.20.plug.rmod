@@ -226,7 +226,12 @@ dpkg -i webmin_1.420_all.deb
 
 /usr/share/webmin/changepass.pl /etc/webmin root $(cat /tmp/passwd.txt)
 
+mv /etc/webmin /var/share/etc/
+mv /usr/share/webmin /var/share/usr/share
 
+ln -s /var/share/etc/webmin /etc/webmin
+
+ln -s /var/share/usr/share/webmin /usr/share/webmin
 
 }
 

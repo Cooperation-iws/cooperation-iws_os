@@ -207,10 +207,12 @@ echo "[Y/n]"
 read r1 < /dev/tty
 
 if [ "$(echo $r1 | awk  '{print $1}')" != "n" ]; then
+
+
 echo "Protect this directory with a password ?"
 echo "[N/y]"
-read r2 < /dev/tty
-if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
+read r3 < /dev/tty
+if [ "$(echo $r3 | awk  '{print $1}')" != "y" ]; then
 echo "[${NOM_SNIF[$count]}]
 	comment = ${NOM_SNIF[$count]}
 	writeable = yes
@@ -230,8 +232,10 @@ echo "[${NOM_SNIF[$count]}]
 smbpasswd -a www-data
 fi
 
-chmod 777 $WWW_DIRECTORY/${NOM_SNIF[$count]}
 fi
+
+chown -R www-data $WWW_DIRECTORY/${NOM_SNIF[$count]}
+
 
 done
 
