@@ -195,7 +195,15 @@ sed -i "s/sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/da
 sed -i "s/root/${NOM_SPHIDER}/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/database.php
 sed -i "4s/\"\"/\"$SPHIDER_MYSQL_PWD\"/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/database.php
 sed -i "4s/admin/$ADMIN_PWD/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/admin/auth.php
-
+sed -i "s/search.php/index.php/g" $WWW_DIRECTORY/admin/$NOM_SPHIDER/admin/templates/standard/search_result.html
+sed -i "s/search.php/index.php/g" $WWW_DIRECTORY/admin/$NOM_SPHIDER/admin/templates/standard/search_form.html
+sed -i "66G" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/search_form.html
+sed -i "66G" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/search_form.html
+sed -i "66G" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/search_form.html
+sed -i "66G" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/search_form.html
+sed -i "67s/^/\$url = str_replace ('localhost', \$HTTP_SERVER_VARS[\"SERVER_NAME\"], \$url);/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/search_form.html
+sed -i "68s/^/\$url2 = str_replace ('localhost', \$HTTP_SERVER_VARS[\"SERVER_NAME\"], \$url2);/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/search_form.html
+echo "#dummy file" > $WWW_DIRECTORY/admin/$NOM_SPHIDER/admin/index.html
 
 chown -R www-data $WWW_DIRECTORY/admin/$NOM_SPHIDER/
 
@@ -216,7 +224,7 @@ function CREATE_WUI
 {
 echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_SPHIDER/\" >$NOM_SPHIDER</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
-echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_SPHIDER/admin/\" >$NOM_SPHIDER</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_SPHIDER/admin/admin.php\" >$NOM_SPHIDER</a><br>
 " >> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________
