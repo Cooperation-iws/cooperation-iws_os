@@ -1,0 +1,223 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='OpenXchange6.6.0'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Egroupware'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+#VARIABLES
+#MYSQL PASSWORD
+OPENXCHANGE_MYSQL_PWD="OPENXCHANGE_MYSQL_PWD"
+HOSTNAME="127.0.0.1"
+DOMAIN="ciws.com"
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+
+
+apt-get autoremove --assume-yes --force-yes java-gcj-compat
+apt-get autoremove --assume-yes --force-yes gcj
+
+ln -s / /cow
+
+echo "
+deb http://download.opensuse.org/repositories/server:/OX:/ox6/xUbuntu_8.04/ /
+" >> /etc/apt/sources.list
+aptitude update
+
+aptitude install -y mysql-server  open-xchange-admin-client \
+open-xchange-admin-doc open-xchange-admin-plugin-hosting-doc \
+open-xchange-admin-plugin-hosting open-xchange-admin-soap open-xchange-admin \
+open-xchange-authentication-database open-xchange-axis2 open-xchange-cache \
+open-xchange-charset open-xchange-common open-xchange-configjump-generic \
+open-xchange-configread open-xchange-control open-xchange-data-conversion-ical4j \
+open-xchange-global open-xchange-group-managerequest open-xchange-gui \
+open-xchange-i18n open-xchange-imap open-xchange-jcharset open-xchange-mailfilter \
+open-xchange-management open-xchange-monitoring \
+open-xchange-passwordchange-database open-xchange-passwordchange-servlet \
+open-xchange-push-udp open-xchange-resource-managerequest open-xchange-server \
+open-xchange-sessiond open-xchange-settings-extensions open-xchange-smtp \
+open-xchange-spamhandler-default open-xchange
+
+
+
+
+
+ln -s /etc/apache2/mods-available/expires.load /etc/apache2/mods-enabled/expires.load 2>/dev/null
+ln -s /etc/apache2/mods-available/deflate.load /etc/apache2/mods-enabled/deflate.load 2>/dev/null
+#cp $DL_DIR/hyperion-install/config/apache/default /etc/apache2/sites-available/default
+#cp $DL_DIR/hyperion-install/config/apache/ox.conf /etc/apache2/conf.d/ox.conf
+#cp $DL_DIR/hyperion-install/config/apache/workers.properties /etc/libapache2-mod-jk/workers.properties
+awk '{gsub("hyperion.example.com", "'"$DOMAIN"'", $0); print > FILENAME}' /etc/apache2/sites-available/default
+awk '{gsub("oxadmin@example.com", "oxadmin@" "'"$DOMAIN"'", $0); print > FILENAME}' /etc/apache2/sites-available/default
+
+
+
+
+
+apache2ctl restart
+
+
+echo "GRANT ALL PRIVILEGES ON *.* TO 'openexchange'@'localhost' IDENTIFIED BY '$OPENXCHANGE_MYSQL_PWD';" > /tmp/openXchange_pri.sql
+$BIN_MYSQL -u root < /tmp/openXchange_pri.sql mysql
+
+sed -i "3s/SHA/CRYPT/" /opt/open-xchange/etc/admindaemon/User.properties
+
+/opt/open-xchange/sbin/initconfigdb --configdb-pass=$OPENXCHANGE_MYSQL_PWD
+
+
+
+
+
+/opt/open-xchange/sbin/oxinstaller --servername=oxserver --configdb-pass=$OPENXCHANGE_MYSQL_PWD --master-pass=admin_master_password 
+
+/etc/init.d/open-xchange-groupware restart
+/etc/init.d/open-xchange-admin start
+
+
+a2enmod proxy
+a2enmod proxy_ajp
+a2enmod expires
+a2enmod deflate
+a2enmod headers
+
+echo "
+<Proxy *>
+Order deny,allow
+allow from all
+</Proxy>
+
+ProxyPass /axis2 ajp://127.0.0.1:8009/axis2 smax=0 ttl=60 retry=5
+ProxyPass /ajax ajp://127.0.0.1:8009/ajax smax=0 ttl=60 retry=5
+ProxyPass /servlet ajp://127.0.0.1:8009/servlet smax=0 ttl=60 retry=5
+ProxyPass /infostore ajp://127.0.0.1:8009/infostore smax=0 ttl=60 retry=5
+" > /etc/apache2/conf.d/proxy_ajp.conf
+
+sed -i "14G" /etc/apache2/sites-available/default
+sed -i "14G" /etc/apache2/sites-available/default
+#sed -i "15s/^/RedirectMatch \^\/\$ \/ox6/" /etc/apache2/sites-available/default
+sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
+
+echo '
+ExpiresActive On
+	ExpiresByType image/gif "access plus 23 hours"
+	ExpiresByType image/png "access plus 23 hours"
+	ExpiresByType image/jpg "access plus 23 hours"
+	ExpiresByType image/jpeg "access plus 23 hours"
+	ExpiresByType text/javascript "access plus 23 hours"
+	ExpiresByType text/css "access plus 23 hours"
+	ExpiresByType text/html "access plus 23 hours"
+	ExpiresByType application/x-javascript "access plus 23 hours"
+	<Files ~ "\.(js|css|gif|jpe?g|png)$">
+		Header append Cache-Control "public"
+	</Files>
+
+ 	DeflateFilterNote ratio
+	AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/x-javascript
+	BrowserMatch ^Mozilla/4 gzip-only-text/html
+	BrowserMatch ^Mozilla/4\.0[678] no-gzip
+	BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+	Header append Vary User-Agent env=!dont-vary
+</VirtualHost>
+' >> /etc/apache2/sites-available/default
+
+/etc/init.d/apache2 restart
+/etc/init.d/open-xchange-groupware restart
+
+/opt/open-xchange/sbin/registerserver -n oxserver -A oxadminmaster -P admin_master_password
+
+mkdir /var/opt/filestore
+chown open-xchange:open-xchange /var/opt/filestore
+
+/opt/open-xchange/sbin/registerfilestore -A oxadminmaster -P admin_master_password \
+-t file:///var/opt/filestore
+
+/opt/open-xchange/sbin/registerdatabase -A oxadminmaster -P admin_master_password \
+-n oxdatabase -p $OPENXCHANGE_MYSQL_PWD -m true
+
+echo "-----------------Cooperation-iws----------------------------"
+echo "-----------Configure Admin password--------------------"
+echo "-------Else default: cooperation will be used------------"
+echo "[N/y]"
+read r1 < /dev/tty
+if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
+DEFAULT_PWD="cooperation"
+else
+echo "-------Enter the email address the scan reports will be sent on----------"
+read DEFAULT_PWD < /dev/tty
+fi
+
+echo "-----------------Cooperation-iws----------------------------"
+echo "-----------Configure Admin email address--------------------"
+echo "-------Else default: admin@ciws.com will be used------------"
+echo "[N/y]"
+read r1 < /dev/tty
+if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
+MAIL_REPORT="admin@ciws.com"
+else
+echo "-------Enter the email address the scan reports will be sent on----------"
+read MAIL_REPORT < /dev/tty
+fi
+
+/opt/open-xchange/sbin/createcontext -A oxadminmaster -P admin_master_password -c 1 \
+-u oxadmin -d "Context Admin" -g Admin -s User -p admin_password -L defaultcontext \
+-e oxadmin@localhost -q 1024 --access-combination-name=all 
+
+/opt/open-xchange/sbin/createuser -c 1 -A oxadmin -P admin_password -u admin \
+-d "Admin Ciws" -g Admin -s Ciws -p $DEFAULT_PWD -e $MAIL_REPORT --imaplogin $MAIL_REPORT --imapserver 127.0.0.1 --smtpserver 127.0.0.1
+
+
+
+
+mv /opt/open-xchange /var/share/opt/
+
+ln -s /var/share/opt/open-xchange /opt/open-xchange
+
+
+
+/etc/init.d/open-xchange-admin restart
+/etc/init.d/open-xchange-groupware restart
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+echo "$RMOD_DESCRIPTION | <a href=\"/ox6\" >Open-Xchange</a><br>
+" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+echo "I: Install OpenXchange"
+CREATE_WUI
+INSTALL
+echo "I: End of install OpenXchange"

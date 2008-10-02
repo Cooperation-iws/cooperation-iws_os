@@ -138,15 +138,15 @@ APPEND  file=/preseed/xubuntu.seed boot=$INITRD_VMLINUZ_PATH initrd=/$NOM_INITRD
 LABEL persistent
   menu label ^Try Cooperation-iws with persistent mode
   kernel /$NOM_VMLINUZ
-  append  locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup/layoutcode=${LANGUAGE[3]} console-setup/variantcode=nodeadkeys boot=$INITRD_VMLINUZ_PATH persistent initrd=/$NOM_INITRD root=/dev/ram quiet splash --
+  append  locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup/layoutcode=${LANGUAGE[3]} keyb=${LANGUAGE[3]} console-setup/variantcode=nodeadkeys boot=$INITRD_VMLINUZ_PATH persistent initrd=/$NOM_INITRD root=/dev/ram quiet splash --
 LABEL live
   menu label ^Try Cooperation-iws without any change to your computer
   kernel /$NOM_VMLINUZ
-  append  file=/preseed/xubuntu.seed boot=$INITRD_VMLINUZ_PATH initrd=/$NOM_INITRD quiet splash --
+  append  file=/preseed/xubuntu.seed boot=$INITRD_VMLINUZ_PATH initrd=/$NOM_INITRD locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup/layoutcode=${LANGUAGE[3]} keyb=${LANGUAGE[3]} quiet splash --
 LABEL live-install
   menu label ^Install Cooperation-iws
   kernel /$NOM_VMLINUZ
-  append  file=/preseed/xubuntu.seed boot=$INITRD_VMLINUZ_PATH only-ubiquity initrd=/$NOM_INITRD quiet splash --
+  append  file=/preseed/xubuntu.seed boot=$INITRD_VMLINUZ_PATH only-ubiquity initrd=/$NOM_INITRD locale=${LANGUAGE[4]} bootkbd=${LANGUAGE[3]} console-setup/layoutcode=${LANGUAGE[3]} keyb=${LANGUAGE[3]} quiet splash --
 LABEL check
   menu label ^Check CD for defects
   kernel /$NOM_VMLINUZ
@@ -176,8 +176,6 @@ EOT
 
 
 mv ${WORKING_DIRECTORY}${USB_REMASTER}/isolinux.cfg  ${WORKING_DIRECTORY}${USB_REMASTER}/syslinux.cfg 
-
-
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_TRANSFORM__________________________________________

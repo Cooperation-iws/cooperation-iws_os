@@ -356,6 +356,8 @@ class Reconstructor:
 	self.wTree.get_widget("comboboxDebianLiveMirrors").set_active(0)
         self.wTree.get_widget("comboboxUbuntuMirrors").set_active(0)
         self.wTree.get_widget("comboboxDebianLiveMirrors1").set_active(0)
+        self.wTree.get_widget("comboboxLiveCDKeybLang").set_active(0)
+        self.wTree.get_widget("comboboxLiveCDKeybLang1").set_active(0)
        
        
 
@@ -1239,10 +1241,19 @@ class Reconstructor:
         if os.path.exists(os.path.join(self.customDir, "chroot")) == False:
             if self.wTree.get_widget("checkbuttonCreateRoot").get_active() == False:
                 rootExists = False
-	if os.path.exists(os.path.join(self.customDir, "remaster/casper")) == False:
+	if os.path.exists(os.path.join(self.customDir, "remaster/dists")) == False:
 		self.casperPath = 'live'
+		self.wTree.get_widget("hbox701").hide()
+		self.wTree.get_widget("hbox301").show()
+		self.wTree.get_widget("hbox702").show()
+		self.wTree.get_widget("labelLiveCDKeybLang3").show()
+
 	else :
-		self.casperPath = 'casper'        
+		self.casperPath = 'casper'
+	    	self.wTree.get_widget("hbox301").hide()
+		self.wTree.get_widget("hbox701").show()
+		self.wTree.get_widget("hbox702").hide()
+		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
 
 	workingDirOk = True
         if remasterExists == False:
@@ -1895,7 +1906,7 @@ class Reconstructor:
 
     # Sets live cd information (username, full name, hostname) for live cd
     def setLiveCdInfo(self, username, userFullname, userPassword, hostname):
-        
+	if self.casperPath == 'casper': 
 	    if username != '':
 		    print ('Username: ' + username)
 		    sed = 'sed -i \'5s/ubuntu/' + username + '/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPath + ".conf")
@@ -1910,7 +1921,7 @@ class Reconstructor:
 		    sed = 'sed -i \'s/USERFULLNAME=\"Live session user\"/USERFULLNAME=\"' + userFullname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPath + ".conf") 
 		    cmd = commands.getoutput(sed)
 	 	    #print ('Sed User Full Name: \n ' + sed + '\n' + cmd)
-	    	    sed = 'sed -i \'s/USERFULLNAME=\"Live session user\"/USERFULLNAME=\"' + userFullname + '\"/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath )
+	    	    #sed = 'sed -i \'s/USERFULLNAME=\"Live session user\"/USERFULLNAME=\"' + userFullname + '\"/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath )
 		    cmd = commands.getoutput(sed)
 	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
 	    
@@ -1930,6 +1941,7 @@ class Reconstructor:
 	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
 	    	   
 		    #cmd = commands.getoutput('chmod +r+x '+ os.path.join(self.customDir, "chroot/etc/casper.conf"))	
+       
 
 	    
            
@@ -1971,7 +1983,63 @@ class Reconstructor:
  	        #print ('Sed 1 autologin:\n ' + sed + '\n' + cmd)
 		
             
-        
+        else:
+	    if username != '':
+		    print ('Username: ' + username)
+		    sed = 'sed -i \'3s/user/' + username + '/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPath + ".conf")
+		    cmd = commands.getoutput(sed)
+	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
+	    	    sed = 'sed -i \'s/USERNAME=\"user\"/USERNAME=\"' + username + '\"/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath)
+		    cmd = commands.getoutput(sed)
+	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
+	    
+	    if userFullname != '':
+		    print ('User Full Name: ' + userFullname)
+		    sed = 'sed -i \'s/USERFULLNAME=\"Debian Live user\"/USERFULLNAME=\"' + userFullname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPath + ".conf") 
+		    cmd = commands.getoutput(sed)
+	 	    #print ('Sed User Full Name: \n ' + sed + '\n' + cmd)
+	    	    sed = 'sed -i \'s/USERFULLNAME=\"Live user\"/USERFULLNAME=\"' + userFullname + '\"/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath )
+		    cmd = commands.getoutput(sed)
+	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
+	    
+	    if hostname != '':
+		    print ('Hostname: ' + hostname)
+		    sed = 'sed -i \'s/HOSTNAME=\"debian\"/HOSTNAME=\"' + hostname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPath + ".conf") 
+		    cmd = commands.getoutput(sed)
+	 	    #print ('Sed 1 Hostname: \n ' + sed + '\n' + cmd)
+		    #print ('Sed 2 Hostname: \n ' + sed + '\n' + cmd)
+		    sed = 'sed -i \'s/HOSTNAME=\"host\"/HOSTNAME=\"' + hostname + '\"/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath )
+		    cmd = commands.getoutput(sed)
+	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
+	    	   
+		    #cmd = commands.getoutput('chmod +r+x '+ os.path.join(self.customDir, "chroot/etc/casper.conf"))	
+       
+
+	    
+           
+            
+            
+            if userPassword != '':
+                #print ('Password: ' + l)
+                passwordText = _('Setting Live CD Password... ')
+                print passwordText
+                #print "DEBUG: Password: " + userPassword + " des Hash: " + commands.getoutput('echo ' + userPassword + ' | mkpasswd -s -H des')
+		crypt_pass = commands.getoutput('mkpasswd -s ' + userPassword )			
+		while  commands.getoutput(' echo  ' + crypt_pass + ' | grep "[/.]" ') != '' :
+               		crypt_pass = commands.getoutput('mkpasswd -s ' + userPassword )
+		sed = 'sed -i \'s/8Ab05sVQ4LLps/' + crypt_pass +'/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath + "-bottom/10adduser") 
+		cmd = commands.getoutput(sed)
+ 	        #print ('Sed 1 password:\n ' + sed + '\n' + cmd)
+		#sed = 'sed -i \'s/set passwd\/root-password-crypted \*/set passwd\/root-password-crypted ${user_crypted}/\' '+ os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath + "-bottom/10adduser")  
+		#cmd = commands.getoutput(sed)
+ 	       	sed = 'sed -i \'s/ NOPASSWD://\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath + "-bottom/10adduser") 
+		cmd = commands.getoutput(sed)
+                
+            
+	    if self.wTree.get_widget("checkbuttonDisableAutologin").get_active() == True:
+		sed = 'sed -i \'s/true/false/g\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath + "-bottom/15autologin") 
+		cmd = commands.getoutput(sed)
+ 	 	
 
     # Burns ISO
     def burnIso(self):
@@ -2340,7 +2408,7 @@ class Reconstructor:
             self.wTree.get_widget("tableBuildUsb").show()
         else:
             # hide filename entry
-            self.wTree.get_widget("tableBuildUsb").hide()
+            caself.wTree.get_widget("tableBuildUsb").hide()
 
   
  
@@ -2613,10 +2681,6 @@ class Reconstructor:
             # copy remaster files
             os.popen('rsync -at --del ' + self.mountDir + '/ \"' + os.path.join(self.customDir, "remaster") + '\"')
             print _("Finished copying files...")
-	    if os.path.exists(os.path.join(self.customDir, "remaster/casper")) == False:
-		self.casperPath = 'live'
-	    else :
-		self.casperPath = 'casper'
 	    
 	    
 	
@@ -2725,6 +2789,8 @@ class Reconstructor:
         os.popen('mount -o loop \"' + self.isoFilename + '\" ' + os.path.join(self.customDir, "remaster"))
 
     def setupDebianLive(self):
+	debMirror = self.wTree.get_widget("comboboxDebianLiveMirrors").get_active_text() 
+	keybLang = self.wTree.get_widget("comboboxLiveCDKeybLang").get_active_text()
 	lhConfig = "lh_config "
 	if re.search('Smallest',self.DebianLiveType): 
 		lhConfig += "--bootstrap-flavour minimal "
@@ -2736,7 +2802,7 @@ class Reconstructor:
 		lhConfig += "-p xfce-desktop "
 	elif re.search('Full Gnome',self.DebianLiveType):
 		lhConfig += "-p gnome-desktop "
-    	lhConfig += '--distribution lenny --linux-flavours "686" --mirror-bootstrap "http://ftp.fr.debian.org/debian/" --mirror-chroot "http://ftp.fr.debian.org/debian/" --mirror-binary "http://ftp.fr.debian.org/debian/" --apt-options "--yes  --force-yes" '
+    	lhConfig += '--distribution lenny --linux-flavours "686" --mirror-bootstrap "' + debMirror + '" --mirror-chroot "' + debMirror + '" --mirror-binary "' + debMirror + '" --apt-options "--yes  --force-yes" --bootappend-live "keyb=' + keybLang + '" '
 	
 	scriptDebianLive = 'echo "I: Creating Debian Live CD Linux flavour ' + self.DebianLiveType + '" \n'
 	scriptDebianLive += 'echo "' + lhConfig + '"\n'
@@ -2772,6 +2838,11 @@ class Reconstructor:
 		    userFull = self.wTree.get_widget("entryLiveCdUserFullname").get_text()
 		    password = self.wTree.get_widget("entryLiveCdUserPassword").get_text()
 		    host = self.wTree.get_widget("entryLiveCdHostname").get_text()
+		    if self.casperPath == 'casper':
+			debMirror= self.wTree.get_widget("comboboxUbuntuMirrors").get_active_text() 
+		    else:
+			debMirror= self.wTree.get_widget("comboboxDebianLiveMirrors1").get_active_text()
+		    	keyLang = self.wTree.get_widget("comboboxLiveCDKeybLang1").get_active_text()
 		    # set live cd info
 		    self.setLiveCdInfo(username=user, userFullname=userFull, userPassword=password, hostname=host)
 	 	    
@@ -2838,7 +2909,11 @@ class Reconstructor:
         fcasper=open(os.path.join(self.customDir, "chroot/tmp/casper_path"), 'w')
 	fcasper.write(self.casperPath)
 	fcasper.close()  
-	
+	fDebMirror=open(os.path.join(self.customDir, "chroot/tmp/deb_mirror_path"), 'w')
+	fDebMirror.write(debMirror)
+	fDebMirror.close()
+
+  
 	#Splash screen
 	scriptCustomSplash = '#!/bin/sh\n\n'
 	scriptCustomSplash += 'cd /tmp\n'
@@ -2846,6 +2921,8 @@ class Reconstructor:
 	scriptCustomSplash += 'wget '+ os.path.join(self.mirrorFree, "isolinux-ciws.tar.gz") + ' \n'  
 	scriptCustomSplash += 'tar -xzf isolinux-ciws.tar.gz -C ' + os.path.join(self.customDir, "remaster/")+' \n'  
 	scriptCustomSplash += 'sed -i "s/casper/'+self.casperPath+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")+' \n'  
+	if self.casperPath == 'live':
+		scriptCustomSplash += 'sed -i "s/initrd=\/'+self.casperPath+'\/initrd.gz/initrd=\/'+self.casperPath+'\/initrd.gz keyb='+keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")+' \n' 
 	fscriptCustomExec=open(os.path.join(self.customDir, "scriptSplash.sh"), 'w')
         fscriptCustomExec.write(scriptCustomSplash)
         fscriptCustomExec.close()

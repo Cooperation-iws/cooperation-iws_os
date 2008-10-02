@@ -32,6 +32,8 @@ URL_BERLIOS1="http://download.berlios.de/ciws"
 URL_BERLIOS2="http://download2.berlios.de/ciws"
 VERSION="0.5.2"
 CASPER_PATH=$(cat /tmp/casper_path)
+DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
+
 
 if [ "$(echo $LANG | grep 'fr')" ]; then
 LANG_UI="FR"
@@ -61,19 +63,18 @@ sleep 2
 
 if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ]; then
 echo "
-deb http://ftp.crihan.fr/ubuntu/ hardy restricted main universe multiverse
-deb http://ftp.crihan.fr/ubuntu/ hardy-updates restricted main universe multiverse
-deb http://ftp.crihan.fr/ubuntu/ hardy-security restricted main universe multiverse
+deb $DEB_MIRROR_PATH/ hardy restricted main universe multiverse
+deb $DEB_MIRROR_PATH/ hardy-updates restricted main universe multiverse
+deb $DEB_MIRROR_PATH/ hardy-security restricted main universe multiverse
 " > /etc/apt/sources.list
 else
 echo "
-deb http://ftp.fr.debian.org/debian/ lenny main contrib non-free
-deb-src http://ftp.fr.debian.org/debian/ lenny main contrib 
-# Dépôts Multimédia
-# Dépôts Multimédia
-deb http://www.debian-multimedia.org lenny main non-free
+deb $DEB_MIRROR_PATH/ lenny main contrib non-free
+deb-src $DEB_MIRROR_PATH/ lenny main contrib 
+#Multimedia
+deb http://www.debian-multimedia.org lenny main 
 deb-src http://www.debian-multimedia.org lenny main 
-#Dépots sécurité
+#Security
 deb http://security.debian.org/ lenny/updates main contrib non-free
 deb-src http://security.debian.org/ lenny/updates main contrib 
 " > /etc/apt/sources.list
@@ -154,6 +155,7 @@ mkdir $LAMPP_DIRECTORY/share/lampp
 mkdir $LAMPP_DIRECTORY/share/etc
 mkdir $LAMPP_DIRECTORY/share/usr
 mkdir $LAMPP_DIRECTORY/share/usr/share
+mkdir $LAMPP_DIRECTORY/share/opt
 echo "I: post install script creation"
 echo "#!/bin/bash
 WWW_DIRECTORY=\"/var/www\"

@@ -74,12 +74,10 @@ tar -xzf postfixadmin-2.2.1.1.tar.gz
 mv postfixadmin-2.2.1.1 postfixadmin
 
 cd $DL_DIR
-wget $URL_FREE/clam_webmin_mod.tar.gz
-tar -xzf clam_webmin_mod.tar.gz -C /usr/share/webmin
+wget http://labs.libre-entreprise.org/frs/download.php/622/wbmclamav-0.9.0.wbm.gz
 
 cd $DL_DIR
-wget $URL_FREE/mailscanner_webmin_mod.tar.gz
-tar -xzf mailscanner_webmin_mod.tar.gz -C /usr/share/webmin
+wget http://surfnet.dl.sourceforge.net/sourceforge/msfrontend/webmin-module-1.1-4.wbm
 
 
 }
@@ -99,12 +97,10 @@ tar -xzf postfixadmin-2.2.1.1.tar.gz
 mv postfixadmin-2.2.1.1 postfixadmin
 
 cd $DL_DIR
-wget $URL_FREE/clam_webmin_mod.tar.gz
-tar -xzf clam_webmin_mod.tar.gz -C /usr/share/webmin
+wget $URL_FREE/wbmclamav-0.9.0.wbm.gz
 
 cd $DL_DIR
-wget $URL_FREE/mailscanner_webmin_mod.tar.gz
-tar -xzf mailscanner_webmin_mod.tar.gz -C /usr/share/webmin
+wget $URL_FREE/webmin-module-1.1-4.wbm
 
 
 
@@ -211,7 +207,7 @@ sed -i "31s/false/true/" $WWW_DIRECTORY/admin/$POSTFIXADMIN/config.inc.php
 
 
 
-apt-get install --assume-yes --force-yes postfix postfix-mysql squirrelmail squirrelmail-locales php-pear php5-cli mailscanner clamav-daemon libdate-manip-perl tnef unrar unzip pyzor razor mailutils
+apt-get install --assume-yes --force-yes postfix postfix-mysql mailscanner clamav-daemon libdate-manip-perl tnef unrar unzip pyzor razor mailutils clamav-freshclam
 
 
 cat << EOT > /etc/postfix/main.cf
@@ -406,31 +402,6 @@ sed -i "92s/^/password_query = SELECT username as user, password FROM mailbox WH
 chmod 600 /etc/dovecot/*.conf
 chown vmail /etc/dovecot/*.conf
 
-sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
-cat << EOT >> /etc/apache2/sites-available/default
-Alias /Squirrelmail /usr/share/squirrelmail
-
-<Directory /usr/share/squirrelmail>
-  Options Indexes FollowSymLinks
-  <IfModule mod_php4.c>
-    php_flag register_globals off
-  </IfModule>
-  <IfModule mod_php5.c>
-    php_flag register_globals off
-  </IfModule>
-  <IfModule mod_dir.c>
-    DirectoryIndex index.php
-  </IfModule>
-
-  # access to configtest is limited by default to prevent information leak
-  <Files configtest.php>
-    order deny,allow
-    deny from all
-    allow from 127.0.0.1
-  </Files>
-</Directory>
-</VirtualHost>
-EOT
 
 
 postalias /etc/aliases
@@ -439,17 +410,17 @@ echo "
 #Postfix hack
 postalias /etc/aliases
 rm /var/vmail/*/*/dovecot.index.log
+rm /var/vmail/*/*/.INBOX.Trash/dovecot.index.log
+rm /var/vmail/*/*/.INBOX.Sent/dovecot.index.log
+rm /var/vmail/*/*/.INBOX.Drafts/dovecot.index.log
 /etc/init.d/postfix restart
 /etc/init.d/dovecot restart
 
 " >> /etc/rc.local
 
-squirrelmail-configure
 
 
-##Clamav configuration
 
-freshclam
 
 
 
@@ -1651,7 +1622,7 @@ Multiple Headers = append
 # Remember you can use $HOSTNAME in here, so you might want to set it to
 # Hostname = the %org-name% ($HOSTNAME) MailScanner
 # This can also be the filename of a ruleset.
-Hostname = the %org-name% ($HOSTNAME) MailScanner
+Hostname = the %org-name% (\$HOSTNAME) MailScanner
 
 # If this is "no", then (as far as possible) messages which have already
 # been processed by another MailScanner server will not have the clean
@@ -2735,10 +2706,73 @@ Lock Type =
 Minimum Code Status = supported
 EOT
 
-##Refresh webmin cache
-rm /etc/webmin/module.infos.cache 
 
-mkdir /etc/webmin/clamav
+
+sed -i "s/#run_mailscanner=1/run_mailscanner=1/" /etc/default/mailscanner
+
+chown postfix:postfix /var/spool/MailScanner/incoming
+chown postfix:postfix /var/spool/MailScanner/quarantine
+
+##Clamav configuration
+
+
+
+
+mv /etc/clamav /var/share/etc/
+
+ln -s /var/share/etc/clamav /etc/clamav
+
+
+mv /etc/MailScanner /var/share/etc/
+
+ln -s /var/share/etc/MailScanner /etc/MailScanner
+
+mv /etc/postfix /var/share/etc/
+
+ln -s /var/share/etc/postfix /etc/postfix
+
+mv /etc/dovecot /var/share/etc/
+
+ln -s /var/share/etc/dovecot /etc/dovecot
+
+
+freshclam
+
+
+
+
+/etc/init.d/apache2 restart
+/etc/init.d/clamav-daemon restart
+/etc/init.d/dovecot restart
+/etc/init.d/postfix restart
+/etc/init.d/mailscanner restart
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+echo "$RMOD_DESCRIPTION | <a href=\"/admin/$POSTFIXADMIN\" >$POSTFIXADMIN</a><br>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+
+echo "
+
+#Mailserver
+
 cat << EOT > /etc/webmin/clamav/config
 clamav_quarantine=/var/lib/amavis/virusmails
 clamav_clamav_log=/var/log/clamav/clamav.log
@@ -2758,8 +2792,8 @@ clamav_refresh_use_cron=0
 clamav_sys_group=adm
 EOT
 
-mkdir /etc/webmin/mailscanner
-cat << EOT > /etc/webmin/mailscanner
+
+cat << EOT > /etc/webmin/mailscanner/config
 start_cmd=/etc/init.d/MailScanner start
 pidfile=/var/run/MailScanner.pid
 bindir=/usr/sbin/
@@ -2767,66 +2801,17 @@ mailscanner_config=/etc/MailScanner/MailScanner.conf
 mailscanner_path=/usr/sbin/MailScanner
 stop_cmd=/etc/init.d/mailscanner stop
 EOT
-
-sed -i "s/#run_mailscanner=1/run_mailscanner=1/" /etc/default/mailscanner
-
-chown postfix:postfix /var/spool/MailScanner/incoming
-chown postfix:postfix /var/spool/MailScanner/quarantine
-
-mv /etc/clamav /var/share/etc/
-
-ln -s /var/share/etc/clamav /etc/clamav
-
-
-mv /etc/MailScanner /var/share/etc/
-
-ln -s /var/share/etc/MailScanner /etc/MailScanner
-
-mv /etc/postfix /var/share/etc/
-
-ln -s /var/share/etc/postfix /etc/postfix
-
-mv /etc/dovecot /var/share/etc/
-
-ln -s /var/share/etc/dovecot /etc/dovecot
-
-mv /usr/share/squirrelmail /var/share/
-
-ln -s /var/share/squirrelmail /usr/share/squirrelmail
-
-
-
-
-
-
-/etc/init.d/apache2 restart
-/etc/init.d/clamav-daemon start
-/etc/init/d/mailscanner start
-/etc/init.d/postfix restart
-/etc/init.d/dovecot restart
-
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
 }
-#_______________________________________________________________________________________________
-#________________________________________FIN_INSTALL____________________________________________
 
 #_______________________________________________________________________________________________
-#________________________________________CREATE_WUI_____________________________________________
-
-function CREATE_WUI
-{
-echo "$RMOD_DESCRIPTION | <a href=\"/Squirrelmail\" >Squirrelmail</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
-echo "$RMOD_DESCRIPTION | <a href=\"/admin/$POSTFIXADMIN\" >$POSTFIXADMIN</a><br>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CREATE_WUI_________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Mail server"
 CHOICE_LANG
 CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
-
+CREATE_INSTALL_SCRIPT
 echo "I: End of install Mail server"
