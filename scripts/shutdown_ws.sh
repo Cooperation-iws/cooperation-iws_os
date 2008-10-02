@@ -110,9 +110,9 @@ echo "I: config rc.local"
 
 echo "#!/bin/bash
 
-" > /var/share/etc/rc.ciws
+" > /var/share/etc/rc.ciws > /dev/null 2>&1 
 
-chmod +x /var/share/etc/rc.ciws
+chmod +x /var/share/etc/rc.ciws > /dev/null 2>&1 
 
 echo "
 /var/share/etc/rc.ciws
