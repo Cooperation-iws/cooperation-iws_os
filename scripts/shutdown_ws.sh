@@ -19,7 +19,10 @@ echo "I: Configuring cooperation-iws wui"
 echo "<?php include('cooperation-wui.header.php'); ?>
 
 <center>
-<img src=\"cooperation.header.jpg\"><br><br>
+<img src=\"cooperation.header.jpg\"></center><br><br>
+<?php include('Sphider/index.php'); ?>
+<?php if ( !isset(\$_GET['query'])) {?>
+<center>
 " > $WWW_DIRECTORY/index.php
 
 cat $WWW_DIRECTORY/cooperation-wui.frame.php | sort | sed '/^$/d' | sed "s/^/<hr width=\"10%\">/" | sed "s/000Cooperation-iws/Cooperation-iws/">> $WWW_DIRECTORY/index.php
@@ -28,6 +31,10 @@ echo "
 <hr width=\"20%\">
 <a href=\"/admin\">Admin</a><br>
 </center>
+<?php } else {?>
+<hr width=\"20%\">
+<center><h1><a href=\"/\">Home</a></h1></center><br>
+<?php } ?>
 
 " >> $WWW_DIRECTORY/index.php
 

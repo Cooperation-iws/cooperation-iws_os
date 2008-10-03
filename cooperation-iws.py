@@ -1843,7 +1843,7 @@ class Reconstructor:
             os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
             os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
 	    # HACK: create temporary script for chrooting
-            scr = '#!/bin/sh\n#\n#\t(c) cooperation-iws, 2008\n#\nchroot ' + os.path.join(self.customDir, "root") + " /var/share/lampp/config_post_install.sh" + '\n'
+            scr = '#!/bin/sh\n#\n#\t(c) cooperation-iws, 2008\n#\nchroot ' + os.path.join(self.customDir, "chroot") + " /var/share/lampp/config_post_install.sh" + '\n'
             fchroot = open(os.path.join(self.customDir, "scriptPostInstall.sh"), 'w')
             fchroot.write(scr)
             fchroot.close()
@@ -2935,9 +2935,11 @@ class Reconstructor:
 	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init_Lampp.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'end_Lampp.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'shutdown_ws.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
+ 	scriptCustomExec += 'cp -r ' + self.scriptDir + 'cooperation-iws-wui.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/init_Lampp.sh")   + ' ;\n'
  	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/end_Lampp.sh")   + ' ;\n'
 	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/shutdown_ws.sh")   + ' ;\n'
+	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/cooperation-iws-wui.sh")   + ' ;\n'
 	fscriptCustomExec=open(os.path.join(self.customDir, "scriptExec.sh"), 'w')
         fscriptCustomExec.write(scriptCustomExec)
         fscriptCustomExec.close()
@@ -2999,6 +3001,7 @@ class Reconstructor:
 	    modExecScrChroot += 'export DISPLAY=127.0.0.1:5.0 \n'
  	    modExecScrChroot += 'echo Running Core:  \n'
 	    modExecScrChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
+            modExecScrChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
             modExecScr = '#!/bin/sh\n\n'
 	    # copy all "execute" enabled scripts proper location (chroot or customdir)
             

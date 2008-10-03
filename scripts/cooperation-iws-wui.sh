@@ -2,10 +2,10 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Sphider1.3.4'
+RMOD_NAME='Cooperation-iws-wui.0.5.2'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Search engine'
+RMOD_DESCRIPTION='Web User interface'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -17,7 +17,7 @@ SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
-
+APACHE=$(cat /tmp/apache)
 
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
@@ -85,10 +85,9 @@ fi
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-wget http://www.sphider.eu/dl.php?file=sphider-1.3.4.zip
-unzip sphider-1.3.4.zip
-mv sphider-1.3.4 sphider
-#rm moodle-latest-19.zip
+wget $URL_FREE/cooperation-wui-0.5.2.tar.gz
+tar -xzf cooperation-wui-0.5.2.tar.gz
+mv cooperation-wui-0.5.2 cooperation-wui
 
 }
 
@@ -101,10 +100,9 @@ mv sphider-1.3.4 sphider
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/sphider-1.3.4.zip
-unzip sphider-1.3.4.zip
-mv sphider-1.3.4 sphider
-#rm moodle-latest-19.zip
+wget $URL_FREE/cooperation-wui-0.5.2.tar.gz
+tar -xzf cooperation-wui-0.5.2.tar.gz
+mv cooperation-wui-0.5.2 cooperation-wui
 
 }
 
@@ -136,21 +134,7 @@ fi
 
 function CHOOSE_PARAMETERS_GUI
 {
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NOM_SPHIDER="Sphider"
-else 
-
-NOM_SPHIDER=$(zenity --entry --text "$MESS_NAME SPHIDER")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_SPHIDER | grep "[^a-zA-Z0-9]") 
-do
-NOM_SPHIDER=$(zenity --entry --text "$MESS_NAME SPHIDER")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
- 
-
-fi
-export NOM_SPHIDER=$NOM_SPHIDER
 
 }
 #_______________________________________________________________________________________________
@@ -163,13 +147,13 @@ export NOM_SPHIDER=$NOM_SPHIDER
 
 function INSTALL
 {
-echo "I: Download Sphider"
+echo "I: Download Cooperation-wui"
 DOWNLOAD
 
 ##SPHIDER
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/admin/$NOM_SPHIDER
-cp -Rf sphider/* $WWW_DIRECTORY/admin/$NOM_SPHIDER/.
+sed -i "s/{version}/$VERSION/" $DL_DIR/cooperation-wui/cooperation-wui.footer.php
+cp -Rf $DL_DIR/cooperation-wui/* $WWW_DIRECTORY/.
 
 echo "create database ${NOM_SPHIDER};
 grant all on ${NOM_SPHIDER}.* to ${NOM_SPHIDER}@localhost identified by '$SPHIDER_MYSQL_PWD';
@@ -182,42 +166,16 @@ $BIN_MYSQL -u root ${NOM_SPHIDER} < $WWW_DIRECTORY/admin/$NOM_SPHIDER/sql/tables
 
 apt-get install --assume-yes --force-yes poppler-utils catdoc pstotext zip
 
-sed -i "s/admin@localhost/admin@ciws.com/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/conf.php
-sed -i "71s/0/1/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/conf.php
-sed -i "74s/0/1/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/conf.php
-sed -i "77s/0/1/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/conf.php
-sed -i "80s/0/1/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/conf.php
-sed -i "s/c:\\temp\\pdftotext.exe/\/usr\/bin\/pstotext/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/conf.php
-sed -i "s/c:\\temp\\catdoc.exe/\/usr\/bin\/catdoc/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/conf.php
-sed -i "s/c:\\temp\\xls2csv/\/usr\/bin\/xls2csv/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/conf.php
-sed -i "s/c:\\temp\\catppt/\/usr\/bin\/catppt/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/conf.php
-sed -i "s/sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/database.php
-sed -i "s/root/${NOM_SPHIDER}/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/database.php
-sed -i "4s/\"\"/\"$SPHIDER_MYSQL_PWD\"/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/settings/database.php
-sed -i "4s/\$admin_pw = \"admin\"/\$admin_pw = \"$ADMIN_PWD\"/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/admin/auth.php
-sed -i "s/search.php/index.php/g" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/standard/search_results.html
-sed -i "s/search.php/index.php/g" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/standard/search_form.html
-sed -i "66G" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/standard/search_form.html
-sed -i "66G" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/standard/search_form.html
-sed -i "66G" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/standard/search_form.html
-sed -i "66G" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/standard/search_form.html
-sed -i "67s/^/\$url = str_replace ('localhost', \$HTTP_SERVER_VARS[\"SERVER_NAME\"], \$url);/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/standard/search_results.html
-sed -i "68s/^/\$url2 = str_replace ('localhost', \$HTTP_SERVER_VARS[\"SERVER_NAME\"], \$url2);/" $WWW_DIRECTORY/admin/$NOM_SPHIDER/templates/standard/search_results.html
-echo "#dummy file" > $WWW_DIRECTORY/admin/$NOM_SPHIDER/admin/index.html
 
-chown -R www-data $WWW_DIRECTORY/admin/$NOM_SPHIDER/
+chown -R www-data $WWW_DIRECTORY/
 
-mv $WWW_DIRECTORY/admin/$NOM_SPHIDER/search.php $WWW_DIRECTORY/admin/$NOM_SPHIDER/index.php
-mkdir $WWW_DIRECTORY/$NOM_SPHIDER
-cp -Rf $WWW_DIRECTORY/admin/$NOM_SPHIDER/* $WWW_DIRECTORY/$NOM_SPHIDER/.
-rm -r $WWW_DIRECTORY/$NOM_SPHIDER/admin
 
 echo "-----------------Cooperation-iws----------------------------"
 echo "---Configure Sphider to automatically index the portal------"
 echo "[Y/n]"
 read r1 < /dev/tty
 if [ "$(echo $r1 | awk  '{print $1}')" != "n" ]; then
-echo "18 */23 * * * www-data php $WWW_DIRECTORY/$NOM_SPHIDER/admin/spider.php -u http://localhost/ -r -d 5" > /etc/cron.d/sphider_crawl
+echo "18 */23 * * * www-data php $WWW_DIRECTORY/admin/$NOM_SPHIDER/admin/spider.php -u http://localhost/ -r -d 5" > /etc/cron.d/sphider_crawl
 sudo chmod +x /etc/cron.d/sphider_crawl
 fi
 
@@ -232,8 +190,7 @@ fi
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_SPHIDER/\" >$NOM_SPHIDER</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+
 echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_SPHIDER/admin/admin.php\" >$NOM_SPHIDER</a><br>
 " >> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
 }
@@ -256,7 +213,7 @@ echo "
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
-
+if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
 echo "I: Install Sphider"
 CHOICE_LANG
 CHOOSE_PARAMETERS_GUI
@@ -264,3 +221,4 @@ INSTALL
 CREATE_WUI
 CREATE_INSTALL_SCRIPT
 echo "I: End of install Sphider"
+fi

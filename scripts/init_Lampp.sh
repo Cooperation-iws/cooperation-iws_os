@@ -119,19 +119,6 @@ mkdir $WWW_DIRECTORY/admin/
 rm $WWW_DIRECTORY/index.html
 
 echo "I: config Cooperation-iws wui"
-cd $DL_DIR
-wget $URL_FREE/cooperation-wui-0.5.0.tar.gz
-tar -xzvf cooperation-wui-0.5.0.tar.gz
-mv cooperation-wui-0.5.0 cooperation-wui
-sed -i "s/{version}/$VERSION/" $DL_DIR/cooperation-wui/cooperation-wui.footer.php
-cp -Rf $DL_DIR/cooperation-wui/cooperation.header.jpg $WWW_DIRECTORY/.
-cp -Rf $DL_DIR/cooperation-wui/cooperation.header.jpg $WWW_DIRECTORY/admin/.
-cp -Rf $DL_DIR/cooperation-wui/cooperation-wui.footer.php $WWW_DIRECTORY/.
-cp -Rf $DL_DIR/cooperation-wui/cooperation-wui.footer.php $WWW_DIRECTORY/admin/.
-cp -Rf $DL_DIR/cooperation-wui/cooperation-wui.header.php $WWW_DIRECTORY/.
-cp -Rf $DL_DIR/cooperation-wui/cooperation-wui.header.php $WWW_DIRECTORY/admin/.
-cp -Rf $DL_DIR/cooperation-wui/cooperation-wui.layout.css $WWW_DIRECTORY/.
-cp -Rf $DL_DIR/cooperation-wui/cooperation-wui.layout.css $WWW_DIRECTORY/admin/.
 
 
 echo ""> $WWW_DIRECTORY/cooperation-wui.frame.php
@@ -141,7 +128,6 @@ echo ""> $WWW_DIRECTORY/cooperation-wui.frame.php
 cp -Rf $WWW_DIRECTORY/cooperation-wui.frame.php $WWW_DIRECTORY/admin/.
 
 fi
-
 
 
 echo "I: config rc.local"
