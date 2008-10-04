@@ -358,6 +358,7 @@ class Reconstructor:
         self.wTree.get_widget("comboboxDebianLiveMirrors1").set_active(0)
         self.wTree.get_widget("comboboxLiveCDKeybLang").set_active(0)
         self.wTree.get_widget("comboboxLiveCDKeybLang1").set_active(0)
+        self.wTree.get_widget("comboboxWebAppMirrors").set_active(1)
        
        
 
@@ -2952,18 +2953,21 @@ class Reconstructor:
         fWorkDir.close()
 
 	#Mirrors
-	if self.wTree.get_widget("radiobuttonMirrorTypeFree").get_active() == True:
+	if self.wTree.get_widget("comboboxWebAppMirrors").get_active() == "Free.fr":
 	    mirrorWebApp = "B"
 	    mirrorUrl = self.mirrorFree
-	if self.wTree.get_widget("radiobuttonMirrorTypeBerlios1").get_active() == True:
+	if self.wTree.get_widget("comboboxWebAppMirrors").get_active() == "Berlios1.de":
  	    mirrorWebApp = "B"
 	    mirrorUrl = self.mirrorBerlios1
-	if self.wTree.get_widget("radiobuttonMirrorTypeBerlios2").get_active() == True:
+	if self.wTree.get_widget("comboboxWebAppMirrors").get_active() == "Berlios2.de":
  	    mirrorWebApp = "B"
 	    mirrorUrl = self.mirrorBerlios2
-	if self.wTree.get_widget("radiobuttonMirrorTypeWeb").get_active() == True:
+	if self.wTree.get_widget("comboboxWebAppMirrors").get_active() == "Web":
  	    mirrorWebApp = "A"
 	    mirrorUrl = self.mirrorFree
+	if self.wTree.get_widget("checkbuttonLocalMirror").get_active() == True:
+	    mirrorWebApp = "B"
+	    mirrorUrl = self.wTree.get_widget("entryLocalMirror").get_text()
 	fMirrorWebApp=open(os.path.join(self.customDir, "chroot/tmp/mirroir"), 'w')
         fMirrorWebApp.write(mirrorWebApp)
         fMirrorWebApp.close() 

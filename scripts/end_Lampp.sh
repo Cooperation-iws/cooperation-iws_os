@@ -87,6 +87,10 @@ mv /etc/php5 /var/share/etc/
 
 ln -s /var/share/etc/php5 /etc/php5
 
+mv /etc/mysql /var/share/etc/
+
+ln -s /var/share/etc/mysql /etc/mysql
+
 fi
 echo "I: preparing for Artwork"
 mkdir /etc/skel/Desktop
