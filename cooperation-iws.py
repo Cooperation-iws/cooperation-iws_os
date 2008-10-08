@@ -1242,19 +1242,8 @@ class Reconstructor:
         if os.path.exists(os.path.join(self.customDir, "chroot")) == False:
             if self.wTree.get_widget("checkbuttonCreateRoot").get_active() == False:
                 rootExists = False
-	if os.path.exists(os.path.join(self.customDir, "remaster/dists")) == False:
-		self.casperPath = 'live'
-		self.wTree.get_widget("hbox701").hide()
-		self.wTree.get_widget("hbox301").show()
-		self.wTree.get_widget("hbox702").show()
-		self.wTree.get_widget("labelLiveCDKeybLang3").show()
-
-	else :
-		self.casperPath = 'casper'
-	    	self.wTree.get_widget("hbox301").hide()
-		self.wTree.get_widget("hbox701").show()
-		self.wTree.get_widget("hbox702").hide()
-		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
+		
+		
 
 	workingDirOk = True
         if remasterExists == False:
@@ -2688,6 +2677,41 @@ class Reconstructor:
 			
             # unmount iso/cd-rom
             os.popen("umount " + self.mountDir)
+
+	    if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'etch\'') != '':
+		self.casperPath = 'casper'
+		self.debDist= 'etch'			
+		self.wTree.get_widget("hbox701").hide()
+		self.wTree.get_widget("hbox301").show()
+		self.wTree.get_widget("hbox702").show()
+		self.wTree.get_widget("labelLiveCDKeybLang3").show()
+		print "Debian Etch Live CD"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '':
+		self.casperPath = 'casper'	
+		self.wTree.get_widget("hbox301").hide()
+		self.wTree.get_widget("hbox701").show()
+		self.wTree.get_widget("hbox702").hide()
+		self.wTree.get_widget("labelLiveCDKeybLang3").hide()		
+		print "Ubuntu 8.04 Live CD"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'lenny\'') != '':
+		self.casperPath = 'live'
+		self.wTree.get_widget("hbox701").hide()
+		self.wTree.get_widget("hbox301").show()
+		self.wTree.get_widget("hbox702").show()
+		self.wTree.get_widget("labelLiveCDKeybLang3").show()	    	
+		self.debDist= 'lenny'	
+		print "Debian Lenny Live CD"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'sid\'') != '':	    	
+		self.debDist= 'sid'			
+		self.casperPath = 'live'
+		self.wTree.get_widget("hbox701").hide()
+		self.wTree.get_widget("hbox301").show()
+		self.wTree.get_widget("hbox702").show()
+		self.wTree.get_widget("labelLiveCDKeybLang3").show()	    	
+		print "Debian Lenny Live CD"	
+	    else:
+		print "Live CD not detected, Aborting"
+	
         # custom root dir
         if self.createCustomRoot == True:
             #if os.path.exists(os.path.join(self.customDir, "root")):
@@ -2823,10 +2847,18 @@ class Reconstructor:
         
 	os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws Terminal\" -e \"bash ' + os.path.join(self.customDir, "scriptDebianLive.sh")+ '\"')
 	self.casperPath = 'live'
+	if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'etch\'') != '':	    	
+			self.debDist= 'etch'	
+	if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'lenny\'') != '':	    	
+			self.debDist= 'lenny'			
+	if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'sid\'') != '':	    	
+			self.debDist= 'sid'	
 	fcasper=open(os.path.join(self.customDir, "chroot/tmp/casper_path"), 'w')
 	fcasper.write(self.casperPath)
 	fcasper.close()
-	
+	fdebDist=open(os.path.join(self.customDir, "chroot/tmp/deb_dist"), 'w')
+	fdebDist.write(self.debDist)
+	fdebDist.close()  
 	
 # ---------- Customize Live ---------- #
     def customize(self):
@@ -2840,7 +2872,7 @@ class Reconstructor:
 		    userFull = self.wTree.get_widget("entryLiveCdUserFullname").get_text()
 		    password = self.wTree.get_widget("entryLiveCdUserPassword").get_text()
 		    host = self.wTree.get_widget("entryLiveCdHostname").get_text()
-		    if self.casperPath == 'casper':
+		    if self.casperPath == 'casper' and self.debDist != 'etch':
 			debMirror= self.wTree.get_widget("comboboxUbuntuMirrors").get_active_text() 
 		    else:
 			debMirror= self.wTree.get_widget("comboboxDebianLiveMirrors1").get_active_text()
@@ -2911,6 +2943,9 @@ class Reconstructor:
         fcasper=open(os.path.join(self.customDir, "chroot/tmp/casper_path"), 'w')
 	fcasper.write(self.casperPath)
 	fcasper.close()  
+	fdebDist=open(os.path.join(self.customDir, "chroot/tmp/deb_dist"), 'w')
+	fdebDist.write(self.debDist)
+	fdebDist.close()  
 	fDebMirror=open(os.path.join(self.customDir, "chroot/tmp/deb_mirror_path"), 'w')
 	fDebMirror.write(debMirror)
 	fDebMirror.close()

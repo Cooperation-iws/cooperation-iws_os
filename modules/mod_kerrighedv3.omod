@@ -73,27 +73,27 @@ tar jxf linux-2.6.20.tar.bz2
 cd kerrighed-*
 ./configure --with-kernel=/usr/src/linux-2.6.20 
 echo "PRESS ENTER"
-read r < /dev/tty
+#read r < /dev/tty
 #mv patches/2.6.20 patches/2.6.20.21
 make patch
 make defconfig
 sed -i \"303s/=/= -fno-tree-scev-cprop/\" ../linux-2.6.20/Makefile
 make kernel
 echo "PRESS ENTER"
-read r < /dev/tty
+#read r < /dev/tty
 make 
 echo "PRESS ENTER"
-read r < /dev/tty
+#read r < /dev/tty
 
 make kernel-install
 echo "PRESS ENTER"
-read r < /dev/tty
+#read r < /dev/tty
 
 make install
 echo "PRESS ENTER"
-read r < /dev/tty
+#read r < /dev/tty
 
-
+echo \"session=10\" > /etc/kerrighed_nodes 
 EOF
 umount /var/chroot/proc
 

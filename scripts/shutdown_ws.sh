@@ -155,7 +155,6 @@ function REMOVE_USER()
 {
 
 #faire mirroir dans /etc/skel/.
-rsync -uravH --delete /home/liveusb/. /etc/skel/.
 #rsync -uravH --delete /home/liveusb/. 
 sleep 2
 #virer admin et liveusb de /etc/sudoers
