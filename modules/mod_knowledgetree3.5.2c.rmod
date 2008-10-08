@@ -89,10 +89,7 @@ wget http://kent.dl.sourceforge.net/sourceforge/kt-dms/ktdms-src-oss-3.5.2c.tgz
 tar -xzf ktdms-src-oss-3.5.2c.tgz
 #rm mediawiki-1.12.0rc1.tar.gz
 mv knowledgeTree-OSS kt
-#wget http://forge.knowledgetree.com/frs/download.php/111/frenchplugin31-0-1.zip
-#mkdir kt_fr
-#cd kt_fr
-#unzip ../frenchplugin31-0-1.zip
+wget http://forge.knowledgetree.com/frs/download.php/196/knowledgeTree.po
 
 }
 

@@ -612,7 +612,7 @@ class Reconstructor:
         for root, dirs, files in os.walk(self.moduleDir):
                 for f in files:
                     r, ext = os.path.splitext(f)
-                    if ext == '.rmod' or ext == '.smod':
+                    if ext == '.rmod' or ext == '.smod' or ext == '.omod':
                         print 'Module: ' + f.replace('.?mod', '') + ' found...'
 
                         modPath = os.path.join(self.moduleDir, f)
@@ -752,7 +752,7 @@ class Reconstructor:
             # if not updating, copy to modules dir
             if updating == False:
                 r, ext = os.path.splitext(modulePath)
-                if ext == '.rmod' or ext == '.smod':
+                if ext == '.rmod' or ext == '.smod' or ext == '.smod':
                     installText = _('Installing Module: ')
                     print installText + os.path.basename(modulePath)
                     shutil.copy(modulePath, self.moduleDir)
@@ -2803,7 +2803,7 @@ class Reconstructor:
 		lhConfig += "-p xfce-desktop "
 	elif re.search('Full Gnome',self.DebianLiveType):
 		lhConfig += "-p gnome-desktop "
-    	lhConfig += '--distribution lenny --linux-flavours "686" --mirror-bootstrap "' + debMirror + '" --mirror-chroot "' + debMirror + '" --mirror-binary "' + debMirror + '" --apt-options "--yes  --force-yes" --bootappend-live "keyb=' + keybLang + '" '
+    	lhConfig += '--distribution lenny --linux-flavours \"686\" --mirror-bootstrap \"' + debMirror + '\" --mirror-chroot \"' + debMirror + '\" --mirror-binary \"' + debMirror + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + keybLang + '\" '
 	
 	scriptDebianLive = 'echo "I: Creating Debian Live CD Linux flavour ' + self.DebianLiveType + '" \n'
 	scriptDebianLive += 'echo "' + lhConfig + '"\n'
@@ -2813,7 +2813,8 @@ class Reconstructor:
 	scriptDebianLive += 'apt-get install -y --force-yes live-helper cdebootstrap debian-keyring \n'
 	scriptDebianLive += 'cd ' +self.customDir + '\n'
 	scriptDebianLive += lhConfig + '\n'
-	scriptDebianLive += 'lh_build \n'
+	#scriptDebianLive += 'lh_bootstrap && lh_chroot\n'
+	scriptDebianLive += 'lh_build\n'
 	scriptDebianLive += 'mv binary remaster \n'
 	scriptDebianLive += 'mv binary.iso debian_lenny_barebone.iso\n'
 	fscriptCustomExec=open(os.path.join(self.customDir, "scriptDebianLive.sh"), 'w')
@@ -2922,6 +2923,7 @@ class Reconstructor:
 	scriptCustomSplash += 'wget '+ os.path.join(self.mirrorFree, "isolinux-ciws.tar.gz") + ' \n'  
 	scriptCustomSplash += 'tar -xzf isolinux-ciws.tar.gz -C ' + os.path.join(self.customDir, "remaster/")+' \n'  
 	scriptCustomSplash += 'sed -i "s/casper/'+self.casperPath+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")+' \n'  
+	scriptCustomSplash += 'sed -i "s/splash/splash union=aufs/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")+' \n'  
 	if self.casperPath == 'live':
 		scriptCustomSplash += 'sed -i "s/initrd=\/'+self.casperPath+'\/initrd.gz/initrd=\/'+self.casperPath+'\/initrd.gz keyb='+keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")+' \n' 
 	fscriptCustomExec=open(os.path.join(self.customDir, "scriptSplash.sh"), 'w')
@@ -2934,9 +2936,11 @@ class Reconstructor:
 	scriptCustomExec = '#!/bin/sh\n\n'
 	scriptCustomExec += 'bash \"' + self.scriptDir + 'xnest.sh\"' + ' ;\n'
 	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init_Lampp.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
+ 	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'end_Lampp.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'shutdown_ws.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'cooperation-iws-wui.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
+ 	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/init.sh")   + ' ;\n'
  	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/init_Lampp.sh")   + ' ;\n'
  	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/end_Lampp.sh")   + ' ;\n'
 	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/shutdown_ws.sh")   + ' ;\n'
@@ -2953,16 +2957,16 @@ class Reconstructor:
         fWorkDir.close()
 
 	#Mirrors
-	if self.wTree.get_widget("comboboxWebAppMirrors").get_active() == "Free.fr":
+	if self.wTree.get_widget("comboboxWebAppMirrors").get_active_text() == "Free.fr":
 	    mirrorWebApp = "B"
 	    mirrorUrl = self.mirrorFree
-	if self.wTree.get_widget("comboboxWebAppMirrors").get_active() == "Berlios1.de":
+	if self.wTree.get_widget("comboboxWebAppMirrors").get_active_text() == "Berlios1.de":
  	    mirrorWebApp = "B"
 	    mirrorUrl = self.mirrorBerlios1
-	if self.wTree.get_widget("comboboxWebAppMirrors").get_active() == "Berlios2.de":
+	if self.wTree.get_widget("comboboxWebAppMirrors").get_active_text() == "Berlios2.de":
  	    mirrorWebApp = "B"
 	    mirrorUrl = self.mirrorBerlios2
-	if self.wTree.get_widget("comboboxWebAppMirrors").get_active() == "Web":
+	if self.wTree.get_widget("comboboxWebAppMirrors").get_active_text() == "Web":
  	    mirrorWebApp = "A"
 	    mirrorUrl = self.mirrorFree
 	if self.wTree.get_widget("checkbuttonLocalMirror").get_active() == True:
@@ -3003,10 +3007,8 @@ class Reconstructor:
             print _('Running modules...')
             modExecScrChroot = '#!/bin/sh\n\ncd /tmp ;\n'
 	    modExecScrChroot += 'export DISPLAY=127.0.0.1:5.0 \n'
- 	    modExecScrChroot += 'echo Running Core:  \n'
-	    modExecScrChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
-            modExecScrChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
-            modExecScr = '#!/bin/sh\n\n'
+ 	    modExecScrChroot += 'bash \"/tmp/init.sh\"' + ' ;\n '
+ 	    modExecScr = '#!/bin/sh\n\n'
 	    # copy all "execute" enabled scripts proper location (chroot or customdir)
             
 	    self.treeModel.foreach(self.copyExecuteModule)
@@ -3024,7 +3026,7 @@ class Reconstructor:
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in execModFiles:
                     ext = os.path.basename(execMod)
-                    if re.search('.smod', ext):
+                    if re.search('.omod', ext):
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'echo ------------Cooperation-iws----------------------\n'
                         modExecScrChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
@@ -3032,6 +3034,19 @@ class Reconstructor:
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
+                for execMod in execModFiles:
+                    ext = os.path.basename(execMod)
+                    if re.search('.smod', ext):
+                        modExecScrChroot += 'echo -------------------------------------------------\n'
+                        modExecScrChroot += 'echo ------------Cooperation-iws----------------------\n'
+                        modExecScrChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
+                        modExecScrChroot += 'echo -------------------------------------------------\n'
+                        modExecScrChroot += 'echo -------------------------------------------------\n'
+                        modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
+	    modExecScrChroot += 'echo Running Core:  \n'
+	    modExecScrChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
+            modExecScrChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
+            for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in execModFiles:
                     ext = os.path.basename(execMod)
                     if re.search('.rmod', ext):
@@ -3056,16 +3071,13 @@ class Reconstructor:
             fModExec=open(os.path.join(self.customDir, "scripts/module-exec.sh"), 'w')
             fModExec.write(modExecScr)
             fModExec.close()
-	    
-	    
-
 	    os.popen('chmod a+x ' + os.path.join(self.customDir, "scripts/module-exec.sh"))
             #print modExecScrChroot
             fModExecChroot=open(os.path.join(self.customDir, "chroot/tmp/module-exec.sh"), 'w')
             fModExecChroot.write(modExecScrChroot)
             fModExecChroot.close()
             os.popen('chmod a+x ' + os.path.join(self.customDir, "chroot/tmp/module-exec.sh"))
-            	   	
+             	   	
 	    #os.popen('xterm -title \'Reconstructor Module Exec\' -e chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/module-exec.sh')
             # copy dns info
             print _("Copying DNS info...")
@@ -3094,8 +3106,7 @@ class Reconstructor:
             os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws Modules\" -x bash \"' + os.path.join(self.customDir, "scripts/module-exec.sh")+ '\"')
 	
 	    # cleanup
-            os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
-            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/tmp/module-exec.sh") + '\" 1>&2 2>/dev/null')
+            #os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
             # restore wgetrc
             print _("Restoring wgetrc configuration...")
             os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')

@@ -86,26 +86,15 @@ wget http://ftp.mozilla.org/pub/mozilla.org/webtools/bugzilla-3.0.5.tar.gz
 tar -xzf bugzilla-3.0.5.tar.gz
 mv bugzilla-3.0.5 bugzilla
 #rm cacti-0.8.7b.tar.gz
-
+wget http://prdownloads.sourceforge.net/frenchmozilla/bugzilla-3.0.5.fr.tar.gz?download
+tar -xzf bugzilla-3.0.5.fr.tar.gz -C bugzilla/template
+wget http://ganderbay.net/dl/germzilla-3.0.5-1.utf-8.tar.gz
+tar -xzf germzilla-3.0.5-1.utf-8.tar.gz -C bugzilla/template
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_WEB___________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_LOCAL_____________________________________
-
-function WGET_MIRROIR_LOCAL
-{
-
-cd $DL_DIR
-wget http://$MIRROIR_URL/mirroir/cacti-0.8.7b.tar.gz
-tar -xvzf cacti-0.8.7b.tar.gz
-mv cacti-0.8.7b cacti
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -116,6 +105,10 @@ cd $DL_DIR
 wget $URL_FREE/bugzilla-3.0.5.tar.gz
 tar -xzf bugzilla-3.0.5.tar.gz
 mv bugzilla-3.0.5 bugzilla
+wget $URL_FREE/bugzilla-3.0.5.fr.tar.gz
+tar -xzf bugzilla-3.0.5.fr.tar.gz -C bugzilla/template
+wget $URL_FREE/germzilla-3.0.5-1.utf-8.tar.gz
+tar -xzf germzilla-3.0.5-1.utf-8.tar.gz -C bugzilla/template
 
 }
 

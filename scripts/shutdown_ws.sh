@@ -10,7 +10,13 @@ KERNEL=$(ls /lib/modules)
 KERNEL=(${KERNEL[@]})
 NB_KERNEL=$(ls /lib/modules | wc -l)
 NB_KERNEL=$(expr $NB_KERNEL-1)
+if [ "$(cat /tmp/kernel)" ]; then
+KERNEL[0]="$(cat /tmp/kernel)"
+NB_KERNEL=0
+fi
+echo "building ${KERNEL[$NB_KERNEL]}"
 mkinitramfs -o /initrd.gz ${KERNEL[$NB_KERNEL]}
+rm /vmlinuz
 cp /boot/vmlinuz-${KERNEL[$NB_KERNEL]} /vmlinuz
 
 if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
@@ -110,7 +116,11 @@ killall -9 mysqld_safe
 /etc/init.d/clamav-daemon stop 1>&2 2>/dev/null
 /etc/init.d/open-xchange-admin restart 1>&2 2>/dev/null
 /etc/init.d/open-xchange-groupware restart 1>&2 2>/dev/null
-
+/etc/init.d/dhcp3-server stop 1>&2 2>/dev/null
+/etc/init.d/tftpd-hpa stop 1>&2 2>/dev/null
+/etc/init.d/portmap stop 1>&2 2>/dev/null
+/etc/init.d/nfs-common stop 1>&2 2>/dev/null
+/etc/init.d/nfs-kernel-server stop 1>&2 2>/dev/null
 fi
 
 echo "I: config rc.local"
@@ -139,6 +149,23 @@ echo "I: config persistent directory"
 
 mkdir /etc/ciws
 cp -a  /var/* /etc/ciws/.
+
+echo "I: Removing chroot user"
+function REMOVE_USER()
+{
+
+#faire mirroir dans /etc/skel/.
+rsync -uravH --delete /home/liveusb/. /etc/skel/.
+#rsync -uravH --delete /home/liveusb/. 
+sleep 2
+#virer admin et liveusb de /etc/sudoers
+#cat /etc/sudoers | sed '/%admin/d' | tee /etc/sudoers
+echo -e "root ALL=(ALL) ALL" | tee /etc/sudoers
+#supprimer user 
+userdel -r liveusb
+}
+REMOVE_USER
+
 
 echo "----------------Cooperation-iws----------------
 ------------Press Enter / Appuyer sur entrée----------"

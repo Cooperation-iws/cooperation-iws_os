@@ -87,6 +87,10 @@ cd $DL_DIR
 wget http://surfnet.dl.sourceforge.net/sourceforge/eyeos/eyeOS_1.6.0.3-1.tar.gz
 tar -xzf eyeOS_1.6.0.3-1.tar.gz
 
+wget http://eyeos.org/get/?file=translations/all-system.eyepackage
+mv index.html?file=translations%2Fall-system.eyepackage all-system.eyepackage
+
+
 }
 
 #_______________________________________________________________________________________________
@@ -101,6 +105,7 @@ function WGET_MIRROIR_FREE
 cd $DL_DIR
 wget $URL_FREE/eyeOS_1.6.0.3-1.tar.gz
 tar -xzf eyeOS_1.6.0.3-1.tar.gz
+wget $URL_FREE/all-system.eyepackage
 
 }
 

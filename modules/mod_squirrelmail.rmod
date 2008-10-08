@@ -84,6 +84,10 @@ fi
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
+mkdir squirrelmail_locales
+wget http://downloads.sourceforge.net/squirrelmail/all_locales-1.4.13-20071220.tar.gz?modtime=1198151922&big_mirror=0 
+tar xzf all_locales-1.4.13-20071220.tar.gz -C squirrelmail_locales
+
 
 }
 
@@ -96,6 +100,9 @@ cd $DL_DIR
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
+mkdir squirrelmail_locales
+wget $URL_FREE/all_locales-1.4.13-20071220.tar.gz 
+tar xzf all_locales-1.4.13-20071220.tar.gz -C squirrelmail_locales
 
 }
 
@@ -190,7 +197,8 @@ mv /usr/share/squirrelmail /var/share/lampp
 
 ln -s /var/share/lampp/squirrelmail /usr/share/squirrelmail
 /etc/init.d/apache2 restart
-
+cd $DL_DIR
+cp -r squirrelmail_locales/help squirrelmail_locales/images squirrelmail_locales/locale /var/share/lampp/squirrelmail/.
 }
 
 #_______________________________________________________________________________________________
