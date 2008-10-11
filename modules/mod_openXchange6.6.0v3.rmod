@@ -41,8 +41,8 @@ function INSTALL
 
 
 
-apt-get autoremove --assume-yes --force-yes java-gcj-compat
-apt-get autoremove --assume-yes --force-yes gcj
+apt-get remove --assume-yes --force-yes java-gcj-compat
+apt-get remove --assume-yes --force-yes gcj
 
 ln -s / /cow
 

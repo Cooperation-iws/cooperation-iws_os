@@ -132,8 +132,8 @@ killall -9 mysqld_safe
 /etc/init.d/dovecot stop 1>&2 2>/dev/null
 /etc/init.d/mailscanner stop 1>&2 2>/dev/null
 /etc/init.d/clamav-daemon stop 1>&2 2>/dev/null
-/etc/init.d/open-xchange-admin restart 1>&2 2>/dev/null
-/etc/init.d/open-xchange-groupware restart 1>&2 2>/dev/null
+/etc/init.d/open-xchange-admin stop 1>&2 2>/dev/null
+/etc/init.d/open-xchange-groupware stop 1>&2 2>/dev/null
 /etc/init.d/dhcp3-server stop 1>&2 2>/dev/null
 /etc/init.d/tftpd-hpa stop 1>&2 2>/dev/null
 /etc/init.d/portmap stop 1>&2 2>/dev/null

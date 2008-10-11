@@ -2,14 +2,13 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Elgg 1.0'
+RMOD_NAME='Pligg1.8'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Social network'
+RMOD_DESCRIPTION='Social Bookmark'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
-
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
 DL_DIR=$(cat /tmp/web_install-path)
@@ -18,6 +17,8 @@ SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
+
+
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
@@ -26,8 +27,7 @@ INSTALL=$(cat /tmp/def_install)
 
 #VARIABLES
 #MYSQL PASSWORD
-ELGG_MYSQL_PWD="ELGG_MYSQL_PWD"
-
+PLIGG_MYSQL_PWD="PLIGG_MYSQL_PWD"
 #_______________________________________________________________________________________________
 #__________________________________________LANGFR______________________________________________
 
@@ -38,6 +38,7 @@ function LANGFR
 MESS_NAME="Entrez le nom de l'installation "
 MESS_HOW_MANY="Combien de" 
 MESS_DO_YOU_WANT="voulez vous installez ?"
+MESS_URL="Quelle est l'url à partir de laquelle vous avez effectuée l'installation des applications web?"
 }
 #_______________________________________________________________________________________________
 #__________________________________________FIN_LANGFR___________________________________________
@@ -52,6 +53,8 @@ function LANGEN
 MESS_NAME="Enter the name of the install "
 MESS_HOW_MANY="How many"
 MESS_DO_YOU_WANT="do you want to install ?"
+MESS_URL="What's the url from where you install web applications ?"
+
 }
 #_______________________________________________________________________________________________
 #__________________________________________FIN_LANGEN___________________________________________
@@ -74,9 +77,6 @@ fi
 #__________________________________________FIN_CHOICE_LANG______________________________________
 
 
-
-
-
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_WEB_______________________________________
 
@@ -84,16 +84,15 @@ fi
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-
-wget http://elgg.org/getelgg.php?forward=elgg1.0.zip
-unzip -q elgg1.0.zip
-mv elgg1.0 elgg
+wget $URL_FREE/Pligg_Beta_9.9.5.zip
+unzip -q Pligg_Beta_9.9.5.zip
+mv "Pligg Beta 9.9.5" pligg
+#rm moodle-latest-19.zip
 
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_WEB___________________________________
-
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -101,10 +100,10 @@ mv elgg1.0 elgg
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/elgg1.0.zip
-unzip -q elgg1.0.zip
-mv elgg1.0 elgg
-
+wget $URL_FREE/Pligg_Beta_9.9.5.zip
+unzip -q Pligg_Beta_9.9.5.zip
+mv "Pligg Beta 9.9.5" pligg
+#rm moodle-latest-19.zip
 
 }
 
@@ -125,7 +124,6 @@ if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 WGET_MIRROIR_FREE
 fi
 
-
 }
 
 
@@ -137,12 +135,21 @@ fi
 
 function CHOOSE_PARAMETERS_GUI
 {
+if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
+NOM_PLIGG="Pligg"
+else 
 
-NB_ELGG=1
-NOM_ELGG="Elgg"
+NOM_PLIGG=$(zenity --entry --text "$MESS_NAME PLIGG")
+test $? -ne 0 && break # Bouton Annuler
+while (echo $NOM_PLIGG | grep "[^a-zA-Z0-9]") 
+do
+NOM_PLIGG=$(zenity --entry --text "$MESS_NAME PLIGG")
+test $? -ne 0 && break # Bouton Annulerdone
+done 
+ 
 
-export NB_ELGG=$NB_ELGG
-export NOM_ELGG=$NOM_ELGG
+fi
+export NOM_PLIGG=$NOM_PLIGG
 
 }
 #_______________________________________________________________________________________________
@@ -155,32 +162,31 @@ export NOM_ELGG=$NOM_ELGG
 
 function INSTALL
 {
-
-echo "I: Download Elgg"
+echo "I: Download Pligg"
 DOWNLOAD
 
-
-mkdir $WWW_DIRECTORY/${NOM_ELGG}
+##PLIGG
 cd $DL_DIR
-cp -Rf elgg/* $WWW_DIRECTORY/${NOM_ELGG}/.
+mkdir $WWW_DIRECTORY/$NOM_PLIGG
+cp -Rf pligg/* $WWW_DIRECTORY/$NOM_PLIGG/.
 
-echo "create database ${NOM_ELGG};
-grant all on ${NOM_ELGG}.* to ${NOM_ELGG}@localhost identified by '$ELGG_MYSQL_PWD';
-flush privileges;" > ELGG_db.sql
+echo "create database ${NOM_PLIGG};
+grant all on ${NOM_PLIGG}.* to ${NOM_PLIGG}@localhost identified by '$PLIGG_MYSQL_PWD';
+flush privileges;" > PLIGG_db.sql
 
-$BIN_MYSQL -u root < ELGG_db.sql mysql
-rm ELGG_db.sql
-
-mv $WWW_DIRECTORY/${NOM_ELGG}/engine/settings.example.php $WWW_DIRECTORY/${NOM_ELGG}/engine/settings.php
-
-sed -i "s/{{CONFIG_DBUSER}}/${NOM_ELGG}/" $WWW_DIRECTORY/${NOM_ELGG}/engine/settings.php
-sed -i "s/{{CONFIG_DBPASS}}/$ELGG_MYSQL_PWD/" $WWW_DIRECTORY/${NOM_ELGG}/engine/settings.php
-sed -i "s/{{CONFIG_DBNAME}}/${NOM_ELGG}/" $WWW_DIRECTORY/${NOM_ELGG}/engine/settings.php
-sed -i "s/{{CONFIG_DBPREFIX}}/elgg_/" $WWW_DIRECTORY/${NOM_ELGG}/engine/settings.php
+$BIN_MYSQL -u root < PLIGG_db.sql mysql
+rm PLIGG_db.sql
 
 
-chown -R www-data $WWW_DIRECTORY/${NOM_ELGG}
-  
+sed -i "32s/\"\"/$NOM_PLIGG/" $WWW_DIRECTORY/$NOM_PLIGG/install/install2.php
+sed -i "42s/\"\"/$PLIGG_MYSQL_PWD/" $WWW_DIRECTORY/$NOM_PLIGG/install/install2.php
+sed -i "37s/\"\"/$NOM_PLIGG/" $WWW_DIRECTORY/$NOM_PLIGG/install/install2.php
+
+mv $WWW_DIRECTORY/$NOM_PLIGG/settings.php.default $WWW_DIRECTORY/$NOM_PLIGG/settings.php
+mv $WWW_DIRECTORY/$NOM_PLIGG/libs/dbconnect.php.default $WWW_DIRECTORY/$NOM_PLIGG/libs/dbconnect.php
+
+chown -R www-data $WWW_DIRECTORY/$NOM_PLIGG/
+
 
 }
 
@@ -192,10 +198,8 @@ chown -R www-data $WWW_DIRECTORY/${NOM_ELGG}
 
 function CREATE_WUI
 {
-
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_ELGG}\">${NOM_ELGG}</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_PLIGG\" >$NOM_PLIGG</a><br>
 " >> $WWW_DIRECTORY/cooperation-wui.frame.php
-
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -207,10 +211,10 @@ echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_ELGG}\">${NOM_ELGG}</a><br>
 function CREATE_INSTALL_SCRIPT
 {
 
-
 echo "
-#Elgg
 
+#Pligg
+sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/$NOM_PLIGG/platform/conf/claro_main.conf.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
 }
@@ -218,11 +222,10 @@ echo "
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
-echo "I: Install Elgg"
+echo "I: Install Pligg"
 CHOICE_LANG
 CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
-
 CREATE_INSTALL_SCRIPT
-echo "I: End of install Elgg"
+echo "I: End of install Pligg"

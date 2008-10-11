@@ -263,7 +263,7 @@ BrowserMatchNoCase www\.netforex\.org blockAccess
 BrowserMatchNoCase ^WX_mail blockAccess
 BrowserMatchNoCase ^yacybot blockAccess
 BrowserMatchNoCase ^ZIBB blockAccess
-BrowserMatchNoCase ^$ blockAccess
+BrowserMatchNoCase ^\$ blockAccess
 
 
 # The ScriptAlias defines the bin directory as a directory where CGI
