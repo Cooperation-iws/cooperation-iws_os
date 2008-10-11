@@ -15,7 +15,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
 DL_DIR=$(cat /tmp/web_install-path)
-BIN_MYSQL=$(cat /tmp/mysql-path)
+BIN_MYSQL="mysql"
 SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
@@ -41,11 +41,15 @@ mkdir /tmp/debianlive
 cd /tmp/debianlive
 lh_config -p xfce --distribution etch --linux-flavours "686" --mirror-bootstrap "http://ftp.fr.debian.org/debian/" --mirror-chroot "http://ftp.fr.debian.org/debian/" --mirror-binary "http://ftp.fr.debian.org/debian/" --apt-options "--yes  --force-yes"
 lh_bootstrap
-#lh_chroot
+lh_chroot
 
 mv /tmp/debianlive/chroot /var
 echo $URL_FREE > /var/chroot/tmp/url_free
 chroot /var/chroot << "EOF"
+set passwd/root-password-crypted kj8A7sqYE9dQE
+
+rm /etc/init.d/gdm
+
 mount -t proc none /proc
 apt-get remove --assume-yes --force-yes live-initramfs
 apt-get install --yes --force-yes build-essential pkg-config rsync lsb xmlto bzip2
@@ -60,6 +64,7 @@ none    /var/run    tmpfs   defaults    0 0
 192.168.99.254:/var/chroot/var     /var    nfs rw,hard,nolock 0 0
 192.168.99.254:/var/chroot/tmp     /tmp    nfs rw,hard,nolock 0 0
 192.168.99.254:/var/chroot/root    /root   nfs rw,hard,nolock 0 0
+192.168.99.254:/var/chroot/etc    /etc   nfs rw,hard,nolock 0 0
 " > /etc/fstab
 
 
@@ -94,6 +99,8 @@ echo "PRESS ENTER"
 #read r < /dev/tty
 
 echo \"session=10\" > /etc/kerrighed_nodes 
+apt-get install --yes --force-yes apache2 apache2-doc apache2-mpm-prefork apache2-utils apache2.2-common mysql-server php5 libapache2-mod-php5 php5-mysql phpmyadmin php-pear php5-cli php5-gd php5-xsl php5-curl libapache2-mod-python php-pear libphp-adodb libexpat1 ssl-cert php5-imagick php5-imap php5-mcrypt php5-memcache php5-mhash php5-ming php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl php5-cli imagemagick
+sed -i "s/1/0/" /etc/default/apache2
 EOF
 umount /var/chroot/proc
 
@@ -109,6 +116,12 @@ RUN_DAEMON=\"yes\"
 OPTIONS=\"-l -s /srv/tftp\" " > /etc/default/tftpd-hpa
 
 echo "" > /etc/xinetd.conf
+
+cat /etc/resolv.conf | cut -d' ' -f2 > /tmp/dns
+
+DNS_1=$(echo $(cat /tmp/dns) |cut -d' ' -f1)
+
+DNS_2=$(echo $(cat /tmp/dns) |cut -d' ' -f2)
 
 
 echo "
@@ -127,19 +140,12 @@ option ntp-servers ntp.network.net;
 
 ### PART 3
 subnet 192.168.99.0 netmask 255.255.255.0 {
- option routers 192.168.99.254;
- option broadcast-address 192.168.99.255;
-}
-
-
-group {
-
-### PART 4
+option domain-name-servers ${DNS_1}, ${DNS_2};
+option routers 192.168.99.254;
+option broadcast-address 192.168.99.255;
 filename \"pxelinux.0\";
 option root-path \"/var/chroot\";
- host node1   { fixed-address 192.168.99.1;
-               hardware ethernet 00:0A:E4:FA:8A:74; }
-
+range 192.168.99.1 192.168.99.253;
 }
 
 
@@ -154,16 +160,23 @@ echo "
 /var/chroot/var *(rw,sync,no_root_squash,no_subtree_check,fsid=3)
 /var/chroot/dev *(rw,sync,no_root_squash,no_subtree_check,fsid=4)
 /var/chroot/root *(rw,sync,no_root_squash,no_subtree_check,fsid=5)
+/var/chroot/etc *(rw,sync,no_root_squash,no_subtree_check,fsid=6)
 " > /etc/exports
 
 echo "
+#!/bin/bash
+cat /etc/resolv.conf | cut -d' ' -f2 > /tmp/dns
+DNS_1=\$(echo \$(cat /tmp/dns) |cut -d' ' -f1)
+DNS_2=\$(echo \$(cat /tmp/dns) |cut -d' ' -f2)
+sed -i \"s/${DNS_1}/\${DNS_1}/\" /etc/dhcp3/dhcpd.conf
+sed -i \"s/${DNS_2}/\${DNS_2}/\" /etc/dhcp3/dhcpd.conf
+
 ifconfig eth1 192.168.99.254
-/etc/init.d/dhcp3-server stop
-/etc/init.d/dhcp3-server start
 /etc/init.d/dhcp3-server restart
-/etc/init.d/tftpd-hpa     restart
+/etc/init.d/tftpd-hpa restart
 /etc/init.d/nfs-kernel-server restart
-" >> /etc/rc.local
+/etc/init.d/shorewall restart
+" > /etc/rc.local
 
 mkdir /srv/tftp
 cp /var/chroot/boot/vmlinuz-2.6.20-krg /srv/tftp
@@ -185,6 +198,48 @@ label patates
 " > /srv/tftp/pxelinux.cfg/default
 
 chmod -R +r /srv/tftp/
+
+
+##Shorewall
+apt-get install --assume-yes --force-yes shorewall-shell dnsmasq 
+
+NET_IFACE="eth0"
+LOCAL_IFACE="eth1"
+
+#mv /etc/shorewall/ /var/share/etc/shorewall
+
+
+#ln -s /var/share/etc/shorewall /etc/shorewall
+
+
+cp /usr/share/doc/shorewall-common/examples/two-interfaces/* /etc/shorewall
+
+
+sed -i "s/eth0/$NET_IFACE/" /etc/shorewall/interfaces
+sed -i "s/eth1/$LOCAL_IFACE/" /etc/shorewall/interfaces
+sed -i "s/eth0/$NET_IFACE/" /etc/shorewall/masq
+sed -i -e "s/eth1/$LOCAL_IFACE/" /etc/shorewall/masq
+sed -i -e "s/STARTUP_ENABLED=No/STARTUP_ENABLED=Yes/" /etc/shorewall/shorewall.conf
+sed -i -e "43s/REJECT/ACCEPT/" /etc/shorewall/policy
+sed -i -e "43s/info//" /etc/shorewall/policy
+sed -i -e "52s/REJECT/ACCEPT/" /etc/shorewall/policy
+sed -i -e "52s/info//" /etc/shorewall/policy
+sed -i -e "53s/REJECT/ACCEPT/" /etc/shorewall/policy
+sed -i -e "53s/info//" /etc/shorewall/policy
+
+chmod -R +r /etc/shorewall
+
+
+#mv /etc/default/shorewall /var/share/etc/default
+
+#ln -s /var/share/etc/default/shorewall /etc/default/shorewall
+
+sed -i "s/startup=0/startup=1/" /etc/default/shorewall
+
+echo "DNAT       net       loc:192.168.99.1:80  tcp       80" >> /etc/shorewall/rules
+
+
+
 
 }
 

@@ -19,6 +19,24 @@ mkinitramfs -o /initrd.gz ${KERNEL[$NB_KERNEL]}
 rm /vmlinuz
 cp /boot/vmlinuz-${KERNEL[$NB_KERNEL]} /vmlinuz
 
+
+echo "I: Removing chroot user"
+function REMOVE_USER()
+{
+
+#faire mirroir dans /etc/skel/.
+#rsync -uravH --delete /home/liveusb/. 
+sleep 2
+#virer admin et liveusb de /etc/sudoers
+#cat /etc/sudoers | sed '/%admin/d' | tee /etc/sudoers
+echo -e "root ALL=(ALL) ALL" | tee /etc/sudoers
+#supprimer user 
+userdel -r liveusb
+}
+REMOVE_USER
+
+
+
 if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
 
 echo "I: Configuring cooperation-iws wui"
@@ -150,20 +168,6 @@ echo "I: config persistent directory"
 mkdir /etc/ciws
 cp -a  /var/* /etc/ciws/.
 
-echo "I: Removing chroot user"
-function REMOVE_USER()
-{
-
-#faire mirroir dans /etc/skel/.
-#rsync -uravH --delete /home/liveusb/. 
-sleep 2
-#virer admin et liveusb de /etc/sudoers
-#cat /etc/sudoers | sed '/%admin/d' | tee /etc/sudoers
-echo -e "root ALL=(ALL) ALL" | tee /etc/sudoers
-#supprimer user 
-userdel -r liveusb
-}
-REMOVE_USER
 
 
 echo "----------------Cooperation-iws----------------

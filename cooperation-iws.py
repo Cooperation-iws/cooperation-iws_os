@@ -1292,7 +1292,8 @@ class Reconstructor:
                 warnDlg.destroy()
             else:
                 warnDlg.destroy()
-
+	if workingDirOk== True :
+		 self.checkLiveCdVersion()
         return workingDirOk
 
    
@@ -2621,6 +2622,43 @@ class Reconstructor:
         print "Create Initrd Root: " + str(self.createAltInitrdRoot)
         print "ISO Filename: " + str(self.isoFilename)
 
+    def checkLiveCdVersion(self):
+
+	    if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'etch\'') != '':
+		self.casperPath = 'casper'
+		self.debDist= 'etch'			
+		self.wTree.get_widget("hbox701").hide()
+		self.wTree.get_widget("hbox301").show()
+		self.wTree.get_widget("hbox702").show()
+		self.wTree.get_widget("labelLiveCDKeybLang3").show()
+		print "Debian Etch Live CD"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '':
+		self.casperPath = 'casper'	
+		self.wTree.get_widget("hbox301").hide()
+		self.wTree.get_widget("hbox701").show()
+		self.wTree.get_widget("hbox702").hide()
+		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
+		self.debDist= '8.04'		
+		print "Ubuntu 8.04 Live CD"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'lenny\'') != '':
+		self.casperPath = 'live'
+		self.wTree.get_widget("hbox701").hide()
+		self.wTree.get_widget("hbox301").show()
+		self.wTree.get_widget("hbox702").show()
+		self.wTree.get_widget("labelLiveCDKeybLang3").show()	    	
+		self.debDist= 'lenny'	
+		print "Debian Lenny Live CD"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'sid\'') != '':	    	
+		self.debDist= 'sid'			
+		self.casperPath = 'live'
+		self.wTree.get_widget("hbox701").hide()
+		self.wTree.get_widget("hbox301").show()
+		self.wTree.get_widget("hbox702").show()
+		self.wTree.get_widget("labelLiveCDKeybLang3").show()	    	
+		print "Debian Lenny Live CD"	
+	    else:
+		print "Live CD not detected, Aborting"
+
 
 # ---------- Setup ---------- #
     def setupWorkingDirectory(self):
@@ -2677,40 +2715,9 @@ class Reconstructor:
 			
             # unmount iso/cd-rom
             os.popen("umount " + self.mountDir)
-
-	    if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'etch\'') != '':
-		self.casperPath = 'casper'
-		self.debDist= 'etch'			
-		self.wTree.get_widget("hbox701").hide()
-		self.wTree.get_widget("hbox301").show()
-		self.wTree.get_widget("hbox702").show()
-		self.wTree.get_widget("labelLiveCDKeybLang3").show()
-		print "Debian Etch Live CD"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '':
-		self.casperPath = 'casper'	
-		self.wTree.get_widget("hbox301").hide()
-		self.wTree.get_widget("hbox701").show()
-		self.wTree.get_widget("hbox702").hide()
-		self.wTree.get_widget("labelLiveCDKeybLang3").hide()		
-		print "Ubuntu 8.04 Live CD"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'lenny\'') != '':
-		self.casperPath = 'live'
-		self.wTree.get_widget("hbox701").hide()
-		self.wTree.get_widget("hbox301").show()
-		self.wTree.get_widget("hbox702").show()
-		self.wTree.get_widget("labelLiveCDKeybLang3").show()	    	
-		self.debDist= 'lenny'	
-		print "Debian Lenny Live CD"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'sid\'') != '':	    	
-		self.debDist= 'sid'			
-		self.casperPath = 'live'
-		self.wTree.get_widget("hbox701").hide()
-		self.wTree.get_widget("hbox301").show()
-		self.wTree.get_widget("hbox702").show()
-		self.wTree.get_widget("labelLiveCDKeybLang3").show()	    	
-		print "Debian Lenny Live CD"	
-	    else:
-		print "Live CD not detected, Aborting"
+	
+	    #Identify Live CD
+	    self.checkLiveCdVersion()
 	
         # custom root dir
         if self.createCustomRoot == True:
@@ -2958,6 +2965,7 @@ class Reconstructor:
 	scriptCustomSplash += 'wget '+ os.path.join(self.mirrorFree, "isolinux-ciws.tar.gz") + ' \n'  
 	scriptCustomSplash += 'tar -xzf isolinux-ciws.tar.gz -C ' + os.path.join(self.customDir, "remaster/")+' \n'  
 	scriptCustomSplash += 'sed -i "s/casper/'+self.casperPath+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")+' \n'  
+	scriptCustomSplash += 'sed -i "s/8.04/'+ self.debDist + '/" ' + os.path.join(self.customDir, "remaster/isolinux/f1.txt")+' \n'  
 	scriptCustomSplash += 'sed -i "s/splash/splash union=aufs/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")+' \n'  
 	if self.casperPath == 'live':
 		scriptCustomSplash += 'sed -i "s/initrd=\/'+self.casperPath+'\/initrd.gz/initrd=\/'+self.casperPath+'\/initrd.gz keyb='+keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")+' \n' 
