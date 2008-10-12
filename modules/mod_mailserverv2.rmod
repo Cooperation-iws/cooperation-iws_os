@@ -358,6 +358,7 @@ protocol lda {
 postmaster_address = postmaster@mydomain.com
 sendmail_path = /usr/lib/sendmail
 auth_socket_path = /var/run/dovecot/auth-master
+mail_plugins = cmusieve
 }
 #
 auth_verbose = no
@@ -392,7 +393,73 @@ group = postfix
 # ssl_require_client_cert = yes
 # ssl_username_from_cert = yes
 }
+plugin {
+ # NOTE: %variable expansion works only with Dovecot v1.0.2+
+ sieve = /var/sieve-scripts/%u.sieve
+}
+mkdir /var/sieve-scripts
 EOT
+
+apt-get install --assume-yes --force-yes git-core curl python-mysqldb
+git clone http://woozle.org/~neale/repos/pysieved
+sed -i "s/dbuser = user/dbuser = $NOM_MAILSERVER/" /opt/pysieved/pysieved.ini
+sed -i "s/dbname = db/dbname = $NOM_MAILSERVER/" /opt/pysieved/pysieved.ini
+sed -i "s/dbpass = pass/dbpass = $MAILSERVER_MYSQL_PWD/" /opt/pysieved/pysieved.ini
+sed -i "s/FROM users/FROM mailbox/g" /opt/pysieved/pysieved.ini
+sed -i "s/userdb  = passwd/userdb  = Dovecot/" /opt/pysieved/pysieved.ini
+sed -i "60s/#//" /opt/pysieved/pysieved.ini
+sed -i "63s/#//" /opt/pysieved/pysieved.ini
+sed -i "s/mux = \/var\/spool\/postfix\/auth\/dovecot/mux = \/var\/spool\/postfix\/private\/auth/" /opt/pysieved/pysieved.ini
+sed -i "3s/SASL/Dovecot/" /opt/pysieved/pysieved.ini
+sed -i "s/user_query = SELECT homedir FROM mailbox WHERE username = \"%(username)s\" AND (active = \"1\")/user_query = SELECT maildir AS homedir FROM mailbox WHERE username = \"%(username)s\" AND (active = \"1\")/" /opt/pysieved/pysieved.ini
+cat << EOF > /etc/init.d/pysieved
+#!/bin/bash
+# Antoine Reversat, 2008-10-20
+# Script to stop and start pySieved managesieve server
+
+PIDFILE=/var/run/pysieved.pid
+PYS_HOME=/opt/pysieved
+
+if [ \$# -ne 1 ]
+then
+        echo "usage : pysieved stop|start|restart"
+        exit 1
+fi
+
+case \$1 in
+        "start")
+                echo -n "Starting ManageSieve server pysieved... "
+                python \${PYS_HOME}/pysieved.py -c \${PYS_HOME}/pysieved.ini
+                if [ \$? -eq 0 ]
+                then
+                        echo "[OK]"
+                else
+                        echo "[Failed]"
+                fi
+                ;;
+        "stop")
+                echo -n "Stopping ManageSieve server pysieved..."
+                kill `cat \$PIDFILE`
+                ps -p `cat /var/run/pysieved.pid` | grep -v PID | grep python
+                if [ \$? -ne 0 ]
+                then
+                  echo "[OK]"
+                else
+                  echo "[Failed]"
+                fi
+                ;;
+        "restart")
+                \$0 stop
+                sleep 1
+                \$0 start
+                ;;
+        "*")
+                echo "Usage : pysieved stop|start|restart"
+                exit 1
+                ;;
+esac
+EOF
+chmod +x /etc/init.d/pysieved
 
 sed -i "28s/#driver =/driver = mysql/" /etc/dovecot/dovecot-sql.conf
 sed -i "57s/#connect = dbname=virtual user=virtual/connect = host=localhost dbname=$NOM_MAILSERVER user=$NOM_MAILSERVER password=$MAILSERVER_MYSQL_PWD/" /etc/dovecot/dovecot-sql.conf

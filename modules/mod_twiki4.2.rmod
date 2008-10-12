@@ -176,8 +176,9 @@ apt-get install libhtml-parser-perl
 apt-get install patch
 
 sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
-
-cat << EOT1 >> /etc/apache2/sites-available/default
+echo "Include /etc/apache2/sites-available/default-twiki
+</VirtualHost> " >> /etc/apache2/sites-available/default
+cat << EOF > /etc/apache2/sites-available/default-twiki
 BrowserMatchNoCase ^Accoona blockAccess
 BrowserMatchNoCase ^ActiveAgent blockAccess
 BrowserMatchNoCase ^Attache blockAccess
@@ -352,8 +353,8 @@ Alias /$NOM_TWIKI "$WWW_DIRECTORY/$NOM_TWIKI"
 
 
 
-</VirtualHost>
-EOT1
+
+EOF
 
 
 echo "
