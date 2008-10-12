@@ -64,6 +64,7 @@ echo -e "liveusb ALL=(ALL) ALL" | tee -a /etc/sudoers
 sleep 2
 }
 ADD_USER
+export HOME=/home/liveusb
 
 if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
 echo "

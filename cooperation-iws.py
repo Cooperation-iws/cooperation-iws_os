@@ -1250,8 +1250,7 @@ class Reconstructor:
             workingDirOk = False
         if rootExists == False:
             workingDirOk = False
-        if initrdExists == False:
-            workingDirOk = False
+        
         if workingDirOk == False:
             warnDlg = gtk.Dialog(title=self.appName, parent=None, flags=0, buttons=(gtk.STOCK_OK, gtk.RESPONSE_OK))
             warnDlg.set_icon_from_file(self.iconFile)

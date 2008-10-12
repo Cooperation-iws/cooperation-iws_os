@@ -1,0 +1,119 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Insoshi'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Social Netwsorking'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+LANG_UI=$(cat /tmp/lang-wui)
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+NOM_INSOSHI="Inshoshi"
+INSOSHI_MYSQL_PWD="INSOSHI_MYSQL_PWD"
+
+
+function INSTALL
+{
+export HOME=/home/liveusb
+apt-get --assume-yes --force-yes install ruby-full build-essential
+cd $DL_DIR
+wget http://rubyforge.org/frs/download.php/38646/rubygems-1.2.0.tgz
+tar xzvf rubygems-1.2.0.tgz
+cd rubygems-1.2.0
+ruby setup.rb
+ln -s /usr/bin/gem1.8 /usr/bin/gem
+gem update --system
+sleep 2
+gem install rails
+sleep 10
+apt-get install --assume-yes --force-yes libmysql++-dev apache2-prefork-dev
+gem install mysql
+gem install chronic
+gem install BlueCloth
+
+apt-get install --assume-yes --force-yes git-core imagemagick 
+mkdir /var
+cd /var
+git clone git://github.com/insoshi/insoshi.git
+cd insoshi
+cp config/database.example config/database.yml
+
+echo "grant all on *.* to ${NOM_INSOSHI}@localhost identified by '$INSOSHI_MYSQL_PWD';
+flush privileges;" > INSOSHI_db.sql
+
+$BIN_MYSQL -u root < INSOSHI_db.sql mysql
+
+sed -i "s/root/$NOM_INSOSHI/" config/database.yml
+sed -i "s/password:/password: $INSOSHI_MYSQL_PWD/" config/database.yml
+
+./script/install
+
+rake db:test:prepare
+rake spec
+
+cd $DL_DIR
+wget http://www.sphinxsearch.com/downloads/sphinx-0.9.8.tar.gz
+tar -xzf sphinx-0.9.8.tar.gz
+cd sphinx-0.9.8
+./configure --with-mysql
+make clean
+make all
+make install
+cd /var/insoshi
+rake ultrasphinx:configure RAILS_ENV=test
+rake ultrasphinx:index RAILS_ENV=test
+rake ultrasphinx:daemon:start RAILS_ENV=test
+
+rake spec
+
+
+
+nohup /var/insoshi/script/server -p 3020 &
+echo "
+#Insoshi
+nohup /var/insoshi/script/server -p 3020 &
+
+" >> /etc/rc.local
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+function CREATE_WUI
+{
+echo "$RMOD_DESCRIPTION | <a href=\"http://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:3020\" >$NOM_INSOSHI</a><br>
+">> $WWW_DIRECTORY/cooperation-wui.frame.php
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+echo "I: Install Insoshi"
+INSTALL
+CREATE_WUI
+echo "I: End of Install Insoshi"
