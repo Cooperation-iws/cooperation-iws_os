@@ -1,0 +1,70 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Kolab2.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Mail Server'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+LANG_UI=$(cat /tmp/lang-wui)
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+NOM_INSOSHI="Inshoshi"
+INSOSHI_MYSQL_PWD="INSOSHI_MYSQL_PWD"
+
+
+function INSTALL
+{
+apt-get install --assume-yes --force-yes make gcc build-essential
+chmod +x obmtool
+
+cd $DL_DIR
+mkdir kolabtemp
+cd kolabtemp
+wget -r -l1 -nd --no-parent --retr-symlinks http://ftp.belnet.be/packages/kolab/server/release/kolab-server-2.2.0/ix86-debian4.0/
+md5sum -c MD5SUMS
+sh install-kolab.sh 2>&1 | tee /root/kolab-install.log
+
+/kolab/etc/kolab/kolab_bootstrap -b
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+function CREATE_WUI
+{
+echo "$RMOD_DESCRIPTION | <a href=\"http://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:3020\" >$NOM_INSOSHI</a><br>
+">> $WWW_DIRECTORY/cooperation-wui.frame.php
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+echo "I: Install Insoshi"
+INSTALL
+CREATE_WUI
+echo "I: End of Install Insoshi"
