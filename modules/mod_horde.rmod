@@ -84,7 +84,7 @@ fi
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-wget wget ftp://ftp.horde.org/pub/horde-webmail/horde-webmail-1.2.tar.gz
+wget ftp://ftp.horde.org/pub/horde-webmail/horde-webmail-1.2.tar.gz
 tar -xzf horde-webmail-1.2.tar.gz
 mv horde-webmail-1.2 horde
 #rm moodle-latest-19.zip
@@ -176,6 +176,16 @@ flush privileges;" > HORDE_db.sql
 
 $BIN_MYSQL -u root < HORDE_db.sql mysql
 rm HORDE_db.sql
+apt-get install --assume-yes --force-yes php-pear php5-dev imagemagick libmagic-dev make 
+
+pear install --onlyreqdeps Log Mail Mail_Mime DB File Date 
+pecl install fileinfo
+pecl install memcache
+
+echo "
+extension=fileinfo.so
+extension=memcache.so
+" > /etc/php5/apache2/php.ini
 
 echo "---------------You will now config Horde--------------------"
 echo "MYSQL DATABASE NAME: $NOM_HORDE"
@@ -185,7 +195,7 @@ echo "-------------Press enter-----------------------"
 read r < /dev/tty
 cd $WWW_DIRECTORY/$NOM_HORDE/
 ./scripts/setup.php
-sed -i "s/\$conf['session']['use_only_cookies'] = true;/\$conf['session']['use_only_cookies'] = false;/" $WWW_DIRECTORY/$NOM_HORDE/config.conf.php
+sed -i "18s/true/false/" $WWW_DIRECTORY/$NOM_HORDE/config/conf.php
 
 chown -R www-data $WWW_DIRECTORY/$NOM_HORDE/
 
