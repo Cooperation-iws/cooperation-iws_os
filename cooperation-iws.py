@@ -364,6 +364,7 @@ class Reconstructor:
     def checkDependencies(self):
         print _('Checking dependencies...')
         dependList = ''
+        wgetlist = ''
         if commands.getoutput('which mksquashfs') == '':
             print _('squashfs-tools NOT FOUND (needed for Root FS extraction)')
             dependList += 'squashfs-tools\n'
@@ -412,7 +413,10 @@ class Reconstructor:
         if commands.getoutput('which apt-ftparchive') == '':
             print _('apt-utils NOT FOUND (needed for Extra Repository Generation)')
             dependList += 'apt-utils\n'
-        if dependList != '':
+	if commands.getoutput('which liveusb') == '':
+            print _('liveusb NOT FOUND (needed for liveusb Generation)')
+            wgetlist = 'liveusb\n'
+        if dependList != '' or wgetlist != '':
             print _('\nThe following dependencies are not met: ')
             print dependList
             print _('Please install the dependencies and restart reconstructor.')
@@ -426,9 +430,13 @@ class Reconstructor:
             lblText = _('  <b>Reconstructor may not work correctly.</b>\nThe following dependencies are not met: ')
             lbl = gtk.Label(lblText)
             lbl.set_use_markup(True)
-            lblInfo = gtk.Label(dependList)
-            lblFixText = _('Install the dependencies and restart reconstructor?')
-            lblFix = gtk.Label(lblFixText)
+	    if dependList != '' :           
+		lblInfo = gtk.Label(dependList)
+            	lblFixText = _('Install the dependencies and restart reconstructor?')
+            if wgetlist != '':
+		lblInfo = gtk.Label(wgetlist)
+            	lblFixText = _('You need to install livusb manually, some functionnality may not work, continue?')
+	    lblFix = gtk.Label(lblFixText)
             warnDlg.vbox.pack_start(lbl)
             warnDlg.vbox.pack_start(lblInfo)
             warnDlg.vbox.pack_start(lblFix)
@@ -437,14 +445,14 @@ class Reconstructor:
             lblFix.show()
             #warnDlg.show()
             response = warnDlg.run()
-            if response == gtk.RESPONSE_OK:
+            if response == gtk.RESPONSE_OK and dependList != '' :
                 warnDlg.destroy()
                 # use apt to install
                 #print 'apt-get install -y ' + dependList.replace('\n', ' ')
                 installTxt = _('Installing dependencies: ')
                 print installTxt + dependList.replace('\n', ' ')
                 os.popen('apt-get install -y ' + dependList.replace('\n', ' '))
-		sys.exit(0)
+		#sys.exit(0)
             else:
                 warnDlg.destroy()
 
