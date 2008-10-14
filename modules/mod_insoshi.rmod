@@ -52,7 +52,7 @@ gem install chronic
 gem install BlueCloth
 
 apt-get install --assume-yes --force-yes git-core imagemagick 
-mkdir /var
+
 cd /var
 git clone git://github.com/insoshi/insoshi.git
 cd insoshi

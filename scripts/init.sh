@@ -68,9 +68,9 @@ export HOME=/home/liveusb
 
 if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
 echo "
-deb $DEB_MIRROR_PATH/ hardy restricted main universe multiverse
-deb $DEB_MIRROR_PATH/ hardy-updates restricted main universe multiverse
-deb $DEB_MIRROR_PATH/ hardy-security restricted main universe multiverse
+deb $DEB_MIRROR_PATH/ $DEB_DIST restricted main universe multiverse
+deb $DEB_MIRROR_PATH/ $DEB_DIST-updates restricted main universe multiverse
+deb $DEB_MIRROR_PATH/ $DEB_DIST-security restricted main universe multiverse
 " > /etc/apt/sources.list
 else
 echo "

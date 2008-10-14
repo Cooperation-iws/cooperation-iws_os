@@ -170,6 +170,7 @@ class Reconstructor:
         self.iterCategoryEducation = None
         self.iterCategorySoftware = None
         self.iterCategoryServer = None
+        self.iterCategoryClient = None
         self.iterCategoryOs = None
         self.iterCategoryMultimedia = None
         self.iterCategoryPlugins = None
@@ -223,8 +224,7 @@ class Reconstructor:
             "on_buttonBrowseIsoFilename_clicked" : self.on_buttonBrowseIsoFilename_clicked,
             "on_buttonBrowseIsoFilename_clicked2" : self.on_buttonBrowseIsoFilename_clicked2,
             "on_checkbuttonBuildIso_toggled" : self.on_checkbuttonBuildIso_toggled,
-	    "on_checkbuttonBuildUsb_toggled" : self.on_checkbuttonBuildUsb_toggled,
-            "on_buttonBrowseLiveCdFilename_clicked" : self.on_buttonBrowseLiveCdFilename_clicked,
+	    "on_buttonBrowseLiveCdFilename_clicked" : self.on_buttonBrowseLiveCdFilename_clicked,
             "on_buttonSoftwareCalculateIsoSize_clicked" : self.on_buttonSoftwareCalculateIsoSize_clicked,
             "on_buttonSoftwareDetectUsb_clicked" : self.on_buttonSoftwareDetectUsb_clicked,
             "on_buttonSoftwareDetectUsb_clicked2" : self.on_buttonSoftwareDetectUsb_clicked2,
@@ -347,11 +347,7 @@ class Reconstructor:
         # set default cd architectures
         self.wTree.get_widget("comboboxLiveCdArch").set_active(0)
         self.wTree.get_widget("comboboxAltBuildArch").set_active(0)
-	self.wTree.get_widget("comboboxLiveUsbKeybLang").set_active(0)
-        self.wTree.get_widget("comboboxLiveUsbBootLang").set_active(0)
-        self.wTree.get_widget("comboboxLiveUsbKeybLang2").set_active(0)
-        self.wTree.get_widget("comboboxLiveUsbBootLang2").set_active(0)
-        # set default Debian Live architecture
+	   # set default Debian Live architecture
 	self.wTree.get_widget("comboboxDebianLiveType").set_active(3)
 	self.wTree.get_widget("comboboxDebianLiveMirrors").set_active(0)
         self.wTree.get_widget("comboboxUbuntuMirrors").set_active(0)
@@ -359,6 +355,7 @@ class Reconstructor:
         self.wTree.get_widget("comboboxLiveCDKeybLang").set_active(0)
         self.wTree.get_widget("comboboxLiveCDKeybLang1").set_active(0)
         self.wTree.get_widget("comboboxWebAppMirrors").set_active(1)
+        self.wTree.get_widget("comboboxCiwsOs").set_active(0)
        
        
 
@@ -447,7 +444,7 @@ class Reconstructor:
                 installTxt = _('Installing dependencies: ')
                 print installTxt + dependList.replace('\n', ' ')
                 os.popen('apt-get install -y ' + dependList.replace('\n', ' '))
-                sys.exit(0)
+		sys.exit(0)
             else:
                 warnDlg.destroy()
 
@@ -597,13 +594,15 @@ class Reconstructor:
         # root categories
         self.iterCategorySoftware = self.treeModel.insert_before(None, None)
         self.treeModel.set_value(self.iterCategorySoftware, 0, 'Software')
-        # Server
-        self.iterCategoryServer = self.treeModel.insert_before(self.iterCategorySoftware, None)
+       # Server
+	self.iterCategoryServer = self.treeModel.insert_before(self.iterCategorySoftware, None)
         self.treeModel.set_value(self.iterCategoryServer, 0, 'Server')
         # Scripts
         self.iterCategoryOs = self.treeModel.insert_before(self.iterCategorySoftware, None)
         self.treeModel.set_value(self.iterCategoryOs, 0, 'OS')
-       
+        # Client
+        self.iterCategoryClient = self.treeModel.insert_before(self.iterCategorySoftware, None)
+        self.treeModel.set_value(self.iterCategoryClient, 0, 'Client')
         # miscellaneous
         self.iterCategoryMisc = self.treeModel.insert_before(self.iterCategorySoftware, None)
         self.treeModel.set_value(self.iterCategoryMisc, 0, 'Web_app')
@@ -633,6 +632,8 @@ class Reconstructor:
                             iter = self.treeModel.insert_before(self.iterCategoryOs, None)
 			elif modSubCategory == 'Server':
 			    iter = self.treeModel.insert_before(self.iterCategoryServer, None)
+                      	elif modSubCategory == 'Client':
+			    iter = self.treeModel.insert_before(self.iterCategoryClient, None)
                         else:
                             iter = self.treeModel.insert_before(self.iterCategoryMisc, None)
 
@@ -1549,8 +1550,6 @@ class Reconstructor:
             	print _("Umounting /proc...")
             	os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
 
-		#hide Live USB tab
-		self.wTree.get_widget("tableBuildUsb").hide()                
 		# check for windows apps and enable/disable checkbox as necessary
                 if self.checkWindowsPrograms() == True:
                     self.wTree.get_widget("checkbuttonLiveCdRemoveWin32Programs").set_sensitive(True)
@@ -1897,9 +1896,19 @@ class Reconstructor:
     # Sets live cd information (username, full name, hostname) for live cd
     def setLiveCdInfo(self, username, userFullname, userPassword, hostname):
 	if self.casperPath == 'casper': 
+	    if self.distVariant == 'mint':
+		initUsername = 'mint'
+		initUserFullname = 'mint'
+		initHostName = 'Elyssa'
+		initBuildSystem = 'Ubuntu'
+	    else:
+		initUsername = 'ubuntu'
+		initUserFullname = 'Live session user'
+		initHostName = 'ubuntu'
+		initBuildSystem = 'Ubuntu'
 	    if username != '':
 		    print ('Username: ' + username)
-		    sed = 'sed -i \'5s/ubuntu/' + username + '/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPath + ".conf")
+		    sed = 'sed -i \'5s/' + initUsername + '/' + username + '/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPath + ".conf")
 		    cmd = commands.getoutput(sed)
 	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
 	    	    #sed = 'sed -i \'s/USERNAME=casper/USERNAME=' + username + '/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/casper")
@@ -1908,7 +1917,7 @@ class Reconstructor:
 	    
 	    if userFullname != '':
 		    print ('User Full Name: ' + userFullname)
-		    sed = 'sed -i \'s/USERFULLNAME=\"Live session user\"/USERFULLNAME=\"' + userFullname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPath + ".conf") 
+		    sed = 'sed -i \'s/USERFULLNAME=\"' + initUserFullname + '\"/USERFULLNAME=\"' + userFullname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPath + ".conf") 
 		    cmd = commands.getoutput(sed)
 	 	    #print ('Sed User Full Name: \n ' + sed + '\n' + cmd)
 	    	    #sed = 'sed -i \'s/USERFULLNAME=\"Live session user\"/USERFULLNAME=\"' + userFullname + '\"/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath )
@@ -1917,10 +1926,10 @@ class Reconstructor:
 	    
 	    if hostname != '':
 		    print ('Hostname: ' + hostname)
-		    sed = 'sed -i \'s/HOST=\"ubuntu\"/HOST=\"' + hostname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPath + ".conf") 
+		    sed = 'sed -i \'s/HOST=\"' + initHostName + '\"/HOST=\"' + hostname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPath + ".conf") 
 		    cmd = commands.getoutput(sed)
 	 	    #print ('Sed 1 Hostname: \n ' + sed + '\n' + cmd)
-		    sed = 'sed -i \'s/BUILD_SYSTEM=\"Ubuntu\"/BUILD_SYSTEM=\"' + hostname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPath + ".conf")
+		    sed = 'sed -i \'s/BUILD_SYSTEM=\"' + initBuildSystem + '\"/BUILD_SYSTEM=\"' + hostname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPath + ".conf")
 		    cmd = commands.getoutput(sed)
 	 	    #print ('Sed 2 Hostname: \n ' + sed + '\n' + cmd)
 		    sed = 'sed -i \'s/HOST=live/HOST=' + hostname + '/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath )
@@ -2097,20 +2106,22 @@ class Reconstructor:
             # regex for extracting size
             r = re.compile('(\d+)\s', re.IGNORECASE)
             # get size of remaster dir - use du -s (it's faster)
-            remaster = commands.getoutput('du -s ' + os.path.join(self.customDir, "remaster/"))
-            mRemaster = r.match(remaster)
-            remasterSize = int(mRemaster.group(1))
+            remaster = commands.getoutput('echo $(du -s ' + os.path.join(self.customDir, "remaster/") + ') | cut -d\' \' -f1')
+           
+	    #mRemaster = r.match(remaster)
+	    #print "mRemaster" + mRemaster +" \n"
+            remasterSize = int(remaster)
             # subtract squashfs root
             if os.path.exists(os.path.join(self.customDir, "remaster/" + self.casperPath + "/filesystem.squashfs")):
-                squash = commands.getoutput('du -s ' + os.path.join(self.customDir, "remaster/" + self.casperPath + "/filesystem.squashfs"))
-                mSquash = r.match(squash)
-                squashSize = int(mSquash.group(1))
+                squash = commands.getoutput('echo $(du -s ' + os.path.join(self.customDir, "remaster/" + self.casperPath + "/filesystem.squashfs")+ ') | cut -d\' \' -f1')
+              
+                squashSize = int(squash)
 
             remasterSize -= squashSize
             # get size of root dir
-            root = commands.getoutput('du -s ' + os.path.join(self.customDir, "chroot/"))
-            mRoot = r.match(root)
-            rootSize = int(mRoot.group(1))
+            root = commands.getoutput('echo $(du -s ' + os.path.join(self.customDir, "chroot/") + ') | cut -d\' \' -f1')
+            
+            rootSize = int(root)
 
             # divide root size to simulate squash compression
             self.wTree.get_widget("labelSoftwareIsoSize").set_text( '~ ' + str(int(round((remasterSize + (rootSize/3.185))/1024))) + ' MB')
@@ -2392,13 +2403,7 @@ class Reconstructor:
             # hide filename entry
             self.wTree.get_widget("tableLiveCd").hide()
 
-    def on_checkbuttonBuildUsb_toggled(self, widget):
-        if self.wTree.get_widget("checkbuttonBuildUsb").get_active() == True:
-            # show filename, description, etc. entry
-            self.wTree.get_widget("tableBuildUsb").show()
-        else:
-            # hide filename entry
-            caself.wTree.get_widget("tableBuildUsb").hide()
+   
 
   
  
@@ -2623,33 +2628,55 @@ class Reconstructor:
 
     def checkLiveCdVersion(self):
 
-	    if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'etch\'') != '':
+	    if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' | grep \'Elyssa\'') != '':
 		self.casperPath = 'casper'
-		self.debDist= 'etch'			
+		self.debDist = 'hardy'
+		self.distVariant = 'mint'			
+		self.wTree.get_widget("hbox701").hide()
+		self.wTree.get_widget("hbox301").show()
+		self.wTree.get_widget("hbox702").show()
+		self.wTree.get_widget("labelLiveCDKeybLang3").show()
+		print "Linux Mint 5 Elyssa"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'etch\'') != '':
+		self.casperPath = 'casper'
+		self.debDist= 'etch'
+		self.distVariant = 'etch'			
 		self.wTree.get_widget("hbox701").hide()
 		self.wTree.get_widget("hbox301").show()
 		self.wTree.get_widget("hbox702").show()
 		self.wTree.get_widget("labelLiveCDKeybLang3").show()
 		print "Debian Etch Live CD"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '':
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '' or commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'hardy\'') != '':
 		self.casperPath = 'casper'	
 		self.wTree.get_widget("hbox301").hide()
 		self.wTree.get_widget("hbox701").show()
 		self.wTree.get_widget("hbox702").hide()
 		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
-		self.debDist= '8.04'		
+		self.debDist= 'hardy'
+		self.distVariant = 'hardy'		
 		print "Ubuntu 8.04 Live CD"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.10\'') != '':
+		self.casperPath = 'casper'	
+		self.wTree.get_widget("hbox301").hide()
+		self.wTree.get_widget("hbox701").show()
+		self.wTree.get_widget("hbox702").hide()
+		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
+		self.debDist= 'intrepid'
+		self.distVariant = 'intrepid'		
+		print "Ubuntu 8.10 Live CD"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'lenny\'') != '':
 		self.casperPath = 'live'
 		self.wTree.get_widget("hbox701").hide()
 		self.wTree.get_widget("hbox301").show()
 		self.wTree.get_widget("hbox702").show()
 		self.wTree.get_widget("labelLiveCDKeybLang3").show()	    	
-		self.debDist= 'lenny'	
+		self.debDist= 'lenny'
+		self.distVariant = 'lenny'	
 		print "Debian Lenny Live CD"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'sid\'') != '':	    	
 		self.debDist= 'sid'			
 		self.casperPath = 'live'
+		self.distVariant = 'sid'
 		self.wTree.get_widget("hbox701").hide()
 		self.wTree.get_widget("hbox301").show()
 		self.wTree.get_widget("hbox702").show()
@@ -2885,7 +2912,7 @@ class Reconstructor:
 		    	keyLang = self.wTree.get_widget("comboboxLiveCDKeybLang1").get_active_text()
 		    # set live cd info
 		    self.setLiveCdInfo(username=user, userFullname=userFull, userPassword=password, hostname=host)
-	 	    
+	 	    ciwsOsType = self.wTree.get_widget("comboboxCiwsOs").get_active_text() 
 		else:
 		    print _('Username do not match.')
 		    # show warning dlg
@@ -2955,6 +2982,9 @@ class Reconstructor:
 	fDebMirror=open(os.path.join(self.customDir, "chroot/tmp/deb_mirror_path"), 'w')
 	fDebMirror.write(debMirror)
 	fDebMirror.close()
+	fciwsOsType=open(os.path.join(self.customDir, "chroot/tmp/os_type"), 'w')
+	fciwsOsType.write(ciwsOsType)
+	fciwsOsType.close()
 
   
 	#Splash screen
@@ -3056,7 +3086,7 @@ class Reconstructor:
 	    self.treeModel.foreach(self.copyExecuteModule)
             # find all modules in chroot and chain together and run
             for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "scripts/")):
-                for execMod in execModFiles:
+                for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
                     if re.search('.rmod', ext):
                         modExecScr += 'echo -------------------------------------------------\n'
@@ -3066,7 +3096,7 @@ class Reconstructor:
                         modExecScr += 'echo -------------------------------------------------\n'
                         modExecScr += 'bash \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(execMod) + '\"' + ' ;\n '
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
-                for execMod in execModFiles:
+                for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
                     if re.search('.omod', ext):
                         modExecScrChroot += 'echo -------------------------------------------------\n'
@@ -3076,7 +3106,7 @@ class Reconstructor:
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
-                for execMod in execModFiles:
+                for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
                     if re.search('.smod', ext):
                         modExecScrChroot += 'echo -------------------------------------------------\n'
@@ -3089,7 +3119,7 @@ class Reconstructor:
 	    modExecScrChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
             modExecScrChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
             for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
-                for execMod in execModFiles:
+                for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
                     if re.search('.rmod', ext):
                         modExecScrChroot += 'echo -------------------------------------------------\n'
@@ -3271,9 +3301,6 @@ class Reconstructor:
 		self.buildSquashRoot = self.wTree.get_widget("checkbuttonBuildSquashRoot").get_active()
 		self.buildIso = self.wTree.get_widget("checkbuttonBuildIso").get_active()
 		self.buildUsb = self.wTree.get_widget("checkbuttonBuildUsb").get_active()
-		self.buildUsbKeyPath = self.wTree.get_widget("entryKeyUsb2").get_text()
-		self.LiveUsbKeybLang = self.wTree.get_widget("comboboxLiveUsbKeybLang").get_active_text()        
-		self.LiveUsbBootLang = self.wTree.get_widget("comboboxLiveUsbBootLang").get_active_text()        
 		self.buildLiveCdFilename = self.wTree.get_widget("entryLiveIsoFilename").get_text()
 		self.LiveCdDescription = "cooperation-iws-custom"
 		self.LiveCdRemovePrograms = self.wTree.get_widget("checkbuttonLiveCdRemoveWin32Programs").get_active()
@@ -3362,9 +3389,6 @@ class Reconstructor:
 		            print _("Building x86_64 ISO...")
 		            os.popen(self.timeCmd + ' mkisofs -r -o \"' + self.buildLiveCdFilename + '\" -b \"isolinux/isolinux.bin\" -c \"isolinux/boot.cat\" -no-emul-boot -V \"' + self.LiveCdDescription + '\" -J -l \"' + os.path.join(self.customDir, "remaster") + '\"')
 	else :
-		self.buildUsbKeyPath = self.wTree.get_widget("entryKeyUsb").get_text()
-		self.LiveUsbKeybLang = self.wTree.get_widget("comboboxLiveUsbKeybLang").get_active_text()        
-		self.LiveUsbBootLang = self.wTree.get_widget("comboboxLiveUsbBootLang").get_active_text()        
 		self.customDir = self.wTree.get_widget("entryWorkingDir").get_text()	
 		self.isoFilename  = self.wTree.get_widget("entryIsoFilename").get_text()
 		
@@ -3379,26 +3403,10 @@ class Reconstructor:
 	if  self.buildUsb == True : 
 		print "Custom Directory: " + str(self.customDir)
         	print "ISO Filename: " + str(self.isoFilename)
-		print "Usb Key: " + str(self.buildUsbKeyPath)
-       		print "Usb key keyboard language: " + str(self.LiveUsbKeybLang)
-       		print "Usb Key locale: " + str(self.LiveUsbBootLang)
-        	
-		#Share Usb Key Path
-		fUsbKeyPath=open('/tmp/usb_key', 'w')
-        	fUsbKeyPath.write(self.buildUsbKeyPath)
-        	fUsbKeyPath.close()       
-		#Share Usb Boot Lang
-		fUsbBootLang=open('/tmp/usb-bootlang', 'w')
-        	fUsbBootLang.write(self.LiveUsbBootLang)
-        	fUsbBootLang.close()		
 		
-		#Share Usb Keyb Lang
-		fUsbKeybLang=open('/tmp/usb-keyblang', 'w')
-        	fUsbKeybLang.write(self.LiveUsbKeybLang)
-        	fUsbKeybLang.close()		
 		print _("Building Live USB...")
 		try:
-		    os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws Build Live Usb\" -x bash \"' + os.path.join(self.scriptDir, "make_usb.sh") + '\"')  	
+		    os.popen('/usr/bin/liveusb -m ' + os.path.join(self.customDir, "remaster"))  	
     		except Exception, detail:
             	    errText = _("Error Creating Live Usb Key: ")
             	    print errText, detail

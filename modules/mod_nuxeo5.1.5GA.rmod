@@ -211,25 +211,11 @@ TEXT1=$MESS_CHOIX_OPTION
 TEXT_CHOIX_1=$MESS_OOO
 TEXT_CHOIX_2=$MESS_DO_NOTHING
 
-OOO=$(zenity \
---title="Live CD/USB" \
---text="$TEXT1" \
---window-icon="/usr/share/pixmaps/ubuntu.svg" \
---width=400 \
---height=250 \
---list \
---print-column="ALL" \
---radiolist \
---separator=" " \
---column="*" \
---column="Val" \
---column="$TEXT2" \
---hide-column="2" \
-FALSE "A" "$TEXT_CHOIX_1" \
-TRUE "B" "$TEXT_CHOIX_2" \
-)
+echo "$MESS_OOO"
+echo "[N/y]"
+read OOO < /dev/tty
 
-if [ "$(echo "${OOO}" | awk  '{print $1}')" == "A" ]; then
+if [ "$(echo "${OOO}" | awk  '{print $1}')" == "y" ]; then
 chroot $DOSSIER_CHROOT << "EOF"
 apt-get install --assume-yes --force-yes openoffice.org-headless
 EOF

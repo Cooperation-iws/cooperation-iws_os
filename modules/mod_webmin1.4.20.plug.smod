@@ -158,17 +158,11 @@ function INSTALL
 {
 
 echo "
----------COOPERATION LIVE SCRIPTS $VERSION----------
+---------Cooperation-iws----------
 
 $MESS_WARNING_PASSWORD
-" | sudo tee "/tmp/cust_webmin.txt"
-zenity \
---title="Live CD/USB" \
---width=640 \
---height=480 \
---text-info \
---editable \
---filename="/tmp/cust_webmin.txt"
+" 
+read r < /dev/tty
 
 function CHOIX_PASS() 
 {
@@ -176,11 +170,11 @@ SAISIE_PASS1="";SAISIE_PASS2="";
 
 function SAISIE()
 {
-SAISIE_PASS1=$(zenity --entry --hide-text --text "Saisie du mot de passe utilisateur (1)")
-test $? -ne 0 && break && SAISIE_PASS1="" && SAISIE_PASS2="" # Bouton Annuler
+echo  "Enter your root password (1):"
+read SAISIE_PASS1 < /dev/tty
 sleep 2
-SAISIE_PASS2=$(zenity --entry --hide-text --text "Confirmez, Saisie du mot de passe utilisateur (2)")
-test $? -ne 0 && break && SAISIE_PASS1="" && SAISIE_PASS2="" # Bouton Annuler
+echo  "Confirm your root password (2):"
+read SAISIE_PASS2 < /dev/tty
 }
 while [[ "$SAISIE_PASS1" != "$SAISIE_PASS2" || "$(echo -e "$SAISIE_PASS1" | wc -m)" -le "6" ]]
 do

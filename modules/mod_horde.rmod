@@ -185,7 +185,7 @@ pecl install memcache
 echo "
 extension=fileinfo.so
 extension=memcache.so
-" > /etc/php5/apache2/php.ini
+" >> /etc/php5/apache2/php.ini
 
 echo "---------------You will now config Horde--------------------"
 echo "MYSQL DATABASE NAME: $NOM_HORDE"

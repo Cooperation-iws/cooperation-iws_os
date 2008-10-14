@@ -256,7 +256,9 @@ DOWNLOAD
 
 apt-get install --assume-yes --force-yes oinkmaster libpcap-dev libmysqlclient15-dev bison flex mysql-client
 
-REGISTERED_KEY=$(zenity --entry --text "$MESS_REGISTER")
+echo "$MESS_REGISTER"
+echo "key:"
+read REGISTERED_KEY < /dev/tty
 
 if [ "$(echo $REGISTERED_KEY | grep '[0-9a-zA-Z]')" ] ; then
 sed -i "s/url = http:\/\/www.snort.org\/dl\/rules\/snortrules-snapshot-2_2.tar.gz/url = http:\/\/www.snort.org\/pub-bin\/oinkmaster.cgi\/$REGISTERED_KEY\/snortrules-snapshot-2.8.tar.gz/" /etc/oinkmaster.conf

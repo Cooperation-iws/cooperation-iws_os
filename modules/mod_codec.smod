@@ -1,0 +1,20 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Multimedia Codecs'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Multimedia Codecs'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$(cat /tmp/user)
+
+echo "I: install codec"
+wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key add -
+echo "deb http://fr.packages.medibuntu.org/ hardy free non-free" >> /etc/apt/sources.list
+apt-get update
+apt-get install --assume-yes --force-yes w32codecs ubuntu-restricted-extras
+
+

@@ -197,8 +197,7 @@ mv /usr/share/squirrelmail /var/share/lampp
 
 ln -s /var/share/lampp/squirrelmail /usr/share/squirrelmail
 /etc/init.d/apache2 restart
-cd $DL_DIR
-cp -r squirrelmail_locales/help squirrelmail_locales/images squirrelmail_locales/locale /var/share/lampp/squirrelmail/.
+
 }
 
 #_______________________________________________________________________________________________
@@ -224,7 +223,7 @@ function CREATE_INSTALL_SCRIPT
 
 echo "
 
-#Roundcube
+#Squirrelmail
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
 }
@@ -232,10 +231,10 @@ echo "
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
-echo "I: Install Roundcube"
+echo "I: Install Squirrelmail"
 CHOICE_LANG
 CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 CREATE_INSTALL_SCRIPT
-echo "I: End of install Roundcube"
+echo "I: End of install Squirrelmail"

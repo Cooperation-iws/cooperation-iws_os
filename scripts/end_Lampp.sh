@@ -10,6 +10,7 @@ APACHE=$(cat /tmp/apache)
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
 CASPER_PATH=$(cat /tmp/casper_path)
+OS_TYPE=$(cat /tmp/os_type)
 
 echo "I: config post install script"
 echo "
@@ -22,22 +23,20 @@ read ok < /dev/tty
 
 chmod +x $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
+if [ "$(echo "${OS_TYPE}" | awk  '{print $1}')" == "Server" ]; then
 echo "I: configuring $CASPER_PATH"
 if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ]; then
 sed -i -e "405s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "412s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "13s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "15s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-
 else
 sed -i -e "1210s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "1218s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "14s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "16s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-
-
 fi
-
+fi
 
 echo "#!/bin/sh
 
@@ -116,8 +115,8 @@ cp wallpaper.png /usr/share/xfce4/backdrops/xubuntu-jmak.png  1>&2 2>/dev/null
 
 echo "I: installing liveusb installer"
 
-wget $URL_FREE/cooperation-iws-liveusb-0.1.deb
-dpkg -i cooperation-iws-liveusb-0.1.deb
+wget $URL_FREE/cooperation-iws-liveusb-0.3.deb
+dpkg -i cooperation-iws-liveusb-0.3.deb
 apt-get -f install --assume-yes --force-yes
 
 
