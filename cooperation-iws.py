@@ -349,6 +349,7 @@ class Reconstructor:
         self.wTree.get_widget("comboboxAltBuildArch").set_active(0)
 	   # set default Debian Live architecture
 	self.wTree.get_widget("comboboxDebianLiveType").set_active(3)
+	self.wTree.get_widget("comboboxDebianLiveReleaseType").set_active(1)
 	self.wTree.get_widget("comboboxDebianLiveMirrors").set_active(0)
         self.wTree.get_widget("comboboxUbuntuMirrors").set_active(0)
         self.wTree.get_widget("comboboxDebianLiveMirrors1").set_active(0)
@@ -1906,8 +1907,13 @@ class Reconstructor:
 	if self.casperPath == 'casper': 
 	    if self.distVariant == 'mint':
 		initUsername = 'mint'
-		initUserFullname = 'mint'
-		initHostName = 'Elyssa'
+		initUserFullname = 'Live session user'
+		initHostName = 'mint'
+		initBuildSystem = 'Ubuntu'
+	    elif self.distVariant == 'nUbuntu':
+		initUsername = 'nubuntu'
+		initUserFullname = 'Live session user'
+		initHostName = 'live'
 		initBuildSystem = 'Ubuntu'
 	    else:
 		initUsername = 'ubuntu'
@@ -2613,6 +2619,7 @@ class Reconstructor:
         print _("INFO: Saving working directory information...")
         self.customDir = self.wTree.get_widget("entryDebianLiveWorkingDir").get_text()
 	self.DebianLiveType = self.wTree.get_widget("comboboxDebianLiveType").get_active_text()         
+	self.DebianLiveReleaseType = self.wTree.get_widget("comboboxDebianLiveReleaseType").get_active_text()         
 
 	# debug
         print "Custom Directory: " + str(self.customDir)
@@ -2635,8 +2642,17 @@ class Reconstructor:
         print "ISO Filename: " + str(self.isoFilename)
 
     def checkLiveCdVersion(self):
-
-	    if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' | grep \'Elyssa\'') != '':
+		
+	    if os.path.exists(os.path.join(self.customDir, "remaster/boot/grub")) and commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/boot/grub/menu.lst") + '| grep \'Webconverger\'') != '':
+		self.casperPath = 'live'
+		self.wTree.get_widget("hbox701").hide()
+		self.wTree.get_widget("hbox301").show()
+		self.wTree.get_widget("hbox702").show()
+		self.wTree.get_widget("labelLiveCDKeybLang3").show()	    	
+		self.debDist= 'lenny'
+		self.distVariant = 'webconverger'	
+		print "Webconverger Live CD"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' | grep \'Elyssa\'') != '':
 		self.casperPath = 'casper'
 		self.debDist = 'hardy'
 		self.distVariant = 'mint'			
@@ -2645,6 +2661,15 @@ class Reconstructor:
 		self.wTree.get_widget("hbox702").show()
 		self.wTree.get_widget("labelLiveCDKeybLang3").show()
 		print "Linux Mint 5 Elyssa"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' | grep \'nUbuntu\'') != '' and commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '':
+		self.casperPath = 'casper'
+		self.debDist = 'hardy'
+		self.distVariant = 'nUbuntu'			
+		self.wTree.get_widget("hbox701").hide()
+		self.wTree.get_widget("hbox301").show()
+		self.wTree.get_widget("hbox702").show()
+		self.wTree.get_widget("labelLiveCDKeybLang3").show()
+		print "nUbuntu 8.04"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'etch\'') != '':
 		self.casperPath = 'casper'
 		self.debDist= 'etch'
@@ -2864,13 +2889,18 @@ class Reconstructor:
 		lhConfig += "-p xfce "
 	elif re.search('Minimal Gnome',self.DebianLiveType):
 		lhConfig += "-p gnome "
+	elif re.search('Minimal Kde',self.DebianLiveType):
+		lhConfig += "-p kde "
 	elif re.search('Full Xfce',self.DebianLiveType):
 		lhConfig += "-p xfce-desktop "
 	elif re.search('Full Gnome',self.DebianLiveType):
 		lhConfig += "-p gnome-desktop "
-    	lhConfig += '--distribution lenny --linux-flavours \"686\" --mirror-bootstrap \"' + debMirror + '\" --mirror-chroot \"' + debMirror + '\" --mirror-binary \"' + debMirror + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + keybLang + '\" '
+	elif re.search('Full Kde',self.DebianLiveType):
+		lhConfig += "-p kde-desktop "
 	
-	scriptDebianLive = 'echo "I: Creating Debian Live CD Linux flavour ' + self.DebianLiveType + '" \n'
+    	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"686\" --mirror-bootstrap \"' + debMirror + '\" --mirror-chroot \"' + debMirror + '\" --mirror-binary \"' + debMirror + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + keybLang + '\" '
+	
+	scriptDebianLive = 'echo "I: Creating Debian Live CD Linux flavour ' + self.DebianLiveType + ' ' + self.DebianLiveReleaseType + ' + " \n'
 	scriptDebianLive += 'echo "' + lhConfig + '"\n'
 	scriptDebianLive += 'echo "deb http://live.debian.net/debian/ ./" >> /etc/apt/sources.list\n'
 	scriptDebianLive += 'apt-get update\n'

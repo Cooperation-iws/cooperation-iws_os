@@ -1893,10 +1893,29 @@ If the boxes are checked, directories will be overwritten.
                         <property name="column_spacing">5</property>
                         <property name="row_spacing">5</property>
                         <child>
-                          <placeholder/>
+                          <widget class="GtkComboBox" id="comboboxDebianLiveReleaseType">
+                            <property name="visible">True</property>
+                            <property name="items" translatable="yes" comments="The items need to be in this particular order: Standard, Server, Desktop.">etch
+lenny
+sid</property>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">2</property>
+                            <property name="bottom_attach">3</property>
+                          </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <widget class="GtkLabel" id="labelDebianLiveOs">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="label" translatable="yes">Debian Release</property>
+                          </widget>
+                          <packing>
+                            <property name="top_attach">2</property>
+                            <property name="bottom_attach">3</property>
+                          </packing>
                         </child>
                         <child>
                           <placeholder/>
@@ -1925,8 +1944,10 @@ If the boxes are checked, directories will be overwritten.
                             <property name="items" translatable="yes" comments="The items need to be in this particular order: Standard, Server, Desktop.">Smallest 
 Minimal Xfce 
 Minimal Gnome 
+Minimal Kde
 Full Xfce
-Full Gnome</property>
+Full Gnome
+Full Kde</property>
                           </widget>
                           <packing>
                             <property name="left_attach">1</property>
@@ -1995,8 +2016,8 @@ Full Gnome</property>
                             <property name="label" translatable="yes">Debian Mirrors</property>
                           </widget>
                           <packing>
-                            <property name="top_attach">2</property>
-                            <property name="bottom_attach">3</property>
+                            <property name="top_attach">4</property>
+                            <property name="bottom_attach">5</property>
                           </packing>
                         </child>
                         <child>
@@ -2016,8 +2037,8 @@ http://ftp.kr.debian.org/debian/</property>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="right_attach">2</property>
-                            <property name="top_attach">2</property>
-                            <property name="bottom_attach">3</property>
+                            <property name="top_attach">4</property>
+                            <property name="bottom_attach">5</property>
                           </packing>
                         </child>
                         <child>
@@ -2122,8 +2143,8 @@ zu
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="right_attach">2</property>
-                            <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
+                            <property name="top_attach">5</property>
+                            <property name="bottom_attach">6</property>
                             <property name="x_options">GTK_FILL</property>
                             <property name="y_options">GTK_FILL</property>
                           </packing>
@@ -2136,8 +2157,8 @@ zu
                             <property name="label" translatable="yes">Keyboard Language of Live CD:</property>
                           </widget>
                           <packing>
-                            <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
+                            <property name="top_attach">5</property>
+                            <property name="bottom_attach">6</property>
                             <property name="x_options">GTK_FILL</property>
                             <property name="y_options"></property>
                           </packing>
@@ -3097,319 +3118,7 @@ Reconstructor Team: http://reconstructor.aperantis.com/
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkTable" id="tableBuildUsb2">
-                    <property name="visible">True</property>
-                    <property name="n_rows">4</property>
-                    <property name="n_columns">2</property>
-                    <child>
-                      <widget class="GtkHBox" id="hbox25">
-                        <property name="visible">True</property>
-                        <child>
-                          <widget class="GtkComboBox" id="comboboxLiveUsbBootLang">
-                            <property name="width_request">128</property>
-                            <property name="visible">True</property>
-                            <property name="items" translatable="yes">fr
-af
-ar
-as
-be
-bg
-bn
-br
-bs
-ca
-cs
-cy
-da
-de
-dz
-el
-en
-eo
-es
-et
-eu
-fa
-fi
-ga
-gl
-gu
-he
-hi
-hr
-hu
-it
-ja
-ka
-km
-kn
-ko
-ku
-lo
-lt
-lv
-mk
-ml
-mr
-nb
-ne
-nl
-nn
-no
-nr
-ns
-nso
-or
-pa
-pl
-pt
-ro
-ru
-rw
-sk
-sl
-sr
-ss
-st
-sv
-sw
-ta
-te
-tg
-th
-ti
-tn
-tr
-ts
-uk
-ur
-uz
-ve
-vi
-xh
-za
-zh
-zu
-</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                          </packing>
-                        </child>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options">GTK_FILL</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelLiveUsbBootLang1">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Language of Live Usb:</property>
-                        <property name="wrap_mode">PANGO_WRAP_CHAR</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelLiveUsbKeybLang1">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Keyboard Language of Live Usb:</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkHBox" id="hbox24">
-                        <property name="visible">True</property>
-                        <child>
-                          <widget class="GtkComboBox" id="comboboxLiveUsbKeybLang">
-                            <property name="width_request">128</property>
-                            <property name="visible">True</property>
-                            <property name="items" translatable="yes">fr
-af
-ar
-as
-be
-bg
-bn
-br
-bs
-ca
-cs
-cy
-da
-de
-dz
-el
-en
-eo
-es
-et
-eu
-fa
-fi
-ga
-gl
-gu
-he
-hi
-hr
-hu
-it
-ja
-ka
-km
-kn
-ko
-ku
-lo
-lt
-lv
-mk
-ml
-mr
-nb
-ne
-nl
-nn
-no
-nr
-ns
-nso
-or
-pa
-pl
-pt
-ro
-ru
-rw
-sk
-sl
-sr
-ss
-st
-sv
-sw
-ta
-te
-tg
-th
-ti
-tn
-tr
-ts
-uk
-ur
-uz
-ve
-vi
-xh
-za
-zh
-zu
-</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                          </packing>
-                        </child>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options">GTK_FILL</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="buttonSoftwareDetectUsb1">
-                        <property name="width_request">24</property>
-                        <property name="height_request">24</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_buttonSoftwareDetectUsb_clicked"/>
-                        <child>
-                          <widget class="GtkImage" id="image5">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-refresh</property>
-                          </widget>
-                        </child>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelSoftwareDetectUsb1">
-                        <property name="width_request">80</property>
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Automatically detect Usb Key:</property>
-                      </widget>
-                      <packing>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="labelKeyUsbDescription1">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="xpad">20</property>
-                        <property name="label" translatable="yes">Path of Usb Key (e.g. /dev/sde ):</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkEntry" id="entryKeyUsb">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes">Description (title) of Live CD</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                        <property name="y_padding">5</property>
-                      </packing>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="pack_type">GTK_PACK_END</property>
-                    <property name="position">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </widget>
               <packing>
