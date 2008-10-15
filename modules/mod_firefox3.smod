@@ -1,0 +1,24 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Firefox & Firefox addons'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Firefox & Firefox addons'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+TMPUSER=$(cat /tmp/tmp_user)
+
+echo "I: install firefox"
+
+apt-get install --assume-yes --force-yes firefox
+
+ADD_ON_LIST="https://addons.mozilla.org/fr/firefox/addon/4550
+https://addons.mozilla.org/fr/firefox/browse/type:3
+https://addons.mozilla.org/fr/firefox/addon/3006
+https://addons.mozilla.org/fr/firefox/browse
+http://www.macromedia.com/support/documentation/fr/flashplayer/help/settings_manager04.html"
+sudo -H -u $TMPUSER `firefox -ProfileManager $(echo -e "$ADD_ON_LIST" | tr "\n" " ")`
+
