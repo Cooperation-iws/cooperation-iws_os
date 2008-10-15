@@ -13,127 +13,9 @@ CASPER_PATH=$(cat /tmp/casper_path)
 OS_TYPE=$(cat /tmp/os_type)
 
 APACHE=$(cat /tmp/apache)
-echo "I: preparing for Artwork"
-mkdir /etc/skel/Desktop
-
-if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ]; then
-echo "I: installing usplash theme"
-
-cd /tmp
-wget $URL_FREE/usplash-theme-ciws_0.1-1_i386.deb 
-dpkg -i usplash-theme-ciws_0.1-1_i386.deb 
-update-alternatives --install /usr/lib/usplash/usplash-artwork.so usplash-artwork.so /usr/lib/usplash/usplash-theme-ciws.so 10
-update-alternatives --config usplash-artwork.so
-wget $URL_FREE/background.png
-wget $URL_FREE/logo.png
-wget $URL_FREE/wallpaper.png
-cp background.png /usr/share/gdm/themes/xubuntu
-cp logo.png /usr/share/gdm/themes/xubuntu/logo.png 1>&2 2>/dev/null
-cp background.png /usr/share/gdm/themes/Human
-cp logo.png /usr/share/gdm/themes/Human/ubuntu.png
-cp wallpaper.png /usr/share/backgrounds/warty-final-ubuntu.png 
-cp wallpaper.png /usr/share/xfce4/backdrops/xubuntu-jmak.png  1>&2 2>/dev/null
-cp wallpaper.png /usr/share/wallpapers/.
-sed -i "s/kubuntu-wallpaper.jpg/wallpaper.png/" /etc/default/kdm.d/20_kubuntu_default_settings
-sed -i "s/kubuntu-wallpaper.jpg/wallpaper.png/" /usr/share/apps/kdm/themes/kubuntu/kubuntu.xml
-
-
-echo "I: installing liveusb installer"
-
-wget $URL_FREE/cooperation-iws-liveusb-0.3.deb
-dpkg -i cooperation-iws-liveusb-0.3.deb
-apt-get -f install --assume-yes --force-yes
-
-
-cat << EOT > /etc/skel/Desktop/LiveUsbinstaller.desktop
-[Desktop Entry]
-Version=1.0
-Encoding=UTF-8
-Name=Live usb installer
-Type=Application
-Terminal=false
-Icon[fr_BE]=gnome-panel-launcher
-Name[fr_BE]=Live usb installer
-Exec=/usr/bin/liveusb
-Icon=ubiquity
-GenericName[fr_BE]=
-EOT
-
-
-cat << EOT > /etc/skel/Desktop/Cooperation-iws.desktop
-[Desktop Entry]
-Version=1.0
-Encoding=UTF-8
-Name=Cooperation-iws
-Type=Application
-Terminal=false
-Icon[fr_BE]=gnome-panel-launcher
-Name[fr_BE]=Cooperation-iws
-Exec=firefox http://localhost
-Icon=/usr/share/pixmaps/firefox-3.0.png
-EOT
-else
-apt-get install --assume-yes --force-yes usplash
-cd /tmp
-wget $URL_FREE/usplash-theme-ciws_0.1-1_i386.deb 
-dpkg -i usplash-theme-ciws_0.1-1_i386.deb 
-update-alternatives --install /usr/lib/usplash/usplash-artwork.so usplash-artwork.so /usr/lib/usplash/usplash-theme-ciws.so 10
-update-alternatives --config usplash-artwork.so
-wget $URL_FREE/background.png
-wget $URL_FREE/logo.png
-wget $URL_FREE/wallpaper.png
-cp wallpaper.png /usr/share/gdm/themes/debian-moreblue-orbit
-sed -i "s/background.svg/wallpaper.png/" /usr/share/gdm/themes/debian-moreblue-orbit/debian-moreblue-orbit.xml
-cp wallpaper.png /usr/share/images/desktop-base/
-rm /etc/alternatives/desktop-background
-ln -s  /usr/share/images/desktop-base/wallpaper.png /etc/alternatives/desktop-background
-rm /etc/alternatives/desktop-splash
-ln -s  /usr/share/images/desktop-base/wallpaper.png /etc/alternatives/desktop-splash
-
-
-echo "I: installing liveusb installer"
-
-wget $URL_FREE/cooperation-iws-liveusb-0.2.deb
-dpkg -i cooperation-iws-liveusb-0.2.deb
-apt-get -f install --assume-yes --force-yes
-
-
-
-fi
-
-cat << EOT > /etc/skel/Desktop/PASSWORDS.txt
-Default login / password are : admin /cooperation
-
-Except for ftp serveur: www-data / cooperation
-
-Mantis : administrator / root
-
-Taskfreak: admin / ciws
-
-Lifetype, Achievo: administrator / cooperation
-
-Phpmyadmin / Mysql Serveur / Webmin / EyeOS: root / cooperation
-
-Mail server / Squirrelmail: admin@ciws.com / cooperation
-
--------------------------------------------------------------
-
-Les login / mot de passe par défaut sont : admin /cooperation
-
-Excepter pour le serveur ftp: www-data / cooperation
-
-Mantis : administrator / root
-
-Taskfreak: admin / ciws
-
-Lifetype / Achievo: administrator / cooperation
-
-Phpmyadmin / Mysql Serveur / Webmin /EyeOS : root / cooperation
-
-Serveur Mail / Squirrelmail: admin@ciws.com / cooperation
-EOT
-
-chmod 777 /etc/skel/Desktop/PASSWORDS.txt
+LIVEUSER=$(cat /tmp/user)
+TMPUSER=$(cat /tmp/tmp_user)
+OS_TYPE=$(cat /tmp/os_type)
 
 echo "I: making initramfs"
 KERNEL=$(ls /lib/modules) 
@@ -155,13 +37,13 @@ function REMOVE_USER()
 {
 
 #faire mirroir dans /etc/skel/.
-cp -r /home/liveusb/* /etc/skel/.
+cp -r /home/$TMPUSER/* /etc/skel/.
 sleep 2
 #virer admin et liveusb de /etc/sudoers
 #cat /etc/sudoers | sed '/%admin/d' | tee /etc/sudoers
 echo -e "root ALL=(ALL) ALL" | tee /etc/sudoers
 #supprimer user 
-userdel -r liveusb
+userdel -r $TMPUSER
 }
 REMOVE_USER
 
@@ -293,12 +175,14 @@ rm -r /tmp/*
 rm /var/cache/apt/archives/* > /dev/null 2>&1 
 rm /var/cache/apt/archives/partial/* > /dev/null 2>&1 
 
+if [ "$(echo "${OS_TYPE}" | awk  '{print $1}')" == "Server" ]; then
+
 echo "I: config persistent directory"
 
 
 mkdir /etc/ciws
 cp -a  /var/* /etc/ciws/.
-
+fi
 
 
 echo "----------------Cooperation-iws----------------

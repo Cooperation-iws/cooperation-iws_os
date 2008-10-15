@@ -11,7 +11,7 @@ MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
 CASPER_PATH=$(cat /tmp/casper_path)
 OS_TYPE=$(cat /tmp/os_type)
-
+TMPUSER=$(cat /tmp/tmp_user)
 echo "I: config post install script"
 echo "
 
@@ -71,6 +71,14 @@ fi
 
 chmod +x /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/00cpvar
 
+echo "I: Delete examples directory on the desktop"
+CHERCHE='chroot \/root install -o $USERNAME -g $USERNAME -d \/home\/$USERNAME\/Desktop\/'
+sed -i "s/^[ \t]*${CHERCHE}/#${CHERCHE}/" \
+	/usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/10adduser
+#Désactiver alias Examples sur bureau
+CHERCHE='mv \/root\/home\/$USERNAME\/Examples \/root\/home\/$USERNAME\/Desktop\/'
+sed -i "s/^[ \t]*${CHERCHE}/#${CHERCHE}/" \
+	/usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/10adduser
 
 
 if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then

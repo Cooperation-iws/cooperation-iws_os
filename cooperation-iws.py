@@ -3025,7 +3025,7 @@ class Reconstructor:
 	fciwsOsType.close()
 
   
-	#Splash screen
+	#Isolinux and Splash screen
 	scriptCustomSplash = '#!/bin/sh\n\n'
 	scriptCustomSplash += 'cd /tmp\n'
 	scriptCustomSplash += 'rm -r ' + os.path.join(self.customDir, "remaster/isolinux/") + ' \n'
@@ -3041,7 +3041,9 @@ class Reconstructor:
         fscriptCustomExec.close()
         os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptSplash.sh"))
         os.popen('bash \"' + os.path.join(self.customDir, "scriptSplash.sh") + '\" > /dev/null 2>&1')
-	    
+	if self.distVariant == 'webconverger' :  
+		os.popen('rm -r ' + os.path.join(self.customDir, "remaster/boot/"))
+		os.popen('rm -r ' + os.path.join(self.customDir, "remaster/boot.catalog"))
 	#XNEST
 	scriptCustomExec = '#!/bin/sh\n\n'
 	scriptCustomExec += 'bash \"' + self.scriptDir + 'xnest.sh\"' + ' ;\n'

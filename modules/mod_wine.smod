@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'

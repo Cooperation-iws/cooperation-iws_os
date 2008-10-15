@@ -32,6 +32,7 @@ synaptic
 
 function FCT_KDM
 {
+qt-language-selector
 adept_updater
 adept_installer
 konsole
@@ -56,16 +57,16 @@ echo "xdm pas codé"
 
 
 if [ "$DESK_ENV" == "kdm" ] ; then
-echo -e '\E[37;44m'"\033[1m kdm environement compatible \033[0m"
+echo -e '\E[37;44m'"\033[1m kdm environement \033[0m"
 FCT_KDM
 elif [ "$DESK_ENV" == "gdm" ] ; then
-echo -e '\E[37;44m'"\033[1m gdm environement compatible \033[0m"
+echo -e '\E[37;44m'"\033[1m gdm environement \033[0m"
 FCT_GDM
 elif [ "$DESK_ENV" == "xdm" ] ; then
-echo -e '\E[37;44m'"\033[1m xdm environement compatible \033[0m"
+echo -e '\E[37;44m'"\033[1m xdm environement \033[0m"
 FCT_XDM
 elif [ "$DESK_ENV" == "E17" ] ; then
-echo -e '\E[37;44m'"\033[1m E17 environement compatible \033[0m"
+echo -e '\E[37;44m'"\033[1m E17 environement \033[0m"
 FCT_E17
 fi
 
