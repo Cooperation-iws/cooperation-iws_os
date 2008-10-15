@@ -85,6 +85,7 @@ class Reconstructor:
         self.hardyVersion = '8.04'
         self.moduleDir = os.getcwd() + '/modules/'
 	self.scriptDir = os.getcwd() + '/scripts/'
+	self.ciwsRootDir = os.getcwd()
         self.mountDir = '/media/cdrom'
         self.tmpDir = "tmp"
         self.altRemasterDir = "remaster_alt"
@@ -357,6 +358,7 @@ class Reconstructor:
         self.wTree.get_widget("comboboxLiveCDKeybLang1").set_active(0)
         self.wTree.get_widget("comboboxWebAppMirrors").set_active(1)
         self.wTree.get_widget("comboboxCiwsOs").set_active(0)
+        self.wTree.get_widget("comboboxCiwsArtwork").set_active(0)  
        
        
 
@@ -3014,6 +3016,9 @@ class Reconstructor:
         fcasper=open(os.path.join(self.customDir, "chroot/tmp/casper_path"), 'w')
 	fcasper.write(self.casperPath)
 	fcasper.close()  
+	fcasper=open("/tmp/casper_path"), 'w')
+	fcasper.write(self.casperPath)
+	fcasper.close()
 	fdebDist=open(os.path.join(self.customDir, "chroot/tmp/deb_dist"), 'w')
 	fdebDist.write(self.debDist)
 	fdebDist.close()  
@@ -3023,27 +3028,17 @@ class Reconstructor:
 	fciwsOsType=open(os.path.join(self.customDir, "chroot/tmp/os_type"), 'w')
 	fciwsOsType.write(ciwsOsType)
 	fciwsOsType.close()
+	
+	if self.wTree.get_widget("comboboxCiwsArtwork").get_active_text() == "Ciws for Gnome":
+		self.artwork = "ciws_gnome"
+	else
+		self.artwork = ""
 
-  
-	#Isolinux and Splash screen
-	scriptCustomSplash = '#!/bin/sh\n\n'
-	scriptCustomSplash += 'cd /tmp\n'
-	scriptCustomSplash += 'rm -r ' + os.path.join(self.customDir, "remaster/isolinux/") + ' \n'
-	scriptCustomSplash += 'wget '+ os.path.join(self.mirrorFree, "isolinux-ciws.tar.gz") + ' \n'  
-	scriptCustomSplash += 'tar -xzf isolinux-ciws.tar.gz -C ' + os.path.join(self.customDir, "remaster/")+' \n'  
-	scriptCustomSplash += 'sed -i "s/casper/'+self.casperPath+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")+' \n'  
-	scriptCustomSplash += 'sed -i "s/8.04/'+ self.debDist + '/" ' + os.path.join(self.customDir, "remaster/isolinux/f1.txt")+' \n'  
-	scriptCustomSplash += 'sed -i "s/splash/splash union=aufs/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")+' \n'  
+  	if self.wTree.get_widget("checkbuttonAufs").get_active() == True:
+		os.popen('sed -i "s/splash/splash union=aufs/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
 	if self.casperPath == 'live':
-		scriptCustomSplash += 'sed -i "s/initrd=\/'+self.casperPath+'\/initrd.gz/initrd=\/'+self.casperPath+'\/initrd.gz keyb='+keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")+' \n' 
-	fscriptCustomExec=open(os.path.join(self.customDir, "scriptSplash.sh"), 'w')
-        fscriptCustomExec.write(scriptCustomSplash)
-        fscriptCustomExec.close()
-        os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptSplash.sh"))
-        os.popen('bash \"' + os.path.join(self.customDir, "scriptSplash.sh") + '\" > /dev/null 2>&1')
-	if self.distVariant == 'webconverger' :  
-		os.popen('rm -r ' + os.path.join(self.customDir, "remaster/boot/"))
-		os.popen('rm -r ' + os.path.join(self.customDir, "remaster/boot.catalog"))
+		os.popen('sed -i "s/initrd=\/'+self.casperPath+'\/initrd.gz/initrd=\/'+self.casperPath+'\/initrd.gz keyb='+keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
+	
 	#XNEST
 	scriptCustomExec = '#!/bin/sh\n\n'
 	scriptCustomExec += 'bash \"' + self.scriptDir + 'xnest.sh\"' + ' ;\n'
@@ -3057,6 +3052,11 @@ class Reconstructor:
  	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/end_Lampp.sh")   + ' ;\n'
 	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/shutdown_ws.sh")   + ' ;\n'
 	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/cooperation-iws-wui.sh")   + ' ;\n'
+	if self.artwork != ""
+			scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "artwork/" + self.artwork+".artchroot") + ' ' +  os.path.join(self.customDir, "chroot/tmp/artwork.amod")   + ' ;\n'
+ 			scriptCustomExec += 'chmod 777 ' + os.path.join(self.ciwsRootDir, "chroot/tmp/artwork.amod")   + ' ;\n'
+ 			scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "artwork/" + self.artwork+"/") + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
+ 			
 	fscriptCustomExec=open(os.path.join(self.customDir, "scriptExec.sh"), 'w')
         fscriptCustomExec.write(scriptCustomExec)
         fscriptCustomExec.close()
@@ -3066,6 +3066,10 @@ class Reconstructor:
 	#Share Working directory
 	fWorkDir=open('/tmp/working-directory', 'w')
         fWorkDir.write(self.customDir)
+        fWorkDir.close()
+	#Share Script Root dir	
+	fWorkDir=open('/tmp/ciws-root-directory', 'w')
+        fWorkDir.write(self.ciwsRootDir)
         fWorkDir.close()
 
 	#Mirrors
@@ -3120,7 +3124,9 @@ class Reconstructor:
             modExecScrChroot = '#!/bin/sh\n\ncd /tmp ;\n'
 	    modExecScrChroot += 'export DISPLAY=127.0.0.1:5.0 \n'
  	    modExecScrChroot += 'bash \"/tmp/init.sh\"' + ' ;\n '
+ 	    modExecScrChroot += 'bash \"/tmp/artwork.amod\"' + ' ;\n '
  	    modExecScr = '#!/bin/sh\n\n'
+            modExecScr += 'bash \"' + os.path.join(self.ciwsRootDir, "artwork/"+self.artwork+".artscript")+ '\"' + ' ;\n '
 	    # copy all "execute" enabled scripts proper location (chroot or customdir)
             
 	    self.treeModel.foreach(self.copyExecuteModule)

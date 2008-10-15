@@ -1,0 +1,22 @@
+#!/bin/bash
+
+
+cp background.png /usr/share/gdm/themes/xubuntu
+cp logo.png /usr/share/gdm/themes/xubuntu/logo.png 1>&2 2>/dev/null
+cp background.png /usr/share/gdm/themes/Human
+cp logo.png /usr/share/gdm/themes/Human/ubuntu.png
+cp wallpaper.png /usr/share/backgrounds/warty-final-ubuntu.png 
+cp wallpaper.png /usr/share/xfce4/backdrops/xubuntu-jmak.png  1>&2 2>/dev/null
+cp wallpaper.png /usr/share/wallpapers/.
+cp background.png /usr/share/wallpapers/.
+cp logo.png /usr/share/apps/kdm/themes/kubuntu/
+sed -i "s/kubuntu-wallpaper.jpg/wallpaper.png/" /etc/default/kdm.d/20_kubuntu_default_settings
+sed -i "s/kubuntu-wallpaper.jpg/background.png/" /usr/share/apps/kdm/themes/kubuntu/kubuntu.xml
+sed -i "s/Dialog.png/logo.png/" /usr/share/apps/kdm/themes/kubuntu/kubuntu.xml
+sed -i 's/<pos width="640" x="50%" y="50%" anchor="c" height="400" \/>/<pos width="500" x="50%" y="30%" anchor="c" height="98" \/>/' /usr/share/apps/kdm/themes/kubuntu/kubuntu.xml
+
+
+tar -xzf isolinux-ciws.tar.gz -C ' + os.path.join(self.customDir, "remaster/")
+sed -i "s/casper/'+self.casperPath+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")
+	
+	

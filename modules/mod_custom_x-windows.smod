@@ -2,17 +2,17 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='Customize Gnome'
+RMOD_NAME='Customize Gnome/KDE'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
-RMOD_DESCRIPTION='Customize Gnome'
+RMOD_DESCRIPTION='Customize Gnome/KDE'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 TMPUSER=$(cat /tmp/tmp_user)
 DISPLAY=127.0.0.1:5.0
 export LANG="en"
 export LC_ALL=C
-export HOME=/home/$TMPUSER
+export HOME=/root
 echo "I: Customize X-window environment"
 
 
@@ -70,3 +70,15 @@ fi
 
 umount /sys
 umount /dev/pts
+function CREATE_INSTALL_SCRIPT
+{
+
+echo "
+
+#Firefox
+cp -r /root/.kde /etc/skel
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+
+}
+CREATE_INSTALL_SCRIPT
+

@@ -403,7 +403,7 @@ $BIN_MYSQL -u root < frwiki-latest-page.sql ${NOM_WIKIPEDIAFR[$count]}
 
 
 
-#php $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/maintenance/refreshLinks.php --update
+php $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/maintenance/refreshLinks.php --update > /tmp/refresh_links
 #php $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/maintenance/initStats.php --update
 
 
