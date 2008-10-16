@@ -6,14 +6,14 @@
 ********************************************/
 //error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING); 
 error_reporting(E_ALL); 
-$include_dir = "./Sphider/include"; 
+$include_dir = "../Sphider/include"; 
 include ("$include_dir/commonfuncs.php");
 //extract(getHttpVars());
 
-if (isset($_GET['query']))
-	$query = $_GET['query'];
-if (isset($_GET['search']))
-	$search = $_GET['search'];
+if (isset($_GET['queries']))
+	$query = $_GET['queries'];
+if (isset($_GET['research']))
+	$search = $_GET['research'];
 if (isset($_GET['domain'])) 
 	$domain = $_GET['domain'];
 if (isset($_GET['type'])) 
@@ -30,10 +30,10 @@ if (isset($_GET['adv']))
 	$adv = $_GET['adv'];
 	
 	
-$include_dir = "./Sphider/include"; 
-$template_dir = "./Sphider/templates"; 
-$settings_dir = "./Sphider/settings"; 
-$language_dir = "./Sphider/languages";
+$include_dir = "../Sphider/include"; 
+$template_dir = "../Sphider/templates"; 
+$settings_dir = "../Sphider/settings"; 
+$language_dir = "../Sphider/languages";
 
 
 require_once("$settings_dir/database.php");

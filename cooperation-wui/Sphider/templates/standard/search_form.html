@@ -6,9 +6,9 @@
 	<form action="index.php" method="get">
 
 <table><tr><td>
-	<div align="left"> 
-<input type="text" name="query" id="query" size="40" value="<?php   print quote_replace($query);?>" action="include/js_suggest/suggest.php" columns="2" autocomplete="off" delay="1500">	
-</div> 
+	 
+<input type="text" name="queries" id="query" size="40" value="<?php   print quote_replace($query);?>" action="include/js_suggest/suggest.php" columns="2" autocomplete="off" delay="1500">	
+ 
 <td>
 <input type="submit" value="<?php print $sph_messages['Search']?>">
 </td></tr></table>
@@ -41,7 +41,7 @@
 <?php if ($catid<>0){?>     
 	<center><b><?php print $sph_messages['Search']?></b>: <input type="radio" name="category" value="<?php print $catid?>"><?php print $sph_messages['Only in category']?> "<?php print $tpl_['category'][0]['category']?>'" <input type="radio" name="category" value="-1" checked><?php print $sph_messages['All sites']?></center>
 <?php  }?>
-	<input type="hidden" name="search" value="1"> 
+	<input type="hidden" name="research" value="1"> 
 	</form>
 		<?php if ($has_categories && $search==1 && $show_categories){?> 
 		<a href="index.php"><?php print $sph_messages['Categories']?></a>
@@ -50,4 +50,4 @@
 
 </tr>
 </table>
-</center>
+</center><br>
