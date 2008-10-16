@@ -87,7 +87,6 @@ deb-src http://security.debian.org/ $DEB_DIST/updates main contrib
 export DEBIAN_FRONTEND="dialog"
 fi
 apt-get update
-apt-get install --yes --force-yes build-essential 
 
 
 echo "I: config rc.local"
@@ -108,26 +107,6 @@ WWW_DIRECTORY=\"/var/www\"
 " > $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
 
-echo "I: installing liveusb installer"
-
-wget $URL_FREE/cooperation-iws-liveusb-0.3.deb
-dpkg -i cooperation-iws-liveusb-0.3.deb
-apt-get -f install --assume-yes --force-yes
-
-
-cat << EOT > /etc/skel/Desktop/LiveUsbinstaller.desktop
-[Desktop Entry]
-Version=1.0
-Encoding=UTF-8
-Name=Live usb installer
-Type=Application
-Terminal=false
-Icon[fr_BE]=gnome-panel-launcher
-Name[fr_BE]=Live usb installer
-Exec=/usr/bin/liveusb
-Icon=ubiquity
-GenericName[fr_BE]=
-EOT
 
 if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
 cat << EOT > /etc/skel/Desktop/Cooperation-iws.desktop

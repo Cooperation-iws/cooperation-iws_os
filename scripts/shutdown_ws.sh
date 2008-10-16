@@ -38,6 +38,7 @@ function REMOVE_USER()
 
 #faire mirroir dans /etc/skel/.
 cp -r /home/$TMPUSER/* /etc/skel/.
+
 sleep 2
 #virer admin et liveusb de /etc/sudoers
 #cat /etc/sudoers | sed '/%admin/d' | tee /etc/sudoers
@@ -46,8 +47,8 @@ echo -e "root ALL=(ALL) ALL" | tee /etc/sudoers
 userdel -r $TMPUSER
 }
 REMOVE_USER
-
-
+chmod -R 777 /etc/skel
+rm -r /home/*
 
 if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
 
