@@ -1,0 +1,72 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Clamav antivirus'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Secure Shell server'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+
+
+function INSTALL
+{
+
+
+apt-get install --assume-yes --force-yes clamav clamav-daemon zoo unzip arj bzip2 razor pyzor clamav-freshclam mailutils
+
+echo "-----------------Cooperation-iws----------------------------"
+echo "---Configure Clamav to report at a specific email address---"
+echo "-------Else default: admin@ciws.com will be used------------"
+echo "[N/y]"
+read r1 < /dev/tty
+if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
+MAIL_REPORT="admin@ciws.com"
+else
+echo "-------Enter the email address the scan reports will be sent on----------"
+read MAIL_REPORT < /dev/tty
+fi
+
+echo "#/bin/bash
+#
+#
+/usr/bin/clamscan -r -i \$1 > /tmp/scan_report
+if [ -z \"\$(cat /tmp/scan_report | grep 'Infected files: 0')\" ]; then
+\$(cat /tmp/scan_report | mail $MAIL_REPORT -s \"Clamav antivirus scan: VIRUS FOUND\")
+fi
+" > /var/share/lampp/clamav_scan
+chmod +x /var/share/lampp/clamav_scan
+
+
+echo "*/14 * * * * root /var/share/lampp/clamav_scan \"/var\"" > /etc/cron.d/clamScan
+sudo chmod +x /etc/cron.d/clamScan
+echo "03 2 * * * root /var/share/lampp/clamav_scan \"/\"" > /etc/cron.d/clamScan_all
+sudo chmod +x /etc/cron.d/clamScan_all
+echo "04 00,04,08,12,16,20 * * * root /usr/bin/freshclam 1> /dev/null " >> /etc/cron.d/freshClam
+sudo chmod +x /etc/cron.d/freshClam
+
+freshclam
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+echo "I: Install Clamav"
+INSTALL
+echo "I: End of Install Clamav"

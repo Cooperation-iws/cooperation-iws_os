@@ -1,0 +1,130 @@
+#!/bin/bash
+
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Server'
+RMOD_NAME='Proftpd'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Server Ftp'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+
+#TEMP
+MIRROIR="A"
+DISPLAY=localhost:5.0
+
+#VARIABLES
+
+NTOP_PWD="cooperation"
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+
+DEBIAN_FRONTEND="dialog"
+apt-get install --assume-yes --force-yes proftpd
+
+#samba config
+cd /etc
+mv proftpd /var/share/etc/
+
+cat << EOT > /var/share/etc/proftpd/proftpd.conf
+# This is a basic ProFTPD configuration file (rename it to 
+# 'proftpd.conf' for actual use.  It establishes a single server
+# and a single anonymous login.  It assumes that you have a user/group
+# "nobody" and "ftp" for normal operation and anon.
+
+ServerName			"ProFTPD"
+ServerType			standalone
+DefaultServer			on
+
+# Port 21 is the standard FTP port.
+Port				21
+# Umask 022 is a good standard umask to prevent new dirs and files
+# from being group and world writable.
+Umask				022
+
+# To prevent DoS attacks, set the maximum number of child processes
+# to 30.  If you need to allow more than 30 concurrent connections
+# at once, simply increase this value.  Note that this ONLY works
+# in standalone mode, in inetd mode you should use an inetd server
+# that allows you to limit maximum number of processes per service
+# (such as xinetd)
+MaxInstances			30
+
+# Set the user and group that the server normally runs at.
+User				www-data
+#Group				nogroup
+
+# Normally, we want files to be overwriteable.
+<Directory /var/*>
+  AllowOverwrite		on
+</Directory>
+
+# only for the web servers content
+DefaultRoot /var
+
+# nobody gets the password "lampp"
+UserPassword www-data 9DyPIRj6JheLk
+
+# nobody is no normal user so we have to allow users with no real shell
+RequireValidShell off
+
+# nobody may be in /etc/ftpusers so we also have to ignore this file
+UseFtpUsers off
+EOT
+
+
+
+ln -s /var/share/etc/proftpd /etc/proftpd
+
+apt-get install --assume-yes --force-yes proftpd
+
+
+echo "
+---------------Cooperation-iws----------------------------
+-------Do you want to secure your ftp server ?----------
+--------Curently there is a default password (cooperation)---------
+[Y/n]:
+"
+read secure_admin < /dev/tty
+if [ "$(echo $secure_admin | awk  '{print $1}')" != "n" ]; then
+htpasswd -c /tmp/ftppass admin 
+
+passwd=$(cat /tmp/ftppass | grep 'admin' | cut -d':' -f2)
+sed -i "s/9DyPIRj6JheLk/$passwd/" /var/share/etc/proftpd/proftpd.conf
+echo "CIWS: Password protection active. Please use 'admin' as user name!"
+
+fi
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+
+echo "I: Install Proftpd"
+INSTALL
+echo "I: End of install Proftpd"

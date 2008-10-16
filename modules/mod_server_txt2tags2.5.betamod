@@ -1,0 +1,227 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='txt2tags 2.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Multiformat Text converter'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+INSTALL=$(cat /tmp/def_install)
+#VARIABLES
+#MYSQL PASSWORD
+TXT2TAGS_MYSQL_PWD="TXT2TAGS_MYSQL_PWD"
+
+
+#_______________________________________________________________________________________________
+#__________________________________________LANGFR______________________________________________
+
+
+function LANGFR
+
+{
+MESS_NAME="Entrez le nom de l'installation "
+MESS_HOW_MANY="Combien de" 
+MESS_DO_YOU_WANT="voulez vous installez ?"
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGFR___________________________________________
+
+#_______________________________________________________________________________________________
+#__________________________________________LANGEN______________________________________________
+
+
+function LANGEN
+
+{
+MESS_NAME="Enter the name of the install "
+MESS_HOW_MANY="How many"
+MESS_DO_YOU_WANT="do you want to install ?"
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGEN___________________________________________
+
+
+#_______________________________________________________________________________________________
+#__________________________________________CHOICE_LANG___________________________________________
+
+function CHOICE_LANG
+{
+if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
+LANGFR
+
+else
+LANGEN
+
+fi
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_CHOICE_LANG______________________________________
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_WEB_______________________________________
+
+
+function WGET_MIRROIR_WEB
+{
+cd $DL_DIR
+wget http://edermarques.net/pacotes/txt2tags/txt2tags_2.5-1_all.deb
+wget $URL_FREE/txt2tags.txt
+#rm phpBB-3.0.0.zip
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_LOCAL_____________________________________
+
+function WGET_MIRROIR_LOCAL
+{
+
+cd $DL_DIR
+wget http://$MIRROIR_URL/mirroir/phpBB-3.0.0_FR.zip
+unzip phpBB-3.0.0_FR.zip
+#rm phpBB-3.0.0.zip
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/txt2tags_2.5-1_all.deb
+wget $URL_FREE/txt2tags.txt
+#rm phpBB-3.0.0.zip
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________DOWNLOAD_______________________________________________
+
+function DOWNLOAD
+{
+if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
+
+WGET_MIRROIR_WEB
+fi
+if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
+
+WGET_MIRROIR_FREE
+fi
+if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
+
+
+WGET_MIRROIR_LOCAL
+fi
+
+}
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_DOWNLOAD___________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
+
+function CHOOSE_PARAMETERS_GUI
+{
+if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
+NOM_TXT2TAGS="Txt2tags"
+
+else 
+NOM_TXT2TAGS=$(zenity --entry --text "$MESS_NAME TXT2TAGS")
+test $? -ne 0 && break # Bouton Annuler
+while (echo $NOM_TXT2TAGS | grep "[^a-zA-Z0-9]") 
+do
+NOM_TXT2TAGS=$(zenity --entry --text "$MESS_NAME TXT2TAGS")
+test $? -ne 0 && break # Bouton Annulerdone
+done 
+
+
+
+fi
+
+export NOM_TXT2TAGS=$NOM_TXT2TAGS
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Txt2tags"
+DOWNLOAD
+#phpBB
+cd $DL_DIR
+dpkg -i txt2tags_2.5-1_all.deb
+
+mkdir $WWW_DIRECTORY/$NOM_TXT2TAGS
+
+mv txt2tags.txt $WWW_DIRECTORY/$NOM_TXT2TAGS/index.php
+
+sed -i "20s/txt2tags/\/usr\/bin\/txt2tags/" $WWW_DIRECTORY/$NOM_TXT2TAGS/index.php
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "<hr width=\"10%\">
+<a href=\"/$NOM_TXT2TAGS\">$NOM_TXT2TAGS</a><br>
+" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Txt2tags"
+CHOICE_LANG
+CHOOSE_PARAMETERS_GUI
+INSTALL
+CREATE_WUI
+
+echo "I: End of install Txt2tags"
