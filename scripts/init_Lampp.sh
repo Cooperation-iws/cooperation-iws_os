@@ -65,11 +65,12 @@ rm $WWW_DIRECTORY/index.html
 echo "I: config Cooperation-iws wui"
 
 
-echo ""> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "<?xml version=\"1.0\"?>
+<items>" > $WWW_DIRECTORY/cooperation-wui.xml
 
 #ADMIN
 
-cp -Rf $WWW_DIRECTORY/cooperation-wui.frame.php $WWW_DIRECTORY/admin/.
+cp -Rf $WWW_DIRECTORY/cooperation-wui.xml $WWW_DIRECTORY/admin/.
 
 fi
 

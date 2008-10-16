@@ -151,14 +151,14 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_NET2FTP="Net2ftp"
+MOD_NAME="Net2ftp"
 else 
-NOM_NET2FTP=$(zenity --entry --text "$MESS_NAME NET2FTP")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME NET2FTP")
 test $? -ne 0 && break # Bouton Annuler
 
 while (echo $NET2FTP | grep "[^a-zA-Z0-9]") 
 do
-NOM_NET2FTP=$(zenity --entry --text "$MESS_NAME NET2FTP")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME NET2FTP")
 test $? -ne 0 && break # Bouton Annulerdone
 done
 fi
@@ -180,23 +180,23 @@ DOWNLOAD
 
 ##NET2FTP
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/admin/$NOM_NET2FTP
-cp -Rf net2ftp/* $WWW_DIRECTORY/admin/$NOM_NET2FTP/.
-echo "create database $NOM_NET2FTP;
-grant all on $NOM_NET2FTP.* to $NOM_NET2FTP@localhost identified by '$NET2FTP_MYSQL_PWD';
+mkdir $WWW_DIRECTORY/admin/$MOD_NAME
+cp -Rf net2ftp/* $WWW_DIRECTORY/admin/$MOD_NAME/.
+echo "create database $MOD_NAME;
+grant all on $MOD_NAME.* to $MOD_NAME@localhost identified by '$NET2FTP_MYSQL_PWD';
 flush privileges;" > net2ftp_db.sql
 
 $BIN_MYSQL -u root < net2ftp_db.sql mysql
 rm net2ftp_db.sql
-$BIN_MYSQL -u root < $WWW_DIRECTORY/admin/$NOM_NET2FTP/create_tables.sql $NOM_NET2FTP
-rm -r $WWW_DIRECTORY/admin/$NOM_NET2FTP/integration_in_other_PHP_applications
-mv $WWW_DIRECTORY/admin/$NOM_NET2FTP/files_to_upload/* $WWW_DIRECTORY/admin/$NOM_NET2FTP/.
-cat $WWW_DIRECTORY/admin/$NOM_NET2FTP/settings.inc.php | sed -i -e "54s/\"\"/\"cooperation\"/" $WWW_DIRECTORY/admin/$NOM_NET2FTP/settings.inc.php
-cat $WWW_DIRECTORY/admin/$NOM_NET2FTP/settings.inc.php | sed -i -e "71s/\"no\"/\"yes\"/" $WWW_DIRECTORY/admin/$NOM_NET2FTP/settings.inc.php
-cat $WWW_DIRECTORY/admin/$NOM_NET2FTP/settings.inc.php | sed -i -e "74s/\"\"/\"$NOM_NET2FTP\"/" $WWW_DIRECTORY/admin/$NOM_NET2FTP/settings.inc.php
-cat $WWW_DIRECTORY/admin/$NOM_NET2FTP/settings.inc.php | sed -i -e "75s/\"\"/\"$NET2FTP_MYSQL_PWD\"/" $WWW_DIRECTORY/admin/$NOM_NET2FTP/settings.inc.php
-cat $WWW_DIRECTORY/admin/$NOM_NET2FTP/settings.inc.php | sed -i -e "76s/\"\"/\"$NOM_NET2FTP\"/" $WWW_DIRECTORY/admin/$NOM_NET2FTP/settings.inc.php
-chmod -R 777 $WWW_DIRECTORY/admin/$NOM_NET2FTP/
+$BIN_MYSQL -u root < $WWW_DIRECTORY/admin/$MOD_NAME/create_tables.sql $MOD_NAME
+rm -r $WWW_DIRECTORY/admin/$MOD_NAME/integration_in_other_PHP_applications
+mv $WWW_DIRECTORY/admin/$MOD_NAME/files_to_upload/* $WWW_DIRECTORY/admin/$MOD_NAME/.
+cat $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php | sed -i -e "54s/\"\"/\"cooperation\"/" $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php
+cat $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php | sed -i -e "71s/\"no\"/\"yes\"/" $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php
+cat $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php | sed -i -e "74s/\"\"/\"$MOD_NAME\"/" $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php
+cat $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php | sed -i -e "75s/\"\"/\"$NET2FTP_MYSQL_PWD\"/" $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php
+cat $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php | sed -i -e "76s/\"\"/\"$MOD_NAME\"/" $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php
+chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/
 
 }
 
@@ -208,8 +208,16 @@ chmod -R 777 $WWW_DIRECTORY/admin/$NOM_NET2FTP/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_NET2FTP\">$NOM_NET2FTP</a><br>
-">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/admin/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/$MOD_NAME/</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

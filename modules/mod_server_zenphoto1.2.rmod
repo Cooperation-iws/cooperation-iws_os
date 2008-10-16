@@ -153,7 +153,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_ZENPHOTO=1
-NOM_ZENPHOTO[1]="Zenphoto"
+MOD_NAME[1]="Zenphoto"
 
 else 
 
@@ -167,12 +167,12 @@ done
 
 for (( count=1; count<=$NB_ZENPHOTO; count++ ))
 do
-NOM_ZENPHOTO[$count]=$(zenity --entry --text "$MESS_NAME $count ZENPHOTO")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count ZENPHOTO")
 test $? -ne 0 && break # Bouton Annuler
 
-while (echo ${NOM_ZENPHOTO[$count]} | grep "[^a-zA-Z0-9]") 
+while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_ZENPHOTO[$count]=$(zenity --entry --text "$MESS_NAME $count ZENPHOTO")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count ZENPHOTO")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 done 
@@ -180,7 +180,7 @@ done
 
 fi
 export NB_ZENPHOTO=$NB_ZENPHOTO
-export NOM_ZENPHOTO=$NOM_ZENPHOTO
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -199,20 +199,20 @@ DOWNLOAD
 for (( count=1; count<=$NB_ZENPHOTO; count++ ))
 do
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${NOM_ZENPHOTO[$count]}
-cp -Rf zenphoto/* $WWW_DIRECTORY/${NOM_ZENPHOTO[$count]}/.
-#mv $WWW_DIRECTORY/${NOM_ZENPHOTO[$count]}/zp-core/zp-config.php.example $WWW_DIRECTORY/${NOM_ZENPHOTO[$count]}/zp-core/zp-config.php
-echo "create database ${NOM_ZENPHOTO[$count]};
-grant all on ${NOM_ZENPHOTO[$count]}.* to ${NOM_ZENPHOTO[$count]}@localhost identified by '$ZENPHOTO_MYSQL_PWD';
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf zenphoto/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+#mv $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php.example $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php
+echo "create database ${MOD_NAME[$count]};
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$ZENPHOTO_MYSQL_PWD';
 flush privileges;" > zenphoto_db.sql
 
 $BIN_MYSQL -u root < zenphoto_db.sql mysql
 rm zenphoto_db.sql
-sed -i -e "28s/\"\"/\"${NOM_ZENPHOTO[$count]}\"/" $WWW_DIRECTORY/${NOM_ZENPHOTO[$count]}/zp-core/zp-config.php.source
-sed -i -e "29s/\"\"/\"$ZENPHOTO_MYSQL_PWD\"/" $WWW_DIRECTORY/${NOM_ZENPHOTO[$count]}/zp-core/zp-config.php.source
-sed -i -e "31s/\"\"/\"${NOM_ZENPHOTO[$count]}\"/" $WWW_DIRECTORY/${NOM_ZENPHOTO[$count]}/zp-core/zp-config.php.source
+sed -i -e "28s/\"\"/\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php.source
+sed -i -e "29s/\"\"/\"$ZENPHOTO_MYSQL_PWD\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php.source
+sed -i -e "31s/\"\"/\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php.source
 
-chown -R www-data $WWW_DIRECTORY/${NOM_ZENPHOTO[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
 done
 
@@ -229,8 +229,16 @@ function CREATE_WUI
 for (( count=1; count<=$NB_ZENPHOTO; count++ ))
 
 do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_ZENPHOTO[$count]}\">${NOM_ZENPHOTO[$count]}</a> | <a href=\"/${NOM_ZENPHOTO[$count]}/zp-core/\">Admin</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 done
 
 }

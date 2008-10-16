@@ -26,7 +26,7 @@ MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
-NOM_JDICT="Dictionnary"
+MOD_NAME="Dictionnary"
 
 
 #VARIABLES
@@ -171,16 +171,17 @@ DOWNLOAD
 
 ln -s / /cow
 apt-get install --assume-yes --force-yes sun-java5-bin sun-java5-jre
+mkdir $WWW_DIRECTORY/$MOD_NAME/
+cp -r jdictd15/* $WWW_DIRECTORY/$MOD_NAME/.
 
-cp -r jdictd15/* $WWW_DIRECTORY/$NOM_JDICT/.
-
+java -cp $WWW_DIRECTORY/$MOD_NAME/jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/eng-spa.ini DOC/deu-fra.ini DOC/eng-fra.ini DOC/fra-deu.index DOC/fra-eng.ini
 
 
 
 echo "
 #Jdict
 
-java -cp $WWW_DIRECTORY/$NOM_JDICT/jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/eng-spa.ini DOC/deu-fra.ini DOC/eng-fra.ini DOC/fra-deu.index DOC/fra-eng.ini
+java -cp $WWW_DIRECTORY/$MOD_NAME/jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/eng-spa.ini DOC/deu-fra.ini DOC/eng-fra.ini DOC/fra-deu.index DOC/fra-eng.ini
 " >> /etc/rc.local
 
 }
@@ -193,9 +194,17 @@ java -cp $WWW_DIRECTORY/$NOM_JDICT/jdictd.jar org.dict.server.JDictd Elements/el
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"http://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:2626\">$NOM_JDICT</a><br>
-">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>http://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:2626</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
 }
+
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 

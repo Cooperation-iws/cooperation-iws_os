@@ -156,7 +156,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_SPIP=1
-NOM_SPIP[1]="Spip"
+MOD_NAME[1]="Spip"
 
 else 
 NB_SPIP=$(zenity --entry --text "$MESS_HOW_MANY Spip $MESS_DO_YOU_WANT")
@@ -170,19 +170,19 @@ done
 
 for (( count=1; count<=$NB_SPIP; count++ ))
 do
-NOM_SPIP[$count]=$(zenity --entry --text "$MESS_NAME $count SPIP")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count SPIP")
 test $? -ne 0 && break # Bouton Annuler
 
-while (echo ${NOM_SPIP[$count]} | grep "[^a-zA-Z0-9]") 
+while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_SPIP[$count]=$(zenity --entry --text "$MESS_NAME $count SPIP")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count SPIP")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 done
 
 fi
 export NB_SPIP=$NB_SPIP
-export NOM_SPIP=$NOM_SPIP
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -202,21 +202,21 @@ DOWNLOAD
 for (( count=1; count<=$NB_SPIP; count++ ))
 
 do
-mkdir $WWW_DIRECTORY/${NOM_SPIP[$count]}
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cd $DL_DIR
-cp -Rf spip/* $WWW_DIRECTORY/${NOM_SPIP[$count]}/.
-echo "create database ${NOM_SPIP[$count]};
-grant all on ${NOM_SPIP[$count]}.* to ${NOM_SPIP[$count]}@localhost identified by '$SPIP_MYSQL_PWD';
+cp -Rf spip/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+echo "create database ${MOD_NAME[$count]};
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$SPIP_MYSQL_PWD';
 flush privileges;" > spip_db.sql
 
 $BIN_MYSQL -u root < spip_db.sql mysql
 rm spip_db.sql
-sed -i "55s/\$adresse_db/\"localhost\"/" $WWW_DIRECTORY/${NOM_SPIP[$count]}/ecrire/install/etape_1.php
-sed -i "64s/\$login_db/\"${NOM_SPIP[$count]}\"/" $WWW_DIRECTORY/${NOM_SPIP[$count]}/ecrire/install/etape_1.php
-sed -i "73s/\$pass_db/\"$SPIP_MYSQL_PWD\"/" $WWW_DIRECTORY/${NOM_SPIP[$count]}/ecrire/install/etape_1.php
+sed -i "55s/\$adresse_db/\"localhost\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/ecrire/install/etape_1.php
+sed -i "64s/\$login_db/\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/ecrire/install/etape_1.php
+sed -i "73s/\$pass_db/\"$SPIP_MYSQL_PWD\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/ecrire/install/etape_1.php
 
 
-chown -R www-data $WWW_DIRECTORY/${NOM_SPIP[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
   
 done
 }
@@ -232,8 +232,16 @@ function CREATE_WUI
 for (( count=1; count<=$NB_SPIP; count++ ))
 
 do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_SPIP[$count]}\">${NOM_SPIP[$count]}</a> | <a href=\"/${NOM_SPIP[$count]}/ecrire/\">Admin</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}/ecrire/</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 
 done
 }

@@ -134,20 +134,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_TASKFREAK="Taskfreak"
+MOD_NAME="Taskfreak"
 else 
 
-NOM_TASKFREAK=$(zenity --entry --text "$MESS_NAME TASKFREAK")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME TASKFREAK")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_TASKFREAK | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_TASKFREAK=$(zenity --entry --text "$MESS_NAME TASKFREAK")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME TASKFREAK")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_TASKFREAK=$NOM_TASKFREAK
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -165,22 +165,22 @@ DOWNLOAD
 
 ##TASKFREAK
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_TASKFREAK
-cp -Rf taskfreak/* $WWW_DIRECTORY/$NOM_TASKFREAK/.
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf taskfreak/* $WWW_DIRECTORY/$MOD_NAME/.
 
-echo "create database ${NOM_TASKFREAK};
-grant all on ${NOM_TASKFREAK}.* to ${NOM_TASKFREAK}@localhost identified by '$TASKFREAK_MYSQL_PWD';
+echo "create database ${MOD_NAME};
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$TASKFREAK_MYSQL_PWD';
 flush privileges;" > TASKFREAK_db.sql
 
 $BIN_MYSQL -u root < TASKFREAK_db.sql mysql
 rm TASKFREAK_db.sql
 
 
-sed -i "14s/root/$NOM_TASKFREAK/" $WWW_DIRECTORY/$NOM_TASKFREAK/include/config.php
-sed -i "15s/''/'$TASKFREAK_MYSQL_PWD'/" $WWW_DIRECTORY/$NOM_TASKFREAK/include/config.php
-sed -i "16s/taskfreak_strict/$NOM_TASKFREAK/" $WWW_DIRECTORY/$NOM_TASKFREAK/include/config.php
+sed -i "14s/root/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/include/config.php
+sed -i "15s/''/'$TASKFREAK_MYSQL_PWD'/" $WWW_DIRECTORY/$MOD_NAME/include/config.php
+sed -i "16s/taskfreak_strict/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/include/config.php
 
-chown -R www-data $WWW_DIRECTORY/$NOM_TASKFREAK/
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 
 }
@@ -193,8 +193,17 @@ chown -R www-data $WWW_DIRECTORY/$NOM_TASKFREAK/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_TASKFREAK\" >$NOM_TASKFREAK</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

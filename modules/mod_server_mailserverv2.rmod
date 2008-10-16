@@ -192,18 +192,18 @@ $BIN_MYSQL -u root < MAILSERVER_db.sql mysql
 
 cd $DL_DIR
 
-POSTFIXADMIN="Postfixadmin"
-mkdir $WWW_DIRECTORY/admin/$POSTFIXADMIN/
-cp -r postfixadmin/* $WWW_DIRECTORY/admin/$POSTFIXADMIN/.
+MOD_NAME="Postfixadmin"
+mkdir $WWW_DIRECTORY/admin/$MOD_NAME/
+cp -r postfixadmin/* $WWW_DIRECTORY/admin/$MOD_NAME/.
 #user
-sed -i "52s/postfix/$NOM_MAILSERVER/" $WWW_DIRECTORY/admin/$POSTFIXADMIN/config.inc.php
+sed -i "52s/postfix/$NOM_MAILSERVER/" $WWW_DIRECTORY/admin/$MOD_NAME/config.inc.php
 #password
-sed -i "53s/postfixadmin/$MAILSERVER_MYSQL_PWD/" $WWW_DIRECTORY/admin/$POSTFIXADMIN/config.inc.php
+sed -i "53s/postfixadmin/$MAILSERVER_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/config.inc.php
 #databasename
-sed -i "54s/postfix/$NOM_MAILSERVER/" $WWW_DIRECTORY/admin/$POSTFIXADMIN/config.inc.php
+sed -i "54s/postfix/$NOM_MAILSERVER/" $WWW_DIRECTORY/admin/$MOD_NAME/config.inc.php
 
-sed -i "37s/''/'http:\/\/'.\$HTTP_SERVER_VARS[\"SERVER_NAME\"].'\/$POSTFIXADMIN\/'/" $WWW_DIRECTORY/admin/$POSTFIXADMIN/config.inc.php
-sed -i "31s/false/true/" $WWW_DIRECTORY/admin/$POSTFIXADMIN/config.inc.php
+sed -i "37s/''/'http:\/\/'.\$HTTP_SERVER_VARS[\"SERVER_NAME\"].'\/$MOD_NAME\/'/" $WWW_DIRECTORY/admin/$MOD_NAME/config.inc.php
+sed -i "31s/false/true/" $WWW_DIRECTORY/admin/$MOD_NAME/config.inc.php
 
 
 
@@ -2822,9 +2822,16 @@ freshclam
 
 function CREATE_WUI
 {
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/admin/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
 
-echo "$RMOD_DESCRIPTION | <a href=\"/admin/$POSTFIXADMIN\" >$POSTFIXADMIN</a><br>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

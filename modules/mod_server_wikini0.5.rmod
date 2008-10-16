@@ -160,7 +160,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_WIKINI=1
-NOM_WIKINI[1]="Wikini"
+MOD_NAME[1]="Wikini"
 
 else 
 NB_WIKINI=$(zenity --entry --text "$MESS_HOW_MANY Wikini $MESS_DO_YOU_WANT")
@@ -174,19 +174,19 @@ done
 
 for (( count=1; count<=$NB_WIKINI; count++ ))
 do
-NOM_WIKINI[$count]=$(zenity --entry --text "$MESS_NAME $count WIKINI")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count WIKINI")
 test $? -ne 0 && break # Bouton Annuler
 
-while (echo ${NOM_WIKINI[$count]} | grep "[^a-zA-Z0-9]") 
+while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_WIKINI[$count]=$(zenity --entry --text "$MESS_NAME $count WIKINI")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count WIKINI")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 done
 
 fi
 export NB_WIKINI=$NB_WIKINI
-export NOM_WIKINI=$NOM_WIKINI
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -206,21 +206,21 @@ DOWNLOAD
 for (( count=1; count<=$NB_WIKINI; count++ ))
 
 do
-mkdir $WWW_DIRECTORY/${NOM_WIKINI[$count]}
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cd $DL_DIR
-cp -Rf wikini/* $WWW_DIRECTORY/${NOM_WIKINI[$count]}/.
-echo "create database ${NOM_WIKINI[$count]};
-grant all on ${NOM_WIKINI[$count]}.* to ${NOM_WIKINI[$count]}@localhost identified by '$WIKINI_MYSQL_PWD';
+cp -Rf wikini/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+echo "create database ${MOD_NAME[$count]};
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$WIKINI_MYSQL_PWD';
 flush privileges;" > wikini_db.sql
 
 $BIN_MYSQL -u root < wikini_db.sql mysql
 rm wikini_db.sql
-sed -i "1618s/wikini/${NOM_WIKINI[$count]}/" $WWW_DIRECTORY/${NOM_WIKINI[$count]}/wakka.php
-sed -i "1619s/wikini/${NOM_WIKINI[$count]}/" $WWW_DIRECTORY/${NOM_WIKINI[$count]}/wakka.php
-sed -i "1620s/''/'$WIKINI_MYSQL_PWD'/" $WWW_DIRECTORY/${NOM_WIKINI[$count]}/wakka.php
-sed -i "87s/\"\"/\"<?php echo \$wakkaConfig[\"mysql_password\"] ?>\"/" $WWW_DIRECTORY/${NOM_WIKINI[$count]}/setup/default.php
+sed -i "1618s/wikini/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wakka.php
+sed -i "1619s/wikini/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wakka.php
+sed -i "1620s/''/'$WIKINI_MYSQL_PWD'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wakka.php
+sed -i "87s/\"\"/\"<?php echo \$wakkaConfig[\"mysql_password\"] ?>\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/setup/default.php
 
-chown -R www-data $WWW_DIRECTORY/${NOM_WIKINI[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
   
 done
 }
@@ -236,8 +236,17 @@ function CREATE_WUI
 for (( count=1; count<=$NB_WIKINI; count++ ))
 
 do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_WIKINI[$count]}\">${NOM_WIKINI[$count]}</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
+
 
 done
 }
@@ -255,7 +264,7 @@ for (( count=1; count<=$NB_WIKINI; count++ ))
 do
 echo "
 #Wikini
-sed -i \"16s/localhost/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/${NOM_WIKINI[$count]}/wakka.config.php
+sed -i \"16s/localhost/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/wakka.config.php
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done

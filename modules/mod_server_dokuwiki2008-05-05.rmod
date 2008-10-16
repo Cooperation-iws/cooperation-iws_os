@@ -160,7 +160,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_DOKUWIKI=1
-NOM_DOKUWIKI[1]="Dokuwiki"
+MOD_NAME[1]="Dokuwiki"
 
 else 
 NB_DOKUWIKI=$(zenity --entry --text "$MESS_HOW_MANY Dokuwiki $MESS_DO_YOU_WANT")
@@ -174,19 +174,19 @@ done
 
 for (( count=1; count<=$NB_DOKUWIKI; count++ ))
 do
-NOM_DOKUWIKI[$count]=$(zenity --entry --text "$MESS_NAME $count DOKUWIKI")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count DOKUWIKI")
 test $? -ne 0 && break # Bouton Annuler
 
-while (echo ${NOM_DOKUWIKI[$count]} | grep "[^a-zA-Z0-9]") 
+while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_DOKUWIKI[$count]=$(zenity --entry --text "$MESS_NAME $count DOKUWIKI")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count DOKUWIKI")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 done
 
 fi
 export NB_DOKUWIKI=$NB_DOKUWIKI
-export NOM_DOKUWIKI=$NOM_DOKUWIKI
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -206,11 +206,11 @@ DOWNLOAD
 for (( count=1; count<=$NB_DOKUWIKI; count++ ))
 
 do
-mkdir $WWW_DIRECTORY/${NOM_DOKUWIKI[$count]}
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cd $DL_DIR
-cp -Rf dokuwiki/* $WWW_DIRECTORY/${NOM_DOKUWIKI[$count]}/.
+cp -Rf dokuwiki/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
 
-chown -R www-data $WWW_DIRECTORY/${NOM_DOKUWIKI[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
   
 done
 }
@@ -226,8 +226,16 @@ function CREATE_WUI
 for (( count=1; count<=$NB_DOKUWIKI; count++ ))
 
 do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_DOKUWIKI[$count]}\">${NOM_DOKUWIKI[$count]}</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
+
 
 done
 }
@@ -245,7 +253,7 @@ for (( count=1; count<=$NB_DOKUWIKI; count++ ))
 do
 echo "
 #Dokuwiki
-rm $WWW_DIRECTORY/${NOM_DOKUWIKI[$count]}/install.php
+rm $WWW_DIRECTORY/${MOD_NAME[$count]}/install.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done
 }

@@ -133,20 +133,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_OPENGOO="Opengoo"
+MOD_NAME="Opengoo"
 else 
 
-NOM_OPENGOO=$(zenity --entry --text "$MESS_NAME OPENGOO")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME OPENGOO")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_OPENGOO | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_OPENGOO=$(zenity --entry --text "$MESS_NAME OPENGOO")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME OPENGOO")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_OPENGOO=$NOM_OPENGOO
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -164,23 +164,23 @@ DOWNLOAD
 
 ##OPENGOO
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_OPENGOO
-cp -Rf opengoo/* $WWW_DIRECTORY/$NOM_OPENGOO/.
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf opengoo/* $WWW_DIRECTORY/$MOD_NAME/.
 
-echo "create database ${NOM_OPENGOO};
-grant all on ${NOM_OPENGOO}.* to ${NOM_OPENGOO}@localhost identified by '$OPENGOO_MYSQL_PWD';
+echo "create database ${MOD_NAME};
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$OPENGOO_MYSQL_PWD';
 flush privileges;" > OPENGOO_db.sql
 
 $BIN_MYSQL -u root < OPENGOO_db.sql mysql
 rm OPENGOO_db.sql
 
-sed -i "23s/'database_user'/'database_user', '$NOM_OPENGOO'/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/installation/templates/system_config_form.php
-sed -i "28s/'database_pass'/'database_pass', '$OPENGOO_MYSQL_PWD'/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/installation/templates/system_config_form.php
-sed -i "33s/'database_name'/'database_name', '$NOM_OPENGOO'/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/installation/templates/system_config_form.php
-sed -i "17s/gmt/GMT/" $WWW_DIRECTORY/$NOM_OPENGOO/public/install/include.php 
+sed -i "23s/'database_user'/'database_user', '$MOD_NAME'/" $WWW_DIRECTORY/$MOD_NAME/public/install/installation/templates/system_config_form.php
+sed -i "28s/'database_pass'/'database_pass', '$OPENGOO_MYSQL_PWD'/" $WWW_DIRECTORY/$MOD_NAME/public/install/installation/templates/system_config_form.php
+sed -i "33s/'database_name'/'database_name', '$MOD_NAME'/" $WWW_DIRECTORY/$MOD_NAME/public/install/installation/templates/system_config_form.php
+sed -i "17s/gmt/GMT/" $WWW_DIRECTORY/$MOD_NAME/public/install/include.php 
 
 
-chown -R www-data $WWW_DIRECTORY/$NOM_OPENGOO/
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 
 }
@@ -193,8 +193,16 @@ chown -R www-data $WWW_DIRECTORY/$NOM_OPENGOO/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_OPENGOO\" >$NOM_OPENGOO</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -209,7 +217,7 @@ function CREATE_INSTALL_SCRIPT
 echo "
 
 #Opengoo
-sed -i \"s/http:\/\/localhost/http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/$NOM_OPENGOO/config/config.php
+sed -i \"s/http:\/\/localhost/http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/$MOD_NAME/config/config.php
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 

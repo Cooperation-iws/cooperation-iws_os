@@ -136,20 +136,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_HORDE="Horde"
+MOD_NAME="Horde"
 else 
 
-NOM_HORDE=$(zenity --entry --text "$MESS_NAME HORDE")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME HORDE")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_HORDE | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_HORDE=$(zenity --entry --text "$MESS_NAME HORDE")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME HORDE")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_HORDE=$NOM_HORDE
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -167,11 +167,11 @@ DOWNLOAD
 
 ##HORDE
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_HORDE
-cp -Rf horde/* $WWW_DIRECTORY/$NOM_HORDE/.
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf horde/* $WWW_DIRECTORY/$MOD_NAME/.
 
-echo "create database ${NOM_HORDE};
-grant all on ${NOM_HORDE}.* to ${NOM_HORDE}@localhost identified by '$HORDE_MYSQL_PWD';
+echo "create database ${MOD_NAME};
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$HORDE_MYSQL_PWD';
 flush privileges;" > HORDE_db.sql
 
 $BIN_MYSQL -u root < HORDE_db.sql mysql
@@ -188,16 +188,16 @@ extension=memcache.so
 " >> /etc/php5/apache2/php.ini
 
 echo "---------------You will now config Horde--------------------"
-echo "MYSQL DATABASE NAME: $NOM_HORDE"
-echo "MYSQL USER NAME: $NOM_HORDE"
+echo "MYSQL DATABASE NAME: $MOD_NAME"
+echo "MYSQL USER NAME: $MOD_NAME"
 echo "MYSQL PASSWORD: $HORDE_MYSQL_PWD"
 echo "-------------Press enter-----------------------"
 read r < /dev/tty
-cd $WWW_DIRECTORY/$NOM_HORDE/
+cd $WWW_DIRECTORY/$MOD_NAME/
 ./scripts/setup.php
-sed -i "18s/true/false/" $WWW_DIRECTORY/$NOM_HORDE/config/conf.php
+sed -i "18s/true/false/" $WWW_DIRECTORY/$MOD_NAME/config/conf.php
 
-chown -R www-data $WWW_DIRECTORY/$NOM_HORDE/
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 
 }
@@ -210,8 +210,16 @@ chown -R www-data $WWW_DIRECTORY/$NOM_HORDE/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_HORDE\" >$NOM_HORDE</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

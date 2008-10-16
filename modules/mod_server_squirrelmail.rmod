@@ -135,20 +135,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_SQUIRRELMAIL="Squirrelmail"
+MOD_NAME="Squirrelmail"
 else 
 
-NOM_SQUIRRELMAIL=$(zenity --entry --text "$MESS_NAME SQUIRRELMAIL")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME SQUIRRELMAIL")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_SQUIRRELMAIL | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_SQUIRRELMAIL=$(zenity --entry --text "$MESS_NAME SQUIRRELMAIL")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME SQUIRRELMAIL")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_SQUIRRELMAIL=$NOM_SQUIRRELMAIL
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -170,7 +170,7 @@ squirrelmail-configure
 
 sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
 cat << EOT >> /etc/apache2/sites-available/default
-Alias /$NOM_SQUIRRELMAIL /usr/share/squirrelmail
+Alias /$MOD_NAME /usr/share/squirrelmail
 
 <Directory /usr/share/squirrelmail>
   Options Indexes FollowSymLinks
@@ -208,8 +208,17 @@ ln -s /var/share/lampp/squirrelmail /usr/share/squirrelmail
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_SQUIRRELMAIL\" >$NOM_SQUIRRELMAIL</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

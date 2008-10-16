@@ -50,50 +50,7 @@ REMOVE_USER
 chmod -R 777 /etc/skel
 rm -r /home/*
 
-if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
-
-echo "I: Configuring cooperation-iws wui"
-echo "<?php include('cooperation-wui.header.php'); ?>
-
-<center>
-<img src=\"cooperation.header.jpg\"></center><br><br>
-<?php include('Sphider/index.php'); ?>
-<?php if ( !isset(\$_GET['query'])) {?>
-<center>
-" > $WWW_DIRECTORY/index.php
-
-cat $WWW_DIRECTORY/cooperation-wui.frame.php | sort | sed '/^$/d' | sed "s/^/<hr width=\"10%\">/" | sed "s/000Cooperation-iws/Cooperation-iws/">> $WWW_DIRECTORY/index.php
-
-echo "
-<hr width=\"20%\">
-<a href=\"/admin\">Admin</a><br>
-</center>
-<?php } else {?>
-<hr width=\"20%\">
-<center><h1><a href=\"/\">Home</a></h1></center><br>
-<?php } ?>
-
-" >> $WWW_DIRECTORY/index.php
-
-echo "<?php include('cooperation-wui.footer.php'); ?>" >> $WWW_DIRECTORY/index.php
-
-echo "<?php include('cooperation-wui.header.php'); ?>
-
-<center>
-<img src=\"cooperation.header.jpg\"><br><br>
-" > $WWW_DIRECTORY/admin/index.php
-
-cat $WWW_DIRECTORY/admin/cooperation-wui.frame.php | sort | sed '/^$/d' | sed "s/^/<hr width=\"10%\">/" >> $WWW_DIRECTORY/admin/index.php
-
-echo "<hr width=\"10%\">
-<a href=\"/phpmyadmin\">Phpmyadmin</a><br>
-<hr width=\"20%\">
-<a href=\"/\">Home</a><br>
-">> $WWW_DIRECTORY/admin/index.php
-
-echo "<?php include('cooperation-wui.footer.php'); ?>" >> $WWW_DIRECTORY/admin/index.php
-
-
+i
 
 
 echo "I: Securing Lampp Server"

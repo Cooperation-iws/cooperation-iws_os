@@ -215,7 +215,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_WORDPRESS=1
-NOM_WORDPRESS[1]="Wordpress25"
+MOD_NAME[1]="Wordpress25"
 
 else 
 NB_WORDPRESS=$(zenity --entry --text "$MESS_HOW_MANY Wordpress $MESS_DO_YOU_WANT")
@@ -229,19 +229,19 @@ done
 
 for (( count=1; count<=$NB_WORDPRESS; count++ ))
 do
-NOM_WORDPRESS[$count]=$(zenity --entry --text "$MESS_NAME $count WORDPRESS")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count WORDPRESS")
 test $? -ne 0 && break # Bouton Annuler
 
-while (echo ${NOM_WORDPRESS[$count]} | grep "[^a-zA-Z0-9]") 
+while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_WORDPRESS[$count]=$(zenity --entry --text "$MESS_NAME $count WORDPRESS")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count WORDPRESS")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 done
 
 fi
 export NB_WORDPRESS=$NB_WORDPRESS
-export NOM_WORDPRESS=$NOM_WORDPRESS
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -261,63 +261,63 @@ DOWNLOAD
 for (( count=1; count<=$NB_WORDPRESS; count++ ))
 
 do
-mkdir $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cd $DL_DIR
-cp -Rf wordpress/* $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/.
-echo "create database ${NOM_WORDPRESS[$count]};
-grant all on ${NOM_WORDPRESS[$count]}.* to ${NOM_WORDPRESS[$count]}@localhost identified by '$WORDPRESS_MYSQL_PWD';
+cp -Rf wordpress/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+echo "create database ${MOD_NAME[$count]};
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$WORDPRESS_MYSQL_PWD';
 flush privileges;" > wordpress_db.sql
 
 $BIN_MYSQL -u root < wordpress_db.sql mysql
 rm wordpress_db.sql
-cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php | sed -i -e  "s/value=\"wordpress\"/value=\"${NOM_WORDPRESS[$count]}\"/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php
-cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php | sed -i -e  "s/value=\"username\"/value=\"${NOM_WORDPRESS[$count]}\"/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php
-cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php | sed -i -e  "s/value=\"password\"/value=\"$WORDPRESS_MYSQL_PWD\"/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-admin/setup-config.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-admin/setup-config.php | sed -i -e  "s/value=\"wordpress\"/value=\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-admin/setup-config.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-admin/setup-config.php | sed -i -e  "s/value=\"username\"/value=\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-admin/setup-config.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-admin/setup-config.php | sed -i -e  "s/value=\"password\"/value=\"$WORDPRESS_MYSQL_PWD\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-admin/setup-config.php
 
 cd $DL_DIR
 
-cp -Rf plaintxtblog $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/.
+cp -Rf plaintxtblog $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/.
 
 cd $DL_DIR
 
-cp -Rf barthelme $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/.
+cp -Rf barthelme $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/.
 
-
-
-cd $DL_DIR
-
-cp -Rf search-regex $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/plugins/.
 
 
 cd $DL_DIR
 
-cp -Rf search-unleashed $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/plugins/.
+cp -Rf search-regex $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/plugins/.
+
 
 cd $DL_DIR
 
-cp -Rf wpmathpub $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/plugins/.
+cp -Rf search-unleashed $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/plugins/.
 
-sed -i "53s/true/false/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/plugins/wpmathpub/wpmathpub.php
+cd $DL_DIR
 
-cp -Rf wp-print $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/plugins/.
+cp -Rf wpmathpub $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/plugins/.
 
-cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/plaintxtblog/single.php | sed -i -e "24s/<?php endif; ?>/<?php endif; ?><span class=\"entry-comments\"><?php if(function_exists('wp_print')) { print_link(); } ?><\/span>/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/plaintxtblog/single.php 
-cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/plaintxtblog/page.php | sed -i -e "17s/<\/div>/<?php if(function_exists('wp_print')) { print_link(); } ?><\/div>/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/plaintxtblog/page.php 
+sed -i "53s/true/false/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/plugins/wpmathpub/wpmathpub.php
+
+cp -Rf wp-print $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/plugins/.
+
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/plaintxtblog/single.php | sed -i -e "24s/<?php endif; ?>/<?php endif; ?><span class=\"entry-comments\"><?php if(function_exists('wp_print')) { print_link(); } ?><\/span>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/plaintxtblog/single.php 
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/plaintxtblog/page.php | sed -i -e "17s/<\/div>/<?php if(function_exists('wp_print')) { print_link(); } ?><\/div>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/plaintxtblog/page.php 
 #FR
-cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/default/single.php | sed -i -e "s/Modifier cet article.','',''); ?>/Modifier cet article.','',''); ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/default/single.php 
-cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/default/page.php | sed -i -e "s/<?php endwhile; endif; ?>/<?php endwhile; endif; ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/default/page.php 
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/single.php | sed -i -e "s/Modifier cet article.','',''); ?>/Modifier cet article.','',''); ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/single.php 
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/page.php | sed -i -e "s/<?php endwhile; endif; ?>/<?php endwhile; endif; ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/page.php 
 #EN
-cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/default/single.php | sed -i -e "s/Edit this entry.','',''); ?>/Edit this entry.','',''); ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/default/single.php 
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/single.php | sed -i -e "s/Edit this entry.','',''); ?>/Edit this entry.','',''); ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/single.php 
 
-cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/barthelme/single.php | sed -i -e "41s/<?php endif; ?>/<?php endif; ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/barthelme/single.php 
-cat $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/barthelme/page.php | sed -i -e "18s/<\/div>/<?php if(function_exists('wp_print')) { print_link(); } ?><\/div>/" $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-content/themes/barthelme/page.php 
-
-
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/barthelme/single.php | sed -i -e "41s/<?php endif; ?>/<?php endif; ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/barthelme/single.php 
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/barthelme/page.php | sed -i -e "18s/<\/div>/<?php if(function_exists('wp_print')) { print_link(); } ?><\/div>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/barthelme/page.php 
 
 
 
 
-chown -R www-data $WWW_DIRECTORY/${NOM_WORDPRESS[$count]}
+
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
   
 done
 }
@@ -333,8 +333,15 @@ function CREATE_WUI
 for (( count=1; count<=$NB_WORDPRESS; count++ ))
 
 do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_WORDPRESS[$count]}\">${NOM_WORDPRESS[$count]}</a> | <a href=\"/${NOM_WORDPRESS[$count]}/wp-admin/\">Admin</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
 
 done
 }
@@ -352,7 +359,7 @@ for (( count=1; count<=$NB_WORDPRESS; count++ ))
 do
 echo "
 #Wordpress
-sed -i \"8s/define('DB_COLLATE', '');/define('DB_COLLATE', ''); define('WP_SITEURL', 'http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'\/${NOM_WORDPRESS[$count]}'); define('WP_HOME', 'http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'\/${NOM_WORDPRESS[$count]}');/\" \$WWW_DIRECTORY/${NOM_WORDPRESS[$count]}/wp-config.php
+sed -i \"8s/define('DB_COLLATE', '');/define('DB_COLLATE', ''); define('WP_SITEURL', 'http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'\/${MOD_NAME[$count]}'); define('WP_HOME', 'http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'\/${MOD_NAME[$count]}');/\" \$WWW_DIRECTORY/${MOD_NAME[$count]}/wp-config.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done
 }

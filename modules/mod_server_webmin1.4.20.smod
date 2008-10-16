@@ -237,8 +237,17 @@ ln -s /var/share/usr/share/webmin /usr/share/webmin
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"https://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:10000\">Webmin</a><br>
-">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>https://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:10000</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

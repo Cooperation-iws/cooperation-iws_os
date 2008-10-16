@@ -1081,9 +1081,9 @@ class Reconstructor:
         # check for module and skip category
  	if modExecute == True:	
 		if modReqApache == True:       
-                	ReqApache="A"
+                	self.ReqApache="A"
 			fReqApache=open(os.path.join(self.customDir, "chroot/tmp/apache"), 'w')
-            		fReqApache.write(ReqApache)
+            		fReqApache.write(self.ReqApache)
             		fReqApache.close()
 	    
 	if modPath != None:
@@ -3162,8 +3162,11 @@ class Reconstructor:
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
 	    modExecScrChroot += 'echo Running Core:  \n'
-	    modExecScrChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
-            modExecScrChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
+	    if self.ReqApache == "A"	    
+		modExecScrChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
+		os.popen('cp -r ' +os.path.join(self.ciwsRootDir, "cooperation-wui") + '/* ' + os.path.join(self.customDir, "chroot/var/www") + '/.' )	        
+		modExecScrChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
+        	
             for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)

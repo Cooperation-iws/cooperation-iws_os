@@ -79,57 +79,6 @@ fi
 
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget $URL_FREE/cooperation-wui-0.5.2.tar.gz
-tar -xzf cooperation-wui-0.5.2.tar.gz
-mv cooperation-wui-0.5.2 cooperation-wui
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
-
-function WGET_MIRROIR_FREE
-{
-cd $DL_DIR
-wget $URL_FREE/cooperation-wui-0.5.2.tar.gz
-tar -xzf cooperation-wui-0.5.2.tar.gz
-mv cooperation-wui-0.5.2 cooperation-wui
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_MIRROIR_FREE
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
 #________________________________________CHOOSE_PARAMETERS_GUI______________________________________
 
 function CHOOSE_PARAMETERS_GUI
@@ -147,8 +96,6 @@ NOM_SPHIDER="Sphider"
 
 function INSTALL
 {
-echo "I: Download Cooperation-wui"
-DOWNLOAD
 
 ##SPHIDER
 cd $DL_DIR
@@ -163,6 +110,8 @@ $BIN_MYSQL -u root < SPHIDER_db.sql mysql
 rm SPHIDER_db.sql
 
 $BIN_MYSQL -u root ${NOM_SPHIDER} < $WWW_DIRECTORY/admin/$NOM_SPHIDER/sql/tables.sql 
+
+$BIN_MYSQL -u root < /var/www/cooperation-iws/cooperation-iws.sql
 
 apt-get install --assume-yes --force-yes poppler-utils catdoc pstotext zip
 
@@ -190,9 +139,15 @@ fi
 
 function CREATE_WUI
 {
-
-echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_SPHIDER/admin/admin.php\" >$NOM_SPHIDER</a><br>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/admin/$NOM_SPHIDER/admin/admin.php</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/$MOD_NAME</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

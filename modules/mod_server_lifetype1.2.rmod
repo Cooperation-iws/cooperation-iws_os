@@ -157,7 +157,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_LIFETYPE=1
-NOM_LIFETYPE[1]="Lifetype"
+MOD_NAME[1]="Lifetype"
 
 else 
 
@@ -171,12 +171,12 @@ done
 
 for (( count=1; count<=$NB_LIFETYPE; count++ ))
 do
-NOM_LIFETYPE[$count]=$(zenity --entry --text "$MESS_NAME $count LIFETYPE")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count LIFETYPE")
 test $? -ne 0 && break # Bouton Annuler
 
-while (echo ${NOM_LIFETYPE[$count]} | grep "[^a-zA-Z0-9]") 
+while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_LIFETYPE[$count]=$(zenity --entry --text "$MESS_NAME $count LIFETYPE")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count LIFETYPE")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 done 
@@ -184,7 +184,7 @@ done
 
 fi
 export NB_LIFETYPE=$NB_LIFETYPE
-export NOM_LIFETYPE=$NOM_LIFETYPE
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -203,33 +203,33 @@ DOWNLOAD
 for (( count=1; count<=$NB_LIFETYPE; count++ ))
 do
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}
-cp -Rf lifetype/* $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}/.
-#mv $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}/zp-core/zp-config.php.example $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}/zp-core/zp-config.php
-echo "create database ${NOM_LIFETYPE[$count]};
-grant all on ${NOM_LIFETYPE[$count]}.* to ${NOM_LIFETYPE[$count]}@localhost identified by '$LIFETYPE_MYSQL_PWD';
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf lifetype/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+#mv $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php.example $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php
+echo "create database ${MOD_NAME[$count]};
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$LIFETYPE_MYSQL_PWD';
 flush privileges;" > lifetype_db.sql
 
 $BIN_MYSQL -u root < lifetype_db.sql mysql
 rm lifetype_db.sql
-sed -i "29s/{\$dbServer}/localhost/" $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}/templates/wizard/intro.template
-sed -i "37s/{\$dbUser}/${NOM_LIFETYPE[$count]}/" $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}/templates/wizard/intro.template
-sed -i "45s/{\$dbPassword}/$LIFETYPE_MYSQL_PWD/" $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}/templates/wizard/intro.template
-sed -i "52s/{\$dbName}/${NOM_LIFETYPE[$count]}/" $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}/templates/wizard/intro.template
+sed -i "29s/{\$dbServer}/localhost/" $WWW_DIRECTORY/${MOD_NAME[$count]}/templates/wizard/intro.template
+sed -i "37s/{\$dbUser}/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/templates/wizard/intro.template
+sed -i "45s/{\$dbPassword}/$LIFETYPE_MYSQL_PWD/" $WWW_DIRECTORY/${MOD_NAME[$count]}/templates/wizard/intro.template
+sed -i "52s/{\$dbName}/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/templates/wizard/intro.template
 
-chown -R www-data $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
-chmod -R 777 $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}
+chmod -R 777 $WWW_DIRECTORY/${MOD_NAME[$count]}
 
 echo "<IfModule mod_dir.c>
         DirectoryIndex summary.php index.html index.php
 </IfModule>
-" > $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}/.htaccess
+" > $WWW_DIRECTORY/${MOD_NAME[$count]}/.htaccess
 
 
-chown -R www-data $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
-chmod -R 777 $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}
+chmod -R 777 $WWW_DIRECTORY/${MOD_NAME[$count]}
 
 done
 
@@ -246,8 +246,17 @@ function CREATE_WUI
 for (( count=1; count<=$NB_LIFETYPE; count++ ))
 
 do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_LIFETYPE[$count]}\">${NOM_LIFETYPE[$count]}</a> | <a href=\"/${NOM_LIFETYPE[$count]}\">Admin</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
+
 done
 
 }
@@ -265,7 +274,7 @@ for (( count=1; count<=$NB_LIFETYPE; count++ ))
 do
 echo "
 #Lifetype
-rm -r $WWW_DIRECTORY/${NOM_LIFETYPE[$count]}/wizard.php
+rm -r $WWW_DIRECTORY/${MOD_NAME[$count]}/wizard.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done
 }

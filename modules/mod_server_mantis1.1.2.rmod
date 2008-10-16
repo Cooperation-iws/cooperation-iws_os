@@ -150,7 +150,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_MANTIS=1
-NOM_MANTIS[1]="Mantis"
+MOD_NAME[1]="Mantis"
 else 
 NB_MANTIS=$(zenity --entry --text "$MESS_HOW_MANY Mantis $MESS_DO_YOU_WANT")
 test $? -ne 0 && break # Bouton Annuler
@@ -163,11 +163,11 @@ done
 
 for (( count=1; count<=$NB_MANTIS; count++ ))
 do
-NOM_MANTIS[$count]=$(zenity --entry --text "$MESS_NAME $count MANTIS")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count MANTIS")
 test $? -ne 0 && break # Bouton Annuler
-while (echo ${NOM_MANTIS[$count]} | grep "[^a-zA-Z0-9]") 
+while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_MANTIS[$count]=$(zenity --entry --text "$MESS_NAME $count MANTIS")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count MANTIS")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 
@@ -178,7 +178,7 @@ done
 fi
 
 export NB_MANTIS=$NB_MANTIS
-export NOM_MANTIS=$NOM_MANTIS
+export MOD_NAME=$MOD_NAME
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
@@ -199,25 +199,25 @@ DOWNLOAD
 for (( count=1; count<=$NB_MANTIS; count++ ))
 do
 cd $DL_DIR
-echo "create database ${NOM_MANTIS[$count]};
-grant all on ${NOM_MANTIS[$count]}.* to ${NOM_MANTIS[$count]}@localhost identified by '$MANTIS_MYSQL_PWD';
+echo "create database ${MOD_NAME[$count]};
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$MANTIS_MYSQL_PWD';
 flush privileges;" > mantis_db.sql
 $BIN_MYSQL -u root < mantis_db.sql mysql
 rm mantis_db.sql
 
-mkdir $WWW_DIRECTORY/${NOM_MANTIS[$count]}
-cp -Rf mantis/* $WWW_DIRECTORY/${NOM_MANTIS[$count]}/.
-cat $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php | sed -i -e "91s/ config_get( 'database_name', 'bugtrack') /'${NOM_MANTIS[$count]}'/" $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php
-cat $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php | sed -i -e "97s/''/'${NOM_MANTIS[$count]}'/" $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php
-cat $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php | sed -i -e "92s/config_get( 'db_username', '' )/'${NOM_MANTIS[$count]}'/" $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php
-cat $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php | sed -i -e "93s/config_get( 'db_password', '' )/'$MANTIS_MYSQL_PWD'/" $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php
-cat $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php | sed -i -e "98s/''/'$MANTIS_MYSQL_PWD'/" $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php
-cat $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php | sed -i -e "94s/if/#if/" $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php
-cat $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php | sed -i -e "95s/\$f_db_password/#\$f_db_password/" $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php
-cat $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php | sed -i -e "96s/}/#}/" $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php
-cat $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php | sed -i -e "468s/( !is_blank( \$f_db_password ) ? CONFIGURED_PASSWORD : \"\" )/\$f_db_password/" $WWW_DIRECTORY/${NOM_MANTIS[$count]}/admin/install.php
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf mantis/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php | sed -i -e "91s/ config_get( 'database_name', 'bugtrack') /'${MOD_NAME[$count]}'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php | sed -i -e "97s/''/'${MOD_NAME[$count]}'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php | sed -i -e "92s/config_get( 'db_username', '' )/'${MOD_NAME[$count]}'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php | sed -i -e "93s/config_get( 'db_password', '' )/'$MANTIS_MYSQL_PWD'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php | sed -i -e "98s/''/'$MANTIS_MYSQL_PWD'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php | sed -i -e "94s/if/#if/" $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php | sed -i -e "95s/\$f_db_password/#\$f_db_password/" $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php | sed -i -e "96s/}/#}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php | sed -i -e "468s/( !is_blank( \$f_db_password ) ? CONFIGURED_PASSWORD : \"\" )/\$f_db_password/" $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install.php
 
-chown -R www-data $WWW_DIRECTORY/${NOM_MANTIS[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 done
 }
 
@@ -233,8 +233,16 @@ function CREATE_WUI
 for (( count=1; count<=$NB_MANTIS; count++ ))
 
 do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_MANTIS[$count]}\">${NOM_MANTIS[$count]}</a> | <a href=\"/${NOM_MANTIS[$count]}/admin\">Admin</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}/admin</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 done
 }
 #_______________________________________________________________________________________________

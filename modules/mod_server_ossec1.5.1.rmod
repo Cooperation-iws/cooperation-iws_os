@@ -170,17 +170,17 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_OSSEC="Ossec-wui"
+MOD_NAME="Ossec-wui"
 else 
-NOM_OSSEC=$(zenity --entry --text "$MESS_NAME OSSEC")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME OSSEC")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_OSSEC | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_OSSEC=$(zenity --entry --text "$MESS_NAME OSSEC")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME OSSEC")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 fi
-export NOM_OSSEC=$NOM_OSSEC
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -213,15 +213,15 @@ cat /etc/gdm/gdm.conf | sed -i -e "s/Exclude=nobody/Exclude=nobody,ossec,ossecm,
 
 #ossec-wui 
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/admin/$NOM_OSSEC
-cp -Rf ossec-wui/* $WWW_DIRECTORY/admin/$NOM_OSSEC/.
-cd $WWW_DIRECTORY/admin/$NOM_OSSEC
+mkdir $WWW_DIRECTORY/admin/$MOD_NAME
+cp -Rf ossec-wui/* $WWW_DIRECTORY/admin/$MOD_NAME/.
+cd $WWW_DIRECTORY/admin/$MOD_NAME
 echo "## Server Wui Config"
 mkdir tmp >/dev/null 2>&1
 chmod 770 tmp/
 chgrp nogroup tmp/
-chown -R www-data:www-data $WWW_DIRECTORY/admin/$NOM_OSSEC
-chmod -R 777 $WWW_DIRECTORY/admin/$NOM_OSSEC
+chown -R www-data:www-data $WWW_DIRECTORY/admin/$MOD_NAME
+chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME
 #mkdir $DOSSIER_CHROOT/etc/skel/conf
 #mkdir $DOSSIER_CHROOT/etc/skel/conf/var
 #mv $DOSSIER_CHROOT/var/ossec $DOSSIER_CHROOT/etc/skel/conf/var
@@ -247,8 +247,16 @@ echo "
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_OSSEC\">$NOM_OSSEC</a><br>
-">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/admin/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

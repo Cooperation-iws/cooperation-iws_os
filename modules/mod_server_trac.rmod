@@ -163,10 +163,26 @@ echo "I: End of install Trac"
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/svn/project/\">Svn</a><br>
-">> $WWW_DIRECTORY/cooperation-wui.frame.php
-echo "$RMOD_DESCRIPTION | <a href=\"/tracproject/\">Trac</a><br>
-">> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/svn/project</item_url>
+<item_name>Subversion</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/tracproject</item_url>
+<item_name>Trac</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

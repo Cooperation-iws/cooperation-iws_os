@@ -136,20 +136,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_PLIGG="Pligg"
+MOD_NAME="Pligg"
 else 
 
-NOM_PLIGG=$(zenity --entry --text "$MESS_NAME PLIGG")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME PLIGG")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_PLIGG | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_PLIGG=$(zenity --entry --text "$MESS_NAME PLIGG")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME PLIGG")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_PLIGG=$NOM_PLIGG
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -167,25 +167,25 @@ DOWNLOAD
 
 ##PLIGG
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_PLIGG
-cp -Rf pligg/* $WWW_DIRECTORY/$NOM_PLIGG/.
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf pligg/* $WWW_DIRECTORY/$MOD_NAME/.
 
-echo "create database ${NOM_PLIGG};
-grant all on ${NOM_PLIGG}.* to ${NOM_PLIGG}@localhost identified by '$PLIGG_MYSQL_PWD';
+echo "create database ${MOD_NAME};
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$PLIGG_MYSQL_PWD';
 flush privileges;" > PLIGG_db.sql
 
 $BIN_MYSQL -u root < PLIGG_db.sql mysql
 rm PLIGG_db.sql
 
 
-sed -i "32s/\"\"/$NOM_PLIGG/" $WWW_DIRECTORY/$NOM_PLIGG/install/install2.php
-sed -i "42s/\"\"/$PLIGG_MYSQL_PWD/" $WWW_DIRECTORY/$NOM_PLIGG/install/install2.php
-sed -i "37s/\"\"/$NOM_PLIGG/" $WWW_DIRECTORY/$NOM_PLIGG/install/install2.php
+sed -i "32s/\"\"/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/install/install2.php
+sed -i "42s/\"\"/$PLIGG_MYSQL_PWD/" $WWW_DIRECTORY/$MOD_NAME/install/install2.php
+sed -i "37s/\"\"/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/install/install2.php
 
-mv $WWW_DIRECTORY/$NOM_PLIGG/settings.php.default $WWW_DIRECTORY/$NOM_PLIGG/settings.php
-mv $WWW_DIRECTORY/$NOM_PLIGG/libs/dbconnect.php.default $WWW_DIRECTORY/$NOM_PLIGG/libs/dbconnect.php
+mv $WWW_DIRECTORY/$MOD_NAME/settings.php.default $WWW_DIRECTORY/$MOD_NAME/settings.php
+mv $WWW_DIRECTORY/$MOD_NAME/libs/dbconnect.php.default $WWW_DIRECTORY/$MOD_NAME/libs/dbconnect.php
 
-chown -R www-data $WWW_DIRECTORY/$NOM_PLIGG/
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 
 }
@@ -198,8 +198,17 @@ chown -R www-data $WWW_DIRECTORY/$NOM_PLIGG/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_PLIGG\" >$NOM_PLIGG</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -214,7 +223,7 @@ function CREATE_INSTALL_SCRIPT
 echo "
 
 #Pligg
-sed -i \"s/'http://localhost'/'http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/$NOM_PLIGG/settings.php
+sed -i \"s/'http://localhost'/'http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/$MOD_NAME/settings.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
 }

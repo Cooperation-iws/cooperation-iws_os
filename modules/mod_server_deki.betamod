@@ -159,10 +159,10 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 NB_DEKIWIKI=1
-NOM_DEKIWIKI="Dekiwiki"
+MOD_NAME="Dekiwiki"
 
 export NB_DEKIWIKI=$NB_DEKIWIKI
-export NOM_DEKIWIKI=$NOM_DEKIWIKI
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -247,9 +247,15 @@ EOT
 
 function CREATE_WUI
 {
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
 
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_DEKIWIKI}\">${NOM_DEKIWIKI}</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
 
 
 }

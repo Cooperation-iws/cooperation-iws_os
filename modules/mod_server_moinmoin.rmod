@@ -159,10 +159,10 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 NB_MOINMOIN=1
-NOM_MOINMOIN="Moinmoin"
+MOD_NAME="Moinmoin"
 
 export NB_MOINMOIN=$NB_MOINMOIN
-export NOM_MOINMOIN=$NOM_MOINMOIN
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -199,7 +199,7 @@ sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
 
 echo "
 Alias /wiki \"/usr/share/moin/htdocs/\"
-ScriptAlias /$NOM_MOINMOIN \"/var/www/moin/mywiki/moin.cgi\" 
+ScriptAlias /$MOD_NAME \"/var/www/moin/mywiki/moin.cgi\" 
 </VirtualHost>
 " >> /etc/apache2/sites-available/default
 
@@ -220,9 +220,16 @@ ln -s /var/share/etc/moin /etc/moin
 
 function CREATE_WUI
 {
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
 
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_MOINMOIN}\">${NOM_MOINMOIN}</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
 
 
 }

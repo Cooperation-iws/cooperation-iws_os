@@ -133,20 +133,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_RADRIA="Radria"
+MOD_NAME="Radria"
 else 
 
-NOM_RADRIA=$(zenity --entry --text "$MESS_NAME RADRIA")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME RADRIA")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_RADRIA | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_RADRIA=$(zenity --entry --text "$MESS_NAME RADRIA")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME RADRIA")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_RADRIA=$NOM_RADRIA
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -164,20 +164,20 @@ DOWNLOAD
 
 ##RADRIA
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_RADRIA
-cp -Rf radria/* $WWW_DIRECTORY/$NOM_RADRIA/.
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf radria/* $WWW_DIRECTORY/$MOD_NAME/.
 
 echo "
-grant all on *.* to ${NOM_RADRIA}@localhost identified by '$RADRIA_MYSQL_PWD';
+grant all on *.* to ${MOD_NAME}@localhost identified by '$RADRIA_MYSQL_PWD';
 flush privileges;" > RADRIA_db.sql
 
 $BIN_MYSQL -u root < RADRIA_db.sql mysql
 rm RADRIA_db.sql
 
-sed -i "212s/\"\"/\"${NOM_RADRIA}\"/" $WWW_DIRECTORY/$NOM_RADRIA/SiteManager/install.php
-sed -i "213s/\"\"/\"$RADRIA_MYSQL_PWD\"/" $WWW_DIRECTORY/$NOM_RADRIA/SiteManager/install.php
+sed -i "212s/\"\"/\"${MOD_NAME}\"/" $WWW_DIRECTORY/$MOD_NAME/SiteManager/install.php
+sed -i "213s/\"\"/\"$RADRIA_MYSQL_PWD\"/" $WWW_DIRECTORY/$MOD_NAME/SiteManager/install.php
 
-chown -R www-data $WWW_DIRECTORY/$NOM_RADRIA/
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 
 }
@@ -190,8 +190,18 @@ chown -R www-data $WWW_DIRECTORY/$NOM_RADRIA/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_RADRIA\" >$NOM_RADRIA</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

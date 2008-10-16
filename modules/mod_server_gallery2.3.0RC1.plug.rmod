@@ -153,7 +153,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_GALLERY2=1
-NOM_GALLERY2[1]="Gallery2"
+MOD_NAME[1]="Gallery2"
 else 
 NB_GALLERY2=$(zenity --entry --text "$MESS_HOW_MANY Gallery2 $MESS_DO_YOU_WANT")
 test $? -ne 0 && break # Bouton Annuler
@@ -165,12 +165,12 @@ done
 
 for (( count=1; count<=$NB_GALLERY2; count++ ))
 do
-NOM_GALLERY2[$count]=$(zenity --entry --text "$MESS_NAME $count GALLERY2")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count GALLERY2")
 test $? -ne 0 && break # Bouton Annuler
 
 while (echo ${NOM_ZENPHOTO[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_GALLERY2[$count]=$(zenity --entry --text "$MESS_NAME $count GALLERY2")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count GALLERY2")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 done 
@@ -178,7 +178,7 @@ done
 
 fi
 export NB_GALLERY2=$NB_GALLERY2
-export NOM_GALLERY2=$NOM_GALLERY2
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -204,21 +204,21 @@ apt-get install --assume-yes --force-yes imagemagick
 for (( count=1; count<=$NB_GALLERY2; count++ ))
 do
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${NOM_GALLERY2[$count]}
-cp -Rf gallery2/* $WWW_DIRECTORY/${NOM_GALLERY2[$count]}/.
-echo "create database ${NOM_GALLERY2[$count]};
-grant all on ${NOM_GALLERY2[$count]}.* to ${NOM_GALLERY2[$count]}@localhost identified by '$GALLERY2_MYSQL_PWD';
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf gallery2/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+echo "create database ${MOD_NAME[$count]};
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$GALLERY2_MYSQL_PWD';
 flush privileges;" > gallery2_db.sql
 
 $BIN_MYSQL -u root < gallery2_db.sql mysql
 rm gallery2_db.sql
-cat $WWW_DIRECTORY/${NOM_GALLERY2[$count]}/install/steps/DatabaseSetupStep.class | sed -i -e "41s/root/${NOM_GALLERY2[$count]}/" $WWW_DIRECTORY/${NOM_GALLERY2[$count]}/install/steps/DatabaseSetupStep.class 
-cat $WWW_DIRECTORY/${NOM_GALLERY2[$count]}/install/steps/DatabaseSetupStep.class | sed -i -e "42s/''/'$GALLERY2_MYSQL_PWD'/" $WWW_DIRECTORY/${NOM_GALLERY2[$count]}/install/steps/DatabaseSetupStep.class 
-cat $WWW_DIRECTORY/${NOM_GALLERY2[$count]}/install/steps/DatabaseSetupStep.class | sed -i -e "43s/gallery2/${NOM_GALLERY2[$count]}/" $WWW_DIRECTORY/${NOM_GALLERY2[$count]}/install/steps/DatabaseSetupStep.class 
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/install/steps/DatabaseSetupStep.class | sed -i -e "41s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/install/steps/DatabaseSetupStep.class 
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/install/steps/DatabaseSetupStep.class | sed -i -e "42s/''/'$GALLERY2_MYSQL_PWD'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/install/steps/DatabaseSetupStep.class 
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/install/steps/DatabaseSetupStep.class | sed -i -e "43s/gallery2/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/install/steps/DatabaseSetupStep.class 
 
-mkdir $WWW_DIRECTORY/${NOM_GALLERY2[$count]}/g2data
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}/g2data
 
-chown -R www-data $WWW_DIRECTORY/${NOM_GALLERY2[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
 done
 
@@ -235,8 +235,15 @@ function CREATE_WUI
 for (( count=1; count<=$NB_GALLERY2; count++ ))
 
 do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_GALLERY2[$count]}\">${NOM_GALLERY2[$count]}</a> | <a href=\"/${NOM_GALLERY2[$count]}/main.php?g2_view=core.UserAdmin&g2_subView=core.UserLogin&g2_return=%2FGallery2%2Fmain.php%3F\">Admin</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}/main.php?g2_view=core.UserAdmin&g2_subView=core.UserLogin&g2_return=%2FGallery2%2Fmain.php%3F</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
 done
 
 }
@@ -255,7 +262,7 @@ for (( count=1; count<=$NB_GALLERY2; count++ ))
 do
 echo "
 #Gallery2
-sed -i \"194s/localhost/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/${NOM_GALLERY2[$count]}/config.php
+sed -i \"194s/localhost/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done
 

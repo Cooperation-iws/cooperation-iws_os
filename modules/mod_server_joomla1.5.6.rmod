@@ -158,7 +158,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_JOOMLA=1
-NOM_JOOMLA[1]="Joomla"
+MOD_NAME[1]="Joomla"
 else 
 NB_JOOMLA=$(zenity --entry --text "$MESS_HOW_MANY Joomla $MESS_DO_YOU_WANT")
 test $? -ne 0 && break # Bouton Annuler
@@ -170,12 +170,12 @@ done
 
 for (( count=1; count<=$NB_JOOMLA; count++ ))
 do
-NOM_JOOMLA[$count]=$(zenity --entry --text "$MESS_NAME $count JOOMLA")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count JOOMLA")
 test $? -ne 0 && break # Bouton Annuler
 
 while (echo ${NOM_ZENPHOTO[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_JOOMLA[$count]=$(zenity --entry --text "$MESS_NAME $count JOOMLA")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count JOOMLA")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 done 
@@ -183,7 +183,7 @@ done
 
 fi
 export NB_JOOMLA=$NB_JOOMLA
-export NOM_JOOMLA=$NOM_JOOMLA
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -205,22 +205,22 @@ DOWNLOAD
 for (( count=1; count<=$NB_JOOMLA; count++ ))
 do
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${NOM_JOOMLA[$count]}
-cp -Rf Joomla/* $WWW_DIRECTORY/${NOM_JOOMLA[$count]}/.
-echo "create database ${NOM_JOOMLA[$count]};
-grant all on ${NOM_JOOMLA[$count]}.* to ${NOM_JOOMLA[$count]}@localhost identified by '$JOOMLA_MYSQL_PWD';
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf Joomla/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+echo "create database ${MOD_NAME[$count]};
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$JOOMLA_MYSQL_PWD';
 flush privileges;" > joomla_db.sql
 
 $BIN_MYSQL -u root < joomla_db.sql mysql
 rm joomla_db.sql
 
-sed -i "154s/{VAR_DBHOSTNAME}/localhost/" $WWW_DIRECTORY/${NOM_JOOMLA[$count]}/installation/template/tmpl/dbconfig.html
-sed -i "168s/{VAR_DBUSERNAME}/${NOM_JOOMLA[$count]}/" $WWW_DIRECTORY/${NOM_JOOMLA[$count]}/installation/template/tmpl/dbconfig.html
-sed -i "182s/{VAR_DBPASSWORD}/$JOOMLA_MYSQL_PWD/" $WWW_DIRECTORY/${NOM_JOOMLA[$count]}/installation/template/tmpl/dbconfig.html
-sed -i "196s/{VAR_DBNAME}/${NOM_JOOMLA[$count]}/" $WWW_DIRECTORY/${NOM_JOOMLA[$count]}/installation/template/tmpl/dbconfig.html
+sed -i "154s/{VAR_DBHOSTNAME}/localhost/" $WWW_DIRECTORY/${MOD_NAME[$count]}/installation/template/tmpl/dbconfig.html
+sed -i "168s/{VAR_DBUSERNAME}/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/installation/template/tmpl/dbconfig.html
+sed -i "182s/{VAR_DBPASSWORD}/$JOOMLA_MYSQL_PWD/" $WWW_DIRECTORY/${MOD_NAME[$count]}/installation/template/tmpl/dbconfig.html
+sed -i "196s/{VAR_DBNAME}/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/installation/template/tmpl/dbconfig.html
 
 
-chown -R www-data $WWW_DIRECTORY/${NOM_JOOMLA[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
 done
 }
@@ -236,8 +236,16 @@ function CREATE_WUI
 for (( count=1; count<=$NB_JOOMLA; count++ ))
 
 do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_JOOMLA[$count]}\">${NOM_JOOMLA[$count]}</a> | <a href=\"/${NOM_JOOMLA[$count]}/administrator/\">Admin</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}/administrator/</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 done
 
 }
@@ -256,8 +264,8 @@ for (( count=1; count<=$NB_JOOMLA; count++ ))
 do
 echo "
 #Joomla
-sed -i \"11s/http:\/\/localhost//\" $WWW_DIRECTORY/${NOM_JOOMLA[$count]}/configuration.php
-rm -r $WWW_DIRECTORY/${NOM_JOOMLA[$count]}/installation
+sed -i \"11s/http:\/\/localhost//\" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
+rm -r $WWW_DIRECTORY/${MOD_NAME[$count]}/installation
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done
 

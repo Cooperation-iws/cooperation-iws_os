@@ -136,20 +136,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_CLAROLINE="Claroline"
+MOD_NAME="Claroline"
 else 
 
-NOM_CLAROLINE=$(zenity --entry --text "$MESS_NAME CLAROLINE")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME CLAROLINE")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_CLAROLINE | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_CLAROLINE=$(zenity --entry --text "$MESS_NAME CLAROLINE")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME CLAROLINE")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_CLAROLINE=$NOM_CLAROLINE
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -167,24 +167,24 @@ DOWNLOAD
 
 ##CLAROLINE
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_CLAROLINE
-cp -Rf claroline/* $WWW_DIRECTORY/$NOM_CLAROLINE/.
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf claroline/* $WWW_DIRECTORY/$MOD_NAME/.
 
-echo "create database ${NOM_CLAROLINE};
-grant all on ${NOM_CLAROLINE}.* to ${NOM_CLAROLINE}@localhost identified by '$CLAROLINE_MYSQL_PWD';
+echo "create database ${MOD_NAME};
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$CLAROLINE_MYSQL_PWD';
 flush privileges;" > CLAROLINE_db.sql
 
 $BIN_MYSQL -u root < CLAROLINE_db.sql mysql
 rm CLAROLINE_db.sql
 
 
-sed -i "954s/'.htmlspecialchars(\$dbHostForm).'/localhost/" $WWW_DIRECTORY/$NOM_CLAROLINE/claroline/install/index.php
-sed -i "965s/'.htmlspecialchars(\$dbUsernameForm).'/$NOM_CLAROLINE/" $WWW_DIRECTORY/$NOM_CLAROLINE/claroline/install/index.php
-sed -i "976s/'.htmlspecialchars(\$dbPassForm).'/$CLAROLINE_MYSQL_PWD/" $WWW_DIRECTORY/$NOM_CLAROLINE/claroline/install/index.php
-sed -i "1108s/'.htmlspecialchars(\$dbNameForm).'/$NOM_CLAROLINE/" $WWW_DIRECTORY/$NOM_CLAROLINE/claroline/install/index.php
-sed -i "1166s/'.htmlspecialchars(\$dbStatsForm).'/$NOM_CLAROLINE/" $WWW_DIRECTORY/$NOM_CLAROLINE/claroline/install/index.php
+sed -i "954s/'.htmlspecialchars(\$dbHostForm).'/localhost/" $WWW_DIRECTORY/$MOD_NAME/claroline/install/index.php
+sed -i "965s/'.htmlspecialchars(\$dbUsernameForm).'/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/claroline/install/index.php
+sed -i "976s/'.htmlspecialchars(\$dbPassForm).'/$CLAROLINE_MYSQL_PWD/" $WWW_DIRECTORY/$MOD_NAME/claroline/install/index.php
+sed -i "1108s/'.htmlspecialchars(\$dbNameForm).'/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/claroline/install/index.php
+sed -i "1166s/'.htmlspecialchars(\$dbStatsForm).'/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/claroline/install/index.php
 
-chown -R www-data $WWW_DIRECTORY/$NOM_CLAROLINE/
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 
 }
@@ -197,8 +197,15 @@ chown -R www-data $WWW_DIRECTORY/$NOM_CLAROLINE/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_CLAROLINE\" >$NOM_CLAROLINE</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -213,7 +220,7 @@ function CREATE_INSTALL_SCRIPT
 echo "
 
 #Claroline
-sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/$NOM_CLAROLINE/platform/conf/claro_main.conf.php
+sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/$MOD_NAME/platform/conf/claro_main.conf.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
 }

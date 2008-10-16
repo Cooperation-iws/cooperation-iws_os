@@ -134,20 +134,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_SYSLOGNG="Syslog-ng"
+MOD_NAME="Syslogng"
 else 
 
-NOM_SYSLOGNG=$(zenity --entry --text "$MESS_NAME SYSLOGNG")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME SYSLOGNG")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_SYSLOGNG | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_SYSLOGNG=$(zenity --entry --text "$MESS_NAME SYSLOGNG")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME SYSLOGNG")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_SYSLOGNG=$NOM_SYSLOGNG
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -169,38 +169,42 @@ aptitude install -y msttcorefonts
 #Cacti config
 
 echo "
-@daily php $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/scripts/logrotate.php >> /var/log/php-syslog-ng/logrotate.log 
-@daily find $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/html/jpcache/ -atime 1 -exec rm -f '{}' ';' 
-*/5 * * * * php $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/scripts/reloadcache.php >> /var/log/php-syslog-ng/reloadcache.log
-*/5 * * * * php $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/scripts/SqueezeDB-v2.0.php >> /var/log/php-syslog-ng/squeezedb.log
+@daily php $WWW_DIRECTORY/admin/$MOD_NAME/scripts/logrotate.php >> /var/log/php-syslog-ng/logrotate.log 
+@daily find $WWW_DIRECTORY/admin/$MOD_NAME/html/jpcache/ -atime 1 -exec rm -f '{}' ';' 
+*/5 * * * * php $WWW_DIRECTORY/admin/$MOD_NAME/scripts/reloadcache.php >> /var/log/php-syslog-ng/reloadcache.log
+*/5 * * * * php $WWW_DIRECTORY/admin/$MOD_NAME/scripts/SqueezeDB-v2.0.php >> /var/log/php-syslog-ng/squeezedb.log
 " >> /etc/cron.d/syslog-ng
 sudo chmod +x /etc/cron.d/syslog-ng
 
 #Cacti 
 
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/admin/$NOM_SYSLOGNG
-cp -Rf php-syslog-ng/* $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/.
+mkdir $WWW_DIRECTORY/admin/$MOD_NAME
+cp -Rf php-syslog-ng/* $WWW_DIRECTORY/admin/$MOD_NAME/.
 
-cp $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/scripts/logrotate.d /etc/
+cp $WWW_DIRECTORY/admin/$MOD_NAME/scripts/logrotate.d /etc/
 mkdir -p /var/log/php-syslog-ng
 
-echo "create database $NOM_SYSLOGNG;
-grant all on $NOM_SYSLOGNG.* to $NOM_SYSLOGNG@localhost identified by '$SYSLOGNG_MYSQL_PWD';
+echo "create database $MOD_NAME;
+grant all on $MOD_NAME.* to $MOD_NAME@localhost identified by '$SYSLOGNG_MYSQL_PWD';
+grant all on $MOD_NAME.* to sysloguserG@localhost identified by 'sysloguser';
+grant all on $MOD_NAME.* to syslogadmin@localhost identified by 'syslogadmin';
+
 flush privileges;
-" > syslogng_db.sql
-$BIN_MYSQL -u root < syslogng_db.sql mysql
-rm syslogng_db.sql
-chmod -R 777 $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/
-chown -R www-data $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/
+" > /tmp/syslogng_db.sql
+$BIN_MYSQL -u root < /tmp/syslogng_db.sql mysql
 
-cd $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/scripts/
-perl -i -pe 's/\/www\/php-syslog-ng/$WWW_DIRECTORY/admin/$NOM_SYSLOGNG/g' *
 
-sed -i "14s/root/$NOM_SYSLOGNG/" $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/html/install/install1.php
-sed -i "15s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/html/install/install1.php
-sed -i "16s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/html/install/install1.php
-sed -i "23s/syslog/$NOM_SYSLOGNG/" $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/html/install/install1.php
+chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/
+chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/
+
+cd $WWW_DIRECTORY/admin/$MOD_NAME/scripts/
+perl -i -pe 's/\/www\/php-syslog-ng/$WWW_DIRECTORY/admin/$MOD_NAME/g' *
+
+sed -i "14s/root/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "15s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "16s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "23s/syslog/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
 
 }
 
@@ -212,8 +216,18 @@ sed -i "23s/syslog/$NOM_SYSLOGNG/" $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/html/insta
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_SYSLOGNG\" >$NOM_SYSLOGNG</a><br>
-">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/admin/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -232,7 +246,7 @@ ALTER TABLE logs ADD counter INT NOT NULL DEFAULT 1;
 ALTER TABLE logs ADD fo datetime default NULL;
 ALTER TABLE logs ADD lo datetime default NULL;
 \" > /tmp/dbsqueeze-syslog
-$BIN_MYSQL -u root < /tmp/dbsqueeze-syslog $NOM_SYSLOGNG
+$BIN_MYSQL -u root < /tmp/dbsqueeze-syslog $MOD_NAME
 
 " >> $LAMPP_DIRECTORY/config_post_install.sh
 

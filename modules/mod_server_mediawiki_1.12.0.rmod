@@ -146,7 +146,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_MEDIAWIKI=1
-NOM_MEDIAWIKI[1]="Mediawiki"
+MOD_NAME[1]="Mediawiki"
 
 else 
 INST_MEDIAWIKI="1"
@@ -161,18 +161,18 @@ done
 for (( count=1; count<=$NB_MEDIAWIKI; count++ ))
 do
 
-NOM_MEDIAWIKI[$count]=$(zenity --entry --text "$MESS_NAME $count MEDIAWIKI")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count MEDIAWIKI")
 test $? -ne 0 && break # Bouton Annuler
-while (echo ${NOM_MEDIAWIKI[$count]} | grep "[^a-zA-Z0-9]") 
+while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_MEDIAWIKI[$count]=$(zenity --entry --text "$MESS_NAME $count MEDIAWIKI")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count MEDIAWIKI")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 done 
 
 fi
 export NB_MEDIAWIKI=$NB_MEDIAWIKI
-export NOM_MEDIAWIKI=$NOM_MEDIAWIKI
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -198,25 +198,25 @@ for (( count=1; count<=$NB_MEDIAWIKI; count++ ))
 
 do
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}
-cp -Rf mediawiki/* $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/.
-echo "create database ${NOM_MEDIAWIKI[$count]};
-grant all on ${NOM_MEDIAWIKI[$count]}.* to ${NOM_MEDIAWIKI[$count]}@localhost identified by '$MEDIAWIKI_MYSQL_PWD';
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf mediawiki/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+echo "create database ${MOD_NAME[$count]};
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$MEDIAWIKI_MYSQL_PWD';
 flush privileges;" > mediawiki_db.sql
 
 $BIN_MYSQL -u root < mediawiki_db.sql mysql
 rm mediawiki_db.sql
 
-cat $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php | sed -i -e "579s/wikiuser/${NOM_MEDIAWIKI[$count]}/" $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php
-cat $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php | sed -i -e "578s/wikidb/${NOM_MEDIAWIKI[$count]}/" $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php
-cat $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php | sed -i -e "580s/importPost( \"DBpassword\" )/importPost( \"DBpassword\", \"$MEDIAWIKI_MYSQL_PWD\" )/" $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php
-cat $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php | sed -i -e "581s/importPost( \"DBpassword2\" )/importPost( \"DBpassword\", \"$MEDIAWIKI_MYSQL_PWD\" )/" $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php
-cat $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php | sed -i -e '613s/if/#if/' $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php
-cat $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php | sed -i -e '614s/\$errs/#\$errs/' $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php
-cat $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php | sed -i -e '615s/}/#}/' $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e "579s/wikiuser/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e "578s/wikidb/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e "580s/importPost( \"DBpassword\" )/importPost( \"DBpassword\", \"$MEDIAWIKI_MYSQL_PWD\" )/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e "581s/importPost( \"DBpassword2\" )/importPost( \"DBpassword\", \"$MEDIAWIKI_MYSQL_PWD\" )/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e '613s/if/#if/' $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e '614s/\$errs/#\$errs/' $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e '615s/}/#}/' $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
 
 
-cd $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/math
+cd $WWW_DIRECTORY/${MOD_NAME[$count]}/math
 make
 
 
@@ -224,7 +224,7 @@ make
 
 
 
-chown -R www-data $WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
 done
 
@@ -241,8 +241,16 @@ function CREATE_WUI
 for (( count=1; count<=$NB_MEDIAWIKI; count++ ))
 
 do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_MEDIAWIKI[$count]}\">${NOM_MEDIAWIKI[$count]}</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 done
 }
 #_______________________________________________________________________________________________
@@ -260,8 +268,8 @@ for (( count=1; count<=$NB_MEDIAWIKI; count++ ))
 do
 echo "
 #mediawiki
-mv \$WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/config/LocalSettings.php \$WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}
-sed -i \"99s/false/true/\"  \$WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/LocalSettings.php
+mv \$WWW_DIRECTORY/${MOD_NAME[$count]}/config/LocalSettings.php \$WWW_DIRECTORY/${MOD_NAME[$count]}
+sed -i \"99s/false/true/\"  \$WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php
 
 echo \"
 \\\$wgUploadPath = \\\"images\\\";
@@ -270,7 +278,7 @@ echo \"
 \\\$wgMathDirectory = \\\"\\\$wgUploadDirectory/math\\\";
 \\\$wgTmpDirectory = \\\"\\\$wgUploadDirectory/tmp\\\";
 
-\" >> \$WWW_DIRECTORY/${NOM_MEDIAWIKI[$count]}/LocalSettings.php
+\" >> \$WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php
 
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh

@@ -131,20 +131,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_AKOIE="Akoie"
+MOD_NAME="Akoie"
 else 
 
-NOM_AKOIE=$(zenity --entry --text "$MESS_NAME AKOIE")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME AKOIE")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_AKOIE | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_AKOIE=$(zenity --entry --text "$MESS_NAME AKOIE")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME AKOIE")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_AKOIE=$NOM_AKOIE
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -162,8 +162,8 @@ DOWNLOAD
 
 ##AKOIE
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_AKOIE
-cp -Rf Akoie/* $WWW_DIRECTORY/$NOM_AKOIE/.
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf Akoie/* $WWW_DIRECTORY/$MOD_NAME/.
 
 apt-get install --assume-yes --force-yes imagemagick 
 
@@ -177,20 +177,20 @@ echo "[N/y]"
 read r2 < /dev/tty
 
 if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
-echo "[$NOM_AKOIE]
-	comment = $NOM_AKOIE
+echo "[$MOD_NAME]
+	comment = $MOD_NAME
 	writeable = yes
 	public = yes
-	path = /var/www/$NOM_AKOIE/images/album
+	path = /var/www/$MOD_NAME/images/album
 	
 " >> /var/share/etc/samba/smb.conf
 
 else
-echo "[$NOM_AKOIE]
-	comment = $NOM_AKOIE
+echo "[$MOD_NAME]
+	comment = $MOD_NAME
 	writeable = yes
 	public = yes
-	path = /var/www/$NOM_AKOIE/images/album
+	path = /var/www/$MOD_NAME/images/album
 	valid users = www-data
 " >> /var/share/etc/samba/smb.conf
 smbpasswd -a www-data
@@ -198,7 +198,7 @@ fi
 
 fi
 
-chown -R www-data $WWW_DIRECTORY/$NOM_AKOIE/
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 
 }
@@ -211,8 +211,14 @@ chown -R www-data $WWW_DIRECTORY/$NOM_AKOIE/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_AKOIE\" >$NOM_AKOIE</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

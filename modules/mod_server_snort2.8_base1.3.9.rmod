@@ -222,18 +222,18 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_BASE="Base"
+MOD_NAME="Base"
 else 
-NOM_BASE=$(zenity --entry --text "$MESS_NAME SNORT")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME SNORT")
 test $? -ne 0 && break # Bouton Annuler
 
-while (echo $NOM_BASE | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_BASE=$(zenity --entry --text "$MESS_NAME SNORT")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME SNORT")
 test $? -ne 0 && break # Bouton Annulerdone
 done
 fi
-export NOM_BASE=$NOM_BASE
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -470,15 +470,15 @@ $BIN_MYSQL -u root < $DL_DIR/snort/schemas/create_mysql snort
 
 #Base config for Snort
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/admin/$NOM_BASE
-cp -Rf base/* $WWW_DIRECTORY/admin/$NOM_BASE/.
-cp $WWW_DIRECTORY/admin/$NOM_BASE/base_conf.php.dist $WWW_DIRECTORY/admin/$NOM_BASE/base_conf.php 
+mkdir $WWW_DIRECTORY/admin/$MOD_NAME
+cp -Rf base/* $WWW_DIRECTORY/admin/$MOD_NAME/.
+cp $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php.dist $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php 
 
 
-cat $WWW_DIRECTORY/admin/$NOM_BASE/base_conf.php | sed -i -e "s/\$BASE_urlpath = '';/\$BASE_urlpath = '\/admin\/$NOM_BASE';/" $WWW_DIRECTORY/admin/$NOM_BASE/base_conf.php
-cat $WWW_DIRECTORY/admin/$NOM_BASE/base_conf.php | sed -i -e "s/\$DBlib_path = '';/\$DBlib_path = '\/usr\/share\/php\/adodb\/';/" $WWW_DIRECTORY/admin/$NOM_BASE/base_conf.php
-cat $WWW_DIRECTORY/admin/$NOM_BASE/base_conf.php | sed -i -e "s/\$alert_dbname   = 'snort_log';/\$alert_dbname   = 'snort';/" $WWW_DIRECTORY/admin/$NOM_BASE/base_conf.php
-cat $WWW_DIRECTORY/admin/$NOM_BASE/base_conf.php | sed -i -e "s/\$alert_password = 'mypassword';/\$alert_password = '$SNORT_MYSQL_PWD';/" $WWW_DIRECTORY/admin/$NOM_BASE/base_conf.php
+cat $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php | sed -i -e "s/\$BASE_urlpath = '';/\$BASE_urlpath = '\/admin\/$MOD_NAME';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
+cat $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php | sed -i -e "s/\$DBlib_path = '';/\$DBlib_path = '\/usr\/share\/php\/adodb\/';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
+cat $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php | sed -i -e "s/\$alert_dbname   = 'snort_log';/\$alert_dbname   = 'snort';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
+cat $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php | sed -i -e "s/\$alert_password = 'mypassword';/\$alert_password = '$SNORT_MYSQL_PWD';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
 
 #Graph for base
 
@@ -496,8 +496,18 @@ pear install Image_Graph-alpha
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_BASE\">$NOM_BASE</a><br>
-">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/admin/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/admin/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

@@ -156,7 +156,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_DOTCLEAR=1
-NOM_DOTCLEAR[1]="Dotclear"
+MOD_NAME[1]="Dotclear"
 
 else 
 NB_DOTCLEAR=$(zenity --entry --text "$MESS_HOW_MANY Dotclear $MESS_DO_YOU_WANT")
@@ -170,19 +170,19 @@ done
 
 for (( count=1; count<=$NB_DOTCLEAR; count++ ))
 do
-NOM_DOTCLEAR[$count]=$(zenity --entry --text "$MESS_NAME $count DOTCLEAR")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count DOTCLEAR")
 test $? -ne 0 && break # Bouton Annuler
 
-while (echo ${NOM_DOTCLEAR[$count]} | grep "[^a-zA-Z0-9]") 
+while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_DOTCLEAR[$count]=$(zenity --entry --text "$MESS_NAME $count DOTCLEAR")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count DOTCLEAR")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 done
 
 fi
 export NB_DOTCLEAR=$NB_DOTCLEAR
-export NOM_DOTCLEAR=$NOM_DOTCLEAR
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -202,22 +202,22 @@ DOWNLOAD
 for (( count=1; count<=$NB_DOTCLEAR; count++ ))
 
 do
-mkdir $WWW_DIRECTORY/${NOM_DOTCLEAR[$count]}
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cd $DL_DIR
-cp -Rf dotclear/* $WWW_DIRECTORY/${NOM_DOTCLEAR[$count]}/.
-echo "create database ${NOM_DOTCLEAR[$count]};
-grant all on ${NOM_DOTCLEAR[$count]}.* to ${NOM_DOTCLEAR[$count]}@localhost identified by '$DOTCLEAR_MYSQL_PWD';
+cp -Rf dotclear/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+echo "create database ${MOD_NAME[$count]};
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$DOTCLEAR_MYSQL_PWD';
 flush privileges;" > dotclear_db.sql
 
 $BIN_MYSQL -u root < dotclear_db.sql mysql
 rm dotclear_db.sql
-sed -i "50s/''/'localhost'/" $WWW_DIRECTORY/${NOM_DOTCLEAR[$count]}/admin/install/wizard.php
-sed -i "51s/''/'${NOM_DOTCLEAR[$count]}'/" $WWW_DIRECTORY/${NOM_DOTCLEAR[$count]}/admin/install/wizard.php
-sed -i "52s/''/'${NOM_DOTCLEAR[$count]}'/" $WWW_DIRECTORY/${NOM_DOTCLEAR[$count]}/admin/install/wizard.php
-sed -i "53s/''/'$DOTCLEAR_MYSQL_PWD'/" $WWW_DIRECTORY/${NOM_DOTCLEAR[$count]}/admin/install/wizard.php
+sed -i "50s/''/'localhost'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install/wizard.php
+sed -i "51s/''/'${MOD_NAME[$count]}'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install/wizard.php
+sed -i "52s/''/'${MOD_NAME[$count]}'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install/wizard.php
+sed -i "53s/''/'$DOTCLEAR_MYSQL_PWD'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/admin/install/wizard.php
 
 
-chown -R www-data $WWW_DIRECTORY/${NOM_DOTCLEAR[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
   
 done
 }
@@ -233,8 +233,16 @@ function CREATE_WUI
 for (( count=1; count<=$NB_DOTCLEAR; count++ ))
 
 do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_DOTCLEAR[$count]}\">${NOM_DOTCLEAR[$count]}</a> | <a href=\"/${NOM_DOTCLEAR[$count]}/admin/\">Admin</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}/admin/</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 
 done
 }
@@ -252,7 +260,7 @@ for (( count=1; count<=$NB_DOTCLEAR; count++ ))
 do
 echo "
 #Dotclear
-sed -i \"39s/localhost/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" \$WWW_DIRECTORY/${NOM_DOTCLEAR[$count]}/inc/config.php
+sed -i \"39s/localhost/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" \$WWW_DIRECTORY/${MOD_NAME[$count]}/inc/config.php
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done

@@ -9,6 +9,7 @@ RMOD_DESCRIPTION='Project manager'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
+RMOD_VERBOSE=""
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
 DL_DIR=$(cat /tmp/web_install-path)
@@ -133,20 +134,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_ACHIEVO="Achievo"
+MOD_NAME="Achievo"
 else 
 
-NOM_ACHIEVO=$(zenity --entry --text "$MESS_NAME ACHIEVO")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME ACHIEVO")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_ACHIEVO | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_ACHIEVO=$(zenity --entry --text "$MESS_NAME ACHIEVO")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME ACHIEVO")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_ACHIEVO=$NOM_ACHIEVO
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -164,23 +165,23 @@ DOWNLOAD
 
 ##ACHIEVO
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_ACHIEVO
-cp -Rf achievo/* $WWW_DIRECTORY/$NOM_ACHIEVO/.
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf achievo/* $WWW_DIRECTORY/$MOD_NAME/.
 
-echo "create database ${NOM_ACHIEVO};
-grant all on ${NOM_ACHIEVO}.* to ${NOM_ACHIEVO}@localhost identified by '$ACHIEVO_MYSQL_PWD';
+echo "create database ${MOD_NAME};
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$ACHIEVO_MYSQL_PWD';
 flush privileges;" > ACHIEVO_db.sql
 
 $BIN_MYSQL -u root < ACHIEVO_db.sql mysql
 rm ACHIEVO_db.sql
 
 
-sed -i "26s/achievo_1_3/$NOM_ACHIEVO/" $WWW_DIRECTORY/$NOM_ACHIEVO/config.inc.php
-sed -i "28s/demo/$ACHIEVO_MYSQL_PWD/" $WWW_DIRECTORY/$NOM_ACHIEVO/config.inc.php
-sed -i "27s/demo/$NOM_ACHIEVO/" $WWW_DIRECTORY/$NOM_ACHIEVO/config.inc.php
-sed -i "92s/demo/cooperation/" $WWW_DIRECTORY/$NOM_ACHIEVO/config.inc.php
+sed -i "26s/achievo_1_3/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/config.inc.php
+sed -i "28s/demo/$ACHIEVO_MYSQL_PWD/" $WWW_DIRECTORY/$MOD_NAME/config.inc.php
+sed -i "27s/demo/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/config.inc.php
+sed -i "92s/demo/cooperation/" $WWW_DIRECTORY/$MOD_NAME/config.inc.php
 
-chown -R www-data $WWW_DIRECTORY/$NOM_ACHIEVO/
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 
 }
@@ -193,8 +194,14 @@ chown -R www-data $WWW_DIRECTORY/$NOM_ACHIEVO/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_ACHIEVO\" >$NOM_ACHIEVO</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

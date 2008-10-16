@@ -152,14 +152,14 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_PHPBB3="Phpbb3"
+MOD_NAME="Phpbb3"
 
 else 
-NOM_PHPBB3=$(zenity --entry --text "$MESS_NAME PHPBB3")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME PHPBB3")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_PHPBB3 | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_PHPBB3=$(zenity --entry --text "$MESS_NAME PHPBB3")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME PHPBB3")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 
@@ -167,7 +167,7 @@ done
 
 fi
 
-export NOM_PHPBB3=$NOM_PHPBB3
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -184,20 +184,20 @@ echo "I: Download PhpBB"
 DOWNLOAD
 #phpBB
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${NOM_PHPBB3}
-cp -Rf phpBB3/* $WWW_DIRECTORY/${NOM_PHPBB3}/.
-echo "create database ${NOM_PHPBB3};
-grant all on ${NOM_PHPBB3}.* to ${NOM_PHPBB3}@localhost identified by '$PHPBB3_MYSQL_PWD';
+mkdir $WWW_DIRECTORY/${MOD_NAME}
+cp -Rf phpBB3/* $WWW_DIRECTORY/${MOD_NAME}/.
+echo "create database ${MOD_NAME};
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$PHPBB3_MYSQL_PWD';
 flush privileges;" > phpbb_db.sql
 
 $BIN_MYSQL -u root < phpbb_db.sql mysql
 rm phpbb_db.sql
-cat $WWW_DIRECTORY/${NOM_PHPBB3}/install/install_install.php | sed -i -e "1977s/''/'${NOM_PHPBB3}'/" $WWW_DIRECTORY/${NOM_PHPBB3}/install/install_install.php
-cat $WWW_DIRECTORY/${NOM_PHPBB3}/install/install_install.php | sed -i -e "1975s/''/'localhost'/" $WWW_DIRECTORY/${NOM_PHPBB3}/install/install_install.php
-cat $WWW_DIRECTORY/${NOM_PHPBB3}/install/install_install.php | sed -i -e "1979s/''/'${NOM_PHPBB3}'/" $WWW_DIRECTORY/${NOM_PHPBB3}/install/install_install.php
-cat $WWW_DIRECTORY/${NOM_PHPBB3}/install/install_install.php | sed -i -e "1978s/''/'$PHPBB3_MYSQL_PWD'/" $WWW_DIRECTORY/${NOM_PHPBB3}/install/install_install.php
+cat $WWW_DIRECTORY/${MOD_NAME}/install/install_install.php | sed -i -e "1977s/''/'${MOD_NAME}'/" $WWW_DIRECTORY/${MOD_NAME}/install/install_install.php
+cat $WWW_DIRECTORY/${MOD_NAME}/install/install_install.php | sed -i -e "1975s/''/'localhost'/" $WWW_DIRECTORY/${MOD_NAME}/install/install_install.php
+cat $WWW_DIRECTORY/${MOD_NAME}/install/install_install.php | sed -i -e "1979s/''/'${MOD_NAME}'/" $WWW_DIRECTORY/${MOD_NAME}/install/install_install.php
+cat $WWW_DIRECTORY/${MOD_NAME}/install/install_install.php | sed -i -e "1978s/''/'$PHPBB3_MYSQL_PWD'/" $WWW_DIRECTORY/${MOD_NAME}/install/install_install.php
 
-chown -R www-data:www-data $WWW_DIRECTORY/$NOM_PHPBB3
+chown -R www-data:www-data $WWW_DIRECTORY/$MOD_NAME
 }
 
 #_______________________________________________________________________________________________
@@ -208,8 +208,18 @@ chown -R www-data:www-data $WWW_DIRECTORY/$NOM_PHPBB3
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_PHPBB3\">$NOM_PHPBB3</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
+
 
 }
 #_______________________________________________________________________________________________
@@ -224,7 +234,7 @@ function CREATE_INSTALL_SCRIPT
 
 echo "
 #PhpBB3
-rm -r $WWW_DIRECTORY/${NOM_PHPBB3}/install
+rm -r $WWW_DIRECTORY/${MOD_NAME}/install
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
 

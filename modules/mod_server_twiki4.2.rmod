@@ -134,20 +134,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_TWIKI="Twiki"
+MOD_NAME="Twiki"
 else 
 
-NOM_TWIKI=$(zenity --entry --text "$MESS_NAME TWIKI")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME TWIKI")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_TWIKI | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_TWIKI=$(zenity --entry --text "$MESS_NAME TWIKI")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME TWIKI")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_TWIKI=$NOM_TWIKI
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -165,8 +165,8 @@ DOWNLOAD
 
 ##TWIKI
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_TWIKI
-cp -Rf Twiki/* $WWW_DIRECTORY/$NOM_TWIKI/.
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf Twiki/* $WWW_DIRECTORY/$MOD_NAME/.
 
 apt-get install cron grep  
 apt-get install rcs
@@ -254,17 +254,17 @@ BrowserMatchNoCase ^\$ blockAccess
 # The first parameter will be part of the URL to your installation e.g.
 # http://my.co.uk/twiki/bin/view/...
 # The second parameter must point to the physical path on your disc.
-ScriptAlias /$NOM_TWIKI/bin "$WWW_DIRECTORY/$NOM_TWIKI/bin"
+ScriptAlias /$MOD_NAME/bin "$WWW_DIRECTORY/$MOD_NAME/bin"
 
 # The Alias defines a url that points to the root of the twiki installation.
 # It is used to access files in the pub directory (attachments etc)
 # It must come _after_ the ScriptAlias.
-Alias /$NOM_TWIKI "$WWW_DIRECTORY/$NOM_TWIKI"
+Alias /$MOD_NAME "$WWW_DIRECTORY/$MOD_NAME"
 
 # This specifies the options on the TWiki scripts directory. The ExecCGI
 # and SetHandler tell apache that it contains scripts. "Allow from all"
 # lets any IP address access this URL.
-<Directory "$WWW_DIRECTORY/$NOM_TWIKI/bin">
+<Directory "$WWW_DIRECTORY/$MOD_NAME/bin">
     AllowOverride None
     Order Allow,Deny
     Allow from all
@@ -273,9 +273,9 @@ Alias /$NOM_TWIKI "$WWW_DIRECTORY/$NOM_TWIKI"
     Options ExecCGI FollowSymLinks
     SetHandler cgi-script
 </Directory>
-<location /$NOM_TWIKI/bin/configure>
+<location /$MOD_NAME/bin/configure>
     # Password file for TWiki users
-    AuthUserFile $WWW_DIRECTORY/$NOM_TWIKI/data/.htpasswd
+    AuthUserFile $WWW_DIRECTORY/$MOD_NAME/data/.htpasswd
     AuthName 'Enter your WikiName: (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
     AuthType Basic
 
@@ -296,7 +296,7 @@ Alias /$NOM_TWIKI "$WWW_DIRECTORY/$NOM_TWIKI"
 # so if you want to control access to files attached to topics you need to
 # block access to the specific directories same way as the ApacheConfigGenerator
 # blocks access to the pub directory of the Trash web
-<Directory "$WWW_DIRECTORY/$NOM_TWIKI/pub">
+<Directory "$WWW_DIRECTORY/$MOD_NAME/pub">
     Options None
     AllowOverride None
     Order Allow,Deny
@@ -327,27 +327,27 @@ Alias /$NOM_TWIKI "$WWW_DIRECTORY/$NOM_TWIKI"
 
 # Security note: All other directories should be set so
 # that they are *not* visible as URLs, so we set them as =deny from all=.
-<Directory "$WWW_DIRECTORY/$NOM_TWIKI/twiki/data">
+<Directory "$WWW_DIRECTORY/$MOD_NAME/twiki/data">
     deny from all
 </Directory>
 
-<Directory "$WWW_DIRECTORY/$NOM_TWIKI/templates">
+<Directory "$WWW_DIRECTORY/$MOD_NAME/templates">
     deny from all
 </Directory>
 
-<Directory "$WWW_DIRECTORY/$NOM_TWIKI/lib">
+<Directory "$WWW_DIRECTORY/$MOD_NAME/lib">
     deny from all
 </Directory>
 
-<Directory "$WWW_DIRECTORY/$NOM_TWIKI/locale">
+<Directory "$WWW_DIRECTORY/$MOD_NAME/locale">
     deny from all
 </Directory>
 
-<Directory "$WWW_DIRECTORY/$NOM_TWIKI/tools">
+<Directory "$WWW_DIRECTORY/$MOD_NAME/tools">
     deny from all
 </Directory>
 
-<Directory "$WWW_DIRECTORY/$NOM_TWIKI/working">
+<Directory "$WWW_DIRECTORY/$MOD_NAME/working">
     deny from all
 </Directory>
 
@@ -361,12 +361,12 @@ echo "
 ----------------Cooperation-iws SVN-------------------
 ----------Enter the admin password for Twiki------------"
 
-htpasswd -cm $WWW_DIRECTORY/$NOM_TWIKI/data/.htpasswd admin
+htpasswd -cm $WWW_DIRECTORY/$MOD_NAME/data/.htpasswd admin
 
 /etc/init.d/apache2 restart
 
 
-chown -R www-data $WWW_DIRECTORY/$NOM_TWIKI/
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 
 }
@@ -379,8 +379,17 @@ chown -R www-data $WWW_DIRECTORY/$NOM_TWIKI/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_TWIKI/bin/view\" >$NOM_TWIKI</a> | <a href=\"/$NOM_TWIKI/\" >Admin</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME/bin/view</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -395,8 +404,8 @@ function CREATE_INSTALL_SCRIPT
 echo "
 
 #Twiki
-sed -i \"s/\\\$TWiki::cfg{SMTP}{MAILHOST} = '';/\\\$TWiki::cfg{SMTP}{MAILHOST} = 'localhost';/\" $WWW_DIRECTORY/$NOM_TWIKI/lib/LocalSite.cfg
-sed -i \"s/\\\$TWiki::cfg{SMTP}{SENDERHOST} = '';/\\\$TWiki::cfg{SMTP}{SENDERHOST} = 'localhost';/\" $WWW_DIRECTORY/$NOM_TWIKI/lib/LocalSite.cfg
+sed -i \"s/\\\$TWiki::cfg{SMTP}{MAILHOST} = '';/\\\$TWiki::cfg{SMTP}{MAILHOST} = 'localhost';/\" $WWW_DIRECTORY/$MOD_NAME/lib/LocalSite.cfg
+sed -i \"s/\\\$TWiki::cfg{SMTP}{SENDERHOST} = '';/\\\$TWiki::cfg{SMTP}{SENDERHOST} = 'localhost';/\" $WWW_DIRECTORY/$MOD_NAME/lib/LocalSite.cfg
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 

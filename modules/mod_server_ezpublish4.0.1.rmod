@@ -157,7 +157,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_EZPUBLISH=1
-NOM_EZPUBLISH[1]="Ezpublish"
+MOD_NAME[1]="Ezpublish"
 
 else 
 NB_EZPUBLISH=$(zenity --entry --text "$MESS_HOW_MANY Ezpublish $MESS_DO_YOU_WANT")
@@ -171,19 +171,19 @@ done
 
 for (( count=1; count<=$NB_EZPUBLISH; count++ ))
 do
-NOM_EZPUBLISH[$count]=$(zenity --entry --text "$MESS_NAME $count EZPUBLISH")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count EZPUBLISH")
 test $? -ne 0 && break # Bouton Annuler
 
-while (echo ${NOM_EZPUBLISH[$count]} | grep "[^a-zA-Z0-9]") 
+while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_EZPUBLISH[$count]=$(zenity --entry --text "$MESS_NAME $count EZPUBLISH")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count EZPUBLISH")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 done
 
 fi
 export NB_EZPUBLISH=$NB_EZPUBLISH
-export NOM_EZPUBLISH=$NOM_EZPUBLISH
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -203,11 +203,11 @@ DOWNLOAD
 for (( count=1; count<=$NB_EZPUBLISH; count++ ))
 
 do
-mkdir $WWW_DIRECTORY/${NOM_EZPUBLISH[$count]}
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cd $DL_DIR
-cp -Rf ezpublish/* $WWW_DIRECTORY/${NOM_EZPUBLISH[$count]}/.
-echo "create database ${NOM_EZPUBLISH[$count]} CHARACTER SET utf8 COLLATE utf8_bin;
-grant all on ${NOM_EZPUBLISH[$count]}.* to ${NOM_EZPUBLISH[$count]}@localhost identified by '$EZPUBLISH_MYSQL_PWD';
+cp -Rf ezpublish/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+echo "create database ${MOD_NAME[$count]} CHARACTER SET utf8 COLLATE utf8_bin;
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$EZPUBLISH_MYSQL_PWD';
 flush privileges;" > ezpublish_db.sql
 
 $BIN_MYSQL -u root < ezpublish_db.sql mysql
@@ -218,9 +218,9 @@ pear channel-discover components.ez.no
 pear install -a ezc/eZComponents
 
 
-sed -i "101s/{\$database_info.server|wash}/localhost/" $WWW_DIRECTORY/${NOM_EZPUBLISH[$count]}/design/standard/templates/setup/init/database_init.tpl
-sed -i "109s/{\$database_info.user|wash}/${NOM_EZPUBLISH[$count]}/" $WWW_DIRECTORY/${NOM_EZPUBLISH[$count]}/design/standard/templates/setup/init/database_init.tpl
-sed -i "113s/{\$database_info.password|wash}/$EZPUBLISH_MYSQL_PWD/" $WWW_DIRECTORY/${NOM_EZPUBLISH[$count]}/design/standard/templates/setup/init/database_init.tpl
+sed -i "101s/{\$database_info.server|wash}/localhost/" $WWW_DIRECTORY/${MOD_NAME[$count]}/design/standard/templates/setup/init/database_init.tpl
+sed -i "109s/{\$database_info.user|wash}/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/design/standard/templates/setup/init/database_init.tpl
+sed -i "113s/{\$database_info.password|wash}/$EZPUBLISH_MYSQL_PWD/" $WWW_DIRECTORY/${MOD_NAME[$count]}/design/standard/templates/setup/init/database_init.tpl
 
 echo "
 
@@ -229,7 +229,7 @@ AcceptPathInfo On" >> /etc/apache2/apache2.conf
 
 /etc/init.d/apache2 reload
 
-chown -R www-data $WWW_DIRECTORY/${NOM_EZPUBLISH[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
   
 done
 }
@@ -245,8 +245,16 @@ function CREATE_WUI
 for (( count=1; count<=$NB_EZPUBLISH; count++ ))
 
 do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_EZPUBLISH[$count]}\">${NOM_EZPUBLISH[$count]}</a> | <a href=\"/${NOM_EZPUBLISH[$count]}/index.php/ezflow_site_admin\">Admin</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}/index.php/ezflow_site_admin</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 
 done
 }

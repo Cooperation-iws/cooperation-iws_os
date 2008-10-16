@@ -136,20 +136,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_ROUNDCUBE="Roundcube"
+MOD_NAME="Roundcube"
 else 
 
-NOM_ROUNDCUBE=$(zenity --entry --text "$MESS_NAME ROUNDCUBE")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME ROUNDCUBE")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_ROUNDCUBE | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_ROUNDCUBE=$(zenity --entry --text "$MESS_NAME ROUNDCUBE")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME ROUNDCUBE")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_ROUNDCUBE=$NOM_ROUNDCUBE
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -167,24 +167,24 @@ DOWNLOAD
 
 ##ROUNDCUBE
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_ROUNDCUBE
-cp -Rf roundcubemail/* $WWW_DIRECTORY/$NOM_ROUNDCUBE/.
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf roundcubemail/* $WWW_DIRECTORY/$MOD_NAME/.
 
-echo "create database ${NOM_ROUNDCUBE} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-grant all on ${NOM_ROUNDCUBE}.* to ${NOM_ROUNDCUBE}@localhost identified by '$ROUNDCUBE_MYSQL_PWD';
+echo "create database ${MOD_NAME} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$ROUNDCUBE_MYSQL_PWD';
 flush privileges;" > ROUNDCUBE_db.sql
 
 $BIN_MYSQL -u root < ROUNDCUBE_db.sql mysql
 rm ROUNDCUBE_db.sql 
-$BIN_MYSQL -u root <  $WWW_DIRECTORY/$NOM_ROUNDCUBE/SQL/mysql.initial.sql $NOM_ROUNDCUBE 
+$BIN_MYSQL -u root <  $WWW_DIRECTORY/$MOD_NAME/SQL/mysql.initial.sql $MOD_NAME 
 
-sed -i "s/mysql:\/\/roundcube:pass@localhost\/roundcubemail/mysql:\/\/${NOM_ROUNDCUBE}:$ROUNDCUBE_MYSQL_PWD@localhost\/${NOM_ROUNDCUBE}/" $WWW_DIRECTORY/$NOM_ROUNDCUBE/config/db.inc.php.dist
-sed -i "55s/''/'localhost'/" $WWW_DIRECTORY/$NOM_ROUNDCUBE/config/main.inc.php.dist
-mv $WWW_DIRECTORY/$NOM_ROUNDCUBE/config/db.inc.php.dist $WWW_DIRECTORY/$NOM_ROUNDCUBE/config/db.inc.php
-mv $WWW_DIRECTORY/$NOM_ROUNDCUBE/config/main.inc.php.dist $WWW_DIRECTORY/$NOM_ROUNDCUBE/config/main.inc.php
+sed -i "s/mysql:\/\/roundcube:pass@localhost\/roundcubemail/mysql:\/\/${MOD_NAME}:$ROUNDCUBE_MYSQL_PWD@localhost\/${MOD_NAME}/" $WWW_DIRECTORY/$MOD_NAME/config/db.inc.php.dist
+sed -i "55s/''/'localhost'/" $WWW_DIRECTORY/$MOD_NAME/config/main.inc.php.dist
+mv $WWW_DIRECTORY/$MOD_NAME/config/db.inc.php.dist $WWW_DIRECTORY/$MOD_NAME/config/db.inc.php
+mv $WWW_DIRECTORY/$MOD_NAME/config/main.inc.php.dist $WWW_DIRECTORY/$MOD_NAME/config/main.inc.php
 
 
-chown -R www-data $WWW_DIRECTORY/$NOM_ROUNDCUBE/
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 
 }
@@ -197,8 +197,16 @@ chown -R www-data $WWW_DIRECTORY/$NOM_ROUNDCUBE/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_ROUNDCUBE\" >$NOM_ROUNDCUBE</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -213,7 +221,7 @@ function CREATE_INSTALL_SCRIPT
 echo "
 
 #Roundcube
-sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/$NOM_ROUNDCUBE/platform/conf/claro_main.conf.php
+sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/$MOD_NAME/platform/conf/claro_main.conf.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
 }

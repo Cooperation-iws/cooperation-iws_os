@@ -159,19 +159,19 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_MOODLE="Moodle"
+MOD_NAME="Moodle"
 else 
-NOM_MOODLE=$(zenity --entry --text "$MESS_NAME MOODLE")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME MOODLE")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_MOODLE | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_MOODLE=$(zenity --entry --text "$MESS_NAME MOODLE")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME MOODLE")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_MOODLE=$NOM_MOODLE
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -190,8 +190,8 @@ DOWNLOAD
 
 ##MOODLE
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_MOODLE
-cp -Rf moodle/* $WWW_DIRECTORY/$NOM_MOODLE/.
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf moodle/* $WWW_DIRECTORY/$MOD_NAME/.
 mkdir /var/moodledata
 mkdir /var/moodledata/lang
 mv fr_utf8 /var/moodledata/lang
@@ -199,9 +199,9 @@ mv fr_utf8 /var/moodledata/lang
 echo "
 <IfDefine APACHE2>
     AcceptPathInfo on
-</IfDefine>" > $WWW_DIRECTORY/$NOM_MOODLE/.htaccess
-echo "create database $NOM_MOODLE;
-grant all on $NOM_MOODLE.* to $NOM_MOODLE@localhost identified by '$MOODLE_MYSQL_PWD';
+</IfDefine>" > $WWW_DIRECTORY/$MOD_NAME/.htaccess
+echo "create database $MOD_NAME;
+grant all on $MOD_NAME.* to $MOD_NAME@localhost identified by '$MOODLE_MYSQL_PWD';
 flush privileges;" > moodle_db.sql
 
 $BIN_MYSQL -u root < moodle_db.sql mysql
@@ -209,11 +209,11 @@ rm moodle_db.sql
 
 
 chown -R www-data:www-data /var/moodledata
-chown -R www-data:www-data $WWW_DIRECTORY/$NOM_MOODLE
+chown -R www-data:www-data $WWW_DIRECTORY/$MOD_NAME
 
-cat $WWW_DIRECTORY/$NOM_MOODLE/install.php | sed -i -e "60s/''/'$NOM_MOODLE'/" $WWW_DIRECTORY/$NOM_MOODLE/install.php
-cat $WWW_DIRECTORY/$NOM_MOODLE/install.php | sed -i -e "61s/''/'$MOODLE_MYSQL_PWD'/" $WWW_DIRECTORY/$NOM_MOODLE/install.php
-cat $WWW_DIRECTORY/$NOM_MOODLE/install.php | sed -i -e "63s/'moodle'/'$NOM_MOODLE'/" $WWW_DIRECTORY/$NOM_MOODLE/install.php
+cat $WWW_DIRECTORY/$MOD_NAME/install.php | sed -i -e "60s/''/'$MOD_NAME'/" $WWW_DIRECTORY/$MOD_NAME/install.php
+cat $WWW_DIRECTORY/$MOD_NAME/install.php | sed -i -e "61s/''/'$MOODLE_MYSQL_PWD'/" $WWW_DIRECTORY/$MOD_NAME/install.php
+cat $WWW_DIRECTORY/$MOD_NAME/install.php | sed -i -e "63s/'moodle'/'$MOD_NAME'/" $WWW_DIRECTORY/$MOD_NAME/install.php
 
 
 }
@@ -226,8 +226,17 @@ cat $WWW_DIRECTORY/$NOM_MOODLE/install.php | sed -i -e "63s/'moodle'/'$NOM_MOODL
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_MOODLE\">$NOM_MOODLE</a> | <a href=\"/$NOM_MOODLE/login/\">Admin</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/$MOD_NAME/login/</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -243,7 +252,7 @@ echo "
 #Configuration post installation
 url=\"localhost\"
 #Moodle
-sed -i \"13s/\$url/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/${NOM_MOODLE}/config.php
+sed -i \"13s/\$url/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/${MOD_NAME}/config.php
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 

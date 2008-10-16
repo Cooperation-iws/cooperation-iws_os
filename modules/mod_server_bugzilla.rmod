@@ -144,20 +144,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_BUGZILLA="Bugzilla"
+MOD_NAME="Bugzilla"
 else 
 
-NOM_BUGZILLA=$(zenity --entry --text "$MESS_NAME BUGZILLA")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME BUGZILLA")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_BUGZILLA | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_BUGZILLA=$(zenity --entry --text "$MESS_NAME BUGZILLA")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME BUGZILLA")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_BUGZILLA=$NOM_BUGZILLA
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -181,23 +181,23 @@ apt-get install  --assume-yes --force-yes  apache2 libapache2-mod-perl2 libtempl
                 libemail-send-perl libemail-mime-modifier-perl libchart-perl \
                 libgd-graph-perl libhtml-scrubber-perl 
 
-echo "create database ${NOM_BUGZILLA};
-grant all on ${NOM_BUGZILLA}.* to ${NOM_BUGZILLA}@localhost identified by '$BUGZILLA_MYSQL_PWD';
+echo "create database ${MOD_NAME};
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$BUGZILLA_MYSQL_PWD';
 flush privileges;" > BUGZILLA_db.sql
 
 $BIN_MYSQL -u root < BUGZILLA_db.sql mysql
 rm BUGZILLA_db.sql
-mkdir $WWW_DIRECTORY/${NOM_BUGZILLA}
-cp -Rf bugzilla/* $WWW_DIRECTORY/${NOM_BUGZILLA}/.
-cd $WWW_DIRECTORY/${NOM_BUGZILLA}
+mkdir $WWW_DIRECTORY/${MOD_NAME}
+cp -Rf bugzilla/* $WWW_DIRECTORY/${MOD_NAME}/.
+cd $WWW_DIRECTORY/${MOD_NAME}
 ./checksetup.pl
-sed -i -e "s/^\$db_name = '.*';/\$db_name = '${NOM_BUGZILLA}';/" \
-       -e "s/^\$db_user = '.*';/\$db_user = '${NOM_BUGZILLA}';/" \
-       -e "s/^\$db_pass = '.*';/\$db_pass = '$BUGZILLA_MYSQL_PWD';/" $WWW_DIRECTORY/${NOM_BUGZILLA}/localconfig
-sed -i -e "s/^\$webservergroup = '.*';/\$webservergroup = 'www-data';/" $WWW_DIRECTORY/${NOM_BUGZILLA}/localconfig
+sed -i -e "s/^\$db_name = '.*';/\$db_name = '${MOD_NAME}';/" \
+       -e "s/^\$db_user = '.*';/\$db_user = '${MOD_NAME}';/" \
+       -e "s/^\$db_pass = '.*';/\$db_pass = '$BUGZILLA_MYSQL_PWD';/" $WWW_DIRECTORY/${MOD_NAME}/localconfig
+sed -i -e "s/^\$webservergroup = '.*';/\$webservergroup = 'www-data';/" $WWW_DIRECTORY/${MOD_NAME}/localconfig
 ./checksetup.pl
 sed -i -e '/<\/VirtualHost>/i\
-  <Directory "\/var\/www\/'${NOM_BUGZILLA}'">\
+  <Directory "\/var\/www\/'${MOD_NAME}'">\
     Options +ExecCGI\
     AllowOverride Limit\
     DirectoryIndex index.cgi\
@@ -216,8 +216,16 @@ sed -i -e '/<\/VirtualHost>/i\
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_BUGZILLA}\">${NOM_BUGZILLA}</a><br>
-">> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

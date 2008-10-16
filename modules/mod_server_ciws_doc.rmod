@@ -164,7 +164,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_CIWSDOC=1
-NOM_CIWSDOC[1]="Ciwswiki"
+MOD_NAME[1]="Ciwswiki"
 
 else 
 NB_CIWSDOC=$(zenity --entry --text "$MESS_HOW_MANY Dokuwiki $MESS_DO_YOU_WANT")
@@ -178,19 +178,19 @@ done
 
 for (( count=1; count<=$NB_CIWSDOC; count++ ))
 do
-NOM_CIWSDOC[$count]=$(zenity --entry --text "$MESS_NAME $count CIWSDOC")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count CIWSDOC")
 test $? -ne 0 && break # Bouton Annuler
 
-while (echo ${NOM_CIWSDOC[$count]} | grep "[^a-zA-Z0-9]") 
+while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_CIWSDOC[$count]=$(zenity --entry --text "$MESS_NAME $count CIWSDOC")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count CIWSDOC")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 done
 
 fi
 export NB_CIWSDOC=$NB_CIWSDOC
-export NOM_CIWSDOC=$NOM_CIWSDOC
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -210,13 +210,13 @@ DOWNLOAD
 for (( count=1; count<=$NB_CIWSDOC; count++ ))
 
 do
-mkdir $WWW_DIRECTORY/${NOM_CIWSDOC[$count]}
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cd $DL_DIR
-cp -Rf dokuwiki/* $WWW_DIRECTORY/${NOM_CIWSDOC[$count]}/.
+cp -Rf dokuwiki/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
 
-cp -Rf wiki/* $WWW_DIRECTORY/${NOM_CIWSDOC[$count]}/.
+cp -Rf wiki/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
 
-chown -R www-data $WWW_DIRECTORY/${NOM_CIWSDOC[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
   
 done
 }
@@ -232,8 +232,15 @@ function CREATE_WUI
 for (( count=1; count<=$NB_CIWSDOC; count++ ))
 
 do
-echo "000$RMOD_DESCRIPTION | <a href=\"/${NOM_CIWSDOC[$count]}\">${NOM_CIWSDOC[$count]}</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 
 done
 }
@@ -251,7 +258,7 @@ for (( count=1; count<=$NB_CIWSDOC; count++ ))
 do
 echo "
 #Ciws Doc
-rm $WWW_DIRECTORY/${NOM_CIWSDOC[$count]}/install.php
+rm $WWW_DIRECTORY/${MOD_NAME[$count]}/install.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done
 }

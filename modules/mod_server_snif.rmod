@@ -137,7 +137,7 @@ function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
 NB_SNIF=1
-NOM_SNIF[1]="Snif"
+MOD_NAME[1]="Snif"
 
 else 
 
@@ -151,11 +151,11 @@ done
 
 for (( count=1; count<=$NB_SNIF; count++ ))
 do
-NOM_SNIF[$count]=$(zenity --entry --text "$MESS_NAME $count SNIF")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count SNIF")
 test $? -ne 0 && break # Bouton Annuler
-while (echo ${NOM_SNIF[$count]} | grep "[^a-zA-Z0-9]") 
+while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
 do
-NOM_SNIF[$count]=$(zenity --entry --text "$MESS_NAME $count SNIF")
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count SNIF")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
 
@@ -166,7 +166,7 @@ done
 fi
 
 export NB_SNIF=$NB_SNIF
-export NOM_SNIF=$NOM_SNIF
+export MOD_NAME=$MOD_NAME
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
@@ -189,16 +189,16 @@ echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
 for (( count=1; count<=$NB_SNIF; count++ ))
 do
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${NOM_SNIF[$count]}
-cp -Rf snif/* $WWW_DIRECTORY/${NOM_SNIF[$count]}/.
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf snif/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
 
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1967s/444444/cf3a12/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1971s/000000/9499ac/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1978s/444444/aa3b3b/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1987s/eeeeee/e7d9d9/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "1990s/dddddd/ffffff/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "498s/false/true/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
-cat $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php | sed -i -e "512s/30/0/" $WWW_DIRECTORY/${NOM_SNIF[$count]}/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "1967s/444444/cf3a12/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "1971s/000000/9499ac/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "1978s/444444/aa3b3b/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "1987s/eeeeee/e7d9d9/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "1990s/dddddd/ffffff/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "498s/false/true/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "512s/30/0/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
 
 
 
@@ -213,20 +213,20 @@ echo "Protect this directory with a password ?"
 echo "[N/y]"
 read r3 < /dev/tty
 if [ "$(echo $r3 | awk  '{print $1}')" != "y" ]; then
-echo "[${NOM_SNIF[$count]}]
-	comment = ${NOM_SNIF[$count]}
+echo "[${MOD_NAME[$count]}]
+	comment = ${MOD_NAME[$count]}
 	writeable = yes
 	public = yes
-	path = /var/www/${NOM_SNIF[$count]}
+	path = /var/www/${MOD_NAME[$count]}
 	
 " >> /var/share/etc/samba/smb.conf
 
 else
-echo "[${NOM_SNIF[$count]}]
-	comment = ${NOM_SNIF[$count]}
+echo "[${MOD_NAME[$count]}]
+	comment = ${MOD_NAME[$count]}
 	writeable = yes
 	public = yes
-	path = /var/www/${NOM_SNIF[$count]}
+	path = /var/www/${MOD_NAME[$count]}
 	valid users = www-data
 " >> /var/share/etc/samba/smb.conf
 smbpasswd -a www-data
@@ -234,7 +234,7 @@ fi
 
 fi
 
-chown -R www-data $WWW_DIRECTORY/${NOM_SNIF[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
 
 done
@@ -252,8 +252,16 @@ function CREATE_WUI
 for (( count=1; count<=$NB_SNIF; count++ ))
 
 do
-echo "$RMOD_DESCRIPTION | <a href=\"/${NOM_SNIF[$count]}\">${NOM_SNIF[$count]}</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 done
 }
 #_______________________________________________________________________________________________

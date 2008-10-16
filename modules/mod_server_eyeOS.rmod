@@ -138,20 +138,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_EYEOS="Eyeos"
+MOD_NAME="Eyeos"
 else 
 
-NOM_EYEOS=$(zenity --entry --text "$MESS_NAME EYEOS")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME EYEOS")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_EYEOS | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_EYEOS=$(zenity --entry --text "$MESS_NAME EYEOS")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME EYEOS")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_EYEOS=$NOM_EYEOS
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -169,12 +169,12 @@ DOWNLOAD
 
 ##EYEOS
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_EYEOS
-cp -Rf eyeOS/* $WWW_DIRECTORY/$NOM_EYEOS/.
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf eyeOS/* $WWW_DIRECTORY/$MOD_NAME/.
 
 
 
-chown -R www-data $WWW_DIRECTORY/$NOM_EYEOS/
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 
 }
@@ -187,8 +187,17 @@ chown -R www-data $WWW_DIRECTORY/$NOM_EYEOS/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_EYEOS\" >$NOM_EYEOS</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

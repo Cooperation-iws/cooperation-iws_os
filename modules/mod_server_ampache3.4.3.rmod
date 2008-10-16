@@ -133,20 +133,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_AMPACHE="Ampache"
+MOD_NAME="Ampache"
 else 
 
-NOM_AMPACHE=$(zenity --entry --text "$MESS_NAME AMPACHE")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME AMPACHE")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_AMPACHE | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_AMPACHE=$(zenity --entry --text "$MESS_NAME AMPACHE")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME AMPACHE")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_AMPACHE=$NOM_AMPACHE
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -164,25 +164,25 @@ DOWNLOAD
 
 ##AMPACHE
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$NOM_AMPACHE
-cp -Rf ampache/* $WWW_DIRECTORY/$NOM_AMPACHE/.
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf ampache/* $WWW_DIRECTORY/$MOD_NAME/.
 
-echo "create database ${NOM_AMPACHE};
-grant all on ${NOM_AMPACHE}.* to ${NOM_AMPACHE}@localhost identified by '$AMPACHE_MYSQL_PWD';
+echo "create database ${MOD_NAME};
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$AMPACHE_MYSQL_PWD';
 flush privileges;" > AMPACHE_db.sql
 
 $BIN_MYSQL -u root < AMPACHE_db.sql mysql
 rm AMPACHE_db.sql
 
 
-sed -i "66s/ampache/$NOM_AMPACHE/" $WWW_DIRECTORY/$NOM_AMPACHE/templates/show_install.inc.php
-sed -i "78s/name=\"local_pass\"/name=\"local_pass\" value=\"$AMPACHE_MYSQL_PWD\"/" $WWW_DIRECTORY/$NOM_AMPACHE/templates/show_install.inc.php
-sed -i "74s/root/$NOM_AMPACHE/" $WWW_DIRECTORY/$NOM_AMPACHE/templates/show_install.inc.php
-sed -i "94s/value=\"1\"/value=\"0\"/" $WWW_DIRECTORY/$NOM_AMPACHE/templates/show_install.inc.php
+sed -i "66s/ampache/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/templates/show_install.inc.php
+sed -i "78s/name=\"local_pass\"/name=\"local_pass\" value=\"$AMPACHE_MYSQL_PWD\"/" $WWW_DIRECTORY/$MOD_NAME/templates/show_install.inc.php
+sed -i "74s/root/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/templates/show_install.inc.php
+sed -i "94s/value=\"1\"/value=\"0\"/" $WWW_DIRECTORY/$MOD_NAME/templates/show_install.inc.php
 
 
 
-cat << EOT > $WWW_DIRECTORY/$NOM_AMPACHE/config/ampache.cfg.php
+cat << EOT > $WWW_DIRECTORY/$MOD_NAME/config/ampache.cfg.php
 ;#<?php exit(); ?>##
 ;###################
 ; General Config   #
@@ -737,7 +737,7 @@ rss_main_copyright = copyright (c) Speedy B for Ampache
 ;#####################################################
 EOT
 
-chown -R www-data $WWW_DIRECTORY/$NOM_AMPACHE/
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 
 }
@@ -750,8 +750,17 @@ chown -R www-data $WWW_DIRECTORY/$NOM_AMPACHE/
 
 function CREATE_WUI
 {
-echo "$RMOD_DESCRIPTION | <a href=\"/$NOM_AMPACHE\" >$NOM_AMPACHE</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/$MOD_NAME</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

@@ -40,7 +40,7 @@ MESS_HOW_MANY="Combien de"
 MESS_DO_YOU_WANT="voulez vous installez ?"
 MESS_WARNING_POST_INSTALL="Procéder à la configuration post install de Mediawiki en allant à cette adresse:
 
-http://localhost/${NOM_WIKIPEDIAFR[1]}
+http://localhost/${MOD_NAME[1]}
 
 Quand vous aurez terminé, fermez cette fenètre"
 }
@@ -59,7 +59,7 @@ MESS_HOW_MANY="How many"
 MESS_DO_YOU_WANT="do you want to install ?"
 MESS_WARNING_POST_INSTALL="Proceed to post install configuration of Mediawiki while pointing this address with your web browser:
 
-http://localhost/${NOM_WIKIPEDIAFR[1]}
+http://localhost/${MOD_NAME[1]}
 
 When you will be finished, close this window."
 }
@@ -255,10 +255,10 @@ function CHOOSE_PARAMETERS_GUI
 {
 
 NB_WIKIPEDIAFR=1
-NOM_WIKIPEDIAFR[1]="WikipediaFR"
+MOD_NAME[1]="WikipediaFR"
 
 export NB_WIKIPEDIAFR=$NB_WIKIPEDIAFR
-export NOM_WIKIPEDIAFR=$NOM_WIKIPEDIAFR
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -284,28 +284,28 @@ for (( count=1; count<=$NB_WIKIPEDIAFR; count++ ))
 
 do
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}
-cp -Rf mediawiki/* $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/.
-echo "create database ${NOM_WIKIPEDIAFR[$count]};
-grant all on ${NOM_WIKIPEDIAFR[$count]}.* to ${NOM_WIKIPEDIAFR[$count]}@localhost identified by '$WIKIPEDIAFR_MYSQL_PWD';
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf mediawiki/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+echo "create database ${MOD_NAME[$count]};
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$WIKIPEDIAFR_MYSQL_PWD';
 flush privileges;" > mediawiki_db.sql
 
 $BIN_MYSQL -u root < mediawiki_db.sql mysql
 rm mediawiki_db.sql
 
-cat $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php | sed -i -e "579s/wikiuser/${NOM_WIKIPEDIAFR[$count]}/" $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php
-cat $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php | sed -i -e "578s/wikidb/${NOM_WIKIPEDIAFR[$count]}/" $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php
-cat $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php | sed -i -e "580s/importPost( \"DBpassword\" )/importPost( \"DBpassword\", \"$WIKIPEDIAFR_MYSQL_PWD\" )/" $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php
-cat $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php | sed -i -e "581s/importPost( \"DBpassword2\" )/importPost( \"DBpassword\", \"$WIKIPEDIAFR_MYSQL_PWD\" )/" $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php
-cat $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php | sed -i -e '613s/if/#if/' $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php
-cat $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php | sed -i -e '614s/\$errs/#\$errs/' $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php
-cat $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php | sed -i -e '615s/}/#}/' $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e "579s/wikiuser/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e "578s/wikidb/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e "580s/importPost( \"DBpassword\" )/importPost( \"DBpassword\", \"$WIKIPEDIAFR_MYSQL_PWD\" )/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e "581s/importPost( \"DBpassword2\" )/importPost( \"DBpassword\", \"$WIKIPEDIAFR_MYSQL_PWD\" )/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e '613s/if/#if/' $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e '614s/\$errs/#\$errs/' $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
+cat $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php | sed -i -e '615s/}/#}/' $WWW_DIRECTORY/${MOD_NAME[$count]}/config/index.php
 
 
-cd $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/math
+cd $WWW_DIRECTORY/${MOD_NAME[$count]}/math
 make
 
-chown -R www-data $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
 echo "
 ---------COOPERATION LIVE SCRIPTS $VERSION----------
@@ -318,8 +318,8 @@ $MESS_WARNING_POST_INSTALL
 read r < /dev/tty
 echo "
 #mediawiki
-mv \$WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/LocalSettings.php \$WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}
-sed -i \"99s/false/true/\"  \$WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/LocalSettings.php
+mv \$WWW_DIRECTORY/${MOD_NAME[$count]}/config/LocalSettings.php \$WWW_DIRECTORY/${MOD_NAME[$count]}
+sed -i \"99s/false/true/\"  \$WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php
 
 echo \"
 \\\$wgUploadPath = \\\"images\\\";
@@ -328,7 +328,7 @@ echo \"
 \\\$wgMathDirectory = \\\"\\\$wgUploadDirectory/math\\\";
 \\\$wgTmpDirectory = \\\"\\\$wgUploadDirectory/tmp\\\";
 
-\" >> \$WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/LocalSettings.php
+\" >> \$WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php
 
 
 " > /var/share/lampp/configWikipedia_post_install.sh
@@ -340,9 +340,9 @@ TRUNCATE page;
 TRUNCATE revision;
 TRUNCATE text;" > /tmp/videpage.sql
 
-$BIN_MYSQL -u root < /tmp/videpage.sql ${NOM_WIKIPEDIAFR[$count]}
+$BIN_MYSQL -u root < /tmp/videpage.sql ${MOD_NAME[$count]}
 
-mv $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/config/LocalSettings.php $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}
+mv $WWW_DIRECTORY/${MOD_NAME[$count]}/config/LocalSettings.php $WWW_DIRECTORY/${MOD_NAME[$count]}
 
 cd $DL_DIR/xml2sql
 
@@ -375,26 +375,26 @@ sed -i "86s/^/#/" /etc/mysql/my.cnf
 
 
 
-#java -jar mwdumper.jar --format=sql:1.5 frwiki-latest-pages-articles.xml.bz2 | $BIN_MYSQL -u root --default-character-set=utf8 ${NOM_WIKIPEDIAFR[$count]} 
+#java -jar mwdumper.jar --format=sql:1.5 frwiki-latest-pages-articles.xml.bz2 | $BIN_MYSQL -u root --default-character-set=utf8 ${MOD_NAME[$count]} 
 
 
 cd $DL_DIR
 bunzip2 -c frwiki-latest-pages-articles.xml.bz2 | xml2sql
 
-/usr/bin/mysqlimport -u root ${NOM_WIKIPEDIAFR[$count]} /$DL_DIR/page.txt
-/usr/bin/mysqlimport -u root ${NOM_WIKIPEDIAFR[$count]} /$DL_DIR/revision.txt
-/usr/bin/mysqlimport -u root ${NOM_WIKIPEDIAFR[$count]} /$DL_DIR/text.txt
+/usr/bin/mysqlimport -u root ${MOD_NAME[$count]} /$DL_DIR/page.txt
+/usr/bin/mysqlimport -u root ${MOD_NAME[$count]} /$DL_DIR/revision.txt
+/usr/bin/mysqlimport -u root ${MOD_NAME[$count]} /$DL_DIR/text.txt
 
 
 cd $DL_DIR 
-$BIN_MYSQL -u root < frwiki-latest-categorylinks.sql ${NOM_WIKIPEDIAFR[$count]}
-$BIN_MYSQL -u root < frwiki-latest-externallinks.sql ${NOM_WIKIPEDIAFR[$count]}
-$BIN_MYSQL -u root < frwiki-latest-image.sql ${NOM_WIKIPEDIAFR[$count]}
-$BIN_MYSQL -u root < frwiki-latest-imagelinks.sql ${NOM_WIKIPEDIAFR[$count]}
-$BIN_MYSQL -u root < frwiki-latest-langlinks.sql ${NOM_WIKIPEDIAFR[$count]}
-$BIN_MYSQL -u root < frwiki-latest-pagelinks.sql ${NOM_WIKIPEDIAFR[$count]}
-$BIN_MYSQL -u root < frwiki-latest-templatelinks.sql ${NOM_WIKIPEDIAFR[$count]}
-$BIN_MYSQL -u root < frwiki-latest-page.sql ${NOM_WIKIPEDIAFR[$count]}
+$BIN_MYSQL -u root < frwiki-latest-categorylinks.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root < frwiki-latest-externallinks.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root < frwiki-latest-image.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root < frwiki-latest-imagelinks.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root < frwiki-latest-langlinks.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root < frwiki-latest-pagelinks.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root < frwiki-latest-templatelinks.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root < frwiki-latest-page.sql ${MOD_NAME[$count]}
 
 
 
@@ -403,8 +403,8 @@ $BIN_MYSQL -u root < frwiki-latest-page.sql ${NOM_WIKIPEDIAFR[$count]}
 
 
 
-php $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/maintenance/refreshLinks.php --update > /tmp/refresh_links
-#php $WWW_DIRECTORY/${NOM_WIKIPEDIAFR[$count]}/maintenance/initStats.php --update
+php $WWW_DIRECTORY/${MOD_NAME[$count]}/maintenance/refreshLinks.php --update > /tmp/refresh_links
+#php $WWW_DIRECTORY/${MOD_NAME[$count]}/maintenance/initStats.php --update
 
 
 done
@@ -422,8 +422,16 @@ function CREATE_WUI
 for (( count=1; count<=$NB_WIKIPEDIAFR; count++ ))
 
 do
-echo "<a href=\"/${NOM_WIKIPEDIAFR[$count]}\">${NOM_WIKIPEDIAFR[$count]}</a><br>
-" >> $WWW_DIRECTORY/cooperation-wui.frame.php
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 done
 }
 #_______________________________________________________________________________________________
