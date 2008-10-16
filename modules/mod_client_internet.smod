@@ -11,4 +11,4 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 echo "I: install Ekiga"
-apt-get install --assume-yes --force-yes ekiga filezilla-locales grsync vlc 
+apt-get install --assume-yes --force-yes ekiga filezilla-locales grsync vlc avahi-discover
