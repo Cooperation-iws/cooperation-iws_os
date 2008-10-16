@@ -1,0 +1,250 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Syslog-ng'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Logs administration'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+INSTALL=$(cat /tmp/def_install)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+
+#VARIABLES
+#MYSQL PASSWORD
+SYSLOGNG_MYSQL_PWD="SYSLOGNG_MYSQL_PWD"
+
+
+#_______________________________________________________________________________________________
+#__________________________________________LANGFR______________________________________________
+
+
+function LANGFR
+
+{
+MESS_NAME="Entrez le nom de l'installation de "
+
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGFR___________________________________________
+
+#_______________________________________________________________________________________________
+#__________________________________________LANGEN______________________________________________
+
+
+function LANGEN
+
+{
+MESS_NAME="Enter the name of the install of "
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGEN___________________________________________
+
+
+#_______________________________________________________________________________________________
+#__________________________________________CHOICE_LANG___________________________________________
+
+function CHOICE_LANG
+{
+if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
+LANGFR
+
+else
+LANGEN
+
+fi
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_CHOICE_LANG______________________________________
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_WEB_______________________________________
+
+
+function WGET_MIRROIR_WEB
+{
+cd $DL_DIR
+
+
+wget  http://php-syslog-ng.googlecode.com/files/php-syslog-ng-2.9.8f.tgz
+
+tar -xzf php-syslog-ng-2.9.8f.tgz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/php-syslog-ng-2.9.8f.tgz
+tar -xzf php-syslog-ng-2.9.8f.tgz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________DOWNLOAD_______________________________________________
+
+function DOWNLOAD
+{
+if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
+
+WGET_MIRROIR_WEB
+fi
+if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
+
+WGET_MIRROIR_FREE
+fi
+
+}
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_DOWNLOAD___________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
+
+function CHOOSE_PARAMETERS_GUI
+{
+if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
+NOM_SYSLOGNG="Syslog-ng"
+else 
+
+NOM_SYSLOGNG=$(zenity --entry --text "$MESS_NAME SYSLOGNG")
+test $? -ne 0 && break # Bouton Annuler
+while (echo $NOM_SYSLOGNG | grep "[^a-zA-Z0-9]") 
+do
+NOM_SYSLOGNG=$(zenity --entry --text "$MESS_NAME SYSLOGNG")
+test $? -ne 0 && break # Bouton Annulerdone
+done 
+ 
+
+fi
+export NOM_SYSLOGNG=$NOM_SYSLOGNG
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Cacti download"
+DOWNLOAD
+
+apt-get install --assume-yes --force-yes syslog-ng
+aptitude install -y msttcorefonts
+
+#Cacti config
+
+echo "
+@daily php $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/scripts/logrotate.php >> /var/log/php-syslog-ng/logrotate.log 
+@daily find $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/html/jpcache/ -atime 1 -exec rm -f '{}' ';' 
+*/5 * * * * php $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/scripts/reloadcache.php >> /var/log/php-syslog-ng/reloadcache.log
+*/5 * * * * php $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/scripts/SqueezeDB-v2.0.php >> /var/log/php-syslog-ng/squeezedb.log
+" >> /etc/cron.d/syslog-ng
+sudo chmod +x /etc/cron.d/syslog-ng
+
+#Cacti 
+
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/admin/$NOM_SYSLOGNG
+cp -Rf php-syslog-ng/* $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/.
+
+cp $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/scripts/logrotate.d /etc/
+mkdir -p /var/log/php-syslog-ng
+
+echo "create database $NOM_SYSLOGNG;
+grant all on $NOM_SYSLOGNG.* to $NOM_SYSLOGNG@localhost identified by '$SYSLOGNG_MYSQL_PWD';
+flush privileges;
+" > syslogng_db.sql
+$BIN_MYSQL -u root < syslogng_db.sql mysql
+rm syslogng_db.sql
+chmod -R 777 $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/
+chown -R www-data $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/
+
+cd $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/scripts/
+perl -i -pe 's/\/www\/php-syslog-ng/$WWW_DIRECTORY/admin/$NOM_SYSLOGNG/g' *
+
+sed -i "14s/root/$NOM_SYSLOGNG/" $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/html/install/install1.php
+sed -i "15s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/html/install/install1.php
+sed -i "16s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/html/install/install1.php
+sed -i "23s/syslog/$NOM_SYSLOGNG/" $WWW_DIRECTORY/admin/$NOM_SYSLOGNG/html/install/install1.php
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_SYSLOGNG\" >$NOM_SYSLOGNG</a><br>
+">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+
+echo "
+#SYSLOGNG
+echo \"
+ALTER TABLE logs ADD counter INT NOT NULL DEFAULT 1;
+ALTER TABLE logs ADD fo datetime default NULL;
+ALTER TABLE logs ADD lo datetime default NULL;
+\" > /tmp/dbsqueeze-syslog
+$BIN_MYSQL -u root < /tmp/dbsqueeze-syslog $NOM_SYSLOGNG
+
+" >> $LAMPP_DIRECTORY/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Cacti"
+CHOICE_LANG
+CHOOSE_PARAMETERS_GUI
+INSTALL
+CREATE_WUI
+CREATE_INSTALL_SCRIPT
+echo "I: End of Install Cacti"
