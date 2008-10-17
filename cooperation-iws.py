@@ -3162,7 +3162,7 @@ class Reconstructor:
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
 	    modExecScrChroot += 'echo Running Core:  \n'
-	    if self.ReqApache == "A"	    
+	    if self.ReqApache == "A":    
 		modExecScrChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
 		os.popen('cp -r ' +os.path.join(self.ciwsRootDir, "cooperation-wui") + '/* ' + os.path.join(self.customDir, "chroot/var/www") + '/.' )	        
 		modExecScrChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '

@@ -149,6 +149,7 @@ echo "
 " >> /etc/apache2/sites-available/default
 /etc/init.d/apache2 reload
 
+trac-admin /var/trac/project permission add admin TRAC_ADMIN
 
 echo "I: End of install Trac"
 
