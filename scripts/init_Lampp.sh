@@ -65,6 +65,7 @@ rm $WWW_DIRECTORY/index.html
 echo "I: config Cooperation-iws wui"
 
 
+
 echo "<?xml version=\"1.0\"?>
 <items>" > $WWW_DIRECTORY/cooperation-wui.xml
 

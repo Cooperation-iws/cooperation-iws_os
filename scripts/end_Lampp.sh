@@ -98,9 +98,9 @@ mv /etc/mysql /var/share/etc/
 
 ln -s /var/share/etc/mysql /etc/mysql
 
-echo "</items>" > $WWW_DIRECTORY/cooperation-wui.xml
+echo "</items>" >> $WWW_DIRECTORY/cooperation-wui.xml
 
-echo "</items>" > $WWW_DIRECTORY/admin/cooperation-wui.xml
+echo "</items>" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
 
 
 fi

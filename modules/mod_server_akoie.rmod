@@ -85,7 +85,7 @@ function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
 wget $URL_FREE/akoie-customv2-0.5.tar.gz
-tar -xzf akoie-custom-0.5.tar.gz
+tar -xzf akoie-customv2-0.5.tar.gz
 }
 
 #_______________________________________________________________________________________________
@@ -99,7 +99,7 @@ function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
 wget $URL_FREE/akoie-customv2-0.5.tar.gz
-tar -xzf akoie-custom-0.5.tar.gz
+tar -xzf akoie-customv2-0.5.tar.gz
 }
 
 #_______________________________________________________________________________________________

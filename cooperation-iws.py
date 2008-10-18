@@ -3164,7 +3164,7 @@ class Reconstructor:
 	    modExecScrChroot += 'echo Running Core:  \n'
 	    if self.ReqApache == "A":    
 		modExecScrChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
-		os.popen('cp -r ' +os.path.join(self.ciwsRootDir, "cooperation-wui") + '/* ' + os.path.join(self.customDir, "chroot/var/www") + '/.' )	        
+		os.popen('cp -r ' +os.path.join(self.ciwsRootDir, "cooperation-wui") + ' ' + os.path.join(self.customDir, "chroot/tmp/") + '' )	        
 		modExecScrChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
         	
             for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):

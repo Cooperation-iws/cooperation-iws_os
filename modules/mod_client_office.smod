@@ -13,4 +13,4 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 echo "I: installing liveusb installer"
 
-aptitude install -y openoffice.org myspell-dictionary-* hunspell-dictionary-* openoffice.org-l10n-* openoffice.org-help-* openoffice.org-thesaurus-* openoffice.org-hyphenation-* unixodbc cupsys-bsd libsane libxrender1 libgl1 openclipart-openoffice.org msttcorefonts pstoedit imagemagick libpaper-utils dia gimp inkscape pdfedit flpsed 
+aptitude install -y openoffice.org myspell-dictionary-* hunspell-dictionary-* openoffice.org-l10n-* openoffice.org-help-* openoffice.org-thesaurus-* openoffice.org-hyphenation-* unixodbc cupsys-bsd libsane libxrender1 libgl1 openclipart-openoffice.org msttcorefonts pstoedit imagemagick libpaper-utils dia gimp inkscape pdfedit flpsed zip unzip

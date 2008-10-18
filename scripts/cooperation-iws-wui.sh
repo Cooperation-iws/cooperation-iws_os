@@ -2,10 +2,10 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Cooperation-iws-wui.0.5.2'
+RMOD_NAME='Search Engine'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Search Engine'
+RMOD_DESCRIPTION='Web crawler'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -99,8 +99,8 @@ function INSTALL
 
 ##SPHIDER
 cd $DL_DIR
-sed -i "s/{version}/$VERSION/" $DL_DIR/cooperation-wui/cooperation-wui.footer.php
-cp -Rf $DL_DIR/cooperation-wui/* $WWW_DIRECTORY/.
+sed -i "s/{version}/$VERSION/" /tmp/cooperation-wui/cooperation-wui.footer.php
+cp -r /tmp/cooperation-wui/* /var/www/.
 
 echo "create database ${NOM_SPHIDER};
 grant all on ${NOM_SPHIDER}.* to ${NOM_SPHIDER}@localhost identified by '$SPHIDER_MYSQL_PWD';
@@ -112,6 +112,9 @@ rm SPHIDER_db.sql
 $BIN_MYSQL -u root ${NOM_SPHIDER} < $WWW_DIRECTORY/admin/$NOM_SPHIDER/sql/tables.sql 
 
 $BIN_MYSQL -u root < /var/www/cooperation-iws/cooperation-iws.sql
+echo "grant all on \`cooperation-iws\`.* to \`cooperation-iws\`@localhost identified by 'CIWS_MYSQL_PWD';
+flush privileges;" > CIWS_db.sql
+$BIN_MYSQL -u root < CIWS_db.sql mysql
 
 apt-get install --assume-yes --force-yes poppler-utils catdoc pstotext zip
 
