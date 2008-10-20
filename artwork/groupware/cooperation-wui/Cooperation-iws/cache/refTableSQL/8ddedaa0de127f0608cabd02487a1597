@@ -1,6 +1,0 @@
-a:7:{s:15:"fieldTablePairs";a:0:{}s:12:"tableAliases";a:0:{}s:19:"reverseTableAliases";a:0:{}s:12:"fieldAliases";a:0:{}s:19:"fieldTableAliasData";a:0:{}s:10:"fieldCount";i:4;s:3:"sql";s:284:"SELECT jf_content.reference_field, jf_content.value, jf_content.reference_id, jf_content.original_value 
-FROM jos_jf_content AS jf_content
-WHERE jf_content.language_id=2
-	AND jf_content.published=1
-   AND jf_content.reference_id IN(48,1,45)
-   AND jf_content.reference_table='content'";}
