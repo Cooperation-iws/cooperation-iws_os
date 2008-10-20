@@ -1,0 +1,2 @@
+<?php die("Access Denied"); ?>
+a:2:{s:6:"output";s:0:"";s:6:"result";a:1:{i:0;O:8:"stdClass":9:{s:2:"id";s:2:"15";s:5:"title";s:24:"Ciws est utilisé pour ?";s:5:"alias";s:22:"ciws-est-utilise-pour-";s:6:"voters";s:1:"0";s:11:"checked_out";s:1:"0";s:16:"checked_out_time";s:19:"0000-00-00 00:00:00";s:9:"published";s:1:"1";s:6:"access";s:1:"0";s:3:"lag";s:5:"86400";}}}

@@ -1,0 +1,1 @@
+a:7:{s:15:"fieldTablePairs";a:0:{}s:12:"tableAliases";a:0:{}s:19:"reverseTableAliases";a:0:{}s:12:"fieldAliases";a:0:{}s:19:"fieldTableAliasData";a:0:{}s:10:"fieldCount";i:1;s:3:"sql";s:51:"select distinct reference_table from jos_jf_content";}
