@@ -2,10 +2,14 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Pligg1.8'
+RMOD_NAME='Pligg 1.8'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Social Bookmark'
+RMOD_DESCRIPTION='Web 2.0'
+RMOD_DESCRIPTION_FR='Web 2.0'
+RMOD_VERBOSE="Pligg is an open source Content Management System (CMS) available to download for free. Pligg has perfected content management in a unique way that encourages users to participate and control the content on the site. This makes the site user-moderated and allows for social publishing where the stories are created and promoted by members not website editors. Pligg CMS is based on PHP and MySQL technologies that allow it to be installed on almost any web host on a relatively small budget."
+RMOD_VERBOSE_FR="Pligg est un logiciel de gestion de contenu orienté aggrégation de données."
+
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -201,13 +205,22 @@ function CREATE_WUI
 
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/$MOD_NAME</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
-<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 }
 #_______________________________________________________________________________________________

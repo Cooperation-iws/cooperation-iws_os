@@ -6,9 +6,12 @@ RMOD_NAME='Akoie 0.5'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Web images editor'
+RMOD_DESCRIPTION_FR="Editeur d'image en ligne"
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
+RMOD_VERBOSE="Akoie (AKanai Online Image Editor) is a rich internet application for manipulating images online. It's works with Mozilla Firefox and Internet Explorer. It uses HTML, JavaScript and Ext JS on client side and ImageMagick and PHP on server side."
+RMOD_VERBOSE_FR="Akoie (AKanai Online Image Editor) est un client web riche pour manipuler des images en ligne. Il fonctionne avec Mozilla Firefox et Internet Explorer. Il utilise HTML, JavaScript et Ext JS côté client et ImageMagick et PHP côté serveur."
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
 DL_DIR=$(cat /tmp/web_install-path)
@@ -213,10 +216,19 @@ function CREATE_WUI
 {
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/$MOD_NAME</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/$MOD_NAME</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
 }

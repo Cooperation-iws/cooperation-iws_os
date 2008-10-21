@@ -6,6 +6,10 @@ RMOD_NAME='Squirrelmail'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Webmail'
+RMOD_DESCRIPTION_FR='E-mail en ligne'
+
+RMOD_VERBOSE="SquirrelMail is a standards-based webmail package written in PHP. It includes built-in pure PHP support for the IMAP and SMTP protocols, and all pages render in pure HTML 4.0 (with no JavaScript required) for maximum compatibility across browsers. It has very few requirements and is very easy to configure and install. SquirrelMail has all the functionality you would want from an email client, including strong MIME support, address books, and folder manipulation. "
+RMOD_VERBOSE_FR="Squirrelmail est un webmail, permettant de consulter ses e-mails en ligne."
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True

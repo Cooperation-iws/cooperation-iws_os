@@ -4,10 +4,15 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Jdicd1.5'
+RMOD_NAME='Jdicd 1.5'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Translations Dictionnary'
+RMOD_DESCRIPTION_FR='Dictionnaire de traduction'
+RMOD_VERBOSE="JDictd is a set of Java programs that implement the Dictionary Server Protocol (DICT) as specified in RFC 2229. It is used to access dictionary definitions from a set of natural language dictionary databases. The software (including binaries and source code) is distributed on the terms of the GNU General Public License.  "
+RMOD_VERBOSE_FR="JDictd est une application Java qui implémente le Dictionary Server Protocol (DICT) tel que spécifié dans la RFC 2229. Elle est utilisée pour accéder aux définitions des dictionnaires en language naturel stocké en base de données. "
+
+
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
@@ -197,12 +202,22 @@ function CREATE_WUI
 
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>http://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:2626</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url><![CDATA[http://localhost:2626]]></item_url>
+	<item_admin_url><![CDATA[http://localhost:2626]]></item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url><![CDATA[http://localhost:2626]]></item_url>
+	<item_admin_url><![CDATA[http://localhost:2626]]></item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 }
 
 #_______________________________________________________________________________________________

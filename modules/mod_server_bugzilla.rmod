@@ -7,10 +7,14 @@ RMOD_SUBCATEGORY='Servers'
 RMOD_NAME='Bugzilla'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
-RMOD_DESCRIPTION='Bugs tracking system'
+RMOD_DESCRIPTION='Defect Tracking System'
+RMOD_DESCRIPTION_FR='Système de suivi des bogues'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
+RMOD_VERBOSE="Bugzilla is a “Defect Tracking System” or “Bug-Tracking System”. Defect Tracking Systems allow individual or groups of developers to keep track of outstanding bugs in their product effectively. Most commercial defect-tracking software vendors charge enormous licensing fees. Despite being “free”, Bugzilla has many features its expensive counterparts lack. Consequently, Bugzilla has quickly become a favorite of hundreds of organizations across the globe. "
+RMOD_VERBOSE_FR="Bugzilla est un système de suivi des Défauts utilisé par la fondation Mozilla. "
+
 
 
 
@@ -218,12 +222,22 @@ function CREATE_WUI
 {
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/$MOD_NAME</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/$MOD_NAME</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/$MOD_NAME</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 
 }

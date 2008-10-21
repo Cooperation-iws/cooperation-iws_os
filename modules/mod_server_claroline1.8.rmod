@@ -2,12 +2,18 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Claroline1.8'
+RMOD_NAME='Claroline 1.8'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='E-learning portal'
+RMOD_DESCRIPTION='eLearning portal'
+RMOD_DESCRIPTION_FR='Portail de télé-enseignement'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Claroline is an Open Source eLearning and eWorking platform allowing teachers to build effective online courses and to manage learning and collaborative activities on the web. Translated into 35 languages, Claroline has a large worldwide users’ and developers’ community. "
+RMOD_VERBOSE_FR="Claroline est une plate-forme Open Source de formation à distance et de travail collaboratif. Elle permet aux formateurs de créer des espaces de cours en ligne et de gérer des activités de formation sur Internet. Traduite en 35 langues, Claroline bénéficie de l'appui d'une communauté mondiale d'utilisateurs et de développeurs.  "
+
+
+
 RMOD_REQ_APACHE=True
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
@@ -199,12 +205,22 @@ function CREATE_WUI
 {
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/$MOD_NAME</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_admin_url>/$MOD_NAME</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_admin_url>/$MOD_NAME</item_admin_url>
+	<item_name>$RMOD_NAME_FR</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 }
 #_______________________________________________________________________________________________

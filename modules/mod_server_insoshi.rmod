@@ -7,9 +7,13 @@ RMOD_SUBCATEGORY='Servers'
 RMOD_NAME='Insoshi'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Social Networking'
+RMOD_DESCRIPTION='Web 2.0'
+RMOD_DESCRIPTION_FR='Web 2.0'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Insoshi is a product and a project. The product aims to be the best open-source social networking platform. The project is to make the product!  "
+RMOD_VERBOSE_FR="Insoshi est un produit et un projet. Le produit est destiné à être la meilleurs application open source de réseaux sociaux. Le projet est destiné à faire le produit! "
+
 RMOD_REQ_APACHE=True
 LANG_UI=$(cat /tmp/lang-wui)
 
@@ -108,12 +112,22 @@ function CREATE_WUI
 
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>http://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:3020</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url><![CDATA[http://localhost:3020]]></item_url>
+	<item_admin_url><![CDATA[http://localhost:3020]]></item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url><![CDATA[http://localhost:3020]]></item_url>
+	<item_admin_url><![CDATA[http://localhost:3020]]></item_admin_url>
+	<item_name>$RMOD_NAME_FR</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 }
 #_______________________________________________________________________________________________

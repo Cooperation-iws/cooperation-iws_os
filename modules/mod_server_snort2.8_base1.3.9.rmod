@@ -7,7 +7,11 @@ RMOD_SUBCATEGORY='Servers'
 RMOD_NAME='Snort2.8 Base1.3.9'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='NIDS'
+RMOD_DESCRIPTION='Network Intrusion Detection System'
+RMOD_DESCRIPTION_FR="Système de détection d'intrusion réseau"
+RMOD_VERBOSE="Snort is a NIDS, Network Intrusion Detection System. Base is a Snort Front-end, it displays Snort alerts.  "
+RMOD_VERBOSE_FR="Snort est un NIDS (Network Intrusion Detection System), un système de détection d'intrusion réseau. Base est le front-end de Snort écrit en php, permettant d'afficher les alertes de Snort. "
+
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -499,13 +503,23 @@ function CREATE_WUI
 
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/admin/$MOD_NAME</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
-<item_admin_url>/admin/${MOD_NAME[$count]}</item_admin_url>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/admin/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/admin/${MOD_NAME[$count]}</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/admin/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/admin/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 
 
 }

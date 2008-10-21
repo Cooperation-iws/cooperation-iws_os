@@ -7,7 +7,12 @@ RMOD_SUBCATEGORY='Servers'
 RMOD_NAME='Mantis1.1.2'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
-RMOD_DESCRIPTION='Bug Tracking system'
+RMOD_DESCRIPTION='Defect Tracking System'
+RMOD_DESCRIPTION_FR='Système de suivi des bogues'
+RMOD_VERBOSE="Mantis is a bug tracking system."
+RMOD_VERBOSE_FR="Mantis est outil de suivi de défauts.  "
+
+
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -235,13 +240,22 @@ for (( count=1; count<=$NB_MANTIS; count++ ))
 do
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/${MOD_NAME[$count]}</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
-<item_admin_url>/${MOD_NAME[$count]}/admin</item_admin_url>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}/admin</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}/admin</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 done
 }

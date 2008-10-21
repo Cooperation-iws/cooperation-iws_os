@@ -3,13 +3,18 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Cacti0.8.7b'
+RMOD_NAME='Cacti 0.8.7b'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Server load Admin'
+RMOD_DESCRIPTION_FR='Server load Admin'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
+RMOD_VERBOSE="Cacti is an interface for rrd tools. Cacti allow to have traceability of serveur load."
+RMOD_VERBOSE_FR="Cacti est une interface graphique à l'outil rrd. Cacti permet notament de suivre la charge du serveur Cooperation-iws.  "
+
+
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
 DL_DIR=$(cat /tmp/web_install-path)
@@ -231,12 +236,22 @@ function CREATE_WUI
 {
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/admin/$MOD_NAME</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/admin/$MOD_NAME</item_url>
+	<item_admin_url>/admin/$MOD_NAME</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/admin/$MOD_NAME</item_url>
+	<item_admin_url>/admin/$MOD_NAME</item_admin_url>
+	<item_name>$RMOD_NAME_FR</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 
 echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_CACTI\" >$NOM_CACTI</a><br>
 ">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php

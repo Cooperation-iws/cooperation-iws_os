@@ -359,6 +359,7 @@ class Reconstructor:
         self.wTree.get_widget("comboboxWebAppMirrors").set_active(1)
         self.wTree.get_widget("comboboxCiwsOs").set_active(0)
         self.wTree.get_widget("comboboxCiwsArtwork").set_active(0)  
+        self.wTree.get_widget("comboboxCiwsCms").set_active(1)  
        
        
 
@@ -3031,9 +3032,17 @@ class Reconstructor:
 	
 	if self.wTree.get_widget("comboboxCiwsArtwork").get_active_text() == "Ciws for Gnome":
 		self.artwork = "ciws_gnome"
+		
+	elif self.wTree.get_widget("comboboxCiwsArtwork").get_active_text() == "eLearning":
+		self.artwork = "eLearning"
+		
 	else:
 		self.artwork = ""
-
+		
+	if self.wTree.get_widget("comboboxCiwsCms").get_active_text() == "Wordpress":
+		self.cms = "Wordpress"
+	else:
+		self.cms = "Joomla"
   	if self.wTree.get_widget("checkbuttonAufs").get_active() == True:
 		os.popen('sed -i "s/splash/splash union=aufs/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
 	if self.casperPath == 'live':
@@ -3046,7 +3055,10 @@ class Reconstructor:
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'end_Lampp.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'shutdown_ws.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
+	scriptCustomExec += 'mkdir ' +  os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + ' ;\n'
+ 	scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "cooperation-wui/" + self.cms ) + '/* ' +  os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + '/. ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'cooperation-iws-wui.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
+ 	scriptCustomExec += 'chmod -R 777 ' + os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + ' ;\n'
  	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/init.sh")   + ' ;\n'
  	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/init_Lampp.sh")   + ' ;\n'
  	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/end_Lampp.sh")   + ' ;\n'
@@ -3055,7 +3067,7 @@ class Reconstructor:
 	if self.artwork != "":
 			scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "artwork/" + self.artwork+".artchroot") + ' ' +  os.path.join(self.customDir, "chroot/tmp/artwork.amod")   + ' ;\n'
  			scriptCustomExec += 'chmod 777 ' + os.path.join(self.ciwsRootDir, "chroot/tmp/artwork.amod")   + ' ;\n'
- 			scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "artwork/" + self.artwork+"/") + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
+ 			scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "artwork/" + self.artwork) + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  			
 	fscriptCustomExec=open(os.path.join(self.customDir, "scriptExec.sh"), 'w')
         fscriptCustomExec.write(scriptCustomExec)
@@ -3124,9 +3136,10 @@ class Reconstructor:
             modExecScrChroot = '#!/bin/sh\n\ncd /tmp ;\n'
 	    modExecScrChroot += 'export DISPLAY=127.0.0.1:5.0 \n'
  	    modExecScrChroot += 'bash \"/tmp/init.sh\"' + ' ;\n '
- 	    modExecScrChroot += 'bash \"/tmp/artwork.amod\"' + ' ;\n '
+ 	    
  	    modExecScr = '#!/bin/sh\n\n'
-            modExecScr += 'bash \"' + os.path.join(self.ciwsRootDir, "artwork/"+self.artwork+".artscript")+ '\"' + ' ;\n '
+            modExecScr += 'chmod +x \"' + os.path.join(self.ciwsRootDir, "artwork/"+self.artwork+".artscript")+ '\"' + ' ;\n '
+	    modExecScr += 'bash \"' + os.path.join(self.ciwsRootDir, "artwork/"+self.artwork+".artscript")+ '\"' + ' ;\n '
 	    # copy all "execute" enabled scripts proper location (chroot or customdir)
             
 	    self.treeModel.foreach(self.copyExecuteModule)
@@ -3164,9 +3177,9 @@ class Reconstructor:
 	    modExecScrChroot += 'echo Running Core:  \n'
 	    if self.ReqApache == "A":    
 		modExecScrChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
-		os.popen('cp -r ' +os.path.join(self.ciwsRootDir, "cooperation-wui") + ' ' + os.path.join(self.customDir, "chroot/tmp/") + '' )	        
 		modExecScrChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
-        	
+	    if self.artwork != "":  
+		modExecScrChroot += 'bash \"/tmp/artwork.amod\"' + ' ;\n '
             for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)

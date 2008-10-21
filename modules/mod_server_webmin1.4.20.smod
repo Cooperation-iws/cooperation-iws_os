@@ -4,10 +4,14 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Server'
-RMOD_NAME='Webmin1.4.20'
+RMOD_NAME='Webmin 1.4.20'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Web based unix management'
+RMOD_DESCRIPTION='Gestion du système unix en ligne'
+RMOD_VERBOSE_FR="Webmin est un front-end web d'administration de système Unix. "
+RMOD_VERBOSE="Webmin is a web-based interface for system administration for Unix. Using any modern web browser, you can setup user accounts, Apache, DNS, file sharing and much more. Webmin removes the need to manually edit Unix configuration files like /etc/passwd, and lets you manage a system from the console or remotely."
+
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 

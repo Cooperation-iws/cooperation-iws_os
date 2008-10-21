@@ -5,10 +5,13 @@ RMOD_SUBCATEGORY='Servers'
 RMOD_NAME='Dokuwiki 0.5'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Wiki CMS'
+RMOD_DESCRIPTION='Wiki portal'
+RMOD_DESCRIPTION_FR='Portail de wiki'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
+RMOD_VERBOSE="DokuWiki is a standards compliant, simple to use Wiki, mainly aimed at creating documentation of any kind. It is targeted at developer teams, workgroups and small companies. It has a simple but powerful syntax which makes sure the datafiles remain readable outside the Wiki and eases the creation of structured texts. All data is stored in plain text files – no database is required. "
+RMOD_VERBOSE_FR="DokuWiki est un Wiki conforme aux standards, simple à utiliser, dont le but est de créer des documentations de toute sorte. Il est destiné aux équipes de développement, aux travaux de groupe et aux petites entreprises. Il a une syntaxe simple mais puissante qui assure la lisibilité des fichiers de données en dehors du Wiki, et facilite la création de textes structurés. Toutes les données sont stockées dans des fichiers textes – aucune base de donnée n'est requise."
 
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
@@ -228,12 +231,22 @@ for (( count=1; count<=$NB_DOKUWIKI; count++ ))
 do
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/${MOD_NAME[$count]}</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}/doku.php?do=login&id=start</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}/doku.php?do=login&id=start</item_admin_url>
+	<item_name>$RMOD_NAME_FR</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 
 

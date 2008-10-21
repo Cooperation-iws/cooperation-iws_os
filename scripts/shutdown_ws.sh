@@ -50,7 +50,7 @@ REMOVE_USER
 chmod -R 777 /etc/skel
 rm -r /home/*
 
-i
+if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
 
 
 echo "I: Securing Lampp Server"
@@ -91,7 +91,7 @@ htpasswd -cm lampp.users admin
 chmod a+r /var/www/admin/.htaccess
 echo "CIWS: Password protection active. Please use 'admin' as user name!"
 fi
-
+fi
 echo "I: shuting down servers"
 #shutdown script
 killall -9 apache2
@@ -110,7 +110,7 @@ killall -9 mysqld_safe
 /etc/init.d/nfs-common stop 1>&2 2>/dev/null
 /etc/init.d/nfs-kernel-server stop 1>&2 2>/dev/null
 killall -9 ruby 1>&2 2>/dev/null
-fi
+
 
 echo "I: config rc.local"
 

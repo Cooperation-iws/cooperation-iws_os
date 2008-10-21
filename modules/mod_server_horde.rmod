@@ -5,9 +5,14 @@ RMOD_SUBCATEGORY='Servers'
 RMOD_NAME='Horde1.2'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Webmail and Groupware'
+RMOD_DESCRIPTION='Groupware'
+RMOD_DESCRIPTION_FR='Travail collaboratif'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Horde Groupware is a free, enterprise ready, browser based collaboration suite. Users can manage and share calendars, contacts, tasks and notes with the standards compliant components from the Horde Project. Horde Groupware bundles the separately available applications Kronolith, Turba, Nag and Mnemo. "
+RMOD_VERBOSE_FR="Horde Groupware est une suite d'outils collaboratifs en ligne destiné aux entreprises. Les utilisateurs peuvent gérer et partager calendriers, contacts, activité, notes. "
+
+
 RMOD_REQ_APACHE=True
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
@@ -213,12 +218,22 @@ function CREATE_WUI
 
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/$MOD_NAME</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_admin_url>/$MOD_NAME</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_admin_url>/$MOD_NAME</item_admin_url>
+	<item_name>$RMOD_NAME_FR</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 }
 #_______________________________________________________________________________________________

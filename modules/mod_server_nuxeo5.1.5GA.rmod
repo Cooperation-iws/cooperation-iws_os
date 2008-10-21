@@ -7,6 +7,9 @@ RMOD_NAME='Nuxeo 5.1.5GA'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Data management portal'
+RMOD_DESCRIPTION_FR='Portail de gestion des données'
+RMOD_VERBOSE="Nuxeo is a commercial opensource CMS (Content Management System). It is developped in Java."
+RMOD_VERBOSE_FR="Nuxeo est le pionnier et le leader de l'Enterprise Content Management (ECM) open source. La plateforme, Nuxeo EP 5 est une solution pour la gestion de tous les documents et contenus numériques. Nuxeo est développé en Java. "
 
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
@@ -370,14 +373,27 @@ sed -i "s/<\/items>//" $WWW_DIRECTORY/cooperation-wui.xml
 
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>http://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:8080/nuxeo</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
-<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url><![CDATA[http://localhost:8080/nuxeo]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url><![CDATA[http://localhost:8080/nuxeo]]></item_admin_url>
 </item>
 </items>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+
+sed -i "s/<\/items>//" $WWW_DIRECTORY/cooperation-wui-fr.xml
+
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url><![CDATA[http://localhost:8080/nuxeo]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url><![CDATA[http://localhost:8080/nuxeo]]></item_admin_url>
+</item>
+</items>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 
 

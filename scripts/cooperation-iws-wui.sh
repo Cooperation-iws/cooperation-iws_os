@@ -99,7 +99,6 @@ function INSTALL
 
 ##SPHIDER
 cd $DL_DIR
-sed -i "s/{version}/$VERSION/" /tmp/cooperation-wui/cooperation-wui.footer.php
 cp -r /tmp/cooperation-wui/* /var/www/.
 
 echo "create database ${NOM_SPHIDER};
@@ -111,7 +110,7 @@ rm SPHIDER_db.sql
 
 $BIN_MYSQL -u root ${NOM_SPHIDER} < $WWW_DIRECTORY/admin/$NOM_SPHIDER/sql/tables.sql 
 
-$BIN_MYSQL -u root < /var/www/cooperation-iws/cooperation-iws.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/Cooperation-iws/cooperation-iws.sql
 echo "grant all on \`cooperation-iws\`.* to \`cooperation-iws\`@localhost identified by 'CIWS_MYSQL_PWD';
 flush privileges;" > CIWS_db.sql
 $BIN_MYSQL -u root < CIWS_db.sql mysql
@@ -131,6 +130,7 @@ echo "18 */23 * * * www-data php $WWW_DIRECTORY/admin/$NOM_SPHIDER/admin/spider.
 sudo chmod +x /etc/cron.d/sphider_crawl
 fi
 
+rm -rf `find /var/www -type d -name .svn`
 
 }
 

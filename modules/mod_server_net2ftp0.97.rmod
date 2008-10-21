@@ -4,10 +4,16 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Net2ftp0.97'
+RMOD_NAME='Net2ftp 0.97'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Web ftp client'
+RMOD_DESCRIPTION_FR='Client web Ftp'
+RMOD_VERBOSE="Net2ftp is an Ftp client written in php. "
+RMOD_VERBOSE_FR="Net2ftp est un client Ftp écrit en php. "
+
+
+
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -210,13 +216,22 @@ function CREATE_WUI
 {
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/admin/${MOD_NAME[$count]}</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
-<item_admin_url>/$MOD_NAME/</item_admin_url>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/admin/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/$MOD_NAME/</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/admin/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/$MOD_NAME/</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 
 }
 #_______________________________________________________________________________________________

@@ -2,12 +2,18 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Dotclear2.0.1'
+RMOD_NAME='Dotclear 2.0.1'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Blog CMS'
+RMOD_DESCRIPTION='Content Management System portal'
+RMOD_DESCRIPTION_FR='Portail de gestion de contenu'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Dotclear is a Blog Content Management System."
+RMOD_VERBOSE_FR="Dotclear est un logiciel libre de publication web créé en 2002 par Olivier Meunier. Fruit du travail d'une seule personne à l'origine, le projet s'est rapidement doté d'une équipe constituée de personnalités diverses et d'horizons variés.
+L'objectif du projet est de fournir un outil simple d'emploi permettant à tout un chacun de publier sur le web et ce, quel que soit son niveau de connaissances techniques.
+Dotclear est un logiciel libre conçu avant tout pour ses utilisateurs et recevant des contributions régulières de ceux-ci. N'importe qui peut l'utiliser et le modifier selon les termes de la licence d'utilisation."
+
 RMOD_REQ_APACHE=True
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
@@ -235,13 +241,22 @@ for (( count=1; count<=$NB_DOTCLEAR; count++ ))
 do
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/${MOD_NAME[$count]}</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
-<item_admin_url>/${MOD_NAME[$count]}/admin/</item_admin_url>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}/admin/</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}/admin/</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 
 done

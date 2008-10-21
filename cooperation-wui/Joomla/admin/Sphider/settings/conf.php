@@ -80,16 +80,16 @@ $index_xls	= 1;
 $index_ppt	= 1;
 
 //executable path to pdf converter
-$pdftotext_path	= 'c:\temp\pdftotext.exe';
+$pdftotext_path	= '/usr/bin/pdftotext';
 
 //executable path to doc converter
-$catdoc_path	= 'c:\temp\catdoc.exe';
+$catdoc_path	= '/usr/bin/catdoc';
 
 //executable path to xls converter
-$xls2csv_path	= 'c:\temp\xls2csv';
+$xls2csv_path	= '/usr/bin/xls2csv';
 
 //executable path to ppt converter
-$catppt_path	= 'c:\temp\catppt';
+$catppt_path	= '/usr/bin/catppt';
 
 // User agent string 
 $user_agent			 = 'Sphider';

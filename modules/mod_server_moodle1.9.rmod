@@ -4,14 +4,18 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Moodle1.9'
+RMOD_NAME='Moodle 1.9'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='E-learning portal'
-RMOD_RUN_IN_CHROOT=True
+RMOD_DESCRIPTION='eLearning portal'
+RMOD_DESCRIPTION_FR='Portail de télé-enseignement'
+RMOD_VERBOSE="Moodle is an eLearning portal. Moodle is also a course content management system.  "
+RMOD_VERBOSE_FR="Moodle est un portail de eLearning. C'est également un logiciel d'édition de contenu pédagogique.  "
+
+
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
-
+RMOD_RUN_IN_CHROOT=True
 WWW_DIRECTORY=$(cat /tmp/web-path)
 LAMPP_DIRECTORY=$WWW_DIRECTORY
 DL_DIR=$(cat /tmp/web_install-path)
@@ -229,13 +233,22 @@ function CREATE_WUI
 
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/${MOD_NAME[$count]}</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
-<item_admin_url>/$MOD_NAME/login/</item_admin_url>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/$MOD_NAME/login/</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/$MOD_NAME/login/</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 }
 #_______________________________________________________________________________________________

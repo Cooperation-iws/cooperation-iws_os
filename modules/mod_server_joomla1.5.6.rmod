@@ -2,10 +2,14 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Joomla1.5.6'
+RMOD_NAME='Joomla 1.5.6'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='CMS Portal'
+RMOD_DESCRIPTION='Content Management System portal'
+RMOD_DESCRIPTION='Portail de gestion de contenu'
+RMOD_VERBOSE="Joomla! is an award-winning Content Management System (CMS) that will help you build websites and other powerful online applications. Best of all, Joomla! is an open source solution that is freely available to everybody.  "
+RMOD_VERBOSE_FR="http://www.joomla.org/ est un système de gestion de contenu (en anglais, CMS, pour Content Management system) créé par une équipe internationale de développeurs récompensée à maintes reprises, celle-là même qui a hissé Mambo vers les sommets. Et un CMS, c'est quoi?? Pour faire simple, un CMS est un logiciel web qui vous permettra de créer un site internet dynamique en toute simplicité. Joomla! est un CMS Open Source distribué sous license GNU/GPL (gratuit) avec lequel vous pourrez mettre en ligne du contenu et mettre à disposition de vos visiteurs des services (forum, boutique en ligne, galerie photos,…), le tout sans connaissance technique particulière. "
+
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -238,13 +242,22 @@ for (( count=1; count<=$NB_JOOMLA; count++ ))
 do
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/${MOD_NAME[$count]}</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
-<item_admin_url>/${MOD_NAME[$count]}/administrator/</item_admin_url>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}/administrator/</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}/administrator/</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 done
 

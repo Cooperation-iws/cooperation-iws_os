@@ -2,10 +2,17 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Taskfreak1.8'
+RMOD_NAME='Taskfreak 1.8'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Tasks manager'
+RMOD_DESCRIPTION='Projects management'
+RMOD_DESCRIPTION_FR='Management de projets'
+RMOD_VERBOSE="TaskFreak! is a simple but efficient web based task manager written in PHP.  "
+RMOD_VERBOSE_FR="TaskFreak! est un gestionnaire de tâches simple.  "
+
+
+
+
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -141,7 +148,16 @@ MOD_NAME=$(zenity --entry --text "$MESS_NAME TASKFREAK")
 test $? -ne 0 && break # Bouton Annuler
 while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-MOD_NAME=$(zenity --entry --text "$MESS_NAME TASKFREAK")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME TASKFREAK")echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
@@ -196,13 +212,22 @@ function CREATE_WUI
 
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/$MOD_NAME</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
-<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 }
 #_______________________________________________________________________________________________
