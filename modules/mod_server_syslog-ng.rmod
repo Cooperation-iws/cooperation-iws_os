@@ -192,9 +192,6 @@ mkdir -p /var/log/php-syslog-ng
 
 echo "create database $MOD_NAME;
 grant all on $MOD_NAME.* to $MOD_NAME@localhost identified by '$SYSLOGNG_MYSQL_PWD';
-grant all on $MOD_NAME.* to sysloguserG@localhost identified by 'sysloguser';
-grant all on $MOD_NAME.* to syslogadmin@localhost identified by 'syslogadmin';
-
 flush privileges;
 " > /tmp/syslogng_db.sql
 $BIN_MYSQL -u root < /tmp/syslogng_db.sql mysql
@@ -209,7 +206,60 @@ perl -i -pe "s/\/www\/php-syslog-ng/$WWW_DIRECTORY/admin/$MOD_NAME/g" *
 sed -i "14s/root/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
 sed -i "15s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
 sed -i "16s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "17s/sysloguser/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "18s/sysloguser/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "19s/sysloguser/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "20s/syslogadmin/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "21s/syslogadmin/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "22s/syslogadmin/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
 sed -i "23s/syslog/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "27s/\//\/admin\/$MOD_NAME\/html\//" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install3.php
+
+
+cat << EOT >> /etc/syslog-ng/syslog-ng.conf
+###########################################################################################
+# Added by cdukes for php-syslog-ng // ref: http://gentoo-wiki.com/HOWTO_setup_PHP-Syslog-NG
+###########################################################################################
+options { 
+long_hostnames(off);
+# doesn't actually help on Solaris, log(3) truncates at 1024 chars
+log_msg_size(8192);
+# buffer just a little for performance
+sync(1);
+# memory is cheap, buffer messages unable to write (like to loghost)
+log_fifo_size(16384);
+# Hosts we don't want syslog from
+#bad_hostname("^(ctld.|cmd|tmd|last)$");
+# The time to wait before a dead connection is reestablished (seconds)
+time_reopen(10);
+#Use DNS so that our good names are used, not hostnames
+use_dns(yes);
+dns_cache(yes);
+#Use the whole DNS name
+use_fqdn(yes);
+keep_hostname(yes);
+chain_hostnames(no);
+#Read permission for everyone
+perm(0644);
+# The default action of syslog-ng 1.6.0 is to log a STATS line
+# to the file every 10 minutes.  That's pretty ugly after a while.
+# Change it to every 12 hours so you get a nice daily update of
+# how many messages syslog-ng missed (0).
+stats(43200); 
+};
+source s_everything { internal(); pipe("/proc/kmsg"); unix-stream("/dev/log"); udp(); };
+destination d_mysql {
+program("/usr/bin/mysql -usyslogadmin -psyslogadmin $MOD_NAME"
+template("INSERT INTO logs (host, facility, priority, level, tag, datetime, program, msg)
+VALUES ( '\$HOST', '\$FACILITY', '\$PRIORITY', '\$LEVEL', '\$TAG', '\$YEAR-\$MONTH-\$DAY \$HOUR:\$MIN:\$SEC', '\$PROGRAM', '\$MSG' );\n")
+template-escape(yes));
+};
+log {
+source(s_everything);
+destination(d_mysql);
+};
+# Added above by cdukes for php-syslog-ng enhancements
+EOT
 
 }
 
@@ -261,7 +311,6 @@ ALTER TABLE logs ADD fo datetime default NULL;
 ALTER TABLE logs ADD lo datetime default NULL;
 \" > /tmp/dbsqueeze-syslog
 $BIN_MYSQL -u root < /tmp/dbsqueeze-syslog $MOD_NAME
-
 " >> $LAMPP_DIRECTORY/config_post_install.sh
 
 }

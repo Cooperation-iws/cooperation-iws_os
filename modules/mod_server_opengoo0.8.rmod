@@ -6,7 +6,7 @@ RMOD_NAME='OpenGoo 0.8'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Online Office suite'
-RMOD_DESCRIPTION='Suite Office en ligne'
+RMOD_DESCRIPTION_FR='Suite Office en ligne'
 RMOD_VERBOSE="OpenGoo is an Open Source Web Office. It is a complete solution for every organization to create, collaborate, share and publish all its internal and external documents."
 RMOD_VERBOSE_FR="OpenGoo est une suite office open source en ligne.  "
 

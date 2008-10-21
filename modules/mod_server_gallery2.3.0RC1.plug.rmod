@@ -6,7 +6,7 @@ RMOD_SUBCATEGORY='Servers'
 RMOD_NAME='Gallery 2.3RC1'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Images gallery'
+RMOD_DESCRIPTION='Pictures gallery'
 RMOD_DESCRIPTION_FR="Galleries d'images"
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
@@ -246,7 +246,7 @@ echo "
 	<item_url>/${MOD_NAME[$count]}</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url><![CDATA[/${MOD_NAME[$count]}/main.php?g2_view=core.UserAdmin&g2_subView=core.UserLogin&g2_return=%2FGallery2%2Fmain.php%3F]]</item_admin_url>
+	<item_admin_url><![CDATA[/${MOD_NAME[$count]}/main.php?g2_view=core.UserAdmin&g2_subView=core.UserLogin&g2_return=%2FGallery2%2Fmain.php%3F]]></item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
 echo "
@@ -255,7 +255,7 @@ echo "
 	<item_url>/${MOD_NAME[$count]}</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url><![CDATA[/${MOD_NAME[$count]}/main.php?g2_view=core.UserAdmin&g2_subView=core.UserLogin&g2_return=%2FGallery2%2Fmain.php%3F]]</item_admin_url>
+	<item_admin_url><![CDATA[/${MOD_NAME[$count]}/main.php?g2_view=core.UserAdmin&g2_subView=core.UserLogin&g2_return=%2FGallery2%2Fmain.php%3F]]></item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 done

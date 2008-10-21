@@ -109,6 +109,7 @@ killall -9 mysqld_safe
 /etc/init.d/portmap stop 1>&2 2>/dev/null
 /etc/init.d/nfs-common stop 1>&2 2>/dev/null
 /etc/init.d/nfs-kernel-server stop 1>&2 2>/dev/null
+/etc/init.d/syslog-ng stop 1>&2 2>/dev/null
 killall -9 ruby 1>&2 2>/dev/null
 
 

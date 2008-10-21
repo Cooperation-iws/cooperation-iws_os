@@ -233,7 +233,7 @@ echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
 	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_admin_url>/${MOD_NAME[$count]}/doku.php?do=login&id=start</item_admin_url>
+	<item_admin_url><![CDATA[/${MOD_NAME[$count]}/doku.php?do=login&id=start]]></item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 </item>
@@ -242,7 +242,7 @@ echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
 	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_admin_url>/${MOD_NAME[$count]}/doku.php?do=login&id=start</item_admin_url>
+	<item_admin_url><![CDATA[/${MOD_NAME[$count]}/doku.php?do=login&id=start]]></item_admin_url>
 	<item_name>$RMOD_NAME_FR</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 </item>
