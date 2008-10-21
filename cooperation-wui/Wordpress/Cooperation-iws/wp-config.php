@@ -6,7 +6,7 @@ define('DB_PASSWORD', 'CIWS_MYSQL_PWD'); // ...and password
 define('DB_HOST', 'localhost');    // 99% chance you won't need to change this value
 define('DB_CHARSET', 'utf8');
 define('DB_COLLATE', '');
-define('WP_SITEURL', 'http://'.$HTTP_SERVER_VARS["SERVER_NAME"].'/cooperation-iws'); define('WP_HOME', 'http://'.$HTTP_SERVER_VARS["SERVER_NAME"].'/cooperation-iws');
+define('WP_SITEURL', 'http://'.$HTTP_SERVER_VARS["SERVER_NAME"].'/Cooperation-iws'); define('WP_HOME', 'http://'.$HTTP_SERVER_VARS["SERVER_NAME"].'/Cooperation-iws');
 // Change each KEY to a different unique phrase.  You won't have to remember the phrases later,
 // so make them long and complicated.  You can visit http://api.wordpress.org/secret-key/1.1/
 // to get keys generated for you, or just make something up.  Each key should have a different phrase.
