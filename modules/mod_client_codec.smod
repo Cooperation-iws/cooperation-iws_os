@@ -12,6 +12,37 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 LIVEUSER=$(cat /tmp/user)
 DEB_DIST=$(cat /tmp/deb_dist)
 
+echo "
+Name: msttcorefonts/baddldir
+Template: msttcorefonts/baddldir
+Owners: msttcorefonts
+
+Name: msttcorefonts/defoma
+Template: msttcorefonts/defoma
+Value: 
+Owners: msttcorefonts
+Flags: seen
+
+Name: msttcorefonts/dldir
+Template: msttcorefonts/dldir
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/dlurl
+Template: msttcorefonts/dlurl
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/http_proxy
+Template: msttcorefonts/http_proxy
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/savedir
+Template: msttcorefonts/savedir
+Value: 
+Owners: msttcorefonts
+" >> /var/cache/debconf/config.dat
 echo "I: install codec"
 wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key add -
 echo "deb http://fr.packages.medibuntu.org/ $DEB_DIST free non-free" >> /etc/apt/sources.list

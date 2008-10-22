@@ -187,6 +187,14 @@ export NOM_MAILSERVER=$NOM_MAILSERVER
 function INSTALL
 {
 DOWNLOAD
+echo "
+Name: postfix/main_mailer_type
+Template: postfix/main_mailer_type
+Value: No configuration
+Owners: postfix
+Flags: seen
+" >> /var/cache/debconf/config.dat
+
 
 cat << EOT > MAILSERVER_db.sql
 create database $NOM_MAILSERVER;
@@ -2841,8 +2849,8 @@ echo "
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
 	<item_url>/admin/$MOD_NAME</item_url>
 	<item_admin_url>/admin/$MOD_NAME</item_admin_url>
-	<item_name>$RMOD_NAME_FR</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 

@@ -2,7 +2,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='OpenXchange6.6.0'
+RMOD_NAME='OpenXchange 6.6.0'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Groupware'
@@ -49,6 +49,9 @@ apt-get remove --assume-yes --force-yes java-gcj-compat
 apt-get remove --assume-yes --force-yes gcj
 
 ln -s / /cow
+
+
+
 
 echo "
 deb http://download.opensuse.org/repositories/server:/OX:/ox6/xUbuntu_8.04/ /

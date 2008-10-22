@@ -108,35 +108,36 @@ tar -xzf fra-eng.tar.gz -C jdictd15/DOC
 echo "
 fra-eng.data=fra-eng.dict.dz
 fra-eng.index=fra-eng.index
-" >> jdictd15/DOC/fra-eng.ini
+" >> jdictd15/DOC/dic.ini
 
 wget $URL_FREE/fra-deu.tar.gz
 tar -xzf fra-deu.tar.gz -C jdictd15/DOC
 echo "
 fra-deu.data=fra-deu.dict.dz
 fra-deu.index=fra-deu.index
-" >> jdictd15/DOC/fra-deu.ini
+" >> jdictd15/DOC/dic.ini
 
 wget $URL_FREE/eng-fra.tar.gz
 tar -xzf eng-fra.tar.gz -C jdictd15/DOC
+mv jdictd15/DOC/bin/eng-fra* jdictd15/DOC
 echo "
 eng-fra.data=eng-fra.dict.dz
 eng-fra.index=eng-fra.index
-" >> jdictd15/DOC/eng-fra.ini
+" >> jdictd15/DOC/dic.ini
 
 wget $URL_FREE/deu-fra.tar.gz
 tar -xzf deu-fra.tar.gz -C jdictd15/DOC
 echo "
 deu-fra.data=deu-fra.dict.dz
 deu-fra.index=deu-fra.index
-" >> jdictd15/DOC/deu-fra.ini
+" >> jdictd15/DOC/dic.ini
 
 wget $URL_FREE/eng-spa.tar.gz
 tar -xzf eng-spa.tar.gz -C jdictd15/DOC
 echo "
 eng-spa.data=eng-spa.dict.dz
 eng-spa.index=eng-spa.index
-" >> jdictd15/DOC/eng-spa.ini
+" >> jdictd15/DOC/dic.ini
 
 }
 
@@ -179,14 +180,15 @@ apt-get install --assume-yes --force-yes sun-java5-bin sun-java5-jre
 mkdir $WWW_DIRECTORY/$MOD_NAME/
 cp -r jdictd15/* $WWW_DIRECTORY/$MOD_NAME/.
 
-nohup java -cp $WWW_DIRECTORY/$MOD_NAME/jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/eng-spa.ini DOC/deu-fra.ini DOC/eng-fra.ini DOC/fra-deu.index DOC/fra-eng.ini &
+cd $WWW_DIRECTORY/$MOD_NAME
+nohup java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini &
 
 
 
 echo "
 #Jdict
-
-nohup java -cp $WWW_DIRECTORY/$MOD_NAME/jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/eng-spa.ini DOC/deu-fra.ini DOC/eng-fra.ini DOC/fra-deu.index DOC/fra-eng.ini &
+cd $WWW_DIRECTORY/$MOD_NAME
+nohup java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini &
 " >> /etc/rc.local
 
 }

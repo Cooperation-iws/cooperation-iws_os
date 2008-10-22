@@ -6,6 +6,10 @@ RMOD_NAME='Search Engine'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Web crawler'
+RMOD_DESCRIPTION_FR="Robot d'indexation web"
+RMOD_VERBOSE="Sphider is a lightweight web spider and search engine written in PHP, using MySQL as its back end database. It is a great tool for adding search functionality to your web site or building your custom search engine. Sphider is small, easy to set up and modify, and is used in thousands of websites across the world."
+RMOD_VERBOSE_FR="Sphider est un petit logiciel de recherche et d'indexation web. C'est un outil intéressant pour ajouter une fonctionnalité de recherche à un site web."
+
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
@@ -144,13 +148,22 @@ function CREATE_WUI
 {
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/admin/$NOM_SPHIDER/admin/admin.php</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
-<item_admin_url>/$MOD_NAME</item_admin_url>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/admin/$NOM_SPHIDER/admin/admin.php</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/$MOD_NAME</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/admin/$NOM_SPHIDER/admin/admin.php</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/$MOD_NAME</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

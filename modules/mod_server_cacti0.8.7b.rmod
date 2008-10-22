@@ -161,20 +161,20 @@ fi
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NOM_CACTI="Cacti"
+MOD_NAME="Cacti"
 else 
 
-NOM_CACTI=$(zenity --entry --text "$MESS_NAME CACTI")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME CACTI")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_CACTI | grep "[^a-zA-Z0-9]") 
+while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
-NOM_CACTI=$(zenity --entry --text "$MESS_NAME CACTI")
+MOD_NAME=$(zenity --entry --text "$MESS_NAME CACTI")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
  
 
 fi
-export NOM_CACTI=$NOM_CACTI
+export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
@@ -194,32 +194,32 @@ apt-get install --assume-yes --force-yes rrdtool snmp snmpd
 
 #Cacti config
 
-echo "*/5 * * * * www-data /usr/bin/php $WWW_DIRECTORY/admin/$NOM_CACTI/poller.php > /dev/null 2>&1" >> /etc/cron.d/cacti
+echo "*/5 * * * * www-data /usr/bin/php $WWW_DIRECTORY/admin/$MOD_NAME/poller.php > /dev/null 2>&1" >> /etc/cron.d/cacti
 sudo chmod +x /etc/cron.d/cacti
 
 #Cacti 
 
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/admin/$NOM_CACTI
-cp -Rf cacti/* $WWW_DIRECTORY/admin/$NOM_CACTI/.
+mkdir $WWW_DIRECTORY/admin/$MOD_NAME
+cp -Rf cacti/* $WWW_DIRECTORY/admin/$MOD_NAME/.
 echo "create database cacti;
 grant all on cacti.* to cacti@localhost identified by '$CACTI_MYSQL_PWD';
 flush privileges;
 " > cacti_db.sql
 $BIN_MYSQL -u root < cacti_db.sql mysql
 rm cacti_db.sql
-chmod -R 777 $WWW_DIRECTORY/admin/$NOM_CACTI/
-chown -R www-data $WWW_DIRECTORY/admin/$NOM_CACTI/
-$BIN_MYSQL -u root < $WWW_DIRECTORY/admin/$NOM_CACTI/cacti.sql cacti
-cat $WWW_DIRECTORY/admin/$NOM_CACTI/include/config.php | sed -i -e 's/database_username = "cactiuser"/database_username = "cacti"/' $WWW_DIRECTORY/admin/$NOM_CACTI/include/config.php
-cat $WWW_DIRECTORY/admin/$NOM_CACTI/include/config.php | sed -i -e "s/database_password = \"cactiuser\"/database_password = \"$CACTI_MYSQL_PWD\"/" $WWW_DIRECTORY/admin/$NOM_CACTI/include/config.php
-#cat $WWW_DIRECTORY/admin/$NOM_CACTI/install/index.php | sed -i -e 's/"\/usr\/local\/sbin"/"\/usr\/local\/sbin", "\/opt\/lampp\/bin", "\/opt\/lampp\/sbin"/' $WWW_DIRECTORY/admin/$NOM_CACTI/install/index.php
-cat $WWW_DIRECTORY/admin/$NOM_CACTI/include/global.php | sed -i -e "s/dirname(__FILE__)/\"\/var\/www\/admin\/$NOM_CACTI\/include\"/g" $WWW_DIRECTORY/admin/$NOM_CACTI/include/global.php
+chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/
+chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/
+$BIN_MYSQL -u root < $WWW_DIRECTORY/admin/$MOD_NAME/cacti.sql cacti
+cat $WWW_DIRECTORY/admin/$MOD_NAME/include/config.php | sed -i -e 's/database_username = "cactiuser"/database_username = "cacti"/' $WWW_DIRECTORY/admin/$MOD_NAME/include/config.php
+cat $WWW_DIRECTORY/admin/$MOD_NAME/include/config.php | sed -i -e "s/database_password = \"cactiuser\"/database_password = \"$CACTI_MYSQL_PWD\"/" $WWW_DIRECTORY/admin/$MOD_NAME/include/config.php
+#cat $WWW_DIRECTORY/admin/$MOD_NAME/install/index.php | sed -i -e 's/"\/usr\/local\/sbin"/"\/usr\/local\/sbin", "\/opt\/lampp\/bin", "\/opt\/lampp\/sbin"/' $WWW_DIRECTORY/admin/$MOD_NAME/install/index.php
+cat $WWW_DIRECTORY/admin/$MOD_NAME/include/global.php | sed -i -e "s/dirname(__FILE__)/\"\/var\/www\/admin\/$MOD_NAME\/include\"/g" $WWW_DIRECTORY/admin/$MOD_NAME/include/global.php
 
 echo "
 #Cacti
-chmod -R 777 $WWW_DIRECTORY/admin/$NOM_CACTI/
-chown -R www-data $WWW_DIRECTORY/admin/$NOM_CACTI/
+chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/
+chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/
 
 " >> /etc/rc.local
 
@@ -253,7 +253,7 @@ echo "
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 
-echo "$RMOD_DESCRIPTION | <a href=\"/admin/$NOM_CACTI\" >$NOM_CACTI</a><br>
+echo "$RMOD_DESCRIPTION | <a href=\"/admin/$MOD_NAME\" >$MOD_NAME</a><br>
 ">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________
@@ -268,12 +268,12 @@ function CREATE_INSTALL_SCRIPT
 
 echo "
 #CACTI
-#rm -r $WWW_DIRECTORY/admin/$NOM_CACTI/rra/*
-rm -r $WWW_DIRECTORY/admin/$NOM_CACTI/log/*
-sudo chown -R www-data $WWW_DIRECTORY/admin/$NOM_CACTI/rra
-sudo chmod -R 777 $WWW_DIRECTORY/admin/$NOM_CACTI/rra
-sudo chown -R www-data $WWW_DIRECTORY/admin/$NOM_CACTI/log
-sudo chmod -R 777 $WWW_DIRECTORY/admin/$NOM_CACTI/log
+#rm -r $WWW_DIRECTORY/admin/$MOD_NAME/rra/*
+rm -r $WWW_DIRECTORY/admin/$MOD_NAME/log/*
+sudo chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/rra
+sudo chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/rra
+sudo chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/log
+sudo chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/log
 " >> $LAMPP_DIRECTORY/config_post_install.sh
 
 }

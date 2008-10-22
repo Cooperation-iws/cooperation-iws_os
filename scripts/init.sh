@@ -47,6 +47,13 @@ LANG_UI="EN"
 fi
 echo $LANG_UI > /tmp/lang-wui
 
+##LICENCE JAVA UBUNTU
+echo "Name: shared/accepted-sun-dlj-v1-1
+Template: shared/accepted-sun-dlj-v1-1
+Value: true
+Owners: sun-java5-bin, sun-java5-jre
+Flags: seen
+" >> /var/cache/debconf/config.dat
 
 
 function ADD_USER()

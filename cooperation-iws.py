@@ -242,6 +242,15 @@ class Reconstructor:
             "on_windowMain_destroy" : self.exitApp }
         self.wTree.signal_autoconnect(dic)
 
+
+
+	# print copyright
+        print " "
+        print self.appName + " -- (c) Cooperation-iws Team, 2008"
+        print "       Version: " + self.appVersion
+        print "        http://cooperation-iws.gensys-net.eu"
+        print " "
+	
         # add command option parser
         parser = optparse.OptionParser()
         parser.add_option("-d", "--debug",
@@ -250,15 +259,70 @@ class Reconstructor:
         parser.add_option("-v", "--version",
                     action="store_true", dest="version", default=False,
                     help="show version and exit")
-        parser.add_option("-m", "--manual-install",
-                    action="store_true", dest="manualinstall", default=False,
-                    help="manually installs all .debs in apt cache before other software")
         parser.add_option("-e", "--experimental",
                     action="store_true", dest="experimental", default=False,
                     help="enable experimental features")
         parser.add_option("-u", "--update",
                     action="store_true", dest="update", default=False,
                     help="automatically update to latest version")
+	parser.add_option("-c", "--commandline",
+                    action="store_true", dest="commandline", default=False,
+                    help="command line option")
+	parser.add_option("-l", "--listmodules",
+                    action="store_true", dest="listmodules", default=False,
+                    help="list all modules")
+	parser.add_option( "--directory",
+                    dest="directory", default="" ,
+                    help="Install directory")
+	parser.add_option( "--createdirectories", action="store_true",
+                    dest="createdirectories", default=False ,
+                    help="Create install directory")
+	parser.add_option( "--isofile", 
+                    dest="isofile", default="" ,
+                    help="Initial Cd image")
+	parser.add_option( "--modulesfile", 
+                    dest="modulesfile", default="" ,
+                    help="Modules list file")
+	parser.add_option( "--artwork", 
+                    dest="artwork", default="" ,
+                    help="Kind of Artwork")
+	parser.add_option( "--cms", 
+                    dest="cms", default="Wordpress" ,
+                    help="Kind of CMS")
+	parser.add_option( "--aufs", action="store_true",
+                    dest="aufs", default=False ,
+                    help="Use aufs")
+	parser.add_option( "--webappmirror", 
+                    dest="webappmirror", default="http://download.berlios.de/ciws" ,
+                    help="Web applictions mirror url")
+	parser.add_option( "--debmirror", 
+                    dest="debmirror", default="ftp://ftp.proxad.net/mirrors/ftp.ubuntu.com/ubuntu/" ,
+                    help="Debian packages mirror url")
+	parser.add_option( "--custom", action="store_false",
+                    dest="custom", default=False ,
+                    help="Custom install")
+	parser.add_option( "--username", 
+                    dest="username", default="admin" ,
+                    help="User Name")
+	parser.add_option( "--userfullname", 
+                    dest="userfullname", default="admin ciws" ,
+                    help="User Full Name")
+	parser.add_option( "--password", 
+                    dest="password", default="" ,
+                    help="User Admin Password")
+	parser.add_option( "--host", 
+                    dest="host", default="ciws-host" ,
+                    help="Host Name")
+	parser.add_option( "--keyblang", 
+                    dest="keyblang", default="" ,
+                    help="Keyboard Language")
+	parser.add_option( "--ostype", 
+                    dest="ostype", default="Server" ,
+                    help="Os Type (Server or Client)")
+	parser.add_option( "--disautologin", action="store_true",
+                    dest="disautologin", default=False ,
+                    help="Use aufs")
+	
         (options, args) = parser.parse_args()
 
         if options.debug == True:
@@ -276,92 +340,137 @@ class Reconstructor:
             print " "
             #gtk.main_quit()
             sys.exit(0)
-        if options.manualinstall == True:
-            print _('INFO: Manually Installing .deb archives in cache...')
-            self.manualInstall = True
         if options.experimental == True:
             print _('INFO: Enabling Experimental Features...')
             self.enableExperimental = True
         if options.update == True:
             print _('INFO: Updating...')
             self.update()
+	if options.commandline == True:
+            print _('INFO: Text only version...')
+            self.commandLine = True
+	    
+	    if options.listmodules == True:
+		self.listModules()
+		exit(0)
+	    self.customDir = options.directory
+	    if options.createdirectories == True:
+		self.createRemasterDir = True
+           	self.createCustomRoot = True
+	    self.isoFilename = options.isofile     
+	    if options.modulesfile == "":
+		print _("You need to specify a Modules list file")
+		exit(0)
+	    self.moduleFilename = options.modulesfile  
+	    self.comboboxCiwsArtwork = options.artwork       
+  	    self.comboboxCiwsCms = options.cms
+	    self.checkbuttonAufs = options.aufs
+	    self.checkbuttonLocalMirror = True
+	    self.entryLocalMirror = options.webappmirror
+	    self.comboboxWebAppMirrors = ""
+	    self.radiobuttonDefaultInstall = True
+	    self.user = options.username
+	    self.password = options.password
+	    self.userFull = options.userfullname
+	    self.host = options.host
+	    self.checkbuttonDisableAutologin = options.disautologin
+	    self.debMirror = options.debmirror
+            self.keyLang = options.keyblang
+	    self.ciwsOsType = options.ostype
+	else:
+	    self.commandLine = False
 
-        # print copyright
-        print " "
-        print self.appName + " -- (c) Cooperation-iws Team, 2008"
-        print "       Version: " + self.appVersion
-        print "        http://cooperation-iws.gensys-net.eu"
-        print " "
 
-        # set icons & logo
-        self.wTree.get_widget("windowMain").set_icon_from_file(self.iconFile)
-        self.wTree.get_widget("imageLogo").set_from_file(self.logoFile)
-	self.wTree.get_widget("imageLogo2").set_from_file(self.logoFile)
-        self.wTree.get_widget("imageLogo3").set_from_file(self.logoFile)
-        imgTerminal = gtk.Image()
-        imgTerminal.set_from_file(self.terminalIconFile)
-        self.wTree.get_widget("buttonCustomizeLaunchTerminal").set_image(imgTerminal)
-	imgFirefox = gtk.Image()
-        imgFirefox.set_from_file(self.firefoxIconFile)
-        self.wTree.get_widget("buttonCustomizeLaunchFirefox").set_image(imgFirefox)
-        imgPostInstall = gtk.Image()
-        imgPostInstall.set_from_file(self.postInstallIconFile)
-        self.wTree.get_widget("buttonCustomizeLaunchPostInstall").set_image(imgPostInstall)
-               
-	imgUpdate = gtk.Image()
-        imgUpdate.set_from_file(self.updateIconFile)
-        #self.wTree.get_widget("buttonCheckUpdates").set_image(imgUpdate)
-        imgModUpdate = gtk.Image()
-        imgModUpdate.set_from_file(self.updateIconFile)
-        #self.wTree.get_widget("buttonModulesUpdateModule").set_image(imgModUpdate)
 
-        # check for existing mount dir
-        if os.path.exists(self.mountDir) == False:
-            print _('INFO: Creating mount directory...')
-            os.makedirs(self.mountDir)
+	if os.path.exists(self.mountDir) == False:
+		    print _('INFO: Creating mount directory...')
+		    os.makedirs(self.mountDir)
 
-        # set app title
-        if self.devInProgress:
-            self.wTree.get_widget("windowMain").set_title(self.appName + self.codeName + "  Build " + self.devRevision)
-        else:
-            self.wTree.get_widget("windowMain").set_title(self.appName)
+        self.commandLineGui()
 
-        # check dependencies
-        self.checkDependencies()
 
-        # set version
-        self.wTree.get_widget("labelVersion").set_text('version ' + self.appVersion)
+	if self.commandLine == False: 
+		# set icons & logo
+		self.wTree.get_widget("windowMain").set_icon_from_file(self.iconFile)
+		self.wTree.get_widget("imageLogo").set_from_file(self.logoFile)
+		self.wTree.get_widget("imageLogo2").set_from_file(self.logoFile)
+		self.wTree.get_widget("imageLogo3").set_from_file(self.logoFile)
+		imgTerminal = gtk.Image()
+		imgTerminal.set_from_file(self.terminalIconFile)
+		self.wTree.get_widget("buttonCustomizeLaunchTerminal").set_image(imgTerminal)
+		imgFirefox = gtk.Image()
+		imgFirefox.set_from_file(self.firefoxIconFile)
+		self.wTree.get_widget("buttonCustomizeLaunchFirefox").set_image(imgFirefox)
+		imgPostInstall = gtk.Image()
+		imgPostInstall.set_from_file(self.postInstallIconFile)
+		self.wTree.get_widget("buttonCustomizeLaunchPostInstall").set_image(imgPostInstall)
+		       
+		imgUpdate = gtk.Image()
+		imgUpdate.set_from_file(self.updateIconFile)
+		#self.wTree.get_widget("buttonCheckUpdates").set_image(imgUpdate)
+		imgModUpdate = gtk.Image()
+		imgModUpdate.set_from_file(self.updateIconFile)
+		#self.wTree.get_widget("buttonModulesUpdateModule").set_image(imgModUpdate)
 
-        # hide back button initially
-        self.wTree.get_widget("buttonBack").hide()
-        # set default working directory path
-        self.wTree.get_widget("entryWorkingDir").set_text(os.path.join(os.environ['HOME'], "reconstructor"))
-        self.wTree.get_widget("entryWorkingDir2").set_text(os.path.join(os.environ['HOME'], "reconstructor"))
-        self.wTree.get_widget("entryDebianLiveWorkingDir").set_text(os.path.join(os.environ['HOME'], "reconstructor"))
-        # set default iso filenames
-        
-        self.wTree.get_widget("entryAltBuildIsoFilename").set_text(os.path.join(os.environ['HOME'], "ubuntu-custom-alt.iso"))
-        # set default descriptions
-        cdDesc = _('Ubuntu Custom')
-        self.wTree.get_widget("entryLiveCdDescription").set_text(cdDesc)
-        self.wTree.get_widget("entryBuildAltCdDescription").set_text(cdDesc)
-        # set default cd architectures
-        self.wTree.get_widget("comboboxLiveCdArch").set_active(0)
-        self.wTree.get_widget("comboboxAltBuildArch").set_active(0)
-	   # set default Debian Live architecture
-	self.wTree.get_widget("comboboxDebianLiveType").set_active(3)
-	self.wTree.get_widget("comboboxDebianLiveReleaseType").set_active(1)
-	self.wTree.get_widget("comboboxDebianLiveMirrors").set_active(0)
-        self.wTree.get_widget("comboboxUbuntuMirrors").set_active(0)
-        self.wTree.get_widget("comboboxDebianLiveMirrors1").set_active(0)
-        self.wTree.get_widget("comboboxLiveCDKeybLang").set_active(0)
-        self.wTree.get_widget("comboboxLiveCDKeybLang1").set_active(0)
-        self.wTree.get_widget("comboboxWebAppMirrors").set_active(1)
-        self.wTree.get_widget("comboboxCiwsOs").set_active(0)
-        self.wTree.get_widget("comboboxCiwsArtwork").set_active(0)  
-        self.wTree.get_widget("comboboxCiwsCms").set_active(1)  
-       
-       
+		# check for existing mount dir
+		
+
+		# set app title
+		if self.devInProgress:
+		    self.wTree.get_widget("windowMain").set_title(self.appName + self.codeName + "  Build " + self.devRevision)
+		else:
+		    self.wTree.get_widget("windowMain").set_title(self.appName)
+
+		# check dependencies
+		self.checkDependencies()
+
+		# set version
+		self.wTree.get_widget("labelVersion").set_text('version ' + self.appVersion)
+
+		# hide back button initially
+		self.wTree.get_widget("buttonBack").hide()
+		# set default working directory path
+		self.wTree.get_widget("entryWorkingDir").set_text(os.path.join(os.environ['HOME'], "reconstructor"))
+		self.wTree.get_widget("entryWorkingDir2").set_text(os.path.join(os.environ['HOME'], "reconstructor"))
+		self.wTree.get_widget("entryDebianLiveWorkingDir").set_text(os.path.join(os.environ['HOME'], "reconstructor"))
+		# set default iso filenames
+		
+		self.wTree.get_widget("entryAltBuildIsoFilename").set_text(os.path.join(os.environ['HOME'], "ubuntu-custom-alt.iso"))
+		# set default descriptions
+		cdDesc = _('Ubuntu Custom')
+		self.wTree.get_widget("entryLiveCdDescription").set_text(cdDesc)
+		self.wTree.get_widget("entryBuildAltCdDescription").set_text(cdDesc)
+		# set default cd architectures
+		self.wTree.get_widget("comboboxLiveCdArch").set_active(0)
+		self.wTree.get_widget("comboboxAltBuildArch").set_active(0)
+		   # set default Debian Live architecture
+		self.wTree.get_widget("comboboxDebianLiveType").set_active(3)
+		self.wTree.get_widget("comboboxDebianLiveReleaseType").set_active(1)
+		self.wTree.get_widget("comboboxDebianLiveMirrors").set_active(0)
+		self.wTree.get_widget("comboboxUbuntuMirrors").set_active(0)
+		self.wTree.get_widget("comboboxDebianLiveMirrors1").set_active(0)
+		self.wTree.get_widget("comboboxLiveCDKeybLang").set_active(0)
+		self.wTree.get_widget("comboboxLiveCDKeybLang1").set_active(0)
+		self.wTree.get_widget("comboboxWebAppMirrors").set_active(1)
+		self.wTree.get_widget("comboboxCiwsOs").set_active(0)
+		self.wTree.get_widget("comboboxCiwsArtwork").set_active(0)  
+		self.wTree.get_widget("comboboxCiwsCms").set_active(1)  
+	       
+    
+    def commandLineGui(self):
+	self.checkDependencies()
+	self.saveSetupInfo()
+ 	if self.checkCustomDir() == True:
+                if self.checkSetup() == True:
+                    if self.checkWorkingDir() == True:
+           		self.setupWorkingDirectory()
+		self.checkLiveCdVersion()
+		self.cmdLoadModules()
+		self.setLiveCdInfo(username=self.user, userFullname=self.userFull, userPassword=self.password, hostname=self.host)
+		self.customize()
+	print _('Proceeding to customization...')
+	
+	exit(0)
 
 
     # Check for Application Dependencies
@@ -423,43 +532,48 @@ class Reconstructor:
         if dependList != '' or wgetlist != '':
             print _('\nThe following dependencies are not met: ')
             print dependList
-            print _('Please install the dependencies and restart reconstructor.')
-            # show warning dialog
-            warnDlg = gtk.Dialog(title=self.appName, parent=None, flags=0, buttons=(gtk.STOCK_NO, gtk.RESPONSE_CANCEL, gtk.STOCK_YES, gtk.RESPONSE_OK))
-            warnDlg.set_icon_from_file(self.iconFile)
-            warnDlg.vbox.set_spacing(10)
-            labelSpc = gtk.Label(" ")
-            warnDlg.vbox.pack_start(labelSpc)
-            labelSpc.show()
-            lblText = _('  <b>Reconstructor may not work correctly.</b>\nThe following dependencies are not met: ')
-            lbl = gtk.Label(lblText)
-            lbl.set_use_markup(True)
-	    if dependList != '' :           
-		lblInfo = gtk.Label(dependList)
-            	lblFixText = _('Install the dependencies and restart reconstructor?')
-            if wgetlist != '':
-		lblInfo = gtk.Label(wgetlist)
-            	lblFixText = _('You need to install livusb manually, some functionnality may not work, continue?')
-	    lblFix = gtk.Label(lblFixText)
-            warnDlg.vbox.pack_start(lbl)
-            warnDlg.vbox.pack_start(lblInfo)
-            warnDlg.vbox.pack_start(lblFix)
-            lbl.show()
-            lblInfo.show()
-            lblFix.show()
-            #warnDlg.show()
-            response = warnDlg.run()
-            if response == gtk.RESPONSE_OK and dependList != '' :
-                warnDlg.destroy()
-                # use apt to install
-                #print 'apt-get install -y ' + dependList.replace('\n', ' ')
-                installTxt = _('Installing dependencies: ')
-                print installTxt + dependList.replace('\n', ' ')
-                os.popen('apt-get install -y ' + dependList.replace('\n', ' '))
-		#sys.exit(0)
-            else:
-                warnDlg.destroy()
-
+            print _('Please install the dependencies.')
+            if self.commandLine == False: 
+		    # show warning dialog
+		    
+		    warnDlg = gtk.Dialog(title=self.appName, parent=None, flags=0, buttons=(gtk.STOCK_NO, gtk.RESPONSE_CANCEL, gtk.STOCK_YES, gtk.RESPONSE_OK))
+		    warnDlg.set_icon_from_file(self.iconFile)
+		    warnDlg.vbox.set_spacing(10)
+		    labelSpc = gtk.Label(" ")
+		    warnDlg.vbox.pack_start(labelSpc)
+		    labelSpc.show()
+		    lblText = _('  <b>Reconstructor may not work correctly.</b>\nThe following dependencies are not met: ')
+		    lbl = gtk.Label(lblText)
+		    lbl.set_use_markup(True)
+		    if dependList != '' :           
+			lblInfo = gtk.Label(dependList)
+		    	lblFixText = _('Install the dependencies and restart reconstructor?')
+		    if wgetlist != '':
+			lblInfo = gtk.Label(wgetlist)
+		    	lblFixText = _('You need to install livusb manually, some functionnality may not work, continue?')
+		    lblFix = gtk.Label(lblFixText)
+		    warnDlg.vbox.pack_start(lbl)
+		    warnDlg.vbox.pack_start(lblInfo)
+		    warnDlg.vbox.pack_start(lblFix)
+		    lbl.show()
+		    lblInfo.show()
+		    lblFix.show()
+		    #warnDlg.show()
+		    response = warnDlg.run()
+		    if response == gtk.RESPONSE_OK and dependList != '' :
+		        warnDlg.destroy()
+		        # use apt to install
+		        #print 'apt-get install -y ' + dependList.replace('\n', ' ')
+		        installTxt = _('Installing dependencies: ')
+		        print installTxt + dependList.replace('\n', ' ')
+		        os.popen('apt-get install -y ' + dependList.replace('\n', ' '))
+			#sys.exit(0)
+		    else:
+		        warnDlg.destroy()
+	    else:
+		    installTxt = _('Installing dependencies: ')
+		    print installTxt + dependList.replace('\n', ' ')
+		    os.popen('apt-get install -y ' + dependList.replace('\n', ' '))
         else:
             print _('Ok.')
 
@@ -516,7 +630,8 @@ class Reconstructor:
 
     # Handle Module Properties
     def getModuleProperties(self, moduleName):
-        print _('Loading module properties...')
+	if self.commandLine == False:         
+		print _('Loading module properties...')
 
         fMod = file(os.path.join(self.moduleDir, moduleName), 'r')
 
@@ -758,7 +873,99 @@ class Reconstructor:
                         view.show()
                         # expand Software section
                         view.expand_to_path('0')
-                        self.setDefaultCursor()
+                        self.setDefaultCursor() 
+
+    def listModules(self):
+	print _('Listing modules...')
+        print " \033[1m Module Name \033[0m\n"
+	print "Module file name | Description | Author | Version | Require Apache | Run in chroot"
+                        
+        # load modules into the treestore
+        for root, dirs, files in os.walk(self.moduleDir):
+		count = 1
+                for f in files:
+                    r, ext = os.path.splitext(f)
+                    if ext == '.rmod' or ext == '.smod' or ext == '.omod':
+                        #print 'Module: ' + f.replace('.?mod', '') + ' found...'
+
+                        modPath = os.path.join(self.moduleDir, f)
+
+                        # Refactoring! triplem
+                        modProps = self.getModuleProperties(f)
+                        modSubCategory = modProps[self.modSubCategoryKey]
+
+                        if self.modules.has_key(modProps[self.modNameKey]):
+                            print "The module is already present"
+
+                        self.modules[modProps[self.modNameKey]] = modProps
+
+                        # load into self.treeModel
+                        #iter = self.treeModel.insert_before(iterCatOther, None)
+			print "\033[1m "+ str(count) + "| "+ str(modProps[self.modNameKey]) + "\033[0m\n"
+                        print str(os.path.basename(modPath))  + " | " +str(modProps[self.modDescriptionKey]) + " | "  +str(modProps[self.modAuthorKey]) + " | "+ str(modProps[self.modVersionKey]) + " | "  + str(bool(modProps[self.modReqApache]))+ " | " +str(bool(modProps[self.modRunInChrootKey]))+ "\n"
+						
+                       	count +=1
+			
+    def cmdLoadModules(self):
+	print _('Listing choosen modules...\n')
+        print " \033[1m Module Name \033[0m\n"
+	print "Module file name | Description | Author | Version | Require Apache | Run in chroot\n"
+        self.choosenModule = []            
+        # load modules into the treestore
+        for root, dirs, files in os.walk(self.moduleDir):
+		count = 0
+                for f in files:
+                    r, ext = os.path.splitext(f)
+                    if ext == '.rmod' or ext == '.smod' or ext == '.omod':
+                        #print 'Module: ' + f.replace('.?mod', '') + ' found...'
+
+                        modPath = os.path.join(self.moduleDir, f)
+
+                        # Refactoring! triplem
+                        modProps = self.getModuleProperties(f)
+                        modSubCategory = modProps[self.modSubCategoryKey]
+
+                        if self.modules.has_key(modProps[self.modNameKey]):
+                            print "The module is already present"
+
+                        self.modules[modProps[self.modNameKey]] = modProps
+
+                        # load into self.treeModel
+                        #iter = self.treeModel.insert_before(iterCatOther, None)
+			if commands.getoutput("cat "+self.moduleFilename+" | grep \""+str(modProps[self.modNameKey])+"\"") != "" :
+				
+				moduleProperties = []
+				moduleProperties.append(modProps[self.modNameKey]) 
+				moduleProperties.append(modProps[self.modReqApache]) 
+				moduleProperties.append(modPath) 
+				moduleProperties.append(bool(modProps[self.modRunInChrootKey])) 
+				self.choosenModule.append(moduleProperties)
+				print "\033[1m "+ str(count) + "| "+ str(self.choosenModule[count][0]) + "\033[0m\n"
+                        	print str(os.path.basename(modPath))  + " | " +str(modProps[self.modDescriptionKey]) + " | "  +str(modProps[self.modAuthorKey]) + " | "+ str(modProps[self.modVersionKey]) + " | "  + str(bool(modProps[self.modReqApache]))+ " | " +str(bool(modProps[self.modRunInChrootKey]))+ "\n"
+				self.cmdCopyExecuteModule(moduleProperties)		
+                       		count +=1
+				self.execModulesEnabled =True
+					
+				if bool(modProps[self.modReqApache]) == True:       
+					self.ReqApache="A"
+					fReqApache=open(os.path.join(self.customDir, "chroot/tmp/apache"), 'w')
+			    		fReqApache.write(self.ReqApache)
+			    		fReqApache.close()
+			    
+				if modPath != None:
+				   	# check for execute
+				  	
+					#print modName, modRunInChroot
+					if bool(modProps[self.modRunInChrootKey]) == True:
+					    #print modName + ' - Running in chroot...'
+					    os.popen('cp -R \"' + modPath + '\" \"' + os.path.join(self.customDir, "chroot/tmp/") + '\"')
+					    os.popen('chmod a+x \"' + os.path.join(self.customDir, "chroot/tmp/") + os.path.basename(modPath) + '\"')
+
+					else:
+					    print modName + ' - Running in custom directory...'
+					    os.popen('cp -R \"' + modPath + '\" \"' + os.path.join(self.customDir, "scripts/") + '\"')
+					    os.popen('chmod a+x \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(modPath) + '\"')
+
 
     def addModule(self, modulePath, updating=False):
         try:
@@ -1074,33 +1281,65 @@ class Reconstructor:
             pass
 
     def copyExecuteModule(self, model, path, iter):
-        modName = model.get_value(iter, self.moduleColumnName)
-        modExecute = model.get_value(iter, self.moduleColumnExecute)
-        modPath = model.get_value(iter, self.moduleColumnPath)
-        modRunInChroot = model.get_value(iter, self.moduleColumnRunInChroot)
-        modReqApache = model.get_value(iter, self.moduleColumnReqApache)
-        # check for module and skip category
+     
+	modName = model.get_value(iter, self.moduleColumnName)
+	modExecute = model.get_value(iter, self.moduleColumnExecute)
+	modPath = model.get_value(iter, self.moduleColumnPath)
+	modRunInChroot = model.get_value(iter, self.moduleColumnRunInChroot)
+	modReqApache = model.get_value(iter, self.moduleColumnReqApache)
+
+	# check for module and skip category
  	if modExecute == True:	
 		if modReqApache == True:       
-                	self.ReqApache="A"
+	        	self.ReqApache="A"
 			fReqApache=open(os.path.join(self.customDir, "chroot/tmp/apache"), 'w')
-            		fReqApache.write(self.ReqApache)
-            		fReqApache.close()
+	    		fReqApache.write(self.ReqApache)
+	    		fReqApache.close()
 	    
 	if modPath != None:
-            # check for execute
-            if modExecute == True:
-                #print modName, modRunInChroot
-                if modRunInChroot == True:
-                    #print modName + ' - Running in chroot...'
-                    os.popen('cp -R \"' + modPath + '\" \"' + os.path.join(self.customDir, "chroot/tmp/") + '\"')
-                    os.popen('chmod a+x \"' + os.path.join(self.customDir, "chroot/tmp/") + os.path.basename(modPath) + '\"')
+	    # check for execute
+	    if modExecute == True:
+	        #print modName, modRunInChroot
+	        if modRunInChroot == True:
+	            #print modName + ' - Running in chroot...'
+	            os.popen('cp -R \"' + modPath + '\" \"' + os.path.join(self.customDir, "chroot/tmp/") + '\"')
+	            os.popen('chmod a+x \"' + os.path.join(self.customDir, "chroot/tmp/") + os.path.basename(modPath) + '\"')
 
-                else:
-                    print modName + ' - Running in custom directory...'
-                    os.popen('cp -R \"' + modPath + '\" \"' + os.path.join(self.customDir, "scripts/") + '\"')
-                    os.popen('chmod a+x \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(modPath) + '\"')
+	        else:
+	            print modName + ' - Running in custom directory...'
+	            os.popen('cp -R \"' + modPath + '\" \"' + os.path.join(self.customDir, "scripts/") + '\"')
+	            os.popen('chmod a+x \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(modPath) + '\"')
 
+    def cmdCopyExecuteModule(self, model):
+     
+	modName = model[0]
+	modExecute = True
+	modPath = model[2]
+	modRunInChroot = model[3]
+	modReqApache = model[1]
+
+	# check for module and skip category
+ 	if modExecute == True:	
+		if modReqApache == True:       
+	        	self.ReqApache="A"
+			fReqApache=open(os.path.join(self.customDir, "chroot/tmp/apache"), 'w')
+	    		fReqApache.write(self.ReqApache)
+	    		fReqApache.close()
+	    
+	if modPath != None:
+	    # check for execute
+	    if modExecute == True:
+	        #print modName, modRunInChroot
+	        if modRunInChroot == True:
+	            #print modName + ' - Running in chroot...'
+	            os.popen('cp -R \"' + modPath + '\" \"' + os.path.join(self.customDir, "chroot/tmp/") + '\"')
+	            os.popen('chmod a+x \"' + os.path.join(self.customDir, "chroot/tmp/") + os.path.basename(modPath) + '\"')
+
+	        else:
+	            print modName + ' - Running in custom directory...'
+	            os.popen('cp -R \"' + modPath + '\" \"' + os.path.join(self.customDir, "scripts/") + '\"')
+	            os.popen('chmod a+x \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(modPath) + '\"')
+	
    
 
     def checkExecModuleEnabled(self, model, path, iter):
@@ -1249,11 +1488,12 @@ class Reconstructor:
         remasterExists = None
         rootExists = None
         initrdExists = None
-        if os.path.exists(os.path.join(self.customDir, "remaster")) == False:
-            if self.wTree.get_widget("checkbuttonCreateRemaster").get_active() == False:
+	
+	if os.path.exists(os.path.join(self.customDir, "remaster")) == False:
+            if self.createRemasterDir == False:
                 remasterExists = False
         if os.path.exists(os.path.join(self.customDir, "chroot")) == False:
-            if self.wTree.get_widget("checkbuttonCreateRoot").get_active() == False:
+            if self.createCustomRoot == False:
                 rootExists = False
 		
 		
@@ -1265,45 +1505,55 @@ class Reconstructor:
             workingDirOk = False
         
         if workingDirOk == False:
-            warnDlg = gtk.Dialog(title=self.appName, parent=None, flags=0, buttons=(gtk.STOCK_OK, gtk.RESPONSE_OK))
-            warnDlg.set_icon_from_file(self.iconFile)
-            warnDlg.vbox.set_spacing(10)
-            labelSpc = gtk.Label(" ")
-            warnDlg.vbox.pack_start(labelSpc)
-            labelSpc.show()
-            lblWarningText = _("  <b>Please fix the errors below before continuing.</b>   ")
-            lblRemasterText = _("  There is no remaster directory.  Please select create remaster option.  ")
-            lblRootText = _("  There is no root directory.  Please select create root option.  ")
-            lblInitrdText = _("  There is no initrd directory.  Please select create initrd option.  ")
-            labelWarning = gtk.Label(lblWarningText)
-            labelRemaster = gtk.Label(lblRemasterText)
-            labelRoot = gtk.Label(lblRootText)
-            labelInitrd = gtk.Label(lblInitrdText)
+		if self.commandLine == False:
+		    warnDlg = gtk.Dialog(title=self.appName, parent=None, flags=0, buttons=(gtk.STOCK_OK, gtk.RESPONSE_OK))
+		    warnDlg.set_icon_from_file(self.iconFile)
+		    warnDlg.vbox.set_spacing(10)
+		    labelSpc = gtk.Label(" ")
+		    warnDlg.vbox.pack_start(labelSpc)
+		    labelSpc.show()
+		    lblWarningText = _("  <b>Please fix the errors below before continuing.</b>   ")
+		    lblRemasterText = _("  There is no remaster directory.  Please select create remaster option.  ")
+		    lblRootText = _("  There is no root directory.  Please select create root option.  ")
+		    lblInitrdText = _("  There is no initrd directory.  Please select create initrd option.  ")
+		    labelWarning = gtk.Label(lblWarningText)
+		    labelRemaster = gtk.Label(lblRemasterText)
+		    labelRoot = gtk.Label(lblRootText)
+		    labelInitrd = gtk.Label(lblInitrdText)
 
-            labelWarning.set_use_markup(True)
-            labelRemaster.set_use_markup(True)
-            labelRoot.set_use_markup(True)
-            labelInitrd.set_use_markup(True)
-            warnDlg.vbox.pack_start(labelWarning)
-            warnDlg.vbox.pack_start(labelRemaster)
-            warnDlg.vbox.pack_start(labelRoot)
-            warnDlg.vbox.pack_start(labelInitrd)
-            labelWarning.show()
+		    labelWarning.set_use_markup(True)
+		    labelRemaster.set_use_markup(True)
+		    labelRoot.set_use_markup(True)
+		    labelInitrd.set_use_markup(True)
+		    warnDlg.vbox.pack_start(labelWarning)
+		    warnDlg.vbox.pack_start(labelRemaster)
+		    warnDlg.vbox.pack_start(labelRoot)
+		    warnDlg.vbox.pack_start(labelInitrd)
+		    labelWarning.show()
 
-            if remasterExists == False:
-                labelRemaster.show()
-            if rootExists == False:
-                labelRoot.show()
-            if initrdExists == False:
-                labelInitrd.show()
+		    if remasterExists == False:
+		        labelRemaster.show()
+		    if rootExists == False:
+		        labelRoot.show()
+		    if initrdExists == False:
+		        labelInitrd.show()
 
-            #warnDlg.show()
-            response = warnDlg.run()
-            # HACK: return False no matter what
-            if response == gtk.RESPONSE_OK:
-                warnDlg.destroy()
-            else:
-                warnDlg.destroy()
+		    #warnDlg.show()
+		    response = warnDlg.run()
+		    # HACK: return False no matter what
+		    if response == gtk.RESPONSE_OK:
+		        warnDlg.destroy()
+		    else:
+		        warnDlg.destroy()
+		else:
+		    lblWarningText = _("  <b>Please fix the errors below before continuing.</b>   \n")
+		    lblRemasterText = _("  There is no remaster directory.  Please select create remaster option.  ")
+		    lblRootText = _("  There is no root directory.  Please select create root option.  ")
+		    print lblWarningText
+		    if remasterExists == False:
+		        print lblRemasterText
+		    if rootExists == False:
+		        print lblRootText
 	if workingDirOk== True :
 		 self.checkLiveCdVersion()
         return workingDirOk
@@ -1984,7 +2234,7 @@ class Reconstructor:
 
                 
             
-	    if self.wTree.get_widget("checkbuttonDisableAutologin").get_active() == True:
+	    if self.checkbuttonDisableAutologin == True:
 		sed = 'sed -i \'34s/true/false/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath + "-bottom/15autologin") 
 		cmd = commands.getoutput(sed)
  	        #print ('Sed 1 autologin:\n ' + sed + '\n' + cmd)
@@ -2052,7 +2302,7 @@ class Reconstructor:
 		cmd = commands.getoutput(sed)
                 
             
-	    if self.wTree.get_widget("checkbuttonDisableAutologin").get_active() == True:
+	    if self.checkbuttonDisableAutologin == True:
 		sed = 'sed -i \'s/true/false/g\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath + "-bottom/15autologin") 
 		cmd = commands.getoutput(sed)
  	 	
@@ -2447,7 +2697,90 @@ class Reconstructor:
         if response == gtk.RESPONSE_OK:
             warnDlg.destroy()
             self.setBusyCursor()
-            gobject.idle_add(self.customize)
+            self.user = 'ubuntu'
+            # check user entered password first, so user doesn't have to wait
+            if self.checkUserPassword() == True : 
+		if self.wTree.get_widget("entryLiveCdUsername").get_text() == '' or self.checkUserName() == True:
+		    # set user info
+		    self.user = self.wTree.get_widget("entryLiveCdUsername").get_text()
+		    self.userFull = self.wTree.get_widget("entryLiveCdUserFullname").get_text()
+		    self.password = self.wTree.get_widget("entryLiveCdUserPassword").get_text()
+		    self.host = self.wTree.get_widget("entryLiveCdHostname").get_text()
+		    if self.casperPath == 'casper' and self.debDist != 'etch':
+			self.debMirror= self.wTree.get_widget("comboboxUbuntuMirrors").get_active_text() 
+		    else:
+			self.debMirror= self.wTree.get_widget("comboboxDebianLiveMirrors1").get_active_text()
+		    	self.keyLang = self.wTree.get_widget("comboboxLiveCDKeybLang1").get_active_text()
+		    # set live cd info
+		    self.checkbuttonDisableAutologin = self.wTree.get_widget("checkbuttonDisableAutologin").get_active()
+		    self.setLiveCdInfo(username=self.user, userFullname=self.userFull, userPassword=self.password, hostname=self.host)
+	 	    self.ciwsOsType = self.wTree.get_widget("comboboxCiwsOs").get_active_text() 
+		else:
+		    print _('Username do not match.')
+		    # show warning dlg
+		    warnDlg = gtk.Dialog(title=self.appName, parent=None, flags=0, buttons=(gtk.STOCK_OK, gtk.RESPONSE_OK))
+		    warnDlg.set_icon_from_file(self.iconFile)
+		    warnDlg.vbox.set_spacing(10)
+		    labelSpc = gtk.Label(" ")
+		    warnDlg.vbox.pack_start(labelSpc)
+		    labelSpc.show()
+		    lblBuildText = _("  Either username count less than 6 characters, either username count a forbidden character [0-9a-z_-*.]")
+		    lblBuildInfo = _("     Please make sure passwords or Username match and try again...     ")
+		    label = gtk.Label(lblBuildText)
+		    lblInfo = gtk.Label(lblBuildInfo)
+		    label.set_use_markup(True)
+		    warnDlg.vbox.pack_start(label)
+		    warnDlg.vbox.pack_start(lblInfo)
+		    lblInfo.show()
+		    label.show()
+		    response = warnDlg.run()
+		    # destroy dialog no matter what...
+		    if response == gtk.RESPONSE_OK:
+		        warnDlg.destroy()
+		    else:
+		        warnDlg.destroy()
+		    # show live cd customization page
+		    self.wTree.get_widget("notebookCustomize").set_current_page(-1)
+		    # return - don't continue until error fixed
+		    return 
+            else:
+                print _('User passwords do not match.')
+                # show warning dlg
+                warnDlg = gtk.Dialog(title=self.appName, parent=None, flags=0, buttons=(gtk.STOCK_OK, gtk.RESPONSE_OK))
+                warnDlg.set_icon_from_file(self.iconFile)
+                warnDlg.vbox.set_spacing(10)
+                labelSpc = gtk.Label(" ")
+                warnDlg.vbox.pack_start(labelSpc)
+                labelSpc.show()
+                lblBuildText = _("  Either Passwords do not match,  ")
+                lblBuildInfo = _("     Please make sure passwords or Username match and try again...     ")
+                label = gtk.Label(lblBuildText)
+                lblInfo = gtk.Label(lblBuildInfo)
+                label.set_use_markup(True)
+            	warnDlg.vbox.pack_start(label)
+            	warnDlg.vbox.pack_start(lblInfo)
+            	lblInfo.show()
+            	label.show()
+            	response = warnDlg.run()
+            	# destroy dialog no matter what...
+            	if response == gtk.RESPONSE_OK:
+                	warnDlg.destroy()
+            	else:
+                	warnDlg.destroy()
+            	# show live cd customization page
+            	self.wTree.get_widget("notebookCustomize").set_current_page(-1)
+            	# return - don't continue until error fixed
+            	return
+            self.treeModel.foreach(self.copyExecuteModule)
+	    self.comboboxCiwsArtwork = self.wTree.get_widget("comboboxCiwsArtwork").get_active_text()
+	    self.comboboxCiwsCms = self.wTree.get_widget("comboboxCiwsCms").get_active_text()
+	    self.checkbuttonAufs = self.wTree.get_widget("checkbuttonAufs").get_active()
+	    self.comboboxWebAppMirrors = self.wTree.get_widget("comboboxWebAppMirrors").get_active_text()
+	    self.checkbuttonLocalMirror = self.wTree.get_widget("checkbuttonLocalMirror").get_active()
+	    self.entryLocalMirror = self.wTree.get_widget("entryLocalMirror").get_text()
+	    self.radiobuttonDefaultInstall = self.wTree.get_widget("radiobuttonDefaultInstall").get_active()
+
+	    gobject.idle_add(self.customize)
             gobject.idle_add(self.calculateIsoSize)
         else:
             warnDlg.destroy()
@@ -2606,17 +2939,20 @@ class Reconstructor:
     def saveSetupInfo(self):
         # do setup - check and create dirs as needed
         print _("INFO: Saving working directory information...")
-        self.customDir = self.wTree.get_widget("entryWorkingDir2").get_text()
-        self.createRemasterDir = self.wTree.get_widget("checkbuttonCreateRemaster").get_active()
-        self.createCustomRoot = self.wTree.get_widget("checkbuttonCreateRoot").get_active()
-        self.createInitrdRoot = self.wTree.get_widget("checkbuttonCreateInitRd").get_active()
-        self.isoFilename = self.wTree.get_widget("entryIsoFilename2").get_text()
-        # debug
+	if self.commandLine == False: 
+		self.customDir = self.wTree.get_widget("entryWorkingDir2").get_text()
+		self.createRemasterDir = self.wTree.get_widget("checkbuttonCreateRemaster").get_active()
+		self.createCustomRoot = self.wTree.get_widget("checkbuttonCreateRoot").get_active()
+		self.createInitrdRoot = self.wTree.get_widget("checkbuttonCreateInitRd").get_active()
+		self.isoFilename = self.wTree.get_widget("entryIsoFilename2").get_text()
+		
+	# debug
         print "Custom Directory: " + str(self.customDir)
         print "Create Remaster Directory: " + str(self.createRemasterDir)
         print "Create Custom Root: " + str(self.createCustomRoot)
         print "Create Initrd Root: " + str(self.createInitrdRoot)
         print "ISO Filename: " + str(self.isoFilename)
+    
     def saveDebianLiveSetupInfo(self):
         # do setup - check and create dirs as needed
         print _("INFO: Saving working directory information...")
@@ -2740,28 +3076,32 @@ class Reconstructor:
                 os.makedirs(os.path.join(self.customDir, "remaster"))
             
 	    # check for iso
-            if self.isoFilename == "":
-                mntDlg = gtk.Dialog(title=self.appName, parent=None, flags=0, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
-                mntDlg.set_icon_from_file(self.iconFile)
-                mntDlg.vbox.set_spacing(10)
-                labelSpc = gtk.Label(" ")
-                mntDlg.vbox.pack_start(labelSpc)
-                labelSpc.show()
-                lblText = _("  <b>Please insert Ubuntu Live CD and click OK</b>  ")
-                label = gtk.Label(lblText)
-                label.set_use_markup(True)
-                mntDlg.vbox.pack_start(label)
-                label.show()
-                #warnDlg.show()
-                response = mntDlg.run()
-                if response == gtk.RESPONSE_OK:
-                    print _("Using Live CD for remastering...")
-                    mntDlg.destroy()
-                    os.popen("mount " + self.mountDir)
-                else:
-                    mntDlg.destroy()
-                    self.setDefaultCursor()
-                    return
+            if self.isoFilename == "" :
+		if self.commandLine == False:
+		        mntDlg = gtk.Dialog(title=self.appName, parent=None, flags=0, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
+		        mntDlg.set_icon_from_file(self.iconFile)
+		        mntDlg.vbox.set_spacing(10)
+		        labelSpc = gtk.Label(" ")
+		        mntDlg.vbox.pack_start(labelSpc)
+		        labelSpc.show()
+		        lblText = _("  <b>Please insert Ubuntu Live CD and click OK</b>  ")
+		        label = gtk.Label(lblText)
+		        label.set_use_markup(True)
+		        mntDlg.vbox.pack_start(label)
+		        label.show()
+		        #warnDlg.show()
+		        response = mntDlg.run()
+		        if response == gtk.RESPONSE_OK:
+		            print _("Using Live CD for remastering...")
+		            mntDlg.destroy()
+		            os.popen("mount " + self.mountDir)
+		        else:
+		            mntDlg.destroy()
+		            self.setDefaultCursor()
+		            return
+		else:
+			print _("Please choose an iso file")
+			exit(0)
             else:
                 print _("Using ISO for remastering...")
                 os.popen('mount -o loop \"' + self.isoFilename + '\" ' + self.mountDir)
@@ -2883,8 +3223,8 @@ class Reconstructor:
         os.popen('mount -o loop \"' + self.isoFilename + '\" ' + os.path.join(self.customDir, "remaster"))
 
     def setupDebianLive(self):
-	debMirror = self.wTree.get_widget("comboboxDebianLiveMirrors").get_active_text() 
-	keybLang = self.wTree.get_widget("comboboxLiveCDKeybLang").get_active_text()
+	self.debMirror = self.wTree.get_widget("comboboxDebianLiveMirrors").get_active_text() 
+	self.keybLang = self.wTree.get_widget("comboboxLiveCDKeybLang").get_active_text()
 	lhConfig = "lh_config "
 	if re.search('Smallest',self.DebianLiveType): 
 		lhConfig += "--bootstrap-flavour minimal "
@@ -2901,7 +3241,7 @@ class Reconstructor:
 	elif re.search('Full Kde',self.DebianLiveType):
 		lhConfig += "-p kde-desktop "
 	
-    	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"686\" --mirror-bootstrap \"' + debMirror + '\" --mirror-chroot \"' + debMirror + '\" --mirror-binary \"' + debMirror + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + keybLang + '\" '
+    	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"686\" --mirror-bootstrap \"' + self.debMirror + '\" --mirror-chroot \"' + self.debMirror + '\" --mirror-binary \"' + self.debMirror + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + keybLang + '\" '
 	
 	scriptDebianLive = 'echo "I: Creating Debian Live CD Linux flavour ' + self.DebianLiveType + ' ' + self.DebianLiveReleaseType + ' + " \n'
 	scriptDebianLive += 'echo "' + lhConfig + '"\n'
@@ -2937,82 +3277,10 @@ class Reconstructor:
 # ---------- Customize Live ---------- #
     def customize(self):
         print _("INFO: Customizing...")
-	user = 'ubuntu'
-        # check user entered password first, so user doesn't have to wait
-        if self.checkUserPassword() == True : 
-		if self.wTree.get_widget("entryLiveCdUsername").get_text() == '' or self.checkUserName() == True:
-		    # set user info
-		    user = self.wTree.get_widget("entryLiveCdUsername").get_text()
-		    userFull = self.wTree.get_widget("entryLiveCdUserFullname").get_text()
-		    password = self.wTree.get_widget("entryLiveCdUserPassword").get_text()
-		    host = self.wTree.get_widget("entryLiveCdHostname").get_text()
-		    if self.casperPath == 'casper' and self.debDist != 'etch':
-			debMirror= self.wTree.get_widget("comboboxUbuntuMirrors").get_active_text() 
-		    else:
-			debMirror= self.wTree.get_widget("comboboxDebianLiveMirrors1").get_active_text()
-		    	keyLang = self.wTree.get_widget("comboboxLiveCDKeybLang1").get_active_text()
-		    # set live cd info
-		    self.setLiveCdInfo(username=user, userFullname=userFull, userPassword=password, hostname=host)
-	 	    ciwsOsType = self.wTree.get_widget("comboboxCiwsOs").get_active_text() 
-		else:
-		    print _('Username do not match.')
-		    # show warning dlg
-		    warnDlg = gtk.Dialog(title=self.appName, parent=None, flags=0, buttons=(gtk.STOCK_OK, gtk.RESPONSE_OK))
-		    warnDlg.set_icon_from_file(self.iconFile)
-		    warnDlg.vbox.set_spacing(10)
-		    labelSpc = gtk.Label(" ")
-		    warnDlg.vbox.pack_start(labelSpc)
-		    labelSpc.show()
-		    lblBuildText = _("  Either username count less than 6 characters, either username count a forbidden character [0-9a-z_-*.]")
-		    lblBuildInfo = _("     Please make sure passwords or Username match and try again...     ")
-		    label = gtk.Label(lblBuildText)
-		    lblInfo = gtk.Label(lblBuildInfo)
-		    label.set_use_markup(True)
-		    warnDlg.vbox.pack_start(label)
-		    warnDlg.vbox.pack_start(lblInfo)
-		    lblInfo.show()
-		    label.show()
-		    response = warnDlg.run()
-		    # destroy dialog no matter what...
-		    if response == gtk.RESPONSE_OK:
-		        warnDlg.destroy()
-		    else:
-		        warnDlg.destroy()
-		    # show live cd customization page
-		    self.wTree.get_widget("notebookCustomize").set_current_page(-1)
-		    # return - don't continue until error fixed
-		    return 
-        else:
-            print _('User passwords do not match.')
-            # show warning dlg
-            warnDlg = gtk.Dialog(title=self.appName, parent=None, flags=0, buttons=(gtk.STOCK_OK, gtk.RESPONSE_OK))
-            warnDlg.set_icon_from_file(self.iconFile)
-            warnDlg.vbox.set_spacing(10)
-            labelSpc = gtk.Label(" ")
-            warnDlg.vbox.pack_start(labelSpc)
-            labelSpc.show()
-            lblBuildText = _("  Either Passwords do not match,  ")
-            lblBuildInfo = _("     Please make sure passwords or Username match and try again...     ")
-            label = gtk.Label(lblBuildText)
-            lblInfo = gtk.Label(lblBuildInfo)
-            label.set_use_markup(True)
-            warnDlg.vbox.pack_start(label)
-            warnDlg.vbox.pack_start(lblInfo)
-            lblInfo.show()
-            label.show()
-            response = warnDlg.run()
-            # destroy dialog no matter what...
-            if response == gtk.RESPONSE_OK:
-                warnDlg.destroy()
-            else:
-                warnDlg.destroy()
-            # show live cd customization page
-            self.wTree.get_widget("notebookCustomize").set_current_page(-1)
-            # return - don't continue until error fixed
-            return            
+            
 	#Set Global variable for chroot
 	fWorkDir=open(os.path.join(self.customDir, "chroot/tmp/user"), 'w')
-        fWorkDir.write(user)
+        fWorkDir.write(self.user)
        	fWorkDir.close()
         fcasper=open(os.path.join(self.customDir, "chroot/tmp/casper_path"), 'w')
 	fcasper.write(self.casperPath)
@@ -3024,29 +3292,32 @@ class Reconstructor:
 	fdebDist.write(self.debDist)
 	fdebDist.close()  
 	fDebMirror=open(os.path.join(self.customDir, "chroot/tmp/deb_mirror_path"), 'w')
-	fDebMirror.write(debMirror)
+	fDebMirror.write(self.debMirror)
 	fDebMirror.close()
 	fciwsOsType=open(os.path.join(self.customDir, "chroot/tmp/os_type"), 'w')
-	fciwsOsType.write(ciwsOsType)
+	fciwsOsType.write(self.ciwsOsType)
 	fciwsOsType.close()
 	
-	if self.wTree.get_widget("comboboxCiwsArtwork").get_active_text() == "Ciws for Gnome":
+	
+	
+	if self.comboboxCiwsArtwork == "Ciws for Gnome":
 		self.artwork = "ciws_gnome"
 		
-	elif self.wTree.get_widget("comboboxCiwsArtwork").get_active_text() == "eLearning":
+	elif self.comboboxCiwsArtwork == "eLearning":
 		self.artwork = "eLearning"
 		
 	else:
 		self.artwork = ""
 		
-	if self.wTree.get_widget("comboboxCiwsCms").get_active_text() == "Wordpress":
+	if self.comboboxCiwsCms == "Wordpress":
 		self.cms = "Wordpress"
 	else:
 		self.cms = "Joomla"
-  	if self.wTree.get_widget("checkbuttonAufs").get_active() == True:
+
+  	if self.checkbuttonAufs == True:
 		os.popen('sed -i "s/splash/splash union=aufs/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
 	if self.casperPath == 'live':
-		os.popen('sed -i "s/initrd=\/'+self.casperPath+'\/initrd.gz/initrd=\/'+self.casperPath+'\/initrd.gz keyb='+keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
+		os.popen('sed -i "s/initrd=\/'+self.casperPath+'\/initrd.gz/initrd=\/'+self.casperPath+'\/initrd.gz keyb='+self.keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
 	
 	#XNEST
 	scriptCustomExec = '#!/bin/sh\n\n'
@@ -3085,21 +3356,21 @@ class Reconstructor:
         fWorkDir.close()
 
 	#Mirrors
-	if self.wTree.get_widget("comboboxWebAppMirrors").get_active_text() == "Free.fr":
+	if self.comboboxWebAppMirrors == "Free.fr":
 	    mirrorWebApp = "B"
 	    mirrorUrl = self.mirrorFree
-	if self.wTree.get_widget("comboboxWebAppMirrors").get_active_text() == "Berlios1.de":
+	elif self.comboboxWebAppMirrors == "Berlios1.de":
  	    mirrorWebApp = "B"
 	    mirrorUrl = self.mirrorBerlios1
-	if self.wTree.get_widget("comboboxWebAppMirrors").get_active_text() == "Berlios2.de":
+	elif self.comboboxWebAppMirrors == "Berlios2.de":
  	    mirrorWebApp = "B"
 	    mirrorUrl = self.mirrorBerlios2
-	if self.wTree.get_widget("comboboxWebAppMirrors").get_active_text() == "Web":
+	elif self.comboboxWebAppMirrors == "Web":
  	    mirrorWebApp = "A"
 	    mirrorUrl = self.mirrorFree
-	if self.wTree.get_widget("checkbuttonLocalMirror").get_active() == True:
+	elif self.checkbuttonLocalMirror == True:
 	    mirrorWebApp = "B"
-	    mirrorUrl = self.wTree.get_widget("entryLocalMirror").get_text()
+	    mirrorUrl = self.entryLocalMirror
 	fMirrorWebApp=open(os.path.join(self.customDir, "chroot/tmp/mirroir"), 'w')
         fMirrorWebApp.write(mirrorWebApp)
         fMirrorWebApp.close() 
@@ -3115,7 +3386,7 @@ class Reconstructor:
         fMirrorUrl.close() 
 
 	#Default Install of Web Apps
-	if self.wTree.get_widget("radiobuttonDefaultInstall").get_active() == True:
+	if self.radiobuttonDefaultInstall == True:
 	    defaultInstall = "A"
 	else:
 	    defaultInstall = "B"
@@ -3129,8 +3400,9 @@ class Reconstructor:
 	
         # run modules
         # HACK: check for run on boot scripts and clear previous if new ones selected
-        self.execModulesEnabled = False;
-        self.treeModel.foreach(self.checkExecModuleEnabled)
+	if self.commandLine == False:         
+		self.execModulesEnabled = False;
+	        self.treeModel.foreach(self.checkExecModuleEnabled)
         if self.execModulesEnabled == True:
             print _('Running modules...')
             modExecScrChroot = '#!/bin/sh\n\ncd /tmp ;\n'
@@ -3142,7 +3414,7 @@ class Reconstructor:
 	    modExecScr += 'bash \"' + os.path.join(self.ciwsRootDir, "artwork/"+self.artwork+".artscript")+ '\"' + ' ;\n '
 	    # copy all "execute" enabled scripts proper location (chroot or customdir)
             
-	    self.treeModel.foreach(self.copyExecuteModule)
+	   
             # find all modules in chroot and chain together and run
             for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "scripts/")):
                 for execMod in sorted(execModFiles):

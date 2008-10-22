@@ -38,6 +38,14 @@ NTOP_PWD="cooperation"
 
 function INSTALL
 {
+echo "
+Name: shared/proftpd/inetd_or_standalone
+Template: shared/proftpd/inetd_or_standalone
+Value: standalone
+Owners: proftpd
+Flags: seen
+
+" >> /var/cache/debconf/config.dat
 
 
 DEBIAN_FRONTEND="dialog"

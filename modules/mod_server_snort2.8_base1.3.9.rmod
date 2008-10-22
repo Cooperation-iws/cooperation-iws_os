@@ -258,7 +258,7 @@ DOWNLOAD
 #Snort config
 
 
-apt-get install --assume-yes --force-yes oinkmaster libpcap-dev libmysqlclient15-dev bison flex mysql-client
+apt-get install --assume-yes --force-yes oinkmaster libpcap-dev libmysqlclient15-dev bison flex mysql-client build-essential
 
 echo "$MESS_REGISTER"
 echo "key:"

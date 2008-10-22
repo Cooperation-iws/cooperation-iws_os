@@ -8,7 +8,7 @@ RMOD_NAME='Ntop'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Network management'
-RMOD_DESCRIPTION='Gestion du réseau'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
 RMOD_VERBOSE="Ntop is a network sensor. "
 RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
 

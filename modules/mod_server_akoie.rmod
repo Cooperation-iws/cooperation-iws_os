@@ -138,11 +138,11 @@ MOD_NAME="Akoie"
 else 
 
 MOD_NAME=$(zenity --entry --text "$MESS_NAME AKOIE")
-test $? -ne 0 && break # Bouton Annuler
+
 while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
 do
 MOD_NAME=$(zenity --entry --text "$MESS_NAME AKOIE")
-test $? -ne 0 && break # Bouton Annulerdone
+
 done 
  
 

@@ -29,6 +29,71 @@ CASPER_PATH=$(cat /tmp/casper_path)
 
 if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
 
+echo "
+Name: phpmyadmin/reconfigure-webserver
+Template: phpmyadmin/reconfigure-webserver
+Value: apache2
+Owners: phpmyadmin
+Flags: seen
+
+Name: phpmyadmin/setup-username
+Template: phpmyadmin/setup-username
+Value: admin
+Owners: phpmyadmin
+
+Name: mysql-server-5.0/need_sarge_compat
+Template: mysql-server-5.0/need_sarge_compat
+Value: false
+Owners: mysql-server-5.0
+
+Name: mysql-server-5.0/need_sarge_compat_done
+Template: mysql-server-5.0/need_sarge_compat_done
+Value: true
+Owners: mysql-server-5.0
+
+Name: mysql-server-5.0/nis_warning
+Template: mysql-server-5.0/nis_warning
+Owners: mysql-server-5.0
+
+Name: mysql-server-5.0/postrm_remove_databases
+Template: mysql-server-5.0/postrm_remove_databases
+Owners: mysql-server-5.0
+
+Name: mysql-server-5.0/really_downgrade
+Template: mysql-server-5.0/really_downgrade
+Owners: mysql-server-5.0
+
+Name: mysql-server-5.0/start_on_boot
+Template: mysql-server-5.0/start_on_boot
+Owners: mysql-server-5.0
+
+Name: mysql-server/error_setting_password
+Template: mysql-server/error_setting_password
+Owners: mysql-server-5.0
+
+Name: mysql-server/password_mismatch
+Template: mysql-server/password_mismatch
+Owners: mysql-server-5.0
+
+Name: libphp-adodb/pathmove
+Template: libphp-adodb/pathmove
+Value: 
+Owners: libphp-adodb
+Flags: seen
+
+" >> /var/cache/debconf/config.dat
+echo "
+Name: mysql-server/root_password
+Template: mysql-server/root_password
+Value: 
+Owners: mysql-server-5.0
+
+Name: mysql-server/root_password_again
+Template: mysql-server/root_password_again
+Owners: mysql-server-5.0
+" >> /var/cache/debconf/passwords.dat
+
+
 killall -9 httpd
 killall -9 apache2
 killall -9 mysqld

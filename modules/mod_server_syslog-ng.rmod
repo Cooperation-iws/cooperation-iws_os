@@ -7,7 +7,7 @@ RMOD_NAME='Syslog-ng'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Logs administration'
-RMOD_DESCRIPTION='Administration des logs système'
+RMOD_DESCRIPTION_FR='Administration des logs système'
 RMOD_VERBOSE="Php-Syslog-ng is a frontend for viewing syslog-ng messages logged to MySQL in realtime. It features customized searches based on device, priority, date, time, and message.  "
 RMOD_VERBOSE_FR="Php-Syslog-ng est un client web pour visualiser les logs systèmes en temps réel.  "
 
@@ -167,7 +167,37 @@ function INSTALL
 {
 echo "I: Cacti download"
 DOWNLOAD
+echo "
+Name: msttcorefonts/baddldir
+Template: msttcorefonts/baddldir
+Owners: msttcorefonts
 
+Name: msttcorefonts/defoma
+Template: msttcorefonts/defoma
+Value: 
+Owners: msttcorefonts
+Flags: seen
+
+Name: msttcorefonts/dldir
+Template: msttcorefonts/dldir
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/dlurl
+Template: msttcorefonts/dlurl
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/http_proxy
+Template: msttcorefonts/http_proxy
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/savedir
+Template: msttcorefonts/savedir
+Value: 
+Owners: msttcorefonts
+" >> /var/cache/debconf/config.dat
 apt-get install --assume-yes --force-yes syslog-ng
 aptitude install -y msttcorefonts
 
@@ -201,7 +231,7 @@ chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/
 chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/
 
 cd $WWW_DIRECTORY/admin/$MOD_NAME/scripts/
-perl -i -pe "s/\/www\/php-syslog-ng/$WWW_DIRECTORY/admin/$MOD_NAME/g" *
+perl -i -pe "s/\/www\/php-syslog-ng/$WWW_DIRECTORY\/admin\/$MOD_NAME/g" *
 
 sed -i "14s/root/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
 sed -i "15s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php

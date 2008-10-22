@@ -8,7 +8,7 @@ RMOD_NAME='Ossec 1.5.1'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Host based Intrusion Detection System'
-RMOD_DESCRIPTION="Système de détection d'intrusion orienté machine"
+RMOD_DESCRIPTION_FR="Système de détection d'intrusion orienté machine"
 RMOD_VERBOSE="Ossec is an HIDS (Host Based Intrusion Detection System). "
 RMOD_VERBOSE_FR="Ossec est un HIDS (Host Based Intrusion Detection System), un système de détection d'intrusion d'une machine.   "
 
@@ -205,6 +205,21 @@ cp -Rf $DL_DIR/ossec-hids/* /tmp/ossec/.
 cd /tmp/ossec
 chmod -R 777 ../ossec
 chown -R 777 ../ossec
+sed -i "871s/read USER_LG;/#read USER_LG;/" install.sh
+sed -i "1030s/read ANSWER/ANSWER=\"local\"/" install.sh
+sed -i "684s/read ANSWER/ANSWER=\$INSTALLDIR/" install.sh
+sed -i "934s/read ANY/#read ANY/" install.sh
+sed -i "946s/read ANY/ANY=\"no\"/" install.sh
+sed -i "400s/read ANSWER/ANSWER=\"yes\"/" install.sh
+sed -i "416s/read EMAIL/EMAIL=\"admin@ciws.com\"/" install.sh
+sed -i "452s/read EMAIL2/EMAIL2=\"yes\"/" install.sh
+sed -i "468s/read SMTP/SMTP=\"localhost\"/" install.sh
+sed -i "509s/read AR/#read AR/" install.sh
+sed -i "159s/read AS/AS=\"yes\"/" install.sh
+sed -i "194s/read ES/ES=\"yes\"/" install.sh
+sed -i "598s/read ANSWER/ANSWER=\"no\"/" install.sh
+
+
 ./install.sh
 usermod -u501 ossec
 usermod -u502 ossecm
