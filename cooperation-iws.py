@@ -473,6 +473,12 @@ class Reconstructor:
 		os.popen("echo \"A\" > "+ os.path.join(self.customDir, "chroot") + "/tmp/silent")
 		self.setLiveCdInfo(username=self.user, userFullname=self.userFull, userPassword=self.password, hostname=self.host)
 		self.customize()
+		self.launchTerminal()
+		self.launchPostInstall()
+		self.endInstall()
+		self.installType = "Cd"
+		self.LiveCdDescription="Cooperation-iws Live CD"
+		self.build()
 	print _('Proceeding to customization...')
 	
 	exit(0)
@@ -1775,53 +1781,7 @@ class Reconstructor:
             if response == gtk.RESPONSE_OK:
                 warnDlg.destroy()
                 self.setPage(self.pageLiveBuild)
-	   	# execute last config 
-		os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws last config\" -x bash \"'+ os.path.join(self.customDir, "scripts/shutdown_ws.sh") + '\"')
-			
-		print _("Copying DNS info...")
-                os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
-           	# mount /proc
-	    	print _("Mounting /proc filesystem...")
-	    	os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
-	    	# copy apt.conf
-	    	print _("Copying apt.conf configuration...")
-	    	if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d")):
-			os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
-	   	os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
-	   	# copy wgetrc
-	   	print _("Copying wgetrc configuration...")
-	   	# backup
-	   	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
-	   	os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
-	   	print _("Copying hostname configuration...")
-           	# backup
-           	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
-            	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
-            	os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
-            	os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
-           
-           	#execute shutdown web server script
-		print _("Execute shutdown actions...")
-		os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws last config\" -x chroot \"' + os.path.join(self.customDir,"chroot/") +'\" /tmp/shutdown_ws.sh')
-		# cleanup
-            	os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
-            	os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/tmp/module-exec.sh") + '\" 1>&2 2>/dev/null')
-            	# restore wgetrc
-            	print _("Restoring wgetrc configuration...")
-            	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-            	# remove apt.conf
-            	#print _("Removing apt.conf configuration...")
-            	#os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/*") + '\"')
-            	# remove dns info
-		print _("Restoring hostname configuration...")
-                os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
-                os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-                       	
-		print _("Removing DNS info...")
-            	os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
-            	# umount /proc
-            	print _("Umounting /proc...")
-            	os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
+	   	self.endCustom()
 
 		# check for windows apps and enable/disable checkbox as necessary
                 if self.checkWindowsPrograms() == True:
@@ -1860,6 +1820,8 @@ class Reconstructor:
             if response == gtk.RESPONSE_OK:
                 warnDlg.destroy()
                 self.setBusyCursor()
+		if self.wTree.get_widget("entryLiveCdDescription").get_text() != "":
+		            self.LiveCdDescription = self.wTree.get_widget("entryLiveCdDescription").get_text()
                 gobject.idle_add(self.build)
                 # change Next text to Finish
                 self.wTree.get_widget("buttonNext").set_label("Finish")
@@ -1890,6 +1852,8 @@ class Reconstructor:
             if response == gtk.RESPONSE_OK:
                 warnDlg.destroy()
                 self.setBusyCursor()
+		if self.wTree.get_widget("entryLiveCdDescription").get_text() != "":
+		            self.LiveCdDescription = self.wTree.get_widget("entryLiveCdDescription").get_text()
 		gobject.idle_add(self.build)
                 # change Next text to Finish
                 self.wTree.get_widget("buttonNext").set_label("Finish")
@@ -2078,7 +2042,61 @@ class Reconstructor:
             pass
 
         return
+
+
+    def endInstall(self):
+    	# execute last config 
+		os.system('bash \"'+ os.path.join(self.customDir, "scripts/shutdown_ws.sh") + '\"')
+			
+		print _("Copying DNS info...")
+                os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
+           	# mount /proc
+	    	print _("Mounting /proc filesystem...")
+	    	os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
+	    	# copy apt.conf
+	    	print _("Copying apt.conf configuration...")
+	    	if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d")):
+			os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
+	   	os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
+	   	# copy wgetrc
+	   	print _("Copying wgetrc configuration...")
+	   	# backup
+	   	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
+	   	os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
+	   	print _("Copying hostname configuration...")
+           	# backup
+           	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
+            	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
+            	os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
+            	os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
+           
+           	#execute shutdown web server script
+		print _("Execute shutdown actions...")
+		os.system('chroot \"' + os.path.join(self.customDir,"chroot/") +'\" /tmp/shutdown_ws.sh')
+		# cleanup
+            	os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
+            	os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/tmp/module-exec.sh") + '\" 1>&2 2>/dev/null')
+            	# restore wgetrc
+            	print _("Restoring wgetrc configuration...")
+            	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
+            	# remove apt.conf
+            	#print _("Removing apt.conf configuration...")
+            	#os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/*") + '\"')
+            	# remove dns info
+		print _("Restoring hostname configuration...")
+                os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
+                os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
+                       	
+		print _("Removing DNS info...")
+            	os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
+            	# umount /proc
+            	print _("Umounting /proc...")
+            	os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
+
+
     # launch post install script
+
+	
     def launchPostInstall(self):
         try:
             # setup environment
@@ -2112,14 +2130,9 @@ class Reconstructor:
             os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptPostInstall.sh"))
             # TODO: replace default terminal title with "Reconstructor Terminal"
             # use gnome-terminal if available -- more features
-            if commands.getoutput('which gnome-terminal') != '':
-                print _('Launching Gnome-Terminal for advanced customization...')
-                os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws Terminal\" -e \"bash ' + os.path.join(self.customDir, "scriptPostInstall.sh")+ '\"')
-            else:
-                print _('Launching Xterm for advanced customization...')
-                # use xterm if gnome-terminal isn't available
-                os.popen('export HOME=/root ; xterm -bg black -fg white -rightbar -title \"Cooperation-iws Terminal\" -e \"bash ' + os.path.join(self.customDir, "scriptPostInstall.sh")+ '\"')
-
+            print _('Launching Post install script customizations...')
+            os.system('\"bash ' + os.path.join(self.customDir, "scriptPostInstall.sh")+ '\"')
+            
             # restore wgetrc
             print _("Restoring wgetrc configuration...")
             os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
@@ -3707,7 +3720,7 @@ class Reconstructor:
 			fscriptMksquashfs.write(scriptMksquashfs)
 			fscriptMksquashfs.close()
 			os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptMksquashfs.sh"))
-			os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws Build Squashfs\" -x bash \"' + os.path.join(self.customDir, "scriptMksquashfs.sh")+ '\"')
+			os.system('bash \"' + os.path.join(self.customDir, "scriptMksquashfs.sh")+ '\"')
 		   	
 		        #else:
 		            #os.popen(self.timeCmd + ' ' + mksquashfs + ' \"' + os.path.join(self.customDir, "chroot/") + '\"' + ' \"' + os.path.join(self.customDir, "remaster/casper/filesystem.squashfs") + '\"')
@@ -3738,9 +3751,7 @@ class Reconstructor:
 		            os.popen('rm -Rf \"' + self.buildLiveCdFilename + '\"')
 		        # build
 		        # check for description - replace if necessary
-		        if self.wTree.get_widget("entryLiveCdDescription").get_text() != "":
-		            self.LiveCdDescription = self.wTree.get_widget("entryLiveCdDescription").get_text()
-
+		        
 		        # build iso according to architecture
 		        if self.LiveCdArch == "x86":
 		            print _("Building x86 ISO...")

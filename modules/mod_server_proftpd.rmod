@@ -53,7 +53,7 @@ Flags: seen
 
 
 DEBIAN_FRONTEND="dialog"
-apt-get install --assume-yes --force-yes proftpd apache2-utils
+apt-get install --assume-yes --force-yes proftpd 
 
 #samba config
 cd /etc
