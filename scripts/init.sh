@@ -38,6 +38,12 @@ URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 export LANG="en"
 export LC_ALL=C
+SILENT=$(cat /tmp/silent)
+
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+export DEBIAN_FRONTEND=noninteractive
+fi
+
 
 
 if [ "$(echo $LANG | grep 'fr')" ]; then

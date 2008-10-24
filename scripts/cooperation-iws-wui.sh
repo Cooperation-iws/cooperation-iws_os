@@ -28,6 +28,11 @@ MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
+
 
 #VARIABLES
 #MYSQL PASSWORD
@@ -124,16 +129,23 @@ apt-get install --assume-yes --force-yes poppler-utils catdoc pstotext zip
 
 chown -R www-data $WWW_DIRECTORY/
 
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+	if [ "$(echo $sphider_auto_index | awk  '{print $1}')" != "n" ]; then
+	echo "18 */23 * * * www-data php $WWW_DIRECTORY/admin/$NOM_SPHIDER/admin/spider.php -u http://localhost/ -r -d 5" > /etc/cron.d/sphider_crawl
+	sudo chmod +x /etc/cron.d/sphider_crawl
+	fi
+else
+	echo "-----------------Cooperation-iws----------------------------"
+	echo "---Configure Sphider to automatically index the portal------"
+	echo "[Y/n]"
+	read r1 < /dev/tty
 
-echo "-----------------Cooperation-iws----------------------------"
-echo "---Configure Sphider to automatically index the portal------"
-echo "[Y/n]"
-read r1 < /dev/tty
-if [ "$(echo $r1 | awk  '{print $1}')" != "n" ]; then
-echo "18 */23 * * * www-data php $WWW_DIRECTORY/admin/$NOM_SPHIDER/admin/spider.php -u http://localhost/ -r -d 5" > /etc/cron.d/sphider_crawl
-sudo chmod +x /etc/cron.d/sphider_crawl
+	if [ "$(echo $r1 | awk  '{print $1}')" != "n" ]; then
+	echo "18 */23 * * * www-data php $WWW_DIRECTORY/admin/$NOM_SPHIDER/admin/spider.php -u http://localhost/ -r -d 5" > /etc/cron.d/sphider_crawl
+	sudo chmod +x /etc/cron.d/sphider_crawl
+	fi
+
 fi
-
 rm -rf `find /var/www -type d -name .svn`
 
 }

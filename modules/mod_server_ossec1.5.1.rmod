@@ -205,21 +205,21 @@ cp -Rf $DL_DIR/ossec-hids/* /tmp/ossec/.
 cd /tmp/ossec
 chmod -R 777 ../ossec
 chown -R 777 ../ossec
-sed -i "871s/read USER_LG;/#read USER_LG;/" install.sh
-sed -i "1030s/read ANSWER/ANSWER=\"local\"/" install.sh
-sed -i "684s/read ANSWER/ANSWER=\$INSTALLDIR/" install.sh
-sed -i "934s/read ANY/#read ANY/" install.sh
-sed -i "946s/read ANY/ANY=\"no\"/" install.sh
-sed -i "400s/read ANSWER/ANSWER=\"yes\"/" install.sh
-sed -i "416s/read EMAIL/EMAIL=\"admin@ciws.com\"/" install.sh
-sed -i "452s/read EMAIL2/EMAIL2=\"yes\"/" install.sh
-sed -i "468s/read SMTP/SMTP=\"localhost\"/" install.sh
-sed -i "509s/read AR/#read AR/" install.sh
-sed -i "159s/read AS/AS=\"yes\"/" install.sh
-sed -i "194s/read ES/ES=\"yes\"/" install.sh
-sed -i "598s/read ANSWER/ANSWER=\"no\"/" install.sh
 
-
+export USER_ENABLE_EMAIL="y"
+export USER_EMAIL_ADDRESS="admin@ciws.com"
+export EMAILHOST="localhost"
+export INSTYPE="server"
+export USER_NO_STOP="yes"
+export USER_LANGUAGE="en"
+export USER_EMAIL_SMTP="localhost"
+export USER_ENABLE_SYSCHECK="yes"
+export USER_ENABLE_ROOTCHECK="yes"
+export USER_INSTALL_TYPE="server"
+export USER_DIR="/var/ossec"
+export ACTIVERESPONSE="no"
+export USER_ENABLE_ACTIVE_RESPONSE="n"
+export USER_ENABLE_SYSLOG="n"
 ./install.sh
 usermod -u501 ossec
 usermod -u502 ossecm

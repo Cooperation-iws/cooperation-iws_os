@@ -12,6 +12,10 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 LANG_UI=$(cat /tmp/lang-wui)
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
 
 
 
@@ -21,17 +25,21 @@ function INSTALL
 
 
 apt-get install --assume-yes --force-yes clamav clamav-daemon zoo unzip arj bzip2 razor pyzor clamav-freshclam mailutils
-
-echo "-----------------Cooperation-iws----------------------------"
-echo "---Configure Clamav to report at a specific email address---"
-echo "-------Else default: admin@ciws.com will be used------------"
-echo "[N/y]"
-read r1 < /dev/tty
-if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
-MAIL_REPORT="admin@ciws.com"
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+MAIL_REPORT=$clam_mail_report
 else
-echo "-------Enter the email address the scan reports will be sent on----------"
-read MAIL_REPORT < /dev/tty
+	echo "-----------------Cooperation-iws----------------------------"
+	echo "---Configure Clamav to report at a specific email address---"
+	echo "-------Else default: admin@ciws.com will be used------------"
+	echo "[N/y]"
+	read r1 < /dev/tty
+	if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
+	MAIL_REPORT="admin@ciws.com"
+	else
+	echo "-------Enter the email address the scan reports will be sent on----------"
+	read MAIL_REPORT < /dev/tty
+	fi
+
 fi
 
 echo "#/bin/bash

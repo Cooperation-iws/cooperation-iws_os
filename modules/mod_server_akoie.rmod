@@ -28,6 +28,12 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
+
+
 #VARIABLES
 #MYSQL PASSWORD
 AKOIE_MYSQL_PWD="AKOIE_MYSQL_PWD"
@@ -169,38 +175,64 @@ mkdir $WWW_DIRECTORY/$MOD_NAME
 cp -Rf Akoie/* $WWW_DIRECTORY/$MOD_NAME/.
 
 apt-get install --assume-yes --force-yes imagemagick 
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+	if [ "$(echo $share_akoie_smb | awk  '{print $1}')" != "n" ]; then
 
-echo "Configure Samba Server to share upoad images directory ?"
-echo "[Y/n]"
-read r1 < /dev/tty
-
-if [ "$(echo $r1 | awk  '{print $1}')" != "n" ]; then
-echo "Protect this directory with a password ?"
-echo "[N/y]"
-read r2 < /dev/tty
-
-if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
-echo "[$MOD_NAME]
-	comment = $MOD_NAME
-	writeable = yes
-	public = yes
-	path = /var/www/$MOD_NAME/images/album
+		if [ "$(echo $share_akoie_smb_pwd | awk  '{print $1}')" != "y" ]; then
+		echo "[$MOD_NAME]
+			comment = $MOD_NAME
+			writeable = yes
+			public = yes
+			path = /var/www/$MOD_NAME/images/album
 	
-" >> /var/share/etc/samba/smb.conf
+		" >> /var/share/etc/samba/smb.conf
+
+		else
+		echo "[$MOD_NAME]
+			comment = $MOD_NAME
+			writeable = yes
+			public = yes
+			path = /var/www/$MOD_NAME/images/album
+			valid users = www-data
+		" >> /var/share/etc/samba/smb.conf
+
+		fi
+
+	fi
 
 else
-echo "[$MOD_NAME]
-	comment = $MOD_NAME
-	writeable = yes
-	public = yes
-	path = /var/www/$MOD_NAME/images/album
-	valid users = www-data
-" >> /var/share/etc/samba/smb.conf
-smbpasswd -a www-data
-fi
 
-fi
+	echo "Configure Samba Server to share upload images directory ?"
+	echo "[Y/n]"
+	read r1 < /dev/tty
 
+	if [ "$(echo $r1 | awk  '{print $1}')" != "n" ]; then
+		echo "Protect this directory with a password ?"
+		echo "[N/y]"
+		read r2 < /dev/tty
+
+		if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
+			echo "[$MOD_NAME]
+				comment = $MOD_NAME
+				writeable = yes
+				public = yes
+				path = /var/www/$MOD_NAME/images/album
+	
+			" >> /var/share/etc/samba/smb.conf
+
+		else
+			echo "[$MOD_NAME]
+				comment = $MOD_NAME
+				writeable = yes
+				public = yes
+				path = /var/www/$MOD_NAME/images/album
+				valid users = www-data
+			" >> /var/share/etc/samba/smb.conf
+
+		fi
+
+	fi
+fi
 chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 

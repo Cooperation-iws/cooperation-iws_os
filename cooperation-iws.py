@@ -150,6 +150,7 @@ class Reconstructor:
         self.modRunInChrootKey = 'RMOD_RUN_IN_CHROOT'
         self.modUpdateUrlKey = 'RMOD_UPDATE_URL'
         self.modReqApache='RMOD_REQ_APACHE'
+	self.modReqXnest='RMOD_REQ_XNEST'
 	self.modules =  {}
 
         self.regexUbuntuVersion = '^DISTRIB_RELEASE=([0-9.]+)\n'
@@ -162,6 +163,7 @@ class Reconstructor:
         self.regexModVersion = '^RMOD_VERSION=([A-Za-z0-9.\s\w]+)\s'
         self.regexModRunInChroot = '^RMOD_RUN_IN_CHROOT=([A-Za-z0-9\w]+)\s'
 	self.regexModReqApache = '^RMOD_REQ_APACHE=([A-Za-z0-9\w]+)\s'        
+	self.regexModReqXnest = '^RMOD_REQ_XNEST=([A-Za-z0-9\w]+)\s'        
 	self.regexModUpdateUrl = '^RMOD_UPDATE_URL=([A-Za-z0-9:.\-\&\*\_\,\/\\(\)\'\"\s\w]+)\n'
         self.regexUbuntuAltCdVersion = '^[a-zA-Z0-9-.]*\s+([0-9.]+)\s+'
         self.regexUbuntuAltCdInfo = '([\w-]+)\s+(\d+.\d+)\s+\D+Release\s(\w+)\s+'
@@ -193,7 +195,7 @@ class Reconstructor:
         self.bootModulesEnabled = False
         # time command for timing operations
         self.timeCmd = commands.getoutput('which time') + ' -f \"\nBuild Time: %E  CPU: %P\n\"'
-
+	self.reqXnest = False
         # startup daemon list for speedup
         #self.startupDaemons = ('ppp', 'hplip', 'cupsys', 'festival', 'laptop-mode', 'nvidia-kernel', 'rsync', 'bluez-utils', 'mdadm')
         # shutdown scripts - without the 'K' for looping -- see  https://wiki.ubuntu.com/Teardown  for explanation
@@ -466,6 +468,9 @@ class Reconstructor:
            		self.setupWorkingDirectory()
 		self.checkLiveCdVersion()
 		self.cmdLoadModules()
+		os.popen("cp "+self.moduleFilename + " " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
+		os.popen("chmod +x " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
+		os.popen("echo \"A\" > "+ os.path.join(self.customDir, "chroot") + "/tmp/silent")
 		self.setLiveCdInfo(username=self.user, userFullname=self.userFull, userPassword=self.password, hostname=self.host)
 		self.customize()
 	print _('Proceeding to customization...')
@@ -646,6 +651,7 @@ class Reconstructor:
         modDescription = ''
         modRunInChroot = None
 	modReqApache = None      
+	modReqXnest = None      
 	modUpdateUrl = ''
 
       # HACK: regex through module to get info
@@ -657,6 +663,7 @@ class Reconstructor:
         reModDescription = re.compile(self.regexModDescription, re.IGNORECASE)
         reModRunInChroot = re.compile(self.regexModRunInChroot, re.IGNORECASE)
         reModReqApache = re.compile(self.regexModReqApache, re.IGNORECASE)
+        reModReqXnest = re.compile(self.regexModReqXnest, re.IGNORECASE)
         reModUpdateUrl = re.compile(self.regexModUpdateUrl, re.IGNORECASE)
 
         for line in fMod:
@@ -676,6 +683,8 @@ class Reconstructor:
                 modRunInChroot = reModRunInChroot.match(line).group(1)
             if reModReqApache.match(line) != None:
                 modReqApache = reModReqApache.match(line).group(1)
+            if reModReqXnest.match(line) != None:
+                modReqXnest = reModReqXnest.match(line).group(1)
             if reModUpdateUrl.match(line) != None:
                 modUpdateUrl = reModUpdateUrl.match(line).group(1)
         fMod.close()
@@ -707,6 +716,7 @@ class Reconstructor:
         properties[self.modVersionKey] = modVersion
         properties[self.modUpdateUrlKey] = modUpdateUrl
 	properties[self.modReqApache] = modReqApache
+	properties[self.modReqXnest] = modReqXnest
 
         return properties
 
@@ -951,7 +961,8 @@ class Reconstructor:
 					fReqApache=open(os.path.join(self.customDir, "chroot/tmp/apache"), 'w')
 			    		fReqApache.write(self.ReqApache)
 			    		fReqApache.close()
-			    
+			    	if bool(modProps[self.modReqXnest]) == True:      
+					self.reqXnest=true
 				if modPath != None:
 				   	# check for execute
 				  	
@@ -3138,7 +3149,7 @@ class Reconstructor:
 
             # extract squashfs into custom root
             # check for iso
-            if self.isoFilename == "":
+            if self.isoFilename == "" and self.commandLine == False:
                 mntDlg = gtk.Dialog(title=self.appName, parent=None, flags=0, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
                 mntDlg.set_icon_from_file(self.iconFile)
                 mntDlg.vbox.set_spacing(10)
@@ -3199,8 +3210,9 @@ class Reconstructor:
         #self.loadGdmThemes()
         #self.loadGnomeThemes()
         #self.hideWorking()
-        self.setDefaultCursor()
-        self.setPage(self.pageLiveCustomize)
+	if self.commandLine == False:        
+		self.setDefaultCursor()
+		self.setPage(self.pageLiveCustomize)
 	
 	      
 	print _("Finished setting up working directory...")
@@ -3321,7 +3333,8 @@ class Reconstructor:
 	
 	#XNEST
 	scriptCustomExec = '#!/bin/sh\n\n'
-	scriptCustomExec += 'bash \"' + self.scriptDir + 'xnest.sh\"' + ' ;\n'
+	if self.reqXnest == True: 
+		scriptCustomExec += 'bash \"' + self.scriptDir + 'xnest.sh\"' + ' ;\n'
 	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init_Lampp.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'end_Lampp.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
@@ -3491,6 +3504,12 @@ class Reconstructor:
             # mount /proc
             print _("Mounting /proc filesystem...")
             os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
+            # mount /sys
+            print _("Mounting /sys filesystem...")
+            #os.popen('mount -t sysfs none \"' + os.path.join(self.customDir, "chroot/sys") + '\"')
+            # mount 
+	    print _("Mounting /dev/pts filesystem...")
+            #os.popen('mount -t devpts none \"' + os.path.join(self.customDir, "chroot/dev/pts") + '\"')
             # copy apt.conf
             print _("Copying apt.conf configuration...")
             if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d")):
@@ -3508,8 +3527,8 @@ class Reconstructor:
             os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
             os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
             # run module script
-            os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws Modules\" -x chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/module-exec.sh')
-            os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws Modules\" -x bash \"' + os.path.join(self.customDir, "scripts/module-exec.sh")+ '\"')
+            os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/module-exec.sh')
+            os.system('bash \"' + os.path.join(self.customDir, "scripts/module-exec.sh")+ '\"')
 	
 	    # cleanup
             #os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
@@ -3517,8 +3536,11 @@ class Reconstructor:
             print _("Restoring wgetrc configuration...")
             os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
             print _("Restoring hostname configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
+            
+	    os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
+
             os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
+
             # remove apt.conf
             #print _("Removing apt.conf configuration...")
             #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/*") + '\"')
@@ -3528,7 +3550,13 @@ class Reconstructor:
             # umount /proc
             print _("Umounting /proc...")
             os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
-
+	    # umount /sys
+	    print _("Umounting /sys...")
+            #os.popen('umount \"' + os.path.join(self.customDir, "chroot/sys/") + '\"')
+	    # umount /dev/pts
+	    print _("Umounting /dev/pts...")
+            #os.popen('umount \"' + os.path.join(self.customDir, "chroot/dev/pts") + '\"')
+		
         
         # manual software
         # check for manual install
@@ -3613,12 +3641,13 @@ class Reconstructor:
 
 	
 	#END SCRIPTS
-	scriptEndExec = 'bash \"' + self.scriptDir + 'xnest_end.sh\"' + ' ;\n '
- 	fscriptEndExec=open(os.path.join(self.customDir, "scriptEndExec.sh"), 'w')
-        fscriptEndExec.write(scriptEndExec)
-        fscriptEndExec.close()
-        os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptEndExec.sh"))
-        os.popen('bash \"' + os.path.join(self.customDir, "scriptEndExec.sh") + '\"')
+	if self.reqXnest == True: 
+		scriptEndExec = 'bash \"' + self.scriptDir + 'xnest_end.sh\"' + ' ;\n '
+	 	fscriptEndExec=open(os.path.join(self.customDir, "scriptEndExec.sh"), 'w')
+		fscriptEndExec.write(scriptEndExec)
+		fscriptEndExec.close()
+		os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptEndExec.sh"))
+		os.popen('bash \"' + os.path.join(self.customDir, "scriptEndExec.sh") + '\"')
 	
 
 

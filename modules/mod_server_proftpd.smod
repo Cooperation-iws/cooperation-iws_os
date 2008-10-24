@@ -19,6 +19,10 @@ BIN_MYSQL=$(cat /tmp/mysql-path)
 SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
 
 
 
@@ -49,7 +53,7 @@ Flags: seen
 
 
 DEBIAN_FRONTEND="dialog"
-apt-get install --assume-yes --force-yes proftpd
+apt-get install --assume-yes --force-yes proftpd apache2-utils
 
 #samba config
 cd /etc
@@ -107,7 +111,19 @@ ln -s /var/share/etc/proftpd /etc/proftpd
 
 apt-get install --assume-yes --force-yes proftpd
 
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+	if [ "$(echo $proftpd_pwd | awk  '{print $1}')" != "" ]; then
+		
+		htpasswd -c -b /tmp/ftppass admin $proftpd_pwd 
+		
+		passwd=$(cat /tmp/ftppass | grep 'admin' | cut -d':' -f2)
+			
+		sed -i "s/9DyPIRj6JheLk/$passwd/" /var/share/etc/proftpd/proftpd.conf
 
+
+	fi
+
+else
 echo "
 ---------------Cooperation-iws----------------------------
 -------Do you want to secure your ftp server ?----------
@@ -115,16 +131,19 @@ echo "
 [Y/n]:
 "
 read secure_admin < /dev/tty
-if [ "$(echo $secure_admin | awk  '{print $1}')" != "n" ]; then
-htpasswd -c /tmp/ftppass admin 
+	if [ "$(echo $secure_admin | awk  '{print $1}')" != "n" ]; then
+		
+		htpasswd -c /tmp/ftppass admin 
 
-passwd=$(cat /tmp/ftppass | grep 'admin' | cut -d':' -f2)
-sed -i "s/9DyPIRj6JheLk/$passwd/" /var/share/etc/proftpd/proftpd.conf
-echo "CIWS: Password protection active. Please use 'admin' as user name!"
+		passwd=$(cat /tmp/ftppass | grep 'admin' | cut -d':' -f2)
+			
+		sed -i "s/9DyPIRj6JheLk/$passwd/" /var/share/etc/proftpd/proftpd.conf
+		
+		echo "CIWS: Password protection active. Please use 'admin' as user name!"
+
+	fi
 
 fi
-
-
 }
 
 #_______________________________________________________________________________________________

@@ -23,6 +23,12 @@ LAMPP_DIRECTORY=$WWW_DIRECTORY
 DISPLAY=127.0.0.1:5.0
 LANG_UI=$(cat /tmp/lang-wui)
 
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
+
+
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
@@ -160,11 +166,15 @@ fi
 
 function INSTALL
 {
-
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+echo $webmin_pwd > $DOSSIER_CHROOT/tmp/passwd.txt
+else
 echo "
 ---------Cooperation-iws----------
 
 $MESS_WARNING_PASSWORD
+
+---------Press Enter--------------
 " 
 read r < /dev/tty
 
@@ -192,13 +202,15 @@ fi
 fi
 done
 if [[ "$SAISIE_PASS1" == "$SAISIE_PASS2" && "$(echo -e "$SAISIE_PASS1" | wc -m)" -ge "6" ]]; then
-
 echo $SAISIE_PASS2 > $DOSSIER_CHROOT/tmp/passwd.txt
+
 fi
 }
 
 CHOIX_PASS
 
+
+fi
 echo "I: Download Webmin"
 DOWNLOAD
 DEBIAN_FRONTEND="dialog"

@@ -26,6 +26,10 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
 
 
 #_______________________________________________________________________________________________
@@ -372,14 +376,17 @@ map to guest = bad user
 
 EOT
 
-echo "-----------------Cooperation-iws----------------------------"
-echo "You will be asked to enter your samba password"
-echo "-------------------Press enter------------------------------"
-read r </dev/tty
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+	(echo $smb_pwd; echo $smb_pwd) | smbpasswd -a -s www-data
+else
+	echo "-----------------Cooperation-iws----------------------------"
+	echo "You will be asked to enter your samba password"
+	echo "-------------------Press enter------------------------------"
+	read r </dev/tty
 
-smbpasswd -a www-data
+	smbpasswd -a www-data
 
-
+fi
 }
 
 #_______________________________________________________________________________________________
