@@ -1,0 +1,40 @@
+#!/bin/bash
+
+###Cooperation-iws gui
+sphider_auto_index="y"
+#Lampp conf
+secure_mysql="n"
+secure_admin="n"
+
+#Samba
+smb_pwd="cooperation"
+
+#Proftpd
+proftpd_pwd="cooperation"
+
+
+
+#Snif
+share_snif_smb1="y"
+share_snif_smb_pwd1="n"
+
+#Roundcube 0.2
+
+
+#Kolab 2.2
+domain="ciws.com"
+kolab_pwd="cooperation"
+
+#SSH Server
+
+#OpenGoo 0.8
+
+#Ossec 1.5.1
+
+#Clamav antivirus
+clam_mail_report="admin@ciws.com"
+
+#Cooperation-iws Liveusb 0.3
+
+#Webmin 1.4.20
+webmin_pwd="cooperation"

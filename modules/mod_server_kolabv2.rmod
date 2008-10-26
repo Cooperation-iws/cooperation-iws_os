@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Kolab 2.2 old'
+RMOD_NAME='Kolab 2.2 v2'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Mail Server'
@@ -41,7 +41,7 @@ cd $DL_DIR
 mkdir kolabtemp
 cd kolabtemp
 #wget -r -l1 -nd --no-parent --retr-symlinks http://ftp.belnet.be/packages/kolab/server/release/kolab-server-2.2.0/ix86-debian4.0/
-wget -r -l1 -nd --no-parent --retr-symlinks $URL_FREE/kolab/
+wget -r -l1 -nd --no-parent --retr-symlinks ftp://ftp.rent-it.net.ua/pub/linux/kolab/server/release/kolab-server-2.2.0/sources/
 
 md5sum -c MD5SUMS
 sh install-kolab.sh 2>&1 | tee /root/kolab-install.log

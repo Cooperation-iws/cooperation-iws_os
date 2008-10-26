@@ -8,7 +8,7 @@ RMOD_NAME='Snif'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Files display'
-RMOD_DESCRIPTION_FR='Présentation de répertoire de fichiers'
+RMOD_DESCRIPTION_FR='Présentation de répertoires de fichiers'
 RMOD_VERBOSE="Tiny soft that display a files directory to the web. "
 RMOD_VERBOSE_FR="Petit logiciel permettant d'afficher sur le web un répertoire de fichiers. "
 
@@ -205,13 +205,13 @@ cd $DL_DIR
 mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cp -Rf snif/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
 
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "1967s/444444/cf3a12/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "1971s/000000/9499ac/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "1978s/444444/aa3b3b/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "1987s/eeeeee/e7d9d9/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "1990s/dddddd/ffffff/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "498s/false/true/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php | sed -i -e "512s/30/0/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
+sed -i "1967s/444444/cf3a12/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
+sed -i "1971s/000000/9499ac/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
+sed -i "1978s/444444/aa3b3b/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
+sed -i "1987s/eeeeee/e7d9d9/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
+sed -i "1990s/dddddd/ffffff/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
+sed -i "498s/false/true/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
+sed -i "512s/30/0/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
 
 
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then

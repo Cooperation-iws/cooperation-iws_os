@@ -1,0 +1,122 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Kolab 2.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Groupware'
+RMOD_DESCRIPTION_FR='Collaboration en ligne'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Kolab is a Groupware Solution for Emails, Appointments, Contacts and more. It supports mixed client environments (Outlook/KDE) because of an open storage format. Any email client speaking standard protocols can be served."
+RMOD_VERBOSE_FR="Kolab est une solution de travail collaboratif pour les eMails, les rendez vous, les contacts, ... Kolab supporte les environnements Outlook et KDE. "
+RMOD_REQ_APACHE=True
+LANG_UI=$(cat /tmp/lang-wui)
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+HOSTNAME=$(cat /tmp/hostname)
+
+function INSTALL
+{
+
+cd $DL_DIR
+mkdir kolabtemp
+cd kolabtemp
+wget -r -l1 -nd --no-parent --retr-symlinks $URL_FREE/kolab/
+
+md5sum -c MD5SUMS
+sh install-kolab.sh 2>&1 | tee /root/kolab-install.log
+
+mv /kolab /var/kolab
+
+ln -s /var/kolab /kolab
+
+/kolab/bin/openpkg rc all stop
+
+sed -i "165s/80/88/" /kolab/etc/kolab/kolab_bootstrap
+sed -i "166s/443/444/" /kolab/etc/kolab/kolab_bootstrap
+sed -i "113s/80/88/" /kolab/etc/kolab/templates/httpd.conf.template
+sed -i "114s/443/444/" /kolab/etc/kolab/templates/httpd.conf.template
+sed -i "41s/443/444/" /kolab/etc/kolab/templates/httpd.conf.template
+
+sed -i "s/getUserInput( \"\\\nContinue\", \"n\", \"y\", \"n\" )/\"y\"/" /kolab/etc/kolab/kolab_bootstrap 
+sed -i "s/getUserInput(\"Please enter Hostname including Domain Name (e.g. thishost.domain.tld)\", \$fqdn)/\"$HOSTNAME.$domain\"/" /kolab/etc/kolab/kolab_bootstrap 
+sed -i "s/getUserInput( \"Do you want to set up (1) a master Kolab server or (2) a slave\",/\"1\";/" /kolab/etc/kolab/kolab_bootstrap 
+sed -i "280s/^/#/" /kolab/etc/kolab/kolab_bootstrap 
+sed -i "s/getUserInput(\"Please enter your Maildomain - if you do not know your mail domain use the fqdn from above\", \$domain)/\"$domain\"/" /kolab/etc/kolab/kolab_bootstrap 
+sed -i "311s/^/#/" /kolab/etc/kolab/kolab_bootstrap 
+sed -i "s/getUserInput(\"Please choose a manager password\", \$bind_pw)/\"$kolab_pwd\"/" /kolab/etc/kolab/kolab_bootstrap 
+sed -i "s/getUserInput(\"Enter fully qualified hostname of slave kolab server e.g. thishost.domain.tld [empty when done]\")/\"\"/" /kolab/etc/kolab/kolab_bootstrap 
+sed -i "s/getUserInput( \"Do you want to create CA and certificates\", \"y\", \"y\", \"n\")/\"y\"/" /kolab/etc/kolab/kolab_bootstrap 
+sed -i "s/getUserInput( \"Do you want to create a certificate request and sign it\",/\"y\";/" /kolab/etc/kolab/kolab_bootstrap 
+sed -i "832s/^/#/" /kolab/etc/kolab/kolab_bootstrap 
+
+
+/kolab/etc/kolab/kolab_bootstrap -b
+
+nohup /kolab/bin/openpkg rc all start
+
+echo "
+#Kolab
+nohup /kolab/bin/openpkg rc all start
+" >> /etc/rc.local
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>https://localhost:444</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>https://localhost:444/admin</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>https://localhost:444</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>https://localhost:444/admin</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+echo "I: Install Kolab"
+INSTALL
+CREATE_WUI
+echo "I: End of Install Kolab"

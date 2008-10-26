@@ -1,0 +1,34 @@
+#!/bin/bash
+
+###Cooperation-iws gui
+sphider_auto_index="y"
+#Lampp conf
+secure_mysql="n"
+secure_admin="n"
+apache_admin_pwd=""
+#Samba
+smb_pwd="cooperation"
+#Proftpd
+proftpd_pwd="cooperation"
+#Jdicd 1.5
+#Mediawiki 1.12.0
+#Wordpress2.5.1
+#Gallery 2.3RC1
+#Ezpublish4.0.1
+#Joomla 1.5.6
+#Ampache 3.4.3
+#Insoshi
+#Pligg 1.8
+#SSH Server
+#OpenGoo 0.8
+#Ossec 1.5.1
+#Net2ftp 0.97
+#Akoie 0.5
+share_akoie_smb="y"
+share_akoie_smb_pwd="n"
+#Clamav antivirus
+clam_mail_report="admin@ciws.com"
+#Cooperation-iws Liveusb 0.3
+#Webmin 1.4.20
+webmin_pwd="cooperation"
+#Cacti 0.8.7b

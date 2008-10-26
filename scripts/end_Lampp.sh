@@ -12,16 +12,24 @@ URL_FREE=$(cat /tmp/url_mirroir)
 CASPER_PATH=$(cat /tmp/casper_path)
 OS_TYPE=$(cat /tmp/os_type)
 TMPUSER=$(cat /tmp/tmp_user)
-echo "I: config post install script"
-echo "
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
 
-echo \"
-----------------Cooperation-iws----------------
------Press Enter / Appuyer sur entrée----------\"
-read ok < /dev/tty
-" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+if [ "$(echo $SILENT | awk  '{print $1}')" == "" ]; then
+	echo "I: config post install script"
+	echo "
 
-chmod +x $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+	echo \"
+	----------------Cooperation-iws----------------
+	-----Press Enter / Appuyer sur entrée----------\"
+	read ok < /dev/tty
+	" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+
+	chmod +x $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+fi
+
 
 if [ "$(echo "${OS_TYPE}" | awk  '{print $1}')" == "Server" ]; then
 echo "I: configuring $CASPER_PATH"

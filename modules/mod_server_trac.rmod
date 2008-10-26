@@ -15,6 +15,11 @@ RMOD_VERBOSE_FR="Subversion (en abrégé svn) est un système de gestion de vers
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
+
 
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
@@ -70,7 +75,10 @@ echo "
 mkdir /var/private
 
 cd /var/private/
-
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+htpasswd -cm -b svn.htpasswd admin $svn_admin_pwd
+htpasswd -m -b svn.htpasswd anonymous $svn_anonymous_pwd
+else
 echo "
 ----------------Cooperation-iws SVN-------------------
 ----------Enter the admin password for svn------------"
@@ -82,7 +90,7 @@ echo "
 ----------Enter the anonymous password for svn--------"
 
 htpasswd -m svn.htpasswd anonymous
-
+fi
 echo "
 [/]
 anonymous = r
@@ -116,7 +124,7 @@ echo "
 ----------Default path to repository is /var/svn/project----"
 
 
-trac-admin project initenv
+trac-admin project initenv "project" "/var/svn/project"
 
 
 sed -i -e "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
@@ -134,13 +142,16 @@ chown -R www-data /var/trac
 chmod -R 775 /var/trac
 
 cd /var/private/
-
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+htpasswd -cm -b trac.htpasswd admin $trac_admin_pwd
+else
 echo "
 ----------------Cooperation-iws SVN-------------------
 ----------Enter the admin password for trac------------"
 
 
 htpasswd -cm trac.htpasswd admin
+fi
 sed -i -e "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
 echo "
 <location /tracproject/login>

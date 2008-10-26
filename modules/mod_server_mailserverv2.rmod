@@ -5,7 +5,8 @@ RMOD_SUBCATEGORY='Servers'
 RMOD_NAME='Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='PostfixAdmin'
+RMOD_DESCRIPTION='eMails administration'
+RMOD_DESCRIPTION_FR='Administration des eMails'
 RMOD_VERBOSE="Postfix est un logiciel d'envoi d'e-mails (SMTP entre autre). Dovecot est un logiciel de réception d'email POP3 et IMAP."
 RMOD_VERBOSE_FR="What is Postfix? It is Wietse Venema's mailer that started life at IBM research as an alternative to the widely-used Sendmail program. Postfix attempts to be fast, easy to administer, and secure. The outside has a definite Sendmail-ish flavor, but the inside is completely different. Dovecot is an open source IMAP and POP3 server for Linux/UNIX-like systems, written with security primarily in mind. Dovecot is an excellent choice for both small and large installations. It's fast, simple to set up, requires no special administration and it uses very little memory. "
 
@@ -22,6 +23,10 @@ SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
 
 
 #TEMP
@@ -33,7 +38,7 @@ INSTALL=$(cat /tmp/def_install)
 #VARIABLES
 #MYSQL PASSWORD
 MAILSERVER_MYSQL_PWD="MAILSERVER_MYSQL_PWD"
-HOSTNAME="127.0.0.1"
+HOSTNAME=$(cat /tmp/hostname)
 #_______________________________________________________________________________________________
 #__________________________________________LANGFR______________________________________________
 
@@ -222,8 +227,31 @@ sed -i "31s/false/true/" $WWW_DIRECTORY/admin/$MOD_NAME/config.inc.php
 
 apt-get install --assume-yes --force-yes postfix postfix-mysql mailscanner clamav-daemon libdate-manip-perl tnef unrar unzip pyzor razor mailutils clamav-freshclam
 
+if [ "$(echo $public_mail | awk  '{print $1}')" == "y" ]; then
+cat << EOT_PUBLIC > /etc/postfix/main.cf
+smtpd_banner = \$myhostname ESMTP \$mail_name 
+biff = no
+append_dot_mydomain = no
+#delay_warning_time = 4h
+myhostname = $HOSTNAME
+relayhost = $smtp_relay
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+# Virtual mailbox settings
+virtual_mailbox_domains = proxy:mysql:/etc/postfix/mysql_virtual_domains_maps.cf
+virtual_mailbox_base = /var/vmail
+virtual_mailbox_maps = proxy:mysql:/etc/postfix/mysql_virtual_mailbox_maps.cf
+virtual_alias_maps = proxy:mysql:/etc/postfix/mysql_virtual_alias_maps.cf
+virtual_minimum_uid = 150
+virtual_uid_maps = static:150
+virtual_gid_maps = static:8
+virtual_transport = dovecot
+dovecot_destination_recipient_limit = 1
 
-cat << EOT > /etc/postfix/main.cf
+EOT_PUBLIC
+else
+cat << EOT_PRIVATE > /etc/postfix/main.cf
 smtpd_banner = \$myhostname ESMTP \$mail_name 
 biff = no
 append_dot_mydomain = no
@@ -255,7 +283,8 @@ smtpd_sasl_type = dovecot
 smtpd_sasl_path = private/auth
 smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination, permit
 
-EOT
+EOT_PRIVATE
+fi
 
 useradd -r -u 150 -g mail -d /var/vmail -s /sbin/nologin -c "Virtual mailbox" vmail
 mkdir /var/vmail

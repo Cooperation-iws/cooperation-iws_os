@@ -20,6 +20,10 @@ SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
 
 
 #TEMP
@@ -360,12 +364,19 @@ Alias /$MOD_NAME "$WWW_DIRECTORY/$MOD_NAME"
 EOF
 
 
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+
+htpasswd -c -b $WWW_DIRECTORY/$MOD_NAME/data/.htpasswd admin $twiki_pwd
+
+else
+
 echo "
 ----------------Cooperation-iws SVN-------------------
 ----------Enter the admin password for Twiki------------"
 
 htpasswd -cm $WWW_DIRECTORY/$MOD_NAME/data/.htpasswd admin
 
+fi
 /etc/init.d/apache2 restart
 
 

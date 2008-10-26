@@ -232,6 +232,15 @@ echo "
 <item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+<item_category>$RMOD_DESCRIPTION_FR</item_category>
+<item_url>/${MOD_NAME[$count]}</item_url>
+<item_name>$RMOD_NAME</item_name>
+<item_desc>$RMOD_VERBOSE_FR</item_desc>
+<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 
 

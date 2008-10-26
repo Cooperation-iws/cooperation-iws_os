@@ -8,7 +8,7 @@ RMOD_NAME='Webmin 1.4.20'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Web based unix management'
-RMOD_DESCRIPTION='Gestion du système unix en ligne'
+RMOD_DESCRIPTION_FR='Gestion du système unix en ligne'
 RMOD_VERBOSE_FR="Webmin est un front-end web d'administration de système Unix. "
 RMOD_VERBOSE="Webmin is a web-based interface for system administration for Unix. Using any modern web browser, you can setup user accounts, Apache, DNS, file sharing and much more. Webmin removes the need to manually edit Unix configuration files like /etc/passwd, and lets you manage a system from the console or remotely."
 
@@ -255,13 +255,21 @@ function CREATE_WUI
 {
 
 echo "
-<item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>https://<?php echo \$HTTP_SERVER_VARS[\"SERVER_NAME\"]?>:10000</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
-</item>
+	<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>https://localhost:10000</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	</item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+echo "
+	<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>https://localhost:10000</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 
 
 }

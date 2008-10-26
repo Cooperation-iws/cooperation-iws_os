@@ -198,6 +198,8 @@ function INSTALL
 {
 echo "I: Download Ossec"
 DOWNLOAD
+apt-get install --assume-yes --force-yes build-essential
+
 #OSSEC config
 mkdir /tmp/ossec
 cp -Rf $DL_DIR/ossec-hids/* /tmp/ossec/.

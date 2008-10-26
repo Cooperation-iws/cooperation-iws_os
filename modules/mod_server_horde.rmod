@@ -89,9 +89,9 @@ fi
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-wget ftp://ftp.horde.org/pub/horde-webmail/horde-webmail-1.2.tar.gz
-tar -xzf horde-webmail-1.2.tar.gz
-mv horde-webmail-1.2 horde
+wget $URL_FREE/Horde_ciws.tar.gz
+tar -xzf Horde_ciws.tar.gz
+
 #rm moodle-latest-19.zip
 
 }
@@ -105,9 +105,9 @@ mv horde-webmail-1.2 horde
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/horde-webmail-1.2.tar.gz
-tar -xzf horde-webmail-1.2.tar.gz
-mv horde-webmail-1.2 horde
+wget $URL_FREE/Horde_ciws.tar.gz
+tar -xzf Horde_ciws.tar.gz
+
 #rm moodle-latest-19.zip
 
 }
@@ -173,63 +173,41 @@ DOWNLOAD
 ##HORDE
 cd $DL_DIR
 mkdir $WWW_DIRECTORY/$MOD_NAME
-cp -Rf horde/* $WWW_DIRECTORY/$MOD_NAME/.
+cp -Rf Horde/* $WWW_DIRECTORY/$MOD_NAME/.
 
-sed -i "28s/horde/$HORDE_MYSQL_PWD/" $WWW_DIRECTORY/$MOD_NAME/scripts/create.mysql.sql
 
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/create.mysql.sql
 
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/groupware.mysql.sql
 
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_alarms.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/sql/Horde_ciws.sql 
 
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_cache.sql
+echo "grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$HORDE_MYSQL_PWD';
+flush privileges;" > HORDE_db.sql
 
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_datatree.mysql.sql
+$BIN_MYSQL -u root < HORDE_db.sql mysql 
 
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_groups.mysql.sql
+#sed -i "28s/horde/$HORDE_MYSQL_PWD/" $WWW_DIRECTORY/$MOD_NAME/scripts/sql/create.mysql.sql
 
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_histories.sql
+#$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/sql/create.mysql.sql 
 
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_locks.sql
 
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_log.sql
-
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_muvfs.sql
-
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_perms.mysql.sql
-
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_prefs.sql
-
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_sessionhandler.mysql.sql
-
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_signups.mysql.sql
-
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_syncml.sql
-
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_tokens.sql
-
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_users.sql
-
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/horde_vfs.sql
-
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/script.initial_horde_user.sql
+#$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/sql/script.initial_horde_user.sql horde
 
 
 apt-get install --assume-yes --force-yes php-pear php5-dev imagemagick libmagic-dev make 
 
 pear install --onlyreqdeps Log Mail Mail_Mime DB File Date 
-pecl install fileinfo
-pecl install memcache
+
+pecl install -s fileinfo
+#pecl install -s memcache
 
 echo "
 extension=fileinfo.so
 extension=memcache.so
 " >> /etc/php5/apache2/php.ini
 
+#php $WWW_DIRECTORY/$MOD_NAME/scripts/setup.php
 
-
-cat << EOC_CONFIG >> $WWW_DIRECTORY/$MOD_NAME/config/conf.php
+cat << EOC_CONFIG > $WWW_DIRECTORY/$MOD_NAME/config/conf.php
 <?php
 /* CONFIG START. DO NOT CHANGE ANYTHING IN OR AFTER THIS LINE. */
 // \$Horde: horde/config/conf.xml,v 1.74.2.78 2008/09/12 10:01:41 jan Exp $
@@ -246,17 +224,17 @@ cat << EOC_CONFIG >> $WWW_DIRECTORY/$MOD_NAME/config/conf.php
 \$conf['urls']['hmac_lifetime'] = 30;
 \$conf['urls']['pretty'] = false;
 \$conf['safe_ips'] = array();
-\$conf['session']['name'] = \'$MOD_NAME\';
+\$conf['session']['name'] = "$MOD_NAME";
 \$conf['session']['use_only_cookies'] = false;
 \$conf['session']['cache_limiter'] = 'nocache';
 \$conf['session']['timeout'] = 0;
 \$conf['cookie']['domain'] = \$_SERVER['SERVER_NAME'];
-\$conf['cookie']['path'] = \'/$MOD_NAME\';
+\$conf['cookie']['path'] = "/$MOD_NAME";
 \$conf['sql']['persistent'] = true;
-\$conf['sql']['username'] = \'horde\';
-\$conf['sql']['password'] = \'$HORDE_MYSQL_PWD\';
+\$conf['sql']['username'] = "$MOD_NAME";
+\$conf['sql']['password'] = "$HORDE_MYSQL_PWD";
 \$conf['sql']['protocol'] = 'unix';
-\$conf['sql']['database'] = 'horde';
+\$conf['sql']['database'] = "$MOD_NAME";
 \$conf['sql']['charset'] = 'utf-8';
 \$conf['sql']['phptype'] = 'mysql';
 \$conf['auth']['admins'] = array('admin@ciws.com');
@@ -330,20 +308,26 @@ cat << EOC_CONFIG >> $WWW_DIRECTORY/$MOD_NAME/config/conf.php
 \$conf['kolab']['enabled'] = false;
 \$conf['memcache']['enabled'] = false;
 /* CONFIG END. DO NOT CHANGE ANYTHING IN OR BEFORE THIS LINE. */
+?>
 EOC_CONFIG
 
 
-cp $WWW_DIRECTORY/$MOD_NAME/config/hooks.php.dist $WWW_DIRECTORY/$MOD_NAME/config/hooks.php
+#cp $WWW_DIRECTORY/$MOD_NAME/config/hooks.php.dist $WWW_DIRECTORY/$MOD_NAME/config/hooks.php
 
-cp $WWW_DIRECTORY/$MOD_NAME/config/mime_drivers.php.dist $WWW_DIRECTORY/$MOD_NAME/config/mime_drivers.php
+#cp $WWW_DIRECTORY/$MOD_NAME/config/mime_drivers.php.dist $WWW_DIRECTORY/$MOD_NAME/config/mime_drivers.php
 
-cp $WWW_DIRECTORY/$MOD_NAME/config/motd.php.dist $WWW_DIRECTORY/$MOD_NAME/config/motd.php
+#cp $WWW_DIRECTORY/$MOD_NAME/config/motd.php.dist $WWW_DIRECTORY/$MOD_NAME/config/motd.php
 
-cp $WWW_DIRECTORY/$MOD_NAME/config/nls.php.dist $WWW_DIRECTORY/$MOD_NAME/config/nls.php
+#cp $WWW_DIRECTORY/$MOD_NAME/config/nls.php.dist $WWW_DIRECTORY/$MOD_NAME/config/nls.php
 
-cp $WWW_DIRECTORY/$MOD_NAME/config/prefs.php.dist $WWW_DIRECTORY/$MOD_NAME/config/prefs.php
+#cp $WWW_DIRECTORY/$MOD_NAME/config/prefs.php.dist $WWW_DIRECTORY/$MOD_NAME/config/prefs.php
 
-cp $WWW_DIRECTORY/$MOD_NAME/config/registry.php.dist $WWW_DIRECTORY/$MOD_NAME/config/registry.php
+#cp $WWW_DIRECTORY/$MOD_NAME/config/registry.php.dist $WWW_DIRECTORY/$MOD_NAME/config/registry.php
+
+
+
+sed -i "263s/_(\"Sent\")/\"Sent\"/" $WWW_DIRECTORY/$MOD_NAME/imp/config/prefs.php
+sed -i "264s/false/true/" $WWW_DIRECTORY/$MOD_NAME/imp/config/prefs.php
 
 chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
@@ -373,8 +357,8 @@ echo "
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
 	<item_url>/$MOD_NAME</item_url>
 	<item_admin_url>/$MOD_NAME</item_admin_url>
-	<item_name>$RMOD_NAME_FR</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 

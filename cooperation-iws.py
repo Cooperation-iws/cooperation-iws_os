@@ -200,6 +200,7 @@ class Reconstructor:
         #self.startupDaemons = ('ppp', 'hplip', 'cupsys', 'festival', 'laptop-mode', 'nvidia-kernel', 'rsync', 'bluez-utils', 'mdadm')
         # shutdown scripts - without the 'K' for looping -- see  https://wiki.ubuntu.com/Teardown  for explanation
         self.shutdownScripts = ('11anacron', '11atd', '19cupsys', '20acpi-support', '20apmd', '20bittorrent', '20dbus', '20festival', '20hotkey-setup', '20makedev', '20nvidia-kernel', '20powernowd', '20rsync', '20ssh', '21acpid', '21hplip', '74bluez-utils', '88pcmcia', '88pcmciautils', '89klogd', '90syslogd')
+	self.ReqApache = "B"
 
         APPDOMAIN='reconstructor'
         LANGDIR='lang'
@@ -304,10 +305,10 @@ class Reconstructor:
                     dest="custom", default=False ,
                     help="Custom install")
 	parser.add_option( "--username", 
-                    dest="username", default="admin" ,
+                    dest="username", default="" ,
                     help="User Name")
 	parser.add_option( "--userfullname", 
-                    dest="userfullname", default="admin ciws" ,
+                    dest="userfullname", default="" ,
                     help="User Full Name")
 	parser.add_option( "--password", 
                     dest="password", default="" ,
@@ -472,14 +473,24 @@ class Reconstructor:
 		os.popen("chmod +x " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
 		os.popen("echo \"A\" > "+ os.path.join(self.customDir, "chroot") + "/tmp/silent")
 		self.setLiveCdInfo(username=self.user, userFullname=self.userFull, userPassword=self.password, hostname=self.host)
+		print _('Proceeding to customization...')		
 		self.customize()
 		self.launchTerminal()
 		self.launchPostInstall()
 		self.endInstall()
 		self.installType = "Cd"
 		self.LiveCdDescription="Cooperation-iws Live CD"
+		self.LiveCdArch = "x86"
+		self.buildIso=True		
+		self.buildSquashRoot = True
+		self.buildUsb = False
+		self.buildLiveCdFilename = os.path.join(self.customDir, "cooperation-iws-custom.iso")
+		self.LiveCdDescription = "cooperation-iws-custom"
+		self.LiveCdRemovePrograms = True
+		self.hfsMap = os.getcwd() + "/lib/hfs.map"
+		
 		self.build()
-	print _('Proceeding to customization...')
+		
 	
 	exit(0)
 
@@ -962,13 +973,15 @@ class Reconstructor:
                        		count +=1
 				self.execModulesEnabled =True
 					
-				if bool(modProps[self.modReqApache]) == True:       
-					self.ReqApache="A"
+				if bool(modProps[self.modReqApache]) == True :       
+					self.ReqApache = "A"
 					fReqApache=open(os.path.join(self.customDir, "chroot/tmp/apache"), 'w')
 			    		fReqApache.write(self.ReqApache)
 			    		fReqApache.close()
+				
 			    	if bool(modProps[self.modReqXnest]) == True:      
-					self.reqXnest=true
+					self.reqXnest = True
+				
 				if modPath != None:
 				   	# check for execute
 				  	
@@ -1822,7 +1835,17 @@ class Reconstructor:
                 self.setBusyCursor()
 		if self.wTree.get_widget("entryLiveCdDescription").get_text() != "":
 		            self.LiveCdDescription = self.wTree.get_widget("entryLiveCdDescription").get_text()
-                gobject.idle_add(self.build)
+		# setup build vars
+		self.buildSquashRoot = self.wTree.get_widget("checkbuttonBuildSquashRoot").get_active()
+		self.buildIso = self.wTree.get_widget("checkbuttonBuildIso").get_active()
+		self.buildUsb = self.wTree.get_widget("checkbuttonBuildUsb").get_active()
+		self.buildLiveCdFilename = self.wTree.get_widget("entryLiveIsoFilename").get_text()
+		self.LiveCdDescription = "cooperation-iws-custom"
+		self.LiveCdRemovePrograms = self.wTree.get_widget("checkbuttonLiveCdRemoveWin32Programs").get_active()
+		self.LiveCdArch = self.wTree.get_widget("comboboxLiveCdArch").get_active_text()
+		self.hfsMap = os.getcwd() + "/lib/hfs.map"
+                	
+		gobject.idle_add(self.build)
                 # change Next text to Finish
                 self.wTree.get_widget("buttonNext").set_label("Finish")
                 return True
@@ -2124,14 +2147,12 @@ class Reconstructor:
             os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
 	    # HACK: create temporary script for chrooting
             scr = '#!/bin/sh\n#\n#\t(c) cooperation-iws, 2008\n#\nchroot ' + os.path.join(self.customDir, "chroot") + " /var/share/lampp/config_post_install.sh" + '\n'
-            fchroot = open(os.path.join(self.customDir, "scriptPostInstall.sh"), 'w')
-            fchroot.write(scr)
-            fchroot.close()
-            os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptPostInstall.sh"))
             # TODO: replace default terminal title with "Reconstructor Terminal"
             # use gnome-terminal if available -- more features
             print _('Launching Post install script customizations...')
-            os.system('\"bash ' + os.path.join(self.customDir, "scriptPostInstall.sh")+ '\"')
+            os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/var/share/lampp/config_post_install.sh"))
+	   
+	    os.system('chroot ' + os.path.join(self.customDir, "chroot") + ' /var/share/lampp/config_post_install.sh')
             
             # restore wgetrc
             print _("Restoring wgetrc configuration...")
@@ -2181,6 +2202,11 @@ class Reconstructor:
 
     # Sets live cd information (username, full name, hostname) for live cd
     def setLiveCdInfo(self, username, userFullname, userPassword, hostname):
+	fHostFile=open(os.path.join(self.customDir, "chroot") + '/tmp/hostname', 'w')
+   	fHostFile.write(hostname)
+    	fHostFile.close()
+    		    
+ 	 	
 	if self.casperPath == 'casper': 
 	    if self.distVariant == 'mint':
 		initUsername = 'mint'
@@ -2329,7 +2355,8 @@ class Reconstructor:
 	    if self.checkbuttonDisableAutologin == True:
 		sed = 'sed -i \'s/true/false/g\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath + "-bottom/15autologin") 
 		cmd = commands.getoutput(sed)
- 	 	
+
+    		
 
     # Burns ISO
     def burnIso(self):
@@ -3673,16 +3700,7 @@ class Reconstructor:
 		if commands.getoutput('echo $MKSQUASHFS') != '':
 		    mksquashfs = commands.getoutput('echo $MKSQUASHFS')
 		    print 'Using alternative mksquashfs: ' + ' Version: ' + commands.getoutput(mksquashfs + ' -version')
-		# setup build vars
-		self.buildSquashRoot = self.wTree.get_widget("checkbuttonBuildSquashRoot").get_active()
-		self.buildIso = self.wTree.get_widget("checkbuttonBuildIso").get_active()
-		self.buildUsb = self.wTree.get_widget("checkbuttonBuildUsb").get_active()
-		self.buildLiveCdFilename = self.wTree.get_widget("entryLiveIsoFilename").get_text()
-		self.LiveCdDescription = "cooperation-iws-custom"
-		self.LiveCdRemovePrograms = self.wTree.get_widget("checkbuttonLiveCdRemoveWin32Programs").get_active()
-		self.LiveCdArch = self.wTree.get_widget("comboboxLiveCdArch").get_active_text()
-		self.hfsMap = os.getcwd() + "/lib/hfs.map"
-
+		
 		print " "
 		print _("INFO: Starting Build...")
 		print " "
