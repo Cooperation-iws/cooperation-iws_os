@@ -173,4 +173,12 @@ EOT
 chmod 777 /etc/skel/Desktop/PASSWORDS.txt
 fi
 
+echo "<?xml version=\"1.0\"?>
+<items>" > /tmp/cooperation-wui.xml
+echo "<?xml version=\"1.0\"?>
+<items>" > /tmp/cooperation-wui-fr.xml
+echo "<?xml version=\"1.0\"?>
+<items>" > /tmp/admin_cooperation-wui.xml
+echo "<?xml version=\"1.0\"?>
+<items>" > /tmp/admin_cooperation-wui-fr.xml
 

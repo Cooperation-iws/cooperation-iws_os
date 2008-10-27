@@ -222,7 +222,7 @@ echo "
 GREP=$(ps aux | grep 'share/webmin')
 PID=$(echo $GREP | cut -d' ' -f2)
 kill $PID
-killall "/usr/bin/perl /usr/share/webmin/miniserv.pl /etc/webmin/miniserv.conf"
+killall \"/usr/bin/perl /usr/share/webmin/miniserv.pl /etc/webmin/miniserv.conf\"
 " >> /tmp/shutdown_ws.sh
 
 cd $DL_DIR
@@ -261,7 +261,7 @@ echo "
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 	</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+" >> /tmp/admin_cooperation-wui.xml
 echo "
 	<item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
@@ -269,7 +269,7 @@ echo "
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 	</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+" >> /tmp/admin_cooperation-wui-fr.xml
 
 
 }

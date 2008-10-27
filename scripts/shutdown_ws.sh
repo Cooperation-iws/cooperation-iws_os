@@ -139,7 +139,7 @@ killall -9 mysqld_safe
 /etc/init.d/nfs-kernel-server stop 1>&2 2>/dev/null
 /etc/init.d/syslog-ng stop 1>&2 2>/dev/null
 killall -9 ruby 1>&2 2>/dev/null
-/kolab/bin/openpkg rc all stop
+/kolab/bin/openpkg rc all stop 1>&2 2>/dev/null
 
 echo "I: config rc.local"
 

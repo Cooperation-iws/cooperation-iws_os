@@ -217,7 +217,6 @@ cd $DL_DIR
 mkdir $WWW_DIRECTORY/admin/$MOD_NAME
 cp -Rf php-syslog-ng/* $WWW_DIRECTORY/admin/$MOD_NAME/.
 
-cp $WWW_DIRECTORY/admin/$MOD_NAME/scripts/logrotate.d /etc/
 mkdir -p /var/log/php-syslog-ng
 
 echo "create database $MOD_NAME;
@@ -231,7 +230,7 @@ chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/
 chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/
 
 cd $WWW_DIRECTORY/admin/$MOD_NAME/scripts/
-perl -i -pe "s/\/www\/php-syslog-ng/$WWW_DIRECTORY\/admin\/$MOD_NAME/g" *
+perl -i -pe "s/\/www\/php-syslog-ng/\/var\/www\/admin\/$MOD_NAME/g" *
 
 sed -i "14s/root/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
 sed -i "15s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
@@ -244,6 +243,7 @@ sed -i "21s/syslogadmin/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/htm
 sed -i "22s/syslogadmin/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
 sed -i "23s/syslog/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
 sed -i "27s/\//\/admin\/$MOD_NAME\/html\//" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install3.php
+cp $WWW_DIRECTORY/admin/$MOD_NAME/scripts/logrotate.d /etc/logrotate.d
 
 
 cat << EOT >> /etc/syslog-ng/syslog-ng.conf
@@ -279,7 +279,7 @@ stats(43200);
 };
 source s_everything { internal(); pipe("/proc/kmsg"); unix-stream("/dev/log"); udp(); };
 destination d_mysql {
-program("/usr/bin/mysql -usyslogadmin -psyslogadmin $MOD_NAME"
+program("/usr/bin/mysql -u$MOD_NAME -p$SYSLOGNG_MYSQL_PWD $MOD_NAME"
 template("INSERT INTO logs (host, facility, priority, level, tag, datetime, program, msg)
 VALUES ( '\$HOST', '\$FACILITY', '\$PRIORITY', '\$LEVEL', '\$TAG', '\$YEAR-\$MONTH-\$DAY \$HOUR:\$MIN:\$SEC', '\$PROGRAM', '\$MSG' );\n")
 template-escape(yes));
@@ -305,19 +305,19 @@ function CREATE_WUI
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/admin/$MOD_NAME</item_url>
+	<item_url>/admin/$MOD_NAME/html/</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_admin_url>/admin/${MOD_NAME[$count]}/html/</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui.xml
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/admin/$MOD_NAME</item_url>
+	<item_url>/admin/$MOD_NAME/html/</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_admin_url>/admin/${MOD_NAME[$count]}/html/</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 

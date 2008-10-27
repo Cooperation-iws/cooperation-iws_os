@@ -1,0 +1,34 @@
+#!/bin/bash
+
+###Cooperation-iws gui
+sphider_auto_index="y"
+#Lampp conf
+secure_mysql="n"
+secure_admin="n"
+apache_admin_pwd=""
+#Samba
+smb_pwd="cooperation"
+#Proftpd
+proftpd_pwd="cooperation"
+#KnowledgeTree 3.5.2c
+#Nuxeo 5.1.5GA
+nuxeo_install_ooo="y"
+#Snif
+share_snif_smb1="y"
+share_snif_smb_pwd1="n"
+#SSH Server
+#Jdicd 1.5
+#Net2ftp 0.97
+#Ossec 1.5.1
+#Snort2.8 Base1.3.9
+#Cacti 0.8.7b
+#Akoie 0.5
+share_akoie_smb="y"
+share_akoie_smb_pwd="n"
+#Clamav antivirus
+clam_mail_report="admin@ciws.com"
+#Cooperation-iws Liveusb 0.3
+#Webmin 1.4.20
+webmin_pwd="cooperation"
+#Postfix Relay Client
+smtp_postfix_client_relay="mail.ciws.com"

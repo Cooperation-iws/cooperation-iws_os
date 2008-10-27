@@ -73,15 +73,14 @@ echo "I: config Cooperation-iws wui"
 
 
 
-echo "<?xml version=\"1.0\"?>
-<items>" > $WWW_DIRECTORY/cooperation-wui.xml
-echo "<?xml version=\"1.0\"?>
-<items>" > $WWW_DIRECTORY/cooperation-wui-fr.xml
+mv /tmp/cooperation-wui.xml $WWW_DIRECTORY/cooperation-wui.xml
+mv /tmp/cooperation-wui-fr.xml  $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 #ADMIN
 
-cp -Rf $WWW_DIRECTORY/cooperation-wui.xml $WWW_DIRECTORY/admin/.
-cp -Rf $WWW_DIRECTORY/cooperation-wui-fr.xml $WWW_DIRECTORY/admin/.
+mv /tmp/admin_cooperation-wui.xml $WWW_DIRECTORY/admin/cooperation-wui.xml
+mv /tmp/admin_cooperation-wui-fr.xml  $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+
 
 fi
 

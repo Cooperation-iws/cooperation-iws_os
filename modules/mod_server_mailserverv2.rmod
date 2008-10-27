@@ -85,7 +85,7 @@ mv postfixadmin-2.2.1.1 postfixadmin
 
 cd $DL_DIR
 wget http://labs.libre-entreprise.org/frs/download.php/622/wbmclamav-0.9.0.wbm.gz
-
+gunzip wbmclamav-0.9.0.wbm.gz
 cd $DL_DIR
 wget http://surfnet.dl.sourceforge.net/sourceforge/msfrontend/webmin-module-1.1-4.wbm
 
@@ -108,7 +108,7 @@ mv postfixadmin-2.2.1.1 postfixadmin
 
 cd $DL_DIR
 wget $URL_FREE/wbmclamav-0.9.0.wbm.gz
-
+gunzip wbmclamav-0.9.0.wbm.gz
 cd $DL_DIR
 wget $URL_FREE/webmin-module-1.1-4.wbm
 
@@ -2823,8 +2823,9 @@ chown postfix:postfix /var/spool/MailScanner/quarantine
 
 ##Webmin configuration
 cd $DL_DIR
-tar -xzf wbmclamav-0.9.0.wbm.gz -C /usr/share/webmin
-tar -xzf webmin-module-1.1-4.wbm -C /usr/share/webmin
+/usr/share/webmin/install-module.pl wbmclamav-0.9.0.wbm 
+/usr/share/webmin/install-module.pl webmin-module-1.1-4.wbm 
+
 
 rm /etc/webmin/module.infos.cache
 
