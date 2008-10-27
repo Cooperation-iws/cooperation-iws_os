@@ -20,7 +20,6 @@ share_snif_smb_pwd1="n"
 #Jdicd 1.5
 #Net2ftp 0.97
 #Ossec 1.5.1
-#Snort2.8 Base1.3.9
 #Cacti 0.8.7b
 #Akoie 0.5
 share_akoie_smb="y"
@@ -32,3 +31,11 @@ clam_mail_report="admin@ciws.com"
 webmin_pwd="cooperation"
 #Postfix Relay Client
 smtp_postfix_client_relay="mail.ciws.com"
+#Zabbix client 1.6
+zabbix_server_name="mail.ciws.com"
+#Syslog client
+syslog_server_name="mail.ciws.com"
+#Snort2.8 client
+snort_registration_key=""
+snort_server_mysql_pwd="SNORT_MYSQL_PWD"
+snort_server_name="mail.ciws.com"

@@ -30,4 +30,4 @@ clam_mail_report="admin@ciws.com"
 webmin_pwd="cooperation"
 #Cacti 0.8.7b
 #Syslog-ng
-
+#Zabbix 1.6
