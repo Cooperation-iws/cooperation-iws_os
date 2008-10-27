@@ -992,7 +992,7 @@ class Reconstructor:
 					    os.popen('chmod a+x \"' + os.path.join(self.customDir, "chroot/tmp/") + os.path.basename(modPath) + '\"')
 
 					else:
-					    print modName + ' - Running in custom directory...'
+					    #print modName + ' - Running in custom directory...'
 					    os.popen('cp -R \"' + modPath + '\" \"' + os.path.join(self.customDir, "scripts/") + '\"')
 					    os.popen('chmod a+x \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(modPath) + '\"')
 

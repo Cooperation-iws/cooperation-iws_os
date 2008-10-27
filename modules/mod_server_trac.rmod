@@ -124,7 +124,8 @@ echo "
 ----------Default path to repository is /var/svn/project----"
 
 
-trac-admin project initenv "project" "/var/svn/project"
+trac-admin project initenv  "My Project" "sqlite:db/trac.db" "svn" "/var/svn/project" "/usr/share/trac/templates"
+
 
 
 sed -i -e "s/<\/VirtualHost>//" /etc/apache2/sites-available/default

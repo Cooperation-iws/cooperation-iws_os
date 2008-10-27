@@ -85,39 +85,9 @@ mkfifo /var/spool/postfix/public/pickup
 #_______________________________________________________________________________________________
 #________________________________________FIN_INSTALL____________________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________CREATE_WUI_____________________________________________
-
-function CREATE_WUI
-{
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url><![CDATA[http://localhost:3000]]></item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url><![CDATA[http://localhost:3000]]></item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
-
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CREATE_WUI_________________________________________
-
 
 
 
 echo "I: Install Ntop"
 INSTALL
-CREATE_WUI
 echo "I: End of install Ntop"

@@ -15,6 +15,9 @@ proftpd_pwd="cooperation"
 #Wordpress2.5.1
 #Achievo 1.3.4
 #Bugzilla
+bugzilla_admin_email="admin@ciws.com"
+bugzilla_admin_name="admin"
+bugzilla_admin_pwd="cooperation"
 #Mantis1.1.2
 #Radria 0.8.4
 #Trac Subversion
@@ -36,3 +39,4 @@ clam_mail_report="admin@ciws.com"
 #Webmin 1.4.20
 webmin_pwd="cooperation"
 #Cacti 0.8.7b
+#Snort2.8 Base1.3.9

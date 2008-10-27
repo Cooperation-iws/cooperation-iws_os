@@ -8,6 +8,10 @@ RMOD_NAME='KnowledgeTree 3.5.2c'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Data management portal'
+RMOD_DESCRIPTION_FR='Portail de gestion des données'
+RMOD_VERBOSE="KnowledgeTree™ is document management software that connects people, processes, and ideas. Collaborate, securely store all your critical documents, address compliance challenges, and focus on providing a simple solution that works for your business."
+RMOD_VERBOSE_FR="KnowledgeTree est un logiciel de gestion de documents. "
+
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
@@ -306,12 +310,22 @@ for (( count=1; count<=$NB_KT; count++ ))
 do
 echo "
 <item>
-<item_category>$RMOD_DESCRIPTION</item_category>
-<item_url>/${MOD_NAME[$count]}</item_url>
-<item_name>$RMOD_NAME</item_name>
-<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/$MOD_NAME[$count]</item_url>
+	<item_admin_url>/$MOD_NAME[$count]</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/$MOD_NAME[$count]</item_url>
+	<item_admin_url>/$MOD_NAME[$count]</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 done
 }
 #_______________________________________________________________________________________________

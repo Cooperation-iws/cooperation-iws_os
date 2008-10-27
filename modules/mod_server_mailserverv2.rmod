@@ -2821,10 +2821,44 @@ sed -i "s/#run_mailscanner=1/run_mailscanner=1/" /etc/default/mailscanner
 chown postfix:postfix /var/spool/MailScanner/incoming
 chown postfix:postfix /var/spool/MailScanner/quarantine
 
-##Clamav configuration
+##Webmin configuration
+cd $DL_DIR
+tar -xzf wbmclamav-0.9.0.wbm.gz -C /usr/share/webmin
+tar -xzf webmin-module-1.1-4.wbm -C /usr/share/webmin
 
+rm /etc/webmin/module.infos.cache
 
+echo "clamav mailscanner" >> /etc/webmin/webmin.acl
 
+mkdir /etc/webmin/clamav
+cat << EOT > /etc/webmin/clamav/config
+clamav_quarantine=/var/lib/amavis/virusmails
+clamav_clamav_log=/var/log/clamav/clamav.log
+clamav_sys_user=clamav
+clamav_spam_user=amavis
+clamav_db1=/var/lib/clamav/main.inc/main.info
+clamav_init_script=/etc/init.d/clamav-daemon
+clamav_init_restore_path=/var/backups
+clamav_freshclam_log=/var/log/clamav/freshclam.log
+clamav_working_path=/tmp
+clamav_freshclam_init_script=/etc/init.d/clamav-freshclam
+clamav_freshclam_conf=/etc/clamav/freshclam.conf
+clamav_quarantine_soft=4
+clamav_clamav_conf=/etc/clamav/clamd.conf
+clamav_db2=/var/lib/clamav/daily.cvd
+clamav_refresh_use_cron=0
+clamav_sys_group=adm
+EOT
+
+mkdir /etc/webmin/mailscanner
+cat << EOT > /etc/webmin/mailscanner/config
+start_cmd=/etc/init.d/MailScanner start
+pidfile=/var/run/MailScanner.pid
+bindir=/usr/sbin/
+mailscanner_config=/etc/MailScanner/MailScanner.conf
+mailscanner_path=/usr/sbin/MailScanner
+stop_cmd=/etc/init.d/mailscanner stop
+EOT
 
 mv /etc/clamav /var/share/etc/
 
@@ -2898,34 +2932,7 @@ echo "
 
 #Mailserver
 
-cat << EOT > /etc/webmin/clamav/config
-clamav_quarantine=/var/lib/amavis/virusmails
-clamav_clamav_log=/var/log/clamav/clamav.log
-clamav_sys_user=clamav
-clamav_spam_user=amavis
-clamav_db1=/var/lib/clamav/main.inc/main.info
-clamav_init_script=/etc/init.d/clamav-daemon
-clamav_init_restore_path=/var/backups
-clamav_freshclam_log=/var/log/clamav/freshclam.log
-clamav_working_path=/tmp
-clamav_freshclam_init_script=/etc/init.d/clamav-freshclam
-clamav_freshclam_conf=/etc/clamav/freshclam.conf
-clamav_quarantine_soft=4
-clamav_clamav_conf=/etc/clamav/clamd.conf
-clamav_db2=/var/lib/clamav/daily.cvd
-clamav_refresh_use_cron=0
-clamav_sys_group=adm
-EOT
 
-
-cat << EOT > /etc/webmin/mailscanner/config
-start_cmd=/etc/init.d/MailScanner start
-pidfile=/var/run/MailScanner.pid
-bindir=/usr/sbin/
-mailscanner_config=/etc/MailScanner/MailScanner.conf
-mailscanner_path=/usr/sbin/MailScanner
-stop_cmd=/etc/init.d/mailscanner stop
-EOT
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
 }

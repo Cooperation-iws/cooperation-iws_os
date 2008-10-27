@@ -19,6 +19,10 @@ WWW_DIRECTORY=$DOSSIER_CHROOT"/var/www"
 DL_DIR=$LAMPP_DIRECTORY"/DL"
 BIN_MYSQL="/usr/bin/mysql"
 LANG_UI=$(cat $DOSSIER_CHROOT/tmp/lang-wui)
+SILENT=$(cat $DOSSIER_CHROOT/tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. $DOSSIER_CHROOT/tmp/app_params
+fi
 
 DISPLAY=127.0.0.1:5.0 
 
@@ -221,10 +225,14 @@ apt-get install --assume-yes --force-yes sun-java5-bin sun-java5-jre
 TEXT1=$MESS_CHOIX_OPTION
 TEXT_CHOIX_1=$MESS_OOO
 TEXT_CHOIX_2=$MESS_DO_NOTHING
-
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+OOO=$nuxeo_install_ooo
+else
 echo "$MESS_OOO"
 echo "[N/y]"
 read OOO < /dev/tty
+fi
+
 
 if [ "$(echo "${OOO}" | awk  '{print $1}')" == "y" ]; then
 chroot $DOSSIER_CHROOT << "EOF"

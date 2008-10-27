@@ -15,6 +15,11 @@ RMOD_REQ_APACHE=True
 RMOD_VERBOSE="Bugzilla is a “Defect Tracking System” or “Bug-Tracking System”. Defect Tracking Systems allow individual or groups of developers to keep track of outstanding bugs in their product effectively. Most commercial defect-tracking software vendors charge enormous licensing fees. Despite being “free”, Bugzilla has many features its expensive counterparts lack. Consequently, Bugzilla has quickly become a favorite of hundreds of organizations across the globe. "
 RMOD_VERBOSE_FR="Bugzilla est un système de suivi des Défauts utilisé par la fondation Mozilla. "
 
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
+
 
 
 
@@ -194,6 +199,10 @@ rm BUGZILLA_db.sql
 mkdir $WWW_DIRECTORY/${MOD_NAME}
 cp -Rf bugzilla/* $WWW_DIRECTORY/${MOD_NAME}/.
 cd $WWW_DIRECTORY/${MOD_NAME}
+sed -i "292s/<STDIN>/$bugzilla_admin_email/" $WWW_DIRECTORY/${MOD_NAME}/Bugzilla/Install.pm
+sed -i "303s/<STDIN>/$bugzilla_admin_name/" $WWW_DIRECTORY/${MOD_NAME}/Bugzilla/Install.pm
+sed -i "317s/<STDIN>/$bugzilla_admin_pwd/" $WWW_DIRECTORY/${MOD_NAME}/Bugzilla/Install.pm
+sed -i "320s/<STDIN>/$bugzilla_admin_pwd/" $WWW_DIRECTORY/${MOD_NAME}/Bugzilla/Install.pm
 ./checksetup.pl
 sed -i -e "s/^\$db_name = '.*';/\$db_name = '${MOD_NAME}';/" \
        -e "s/^\$db_user = '.*';/\$db_user = '${MOD_NAME}';/" \

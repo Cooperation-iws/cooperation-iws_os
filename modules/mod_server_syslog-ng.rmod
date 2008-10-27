@@ -200,7 +200,7 @@ Owners: msttcorefonts
 " >> /var/cache/debconf/config.dat
 apt-get install --assume-yes --force-yes syslog-ng
 aptitude install -y msttcorefonts
-
+/etc/init.d/syslog-ng stop
 #Cacti config
 
 echo "
@@ -237,11 +237,11 @@ sed -i "14s/root/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install
 sed -i "15s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
 sed -i "16s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
 sed -i "17s/sysloguser/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "18s/sysloguser/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "19s/sysloguser/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "18s/sysloguser/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "19s/sysloguser/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
 sed -i "20s/syslogadmin/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "21s/syslogadmin/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "22s/syslogadmin/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "21s/syslogadmin/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
+sed -i "22s/syslogadmin/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
 sed -i "23s/syslog/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
 sed -i "27s/\//\/admin\/$MOD_NAME\/html\//" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install3.php
 
