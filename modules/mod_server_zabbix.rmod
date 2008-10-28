@@ -196,7 +196,7 @@ DBUser=${MOD_NAME}
 # Database password
 # Comment this line if no password used
 
-DBPassword=9htzr50sDfNV
+DBPassword=$ZABBIX_MYSQL_PWD
 
 # Connect to MySQL using Unix socket?
 
@@ -211,6 +211,8 @@ cat << EOT_APACHE_ZABBIX > /etc/zabbix/apache.conf
 </IfModule>
 EOT_APACHE_ZABBIX
 
+mkdir /var/run/zabbix-server
+chmod -R 777 /var/run/zabbix-server
 
 /usr/bin/zabbix_installdb
 

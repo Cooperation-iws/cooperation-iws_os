@@ -26,7 +26,7 @@ if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
 fi
 
-
+HOSTNAME=$(cat /tmp/hostname)
 MOD_NAME="zabbix"
 ZABBIX_MYSQL_PWD="ZABBIX_MYSQL_PWD"
 
@@ -41,7 +41,8 @@ function INSTALL
 
 apt-get install --assume-yes --force-yes zabbix-agent
 
-sed -i "s/Server=xxx.xxx.xxx.xxx/Server=$zabbix_server_name/"  /etc/zabbix/zabbix_agentd.conf
+sed -i "s/Server=localhost/Server=$zabbix_server_name/"  /etc/zabbix/zabbix_agentd.conf
+sed -i "s/Server=localhost/Server=$HOSTNAME/"  /etc/zabbix/zabbix_agentd.conf
 
 echo "zabbix_agent 10050/tcp # Zabbix ports
 zabbix_trap 10051/tcp
