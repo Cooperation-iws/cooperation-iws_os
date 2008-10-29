@@ -1,0 +1,106 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Awstat'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Web logs tracking analysis tool'
+RMOD_DESCRIPTION_FR='Outil de surveillance des logs du serveur web'
+RMOD_VERBOSE="AWStats is a free powerful and featureful tool that generates advanced web, streaming, ftp or mail server statistics, graphically. This log analyzer works as a CGI or from command line and shows you all possible information your log contains, in few graphical web pages. It uses a partial information file to be able to process large log files, often and quickly. It can analyze log files from all major server tools like Apache log files (NCSA combined/XLF/ELF log format or common/CLF log format), WebStar, IIS (W3C log format) and a lot of other web, proxy, wap, streaming servers, mail servers and some ftp servers. "
+RMOD_VERBOSE_FR="AWStats est un outil qui génère des statistiques avancées sur les serveurs webs, mail, ftp, .... "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
+
+
+#VARIABLES
+
+HOSTNAME=$(cat /tmp/hostname)
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes awstats libnet-ip-perl
+
+cat << EOT > /etc/awstats/awstats.$HOSTNAME.conf
+LogFile="/var/log/apache2/access.log"
+LogFormat=1
+DNSLookup=1
+DirData="/var/cache/awstats/"
+DirCgi="/cgi-bin"
+DirIcons="/icon"
+SiteDomain="$HOSTNAME"
+AllowToUpdateStatsFromBrowser=1
+AllowFullYearView=3
+EOT
+mkdir /var/cache
+mkdir /var/cache/awstats
+chmod -R 777 /var/cache/awstats
+cp -r /usr/share/awstats/icon /var/www/icon
+/usr/lib/cgi-bin/awstats.pl -config=$HOSTNAME -update
+echo "0,10,20,30,40,50 * * * * www-data [ -x /usr/lib/cgi-bin/awstats.pl -a -f /etc/awstats/awstats.conf -a -r /var/log/apache2/access.log ] && /usr/lib/cgi-bin/awstats.pl -config=$HOSTNAME  -update >/dev/null" >> /etc/cron.d/awstats
+sudo chmod +x /etc/cron.d/awstats
+chmod 755 /var/log/apache2
+chmod 644 /var/log/apache2/access.log
+ 
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/cgi-bin/awstats.pl?config=$HOSTNAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/cgi-bin/awstats.pl?config=$HOSTNAME</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/cgi-bin/awstats.pl?config=$HOSTNAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/cgi-bin/awstats.pl?config=$HOSTNAME</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ntop"

@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Snort2.8 Base1.3.9 server'
+RMOD_NAME='Snort2.8 server Base1.3.9'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Network Intrusion Detection System'
@@ -469,7 +469,10 @@ cd $DL_DIR
 echo "create database snort;
 grant insert,select on root.* to snort;
 set password for snort=password('$SNORT_MYSQL_PWD');
-grant create,delete,insert,select,update on snort.* to snort;" > snort_db.sql
+grant create,delete,insert,select,update on snort.* to snort;
+grant insert,select on root.* to snort@localhost;
+set password for snort@localhost=password('$SNORT_MYSQL_PWD');
+grant create,delete,insert,select,update on snort.* to snort@localhost;" > snort_db.sql
 $BIN_MYSQL -u root < snort_db.sql mysql 
 rm snort_db.sql
 cd $DL_DIR/snort/schemas
@@ -496,6 +499,8 @@ pear install Image_Canvas-alpha
 pear install Image_Graph-alpha 
 
 sed -i "s/bind-address/#bind-address/" /etc/mysql/my.cnf
+
+/etc/init.d/mysql restart
 }
 
 #_______________________________________________________________________________________________

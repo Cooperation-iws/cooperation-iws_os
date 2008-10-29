@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Syslog-ng'
+RMOD_NAME='Syslog-ng server'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Logs administration'
@@ -220,6 +220,7 @@ cp -Rf php-syslog-ng/* $WWW_DIRECTORY/admin/$MOD_NAME/.
 mkdir -p /var/log/php-syslog-ng
 
 echo "create database $MOD_NAME;
+grant all on $MOD_NAME.* to $MOD_NAME identified by '$SYSLOGNG_MYSQL_PWD';
 grant all on $MOD_NAME.* to $MOD_NAME@localhost identified by '$SYSLOGNG_MYSQL_PWD';
 flush privileges;
 " > /tmp/syslogng_db.sql
@@ -290,6 +291,11 @@ destination(d_mysql);
 };
 # Added above by cdukes for php-syslog-ng enhancements
 EOT
+
+sed -i "s/bind-address/#bind-address/" /etc/mysql/my.cnf
+
+/etc/init.d/mysql restart
+
 
 }
 

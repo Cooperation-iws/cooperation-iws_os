@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Ossec 1.5.1'
+RMOD_NAME='Ossec 1.5.1 standalone'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Host based Intrusion Detection System'
@@ -217,7 +217,7 @@ export USER_LANGUAGE="en"
 export USER_EMAIL_SMTP="localhost"
 export USER_ENABLE_SYSCHECK="yes"
 export USER_ENABLE_ROOTCHECK="yes"
-export USER_INSTALL_TYPE="server"
+export USER_INSTALL_TYPE="local"
 export USER_DIR="/var/ossec"
 export ACTIVERESPONSE="no"
 export USER_ENABLE_ACTIVE_RESPONSE="n"

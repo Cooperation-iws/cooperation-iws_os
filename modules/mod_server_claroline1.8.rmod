@@ -217,8 +217,8 @@ echo "
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
 	<item_url>/$MOD_NAME</item_url>
 	<item_admin_url>/$MOD_NAME</item_admin_url>
-	<item_name>$RMOD_NAME_FR</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 

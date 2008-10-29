@@ -2,6 +2,10 @@
 
 ###Cooperation-iws gui
 sphider_auto_index="y"
+#Lampp conf
+secure_mysql="n"
+secure_admin="n"
+apache_admin_pwd=""
 
 
 #Samba
@@ -15,8 +19,6 @@ proftpd_pwd="cooperation"
 #Snif
 share_snif_smb1="y"
 share_snif_smb_pwd1="n"
-
-#Roundcube 0.2
 
 #Wordpress2.5.1
 
@@ -42,8 +44,6 @@ share_snif_smb_pwd1="n"
 
 #Ossec 1.5.1
 
-#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
-
 #Lifetype 1.2
 
 #Spip 1.9.2d
@@ -59,5 +59,15 @@ clam_mail_report="admin@ciws.com"
 
 #Cooperation-iws Liveusb 0.3
 
+#Awstat
+
 #Webmin 1.4.20
 webmin_pwd="cooperation"
+#Zabbix client 1.6
+zabbix_server_name="mail.ciws.com"
+#Syslog client
+syslog_server_name="mail.ciws.com"
+#Snort2.8 client
+snort_registration_key=""
+snort_server_mysql_pwd="SNORT_MYSQL_PWD"
+snort_server_name="mail.ciws.com"
