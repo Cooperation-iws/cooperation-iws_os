@@ -7,8 +7,8 @@ RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='eMails administration'
 RMOD_DESCRIPTION_FR='Administration des eMails'
-RMOD_VERBOSE="Postfix est un logiciel d'envoi d'e-mails (SMTP entre autre). Dovecot est un logiciel de réception d'email POP3 et IMAP."
-RMOD_VERBOSE_FR="What is Postfix? It is Wietse Venema's mailer that started life at IBM research as an alternative to the widely-used Sendmail program. Postfix attempts to be fast, easy to administer, and secure. The outside has a definite Sendmail-ish flavor, but the inside is completely different. Dovecot is an open source IMAP and POP3 server for Linux/UNIX-like systems, written with security primarily in mind. Dovecot is an excellent choice for both small and large installations. It's fast, simple to set up, requires no special administration and it uses very little memory. "
+RMOD_VERBOSE_FR="Postfix est un logiciel d'envoi d'e-mails (SMTP entre autre). Dovecot est un logiciel de réception d'email POP3 et IMAP."
+RMOD_VERBOSE="What is Postfix? It is Wietse Venema's mailer that started life at IBM research as an alternative to the widely-used Sendmail program. Postfix attempts to be fast, easy to administer, and secure. The outside has a definite Sendmail-ish flavor, but the inside is completely different. Dovecot is an open source IMAP and POP3 server for Linux/UNIX-like systems, written with security primarily in mind. Dovecot is an excellent choice for both small and large installations. It's fast, simple to set up, requires no special administration and it uses very little memory. "
 
 
 

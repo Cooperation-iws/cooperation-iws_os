@@ -4,23 +4,31 @@
 sphider_auto_index="y"
 #Lampp conf
 secure_mysql="n"
-secure_admin="y"
-apache_admin_pwd="cooperation"
+secure_admin="n"
+apache_admin_pwd=""
 #Samba
 smb_pwd="cooperation"
 #Proftpd
 proftpd_pwd="cooperation"
 #Jdicd 1.5
 #Mediawiki 1.12.0
-#Spip 1.9.2d
 #Wordpress2.5.1
-#Gallery 2.3RC1
-#Ampache 3.4.3
-#Insoshi
-#Pligg 1.8
+#Achievo 1.3.4
+#Bugzilla
+bugzilla_admin_email="admin@ciws.com"
+bugzilla_admin_name="admin"
+bugzilla_admin_pwd="cooperation"
+#Mantis1.1.2
+#Radria 0.8.4
+#Trac Subversion
+svn_admin_pwd="cooperation"
+svn_anonymous_pwd=""
+trac_admin_pwd="cooperation"
+#PhpBB 3.0.2
+#Taskfreak 1.8
 #SSH Server
 #OpenGoo 0.8
-#Ossec 1.5.1 standalone
+
 #Net2ftp 0.97
 #Akoie 0.5
 share_akoie_smb="y"
@@ -31,13 +39,10 @@ clam_mail_report="admin@ciws.com"
 #Webmin 1.4.20
 webmin_pwd="cooperation"
 #Cacti 0.8.7b
-#Postfix Relay Client
-smtp_postfix_client_relay="mail.ciws.com"
-#Zabbix client 1.6
-zabbix_server_name="mail.ciws.com"
-#Syslog client
-syslog_server_name="mail.ciws.com"
-#Snort2.8 client
-snort_registration_key=""
-snort_server_mysql_pwd="SNORT_MYSQL_PWD"
-snort_server_name="mail.ciws.com"
+#Ossec 1.5.1 standalone
+
+#Snort2.8 Base1.3.9 standalone
+
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
+
+

@@ -3352,7 +3352,7 @@ class Reconstructor:
 	
 	
 	
-	if self.comboboxCiwsArtwork == "ciws_gnome":
+	if self.comboboxCiwsArtwork == "ciwsGnome":
 		self.artwork = "ciws_gnome"
 		
 	elif self.comboboxCiwsArtwork == "eLearning":
@@ -3390,7 +3390,7 @@ class Reconstructor:
 	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/cooperation-iws-wui.sh")   + ' ;\n'
 	if self.artwork != "":
 			scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "artwork/" + self.artwork+".artchroot") + ' ' +  os.path.join(self.customDir, "chroot/tmp/artwork.amod")   + ' ;\n'
- 			scriptCustomExec += 'chmod 777 ' + os.path.join(self.ciwsRootDir, "chroot/tmp/artwork.amod")   + ' ;\n'
+ 			scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/artwork.amod")   + ' ;\n'
  			scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "artwork/" + self.artwork) + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  			
 	fscriptCustomExec=open(os.path.join(self.customDir, "scriptExec.sh"), 'w')

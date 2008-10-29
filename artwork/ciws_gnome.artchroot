@@ -9,11 +9,11 @@ mkdir /etc/skel/Desktop
 
 
 apt-get install --assume-yes --force-yes usplash
-cd /tmp
+cd /tmp/ciws_gnome
 dpkg -i usplash-theme-ciws_0.1-1_i386.deb 
 update-alternatives --install /usr/lib/usplash/usplash-artwork.so usplash-artwork.so /usr/lib/usplash/usplash-theme-ciws.so 10
-update-alternatives --config usplash-artwork.so
-cd /tmp
+update-alternatives --set usplash-artwork.so /usr/lib/usplash/usplash-theme-ciws.so
+cd /tmp/ciws_gnome
 cp background.png /usr/share/gdm/themes/xubuntu
 cp logo.png /usr/share/gdm/themes/xubuntu/logo.png 1>&2 2>/dev/null
 cp background.png /usr/share/gdm/themes/Human

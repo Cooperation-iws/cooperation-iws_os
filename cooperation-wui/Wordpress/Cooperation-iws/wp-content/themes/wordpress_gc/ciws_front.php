@@ -163,19 +163,21 @@ $xml_file="cooperation-wui.xml";
 
 
  ?>   
-			</div><?php	} else {?>
+			<?php	} else {?>
 <hr width="20%">
 <a href="/">Home</a><br>
-<?php } ?> 	
+<?php } ?> </div>	
 	
 <div class='sidebar span-8 last'>
 <div class='sidebarboxtop'><img src="<?php bloginfo('template_url') ?>/images/sidebartop.gif" alt="sidebartop" /></div>
         <div class='sidebarbox'>
-		<li><h2>Languages</h2><br>
+		<li><h3>Languages</h3><br>
 <ul><?php if(function_exists('polyglot_list_langs')){
 polyglot_list_langs(true);
 }?></ul>
-</li>	  </div>	
+</li>	  </div>
+<div class='sidebarboxbottom'><img src="<?php bloginfo('template_url') ?>/images/sidebarbottom.gif" alt="sidebarbottom" /></div>
+        	
         <div class='sidebarboxtop'><img src="<?php bloginfo('template_url') ?>/images/sidebartop.gif" alt="sidebartop" /></div>
         <div class='sidebarbox'>
             <li><h3>Applications</h3><br>			
@@ -206,18 +208,19 @@ polyglot_list_langs(true);
 						} ?>						
             </ul>
 </li>	
-			<?php wp_list_pages('title_li=<h2>Pages</h2><br>' ); ?>
+			<?php wp_list_pages('title_li=<h3>Pages</h3><br>' ); ?>
 
 			
 
-			<?php wp_list_categories('show_count=1&title_li=<h2>Categories</h2><br>'); ?>
+			<?php wp_list_categories('show_count=1&title_li=<h3>Categories</h3><br>'); ?>
 
 			
 
 			
 		</ul>
         </div>
-       
+       <div class='sidebarboxbottom'><img src="<?php bloginfo('template_url') ?>/images/sidebarbottom.gif" alt="sidebarbottom" /></div>
+        
         <div class='sidebarboxtop'><img src="<?php bloginfo('template_url') ?>/images/sidebartop.gif" alt="sidebartop" /></div>
         <div class='sidebarbox'>
                 <?php wp_list_bookmarks(array('title_before' => '<h3>', 'title_after' => '</h3>',	'category_before' => '', 'category_after' => '')); ?>
