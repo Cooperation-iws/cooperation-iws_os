@@ -1,0 +1,108 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Syslog client'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Distributed monitoring solution'
+RMOD_DESCRIPTION_FR='solution de surveillance réseau'
+RMOD_VERBOSE="ZABBIX is an enterprise-class open source distributed monitoring solution. "
+RMOD_VERBOSE_FR="Zabbix est un système de surveillance du réseau open source. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+
+
+#echo "*.*            @$syslog_server_name" >> /etc/syslog.conf
+
+
+echo "
+Name: msttcorefonts/baddldir
+Template: msttcorefonts/baddldir
+Owners: msttcorefonts
+
+Name: msttcorefonts/defoma
+Template: msttcorefonts/defoma
+Value: 
+Owners: msttcorefonts
+Flags: seen
+
+Name: msttcorefonts/dldir
+Template: msttcorefonts/dldir
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/dlurl
+Template: msttcorefonts/dlurl
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/http_proxy
+Template: msttcorefonts/http_proxy
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/savedir
+Template: msttcorefonts/savedir
+Value: 
+Owners: msttcorefonts
+" >> /var/cache/debconf/config.dat
+apt-get install --assume-yes --force-yes syslog-ng
+aptitude install -y msttcorefonts
+/etc/init.d/syslog-ng stop
+
+cat << EOT >> /etc/syslog-ng/syslog-ng.conf
+source s_all {
+internal();
+unix-stream("/dev/log");
+file("/proc/kmsg" log_prefix("kernel: "));
+udp();
+};
+
+destination d1 { udp("$syslog_server_name"); };
+
+log
+{
+source(s_all);
+destination(d1);
+}; 
+EOT
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+
+
+echo "I: Install syslog client"
+INSTALL
+
+echo "I: End of install syslog client"
