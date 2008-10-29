@@ -3352,7 +3352,7 @@ class Reconstructor:
 	
 	
 	
-	if self.comboboxCiwsArtwork == "Ciws for Gnome":
+	if self.comboboxCiwsArtwork == "ciws_gnome":
 		self.artwork = "ciws_gnome"
 		
 	elif self.comboboxCiwsArtwork == "eLearning":

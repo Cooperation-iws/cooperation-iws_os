@@ -50,7 +50,7 @@ zabbix_trap 10051/tcp
 " >> /etc/services
 
 sed -i "s/Server=localhost/Server=127.0.0.1/"  /etc/zabbix/zabbix_agentd.conf
-sed -i "s/Hostname=localhost/Hostname=$HOSTNAME/"  /etc/zabbix/zabbix_agentd.conf
+sed -i "s/Hostname=localhost/Hostname=127.0.0.1/"  /etc/zabbix/zabbix_agentd.conf
 
 
 cat << EOT_ZABBIX_DB > /etc/zabbix/dbconfig.php

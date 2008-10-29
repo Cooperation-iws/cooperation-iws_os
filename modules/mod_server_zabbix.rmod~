@@ -225,6 +225,7 @@ echo "
 #Zabbix
 mkdir /var/run/zabbix-server
 chmod -R 777 /var/run/zabbix-server
+/etc/init.d/zabbix-server restart
 " >> /etc/rc.local
 
 /usr/bin/zabbix_installdb
@@ -232,6 +233,7 @@ chmod -R 777 /var/run/zabbix-server
 sed -i "s/;date.timezone =/date.timezone =Europe\/Paris/" /etc/php5/apache2/php.ini
 
 /etc/init.d/apache2 restart
+
 
 }
 
