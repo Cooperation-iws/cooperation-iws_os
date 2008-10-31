@@ -6,63 +6,37 @@ sphider_auto_index="y"
 secure_mysql="n"
 secure_admin="n"
 apache_admin_pwd=""
-
-
 #Proftpd
 proftpd_pwd="cooperation"
-
 #Gallery 2.3RC1
-
 #Ezpublish4.0.1
-
 # Drupal 6.4
-
 #Wikini 0.5
-
 #Joomla 1.5.6
-
 # Twiki 4.2
 twiki_pwd="cooperation"
 # Moinmoin
-
 #Zenphoto1.2
-
-
 #Wordpress2.5.1
-
 #SSH Server
-
-
 #Mediawiki 1.12.0
-
 #PhpBB 3.0.2
-
 #Jdicd 1.5
 #Dokuwiki 0.5
-
-
 #Net2ftp 0.97
-
 #Dotclear 2.0.1
-
 #Ossec 1.5.1 standalone
-
-
+ossec_report_address="admin@ciws.com"
+#Awstats
 #Lifetype 1.2
-
 #Spip 1.9.2d
-
 #Cacti 0.8.7b
-
 #Akoie 0.5
 share_akoie_smb="y"
 share_akoie_smb_pwd="n"
-
 #Clamav antivirus
 clam_mail_report="admin@ciws.com"
-
 #Cooperation-iws Liveusb 0.3
-
 #Webmin 1.4.20
 webmin_pwd="cooperation"
 #Postfix Relay Client

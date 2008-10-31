@@ -17,8 +17,10 @@ share_snif_smb_pwd1="n"
 #Horde 1.2
 #SSH Server
 #OpenGoo 1.0
-#Awstat
+#Awstats
+#Openmeeting
 #Ossec 1.5.1 standalone
+ossec_report_address="admin@ciws.com"
 #Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
 public_mail="y"
 mail_domain="ciws.com"

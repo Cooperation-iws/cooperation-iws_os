@@ -20,6 +20,7 @@ share_snif_smb_pwd1="n"
 #Jdicd 1.5
 #Net2ftp 0.97
 #Ossec 1.5.1 standalone
+ossec_report_address="admin@ciws.com"
 #Cacti 0.8.7b
 #Akoie 0.5
 share_akoie_smb="y"
@@ -30,9 +31,8 @@ clam_mail_report="admin@ciws.com"
 #Webmin 1.4.20
 webmin_pwd="cooperation"
 #Ossec 1.5.1 standalone
-
+#Awstats
 #Snort2.8 Base1.3.9 standalone
-
 #Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
 
 

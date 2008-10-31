@@ -12,7 +12,7 @@ smb_pwd="cooperation"
 proftpd_pwd="cooperation"
 #Jdicd 1.5
 #Mediawiki 1.12.0
-#Spip 1.9.2d
+#Sedna
 #Wordpress2.5.1
 #Gallery 2.3RC1
 #Ampache 3.4.3
@@ -21,6 +21,7 @@ proftpd_pwd="cooperation"
 #SSH Server
 #OpenGoo 1.0
 #Ossec 1.5.1 standalone
+ossec_report_address="admin@ciws.com"
 #Net2ftp 0.97
 #Akoie 0.5
 share_akoie_smb="y"
@@ -41,3 +42,4 @@ syslog_server_name="mail.ciws.com"
 snort_registration_key=""
 snort_server_mysql_pwd="SNORT_MYSQL_PWD"
 snort_server_name="mail.ciws.com"
+#Awstats

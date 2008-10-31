@@ -6,63 +6,40 @@ sphider_auto_index="y"
 secure_mysql="n"
 secure_admin="n"
 apache_admin_pwd=""
-
-
 #Samba
 smb_pwd="cooperation"
-
 #Proftpd
 proftpd_pwd="cooperation"
-
 #Gallery 2.3RC1
-
 #Snif
 share_snif_smb1="y"
 share_snif_smb_pwd1="n"
-
 #Wordpress2.5.1
-
 #SSH Server
-
 #OpenGoo 1.0
-
 #Moodle 1.9
-
 #Taskfreak 1.8
-
 #Mediawiki 1.12.0
-
 #PhpBB 3.0.2
-
 #Jdicd 1.5
-
 #eyeOS 1.6.0.3-1
-
 #Net2ftp 0.97
-
 #Claroline 1.8
-
 #Ossec 1.5.1 standalone
-
+ossec_report_address="admin@ciws.com"
 #Lifetype 1.2
-
 #Spip 1.9.2d
-
 #Cacti 0.8.7b
-
+#Openmeeting
 #Akoie 0.5
 share_akoie_smb="y"
 share_akoie_smb_pwd="n"
-
 #Clamav antivirus
 clam_mail_report="admin@ciws.com"
-
 #Cooperation-iws Liveusb 0.3
-
-#Awstat
+#Awstats
 #Postfix Relay Client
 smtp_postfix_client_relay="mail.ciws.com"
-
 #Webmin 1.4.20
 webmin_pwd="cooperation"
 #Zabbix client 1.6

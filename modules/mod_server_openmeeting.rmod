@@ -1,0 +1,239 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Openmeeting'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Video conferencing'
+RMOD_DESCRIPTION_FR='Video conférence'
+RMOD_VERBOSE="Openmeeting is an open source videoconferencing solution "
+RMOD_VERBOSE_FR="Openmeeting est une solution open source de vidéo conférence. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+
+#VARIABLES
+
+
+MOD_NAME="openmeetings"
+OPENMEETING_MYSQL_PWD="OPENMEETING_MYSQL_PWD"
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_WEB_______________________________________
+
+
+function WGET_MIRROIR_WEB
+{
+cd $DL_DIR
+wget http://dl.fancycode.com/red5/0.6.3/debian/red5_0.6.3-1_all.deb
+wget http://openmeetings.googlecode.com/files/openmeetings052.zip
+unzip -q openmeetings052.zip
+aptitude install -y subversion 
+svn checkout http://openmeetings.googlecode.com/svn/branches/dev/
+mv dev/ OpenMeetingsFromSVN
+wget http://download.openlaszlo.org/4.0.6/openlaszlo-4.0.6-unix.tar.gz
+tar -xzf openlaszlo-4.0.6-unix.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/red5_0.6.3-1_all.deb
+wget $URL_FREE/openmeetings052.zip
+unzip -q openmeetings052.zip
+wget $URL_FREE/OpenMeetingsFromSVN.tar.gz
+tar -xzf OpenMeetingsFromSVN.tar.gz
+wget $URL_FREE/openlaszlo-4.0.6-unix.tar.gz
+tar -xzf openlaszlo-4.0.6-unix.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________DOWNLOAD_______________________________________________
+
+function DOWNLOAD
+{
+if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
+
+WGET_MIRROIR_WEB
+fi
+if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
+
+WGET_MIRROIR_FREE
+fi
+
+}
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_DOWNLOAD___________________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+DOWNLOAD
+echo "create database ${MOD_NAME};
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$OPENMEETING_MYSQL_PWD';
+flush privileges;" > OPENMEETING_db.sql
+
+$BIN_MYSQL -u root < OPENMEETING_db.sql mysql
+rm OPENMEETING_db.sql
+ln -s / /cow
+aptitude install -y xvfb openoffice.org imagemagick gs-gpl swftools sun-java5-bin sun-java5-demo openoffice.org-headless libart-2.0-2 libt1-5 libungif4g
+sed -i "26G" /usr/lib/openoffice/share/registry/data/org/openoffice/Setup.xcu
+sed -i "26G" /usr/lib/openoffice/share/registry/data/org/openoffice/Setup.xcu
+sed -i "26G" /usr/lib/openoffice/share/registry/data/org/openoffice/Setup.xcu
+sed -i "26G" /usr/lib/openoffice/share/registry/data/org/openoffice/Setup.xcu
+sed -i "27s/^/<prop oor:name=\"ooSetupConnectionURL\" oor:type=\"xs:string\">/" /usr/lib/openoffice/share/registry/data/org/openoffice/Setup.xcu
+sed -i "28s/^/<value>socket,host=localhost,port=8100;urp<\/value>/" /usr/lib/openoffice/share/registry/data/org/openoffice/Setup.xcu
+sed -i "29s/^/<\/prop>/" /usr/lib/openoffice/share/registry/data/org/openoffice/Setup.xcu
+cd $DL_DIR
+dpkg -i red5_0.6.3-1_all.deb
+cp openmeetings/conf/mysql_hibernate.cfg.xml openmeetings/conf/hibernate.cfg.xml
+sed -i "12s/root/${MOD_NAME}/" openmeetings/conf/hibernate.cfg.xml
+sed -i "13s/></>OPENMEETING_MYSQL_PWD</" openmeetings/conf/hibernate.cfg.xml
+sed -i "18s/openmeetings/${MOD_NAME}/" openmeetings/conf/hibernate.cfg.xml
+cp -r openmeetings/ /usr/lib/red5/webapps/
+mv lps-4.0.6/ /opt/
+cp -r OpenMeetingsFromSVN/laszlo/client/xmlcrm/videoconference/ /opt/lps-4.0.6/Server/lps-4.0.6/ 
+cp OpenMeetingsFromSVN/xmlcrm/java/webapp/openmeetings/languages/*  openmeetings/languages/
+
+
+cat << EOT > /etc/init.d/openoffice
+#!/bin/bash
+# openoffice.org  headless server script
+#
+# chkconfig: 2345 80 30
+# description: headless openoffice server script
+# processname: openoffice
+# 
+# Author: Vic Vijayakumar
+# Modified by Federico Ch. Tomasczik
+#
+OOo_HOME=/usr/bin
+SOFFICE_PATH=\$OOo_HOME/soffice
+PIDFILE=/var/run/openoffice-server.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "OpenOffice headless server has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting OpenOffice headless server"
+      \$SOFFICE_PATH -headless -nologo -nofirststartwizard -accept="socket,host=127.0.0.1,port=8100;urp" & > /dev/null 2>&1
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping OpenOffice headless server."
+      killall -9 soffice && killall -9 soffice.bin
+      rm -f \$PIDFILE
+      exit
+    fi
+      echo "Openoffice headless server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOT
+
+chmod 0755 /etc/init.d/openoffice
+
+update-rc.d openoffice defaults
+
+/etc/init.d/openoffice start
+
+JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun
+
+#/opt/lps-4.0.6/Server/tomcat-5.0.24/bin/startup.sh
+/etc/init.d/red5 restart
+echo "
+#Openmeetings
+/etc/init.d/openoffice restart
+JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun
+/etc/init.d/red5 restart
+" >> /etc/rc.local
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>http://localhost:5080/openmeetings/</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>http://localhost:5080/openmeetings/</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>http://localhost:5080/openmeetings/</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>http://localhost:5080/openmeetings/</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Openmeetings"
+INSTALL
+CREATE_WUI
+echo "I: End of install Openmeetings"

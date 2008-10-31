@@ -1,43 +1,38 @@
 #!/bin/bash
-
-
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Ossec 1.5.1 standalone'
+RMOD_NAME='Sedna'
 RMOD_AUTHOR='Oliv'
-RMOD_VERSION=0.2
-RMOD_DESCRIPTION='Host based Intrusion Detection System'
-RMOD_DESCRIPTION_FR="Système de détection d'intrusion orienté machine"
-RMOD_VERBOSE="Ossec is an HIDS (Host Based Intrusion Detection System). "
-RMOD_VERBOSE_FR="Ossec est un HIDS (Host Based Intrusion Detection System), un système de détection d'intrusion d'une machine.   "
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Rss agregator'
+RMOD_DESCRIPTION_FR='Agrégateur RSS'
+RMOD_VERBOSE="SPIP is a publishing system for the Internet in which great importance is attached to collaborative working, to multilingual environments, and to simplicity of use for web authors. It is free software, distributed under the GNU/GPL licence. This means that it can be used for any Internet site, whether personal or institutional, non-profit or commercial.  "
+RMOD_VERBOSE_FR="SPIP est un système de publication pour l’Internet qui s’attache particulièrement au fonctionnement collectif, au multilinguisme et à la facilité d’emploi. C’est un logiciel libre, distribué sous la licence GNU/GPL. Il peut ainsi être utilisé pour tout site Internet, qu’il soit associatif ou institutionnel, personnel ou marchand.  "
+
+
+
 
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
-SILENT=$(cat /tmp/silent)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
-. /tmp/app_params
-else
-echo "---------Cooperation-iws---------"
-echo " What's the email address for ossec reporting ?-------"
-read ossec_report_address < /dev/tty
-fi
-
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
 DL_DIR=$(cat /tmp/web_install-path)
 BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/script-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
-HOSTNAME=$(cat /tmp/hostname)
-
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
+
 INSTALL=$(cat /tmp/def_install)
+
+#VARIABLES
+#MYSQL PASSWORD
+SPIP_MYSQL_PWD="SPIP_MYSQL_PWD"
 
 #_______________________________________________________________________________________________
 #__________________________________________LANGFR______________________________________________
@@ -85,6 +80,9 @@ fi
 #__________________________________________FIN_CHOICE_LANG______________________________________
 
 
+
+
+
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_WEB_______________________________________
 
@@ -92,16 +90,10 @@ fi
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-wget http://www.ossec.net/files/ossec-hids-1.5.1.tar.gz
-tar -zxf ossec-hids-*.tar.gz
-mv ossec-hids-1.5.1 ossec-hids
-
-cd $DL_DIR
-wget http://www.ossec.net/files/ui/ossec-wui-0.3.tar.gz
-tar -zxf ossec-wui-0.3.tar.gz
-#rm ossec-wui-0.3.tar.gz
-mv ossec-wui-0.3 ossec-wui
-
+wget http://www.spip.net/spip-dev/DISTRIB/spip.zip
+unzip -q spip.zip
+wget http://files.spip.org/spip-zone/sedna.zip
+unzip -q sedna.zip
 }
 
 #_______________________________________________________________________________________________
@@ -114,16 +106,12 @@ function WGET_MIRROIR_LOCAL
 {
 
 cd $DL_DIR
-wget http://$MIRROIR_URL/mirroir/ossec-hids-1.5.1.tar.gz
-tar -zxvf ossec-hids-*.tar.gz
-mv ossec-hids-1.5.1 ossec-hids
-#rm ossec-hids-*.tar.gz
+MESSAGE="#Spip download"
+echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
+wget http://$MIRROIR_URL/mirroir/wordpress-2.5.1.tar.gz
+tar -xzvf wordpress-2.5.1.tar.gz
+#rm wordpress-2.3.3-fr_FR.zip
 
-cd $DL_DIR
-wget http://$MIRROIR_URL/mirroir/ossec-wui-0.3.tar.gz
-tar -zxvf ossec-wui-0.3.tar.gz
-#rm ossec-wui-0.3.tar.gz
-mv ossec-wui-0.3 ossec-wui
 }
 
 #_______________________________________________________________________________________________
@@ -135,16 +123,12 @@ mv ossec-wui-0.3 ossec-wui
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/ossec-hids-1.5.1.tar.gz
-tar -zxf ossec-hids-*.tar.gz
-mv ossec-hids-1.5.1 ossec-hids
-#rm ossec-hids-*.tar.gz
 
-cd $DL_DIR
-wget $URL_FREE/ossec-wui-0.3.tar.gz
-tar -zxf ossec-wui-0.3.tar.gz
-#rm ossec-wui-0.3.tar.gz
-mv ossec-wui-0.3 ossec-wui
+wget $URL_FREE/spip.zip
+unzip -q spip.zip
+wget $URL_FREE/sedna.zip
+unzip -q sedna.zip
+
 }
 
 #_______________________________________________________________________________________________
@@ -175,28 +159,45 @@ fi
 #_______________________________________________________________________________________________
 #________________________________________FIN_DOWNLOAD___________________________________________
 
-
 #_______________________________________________________________________________________________
 #________________________________________CHOOSE_PARAMETERS_GUI______________________________________
 
 function CHOOSE_PARAMETERS_GUI
 {
 if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-MOD_NAME="Ossec-wui"
+NB_SPIP=1
+MOD_NAME[1]="Spip"
+
 else 
-MOD_NAME=$(zenity --entry --text "$MESS_NAME OSSEC")
+NB_SPIP=$(zenity --entry --text "$MESS_HOW_MANY Spip $MESS_DO_YOU_WANT")
 test $? -ne 0 && break # Bouton Annuler
-while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
+while (echo $NB_SPIP | grep "[^0-9]") 
 do
-MOD_NAME=$(zenity --entry --text "$MESS_NAME OSSEC")
+NB_SPIP=$(zenity --entry --text "$MESS_HOW_MANY Spip $MESS_DO_YOU_WANT")
 test $? -ne 0 && break # Bouton Annulerdone
 done 
+
+
+for (( count=1; count<=$NB_SPIP; count++ ))
+do
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count SPIP")
+test $? -ne 0 && break # Bouton Annuler
+
+while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
+do
+MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count SPIP")
+test $? -ne 0 && break # Bouton Annulerdone
+done 
+done
+
 fi
+export NB_SPIP=$NB_SPIP
 export MOD_NAME=$MOD_NAME
 
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
+
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -204,69 +205,31 @@ export MOD_NAME=$MOD_NAME
 
 function INSTALL
 {
-echo "I: Download Ossec"
+
+echo "I: Download Spip"
 DOWNLOAD
-apt-get install --assume-yes --force-yes build-essential
 
-#OSSEC config
-mkdir /tmp/ossec
-cp -Rf $DL_DIR/ossec-hids/* /tmp/ossec/.
+for (( count=1; count<=$NB_SPIP; count++ ))
 
-
-cd /tmp/ossec
-chmod -R 777 ../ossec
-chown -R 777 ../ossec
-sed -i "31s/OSSEC Notification/$HOSTNAME - OSSEC Notification/" src/os_maild/maild.h
-export USER_ENABLE_EMAIL="y"
-export USER_EMAIL_ADDRESS=$ossec_report_address
-export EMAILHOST="localhost"
-export INSTYPE="server"
-export USER_NO_STOP="yes"
-export USER_LANGUAGE="en"
-export USER_EMAIL_SMTP="localhost"
-export USER_ENABLE_SYSCHECK="yes"
-export USER_ENABLE_ROOTCHECK="yes"
-export USER_INSTALL_TYPE="local"
-export USER_DIR="/var/ossec"
-export ACTIVERESPONSE="no"
-export USER_ENABLE_ACTIVE_RESPONSE="n"
-export USER_ENABLE_SYSLOG="n"
-./install.sh
-usermod -u501 ossec
-usermod -u502 ossecm
-usermod -u503 ossecr
-#./install.sh
-grep -q '^ossec' /etc/group && sed -i -e "/^ossec/s/$/www-data/" /etc/group
-
-
-cat /etc/gdm/gdm.conf | sed -i -e "s/Exclude=nobody/Exclude=nobody,ossec,ossecm,ossecr/" /etc/gdm/gdm.conf
-
-#ossec-wui 
+do
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/admin/$MOD_NAME
-cp -Rf ossec-wui/* $WWW_DIRECTORY/admin/$MOD_NAME/.
-cd $WWW_DIRECTORY/admin/$MOD_NAME
-echo "## Server Wui Config"
-mkdir tmp >/dev/null 2>&1
-chmod 770 tmp/
-chgrp nogroup tmp/
-chown -R www-data:www-data $WWW_DIRECTORY/admin/$MOD_NAME
-chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME
-#mkdir $DOSSIER_CHROOT/etc/skel/conf
-#mkdir $DOSSIER_CHROOT/etc/skel/conf/var
-#mv $DOSSIER_CHROOT/var/ossec $DOSSIER_CHROOT/etc/skel/conf/var
+cp -Rf spip/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+cp -Rf plugins $WWW_DIRECTORY/${MOD_NAME[$count]}/
+echo "create database ${MOD_NAME[$count]};
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$SPIP_MYSQL_PWD';
+flush privileges;" > spip_db.sql
+
+$BIN_MYSQL -u root < spip_db.sql mysql
+rm spip_db.sql
+sed -i "55s/\$adresse_db/\"localhost\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/ecrire/install/etape_1.php
+sed -i "64s/\$login_db/\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/ecrire/install/etape_1.php
+sed -i "73s/\$pass_db/\"$SPIP_MYSQL_PWD\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/ecrire/install/etape_1.php
 
 
-echo "
-#OSSEC
-
-/var/ossec/bin/ossec-control start
-
-" >> /etc/rc.local
-
-
-
-
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
+  
+done
 }
 
 #_______________________________________________________________________________________________
@@ -277,32 +240,57 @@ echo "
 
 function CREATE_WUI
 {
+for (( count=1; count<=$NB_SPIP; count++ ))
+
+do
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/admin/$MOD_NAME</item_url>
+	<item_url>/${MOD_NAME[$count]}/spip.php?page=sedna</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_admin_url>/${MOD_NAME[$count]}/ecrire/</item_admin_url>
 </item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+" >> $WWW_DIRECTORY/cooperation-wui.xml
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/admin/$MOD_NAME</item_url>
+	<item_url>/${MOD_NAME[$count]}/spip.php?page=sedna</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_admin_url>/${MOD_NAME[$count]}/ecrire/</item_admin_url>
 </item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
+
+done
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
-echo "I: Install Ossec"
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+
+for (( count=1; count<=$NB_SPIP; count++ ))
+do
+echo "
+#Spip
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Spip"
 CHOICE_LANG
 CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
-echo "I: End of install Ossec"
+
+CREATE_INSTALL_SCRIPT
+echo "I: End of install Spip"

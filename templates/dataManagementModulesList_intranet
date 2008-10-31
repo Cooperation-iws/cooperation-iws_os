@@ -20,7 +20,8 @@ share_snif_smb_pwd1="n"
 #Jdicd 1.5
 #Net2ftp 0.97
 #Ossec 1.5.1 standalone
-#Awstat
+ossec_report_address="admin@ciws.com"
+#Awstats
 #Cacti 0.8.7b
 #Akoie 0.5
 share_akoie_smb="y"
