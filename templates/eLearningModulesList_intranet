@@ -31,6 +31,7 @@ ossec_report_address="admin@ciws.com"
 #Spip 1.9.2d
 #Cacti 0.8.7b
 #Openmeeting
+#Inspircd
 #Akoie 0.5
 share_akoie_smb="y"
 share_akoie_smb_pwd="n"

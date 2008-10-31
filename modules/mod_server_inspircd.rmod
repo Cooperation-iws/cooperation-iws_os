@@ -1,0 +1,59 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Inspircd'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='IRC Server'
+RMOD_DESCRIPTION_FR='Serveur IRC'
+RMOD_VERBOSE="InspIRCd is a modular C++ IRCd (IRC daemon) for Linux, BSD, Windows and Apple OS X systems created to provide a stable, modern, and lightweight IRCd written from scratch. "
+RMOD_VERBOSE_FR="InspIRCd est un serveur IRC modulaire écrit en C++."
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+
+#VARIABLES
+
+HOSTNAME=$(cat /tmp/hostname)
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes inspircd
+
+sed -i "12s/root@localhost/admin@ciws.com/" /etc/inspircd/inspircd.conf
+sed -i "38s/root/Admin/" /etc/inspircd/inspircd.conf
+sed -i "39s/12345/cooperation/" /etc/inspircd/inspircd.conf
+sed -i "14s/127.0.0.1//" /etc/inspircd/inspircd.conf
+sed -i "s/INSPIRCD_ENABLED=0/INSPIRCD_ENABLED=1/" /etc/default/inspircd
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+
+echo "I: Install Silcd"
+INSTALL
+
+echo "I: End of install Silcd"

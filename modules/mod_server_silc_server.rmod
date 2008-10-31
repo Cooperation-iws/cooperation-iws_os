@@ -1,0 +1,54 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Silcd'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Secure internet chat'
+RMOD_DESCRIPTION_FR='Chat internet sécurisé'
+RMOD_VERBOSE="SILC Server provides system administrators ability to easily and quickly set up new SILC networks. SILC Server is full implementation of server side of the SILC protocol. SILC Server is ideal for small offices and organizations to set up secure conferencing network in LAN. SILC Server is compact and fast, and scales easily to Internet usage as well. "
+RMOD_VERBOSE_FR="Silc server est une implémentation côté serveur du protocole Silc."
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+
+#VARIABLES
+
+HOSTNAME=$(cat /tmp/hostname)
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes silcd
+/usr/sbin/silcd -C /etc/silcd/ --identifier="UN=admin, HN=$HOSTNAME, RN=admin, E=admin@ciws.com, C=FR" 
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+
+echo "I: Install Silcd"
+INSTALL
+
+echo "I: End of install Silcd"

@@ -19,6 +19,7 @@ share_snif_smb_pwd1="n"
 #OpenGoo 1.0
 #Awstats
 #Openmeeting
+#Inspircd
 #Ossec 1.5.1 standalone
 ossec_report_address="admin@ciws.com"
 #Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
