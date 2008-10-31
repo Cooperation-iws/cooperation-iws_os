@@ -24,7 +24,7 @@ share_snif_smb_pwd1="n"
 
 #SSH Server
 
-#OpenGoo 0.8
+#OpenGoo 1.0
 
 #Moodle 1.9
 
@@ -42,7 +42,7 @@ share_snif_smb_pwd1="n"
 
 #Claroline 1.8
 
-#Ossec 1.5.1
+#Ossec 1.5.1 standalone
 
 #Lifetype 1.2
 
@@ -60,14 +60,16 @@ clam_mail_report="admin@ciws.com"
 #Cooperation-iws Liveusb 0.3
 
 #Awstat
+#Postfix Relay Client
+smtp_postfix_client_relay="mail.ciws.com"
 
 #Webmin 1.4.20
 webmin_pwd="cooperation"
 #Zabbix client 1.6
-zabbix_server_name="mail.ciws.com"
+zabbix_server_name="administration.ciws.com"
 #Syslog client
-syslog_server_name="mail.ciws.com"
+syslog_server_name="administration.ciws.com"
 #Snort2.8 client
 snort_registration_key=""
 snort_server_mysql_pwd="SNORT_MYSQL_PWD"
-snort_server_name="mail.ciws.com"
+snort_server_name="administration.ciws.com"

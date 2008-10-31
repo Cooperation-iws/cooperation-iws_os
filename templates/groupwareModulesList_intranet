@@ -15,10 +15,10 @@ share_snif_smb1="y"
 share_snif_smb_pwd1="n"
 #Roundcube 0.2
 #Horde 1.2
-#Snort2.8 server Base1.3.9
 #SSH Server
-#OpenGoo 0.8
-#Ossec 1.5.1
+#OpenGoo 1.0
+#Awstat
+#Ossec 1.5.1 standalone
 #Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
 public_mail="y"
 mail_domain="ciws.com"
@@ -29,5 +29,11 @@ clam_mail_report="admin@ciws.com"
 #Webmin 1.4.20
 webmin_pwd="cooperation"
 #Cacti 0.8.7b
-#Syslog-ng server
-#Zabbix 1.6
+#Zabbix client 1.6
+zabbix_server_name="administration.ciws.com"
+#Syslog client
+syslog_server_name="administration.ciws.com"
+#Snort2.8 client
+snort_registration_key=""
+snort_server_mysql_pwd="SNORT_MYSQL_PWD"
+snort_server_name="administration.ciws.com"

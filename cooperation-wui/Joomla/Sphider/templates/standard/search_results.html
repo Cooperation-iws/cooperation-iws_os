@@ -67,8 +67,8 @@ extract($search_results);
 		} else {
 			$weight = "[$weight%]"; 
 		}
-$url = str_replace ('localhost', $HTTP_SERVER_VARS["SERVER_NAME"], $url);
-$url2 = str_replace ('localhost', $HTTP_SERVER_VARS["SERVER_NAME"], $url2);
+$url = str_replace ('localhost', $_SERVER["SERVER_NAME"], $url);
+$url2 = str_replace ('localhost', $_SERVER["SERVER_NAME"], $url2);
 		?>
 		<?php  if ($domain_name==$last_domain && $merge_site_results == 1 && $domain == "") {?>
 		<div class="idented">
@@ -110,7 +110,7 @@ $url2 = str_replace ('localhost', $HTTP_SERVER_VARS["SERVER_NAME"], $url2);
 	<?php  }?>
 
 	<?php if ($next <= $pages){?>	
-			<a href="<?php print 'index.php?query='.quote_replace(addmarks($query)).'&start='.$next.'&research=1&results='.$results_per_page.$type_qry.$adv_qry.'&domain='.$domain?>"><?php print $sph_messages['Next']?></a>
+			<a href="<?php print 'index.php?queries='.quote_replace(addmarks($query)).'&start='.$next.'&research=1&results='.$results_per_page.$type_qry.$adv_qry.'&domain='.$domain?>"><?php print $sph_messages['Next']?></a>
 	<?php  }?>	
 
 	</div>

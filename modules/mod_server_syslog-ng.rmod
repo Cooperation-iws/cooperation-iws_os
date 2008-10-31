@@ -204,10 +204,10 @@ aptitude install -y msttcorefonts
 #Cacti config
 
 echo "
-@daily php $WWW_DIRECTORY/admin/$MOD_NAME/scripts/logrotate.php >> /var/log/php-syslog-ng/logrotate.log 
+@daily www-data /usr/bin/php $WWW_DIRECTORY/admin/$MOD_NAME/scripts/logrotate.php >> /var/log/php-syslog-ng/logrotate.log 
 @daily find $WWW_DIRECTORY/admin/$MOD_NAME/html/jpcache/ -atime 1 -exec rm -f '{}' ';' 
-*/5 * * * * php $WWW_DIRECTORY/admin/$MOD_NAME/scripts/reloadcache.php >> /var/log/php-syslog-ng/reloadcache.log
-*/5 * * * * php $WWW_DIRECTORY/admin/$MOD_NAME/scripts/SqueezeDB-v2.0.php >> /var/log/php-syslog-ng/squeezedb.log
+*/5 * * * * www-data /usr/bin/php $WWW_DIRECTORY/admin/$MOD_NAME/scripts/reloadcache.php >> /var/log/php-syslog-ng/reloadcache.log
+*/5 * * * * www-data /usr/bin/php $WWW_DIRECTORY/admin/$MOD_NAME/scripts/SqueezeDB-v2.0.php >> /var/log/php-syslog-ng/squeezedb.log
 " >> /etc/cron.d/syslog-ng
 sudo chmod +x /etc/cron.d/syslog-ng
 

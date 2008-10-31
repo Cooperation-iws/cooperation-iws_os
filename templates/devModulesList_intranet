@@ -27,8 +27,9 @@ trac_admin_pwd="cooperation"
 #PhpBB 3.0.2
 #Taskfreak 1.8
 #SSH Server
-#OpenGoo 0.8
+#OpenGoo 1.0
 #Ossec 1.5.1 standalone
+#Awstat
 #Net2ftp 0.97
 #Akoie 0.5
 share_akoie_smb="y"
@@ -42,10 +43,10 @@ webmin_pwd="cooperation"
 #Postfix Relay Client
 smtp_postfix_client_relay="mail.ciws.com"
 #Zabbix client 1.6
-zabbix_server_name="mail.ciws.com"
+zabbix_server_name="administration.ciws.com"
 #Syslog client
-syslog_server_name="mail.ciws.com"
+syslog_server_name="administration.ciws.com"
 #Snort2.8 client
 snort_registration_key=""
 snort_server_mysql_pwd="SNORT_MYSQL_PWD"
-snort_server_name="mail.ciws.com"
+snort_server_name="administration.ciws.com"

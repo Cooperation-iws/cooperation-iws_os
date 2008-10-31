@@ -24,7 +24,7 @@ LAMPP_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
-
+HOSTNAME=$(cat /tmp/hostname)
 
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
@@ -207,7 +207,7 @@ cp -Rf $DL_DIR/ossec-hids/* /tmp/ossec/.
 cd /tmp/ossec
 chmod -R 777 ../ossec
 chown -R 777 ../ossec
-
+sed -i "31s/OSSEC Notification/$HOSTNAME - OSSEC Notification/" src/os_maild/maild.h
 export USER_ENABLE_EMAIL="y"
 export USER_EMAIL_ADDRESS="admin@ciws.com"
 export EMAILHOST="localhost"
