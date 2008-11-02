@@ -35,30 +35,13 @@ INSTALL=$(cat /tmp/def_install)
 
 
 #VARIABLES
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
 
-MOD_NAME="openmeetings"
-OPENMEETING_MYSQL_PWD="OPENMEETING_MYSQL_PWD"
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
 
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget http://dl.fancycode.com/red5/0.6.3/debian/red5_0.6.3-1_all.deb
-wget http://openmeetings.googlecode.com/files/openmeetings052.zip
-unzip -q openmeetings052.zip
-aptitude install -y subversion 
-svn checkout http://openmeetings.googlecode.com/svn/branches/dev/
-mv dev/ OpenMeetingsFromSVN
-wget http://download.openlaszlo.org/4.0.6/openlaszlo-4.0.6-unix.tar.gz
-tar -xzf openlaszlo-4.0.6-unix.tar.gz
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
+MOD_NAME=$openmeeting_name
+OPENMEETING_MYSQL_PWD=$openmeeting_mysql_pwd
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -67,38 +50,16 @@ function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
 wget $URL_FREE/red5_0.6.3-1_all.deb
-wget $URL_FREE/openmeetings052.zip
-unzip -q openmeetings052.zip
-wget $URL_FREE/OpenMeetingsFromSVN.tar.gz
-tar -xzf OpenMeetingsFromSVN.tar.gz
-wget $URL_FREE/openlaszlo-4.0.6-unix.tar.gz
-tar -xzf openlaszlo-4.0.6-unix.tar.gz
+wget $URL_FREE/openmeetings_081101.tar.gz
+tar -xzf openmeetings_081101.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 
 WGET_MIRROIR_FREE
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -106,13 +67,8 @@ fi
 
 function INSTALL
 {
-DOWNLOAD
-echo "create database ${MOD_NAME};
-grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$OPENMEETING_MYSQL_PWD';
-flush privileges;" > OPENMEETING_db.sql
+WGET_MIRROIR_FREE
 
-$BIN_MYSQL -u root < OPENMEETING_db.sql mysql
-rm OPENMEETING_db.sql
 ln -s / /cow
 aptitude install -y xvfb openoffice.org imagemagick gs-gpl swftools sun-java5-bin sun-java5-demo openoffice.org-headless libart-2.0-2 libt1-5 libungif4g
 sed -i "26G" /usr/lib/openoffice/share/registry/data/org/openoffice/Setup.xcu
@@ -124,15 +80,20 @@ sed -i "28s/^/<value>socket,host=localhost,port=8100;urp<\/value>/" /usr/lib/ope
 sed -i "29s/^/<\/prop>/" /usr/lib/openoffice/share/registry/data/org/openoffice/Setup.xcu
 cd $DL_DIR
 dpkg -i red5_0.6.3-1_all.deb
-cp openmeetings/conf/mysql_hibernate.cfg.xml openmeetings/conf/hibernate.cfg.xml
-sed -i "12s/root/${MOD_NAME}/" openmeetings/conf/hibernate.cfg.xml
-sed -i "13s/></>OPENMEETING_MYSQL_PWD</" openmeetings/conf/hibernate.cfg.xml
-sed -i "18s/openmeetings/${MOD_NAME}/" openmeetings/conf/hibernate.cfg.xml
-cp -r openmeetings/ /usr/lib/red5/webapps/
-mv lps-4.0.6/ /opt/
-cp -r OpenMeetingsFromSVN/laszlo/client/xmlcrm/videoconference/ /opt/lps-4.0.6/Server/lps-4.0.6/ 
-cp OpenMeetingsFromSVN/xmlcrm/java/webapp/openmeetings/languages/*  openmeetings/languages/
+cd $DL_DIR
+cp -r openmeetings /usr/lib/red5/webapps/
 
+echo "grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$HORDE_MYSQL_PWD';
+flush privileges;" > HORDE_db.sql
+
+$BIN_MYSQL -u root < HORDE_db.sql mysql 
+sed -i "15s/openmeetings/$MOD_NAME/" /usr/lib/red5/webapps/openmeetings/database.sql
+sed -i "16s/openmeetings/${MOD_NAME}/" /usr/lib/red5/webapps/openmeetings/database.sql
+sed -i "12s/openmeetings/${MOD_NAME}/" openmeetings/conf/hibernate.cfg.xml
+sed -i "13s/OPENMEETING_MYSQL_PWD/$OPENMEETING_MYSQL_PWD/" openmeetings/conf/hibernate.cfg.xml
+sed -i "18s/openmeetings/${MOD_NAME}/" openmeetings/conf/hibernate.cfg.xml
+
+$BIN_MYSQL -u root < /usr/lib/red5/webapps/openmeetings/database.sql
 
 cat << EOT > /etc/init.d/openoffice
 #!/bin/bash
@@ -186,15 +147,24 @@ update-rc.d openoffice defaults
 /etc/init.d/openoffice start
 
 JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun
+/etc/init.d/red5 stop
+
+mkdir /var/share/usr/lib
+mkdir /var/share/usr/lib/red5/
+mv /usr/lib/red5/webapps/ /var/share/usr/lib/red5/
+
+ln -s /var/share/usr/lib/red5/webapps/ /usr/lib/red5/webapps/
 
 #/opt/lps-4.0.6/Server/tomcat-5.0.24/bin/startup.sh
-/etc/init.d/red5 restart
+/etc/init.d/red5 start
 echo "
 #Openmeetings
 /etc/init.d/openoffice restart
 JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun
 /etc/init.d/red5 restart
 " >> /etc/rc.local
+
+
 
 }
 

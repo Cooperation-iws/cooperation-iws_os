@@ -112,12 +112,6 @@ cd $DL_DIR
 wget http://mesh.dl.sourceforge.net/sourceforge/adodb/adodb498.zip
 unzip -q adodb498.zip
 #rm adodb498.zip
-cacti-0.8.7b.tar.gz
-cd $DL_DIR
-wget http://switch.dl.sourceforge.net/sourceforge/secureideas/base-1.3.9.tar.gz 
-tar -xzf base-1.3.9.tar.gz
-mv base-1.3.9 base 
-#rm base-1.3.9.tar.gz
 
 }
 
@@ -189,11 +183,6 @@ wget $URL_FREE/adodb498.zip
 unzip -q adodb498.zip
 #rm adodb498.zip
 
-cd $DL_DIR
-wget $URL_FREE/base-1.3.9.tar.gz 
-tar -xzf base-1.3.9.tar.gz
-mv base-1.3.9 base 
-#rm base-1.3.9.tar.gz
 }
 
 #_______________________________________________________________________________________________

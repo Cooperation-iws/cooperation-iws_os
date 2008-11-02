@@ -475,8 +475,8 @@ class Reconstructor:
 		self.setLiveCdInfo(username=self.user, userFullname=self.userFull, userPassword=self.password, hostname=self.host)
 		print _('Proceeding to customization...')		
 		self.customize()
-		self.launchTerminal()
 		self.launchPostInstall()
+		self.launchTerminal()
 		self.endInstall()
 		self.installType = "Cd"
 		self.LiveCdDescription="Cooperation-iws Live CD"
@@ -3479,16 +3479,18 @@ class Reconstructor:
                         modExecScr += 'echo -------------------------------------------------\n'
                         modExecScr += 'echo -------------------------------------------------\n'
                         modExecScr += 'bash \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(execMod) + '\"' + ' ;\n '
+            modExecScrChroot += 'echo Running OS:  \n'
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
-                    if re.search('.omod', ext):
+                    if re.search('.scrmod', ext):
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'echo ------------Cooperation-iws----------------------\n'
                         modExecScrChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'echo -------------------------------------------------\n'
-                        modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
+                        modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
+	    modExecScrChroot += 'echo Running Servers:  \n'
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
@@ -3498,7 +3500,7 @@ class Reconstructor:
                         modExecScrChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'echo -------------------------------------------------\n'
-                        modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
+                        modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
 	    modExecScrChroot += 'echo Running Core:  \n'
 	    if self.ReqApache == "A":    
 		modExecScrChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '

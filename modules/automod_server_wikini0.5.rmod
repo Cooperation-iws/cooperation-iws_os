@@ -26,93 +26,17 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
-#VARIABLES
-#MYSQL PASSWORD
-WIKINI_MYSQL_PWD="WIKINI_MYSQL_PWD"
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
+NB_WIKINI=$nb_wikini
 
+for (( count=1; count<=$NB_WIKINI; count++ ))
+do
+WIKINI_MYSQL_PWD[$count]=${wikini_mysql_pwd[$count]}
+MOD_NAME[$count]=${wikini_name[$count]}
+done
 
-function LANGFR
-
-{
-MESS_NAME="Entrez le nom de l'installation "
-MESS_HOW_MANY="Combien de" 
-MESS_DO_YOU_WANT="voulez vous installez ?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
-
-
-function LANGEN
-
-{
-MESS_NAME="Enter the name of the install "
-MESS_HOW_MANY="How many"
-MESS_DO_YOU_WANT="do you want to install ?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
-
-
-
-
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-mkdir wikini
-cd wikini
-wget http://www.wikini.net/download/wikini-0.5.tar.gz
-tar -xzf wikini-0.5.tar.gz
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_LOCAL_____________________________________
-
-function WGET_MIRROIR_LOCAL
-{
-
-cd $DL_DIR
-MESSAGE="#Wikini download"
-echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
-wget http://$MIRROIR_URL/mirroir/wordpress-2.5.1.tar.gz
-tar -xzvf wordpress-2.5.1.tar.gz
-#rm wordpress-2.3.3-fr_FR.zip
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -120,81 +44,14 @@ tar -xzvf wordpress-2.5.1.tar.gz
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-mkdir wikini
-cd wikini
-wget $URL_FREE/wikini-0.5.tar.gz
-tar -xzf wikini-0.5.tar.gz
+wget $URL_FREE/wikini-05-081102.tar.gz
+tar -xzf wikini-05-081102.tar.gz
 
 
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_MIRROIR_FREE
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
-
-
-WGET_MIRROIR_LOCAL
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NB_WIKINI=1
-MOD_NAME[1]="Wikini"
-
-else 
-NB_WIKINI=$(zenity --entry --text "$MESS_HOW_MANY Wikini $MESS_DO_YOU_WANT")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $NB_WIKINI | grep "[^0-9]") 
-do
-NB_WIKINI=$(zenity --entry --text "$MESS_HOW_MANY Wikini $MESS_DO_YOU_WANT")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
-
-
-for (( count=1; count<=$NB_WIKINI; count++ ))
-do
-MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count WIKINI")
-test $? -ne 0 && break # Bouton Annuler
-
-while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count WIKINI")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
-done
-
-fi
-export NB_WIKINI=$NB_WIKINI
-export MOD_NAME=$MOD_NAME
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
-
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -204,25 +61,35 @@ function INSTALL
 {
 
 echo "I: Download Wikini"
-DOWNLOAD
+WGET_MIRROIR_FREE
 
 for (( count=1; count<=$NB_WIKINI; count++ ))
 
 do
 mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cd $DL_DIR
-cp -Rf wikini/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
-echo "create database ${MOD_NAME[$count]};
-grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$WIKINI_MYSQL_PWD';
+cp -Rf Wikini/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/Wikini/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Wikini/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "17s/Wikini/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "15s/DROP/--DROP/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${WIKINI_MYSQL_PWD[$count]}';
 flush privileges;" > wikini_db.sql
 
 $BIN_MYSQL -u root < wikini_db.sql mysql
 rm wikini_db.sql
-sed -i "1618s/wikini/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wakka.php
-sed -i "1619s/wikini/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wakka.php
-sed -i "1620s/''/'$WIKINI_MYSQL_PWD'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wakka.php
-sed -i "87s/\"\"/\"<?php echo \$wakkaConfig[\"mysql_password\"] ?>\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/setup/default.php
+sed -i "s/Wikini/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/wakka.config.php
+sed -i "s/WIKINI_MYSQL_PWD/${WIKINI_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wakka.config.php
+sed -i "s/MonSiteWikiNi/${wikini_site_name[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/wakka.config.php
 
+echo "
+UPDATE ${MOD_NAME[$count]}.wikini_users SET email = '${wikini_admin_email[$count]}' WHERE CONVERT( wikini_users.name USING utf8 ) = 'admin' LIMIT 1 ;
+" > wikini_credentials.sql
+$BIN_MYSQL -u root < wikini_credentials.sql
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
   
 done
@@ -287,8 +154,6 @@ done
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Wikini"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 

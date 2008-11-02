@@ -27,124 +27,18 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
-#VARIABLES
-#MYSQL PASSWORD
-WORDPRESS_MYSQL_PWD="WORDPRESS_MYSQL_PWD"
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
+NB_WORDPRESS=$nb_wordpress
 
-
-function LANGFR
-
-{
-MESS_NAME="Entrez le nom de l'installation "
-MESS_HOW_MANY="Combien de" 
-MESS_DO_YOU_WANT="voulez vous installez ?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
+for (( count=1; count<=$NB_WORDPRESS; count++ ))
+do
+WORDPRESS_MYSQL_PWD[$count]=${wordpress_mysql_pwd[$count]}
+MOD_NAME[$count]=${wordpress_name[$count]}
+done
 
 
-function LANGEN
-
-{
-MESS_NAME="Enter the name of the install "
-MESS_HOW_MANY="How many"
-MESS_DO_YOU_WANT="do you want to install ?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
-
-
-
-
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-wget http://fr.wordpress.org/wordpress-2.5.1-fr_FR.tar.gz
-tar -xzf wordpress-2.5.1-fr_FR.tar.gz
-mv wordpress-2.5.1-fr_FR.tar.gz wordpress-2.5.1.tar.gz
-else
-wget http://wordpress.org/wordpress-2.5.1.tar.gz
-tar -xzf wordpress-2.5.1.tar.gz
-fi
-
-cd $DL_DIR
-wget http://www.plaintxt.org/wp-content/uploads/Barthelme_v453.zip
-unzip -q Barthelme_v453.zip
-
-
-cd $DL_DIR
-wget http://www.plaintxt.org/wp-content/uploads/plaintxtblog_v3-1.zip
-unzip -q plaintxtblog_v3-1.zip
-
-cd $DL_DIR
-wget http://urbangiraffe.com/resources/download/plugin/search-regex.zip
-unzip -q search-regex.zip
-
-cd $DL_DIR
-wget http://urbangiraffe.com/resources/download/plugin/search-unleashed.zip?version=0.2.15
-mv search-unleashed.zip?version=0.2.15 search-unleashed.zip
-unzip -q search-unleashed.zip
-
-cd $DL_DIR
-wget http://downloads.wordpress.org/plugin/wpmathpub.1.0.6.zip
-unzip -q wpmathpub.1.0.6.zip
-
-cd $DL_DIR
-wget $URL_FREE/wp-print-custom.tar.gz
-tar -xzf wp-print-custom.tar.gz
-
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_LOCAL_____________________________________
-
-function WGET_MIRROIR_LOCAL
-{
-
-cd $DL_DIR
-MESSAGE="#Wordpress download"
-echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
-wget http://$MIRROIR_URL/mirroir/wordpress-2.5.1.tar.gz
-tar -xzvf wordpress-2.5.1.tar.gz
-#rm wordpress-2.3.3-fr_FR.zip
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -153,104 +47,16 @@ function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
 
-wget $URL_FREE/wordpress-2.5.1.tar.gz
-tar -xzf wordpress-2.5.1.tar.gz
+wget $URL_FREE/wordpress-251-081102.tar.gz
+tar -xzf wordpress-251-081102.tar.gz
 
 
-cd $DL_DIR
-wget $URL_FREE/Barthelme_v453.zip
-unzip -q Barthelme_v453.zip
-
-cd $DL_DIR
-wget $URL_FREE/plaintxtblog_v3-1.zip
-unzip -q plaintxtblog_v3-1.zip
-
-cd $DL_DIR
-wget $URL_FREE/search-regex.zip
-unzip -q search-regex.zip
-
-cd $DL_DIR
-wget $URL_FREE/search-unleashed.zip
-unzip -q search-unleashed.zip
-
-cd $DL_DIR
-wget $URL_FREE/wpmathpub.1.0.6.zip
-unzip -q wpmathpub.1.0.6.zip
-
-cd $DL_DIR
-wget $URL_FREE/wp-print-custom.tar.gz
-tar -xzf wp-print-custom.tar.gz
 
 
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_MIRROIR_FREE
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
-
-
-WGET_MIRROIR_LOCAL
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NB_WORDPRESS=1
-MOD_NAME[1]="Wordpress25"
-
-else 
-NB_WORDPRESS=$(zenity --entry --text "$MESS_HOW_MANY Wordpress $MESS_DO_YOU_WANT")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $NB_WORDPRESS | grep "[^0-9]") 
-do
-NB_WORDPRESS=$(zenity --entry --text "$MESS_HOW_MANY Wordpress $MESS_DO_YOU_WANT")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
-
-
-for (( count=1; count<=$NB_WORDPRESS; count++ ))
-do
-MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count WORDPRESS")
-test $? -ne 0 && break # Bouton Annuler
-
-while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count WORDPRESS")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
-done
-
-fi
-export NB_WORDPRESS=$NB_WORDPRESS
-export MOD_NAME=$MOD_NAME
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
-
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -260,65 +66,47 @@ function INSTALL
 {
 
 echo "I: Download Wordpress"
-DOWNLOAD
+WGET_MIRROIR_FREE
 
 for (( count=1; count<=$NB_WORDPRESS; count++ ))
 
 do
 mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cd $DL_DIR
-cp -Rf wordpress/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
-echo "create database ${MOD_NAME[$count]};
-grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$WORDPRESS_MYSQL_PWD';
+cp -Rf Wordpress25/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/Wordpress25/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Wordpress25/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "17s/Wordpress25/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "15s/DROP/--DROP/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/SET latin1 COLLATE latin1_swedish_ci/SET utf8 COLLATE utf8_general_ci/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${WORDPRESS_MYSQL_PWD[$count]}';
 flush privileges;" > wordpress_db.sql
 
 $BIN_MYSQL -u root < wordpress_db.sql mysql
 rm wordpress_db.sql
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-admin/setup-config.php | sed -i -e  "s/value=\"wordpress\"/value=\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-admin/setup-config.php
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-admin/setup-config.php | sed -i -e  "s/value=\"username\"/value=\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-admin/setup-config.php
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-admin/setup-config.php | sed -i -e  "s/value=\"password\"/value=\"$WORDPRESS_MYSQL_PWD\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-admin/setup-config.php
 
-cd $DL_DIR
-
-cp -Rf plaintxtblog $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/.
-
-cd $DL_DIR
-
-cp -Rf barthelme $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/.
+sed -i "s/Wordpress25/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-config.php
+sed -i "s/WORDPRESS_MYSQL_PWD/${WORDPRESS_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-config.php
 
 
-
-cd $DL_DIR
-
-cp -Rf search-regex $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/plugins/.
-
-
-cd $DL_DIR
-
-cp -Rf search-unleashed $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/plugins/.
-
-cd $DL_DIR
-
-cp -Rf wpmathpub $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/plugins/.
-
-sed -i "53s/true/false/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/plugins/wpmathpub/wpmathpub.php
-
-cp -Rf wp-print $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/plugins/.
-
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/plaintxtblog/single.php | sed -i -e "24s/<?php endif; ?>/<?php endif; ?><span class=\"entry-comments\"><?php if(function_exists('wp_print')) { print_link(); } ?><\/span>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/plaintxtblog/single.php 
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/plaintxtblog/page.php | sed -i -e "17s/<\/div>/<?php if(function_exists('wp_print')) { print_link(); } ?><\/div>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/plaintxtblog/page.php 
+sed -i -e "24s/<?php endif; ?>/<?php endif; ?><span class=\"entry-comments\"><?php if(function_exists('wp_print')) { print_link(); } ?><\/span>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/plaintxtblog/single.php 
+sed -i -e "17s/<\/div>/<?php if(function_exists('wp_print')) { print_link(); } ?><\/div>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/plaintxtblog/page.php 
 #FR
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/single.php | sed -i -e "s/Modifier cet article.','',''); ?>/Modifier cet article.','',''); ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/single.php 
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/page.php | sed -i -e "s/<?php endwhile; endif; ?>/<?php endwhile; endif; ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/page.php 
+sed -i -e "s/Modifier cet article.','',''); ?>/Modifier cet article.','',''); ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/single.php 
+sed -i -e "s/<?php endwhile; endif; ?>/<?php endwhile; endif; ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/page.php 
 #EN
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/single.php | sed -i -e "s/Edit this entry.','',''); ?>/Edit this entry.','',''); ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/single.php 
+sed -i -e "s/Edit this entry.','',''); ?>/Edit this entry.','',''); ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/default/single.php 
+sed -i -e "41s/<?php endif; ?>/<?php endif; ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/barthelme/single.php 
+sed -i -e "18s/<\/div>/<?php if(function_exists('wp_print')) { print_link(); } ?><\/div>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/barthelme/page.php 
 
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/barthelme/single.php | sed -i -e "41s/<?php endif; ?>/<?php endif; ?><?php if(function_exists('wp_print')) { print_link(); } ?>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/barthelme/single.php 
-cat $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/barthelme/page.php | sed -i -e "18s/<\/div>/<?php if(function_exists('wp_print')) { print_link(); } ?><\/div>/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-content/themes/barthelme/page.php 
-
-
-
-
+echo "
+UPDATE ${MOD_NAME[$count]}.wp_users SET user_email = '${wordpress_admin_email[$count]}' WHERE wp_users.ID =1 LIMIT 1 ;
+" > wordpress_credentials.sql
+$BIN_MYSQL -u root < wordpress_credentials.sql
 
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
@@ -381,8 +169,6 @@ done
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Wordpress"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 echo "I: End of install Wordpress"

@@ -11,27 +11,60 @@ smb_pwd="cooperation"
 #Proftpd
 proftpd_pwd="cooperation"
 #Gallery 2.3RC1
+nb_gallery=1
+gallery_name[1]="Gallery"
+gallery_mysql_pwd[1]=$generic_mysql_pwd
+gallery_pwd[1]=$generic_login_pwd
+gallery_admin_email[1]=$generic_admin_email
 #Snif
-share_snif_smb1="y"
-share_snif_smb_pwd1="n"
+nb_snif=1
+snif_name[1]="Snif"
+share_snif_smb[1]="y"
+share_snif_smb_pwd[1]="n"
 #Wordpress2.5.1
+nb_wordpress=1
+wordpress_mysql_pwd[1]=$generic_mysql_pwd
+wordpress_name[1]="Wordpress"
+wordpress_admin_email[1]=$generic_admin_email
 #SSH Server
 #OpenGoo 1.0
 #Moodle 1.9
 #Taskfreak 1.8
 #Mediawiki 1.12.0
+nb_mediawiki=1
+mediawiki_mysql_pwd[1]=$generic_mysql_pwd
+mediawiki_name[1]="Mediawiki"
+mediawiki_site_name[1]="Ciws"
+mediawiki_admin_email[1]=$generic_admin_email
 #PhpBB 3.0.2
+nb_phpbb=1
+phpbb_mysql_pwd[1]=$generic_mysql_pwd
+phpbb_name[1]="Phpbb"
+phpbb_admin_email[1]=$generic_admin_email
 #Jdicd 1.5
 #eyeOS 1.6.0.3-1
 #Net2ftp 0.97
+net2ftp_admin_mail=$generic_admin_email
+net2ftp_admin_pwd=$generic_login_pwd
+net2ftp_admin_name="admin"
+net2ftp_mysql_pwd=$generic_mysql_pwd
+net2ftp_name="Net2ftp"
 #Claroline 1.8
 #Ossec 1.5.1 standalone
 ossec_report_address="admin@ciws.com"
 #Lifetype 1.2
+nb_lifetype=1
+lifetype_mysql_pwd[1]=$generic_mysql_pwd
+lifetype_name[1]="Lifetype"
+lifetype_admin_email[1]=$generic_admin_email
 #Spip 1.9.2d
+nb_spip=1
+spip_mysql_pwd[1]=$generic_mysql_pwd
+spip_name[1]="Spip"
+spip_admin_email[1]=$generic_admin_email
 #Cacti 0.8.7b
-#Openmeeting
-#Inspircd
+cacti_name="Cacti"
+cacti_mysql_pwd=$generic_mysql_pwd
 #Akoie 0.5
 share_akoie_smb="y"
 share_akoie_smb_pwd="n"

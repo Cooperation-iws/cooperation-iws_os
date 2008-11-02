@@ -28,54 +28,14 @@ URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 LANG_UI=$(cat /tmp/lang-wui)
 
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
 
 #VARIABLES
 #MYSQL PASSWORD
-SYSLOGNG_MYSQL_PWD="SYSLOGNG_MYSQL_PWD"
-
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
-
-
-function LANGFR
-
-{
-MESS_NAME="Entrez le nom de l'installation de "
-
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
-
-
-function LANGEN
-
-{
-MESS_NAME="Enter the name of the install of "
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
+SYSLOGNG_MYSQL_PWD=$phpsyslog_mysql_pwd
+MOD_NAME=$phpsyslogng_name
 
 
 
@@ -88,11 +48,8 @@ fi
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-
-
-wget  http://php-syslog-ng.googlecode.com/files/php-syslog-ng-2.9.8f.tgz
-
-tar -xzf php-syslog-ng-2.9.8f.tgz
+wget $URL_FREE/phpsyslogng_081101.tar.gz
+tar -xzf phpsyslogng_081101.tar.gz
 
 }
 
@@ -105,8 +62,8 @@ tar -xzf php-syslog-ng-2.9.8f.tgz
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/php-syslog-ng-2.9.8f.tgz
-tar -xzf php-syslog-ng-2.9.8f.tgz
+wget $URL_FREE/phpsyslogng_081101.tar.gz
+tar -xzf phpsyslogng_081101.tar.gz
 
 }
 
@@ -133,30 +90,6 @@ fi
 #_______________________________________________________________________________________________
 #________________________________________FIN_DOWNLOAD___________________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-MOD_NAME="Syslogng"
-else 
-
-MOD_NAME=$(zenity --entry --text "$MESS_NAME SYSLOGNG")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME=$(zenity --entry --text "$MESS_NAME SYSLOGNG")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
- 
-
-fi
-export MOD_NAME=$MOD_NAME
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
 
 
 #_______________________________________________________________________________________________
@@ -165,7 +98,7 @@ export MOD_NAME=$MOD_NAME
 
 function INSTALL
 {
-echo "I: Cacti download"
+echo "I: Phpsyslogng download"
 DOWNLOAD
 echo "
 Name: msttcorefonts/baddldir
@@ -201,7 +134,7 @@ Owners: msttcorefonts
 apt-get install --assume-yes --force-yes syslog-ng
 aptitude install -y msttcorefonts
 /etc/init.d/syslog-ng stop
-#Cacti config
+
 
 echo "
 @daily www-data /usr/bin/php $WWW_DIRECTORY/admin/$MOD_NAME/scripts/logrotate.php >> /var/log/php-syslog-ng/logrotate.log 
@@ -211,15 +144,20 @@ echo "
 " >> /etc/cron.d/syslog-ng
 sudo chmod +x /etc/cron.d/syslog-ng
 
-#Cacti 
+
 
 cd $DL_DIR
 mkdir $WWW_DIRECTORY/admin/$MOD_NAME
-cp -Rf php-syslog-ng/* $WWW_DIRECTORY/admin/$MOD_NAME/.
+cp -Rf Syslogng/* $WWW_DIRECTORY/admin/$MOD_NAME/.
+sed -i "15s/Syslogng/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+sed -i "16s/Syslogng/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+
+
+$BIN_MYSQL -u root < $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
 
 mkdir -p /var/log/php-syslog-ng
 
-echo "create database $MOD_NAME;
+echo "
 grant all on $MOD_NAME.* to $MOD_NAME identified by '$SYSLOGNG_MYSQL_PWD';
 grant all on $MOD_NAME.* to $MOD_NAME@localhost identified by '$SYSLOGNG_MYSQL_PWD';
 flush privileges;
@@ -231,19 +169,16 @@ chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/
 chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/
 
 cd $WWW_DIRECTORY/admin/$MOD_NAME/scripts/
-perl -i -pe "s/\/www\/php-syslog-ng/\/var\/www\/admin\/$MOD_NAME/g" *
+perl -i -pe "s/\/var\/www\/admin\/Syslogng/\/var\/www\/admin\/$MOD_NAME/g" *
 
-sed -i "14s/root/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "15s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "16s/''/'$SYSLOGNG_MYSQL_PWD'/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "17s/sysloguser/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "18s/sysloguser/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "19s/sysloguser/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "20s/syslogadmin/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "21s/syslogadmin/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "22s/syslogadmin/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "23s/syslog/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install1.php
-sed -i "27s/\//\/admin\/$MOD_NAME\/html\//" $WWW_DIRECTORY/admin/$MOD_NAME/html/install/install3.php
+sed -i "9s/Syslogng/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+sed -i "11s/Syslogng/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+sed -i "13s/Syslogng/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+sed -i "10s/SYSLOGNG_MYSQL_PWD/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+sed -i "12s/SYSLOGNG_MYSQL_PWD/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+sed -i "23s/admin@ciws.com/$syslog_admin_email/" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+sed -i "32s/\/admin\/Syslogng\/html\//\/admin\/$MOD_NAME\/html\//" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+
 cp $WWW_DIRECTORY/admin/$MOD_NAME/scripts/logrotate.d /etc/logrotate.d
 
 

@@ -32,83 +32,23 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
-#VARIABLES
-#MYSQL PASSWORD
-TWIKI_MYSQL_PWD="TWIKI_MYSQL_PWD"
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
+NB_TWIKI=$nb_twiki
 
-function LANGFR
-
-{
-MESS_NAME="Entrez le nom de l'installation "
-MESS_HOW_MANY="Combien de" 
-MESS_DO_YOU_WANT="voulez vous installez ?"
-MESS_URL="Quelle est l'url à partir de laquelle vous avez effectuée l'installation des applications web?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
-
-
-function LANGEN
-
-{
-MESS_NAME="Enter the name of the install "
-MESS_HOW_MANY="How many"
-MESS_DO_YOU_WANT="do you want to install ?"
-MESS_URL="What's the url from where you install web applications ?"
-
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
-
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget $URL_FREE/TWiki-4.2.3.tgz
-mkdir Twiki
-tar -xzf TWiki-4.2.3.tgz -C Twiki
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
-
+for (( count=1; count<=$NB_TWIKI; count++ ))
+do
+MOD_NAME[$count]=${twiki_name[$count]}
+done
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
 
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/TWiki-4.2.3.tgz
-mkdir Twiki
-tar -xzf TWiki-4.2.3.tgz -C Twiki
+wget $URL_FREE/twiki-42-081102.tar.gz
+tar -xzf twiki-42-081102.tar.gz
 
 }
 
@@ -170,10 +110,6 @@ function INSTALL
 echo "I: Download Twiki"
 DOWNLOAD
 
-##TWIKI
-cd $DL_DIR
-mkdir $WWW_DIRECTORY/$MOD_NAME
-cp -Rf Twiki/* $WWW_DIRECTORY/$MOD_NAME/.
 
 apt-get install cron grep  
 apt-get install rcs
@@ -255,23 +191,31 @@ BrowserMatchNoCase ^yacybot blockAccess
 BrowserMatchNoCase ^ZIBB blockAccess
 BrowserMatchNoCase ^\$ blockAccess
 
+EOF
+for (( count=1; count<=$NB_TWIKI; count++ ))
+do
+##TWIKI
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf Twiki/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
 
+cat << EOF > /etc/apache2/sites-available/default-twiki
 # The ScriptAlias defines the bin directory as a directory where CGI
 # scripts are allowed.
 # The first parameter will be part of the URL to your installation e.g.
 # http://my.co.uk/twiki/bin/view/...
 # The second parameter must point to the physical path on your disc.
-ScriptAlias /$MOD_NAME/bin "$WWW_DIRECTORY/$MOD_NAME/bin"
+ScriptAlias /${MOD_NAME[$count]}/bin "$WWW_DIRECTORY/${MOD_NAME[$count]}/bin"
 
 # The Alias defines a url that points to the root of the twiki installation.
 # It is used to access files in the pub directory (attachments etc)
 # It must come _after_ the ScriptAlias.
-Alias /$MOD_NAME "$WWW_DIRECTORY/$MOD_NAME"
+Alias /${MOD_NAME[$count]} "$WWW_DIRECTORY/${MOD_NAME[$count]}"
 
 # This specifies the options on the TWiki scripts directory. The ExecCGI
 # and SetHandler tell apache that it contains scripts. "Allow from all"
 # lets any IP address access this URL.
-<Directory "$WWW_DIRECTORY/$MOD_NAME/bin">
+<Directory "$WWW_DIRECTORY/${MOD_NAME[$count]}/bin">
     AllowOverride None
     Order Allow,Deny
     Allow from all
@@ -282,7 +226,7 @@ Alias /$MOD_NAME "$WWW_DIRECTORY/$MOD_NAME"
 </Directory>
 <location /$MOD_NAME/bin/configure>
     # Password file for TWiki users
-    AuthUserFile $WWW_DIRECTORY/$MOD_NAME/data/.htpasswd
+    AuthUserFile $WWW_DIRECTORY/${MOD_NAME[$count]}/data/.htpasswd
     AuthName 'Enter your WikiName: (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
     AuthType Basic
 
@@ -303,7 +247,7 @@ Alias /$MOD_NAME "$WWW_DIRECTORY/$MOD_NAME"
 # so if you want to control access to files attached to topics you need to
 # block access to the specific directories same way as the ApacheConfigGenerator
 # blocks access to the pub directory of the Trash web
-<Directory "$WWW_DIRECTORY/$MOD_NAME/pub">
+<Directory "$WWW_DIRECTORY/${MOD_NAME[$count]}/pub">
     Options None
     AllowOverride None
     Order Allow,Deny
@@ -334,27 +278,27 @@ Alias /$MOD_NAME "$WWW_DIRECTORY/$MOD_NAME"
 
 # Security note: All other directories should be set so
 # that they are *not* visible as URLs, so we set them as =deny from all=.
-<Directory "$WWW_DIRECTORY/$MOD_NAME/twiki/data">
+<Directory "$WWW_DIRECTORY/${MOD_NAME[$count]}/twiki/data">
     deny from all
 </Directory>
 
-<Directory "$WWW_DIRECTORY/$MOD_NAME/templates">
+<Directory "$WWW_DIRECTORY/${MOD_NAME[$count]}/templates">
     deny from all
 </Directory>
 
-<Directory "$WWW_DIRECTORY/$MOD_NAME/lib">
+<Directory "$WWW_DIRECTORY/${MOD_NAME[$count]}/lib">
     deny from all
 </Directory>
 
-<Directory "$WWW_DIRECTORY/$MOD_NAME/locale">
+<Directory "$WWW_DIRECTORY/${MOD_NAME[$count]}/locale">
     deny from all
 </Directory>
 
-<Directory "$WWW_DIRECTORY/$MOD_NAME/tools">
+<Directory "$WWW_DIRECTORY/${MOD_NAME[$count]}/tools">
     deny from all
 </Directory>
 
-<Directory "$WWW_DIRECTORY/$MOD_NAME/working">
+<Directory "$WWW_DIRECTORY/${MOD_NAME[$count]}/working">
     deny from all
 </Directory>
 
@@ -366,7 +310,7 @@ EOF
 
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 
-htpasswd -c -b $WWW_DIRECTORY/$MOD_NAME/data/.htpasswd admin $twiki_pwd
+htpasswd -c -b $WWW_DIRECTORY/${MOD_NAME[$count]}/data/.htpasswd admin ${twiki_pwd[$count]}
 
 else
 
@@ -374,14 +318,14 @@ echo "
 ----------------Cooperation-iws SVN-------------------
 ----------Enter the admin password for Twiki------------"
 
-htpasswd -cm $WWW_DIRECTORY/$MOD_NAME/data/.htpasswd admin
+htpasswd -cm $WWW_DIRECTORY/${MOD_NAME[$count]}/data/.htpasswd admin
 
 fi
 /etc/init.d/apache2 restart
 
 
-chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
-
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
+done
 
 }
 
@@ -393,11 +337,12 @@ chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 function CREATE_WUI
 {
-
+for (( count=1; count<=$NB_TWIKI; count++ ))
+do
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/$MOD_NAME/bin/view</item_url>
+	<item_url>/${MOD_NAME[$count]}/bin/view</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
@@ -406,13 +351,13 @@ echo "
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/$MOD_NAME/bin/view</item_url>
+	<item_url>/${MOD_NAME[$count]}/bin/view</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
-
+done
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -423,15 +368,16 @@ echo "
 
 function CREATE_INSTALL_SCRIPT
 {
-
+for (( count=1; count<=$NB_TWIKI; count++ ))
+do
 echo "
 
 #Twiki
-sed -i \"s/\\\$TWiki::cfg{SMTP}{MAILHOST} = '';/\\\$TWiki::cfg{SMTP}{MAILHOST} = 'localhost';/\" $WWW_DIRECTORY/$MOD_NAME/lib/LocalSite.cfg
-sed -i \"s/\\\$TWiki::cfg{SMTP}{SENDERHOST} = '';/\\\$TWiki::cfg{SMTP}{SENDERHOST} = 'localhost';/\" $WWW_DIRECTORY/$MOD_NAME/lib/LocalSite.cfg
+sed -i \"s/\\\$TWiki::cfg{SMTP}{MAILHOST} = '';/\\\$TWiki::cfg{SMTP}{MAILHOST} = 'localhost';/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/LocalSite.cfg
+sed -i \"s/\\\$TWiki::cfg{SMTP}{SENDERHOST} = '';/\\\$TWiki::cfg{SMTP}{SENDERHOST} = 'localhost';/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/LocalSite.cfg
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
-
+done
 }
 
 #_______________________________________________________________________________________________

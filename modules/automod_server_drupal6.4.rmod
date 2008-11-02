@@ -29,91 +29,22 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
-#VARIABLES
-#MYSQL PASSWORD
-DRUPAL_MYSQL_PWD="DRUPAL_MYSQL_PWD"
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
+NB_DRUPAL=$nb_drupal
 
-
-function LANGFR
-
-{
-MESS_NAME="Entrez le nom de l'installation "
-MESS_HOW_MANY="Combien de" 
-MESS_DO_YOU_WANT="voulez vous installez ?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
-
-
-function LANGEN
-
-{
-MESS_NAME="Enter the name of the install "
-MESS_HOW_MANY="How many"
-MESS_DO_YOU_WANT="do you want to install ?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
+for (( count=1; count<=$NB_DRUPAL; count++ ))
+do
+DRUPAL_MYSQL_PWD[$count]=${drupal_mysql_pwd[$count]}
+MOD_NAME[$count]=${drupal_name[$count]}
+done
 
 
 
 
 
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
 
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget http://ftp.drupal.org/files/projects/drupal-6.4.tar.gz
-tar -xzf drupal-6.4.tar.gz
-mv drupal-6.4 drupal
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_LOCAL_____________________________________
-
-function WGET_MIRROIR_LOCAL
-{
-
-cd $DL_DIR
-MESSAGE="#Drupal download"
-echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
-wget http://$MIRROIR_URL/mirroir/wordpress-2.5.1.tar.gz
-tar -xzvf wordpress-2.5.1.tar.gz
-#rm wordpress-2.3.3-fr_FR.zip
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -122,78 +53,13 @@ function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
 
-wget $URL_FREE/drupal-6.4.tar.gz
-tar -xzf drupal-6.4.tar.gz
-mv drupal-6.4 drupal
+wget $URL_FREE/drupal6.4-081102.tar.gz
+tar -xzf drupal6.4-081102.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_MIRROIR_FREE
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
-
-
-WGET_MIRROIR_LOCAL
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NB_DRUPAL=1
-MOD_NAME[1]="Drupal"
-
-else 
-NB_DRUPAL=$(zenity --entry --text "$MESS_HOW_MANY Drupal $MESS_DO_YOU_WANT")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $NB_DRUPAL | grep "[^0-9]") 
-do
-NB_DRUPAL=$(zenity --entry --text "$MESS_HOW_MANY Drupal $MESS_DO_YOU_WANT")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
-
-
-for (( count=1; count<=$NB_DRUPAL; count++ ))
-do
-MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count DRUPAL")
-test $? -ne 0 && break # Bouton Annuler
-
-while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count DRUPAL")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
-done
-
-fi
-export NB_DRUPAL=$NB_DRUPAL
-export MOD_NAME=$MOD_NAME
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
 
 
 #_______________________________________________________________________________________________
@@ -204,23 +70,34 @@ function INSTALL
 {
 
 echo "I: Download Drupal"
-DOWNLOAD
+WGET_MIRROIR_FREE
 
 for (( count=1; count<=$NB_DRUPAL; count++ ))
 
 do
 mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cd $DL_DIR
-cp -Rf drupal/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
-echo "create database ${MOD_NAME[$count]};
-grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$DRUPAL_MYSQL_PWD';
+cp -Rf Drupal/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/Drupal/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Drupal/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "17s/Drupal/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "15s/DROP/--DROP/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "s/latin1_swedish_ci/utf8_general_ci/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "s/latin1/utf8/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${DRUPAL_MYSQL_PWD[$count]}';
 flush privileges;" > drupal_db.sql
 
 $BIN_MYSQL -u root < drupal_db.sql mysql
 rm drupal_db.sql
-sed -i "92s/username:password@localhost\/databasename/${MOD_NAME[$count]}:$DRUPAL_MYSQL_PWD@localhost\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/sites/default/default.settings.php
-
-mv $WWW_DIRECTORY/${MOD_NAME[$count]}/sites/default/default.settings.php $WWW_DIRECTORY/${MOD_NAME[$count]}/sites/default/settings.php
+sed -i "92s/Drupal:DRUPAL_MYSQL_PWD@localhost\/Drupal/${MOD_NAME[$count]}:${DRUPAL_MYSQL_PWD[$count]}@localhost\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/sites/default/default.settings.php
+echo "
+UPDATE ${MOD_NAME[$count]}.users SET mail = '${drupal_admin_mail[$count]}',
+init = '${drupal_admin_mail[$count]}' WHERE users.uid =1 LIMIT 1 ;
+" > drupal_credential.sql
+$BIN_MYSQL -u root < drupal_credential.sql
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
   
@@ -282,8 +159,6 @@ done
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Drupal"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 

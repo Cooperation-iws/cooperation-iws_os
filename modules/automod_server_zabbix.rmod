@@ -22,10 +22,16 @@ BIN_MYSQL=$(cat /tmp/mysql-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 HOSTNAME=$(cat /tmp/hostname)
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+INSTALL=$(cat /tmp/def_install)
+LANG_UI=$(cat /tmp/lang-wui)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
 
-MOD_NAME="zabbix"
-ZABBIX_MYSQL_PWD="ZABBIX_MYSQL_PWD"
+MOD_NAME=$zabbix_name
+ZABBIX_MYSQL_PWD=$zabbix_mysql_pwd
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -34,15 +40,14 @@ ZABBIX_MYSQL_PWD="ZABBIX_MYSQL_PWD"
 function INSTALL
 {
 
-export DEBIAN_FRONTEND=noninteractive
-
-echo "create database ${MOD_NAME};
+echo "
 grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$ZABBIX_MYSQL_PWD';
 flush privileges;" > ZABBIX_db.sql
 
 $BIN_MYSQL -u root < ZABBIX_db.sql mysql
 rm ZABBIX_db.sql
 
+export DEBIAN_FRONTEND=noninteractive
 apt-get install --assume-yes --force-yes snmp zabbix-frontend-php zabbix-server-mysql zabbix-agent
 
 echo "zabbix_agent 10050/tcp # Zabbix ports
@@ -228,11 +233,22 @@ chmod -R 777 /var/run/zabbix-server
 /etc/init.d/zabbix-server restart
 " >> /etc/rc.local
 
-/usr/bin/zabbix_installdb
+
 
 sed -i "s/;date.timezone =/date.timezone =Europe\/Paris/" /etc/php5/apache2/php.ini
 
 /etc/init.d/apache2 restart
+
+cd $DL_DIR
+wget $URL_FREE/zabbix_mysql_schema_081101.tar.gz
+tar -xzf zabbix_mysql_schema_081101.tar.gz
+sed -i "15s/Syslogng/$MOD_NAME/" database.sql
+sed -i "16s/Syslogng/$MOD_NAME/" database.sql
+
+echo "DROP DATABASE zabbix; " > drop_zabbix.sql
+$BIN_MYSQL -u root < drop_zabbix.sql
+$BIN_MYSQL -u root < database.sql
+
 
 
 }

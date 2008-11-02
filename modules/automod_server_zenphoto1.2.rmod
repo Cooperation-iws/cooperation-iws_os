@@ -30,166 +30,28 @@ MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 
-ZENPHOTO_MYSQL_PWD="ZENPHOTO_MYSQL_PWD"
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
+NB_ZENPHOTO=$nb_zenphoto
 
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
-
-
-function LANGFR
-
-{
-MESS_NAME="Entrez le nom de l'installation "
-MESS_HOW_MANY="Combien de" 
-MESS_DO_YOU_WANT="voulez vous installez ?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
-
-
-function LANGEN
-
-{
-MESS_NAME="Enter the name of the install "
-MESS_HOW_MANY="How many"
-MESS_DO_YOU_WANT="do you want to install ?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
-
-
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget http://www.zenphoto.org/files/zenphoto-1.2.zip
-unzip -q zenphoto-1.2.zip
-#rm zenphoto-1.1.5.zip
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_LOCAL_____________________________________
-
-function WGET_MIRROIR_LOCAL
-{
-
-cd $DL_DIR
-wget http://$MIRROIR_URL/mirroir/zenphoto-1.1.5.zip
-unzip zenphoto-1.1.5.zip
-#rm zenphoto-1.1.5.zip
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
-
+for (( count=1; count<=$NB_ZENPHOTO; count++ ))
+do
+ZENPHOTO_MYSQL_PWD[$count]=${zenphoto_mysql_pwd[$count]}
+MOD_NAME[$count]=${zenphoto_name[$count]}
+done
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
 
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/zenphoto-1.2.zip
-unzip -q zenphoto-1.2.zip
-#rm zenphoto-1.1.5.zip
-
+wget $URL_FREE/zenphoto-12-081102.tar.gz
+tar -xzf zenphoto-12-081102.tar.gz
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_MIRROIR_FREE
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
-
-
-WGET_MIRROIR_LOCAL
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NB_ZENPHOTO=1
-MOD_NAME[1]="Zenphoto"
-
-else 
-
-NB_ZENPHOTO=$(zenity --entry --text "$MESS_HOW_MANY Zenphoto $MESS_DO_YOU_WANT")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $NB_ZENPHOTO | grep "[^0-9]") 
-do
-NB_ZENPHOTO=$(zenity --entry --text "$MESS_HOW_MANY Zenphoto $MESS_DO_YOU_WANT")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
-
-for (( count=1; count<=$NB_ZENPHOTO; count++ ))
-do
-MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count ZENPHOTO")
-test $? -ne 0 && break # Bouton Annuler
-
-while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count ZENPHOTO")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
-done 
-
-
-fi
-export NB_ZENPHOTO=$NB_ZENPHOTO
-export MOD_NAME=$MOD_NAME
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
 
 
 #_______________________________________________________________________________________________
@@ -199,23 +61,35 @@ export MOD_NAME=$MOD_NAME
 function INSTALL
 {
 echo "I: Download Zenphoto"
-DOWNLOAD
+WGET_MIRROIR_FREE
 
 for (( count=1; count<=$NB_ZENPHOTO; count++ ))
 do
 cd $DL_DIR
 mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
-cp -Rf zenphoto/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
-#mv $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php.example $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php
-echo "create database ${MOD_NAME[$count]};
-grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$ZENPHOTO_MYSQL_PWD';
+cp -Rf Zenphoto/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/Zenphoto/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Zenphoto/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "17s/Zenphoto/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "15s/DROP/--DROP/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+
+
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${ZENPHOTO_MYSQL_PWD[$count]}';
 flush privileges;" > zenphoto_db.sql
 
 $BIN_MYSQL -u root < zenphoto_db.sql mysql
 rm zenphoto_db.sql
-sed -i -e "28s/\"\"/\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php.source
-sed -i -e "29s/\"\"/\"$ZENPHOTO_MYSQL_PWD\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php.source
-sed -i -e "31s/\"\"/\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php.source
+sed -i -e "28s/\"Zenphoto\"/\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php
+sed -i -e "29s/\"ZENPHOTO_MYSQL_PWD\"/\"${ZENPHOTO_MYSQL_PWD[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php
+sed -i -e "31s/\"Zenphoto\"/\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php
+
+echo "
+UPDATE ${MOD_NAME[$count]}.zp_administrators SET email = '$zenphoto_admin_email[$count]}' WHERE zp_administrators.id =1 LIMIT 1 ;
+" > zenphoto_credentials.sql
+$BIN_MYSQL -u root < zenphoto_credentials.sql
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
@@ -265,9 +139,6 @@ done
 
 
 echo "I: Install Zenphoto"
-CHOICE_LANG
-
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 echo "I: End of install Zenphoto"

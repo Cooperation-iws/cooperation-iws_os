@@ -24,9 +24,7 @@ DISPLAY=127.0.0.1:5.0
 LANG_UI=$(cat /tmp/lang-wui)
 
 SILENT=$(cat /tmp/silent)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
-fi
 
 
 #TEMP

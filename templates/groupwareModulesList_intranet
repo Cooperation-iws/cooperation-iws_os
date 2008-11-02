@@ -18,20 +18,23 @@ share_snif_smb_pwd1="n"
 #SSH Server
 #OpenGoo 1.0
 #Awstats
-#Openmeeting
-#Inspircd
 #Ossec 1.5.1 standalone
 ossec_report_address="admin@ciws.com"
 #Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
+postfixadmin_name="Mail"
+postfixadmin_mysql_pwd="MAILSERVER_MYSQL_PWD"
 public_mail="y"
 mail_domain="ciws.com"
 smtp_relay="smtp.free.fr"
+mailbox_quota="100"
 #Clamav antivirus
 clam_mail_report="admin@ciws.com"
 #Cooperation-iws Liveusb 0.3
 #Webmin 1.4.20
 webmin_pwd="cooperation"
 #Cacti 0.8.7b
+cacti_name="Cacti"
+cacti_mysql_pwd="CACTI_MYSQL_PWD"
 #Zabbix client 1.6
 zabbix_server_name="administration.ciws.com"
 #Syslog client
