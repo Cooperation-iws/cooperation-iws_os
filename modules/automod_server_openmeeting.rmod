@@ -83,15 +83,15 @@ dpkg -i red5_0.6.3-1_all.deb
 cd $DL_DIR
 cp -r openmeetings /usr/lib/red5/webapps/
 
-echo "grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$HORDE_MYSQL_PWD';
-flush privileges;" > HORDE_db.sql
+echo "grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$OPENMEETING_MYSQL_PWD';
+flush privileges;" > openmeetings_db.sql
 
-$BIN_MYSQL -u root < HORDE_db.sql mysql 
+$BIN_MYSQL -u root < openmeetings_db.sql mysql 
 sed -i "15s/openmeetings/$MOD_NAME/" /usr/lib/red5/webapps/openmeetings/database.sql
 sed -i "16s/openmeetings/${MOD_NAME}/" /usr/lib/red5/webapps/openmeetings/database.sql
-sed -i "12s/openmeetings/${MOD_NAME}/" openmeetings/conf/hibernate.cfg.xml
-sed -i "13s/OPENMEETING_MYSQL_PWD/$OPENMEETING_MYSQL_PWD/" openmeetings/conf/hibernate.cfg.xml
-sed -i "18s/openmeetings/${MOD_NAME}/" openmeetings/conf/hibernate.cfg.xml
+sed -i "12s/openmeetings/${MOD_NAME}/" /usr/lib/red5/webapps/openmeetings/conf/hibernate.cfg.xml
+sed -i "13s/OPENMEETING_MYSQL_PWD/$OPENMEETING_MYSQL_PWD/" /usr/lib/red5/webapps/openmeetings/conf/hibernate.cfg.xml
+sed -i "18s/openmeetings/${MOD_NAME}/" /usr/lib/red5/webapps/openmeetings/conf/hibernate.cfg.xml
 
 $BIN_MYSQL -u root < /usr/lib/red5/webapps/openmeetings/database.sql
 
@@ -144,7 +144,7 @@ chmod 0755 /etc/init.d/openoffice
 
 update-rc.d openoffice defaults
 
-/etc/init.d/openoffice start
+
 
 JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun
 /etc/init.d/red5 stop
@@ -153,7 +153,7 @@ mkdir /var/share/usr/lib
 mkdir /var/share/usr/lib/red5/
 mv /usr/lib/red5/webapps/ /var/share/usr/lib/red5/
 
-ln -s /var/share/usr/lib/red5/webapps/ /usr/lib/red5/webapps/
+ln -s /var/share/usr/lib/red5/webapps/ /usr/lib/red5/
 
 #/opt/lps-4.0.6/Server/tomcat-5.0.24/bin/startup.sh
 /etc/init.d/red5 start

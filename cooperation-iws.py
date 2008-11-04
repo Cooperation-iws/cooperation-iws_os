@@ -284,7 +284,7 @@ class Reconstructor:
                     dest="isofile", default="" ,
                     help="Initial Cd image")
 	parser.add_option( "--modulesfile", 
-                    dest="modulesfile", default="" ,
+                    dest="modulesfile", default="templates/empty" ,
                     help="Modules list file")
 	parser.add_option( "--artwork", 
                     dest="artwork", default="" ,

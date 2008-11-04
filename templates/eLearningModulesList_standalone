@@ -94,7 +94,7 @@ share_akoie_smb_pwd="n"
 openmeeting_name="openmeetings"
 openmeeting_mysql_pwd=$generic_mysql_pwd
 #Inspircd
-
+#Roundcube 0.2
 #Clamav antivirus
 clam_mail_report=$generic_admin_email
 #Cooperation-iws Liveusb 0.3

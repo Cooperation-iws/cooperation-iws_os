@@ -49,10 +49,8 @@ done
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/moodle-latest-19.zip
-unzip -q moodle-latest-19.zip
-#rm moodle-latest-19.zip
-
+wget $URL_FREE/moodle-19-081103.tar.gz
+tar -xzf moodle-19-081103.tar.gz
 }
 
 #_______________________________________________________________________________________________

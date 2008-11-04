@@ -12,6 +12,7 @@ secure_admin="n"
 apache_admin_pwd=$generic_login_pwd
 #Proftpd
 proftpd_pwd=$generic_login_pwd
+#Roundcube 0.2
 #Gallery 2.3RC1
 nb_gallery=1
 gallery_name[1]="Gallery"

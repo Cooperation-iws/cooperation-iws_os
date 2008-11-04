@@ -95,6 +95,7 @@ $BIN_MYSQL -u root < kt_db.sql
 
 sed -i "s/KnowledgeTree/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
 sed -i "s/KNO_MYSQL_PWD/${KT_MYSQL_PWD[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
+sed -i "s/rootUrl = default/rootUrl = ${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
 
 echo "UPDATE ${MOD_NAME[$count]}.users SET email = '${kt_admin_email[$count]}' WHERE users.id =1 LIMIT 1 ;" > kt_credentials.sql
 
@@ -106,11 +107,60 @@ chmod 755 $WWW_DIRECTORY/${MOD_NAME[$count]}
 echo "/5 * * * * www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/bin/scheduler.php > /dev/null" >> $DOSSIER_CHROOT/etc/cron.d/kt
 sudo chmod +x $DOSSIER_CHROOT/etc/cron.d/kt
 
+cat << EOT > /etc/init.d/openoffice
+#!/bin/bash
+# openoffice.org  headless server script
+#
+# chkconfig: 2345 80 30
+# description: headless openoffice server script
+# processname: openoffice
+# 
+# Author: Vic Vijayakumar
+# Modified by Federico Ch. Tomasczik
+#
+OOo_HOME=/usr/bin
+SOFFICE_PATH=\$OOo_HOME/soffice
+PIDFILE=/var/run/openoffice-server.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "OpenOffice headless server has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting OpenOffice headless server"
+      \$SOFFICE_PATH -headless -nologo -nofirststartwizard -accept="socket,host=127.0.0.1,port=8100;urp" & > /dev/null 2>&1
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping OpenOffice headless server."
+      killall -9 soffice && killall -9 soffice.bin
+      rm -f \$PIDFILE
+      exit
+    fi
+      echo "Openoffice headless server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOT
+
+chmod 0755 /etc/init.d/openoffice
+
+update-rc.d openoffice defaults
+
 
 echo "
+/etc/init.d/openoffice start
 chown -R www-data:www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 chmod 755 $WWW_DIRECTORY/${MOD_NAME[$count]}
-nohup /usr/lib/openoffice/program/soffice.bin -headless -accept='socket,host=localhost,port=8100;urp' &
 sleep 3
 " >> /etc/rc.local
 

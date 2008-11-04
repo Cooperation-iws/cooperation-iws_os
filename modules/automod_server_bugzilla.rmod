@@ -45,7 +45,7 @@ wget $URL_FREE/bugzilla-3.0.5.tar.gz
 tar -xzf bugzilla-3.0.5.tar.gz
 mv bugzilla-3.0.5 bugzilla
 wget $URL_FREE/bugzilla-3.0.5.fr.tar.gz
-tar -xzf bugzilla-3.0.5.fr.tar.gz -C bugzilla/template
+tar -xzf bugzilla-3.0.5.fr.tar.gz -C bugzilla
 wget $URL_FREE/germzilla-3.0.5-1.utf-8.tar.gz
 tar -xzf germzilla-3.0.5-1.utf-8.tar.gz -C bugzilla/template
 

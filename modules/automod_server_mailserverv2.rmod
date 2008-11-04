@@ -2789,7 +2789,14 @@ ln -s /var/share/etc/dovecot /etc/dovecot
 
 freshclam
 
+echo "
+#mail server
+/etc/init.d/clamav-daemon restart
+/etc/init.d/dovecot restart
+/etc/init.d/postfix restart
+/etc/init.d/mailscanner restart
 
+" >> /etc/rc.local
 
 
 /etc/init.d/apache2 restart

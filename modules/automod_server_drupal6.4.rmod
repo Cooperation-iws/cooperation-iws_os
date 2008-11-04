@@ -92,7 +92,7 @@ flush privileges;" > drupal_db.sql
 
 $BIN_MYSQL -u root < drupal_db.sql mysql
 rm drupal_db.sql
-sed -i "92s/Drupal:DRUPAL_MYSQL_PWD@localhost\/Drupal/${MOD_NAME[$count]}:${DRUPAL_MYSQL_PWD[$count]}@localhost\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/sites/default/default.settings.php
+sed -i "92s/Drupal:DRUPAL_MYSQL_PWD@localhost\/Drupal/${MOD_NAME[$count]}:${DRUPAL_MYSQL_PWD[$count]}@localhost\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/sites/default/settings.php
 echo "
 UPDATE ${MOD_NAME[$count]}.users SET mail = '${drupal_admin_mail[$count]}',
 init = '${drupal_admin_mail[$count]}' WHERE users.uid =1 LIMIT 1 ;
