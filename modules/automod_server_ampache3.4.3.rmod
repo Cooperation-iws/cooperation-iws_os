@@ -28,72 +28,16 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
-#VARIABLES
-#MYSQL PASSWORD
-AMPACHE_MYSQL_PWD="AMPACHE_MYSQL_PWD"
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
+NB_AMPACHE=$nb_ampache
 
-function LANGFR
-
-{
-MESS_NAME="Entrez le nom de l'installation "
-MESS_HOW_MANY="Combien de" 
-MESS_DO_YOU_WANT="voulez vous installez ?"
-MESS_URL="Quelle est l'url à partir de laquelle vous avez effectuée l'installation des applications web?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
-
-
-function LANGEN
-
-{
-MESS_NAME="Enter the name of the install "
-MESS_HOW_MANY="How many"
-MESS_DO_YOU_WANT="do you want to install ?"
-MESS_URL="What's the url from where you install web applications ?"
-
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
-
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget http://ampache.org/downloads/ampache-3.4.3.tar.gz
-tar -xzf ampache-3.4.3.tar.gz
-mv ampache-3.4.3 ampache
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
+for (( count=1; count<=$NB_AMPACHE; count++ ))
+do
+AMPACHE_MYSQL_PWD[$count]=${ampache_mysql_pwd[$count]}
+MOD_NAME[$count]=${ampache_name[$count]}
+done
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -101,59 +45,14 @@ mv ampache-3.4.3 ampache
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/ampache-3.4.3.tar.gz
-tar -xzf ampache-3.4.3.tar.gz
-mv ampache-3.4.3 ampache
+wget $URL_FREE/ampache-343-081103.tar.gz
+tar -xzf ampache-343-081103.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_MIRROIR_FREE
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-MOD_NAME="Ampache"
-else 
-
-MOD_NAME=$(zenity --entry --text "$MESS_NAME AMPACHE")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME=$(zenity --entry --text "$MESS_NAME AMPACHE")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
- 
-
-fi
-export MOD_NAME=$MOD_NAME
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
 
 
 #_______________________________________________________________________________________________
@@ -163,29 +62,29 @@ export MOD_NAME=$MOD_NAME
 function INSTALL
 {
 echo "I: Download Ampache"
-DOWNLOAD
-
+WGET_MIRROIR_FREE
+for (( count=1; count<=$NB_AMPACHE; count++ ))
+do
 ##AMPACHE
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$MOD_NAME
-cp -Rf ampache/* $WWW_DIRECTORY/$MOD_NAME/.
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf Ampache/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/Ampache/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Ampache/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "17s/Ampache/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 
-echo "create database ${MOD_NAME};
-grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$AMPACHE_MYSQL_PWD';
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${AMPACHE_MYSQL_PWD[$count]}';
 flush privileges;" > AMPACHE_db.sql
 
 $BIN_MYSQL -u root < AMPACHE_db.sql mysql
 rm AMPACHE_db.sql
 
 
-sed -i "66s/ampache/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/templates/show_install.inc.php
-sed -i "78s/name=\"local_pass\"/name=\"local_pass\" value=\"$AMPACHE_MYSQL_PWD\"/" $WWW_DIRECTORY/$MOD_NAME/templates/show_install.inc.php
-sed -i "74s/root/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/templates/show_install.inc.php
-sed -i "94s/value=\"1\"/value=\"0\"/" $WWW_DIRECTORY/$MOD_NAME/templates/show_install.inc.php
 
 
-
-cat << EOT > $WWW_DIRECTORY/$MOD_NAME/config/ampache.cfg.php
+cat << EOT > $WWW_DIRECTORY/${MOD_NAME[$count]}/config/ampache.cfg.php
 ;#<?php exit(); ?>##
 ;###################
 ; General Config   #
@@ -208,7 +107,7 @@ config_version = 7
 ; if it is located at http://localhost/music you need to 
 ; set web_path to /music
 ; DEFAULT: ""
-web_path = "/Ampache"
+web_path = "/${MOD_NAME[$count]}"
 
 ;##############################
 ; Session and Login Variables #
@@ -220,17 +119,17 @@ database_hostname = "localhost"
 
 ; Name of your ampache database
 ; DEFAULT: ampache
-database_name = "Ampache"
+database_name = "${MOD_NAME[$count]}"
 
 ; Username for your ampache database
 ; DEFAULT: ""
-database_username = "Ampache"
+database_username = "${MOD_NAME[$count]}"
 
 ; Password for your ampache database, this can not be blank
 ; this is a 'forced' security precaution, the default value
 ; will not work
 ; DEFAULT: ""
-database_password = "AMPACHE_MYSQL_PWD"
+database_password = "${AMPACHE_MYSQL_PWD[$count]}"
 
 ; Length that a session will last, the default is very restrictive
 ; at 15min
@@ -264,7 +163,7 @@ session_cookiesecure       = 0
 
 ; Auth Methods 
 ; This defines which auth methods vauth will attempt
-; to use and in which order, if auto_create isn't enabled
+; to use and in which order, if auto_create isn\'t enabled
 ; The user must exist locally as well
 ; DEFAULT: mysql
 ; VALUES: mysql,ldap,http
@@ -292,7 +191,7 @@ catalog_file_pattern = "mp3|mpc|m4p|m4a|mp4|aac|ogg|rm|wma|asf|flac|spx|ra|ape|s
 ; Require Session
 ; If this is set to true ampache will make sure that the URL passed when
 ; attempting to retrieve a song contains a valid Session ID This prevents
-; others from guessing URL's
+; others from guessing URL\'s
 ; DEFAULT: true
 require_session = "true"
 
@@ -325,7 +224,7 @@ require_session = "true"
 ;user_ip_cardinality = "42"
 
 ; Use XML-RPC
-; Allow XML-RPC connections, if you don't want _any_ possibility of your
+; Allow XML-RPC connections, if you don\'t want _any_ possibility of your
 ; catalog being streamed from another location comment this out
 ; DEFAULT: false
 ;xml_rpc 	= "false"
@@ -459,7 +358,7 @@ show_album_art = "true"
 
 ; Amazon base urls
 ; An array of Amazon sites to search.
-; NOTE: This will search each of these sites in turn so don't expect it
+; NOTE: This will search each of these sites in turn so don\'t expect it
 ; to be lightning fast!
 ; It is strongly recommended that only one of these is selected at any
 ; one time
@@ -740,9 +639,9 @@ rss_main_copyright = copyright (c) Speedy B for Ampache
 ;#####################################################
 EOT
 
-chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 
-
+done
 }
 
 #_______________________________________________________________________________________________
@@ -753,12 +652,13 @@ chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 function CREATE_WUI
 {
-
+for (( count=1; count<=$NB_AMPACHE; count++ ))
+do
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/$MOD_NAME</item_url>
-	<item_admin_url>/$MOD_NAME</item_admin_url>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 </item>
@@ -767,13 +667,13 @@ echo "
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/$MOD_NAME</item_url>
-	<item_admin_url>/$MOD_NAME</item_admin_url>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
-
+done
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -784,21 +684,20 @@ echo "
 
 function CREATE_INSTALL_SCRIPT
 {
-
+for (( count=1; count<=$NB_AMPACHE; count++ ))
+do
 echo "
 
 #Ampache
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
-
+done
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Ampache"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 CREATE_INSTALL_SCRIPT

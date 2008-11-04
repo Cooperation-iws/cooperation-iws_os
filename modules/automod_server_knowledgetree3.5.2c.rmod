@@ -30,95 +30,18 @@ LANG_UI=$(cat /tmp/lang-wui)
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
-#VARIABLES
-#MYSQL PASSWORD
-KT_MYSQL_PWD="KNO_MYSQL_PWD"
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
+NB_KT=$nb_kt
 
-
-function LANGFR
-
-{
-MESS_NAME="Entrez le nom de l'installation "
-MESS_HOW_MANY="Combien de" 
-MESS_DO_YOU_WANT="voulez vous installez ?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
+for (( count=1; count<=$NB_KT; count++ ))
+do
+KT_MYSQL_PWD[$count]=${kt_mysql_pwd[$count]}
+MOD_NAME[$count]=${kt_name[$count]}
+done
 
 
-function LANGEN
-
-{
-MESS_NAME="Enter the name of the install "
-MESS_HOW_MANY="How many"
-MESS_DO_YOU_WANT="do you want to install ?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
-
-
-
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget http://kent.dl.sourceforge.net/sourceforge/kt-dms/ktdms-src-oss-3.5.2c.tgz
-tar -xzf ktdms-src-oss-3.5.2c.tgz
-#rm mediawiki-1.12.0rc1.tar.gz
-mv knowledgeTree-OSS kt
-wget http://forge.knowledgetree.com/frs/download.php/196/knowledgeTree.po
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_LOCAL_____________________________________
-
-function WGET_MIRROIR_LOCAL
-{
-
-cd $DL_DIR
-wget http://$MIRROIR_URL/mirroir/knowledgeTree-3.0.3b.tgz
-tar -xzvf knowledgeTree-3.0.3b.tgz
-#rm mediawiki-1.12.0.tar.gz
-mv knowledgeTree kt
-#wget http://$MIRROIR_URL/mirroir/frenchplugin31-0-1.zip
-mkdir kt_fr
-cd kt_fr
-unzip ../frenchplugin31-0-1.zip
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -126,84 +49,13 @@ unzip ../frenchplugin31-0-1.zip
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/ktdms-src-oss-3.5.2c.tgz
-tar -xzf  ktdms-src-oss-3.5.2c.tgz
-#rm mediawiki-1.12.0.tar.gz
-mv knowledgeTree-OSS kt
-#wget $URL_FREE/frenchplugin31-0-1.zip
-#mkdir kt_fr
-#cd kt_fr
-#unzip ../frenchplugin31-0-1.zip
-
+wget $URL_FREE/knowledgetree-352c-081103.tar.gz
+tar -xzf knowledgetree-352c-081103.tar.gz
+#
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_MIRROIR_FREE
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
-
-
-WGET_MIRROIR_LOCAL
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-NB_KT=1
-MOD_NAME[1]="KnowledgeTree"
-
-else 
-INST_KT="1"
-NB_KT=$(zenity --entry --text "$MESS_HOW_MANY Knowledge Tree $MESS_DO_YOU_WANT")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $NB_KT | grep "[^0-9]") 
-do
-NB_KT=$(zenity --entry --text "$MESS_HOW_MANY Knowledge Tree $MESS_DO_YOU_WANT")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
-
-for (( count=1; count<=$NB_KT; count++ ))
-do
-
-MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count Knowledge Tree")
-test $? -ne 0 && break # Bouton Annuler
-while (echo ${MOD_NAME[$count]} | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME[$count]=$(zenity --entry --text "$MESS_NAME $count Knowledge Tree")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
-done 
-
-fi
-export NB_KT=$NB_KT
-export MOD_NAME=$MOD_NAME
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
-
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -213,11 +65,11 @@ function INSTALL
 {
 echo "I: Install KnowledgeTree"
 
-DOWNLOAD
+WGET_MIRROIR_FREE
 
 
 
-apt-get install --assume-yes --force-yes poppler-utils catdoc pstotext zip
+apt-get install --assume-yes --force-yes poppler-utils catdoc pstotext zip openoffice.org-headless openoffice.org
 
 
 
@@ -229,49 +81,24 @@ for (( count=1; count<=$NB_KT; count++ ))
 do
 cd $DL_DIR
 mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
-cp -Rf kt/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
-cp -Rf kt_fr/* $WWW_DIRECTORY/${MOD_NAME[$count]}/plugins
-echo "create database ${MOD_NAME[$count]};
-grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '$KT_MYSQL_PWD';
+cp -Rf KnowledgeTree/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/KnowledgeTree/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/KnowledgeTree/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "17s/KnowledgeTree/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${KT_MYSQL_PWD[$count]}';
 flush privileges;" > kt_db.sql
-
-$BIN_MYSQL -u root < kt_db.sql mysql
-$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/sql/mysql/install/structure.sql ${MOD_NAME[$count]}
-$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/sql/mysql/install/data.sql ${MOD_NAME[$count]}
-$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/sql/mysql/install/user.sql ${MOD_NAME[$count]}
-rm kt_db.sql
+$BIN_MYSQL -u root < kt_db.sql
 
 
 
-sed -i "13s/dms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
-sed -i "14s/dms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
-sed -i "15s/djw9281js/$KT_MYSQL_PWD/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
-sed -i "18s/dmsadmin/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
-sed -i "19s/js9281djw/$KT_MYSQL_PWD/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
-sed -i "168s/none/localhost/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
-sed -i "39s/^/\$checkup=true;/" $WWW_DIRECTORY/${MOD_NAME[$count]}/setup/precheckup.php
-sed -i "36s/config\/dmsDefaults.php/\/var\/www\/${MOD_NAME[$count]}\/config\/dmsDefaults.php/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/validation/customerrorhandler.php
+sed -i "s/KnowledgeTree/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
+sed -i "s/KNO_MYSQL_PWD/${KT_MYSQL_PWD[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
 
-sed -i "945s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "946s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "947s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "948s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "949s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "950s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "951s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "952s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "953s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "954s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "955s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "956s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "957s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "958s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "959s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "960s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "961s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "962s/^/#/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
-sed -i "963s/return false;/return (substr(\$sPath, 0, strlen(KT_DIR)) == KT_DIR)? true : false;/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lib/util/ktutil.inc
+echo "UPDATE ${MOD_NAME[$count]}.users SET email = '${kt_admin_email[$count]}' WHERE users.id =1 LIMIT 1 ;" > kt_credentials.sql
 
+$BIN_MYSQL -u root < kt_credentials.sql
 
 chown -R www-data:www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 chmod 755 $WWW_DIRECTORY/${MOD_NAME[$count]}
@@ -279,12 +106,6 @@ chmod 755 $WWW_DIRECTORY/${MOD_NAME[$count]}
 echo "/5 * * * * www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/bin/scheduler.php > /dev/null" >> $DOSSIER_CHROOT/etc/cron.d/kt
 sudo chmod +x $DOSSIER_CHROOT/etc/cron.d/kt
 
-#sleep 2
-#nohup soffice -headless -accept='socket,host=localhost,port=8100;urp' &
-#sleep 2
-#cd $WWW_DIRECTORY/${MOD_NAME[$count]}/bin/luceneserver
-#nohup java -jar ktlucene.jar &
-#sleep 2
 
 echo "
 chown -R www-data:www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
@@ -341,8 +162,6 @@ done
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install KnowledgeTree"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 echo "I: End of install KnowledgeTree"

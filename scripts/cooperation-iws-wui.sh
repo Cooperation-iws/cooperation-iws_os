@@ -110,14 +110,19 @@ function INSTALL
 cd $DL_DIR
 cp -r /tmp/cooperation-wui/* /var/www/.
 
-echo "create database ${NOM_SPHIDER};
+sed -i "15s/Sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
+sed -i "16s/Sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
+sed -i "17s/Sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
+
+echo "
 grant all on ${NOM_SPHIDER}.* to ${NOM_SPHIDER}@localhost identified by '$SPHIDER_MYSQL_PWD';
 flush privileges;" > SPHIDER_db.sql
 
 $BIN_MYSQL -u root < SPHIDER_db.sql mysql
 rm SPHIDER_db.sql
 
-$BIN_MYSQL -u root ${NOM_SPHIDER} < $WWW_DIRECTORY/admin/$NOM_SPHIDER/sql/tables.sql 
+ 
 
 $BIN_MYSQL -u root < $WWW_DIRECTORY/Cooperation-iws/cooperation-iws.sql
 echo "grant all on \`cooperation-iws\`.* to \`cooperation-iws\`@localhost identified by 'CIWS_MYSQL_PWD';

@@ -1,40 +1,91 @@
 #!/bin/bash
+domain="ciws.com"
+generic_admin_email="admin@$domain"
+generic_mysql_pwd="mysql_pwd"
+generic_login_pwd="cooperation"
+
 
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
 secure_mysql="n"
-secure_admin="y"
-apache_admin_pwd="cooperation"
+secure_admin="n"
+apache_admin_pwd=$generic_mysql_pwd
 #Samba
-smb_pwd="cooperation"
+smb_pwd=$generic_mysql_pwd
 #Proftpd
-proftpd_pwd="cooperation"
+proftpd_pwd=$generic_mysql_pwd
 #Jdicd 1.5
 #Mediawiki 1.12.0
+nb_mediawiki=1
+mediawiki_mysql_pwd[1]=$generic_mysql_pwd
+mediawiki_name[1]="Mediawiki"
+mediawiki_site_name[1]="Ciws"
+mediawiki_admin_email[1]=$generic_admin_email
 #Sedna
+nb_sedna=1
+sedna_mysql_pwd[1]=$generic_mysql_pwd
+sedna_name[1]="Sedna"
+sedna_admin_email[1]=$generic_admin_email
 #Wordpress2.5.1
+nb_wordpress=1
+wordpress_mysql_pwd[1]=$generic_mysql_pwd
+wordpress_name[1]="Wordpress"
+wordpress_admin_email[1]=$generic_admin_email
 #Gallery 2.3RC1
+nb_gallery=1
+gallery_name[1]="Gallery"
+gallery_mysql_pwd[1]=$generic_mysql_pwd
+gallery_pwd[1]=$generic_login_pwd
+gallery_admin_email[1]=$generic_admin_email
 #Ampache 3.4.3
+nb_ampache=1
+ampache_mysql_pwd[1]=$generic_mysql_pwd
+ampache_name[1]="Ampache"
 #Insoshi
 #Pligg 1.8
+nb_pligg=1
+pligg_mysql_pwd[1]=$generic_mysql_pwd
+pligg_name[1]="Pligg"
+pligg_admin_email[1]=$generic_admin_email
 #SSH Server
 #OpenGoo 1.0
-#Awstats
+nb_opengoo=1
+opengoo_mysql_pwd[1]=$generic_mysql_pwd
+opengoo_name[1]="Opengoo"
+opengoo_admin_email[1]=$generic_admin_email
 #Ossec 1.5.1 standalone
+ossec_report_address=$generic_admin_email
 #Net2ftp 0.97
+net2ftp_admin_mail=$generic_admin_email
+net2ftp_admin_pwd=$generic_login_pwd
+net2ftp_admin_name="admin"
+net2ftp_mysql_pwd=$generic_mysql_pwd
+net2ftp_name="Net2ftp"
 #Akoie 0.5
 share_akoie_smb="y"
 share_akoie_smb_pwd="n"
 #Clamav antivirus
-clam_mail_report="admin@ciws.com"
+clam_mail_report=$generic_admin_email
 #Cooperation-iws Liveusb 0.3
 #Webmin 1.4.20
-webmin_pwd="cooperation"
+webmin_pwd=$generic_mysql_pwd
 #Cacti 0.8.7b
+cacti_name="Cacti"
+cacti_mysql_pwd=$generic_mysql_pwd
 #Ossec 1.5.1 standalone
-ossec_report_address="admin@ciws.com"
+ossec_report_address=$generic_admin_email
 #Snort2.8 Base1.3.9 standalone
+snort_registration_key=""
+base_name="Base"
+snort_mysql_pwd=$generic_mysql_pwd
 #Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
+postfixadmin_name="Mail"
+postfixadmin_mysql_pwd=$generic_mysql_pwd
+public_mail="n"
+mail_domain=$domain
+smtp_relay="smtp.free.fr"
+mailbox_quota="100"
+
 
 

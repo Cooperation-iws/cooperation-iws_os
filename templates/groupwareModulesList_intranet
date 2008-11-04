@@ -1,4 +1,8 @@
 #!/bin/bash
+domain="ciws.com"
+generic_admin_email="admin@$domain"
+generic_mysql_pwd="mysql_pwd"
+generic_login_pwd="cooperation"
 
 ###Cooperation-iws gui
 sphider_auto_index="y"
@@ -7,39 +11,45 @@ secure_mysql="n"
 secure_admin="n"
 apache_admin_pwd=""
 #Samba
-smb_pwd="cooperation"
+smb_pwd=$generic_login_pwd
 #Proftpd
-proftpd_pwd="cooperation"
+proftpd_pwd=$generic_login_pwd
 #Snif
-share_snif_smb1="y"
-share_snif_smb_pwd1="n"
+nb_snif=1
+snif_name[1]="Snif"
+share_snif_smb[1]="y"
+share_snif_smb_pwd[1]="n"
 #Roundcube 0.2
 #Horde 1.2
 #SSH Server
 #OpenGoo 1.0
+nb_opengoo=1
+opengoo_mysql_pwd[1]=$generic_mysql_pwd
+opengoo_name[1]="Opengoo"
+opengoo_admin_email[1]=$generic_admin_email
 #Awstats
 #Ossec 1.5.1 standalone
-ossec_report_address="admin@ciws.com"
+ossec_report_address=$generic_admin_email
 #Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
 postfixadmin_name="Mail"
-postfixadmin_mysql_pwd="MAILSERVER_MYSQL_PWD"
+postfixadmin_mysql_pwd=$generic_mysql_pwd
 public_mail="y"
-mail_domain="ciws.com"
+mail_domain=$domain
 smtp_relay="smtp.free.fr"
 mailbox_quota="100"
 #Clamav antivirus
-clam_mail_report="admin@ciws.com"
+clam_mail_report=$generic_admin_email
 #Cooperation-iws Liveusb 0.3
 #Webmin 1.4.20
-webmin_pwd="cooperation"
+webmin_pwd=$generic_login_pwd
 #Cacti 0.8.7b
 cacti_name="Cacti"
-cacti_mysql_pwd="CACTI_MYSQL_PWD"
+cacti_mysql_pwd=$generic_mysql_pwd
 #Zabbix client 1.6
-zabbix_server_name="administration.ciws.com"
+zabbix_server_name="administration.$domain"
 #Syslog client
-syslog_server_name="administration.ciws.com"
+syslog_server_name="administration.$domain"
 #Snort2.8 client
 snort_registration_key=""
-snort_server_mysql_pwd="SNORT_MYSQL_PWD"
-snort_server_name="administration.ciws.com"
+snort_server_mysql_pwd=$generic_mysql_pwd
+snort_server_name="administration.$domain"

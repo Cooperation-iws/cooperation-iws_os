@@ -29,72 +29,11 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
-#VARIABLES
-#MYSQL PASSWORD
-RADRIA_MYSQL_PWD="RADRIA_MYSQL_PWD"
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+MOD_NAME=$radria_name
+RADRIA_MYSQL_PWD=$radria_mysql_pwd
 
-
-function LANGFR
-
-{
-MESS_NAME="Entrez le nom de l'installation "
-MESS_HOW_MANY="Combien de" 
-MESS_DO_YOU_WANT="voulez vous installez ?"
-MESS_URL="Quelle est l'url à partir de laquelle vous avez effectuée l'installation des applications web?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
-
-
-function LANGEN
-
-{
-MESS_NAME="Enter the name of the install "
-MESS_HOW_MANY="How many"
-MESS_DO_YOU_WANT="do you want to install ?"
-MESS_URL="What's the url from where you install web applications ?"
-
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
-
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget http://downloads.sourceforge.net/radria/radria-0.8.4.zip?modtime=1205793672&big_mirror=0
-unzip -q radria-0.8.4.zip
-mv radria-0.8.4 radria
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -102,59 +41,14 @@ mv radria-0.8.4 radria
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/radria-0.8.4.zip
-unzip -q radria-0.8.4.zip
-mv radria-0.8.4 radria
+wget $URL_FREE/radria-084-081103.tar.gz
+tar -xzf radria-084-081103.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_MIRROIR_FREE
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-MOD_NAME="Radria"
-else 
-
-MOD_NAME=$(zenity --entry --text "$MESS_NAME RADRIA")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME=$(zenity --entry --text "$MESS_NAME RADRIA")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
- 
-
-fi
-export MOD_NAME=$MOD_NAME
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
 
 
 #_______________________________________________________________________________________________
@@ -164,12 +58,12 @@ export MOD_NAME=$MOD_NAME
 function INSTALL
 {
 echo "I: Download Radria"
-DOWNLOAD
+WGET_MIRROIR_FREE
 
 ##RADRIA
 cd $DL_DIR
 mkdir $WWW_DIRECTORY/$MOD_NAME
-cp -Rf radria/* $WWW_DIRECTORY/$MOD_NAME/.
+cp -Rf Radria/* $WWW_DIRECTORY/$MOD_NAME/.
 
 echo "
 grant all on *.* to ${MOD_NAME}@localhost identified by '$RADRIA_MYSQL_PWD';
@@ -178,8 +72,7 @@ flush privileges;" > RADRIA_db.sql
 $BIN_MYSQL -u root < RADRIA_db.sql mysql
 rm RADRIA_db.sql
 
-sed -i "212s/\"\"/\"${MOD_NAME}\"/" $WWW_DIRECTORY/$MOD_NAME/SiteManager/install.php
-sed -i "213s/\"\"/\"$RADRIA_MYSQL_PWD\"/" $WWW_DIRECTORY/$MOD_NAME/SiteManager/install.php
+sed -i "215s/(\"Radria\", \"RADRIA_MYSQL_PWD\")/(\"${MOD_NAME}\", \"$RADRIA_MYSQL_PWD\")/" $WWW_DIRECTORY/$MOD_NAME/SiteManager/config.php
 
 chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
@@ -239,8 +132,6 @@ echo "
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Radria"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 CREATE_INSTALL_SCRIPT

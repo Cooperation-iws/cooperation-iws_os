@@ -32,73 +32,16 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
-#VARIABLES
-#MYSQL PASSWORD
-TASKFREAK_MYSQL_PWD="TASKFREAK_MYSQL_PWD"
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
+NB_TASKFREAK=$nb_taskfreak
 
-function LANGFR
-
-{
-MESS_NAME="Entrez le nom de l'installation "
-MESS_HOW_MANY="Combien de" 
-MESS_DO_YOU_WANT="voulez vous installez ?"
-MESS_URL="Quelle est l'url à partir de laquelle vous avez effectuée l'installation des applications web?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
-
-
-function LANGEN
-
-{
-MESS_NAME="Enter the name of the install "
-MESS_HOW_MANY="How many"
-MESS_DO_YOU_WANT="do you want to install ?"
-MESS_URL="What's the url from where you install web applications ?"
-
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
-
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget http://www.taskfreak.com/files/stable/taskfreak-multi-mysql-0.6.1.tgz
-tar -xzf taskfreak-multi-mysql-0.6.1.tgz
-#rm moodle-latest-19.zip
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
+for (( count=1; count<=$NB_TASKFREAK; count++ ))
+do
+TASKFREAK_MYSQL_PWD[$count]=${taskfreak_mysql_pwd[$count]}
+MOD_NAME[$count]=${taskfreak_name[$count]}
+done
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -106,68 +49,12 @@ tar -xzf taskfreak-multi-mysql-0.6.1.tgz
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/taskfreak-multi-mysql-0.6.1.tgz
-tar -xzf taskfreak-multi-mysql-0.6.1.tgz
-#rm moodle-latest-19.zip
-
+wget $URL_FREE/taskfreak-061-081103.tar.gz
+tar -xzf taskfreak-061-081103.tar.gz
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_MIRROIR_FREE
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-MOD_NAME="Taskfreak"
-else 
-
-MOD_NAME=$(zenity --entry --text "$MESS_NAME TASKFREAK")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME=$(zenity --entry --text "$MESS_NAME TASKFREAK")echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/$MOD_NAME</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-
-test $? -ne 0 && break # Bouton Annulerdone
-done 
- 
-
-fi
-export MOD_NAME=$MOD_NAME
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
 
 
 #_______________________________________________________________________________________________
@@ -177,27 +64,38 @@ export MOD_NAME=$MOD_NAME
 function INSTALL
 {
 echo "I: Download Taskfreak"
-DOWNLOAD
-
+WGET_MIRROIR_FREE
+for (( count=1; count<=$NB_TASKFREAK; count++ ))
+do
 ##TASKFREAK
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$MOD_NAME
-cp -Rf taskfreak/* $WWW_DIRECTORY/$MOD_NAME/.
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf Taskfreak/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/Taskfreak/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Taskfreak/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "17s/Taskfreak/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "15s/DROP/--DROP/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "s/latin1_swedish_ci/utf8_general_ci/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "s/latin1/utf8/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 
-echo "create database ${MOD_NAME};
-grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$TASKFREAK_MYSQL_PWD';
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${TASKFREAK_MYSQL_PWD[$count]}';
 flush privileges;" > TASKFREAK_db.sql
 
 $BIN_MYSQL -u root < TASKFREAK_db.sql mysql
 rm TASKFREAK_db.sql
 
 
-sed -i "14s/root/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/include/config.php
-sed -i "15s/''/'$TASKFREAK_MYSQL_PWD'/" $WWW_DIRECTORY/$MOD_NAME/include/config.php
-sed -i "16s/taskfreak_strict/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/include/config.php
+sed -i "14s/Taskfreak/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/include/config.php
+sed -i "15s/TASKFREAK_MYSQL_PWD/${TASKFREAK_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/include/config.php
+sed -i "16s/Taskfreak/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/include/config.php
 
-chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
-
+echo "UPDATE ${MOD_NAME[$count]}.frk_member SET email = '${taskfreak_admin_email[$count]}' WHERE frk_member.memberId =1 LIMIT 1 ;
+" > taskfreak_credentials.sql
+$BIN_MYSQL -u root < taskfreak_credentials.sql
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
+done
 
 }
 
@@ -209,11 +107,12 @@ chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 function CREATE_WUI
 {
-
+for (( count=1; count<=$NB_TASKFREAK; count++ ))
+do
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/$MOD_NAME</item_url>
+	<item_url>/${MOD_NAME[$count]}</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
@@ -222,13 +121,13 @@ echo "
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/$MOD_NAME</item_url>
+	<item_url>/${MOD_NAME[$count]}</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
-
+done
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -239,21 +138,20 @@ echo "
 
 function CREATE_INSTALL_SCRIPT
 {
-
+for (( count=1; count<=$NB_TASKFREAK; count++ ))
+do
 echo "
 
 #Taskfreak
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
-
+done
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Taskfreak"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 CREATE_INSTALL_SCRIPT

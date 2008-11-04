@@ -31,6 +31,7 @@ VERSION="0.5.2"
 CASPER_PATH=$(cat /tmp/casper_path)
 DEB_DIST=$(cat /tmp/deb_dist)
 DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
+DEBNONFREE_MIRROR_PATH=$(cat /tmp/deb-nonfree_mirror_path)
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
@@ -85,6 +86,7 @@ echo "
 deb $DEB_MIRROR_PATH/ $DEB_DIST restricted main universe multiverse
 deb $DEB_MIRROR_PATH/ $DEB_DIST-updates restricted main universe multiverse
 deb $DEB_MIRROR_PATH/ $DEB_DIST-security restricted main universe multiverse
+deb $DEBNONFREE_MIRROR_PATH/ $DEB_DIST free non-free
 " > /etc/apt/sources.list
 else
 echo "
@@ -98,6 +100,9 @@ deb http://security.debian.org/ $DEB_DIST/updates main contrib non-free
 deb-src http://security.debian.org/ $DEB_DIST/updates main contrib 
 " > /etc/apt/sources.list
 export DEBIAN_FRONTEND="dialog"
+fi
+if [ "$(echo "${$DEBNONFREE_MIRROR_PATH}" | grep 'medibuntu.org')" ]; then
+wget -q ${$DEBNONFREE_MIRROR_PATH}/medibuntu-key.gpg -O- | sudo apt-key add -
 fi
 apt-get update
 

@@ -67,10 +67,7 @@ cp -Rf Net2ftp/* $WWW_DIRECTORY/admin/$MOD_NAME/.
 sed -i "15s/Net2ftp/${MOD_NAME[$count]}/" $WWW_DIRECTORY/admin/${MOD_NAME}/database.sql
 sed -i "16s/Net2ftp/${MOD_NAME[$count]}/" $WWW_DIRECTORY/admin/${MOD_NAME}/database.sql
 sed -i "17s/Net2ftp/${MOD_NAME[$count]}/" $WWW_DIRECTORY/admin/${MOD_NAME}/database.sql
-sed -i "15s/DROP/--DROP/" $WWW_DIRECTORY/admin/${MOD_NAME}/database.sql
-sed -i "s/latin1_swedish_ci/utf8_general_ci/" $WWW_DIRECTORY/admin/${MOD_NAME}/database.sql
-sed -i "s/latin1/utf8/" $WWW_DIRECTORY/${MOD_NAME}/admin/database.sql
-$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME}/admin/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/admin/${MOD_NAME}/database.sql
 
 
 echo "

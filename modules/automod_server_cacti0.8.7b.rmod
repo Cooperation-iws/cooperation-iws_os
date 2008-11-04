@@ -98,6 +98,12 @@ sudo chmod +x /etc/cron.d/cacti
 cd $DL_DIR
 mkdir $WWW_DIRECTORY/admin/$MOD_NAME
 cp -Rf Cacti/* $WWW_DIRECTORY/admin/$MOD_NAME/.
+sed -i "15s/cacti/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+sed -i "16s/cacti/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+
+$BIN_MYSQL -u root < $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+
+
 echo "
 grant all on $MOD_NAME.* to $MOD_NAME@localhost identified by '$CACTI_MYSQL_PWD';
 flush privileges;
@@ -107,15 +113,10 @@ rm cacti_db.sql
 chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/
 chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/
 
-sed -i "s/database_default = \"cacti\"/database_default = \"$MOD_NAME\"/" $WWW_DIRECTORY/admin/$MOD_NAME/include/config.php
-sed -i "s/database_username = \"cacti\"/database_username = \"$MOD_NAME\"/" $WWW_DIRECTORY/admin/$MOD_NAME/include/config.php
-sed -i "s/database_password = \"cactiuser\"/database_password = \"$CACTI_MYSQL_PWD\"/" $WWW_DIRECTORY/admin/$MOD_NAME/include/config.php
+sed -i "s/cacti/$MOD_NAME/g" $WWW_DIRECTORY/admin/$MOD_NAME/include/config.php
+sed -i "s/CACTI_MYSQL_PWD/$CACTI_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/include/config.php
 sed -i "s/\"\/var\/www\/admin\/Cacti\/include\"/\"\/var\/www\/admin\/$MOD_NAME\/include\"/g" $WWW_DIRECTORY/admin/$MOD_NAME/include/global.php
 
-sed -i "15s/cacti/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
-sed -i "16s/cacti/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
-
-$BIN_MYSQL -u root < $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
 
 echo "
 #Cacti

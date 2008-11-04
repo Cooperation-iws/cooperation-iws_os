@@ -28,77 +28,16 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
-#VARIABLES
-#MYSQL PASSWORD
-EYEOS_MYSQL_PWD="EYEOS_MYSQL_PWD"
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
+NB_EYEOS=$nb_eyeos
 
-function LANGFR
+for (( count=1; count<=$NB_EYEOS; count++ ))
+do
 
-{
-MESS_NAME="Entrez le nom de l'installation "
-MESS_HOW_MANY="Combien de" 
-MESS_DO_YOU_WANT="voulez vous installez ?"
-MESS_URL="Quelle est l'url à partir de laquelle vous avez effectuée l'installation des applications web?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
-
-
-function LANGEN
-
-{
-MESS_NAME="Enter the name of the install "
-MESS_HOW_MANY="How many"
-MESS_DO_YOU_WANT="do you want to install ?"
-MESS_URL="What's the url from where you install web applications ?"
-
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
-
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget http://surfnet.dl.sourceforge.net/sourceforge/eyeos/eyeOS_1.6.0.3-1.tar.gz
-tar -xzf eyeOS_1.6.0.3-1.tar.gz
-
-wget http://eyeos.org/get/?file=translations/all-system.eyepackage
-mv index.html?file=translations%2Fall-system.eyepackage all-system.eyepackage
-
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
-
+MOD_NAME[$count]=${eyeos_name[$count]}
+done
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -106,59 +45,14 @@ mv index.html?file=translations%2Fall-system.eyepackage all-system.eyepackage
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/eyeOS_1.6.0.3-1.tar.gz
-tar -xzf eyeOS_1.6.0.3-1.tar.gz
-wget $URL_FREE/all-system.eyepackage
+wget $URL_FREE/eyeos-1.6.0.3-1-081103.tar.gz
+tar -xzf eyeos-1.6.0.3-1-081103.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_MIRROIR_FREE
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-MOD_NAME="Eyeos"
-else 
-
-MOD_NAME=$(zenity --entry --text "$MESS_NAME EYEOS")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME=$(zenity --entry --text "$MESS_NAME EYEOS")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
- 
-
-fi
-export MOD_NAME=$MOD_NAME
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
 
 
 #_______________________________________________________________________________________________
@@ -168,17 +62,18 @@ export MOD_NAME=$MOD_NAME
 function INSTALL
 {
 echo "I: Download Eyeos"
-DOWNLOAD
-
+WGET_MIRROIR_FREE
+for (( count=1; count<=$NB_EYEOS; count++ ))
+do
 ##EYEOS
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$MOD_NAME
-cp -Rf eyeOS/* $WWW_DIRECTORY/$MOD_NAME/.
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf Eyeos/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
 
 
 
-chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
-
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
+done
 
 }
 
@@ -190,12 +85,13 @@ chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 
 function CREATE_WUI
 {
-
+for (( count=1; count<=$NB_EYEOS; count++ ))
+do
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/$MOD_NAME</item_url>
-	<item_admin_url>/$MOD_NAME</item_admin_url>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 </item>
@@ -203,14 +99,14 @@ echo "
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/$MOD_NAME</item_url>
-	<item_admin_url>/$MOD_NAME</item_admin_url>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
-
+done
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -221,21 +117,20 @@ echo "
 
 function CREATE_INSTALL_SCRIPT
 {
-
+for (( count=1; count<=$NB_EYEOS; count++ ))
+do
 echo "
 
 #Eyeos
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
-
+done
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Eyeos"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 CREATE_INSTALL_SCRIPT

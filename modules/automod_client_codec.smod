@@ -44,8 +44,8 @@ Value:
 Owners: msttcorefonts
 " >> /var/cache/debconf/config.dat
 echo "I: install codec"
-wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key add -
-echo "deb http://fr.packages.medibuntu.org/ $DEB_DIST free non-free" >> /etc/apt/sources.list
+#wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key add -
+#echo "deb http://fr.packages.medibuntu.org/ $DEB_DIST free non-free" >> /etc/apt/sources.list
 apt-get update
 
 

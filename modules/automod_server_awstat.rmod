@@ -23,9 +23,7 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 
 SILENT=$(cat /tmp/silent)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
-fi
 
 
 #VARIABLES
@@ -100,7 +98,7 @@ echo "
 
 
 
-echo "I: Install Ntop"
+echo "I: Install Awstats"
 INSTALL
 CREATE_WUI
-echo "I: End of install Ntop"
+echo "I: End of install Awstats"

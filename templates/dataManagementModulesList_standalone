@@ -1,4 +1,7 @@
 #!/bin/bash
+generic_admin_email="admin@ciws.com"
+generic_mysql_pwd="mysql_pwd"
+generic_login_pwd="cooperation"
 
 ###Cooperation-iws gui
 sphider_auto_index="y"
@@ -7,32 +10,39 @@ secure_mysql="n"
 secure_admin="n"
 apache_admin_pwd=""
 #Samba
-smb_pwd="cooperation"
+smb_pwd=$generic_login_pwd
 #Proftpd
-proftpd_pwd="cooperation"
+proftpd_pwd=$generic_login_pwd
 #KnowledgeTree 3.5.2c
+nb_kt=1
+kt_name[1]="Knowledgetree"
+kt_mysql_pwd[1]=$generic_mysql_pwd
+kt_admin_email[1]=$generic_mysql_pwd
 #Nuxeo 5.1.5GA
+nuxeo_name="Nuxeo"
 nuxeo_install_ooo="y"
-#Snif
-share_snif_smb1="y"
-share_snif_smb_pwd1="n"
+nuxeo_mysql_pwd=$generic_mysql_pwd
+nuxeo_admin_email=$generic_admin_email
 #SSH Server
-#Jdicd 1.5
-#Net2ftp 0.97
 #Ossec 1.5.1 standalone
-ossec_report_address="admin@ciws.com"
+ossec_report_address=$generic_admin_email
+#Awstats
 #Cacti 0.8.7b
-#Akoie 0.5
-share_akoie_smb="y"
-share_akoie_smb_pwd="n"
 #Clamav antivirus
-clam_mail_report="admin@ciws.com"
+clam_mail_report=$generic_admin_email
 #Cooperation-iws Liveusb 0.3
 #Webmin 1.4.20
-webmin_pwd="cooperation"
-#Ossec 1.5.1 standalone
-#Awstats
+webmin_pwd=$generic_login_pwd
 #Snort2.8 Base1.3.9 standalone
+snort_registration_key=""
+base_name="Base"
+snort_mysql_pwd=$generic_mysql_pwd
 #Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
+postfixadmin_name="Mail"
+postfixadmin_mysql_pwd=$generic_mysql_pwd
+public_mail="n"
+mail_domain=$domain
+smtp_relay="smtp.free.fr"
+mailbox_quota="100"
 
 

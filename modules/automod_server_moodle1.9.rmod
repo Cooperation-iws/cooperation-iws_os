@@ -31,91 +31,17 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
-#VARIABLES
-#MYSQL PASSWORD
-MOODLE_MYSQL_PWD="MOODLE_MYSQL_PWD"
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
+NB_MOODLE=$nb_moodle
 
-function LANGFR
+for (( count=1; count<=$NB_MOODLE; count++ ))
+do
+MOODLE_MYSQL_PWD[$count]=${moodle_mysql_pwd[$count]}
+MOD_NAME[$count]=${moodle_name[$count]}
+done
 
-{
-MESS_NAME="Entrez le nom de l'installation "
-MESS_HOW_MANY="Combien de" 
-MESS_DO_YOU_WANT="voulez vous installez ?"
-MESS_URL="Quelle est l'url à partir de laquelle vous avez effectuée l'installation des applications web?"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
-
-
-function LANGEN
-
-{
-MESS_NAME="Enter the name of the install "
-MESS_HOW_MANY="How many"
-MESS_DO_YOU_WANT="do you want to install ?"
-MESS_URL="What's the url from where you install web applications ?"
-
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
-
-
-
-
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget http://download.moodle.org/stable19/moodle-latest-19.zip
-unzip -q moodle-latest-19.zip
-#rm moodle-latest-19.zip
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_LOCAL_____________________________________
-
-function WGET_MIRROIR_LOCAL
-{
-
-cd $DL_DIR
-wget http://$MIRROIR_URL/mirroir/moodle-latest-19.zip
-unzip moodle-latest-19.zip
-#rm moodle-latest-19.zip
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -132,56 +58,6 @@ unzip -q moodle-latest-19.zip
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_MIRROIR_FREE
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
-
-
-WGET_MIRROIR_LOCAL
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-MOD_NAME="Moodle"
-else 
-MOD_NAME=$(zenity --entry --text "$MESS_NAME MOODLE")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME=$(zenity --entry --text "$MESS_NAME MOODLE")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
- 
-
-fi
-export MOD_NAME=$MOD_NAME
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
-
-
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -191,34 +67,49 @@ function INSTALL
 {
 echo "I: Download Moodle"
 DOWNLOAD
-
+for (( count=1; count<=$NB_MOODLE; count++ ))
+do
 ##MOODLE
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/$MOD_NAME
-cp -Rf moodle/* $WWW_DIRECTORY/$MOD_NAME/.
-mkdir /var/moodledata
-mkdir /var/moodledata/lang
-mv fr_utf8 /var/moodledata/lang
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf Moodle/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/Moodle/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Moodle/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "17s/Moodle/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "15s/DROP/--DROP/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "s/latin1_swedish_ci/utf8_general_ci/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "s/latin1/utf8/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+
+mkdir /var/moodledata/
+mkdir /var/moodledata/${MOD_NAME[$count]}
+mkdir /var/moodledata/${MOD_NAME[$count]}/lang
 
 echo "
 <IfDefine APACHE2>
     AcceptPathInfo on
-</IfDefine>" > $WWW_DIRECTORY/$MOD_NAME/.htaccess
-echo "create database $MOD_NAME;
-grant all on $MOD_NAME.* to $MOD_NAME@localhost identified by '$MOODLE_MYSQL_PWD';
+</IfDefine>" > $WWW_DIRECTORY/${MOD_NAME[$count]}/.htaccess
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${MOODLE_MYSQL_PWD[$count]}';
 flush privileges;" > moodle_db.sql
 
 $BIN_MYSQL -u root < moodle_db.sql mysql
 rm moodle_db.sql
 
+sed -i "s/Moodle/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
+sed -i "s/MOODLE_MYSQL_PWD/${MOODLE_MYSQL_PWD[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
+sed -i "s/\/var\/moodledata/\/var\/moodledata\/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
 
-chown -R www-data:www-data /var/moodledata
-chown -R www-data:www-data $WWW_DIRECTORY/$MOD_NAME
+echo "
+UPDATE ${MOD_NAME[$count]}.mdl_user SET email = '${moodle_admin_email[$count]}' WHERE mdl_user.id =2 LIMIT 1 ;
+" > moodle_credentials.sql
+$BIN_MYSQL -u root < moodle_credentials.sql
 
-cat $WWW_DIRECTORY/$MOD_NAME/install.php | sed -i -e "60s/''/'$MOD_NAME'/" $WWW_DIRECTORY/$MOD_NAME/install.php
-cat $WWW_DIRECTORY/$MOD_NAME/install.php | sed -i -e "61s/''/'$MOODLE_MYSQL_PWD'/" $WWW_DIRECTORY/$MOD_NAME/install.php
-cat $WWW_DIRECTORY/$MOD_NAME/install.php | sed -i -e "63s/'moodle'/'$MOD_NAME'/" $WWW_DIRECTORY/$MOD_NAME/install.php
+chown -R www-data:www-data /var/moodledata/${MOD_NAME[$count]}
+chown -R www-data:www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
+done
 
 }
 
@@ -230,14 +121,15 @@ cat $WWW_DIRECTORY/$MOD_NAME/install.php | sed -i -e "63s/'moodle'/'$MOD_NAME'/"
 
 function CREATE_WUI
 {
-
+for (( count=1; count<=$NB_MOODLE; count++ ))
+do
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
 	<item_url>/${MOD_NAME[$count]}</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/$MOD_NAME/login/</item_admin_url>
+	<item_admin_url>/${MOD_NAME[$count]}/login/</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
 echo "
@@ -246,10 +138,10 @@ echo "
 	<item_url>/${MOD_NAME[$count]}</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/$MOD_NAME/login/</item_admin_url>
+	<item_admin_url>/${MOD_NAME[$count]}/login/</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
-
+done
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -260,15 +152,16 @@ echo "
 
 function CREATE_INSTALL_SCRIPT
 {
-
+for (( count=1; count<=$NB_MOODLE; count++ ))
+do
 echo "
 #Configuration post installation
 url=\"localhost\"
 #Moodle
-sed -i \"13s/\$url/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/${MOD_NAME}/config.php
+sed -i \"13s/\$url/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
 
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
-
+done
 }
 
 #_______________________________________________________________________________________________

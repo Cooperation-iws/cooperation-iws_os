@@ -20,9 +20,7 @@ DL_DIR=$LAMPP_DIRECTORY"/DL"
 BIN_MYSQL="/usr/bin/mysql"
 LANG_UI=$(cat $DOSSIER_CHROOT/tmp/lang-wui)
 SILENT=$(cat $DOSSIER_CHROOT/tmp/silent)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . $DOSSIER_CHROOT/tmp/app_params
-fi
 
 DISPLAY=127.0.0.1:5.0 
 
@@ -33,94 +31,12 @@ URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 
 
-#VARIABLES
-#MYSQL PASSWORD
-NUXEO_MYSQL_PWD="NUXEO_MYSQL_PWD"
+
+NUXEO_MYSQL_PWD=$nuxeo_mysql_pwd
+MOD_NAME=$nuxeo_name
 
 mkdir $DL_DIR
 
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
-
-
-function LANGFR
-
-{
-MESS_CHOIX_OPTION="Choisir l'option désirée dans la liste ci-dessous"
-MESS_NAME="Entrez le nom de l'installation de "
-MESS_OOO="Installer OpenOffice.org ?"
-MESS_DO_NOTHING="Ne rien faire"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
-
-
-function LANGEN
-
-{
-MESS_CHOIX_OPTION="Choose the desired option from the list below"
-MESS_NAME="Enter the name of the install of "
-MESS_OOO="Install OpenOffice.org ?"
-MESS_DO_NOTHING="Do nothing"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
-
-
-
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget $URL_FREE/nuxeo5.1.5GA.tar.gz
-tar -xzf nuxeo5.1.5GA.tar.gz
-wget http://mir2.ovh.net/ftp.mysql.com/Downloads/Connector-J/mysql-connector-java-5.1.6.tar.gz
-tar -xzf mysql-connector-java-5.1.6.tar.gz
-mv mysql-connector-java-5.1.6 mysql-connector-java
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_LOCAL_____________________________________
-
-function WGET_MIRROIR_LOCAL
-{
-
-cd $DL_DIR
-wget http://$MIRROIR_URL/mirroir/nuxeo-ep-5.1.4.GA-installer-1.jar
-wget http://$MIRROIR_URL/mirroir/mysql-connector-java-5.1.6.tar.gz
-tar -xzvf mysql-connector-java-5.1.6.tar.gz
-mv mysql-connector-java-5.1.6 mysql-connector-java
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -128,66 +44,12 @@ mv mysql-connector-java-5.1.6 mysql-connector-java
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/nuxeo5.1.5GA.tar.gz
-tar -xzf nuxeo5.1.5GA.tar.gz
-wget $URL_FREE/mysql-connector-java-5.1.6.tar.gz
-tar -xzf mysql-connector-java-5.1.6.tar.gz
-mv mysql-connector-java-5.1.6 mysql-connector-java
+wget $URL_FREE/nuxeo-515GA-081103.tar.gz
+tar -xzf nuxeo-515GA-081103.tar.gz
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_MIRROIR_FREE
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
-
-
-WGET_MIRROIR_LOCAL
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-MOD_NAME="Nuxeo"
-else 
-
-MOD_NAME=$(zenity --entry --text "$MESS_NAME NUXEO")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $NOM_CACTI | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME=$(zenity --entry --text "$MESS_NAME NUXEO")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
- 
-
-fi
-export MOD_NAME=$MOD_NAME
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
-
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -196,7 +58,7 @@ export MOD_NAME=$MOD_NAME
 function INSTALL
 {
 echo "I: Download Nuxeo"
-DOWNLOAD
+WGET_MIRROIR_FREE
 apt-get autoremove --assume-yes --force-yes java-gcj-compat
 apt-get autoremove --assume-yes --force-yes gcj
 chroot $DOSSIER_CHROOT << "EOF" 
@@ -236,7 +98,7 @@ fi
 
 if [ "$(echo "${OOO}" | awk  '{print $1}')" == "y" ]; then
 chroot $DOSSIER_CHROOT << "EOF"
-apt-get install --assume-yes --force-yes openoffice.org-headless
+apt-get install --assume-yes --force-yes openoffice.org-headless openoffice.org
 EOF
 fi
 
@@ -245,115 +107,59 @@ chmod -R 777 $LAMPP_DIRECTORY/$MOD_NAME
 cd $DL_DIR
 cp -Rf Nuxeo/* $LAMPP_DIRECTORY/$MOD_NAME
 cd $DL_DIR
-cp -r mysql-connector-java/mysql-connector-java-5.1.6-bin.jar $LAMPP_DIRECTORY/$MOD_NAME/server/default/lib/
-chmod +r+x $LAMPP_DIRECTORY/$MOD_NAME/server/default/lib/mysql-connector-java-5.1.6-bin.jar
-
-echo "create database $MOD_NAME;
-grant all on $MOD_NAME.* to $MOD_NAME@localhost identified by '$NUXEO_MYSQL_PWD';
-flush privileges;
-" > $DOSSIER_CHROOT/tmp/nuxeo_db.sql
+sed -i "15s/Nuxeo/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/$MOD_NAME/database.sql
+sed -i "16s/Nuxeo/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/$MOD_NAME/database.sql
+sed -i "17s/Nuxeo/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/$MOD_NAME/database.sql
+cp $LAMPP_DIRECTORY/$MOD_NAME/database.sql $DOSSIER_CHROOT/tmp/nuxeo_db.sql
 chroot $DOSSIER_CHROOT << "EOF"
-/usr/bin/mysql -u root < /tmp/nuxeo_db.sql mysql
+/usr/bin/mysql -u root < /tmp/nuxeo_db.sql
 EOF
 
-sed -i "66s/<PersistenceManager class=\"org.apache.jackrabbit.core.state.obj.ObjectPersistenceManager\">/<PersistenceManager class=\"org.apache.jackrabbit.core.state.db.SimpleDbPersistenceManager\">/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "66G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "66G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "66G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "66G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "66G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "66G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "66G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "67s/^/<param name=\"driver\" value=\"com.mysql.jdbc.Driver\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "68s/^/<param name=\"url\" value=\"jdbc:mysql:\/\/localhost\/$MOD_NAME\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "69s/^/<param name=\"user\" value=\"$MOD_NAME\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "70s/^/<param name=\"password\" value=\"$NUXEO_MYSQL_PWD\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "71s/^/<param name=\"schema\" value=\"mysql\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "72s/^/<param name=\"schemaObjectPrefix\" value=\"jcr_\${wsp.name}_\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "73s/^/<param name=\"externalBLOBs\" value=\"true\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
+echo "
+grant all on $MOD_NAME.* to $MOD_NAME@localhost identified by '$NUXEO_MYSQL_PWD';
+flush privileges;
+" > $DOSSIER_CHROOT/tmp/nuxeo_priv_db.sql
+chroot $DOSSIER_CHROOT << "EOF"
+/usr/bin/mysql -u root < /tmp/nuxeo_priv_db.sql mysql
+EOF
+
+sed -i "s/Nuxeo/$MOD_NAME/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
+
+sed -i "s/Nuxeo/$MOD_NAME/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxaudit-logs-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxaudit-logs-ds.xml
+
+sed -i "s/Nuxeo/$MOD_NAME/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxplaceful-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxplaceful-ds.xml
+
+sed -i "s/Nuxeo/$MOD_NAME/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxuidsequencer-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxuidsequencer-ds.xml
+
+sed -i "s/Nuxeo/$MOD_NAME/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-document-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-document-ds.xml
+
+sed -i "s/Nuxeo/$MOD_NAME/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-jbpm-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-jbpm-ds.xml
 
 
-sed -i "103s/<PersistenceManager class=\"org.apache.jackrabbit.core.state.obj.ObjectPersistenceManager\">/<PersistenceManager class=\"org.apache.jackrabbit.core.state.db.SimpleDbPersistenceManager\">/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "103G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "103G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "103G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "103G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "103G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "103G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "103G"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "104s/^/<param name=\"driver\" value=\"com.mysql.jdbc.Driver\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "105s/^/<param name=\"url\" value=\"jdbc:mysql:\/\/localhost\/$MOD_NAME\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "106s/^/<param name=\"user\" value=\"$MOD_NAME\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "107s/^/<param name=\"password\" value=\"$NUXEO_MYSQL_PWD\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "108s/^/<param name=\"schema\" value=\"mysql\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "109s/^/<param name=\"schemaObjectPrefix\" value=\"jcr_ver_\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "110s/^/<param name=\"externalBLOBs\" value=\"true\"\/>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
+sed -i "s/Nuxeo/$MOD_NAME/g"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxrelations-default-jena-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxrelations-default-jena-ds.xml
 
+sed -i "s/Nuxeo/$MOD_NAME/g"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsearch-compass-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsearch-compass-ds.xml
 
-sed -i "7s/jdbc:hsqldb:\${jboss.server.data.dir}\${\/}hypersonic\${\/}nxaudit-logs/jdbc:mysql:\/\/localhost\/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxaudit-logs-ds.xml
-sed -i "9s/org.hsqldb.jdbcDriver/com.mysql.jdbc.Driver/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxaudit-logs-ds.xml
-sed -i "10s/sa/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxaudit-logs-ds.xml
-sed -i "11s/<password><\/password>/<password>$NUXEO_MYSQL_PWD<\/password>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxaudit-logs-ds.xml
+sed -i "s/Nuxeo/$MOD_NAME/g"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsqldirectory-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsqldirectory-ds.xml
 
+sed -i "s/Nuxeo/$MOD_NAME/g"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxcomment-jena-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxcomment-jena-ds.xml
 
-sed -i "7s/jdbc:hsqldb:\${jboss.server.data.dir}\${\/}hypersonic\${\/}nxplacefulservice/jdbc:mysql:\/\/localhost\/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxplaceful-ds.xml
-sed -i "9s/org.hsqldb.jdbcDriver/com.mysql.jdbc.Driver/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxplaceful-ds.xml
-sed -i "10s/sa/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxplaceful-ds.xml
-sed -i "11s/<password><\/password>/<password>$NUXEO_MYSQL_PWD<\/password>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxplaceful-ds.xml
+sed -i "33s/admin@ciws.com/$nuxeo_admin_email/" $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/mail-service.xml
 
-sed -i "7s/jdbc:hsqldb:\${jboss.server.data.dir}\${\/}hypersonic\${\/}nxuidsequencer/jdbc:mysql:\/\/localhost\/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxuidsequencer-ds.xml
-sed -i "9s/org.hsqldb.jdbcDriver/com.mysql.jdbc.Driver/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxuidsequencer-ds.xml
-sed -i "10s/sa/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxuidsequencer-ds.xml
-sed -i "11s/<password><\/password>/<password>$NUXEO_MYSQL_PWD<\/password>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxuidsequencer-ds.xml
-
-
-sed -i "7s/jdbc:hsqldb:\${jboss.server.data.dir}\${\/}hypersonic\${\/}nxworkflowdocument/jdbc:mysql:\/\/localhost\/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-document-ds.xml
-sed -i "9s/org.hsqldb.jdbcDriver/com.mysql.jdbc.Driver/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-document-ds.xml
-sed -i "10s/sa/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-document-ds.xml
-sed -i "11s/<password><\/password>/<password>$NUXEO_MYSQL_PWD<\/password>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-document-ds.xml
-
-sed -i "7s/jdbc:hsqldb:\${jboss.server.data.dir}\${\/}hypersonic\${\/}nxworkflowjbpm/jdbc:mysql:\/\/localhost\/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-jbpm-ds.xml
-sed -i "9s/org.hsqldb.jdbcDriver/com.mysql.jdbc.Driver/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-jbpm-ds.xml
-sed -i "10s/sa/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-jbpm-ds.xml
-sed -i "11s/<password><\/password>/<password>$NUXEO_MYSQL_PWD<\/password>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-jbpm-ds.xml
-
-
-sed -i "7s/jdbc:hsqldb:\${jboss.server.data.dir}\${\/}hypersonic\${\/}nxrelations-default-jena/jdbc:mysql:\/\/localhost\/$MOD_NAME?relaxAutoCommit=true/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxrelations-default-jena-ds.xml
-sed -i "9s/org.hsqldb.jdbcDriver/com.mysql.jdbc.Driver/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxrelations-default-jena-ds.xml
-sed -i "10s/sa/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxrelations-default-jena-ds.xml
-sed -i "11s/<password><\/password>/<password>$NUXEO_MYSQL_PWD<\/password>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxrelations-default-jena-ds.xml
-
-
-sed -i "10s/jdbc:hsqldb:\${jboss.server.data.dir}\${\/}hypersonic\${\/}nxsearch-compass/jdbc:mysql:\/\/localhost\/$MOD_NAME?relaxAutoCommit=true&amp;emulateLocators=true/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsearch-compass-ds.xml
-sed -i "12s/org.hsqldb.jdbcDriver/com.mysql.jdbc.Driver/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsearch-compass-ds.xml
-sed -i "13s/sa/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsearch-compass-ds.xml
-sed -i "14s/<password><\/password>/<password>$NUXEO_MYSQL_PWD<\/password>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsearch-compass-ds.xml
-
-
-
-
-sed -i "7s/jdbc:hsqldb:\${jboss.server.data.dir}\${\/}hypersonic\${\/}nxsqldirectory/jdbc:mysql:\/\/localhost\/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsqldirectory-ds.xml
-sed -i "9s/org.hsqldb.jdbcDriver/com.mysql.jdbc.Driver/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsqldirectory-ds.xml
-sed -i "10s/sa/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsqldirectory-ds.xml
-sed -i "11s/<password><\/password>/<password>$NUXEO_MYSQL_PWD<\/password>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsqldirectory-ds.xml
-
-
-
-
-
-sed -i "7s/jdbc:hsqldb:\${jboss.server.data.dir}\${\/}hypersonic\${\/}comment-relations/jdbc:mysql:\/\/localhost\/$MOD_NAME?relaxAutoCommit=true/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxcomment-jena-ds.xml
-sed -i "9s/org.hsqldb.jdbcDriver/com.mysql.jdbc.Driver/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxcomment-jena-ds.xml
-sed -i "10s/sa/$MOD_NAME/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxcomment-jena-ds.xml
-sed -i "11s/<password><\/password>/<password>$NUXEO_MYSQL_PWD<\/password>/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxcomment-jena-ds.xml
-
-sed -i "2s/HSQL/MySQL/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/sql.properties
-
-sed -i "23s/HSQLDialect/MySQLDialect/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/platform/nuxeo-platform-search-compass-plugin-5.1.5.jar/compass.cfg.xml
-
-sed -i "27s/pop3.nosuchhost.nosuchdomain.com/localhost/" $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/mail-service.xml
-sed -i "30s/smtp.nosuchhost.nosuchdomain.com/localhost/" $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/mail-service.xml
-sed -i "33s/nobody@nosuchhost.nosuchdomain.com/admin@ciws.com/" $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/mail-service.xml
-
+rm -r $LAMPP_DIRECTORY/$MOD_NAME/server/default/work
+rm -r $LAMPP_DIRECTORY/$MOD_NAME/server/default/log
+rm -r $LAMPP_DIRECTORY/$MOD_NAME/server/default/tmp
+rm -r $LAMPP_DIRECTORY/$MOD_NAME/server/default/data
 
 echo "#!/bin/sh
 cd $LAMPP_DIRECTORY/$MOD_NAME/bin/
@@ -436,8 +242,6 @@ echo "
 
 
 echo "I: Install Nuxeo"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 CREATE_INSTALL_SCRIPT

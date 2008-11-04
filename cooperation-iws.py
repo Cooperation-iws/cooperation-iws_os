@@ -301,6 +301,9 @@ class Reconstructor:
 	parser.add_option( "--debmirror", 
                     dest="debmirror", default="ftp://ftp.proxad.net/mirrors/ftp.ubuntu.com/ubuntu/" ,
                     help="Debian packages mirror url")
+	parser.add_option( "--debmirrornonfree", 
+                    dest="debmirrorNonfree", default="http://packages.medibuntu.org/" ,
+                    help="Non Free Debian packages mirror url")
 	parser.add_option( "--custom", action="store_false",
                     dest="custom", default=False ,
                     help="Custom install")
@@ -325,7 +328,13 @@ class Reconstructor:
 	parser.add_option( "--disautologin", action="store_true",
                     dest="disautologin", default=False ,
                     help="Use aufs")
-	
+	parser.add_option( "--outputisoname", 
+                    dest="outputisoname", default="cooperation-iws-server.iso" ,
+                    help="Output iso image name")
+	parser.add_option( "--silent", 
+                    dest="silent", action="store_true",
+                    default=False ,
+                    help="No prompt mode (silent mode)")
         (options, args) = parser.parse_args()
 
         if options.debug == True:
@@ -373,13 +382,19 @@ class Reconstructor:
 	    self.comboboxWebAppMirrors = ""
 	    self.radiobuttonDefaultInstall = True
 	    self.user = options.username
+	    if self.user != "" and self.checkUserName() == False:
+		print _("You need to specify a username with at least 6 characters in this field of characters: [a-z0-9_-*.]")
+		exit(0)
 	    self.password = options.password
 	    self.userFull = options.userfullname
 	    self.host = options.host
 	    self.checkbuttonDisableAutologin = options.disautologin
 	    self.debMirror = options.debmirror
+            self.debMirrorNonfree = options.debmirrorNonfree
             self.keyLang = options.keyblang
 	    self.ciwsOsType = options.ostype
+	    self.isoname = options.outputisoname
+	    self.silent = options.silent
 	else:
 	    self.commandLine = False
 
@@ -476,7 +491,8 @@ class Reconstructor:
 		print _('Proceeding to customization...')		
 		self.customize()
 		self.launchPostInstall()
-		self.launchTerminal()
+		if self.silent == False:
+			self.launchTerminal()
 		self.endInstall()
 		self.installType = "Cd"
 		self.LiveCdDescription="Cooperation-iws Live CD"
@@ -484,7 +500,7 @@ class Reconstructor:
 		self.buildIso=True		
 		self.buildSquashRoot = True
 		self.buildUsb = False
-		self.buildLiveCdFilename = os.path.join(self.customDir, "cooperation-iws-custom.iso")
+		self.buildLiveCdFilename = os.path.join(self.customDir, self.isoname)
 		self.LiveCdDescription = "cooperation-iws-custom"
 		self.LiveCdRemovePrograms = True
 		self.hfsMap = os.getcwd() + "/lib/hfs.map"
@@ -1448,14 +1464,14 @@ class Reconstructor:
 
     # checks if user entered custom password matches
     def checkUserPassword(self):
-        if self.wTree.get_widget("entryLiveCdUserPassword").get_text() == self.wTree.get_widget("entryLiveCdUserPasswordCheck").get_text():
+        if self.password == self.passwordCheck:
             return True
         else:
             return False
     
     def checkUserName(self):
-	if int(commands.getoutput('echo ' + self.wTree.get_widget("entryLiveCdUsername").get_text() + ' | wc -m')) > 6 :
-		if commands.getoutput('echo '  + self.wTree.get_widget("entryLiveCdUsername").get_text() + '| grep \'^[a-z0-9_-*.]*$\'') != '':
+	if int(commands.getoutput('echo ' + self.user + ' | wc -m')) > 6 :
+		if commands.getoutput('echo '  + self.user + '| grep \'^[a-z0-9_-*.]*$\'') != '':
 	    		return True
 		else:
 	    		return False
@@ -2750,13 +2766,15 @@ class Reconstructor:
             self.setBusyCursor()
             self.user = 'ubuntu'
             # check user entered password first, so user doesn't have to wait
-            if self.checkUserPassword() == True : 
+            self.user = self.wTree.get_widget("entryLiveCdUsername").get_text()
+	    self.userFull = self.wTree.get_widget("entryLiveCdUserFullname").get_text()
+	    self.password = self.wTree.get_widget("entryLiveCdUserPassword").get_text()
+	    self.passwordCheck = self.wTree.get_widget("entryLiveCdUserPasswordCheck").get_text()
+	    self.host = self.wTree.get_widget("entryLiveCdHostname").get_text()
+		   
+	    if self.checkUserPassword() == True : 
 		if self.wTree.get_widget("entryLiveCdUsername").get_text() == '' or self.checkUserName() == True:
 		    # set user info
-		    self.user = self.wTree.get_widget("entryLiveCdUsername").get_text()
-		    self.userFull = self.wTree.get_widget("entryLiveCdUserFullname").get_text()
-		    self.password = self.wTree.get_widget("entryLiveCdUserPassword").get_text()
-		    self.host = self.wTree.get_widget("entryLiveCdHostname").get_text()
 		    if self.casperPath == 'casper' and self.debDist != 'etch':
 			self.debMirror= self.wTree.get_widget("comboboxUbuntuMirrors").get_active_text() 
 		    else:
@@ -3346,6 +3364,9 @@ class Reconstructor:
 	fDebMirror=open(os.path.join(self.customDir, "chroot/tmp/deb_mirror_path"), 'w')
 	fDebMirror.write(self.debMirror)
 	fDebMirror.close()
+	fDebMirrorNonfree=open(os.path.join(self.customDir, "chroot/tmp/deb-nonfree_mirror_path"), 'w')
+	fDebMirrorNonfree.write(self.debMirrorNonfree)
+	fDebMirrorNonfree.close()
 	fciwsOsType=open(os.path.join(self.customDir, "chroot/tmp/os_type"), 'w')
 	fciwsOsType.write(self.ciwsOsType)
 	fciwsOsType.close()

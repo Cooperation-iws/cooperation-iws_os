@@ -1,6 +1,7 @@
 #!/bin/bash
 
-generic_admin_email="admin@ciws.com"
+domain="ciws.com"
+generic_admin_email="admin@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 
@@ -109,12 +110,12 @@ clam_mail_report=$generic_admin_email
 #Webmin 1.4.20
 webmin_pwd=$generic_login_pwd
 #Postfix Relay Client
-smtp_postfix_client_relay="mail.ciws.com"
+smtp_postfix_client_relay="mail.$domain"
 #Zabbix client 1.6
-zabbix_server_name="administration.ciws.com"
+zabbix_server_name="administration.$domain"
 #Syslog client
-syslog_server_name="administration.ciws.com"
+syslog_server_name="administration.$domain"
 #Snort2.8 client
 snort_registration_key=""
-snort_server_mysql_pwd="SNORT_MYSQL_PWD"
-snort_server_name="administration.ciws.com"
+snort_server_mysql_pwd=$generic_mysql_pwd
+snort_server_name="administration.$domain"

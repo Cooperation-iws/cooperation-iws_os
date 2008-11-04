@@ -83,8 +83,8 @@ sed -i "15s/Mediawiki/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/d
 sed -i "16s/Mediawiki/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 sed -i "17s/Mediawiki/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 sed -i "15s/DROP/--DROP/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-sed -i "s/latin1_swedish_ci/utf8_general_ci/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-sed -i "s/latin1/utf8/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+#sed -i "s/latin1_swedish_ci/utf8_general_ci/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+#sed -i "s/latin1/utf8/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 $BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 
 
@@ -101,7 +101,7 @@ sed -i "35s/Ciws/${mediawiki_site_name[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$cou
 sed -i "s/admin@ciws.com/${mediawiki_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/LocalSettings.php
 sed -i "63s/Mediawiki/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/LocalSettings.php
 sed -i "64s/Mediawiki/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/LocalSettings.php
-sed -i "64s/MEDIAWIKI_MYSQL_PWD/${MEDIAWIKI_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/LocalSettings.php
+sed -i "65s/MEDIAWIKI_MYSQL_PWD/${MEDIAWIKI_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/LocalSettings.php
 
 mv  $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.sample $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.php
 

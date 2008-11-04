@@ -57,8 +57,11 @@ gem install BlueCloth
 
 apt-get install --assume-yes --force-yes git-core imagemagick 
 
+cd $DL_DIR
+wget $URL_FREE/insoshi-insoshi-081103.tar.gz
+tar -xzf insoshi-insoshi-081103.tar.gz -C /var
 cd /var
-git clone git://github.com/insoshi/insoshi.git
+mv insoshi-insoshi-9fe47efdd5642220d09772c8bd183195a85b2ce1 insoshi
 cd insoshi
 cp config/database.example config/database.yml
 
