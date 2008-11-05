@@ -23,9 +23,8 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 DISPLAY=127.0.0.1:5.0
 LANG_UI=$(cat /tmp/lang-wui)
 SILENT=$(cat /tmp/silent)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+
 . /tmp/app_params
-fi
 
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
@@ -303,7 +302,7 @@ cp * /etc/snort/
 cp /usr/local/lib/libpcre.so.0 /usr/lib
 
 
-cat /etc/snort/snort.conf | sed -i -e "s/user=root password=test dbname=db host=localhost/user=snort password=$snort_server_mysql_pwd dbname=snort host=$snort_server_name/" /etc/snort/snort.conf
+cat /etc/snort/snort.conf | sed -i -e "s/user=root password=test dbname=db host=localhost/user=$snort_remote_name password=$snort_server_mysql_pwd dbname=$snort_remote_name host=$snort_server_name/" /etc/snort/snort.conf
 cat /etc/snort/snort.conf | sed -i -e "793s/# output/ output/" /etc/snort/snort.conf 
 cat /etc/snort/snort.conf | sed -i -e "110s/..\/rules/\/etc\/snort\/rules/" /etc/snort/snort.conf
 #cat /etc/snort/rules/web-misc.rules | sed -i -e "97s/alert/#alert/" /etc/snort/rules/web-misc.rules

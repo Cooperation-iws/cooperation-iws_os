@@ -242,8 +242,8 @@ sed -i "s/;date.timezone =/date.timezone =Europe\/Paris/" /etc/php5/apache2/php.
 cd $DL_DIR
 wget $URL_FREE/zabbix_mysql_schema_081101.tar.gz
 tar -xzf zabbix_mysql_schema_081101.tar.gz
-sed -i "15s/Syslogng/$MOD_NAME/" database.sql
-sed -i "16s/Syslogng/$MOD_NAME/" database.sql
+sed -i "15s/zabbix/$MOD_NAME/" database.sql
+sed -i "16s/zabbix/$MOD_NAME/" database.sql
 
 echo "DROP DATABASE zabbix; " > drop_zabbix.sql
 $BIN_MYSQL -u root < drop_zabbix.sql

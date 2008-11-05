@@ -116,6 +116,7 @@ zabbix_server_name="administration.$domain"
 #Syslog client
 syslog_server_name="administration.$domain"
 #Snort2.8 client
+snort_remote_name="Base"
 snort_registration_key=""
 snort_server_mysql_pwd=$generic_mysql_pwd
 snort_server_name="administration.$domain"

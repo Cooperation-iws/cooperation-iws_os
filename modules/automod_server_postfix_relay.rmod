@@ -26,9 +26,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 MIRROIR="A"
 NOM_CACTI="Cacti"
 SILENT=$(cat /tmp/silent)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
-fi
 
 
 #VARIABLES
@@ -80,6 +78,13 @@ EOT_PUBLIC
 mkfifo /var/spool/postfix/public/pickup
 
 /etc/init.d/postfix restart
+
+echo "
+#Postfix
+newaliases
+/etc/init.d/postfix restart
+" >> /etc/rc.local
+
 }
 
 #_______________________________________________________________________________________________
@@ -88,6 +93,6 @@ mkfifo /var/spool/postfix/public/pickup
 
 
 
-echo "I: Install Ntop"
+echo "I: Install Postfix relay"
 INSTALL
-echo "I: End of install Ntop"
+echo "I: End of install Postfix relay"

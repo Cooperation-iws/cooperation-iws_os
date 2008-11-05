@@ -76,11 +76,12 @@ cacti_mysql_pwd=$generic_mysql_pwd
 #Postfix Relay Client
 smtp_postfix_client_relay="mail.$domain"
 #Zabbix client 1.6
-zabbix_server_name="mail.$domain"
+zabbix_server_name="administration.$domain"
 #Syslog client
-syslog_server_name="mail.$domain"
+syslog_server_name="administration.$domain"
 #Snort2.8 client
+snort_remote_name="Base"
 snort_registration_key=""
 snort_server_mysql_pwd=$generic_mysql_pwd
-snort_server_name="mail.$domain"
+snort_server_name="administration.$domain"
 #Awstats
