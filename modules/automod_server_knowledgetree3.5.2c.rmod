@@ -95,7 +95,7 @@ $BIN_MYSQL -u root < kt_db.sql
 
 sed -i "s/KnowledgeTree/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
 sed -i "s/KNO_MYSQL_PWD/${KT_MYSQL_PWD[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
-sed -i "s/rootUrl = default/rootUrl = ${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
+sed -i "s/rootUrl = default/rootUrl = /${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
 
 echo "UPDATE ${MOD_NAME[$count]}.users SET email = '${kt_admin_email[$count]}' WHERE users.id =1 LIMIT 1 ;" > kt_credentials.sql
 

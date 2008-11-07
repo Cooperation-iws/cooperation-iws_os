@@ -39,7 +39,11 @@ function INSTALL
 
 echo "*.*            @$syslog_server_name" >> /etc/syslog.conf
 
+echo "
+#Syslog client
+/etc/init.d/sysklogd restart
 
+" >> /etc/rc.local
 
 
 }
