@@ -220,14 +220,47 @@ chmod 0755 /etc/init.d/openoffice
 
 update-rc.d openoffice defaults
 
+cat << EOT > /etc/init.d/nuxeo
+#!/bin/bash
+nuxeo_HOME=/var/$MOD_NAME/bin/
+PIDFILE=/var/run/nuxeo-server.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "Nuxeo server has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting Nuxeo server"
+      \$nuxeo_HOME/run.sh & > /dev/null 2>&1
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping Nuxeo server."
+      \$nuxeo_HOME/shutdown.sh -S & > /dev/null 2>&1
+      rm -f \$PIDFILE
+      exit
+    fi
+      echo "Nuxeo server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOT
+
+chmod 0755 /etc/init.d/nuxeo
+
+update-rc.d nuxeo defaults
 
 
 echo "
-sleep 5
-nohup /var/$MOD_NAME/bin/run.sh &
-sleep 5
-/etc/init.d/openoffice start
-sleep 3
 " >> $DOSSIER_CHROOT/etc/rc.local
 
 
@@ -250,6 +283,8 @@ echo "
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 	<item_admin_url><![CDATA[http://localhost:8080/nuxeo]]></item_admin_url>
+	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/nuxeo start</item_init_start>
+	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
 </item>
 </items>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
@@ -263,6 +298,8 @@ echo "
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 	<item_admin_url><![CDATA[http://localhost:8080/nuxeo]]></item_admin_url>
+	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/nuxeo start</item_init_start>
+	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
 </item>
 </items>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml

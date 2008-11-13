@@ -2821,6 +2821,8 @@ echo "
 	<item_admin_url>/admin/$MOD_NAME</item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_init_start>/etc/init.d/clamav-daemon start\/etc/init.d/dovecot start\/etc/init.d/postfix start\/etc/init.d/mailscanner start\</item_init_start>
+	<item_init_stop>/etc/init.d/clamav-daemon stop\/etc/init.d/dovecot stop\/etc/init.d/postfix stop\/etc/init.d/mailscanner stop\</item_init_stop>
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui.xml
 echo "
@@ -2830,6 +2832,8 @@ echo "
 	<item_admin_url>/admin/$MOD_NAME</item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_init_start>/etc/init.d/clamav-daemon start\/etc/init.d/dovecot start\/etc/init.d/postfix start\/etc/init.d/mailscanner start\</item_init_start>
+	<item_init_stop>/etc/init.d/clamav-daemon stop\/etc/init.d/dovecot stop\/etc/init.d/postfix stop\/etc/init.d/mailscanner stop\</item_init_stop>
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 

@@ -50,10 +50,44 @@ sed -i "s/INSPIRCD_ENABLED=0/INSPIRCD_ENABLED=1/" /etc/default/inspircd
 #_______________________________________________________________________________________________
 #________________________________________FIN_INSTALL____________________________________________
 
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url></item_url>
+	<item_admin_url></item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_init_start>/etc/init.d/inspircd start</item_init_start>
+	<item_init_stop>/etc/init.d/inspircd stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url></item_url>
+	<item_admin_url></item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_init_start>/etc/init.d/inspircd start</item_init_start>
+	<item_init_stop>/etc/init.d/inspircd stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
 
 
 
-echo "I: Install Silcd"
+
+echo "I: Install Inspircd"
 INSTALL
-
-echo "I: End of install Silcd"
+CREATE_WUI
+echo "I: End of install Inspircd"

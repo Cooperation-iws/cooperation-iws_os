@@ -250,6 +250,9 @@ echo "
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 	<item_admin_url>/admin/${MOD_NAME[$count]}/html/</item_admin_url>
+	<item_init_start>/etc/init.d/syslog-ng start</item_init_start>
+	<item_init_stop>/etc/init.d/syslog-ng stop</item_init_stop>
+
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui.xml
 echo "
@@ -259,6 +262,9 @@ echo "
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 	<item_admin_url>/admin/${MOD_NAME[$count]}/html/</item_admin_url>
+	<item_init_start>/etc/init.d/syslog-ng start</item_init_start>
+	<item_init_stop>/etc/init.d/syslog-ng stop</item_init_stop>
+
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 

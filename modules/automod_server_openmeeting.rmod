@@ -4,13 +4,13 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Openmeeting'
+RMOD_NAME='Openmeetings'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Video conferencing'
 RMOD_DESCRIPTION_FR='Video conférence'
-RMOD_VERBOSE="Openmeeting is an open source videoconferencing solution "
-RMOD_VERBOSE_FR="Openmeeting est une solution open source de vidéo conférence. "
+RMOD_VERBOSE="Openmeetings is an open source videoconferencing solution "
+RMOD_VERBOSE_FR="Openmeetings est une solution open source de vidéo conférence. "
 
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
@@ -183,6 +183,8 @@ echo "
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 	<item_admin_url>http://localhost:5080/openmeetings/</item_admin_url>
+	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/red5 start</item_init_start>
+	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/red5 stop</item_init_stop>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
 echo "
@@ -192,6 +194,8 @@ echo "
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 	<item_admin_url>http://localhost:5080/openmeetings/</item_admin_url>
+	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/red5 start</item_init_start>
+	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/red5 stop</item_init_stop>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 

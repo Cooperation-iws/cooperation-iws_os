@@ -258,6 +258,8 @@ echo "
 	<item_url>https://localhost:10000</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_init_start>/etc/init.d/webmin start</item_init_start>
+	<item_init_stop>/etc/init.d/webmin stop</item_init_stop>
 	</item>
 " >> /tmp/admin_cooperation-wui.xml
 echo "
@@ -266,6 +268,8 @@ echo "
 	<item_url>https://localhost:10000</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_init_start>/etc/init.d/webmin start</item_init_start>
+	<item_init_stop>/etc/init.d/webmin stop</item_init_stop>
 	</item>
 " >> /tmp/admin_cooperation-wui-fr.xml
 

@@ -93,12 +93,50 @@ rake ultrasphinx:daemon:start RAILS_ENV=test
 
 rake spec
 
+cat << EOT > /etc/init.d/insoshi
+#!/bin/bash
+insoshi_HOME=/var/insoshi/script
+PIDFILE=/var/run/nuxeo-server.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "Insoshi server has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting Insoshi server"
+      \$insoshi_HOME/server -p 3020 & > /dev/null 2>&1
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping Nuxeo server."
+     killall -9 insoshi
+
+	 rm -f \$PIDFILE
+      exit
+    fi
+      echo "Insoshi server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOT
+
+chmod 0755 /etc/init.d/insoshi
+
+update-rc.d insoshi defaults
 
 
-nohup /var/insoshi/script/server -p 3020 &
+/etc/init.d/insoshi start
 echo "
 #Insoshi
-nohup /var/insoshi/script/server -p 3020 &
 
 " >> /etc/rc.local
 
@@ -120,6 +158,9 @@ echo "
 	<item_admin_url><![CDATA[http://localhost:3020]]></item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_init_start>/etc/init.d/insoshi start</item_init_start>
+	<item_init_stop>/etc/init.d/insoshi stop</item_init_stop>
+
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
 echo "
@@ -129,6 +170,9 @@ echo "
 	<item_admin_url><![CDATA[http://localhost:3020]]></item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_init_start>/etc/init.d/insoshi start</item_init_start>
+	<item_init_stop>/etc/init.d/insoshi stop</item_init_stop>
+
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 

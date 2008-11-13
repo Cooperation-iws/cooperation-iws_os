@@ -180,6 +180,55 @@ apt-get install --assume-yes --force-yes sun-java5-bin sun-java5-jre
 mkdir $WWW_DIRECTORY/$MOD_NAME/
 cp -r jdictd15/* $WWW_DIRECTORY/$MOD_NAME/.
 
+cat << EOT > /etc/init.d/jdictd
+#!/bin/bash
+# openoffice.org  headless server script
+#
+# chkconfig: 2345 80 30
+# description: headless openoffice server script
+# processname: openoffice
+# 
+# Author: Vic Vijayakumar
+# Modified by Federico Ch. Tomasczik
+#
+
+PIDFILE=/var/run/jdictd.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "Jdictd server has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting Jdictd server"
+      java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini & > /dev/null 2>&1
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping Jdictd server."
+      killall -9 soffice && killall -9 soffice.bin
+      rm -f \$PIDFILE
+      exit
+    fi
+      echo "Jdictd server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOT
+
+chmod 0755 /etc/init.d/jdictd
+
+update-rc.d jdictd defaults
+
+
 cd $WWW_DIRECTORY/$MOD_NAME
 nohup java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini &
 
@@ -187,8 +236,8 @@ nohup java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.i
 
 echo "
 #Jdict
-cd $WWW_DIRECTORY/$MOD_NAME
-nohup java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini &
+
+
 " >> /etc/rc.local
 
 }
@@ -209,6 +258,8 @@ echo "
 	<item_admin_url><![CDATA[http://localhost:2626]]></item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_init_start>/etc/init.d/jdictd start</item_init_start>
+	<item_init_stop>/etc/init.d/jdictd stop</item_init_stop>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
 echo "
@@ -218,6 +269,8 @@ echo "
 	<item_admin_url><![CDATA[http://localhost:2626]]></item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_init_start>/etc/init.d/jdictd start</item_init_start>
+	<item_init_stop>/etc/init.d/jdictd stop</item_init_stop>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 }
@@ -228,7 +281,7 @@ echo "
 
 
 
-echo "I: Install Ntop"
+echo "I: Install Jdictd"
 INSTALL
 CREATE_WUI
-echo "I: End of install Ntop"
+echo "I: End of install Jdictd"

@@ -256,11 +256,50 @@ chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME
 #mkdir $DOSSIER_CHROOT/etc/skel/conf/var
 #mv $DOSSIER_CHROOT/var/ossec $DOSSIER_CHROOT/etc/skel/conf/var
 
+cat << EOT > /etc/init.d/ossec
+#!/bin/bash
+
+PIDFILE=/var/run/ossec.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "Ossec server has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting Ossec server"
+      /var/ossec/bin/ossec-control start & > /dev/null 2>&1
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping Ossec server."
+      /var/ossec/bin/ossec-control stop & > /dev/null 2>&1
+      rm -f \$PIDFILE
+      exit
+    fi
+      echo "Ossec server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOT
+
+chmod 0755 /etc/init.d/ossec
+
+update-rc.d ossec defaults
+
+
 
 echo "
 #OSSEC
 
-/var/ossec/bin/ossec-control start
 
 " >> /etc/rc.local
 
@@ -284,6 +323,8 @@ echo "
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_init_start>/etc/init.d/ossec start</item_init_start>
+	<item_init_stop>/etc/init.d/ossec stop</item_init_stop>
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui.xml
 echo "
@@ -293,6 +334,8 @@ echo "
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_init_start>/etc/init.d/ossec start</item_init_start>
+	<item_init_stop>/etc/init.d/ossec stop</item_init_stop>
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 
@@ -301,8 +344,6 @@ echo "
 #________________________________________FIN_CREATE_WUI_________________________________________
 
 echo "I: Install Ossec"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 echo "I: End of install Ossec"

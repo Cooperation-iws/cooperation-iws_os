@@ -90,7 +90,7 @@ cacti_mysql_pwd=$generic_mysql_pwd
 #Akoie 0.5
 share_akoie_smb="y"
 share_akoie_smb_pwd="n"
-#Openmeeting
+#Openmeetings
 openmeeting_name="openmeetings"
 openmeeting_mysql_pwd=$generic_mysql_pwd
 #Inspircd
