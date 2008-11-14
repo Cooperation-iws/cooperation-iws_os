@@ -32,6 +32,8 @@ CASPER_PATH=$(cat /tmp/casper_path)
 DEB_DIST=$(cat /tmp/deb_dist)
 DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
 DEBNONFREE_MIRROR_PATH=$(cat /tmp/deb-nonfree_mirror_path)
+DEB_MIRROR_SECURITY_PATH=$(cat /tmp/deb-security_mirror_path)
+
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
@@ -91,13 +93,13 @@ deb $DEBNONFREE_MIRROR_PATH/ $DEB_DIST free non-free
 else
 echo "
 deb $DEB_MIRROR_PATH/ $DEB_DIST main contrib non-free
-deb-src $DEB_MIRROR_PATH/ $DEB_DIST main contrib 
+#deb-src $DEB_MIRROR_PATH/ $DEB_DIST main contrib 
 #Multimedia
-deb http://www.debian-multimedia.org $DEB_DIST main 
-deb-src http://www.debian-multimedia.org $DEB_DIST main 
+deb $DEBNONFREE_MIRROR_PATH $DEB_DIST main 
+#deb-src http://www.debian-multimedia.org $DEB_DIST main 
 #Security
-deb http://security.debian.org/ $DEB_DIST/updates main contrib non-free
-deb-src http://security.debian.org/ $DEB_DIST/updates main contrib 
+deb $DEB_MIRROR_SECURITY_PATH $DEB_DIST/updates main contrib non-free
+#deb-src http://security.debian.org/ $DEB_DIST/updates main contrib 
 " > /etc/apt/sources.list
 export DEBIAN_FRONTEND="dialog"
 fi

@@ -304,6 +304,9 @@ class Reconstructor:
 	parser.add_option( "--debmirrornonfree", 
                     dest="debmirrorNonfree", default="http://packages.medibuntu.org/" ,
                     help="Non Free Debian packages mirror url")
+	parser.add_option( "--debmirrorsecurity", 
+                    dest="debmirrorsecurity", default="http://security.debian.org/" ,
+                    help="Security packages for Debian OS")
 	parser.add_option( "--custom", action="store_false",
                     dest="custom", default=False ,
                     help="Custom install")
@@ -335,6 +338,16 @@ class Reconstructor:
                     dest="silent", action="store_true",
                     default=False ,
                     help="No prompt mode (silent mode)")
+	parser.add_option( "--debianlive", 
+                    dest="debianlive", action="store_true",
+                    default=False ,
+                    help="Create Debian Live Chroot from Live-helper script")
+	parser.add_option( "--debianLiveOS", 
+                    dest="debianLiveOS", default="lenny" ,
+                    help="Debian OS (etch, lenny, sid)")
+	parser.add_option( "--debianflavor", 
+                    dest="debianLiveFlavor", default="xfce" ,
+                    help="Debian flavor (xfce, gnome, kde)")
         (options, args) = parser.parse_args()
 
         if options.debug == True:
@@ -391,10 +404,15 @@ class Reconstructor:
 	    self.checkbuttonDisableAutologin = options.disautologin
 	    self.debMirror = options.debmirror
             self.debMirrorNonfree = options.debmirrorNonfree
+            self.debMirrorSecurity = options.debmirrorsecurity
             self.keyLang = options.keyblang
 	    self.ciwsOsType = options.ostype
 	    self.isoname = options.outputisoname
 	    self.silent = options.silent
+	    self.debianLive = options.debianlive
+	    self.DebianLiveType =  options.debianLiveFlavor       
+	    self.DebianLiveReleaseType =  options.debianLiveOS         
+
 	else:
 	    self.commandLine = False
 
@@ -481,7 +499,10 @@ class Reconstructor:
  	if self.checkCustomDir() == True:
                 if self.checkSetup() == True:
                     if self.checkWorkingDir() == True:
-           		self.setupWorkingDirectory()
+			if self.debianLive == True:			
+				self.setupDebianLive()           		
+			else:
+				self.setupWorkingDirectory()
 		self.checkLiveCdVersion()
 		self.cmdLoadModules()
 		os.popen("cp "+self.moduleFilename + " " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
@@ -1751,6 +1772,8 @@ class Reconstructor:
 		        if response == gtk.RESPONSE_OK:
 		            warnDlg.destroy()
 		            self.setBusyCursor()
+			    self.debMirror = self.wTree.get_widget("comboboxDebianLiveMirrors").get_active_text() 
+			    self.keyLang = self.wTree.get_widget("comboboxLiveCDKeybLang").get_active_text()
 		            gobject.idle_add(self.setupDebianLive)
 		            # load modules
 		            gobject.idle_add(self.loadModules)
@@ -3293,25 +3316,9 @@ class Reconstructor:
         os.popen('mount -o loop \"' + self.isoFilename + '\" ' + os.path.join(self.customDir, "remaster"))
 
     def setupDebianLive(self):
-	self.debMirror = self.wTree.get_widget("comboboxDebianLiveMirrors").get_active_text() 
-	self.keybLang = self.wTree.get_widget("comboboxLiveCDKeybLang").get_active_text()
 	lhConfig = "lh_config "
-	if re.search('Smallest',self.DebianLiveType): 
-		lhConfig += "--bootstrap-flavour minimal "
-	elif re.search('Minimal Xfce',self.DebianLiveType):
-		lhConfig += "-p xfce "
-	elif re.search('Minimal Gnome',self.DebianLiveType):
-		lhConfig += "-p gnome "
-	elif re.search('Minimal Kde',self.DebianLiveType):
-		lhConfig += "-p kde "
-	elif re.search('Full Xfce',self.DebianLiveType):
-		lhConfig += "-p xfce-desktop "
-	elif re.search('Full Gnome',self.DebianLiveType):
-		lhConfig += "-p gnome-desktop "
-	elif re.search('Full Kde',self.DebianLiveType):
-		lhConfig += "-p kde-desktop "
-	
-    	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"686\" --mirror-bootstrap \"' + self.debMirror + '\" --mirror-chroot \"' + self.debMirror + '\" --mirror-binary \"' + self.debMirror + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + keybLang + '\" '
+	lhConfig += "-p " + self.DebianLiveType + " "
+	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"686\" --mirror-bootstrap \"' + self.debMirror + '\" --mirror-chroot \"' + self.debMirror + '\" --mirror-binary \"' + self.debMirror + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + self.keyLang + '\" '
 	
 	scriptDebianLive = 'echo "I: Creating Debian Live CD Linux flavour ' + self.DebianLiveType + ' ' + self.DebianLiveReleaseType + ' + " \n'
 	scriptDebianLive += 'echo "' + lhConfig + '"\n'
@@ -3329,7 +3336,7 @@ class Reconstructor:
         fscriptCustomExec.write(scriptDebianLive)
         fscriptCustomExec.close()
         
-	os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws Terminal\" -e \"bash ' + os.path.join(self.customDir, "scriptDebianLive.sh")+ '\"')
+	os.system('bash ' + os.path.join(self.customDir, "scriptDebianLive.sh"))
 	self.casperPath = 'live'
 	if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'etch\'') != '':	    	
 			self.debDist= 'etch'	
@@ -3367,6 +3374,10 @@ class Reconstructor:
 	fDebMirrorNonfree=open(os.path.join(self.customDir, "chroot/tmp/deb-nonfree_mirror_path"), 'w')
 	fDebMirrorNonfree.write(self.debMirrorNonfree)
 	fDebMirrorNonfree.close()
+
+	fDebMirrorSecurity=open(os.path.join(self.customDir, "chroot/tmp/deb-security_mirror_path"), 'w')
+	fDebMirrorSecurity.write(self.debMirrorSecurity)
+	fDebMirrorSecurity.close()
 	fciwsOsType=open(os.path.join(self.customDir, "chroot/tmp/os_type"), 'w')
 	fciwsOsType.write(self.ciwsOsType)
 	fciwsOsType.close()
