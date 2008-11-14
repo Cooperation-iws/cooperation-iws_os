@@ -348,6 +348,10 @@ class Reconstructor:
 	parser.add_option( "--debianflavor", 
                     dest="debianLiveFlavor", default="xfce" ,
                     help="Debian flavor (xfce, gnome, kde)")
+	parser.add_option( "--webconverger", 
+                    dest="webconverger", action="store_true",
+                    default=False ,
+                    help="Create Web converger iso")
         (options, args) = parser.parse_args()
 
         if options.debug == True:
@@ -412,7 +416,8 @@ class Reconstructor:
 	    self.debianLive = options.debianlive
 	    self.DebianLiveType =  options.debianLiveFlavor       
 	    self.DebianLiveReleaseType =  options.debianLiveOS         
-
+	    self.webconverger = options.webconverger
+	
 	else:
 	    self.commandLine = False
 
@@ -3110,6 +3115,15 @@ class Reconstructor:
 		self.wTree.get_widget("hbox702").show()
 		self.wTree.get_widget("labelLiveCDKeybLang3").show()
 		print "Debian Etch Live CD"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'20070727\'') != '':
+		self.casperPath = 'casper'
+		self.debDist= 'studio64'
+		self.distVariant = 'studio64'			
+		self.wTree.get_widget("hbox701").hide()
+		self.wTree.get_widget("hbox301").show()
+		self.wTree.get_widget("hbox702").show()
+		self.wTree.get_widget("labelLiveCDKeybLang3").show()
+		print "Studio 64 Live CD"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '' or commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'hardy\'') != '':
 		self.casperPath = 'casper'	
 		self.wTree.get_widget("hbox301").hide()
@@ -3145,7 +3159,8 @@ class Reconstructor:
 		self.wTree.get_widget("hbox301").show()
 		self.wTree.get_widget("hbox702").show()
 		self.wTree.get_widget("labelLiveCDKeybLang3").show()	    	
-		print "Debian Lenny Live CD"	
+		print "Debian Lenny Live CD"
+	    	
 	    else:
 		print "Live CD not detected, Aborting"
 
@@ -3327,7 +3342,20 @@ class Reconstructor:
 	scriptDebianLive += 'apt-get remove -y --force-yes live-helper\n'
 	scriptDebianLive += 'apt-get install -y --force-yes live-helper cdebootstrap debian-keyring \n'
 	scriptDebianLive += 'cd ' +self.customDir + '\n'
-	scriptDebianLive += lhConfig + '\n'
+	if self.webconverger == True:
+		scriptDebianLive += "apt-get install -y --force-yes git-core \n"
+		scriptDebianLive += "wget "+self.entryLocalMirror+"/webconverger-081114.tar.gz \n"
+		scriptDebianLive += "tar -xzf webconverger-081114.tar.gz \n"
+		#scriptDebianLive += "git clone git://git.debian.org/git/debian-live/config-webc.git \n"
+		scriptDebianLive += "sed -i \"21s/locale=en_US/locale=en_US keyb="+ self.keyLang +"/\" config-webc/webconverger/config/binary \n"
+		scriptDebianLive += "echo LH_MIRROR_BOOTSTRAP=\"" + self.debMirror + "\" >> config-webc/webconverger/config/bootstrap \n"
+		scriptDebianLive += "echo LH_MIRROR_CHROOT=\"" + self.debMirror + "\" >> config-webc/webconverger/config/bootstrap \n"
+		scriptDebianLive += "echo LH_MIRROR_CHROOT_SECURITY=\"" + self.debMirrorSecurity + "\" >> config-webc/webconverger/config/bootstrap \n"
+		scriptDebianLive += "echo LH_MIRROR_BINARY=\"" + self.debMirror + "\" >> config-webc/webconverger/config/bootstrap \n"
+		scriptDebianLive += "echo LH_MIRROR_BINARY_SECURITY=\"" + self.debMirrorSecurity + "\" >> config-webc/webconverger/config/bootstrap \n"
+		scriptDebianLive += "cd config-webc/webconverger \n"
+	else:
+		scriptDebianLive += lhConfig + '\n'
 	#scriptDebianLive += 'lh_bootstrap && lh_chroot\n'
 	scriptDebianLive += 'lh_build\n'
 	scriptDebianLive += 'mv binary remaster \n'

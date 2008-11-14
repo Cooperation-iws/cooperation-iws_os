@@ -82,7 +82,7 @@ sleep 2
 ADD_USER
 export HOME=/home/liveusb
 echo "liveusb" > /tmp/tmp_user
-
+if [ "$(echo "${DEB_DIST}" | awk  '{print $1}')" != "studio64" ]; then 
 if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
 echo "
 deb $DEB_MIRROR_PATH/ $DEB_DIST restricted main universe multiverse
@@ -103,8 +103,9 @@ deb $DEB_MIRROR_SECURITY_PATH $DEB_DIST/updates main contrib non-free
 " > /etc/apt/sources.list
 export DEBIAN_FRONTEND="dialog"
 fi
-if [ "$(echo "${$DEBNONFREE_MIRROR_PATH}" | grep 'medibuntu.org')" ]; then
+if [ "$(echo "$DEBNONFREE_MIRROR_PATH" | grep 'medibuntu.org')" ]; then
 wget -q ${$DEBNONFREE_MIRROR_PATH}/medibuntu-key.gpg -O- | sudo apt-key add -
+fi
 fi
 apt-get update
 
