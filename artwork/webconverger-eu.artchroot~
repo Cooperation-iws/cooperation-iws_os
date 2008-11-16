@@ -1,0 +1,38 @@
+#!/bin/bash
+
+CASPER_PATH=$(cat /tmp/casper_path)
+
+
+
+echo "I: preparing for Artwork"
+mkdir /etc/skel/Desktop
+
+
+apt-get install --assume-yes --force-yes usplash
+cd /tmp/webconverger-eu
+dpkg -i usplash-theme-ciws_0.1-1_i386.deb 
+update-alternatives --install /usr/lib/usplash/usplash-artwork.so usplash-artwork.so /usr/lib/usplash/usplash-theme-ciws.so 10
+update-alternatives --set usplash-artwork.so /usr/lib/usplash/usplash-theme-ciws.so
+cd /tmp/ciws_gnome
+cp background.png /usr/share/gdm/themes/xubuntu
+cp logo.png /usr/share/gdm/themes/xubuntu/logo.png 1>&2 2>/dev/null
+cp background.png /usr/share/gdm/themes/Human
+cp logo.png /usr/share/gdm/themes/Human/ubuntu.png
+cp wallpaper.png /usr/share/backgrounds/warty-final-ubuntu.png 
+cp wallpaper.png /usr/share/xfce4/backdrops/xubuntu-jmak.png  1>&2 2>/dev/null
+cp wallpaper.png /usr/share/wallpapers/.
+cp background.png /usr/share/wallpapers/.
+cp logo.png /usr/share/apps/kdm/themes/kubuntu/
+sed -i "s/kubuntu-wallpaper.jpg/wallpaper.png/" /etc/default/kdm.d/20_kubuntu_default_settings
+sed -i "s/kubuntu-wallpaper.jpg/background.png/" /usr/share/apps/kdm/themes/kubuntu/kubuntu.xml
+sed -i "s/Dialog.png/logo.png/" /usr/share/apps/kdm/themes/kubuntu/kubuntu.xml
+sed -i 's/<pos width="640" x="50%" y="50%" anchor="c" height="400" \/>/<pos width="500" x="50%" y="30%" anchor="c" height="98" \/>/' /usr/share/apps/kdm/themes/kubuntu/kubuntu.xml
+cp wallpaper.png /usr/share/gdm/themes/debian-moreblue-orbit
+sed -i "s/background.svg/wallpaper.png/" /usr/share/gdm/themes/debian-moreblue-orbit/debian-moreblue-orbit.xml
+cp wallpaper.png /usr/share/images/desktop-base/
+rm /etc/alternatives/desktop-background
+ln -s  /usr/share/images/desktop-base/wallpaper.png /etc/alternatives/desktop-background
+rm /etc/alternatives/desktop-splash
+ln -s  /usr/share/images/desktop-base/wallpaper.png /etc/alternatives/desktop-splash
+
+

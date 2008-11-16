@@ -1,0 +1,12 @@
+#!/bin/bash
+
+LAMPP_DIRECTORY=$(cat /tmp/working-directory)
+DOSSIER_CHROOT=$LAMPP_DIRECTORY"/chroot"
+CASPER_PATH=$(cat /tmp/casper_path)
+CIWS_ROOT_DIR=$(cat /tmp/ciws-root-directory)
+
+
+cp -r $DOSSIER_CHROOT/tmp/webconverger-eu/isolinux $LAMPP_DIRECTORY/remaster
+sed -i "s/casper/$CASPER_PATH/g" $LAMPP_DIRECTORY/remaster/isolinux/isolinux.cfg
+	
+	
