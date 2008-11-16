@@ -10,5 +10,5 @@ RMOD_DESCRIPTION='Multimedia softs for client'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
-echo "I: install Ekiga"
+echo "I: install Multimedia software"
 apt-get install --assume-yes --force-yes ekiga filezilla-locales grsync vlc avahi-discover

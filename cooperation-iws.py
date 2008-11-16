@@ -311,7 +311,7 @@ class Reconstructor:
                     dest="custom", default=False ,
                     help="Custom install")
 	parser.add_option( "--username", 
-                    dest="username", default="" ,
+                    dest="username", default="ciwsadmin" ,
                     help="User Name")
 	parser.add_option( "--userfullname", 
                     dest="userfullname", default="" ,
@@ -352,8 +352,16 @@ class Reconstructor:
                     dest="webconverger", action="store_true",
                     default=False ,
                     help="Create Web converger iso")
+	parser.add_option( "--webconvergerlocale", 
+                    dest="webconvergerlocale", default="webconverger-eu",
+                    help="Webconverger localization")
+        parser.add_option( "--encryption", 
+                    dest="encryption", default="disabled",
+                    help="Debian live encryption")
+	parser.add_option( "--encryptionpassphrase", 
+                    dest="encryptionpassphrase", default="",
+                    help="Debian live encryption passphrase")
         (options, args) = parser.parse_args()
-
         if options.debug == True:
             self.runningDebug = True
             self.wTree.get_widget("notebookWizard").set_show_tabs(True)
@@ -417,7 +425,9 @@ class Reconstructor:
 	    self.DebianLiveType =  options.debianLiveFlavor       
 	    self.DebianLiveReleaseType =  options.debianLiveOS         
 	    self.webconverger = options.webconverger
-	
+	    self.webconvergerLocale = options.webconvergerlocale
+	    self.encryption = options.encryption
+	    self.encryptionpassphrase = options.encryptionpassphrase
 	else:
 	    self.commandLine = False
 
@@ -3333,7 +3343,7 @@ class Reconstructor:
     def setupDebianLive(self):
 	lhConfig = "lh_config "
 	lhConfig += "-p " + self.DebianLiveType + " "
-	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"686\" --mirror-bootstrap \"' + self.debMirror + '\" --mirror-chroot \"' + self.debMirror + '\" --mirror-binary \"' + self.debMirror + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + self.keyLang + '\" '
+	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"686\" --mirror-bootstrap \"' + self.debMirror + '\" --mirror-chroot \"' + self.debMirror + '\" --mirror-binary \"' + self.debMirror + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + self.keyLang + '\" --hostname ' + self.host + ' --username ' + self.user + ' --encryption '+ self.encryption
 	
 	scriptDebianLive = 'echo "I: Creating Debian Live CD Linux flavour ' + self.DebianLiveType + ' ' + self.DebianLiveReleaseType + ' + " \n'
 	scriptDebianLive += 'echo "' + lhConfig + '"\n'
@@ -3342,29 +3352,54 @@ class Reconstructor:
 	scriptDebianLive += 'apt-get remove -y --force-yes live-helper\n'
 	scriptDebianLive += 'apt-get install -y --force-yes live-helper cdebootstrap debian-keyring \n'
 	scriptDebianLive += 'cd ' +self.customDir + '\n'
+	
+        
 	if self.webconverger == True:
 		scriptDebianLive += "apt-get install -y --force-yes git-core \n"
 		scriptDebianLive += "wget "+self.entryLocalMirror+"/webconverger-081114.tar.gz \n"
 		scriptDebianLive += "tar -xzf webconverger-081114.tar.gz \n"
 		#scriptDebianLive += "git clone git://git.debian.org/git/debian-live/config-webc.git \n"
-		scriptDebianLive += "sed -i \"21s/locale=en_US/locale=en_US keyb="+ self.keyLang +"/\" config-webc/webconverger/config/binary \n"
+		scriptDebianLive += "sed -i \"17s/quiet/quiet keyb="+ self.keyLang +"/\" config-webc/webconverger/config/binary \n"
 		scriptDebianLive += "echo LH_MIRROR_BOOTSTRAP=\"" + self.debMirror + "\" >> config-webc/webconverger/config/bootstrap \n"
 		scriptDebianLive += "echo LH_MIRROR_CHROOT=\"" + self.debMirror + "\" >> config-webc/webconverger/config/bootstrap \n"
 		scriptDebianLive += "echo LH_MIRROR_CHROOT_SECURITY=\"" + self.debMirrorSecurity + "\" >> config-webc/webconverger/config/bootstrap \n"
 		scriptDebianLive += "echo LH_MIRROR_BINARY=\"" + self.debMirror + "\" >> config-webc/webconverger/config/bootstrap \n"
 		scriptDebianLive += "echo LH_MIRROR_BINARY_SECURITY=\"" + self.debMirrorSecurity + "\" >> config-webc/webconverger/config/bootstrap \n"
+		#scriptDebianLive += "sed -i \"25s/LH_BOOTLOADER/#LH_BOOTLOADER/\" config-webc/webconverger/config/binary \n"
+		scriptDebianLive += 'cp ' + self.ciwsRootDir + '/artwork/'+ self.webconvergerLocale +'/menu.lst config-webc/webconverger/config/binary_grub/\n'
 		scriptDebianLive += "cd config-webc/webconverger \n"
+		
+		
 	else:
 		scriptDebianLive += lhConfig + '\n'
-	#scriptDebianLive += 'lh_bootstrap && lh_chroot\n'
+	if self.encryption != "disabled":
+		scriptDebianLive += "sed -i \"105s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
+		scriptDebianLive += "sed -i \"107s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
+		scriptDebianLive += "sed -i \"114s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
+		scriptDebianLive += "sed -i \"116s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
+		scriptDebianLive += "sed -i \"73s/losetup/losetup.orig/\" " +self.customDir +"/config/common\n"
+		
+		fscriptPassphrase=open(os.path.join(self.customDir, "/tmp/squashfspwd"), 'w')
+        	fscriptPassphrase.write(self.encryptionpassphrase)
+        	fscriptPassphrase.close()
+	#scriptDebianLive += 'lh_bootstrap && lh_chroot \n'
 	scriptDebianLive += 'lh_build\n'
-	scriptDebianLive += 'mv binary remaster \n'
-	scriptDebianLive += 'mv binary.iso debian_lenny_barebone.iso\n'
+	if self.webconverger == True:
+		scriptDebianLive += "mv binary.iso webconverger_bare.iso\n"
+		scriptDebianLive += 'mv binary remaster \n'
+	else:	
+		#scriptDebianLive += 'lh_binary && lh_source\n'	
+		scriptDebianLive += 'mv binary remaster \n'
+		scriptDebianLive += 'mv binary.iso debian_lenny_barebone.iso\n'
 	fscriptCustomExec=open(os.path.join(self.customDir, "scriptDebianLive.sh"), 'w')
         fscriptCustomExec.write(scriptDebianLive)
         fscriptCustomExec.close()
         
 	os.system('bash ' + os.path.join(self.customDir, "scriptDebianLive.sh"))
+
+	if self.webconverger == True:
+		exit(0)
+		self.customDir += "/config-webc/webconverger"
 	self.casperPath = 'live'
 	if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'etch\'') != '':	    	
 			self.debDist= 'etch'	
@@ -3415,6 +3450,9 @@ class Reconstructor:
 	if self.comboboxCiwsArtwork == "ciwsGnome":
 		self.artwork = "ciws_gnome"
 		
+	elif self.comboboxCiwsArtwork == "webconvergereu":
+		self.artwork = "webconverger-eu"
+	
 	elif self.comboboxCiwsArtwork == "eLearning":
 		self.artwork = "eLearning"
 		
@@ -3429,7 +3467,7 @@ class Reconstructor:
   	if self.checkbuttonAufs == True:
 		os.popen('sed -i "s/splash/splash union=aufs/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
 	if self.casperPath == 'live':
-		os.popen('sed -i "s/initrd=\/'+self.casperPath+'\/initrd.gz/initrd=\/'+self.casperPath+'\/initrd.gz keyb='+self.keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
+		os.popen('sed -i "s/initrd=\/'+self.casperPath+'\/initrd1.img/initrd=\/'+self.casperPath+'\/initrd.gz keyb='+self.keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg")) 
 	
 	#XNEST
 	scriptCustomExec = '#!/bin/sh\n\n'
@@ -3516,18 +3554,31 @@ class Reconstructor:
 	if self.commandLine == False:         
 		self.execModulesEnabled = False;
 	        self.treeModel.foreach(self.checkExecModuleEnabled)
-        if self.execModulesEnabled == True:
+        
+        modExecScrChroot = '#!/bin/sh\n\ncd /tmp ;\n'
+	modExecScrChroot = 'export DEBIAN_FRONTEND=noninteractive\n'
+	modExecScrChroot += 'export DISPLAY=127.0.0.1:5.0 \n'
+ 	modExecScrChroot += 'bash \"/tmp/init.sh\"' + ' ;\n '
+ 	modExecScr = '#!/bin/sh\n\n'
+        if self.artwork != "":
+		modExecScr += 'chmod +x \"' + os.path.join(self.ciwsRootDir, "artwork/"+self.artwork+".artscript")+ '\"' + ' ;\n '
+		modExecScr += 'bash \"' + os.path.join(self.ciwsRootDir, "artwork/"+self.artwork+".artscript")+ '\"' + ' ;\n '
+	if self.encryption != "disabled":
+	    	modExecScrChroot +='apt-get install --assume-yes --force-yes aespipe \n'
+		#modExecScrChroot +='apt-get install --assume-yes --force-yes loop-aes-modules-2.6-686 \n'
+		#modExecScrChroot += 'echo "cryptoloop" >> /etc/initramfs-tools/modules\n'         
+		#modExecScrChroot += 'echo "loop-aes" >> /etc/initramfs-tools/modules\n' 
+		#modExecScrChroot += 'sed -i \'495s/"loop"/"loop-aes"/\' /usr/share/initramfs-tools/scripts/live\n'    
+		modExecScrChroot += 'sed -i \'522s/"loop"/"loop-aes"/\' /usr/share/initramfs-tools/scripts/live\n'    
+		modExecScrChroot += 'sed -i \'231s/root/$(basename ${fspath})/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
+   		modExecScrChroot += 'sed -i \'231s/filesystem: /filesystem: \\\n/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
+   		#modExecScrChroot += 'sed -i \'1054s/"-r"//\' /usr/share/initramfs-tools/scripts/live\n' 
+   		#modExecScrChroot += 'sed -i \'236s/\/sbin\/losetup ${options}/losetup/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
+   		#modExecScrChroot += 'sed -i \'1052s/"/" && echo $imagename | grep "filesystem"/\' /usr/share/initramfs-tools/scripts/live\n' 
+   		
+
+	if self.execModulesEnabled == True:
             print _('Running modules...')
-            modExecScrChroot = '#!/bin/sh\n\ncd /tmp ;\n'
-	    modExecScrChroot += 'export DISPLAY=127.0.0.1:5.0 \n'
- 	    modExecScrChroot += 'bash \"/tmp/init.sh\"' + ' ;\n '
- 	    
- 	    modExecScr = '#!/bin/sh\n\n'
-            modExecScr += 'chmod +x \"' + os.path.join(self.ciwsRootDir, "artwork/"+self.artwork+".artscript")+ '\"' + ' ;\n '
-	    modExecScr += 'bash \"' + os.path.join(self.ciwsRootDir, "artwork/"+self.artwork+".artscript")+ '\"' + ' ;\n '
-	    # copy all "execute" enabled scripts proper location (chroot or customdir)
-            
-	   
             # find all modules in chroot and chain together and run
             for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "scripts/")):
                 for execMod in sorted(execModFiles):
@@ -3586,79 +3637,81 @@ class Reconstructor:
             modExecScrChroot += '\necho \'--------------------\'\necho \'Modules Finished...\'\n'
             modExecScrChroot += 'echo Running Core_end \n'
             modExecScrChroot += 'bash \"/tmp/end_Lampp.sh\"' + ' ;\n '
-            modExecScrChroot += 'sleep 10'
-            #modExecScrChroot += 'echo \'Press [Enter] to continue...\'\nread \n'
-            #print modExecScr
-            fModExec=open(os.path.join(self.customDir, "scripts/module-exec.sh"), 'w')
-            fModExec.write(modExecScr)
-            fModExec.close()
-	    os.popen('chmod a+x ' + os.path.join(self.customDir, "scripts/module-exec.sh"))
-            #print modExecScrChroot
-            fModExecChroot=open(os.path.join(self.customDir, "chroot/tmp/module-exec.sh"), 'w')
-            fModExecChroot.write(modExecScrChroot)
-            fModExecChroot.close()
-            os.popen('chmod a+x ' + os.path.join(self.customDir, "chroot/tmp/module-exec.sh"))
+	    
+        modExecScrChroot += 'sleep 10'
+	    
+        #modExecScrChroot += 'echo \'Press [Enter] to continue...\'\nread \n'
+        #print modExecScr
+        fModExec=open(os.path.join(self.customDir, "scripts/module-exec.sh"), 'w')
+        fModExec.write(modExecScr)
+        fModExec.close()
+	os.popen('chmod a+x ' + os.path.join(self.customDir, "scripts/module-exec.sh"))
+        #print modExecScrChroot
+        fModExecChroot=open(os.path.join(self.customDir, "chroot/tmp/module-exec.sh"), 'w')
+        fModExecChroot.write(modExecScrChroot)
+        fModExecChroot.close()
+        os.popen('chmod a+x ' + os.path.join(self.customDir, "chroot/tmp/module-exec.sh"))
              	   	
-	    #os.popen('xterm -title \'Reconstructor Module Exec\' -e chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/module-exec.sh')
-            # copy dns info
-            print _("Copying DNS info...")
-            os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
-            # mount /proc
-            print _("Mounting /proc filesystem...")
-            os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
-            # mount /sys
-            print _("Mounting /sys filesystem...")
-            #os.popen('mount -t sysfs none \"' + os.path.join(self.customDir, "chroot/sys") + '\"')
-            # mount 
-	    print _("Mounting /dev/pts filesystem...")
-            #os.popen('mount -t devpts none \"' + os.path.join(self.customDir, "chroot/dev/pts") + '\"')
-            # copy apt.conf
-            print _("Copying apt.conf configuration...")
-            if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d")):
+	#os.popen('xterm -title \'Reconstructor Module Exec\' -e chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/module-exec.sh')
+        # copy dns info
+        print _("Copying DNS info...")
+        os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
+        # mount /proc
+        print _("Mounting /proc filesystem...")
+        os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
+        # mount /sys
+        print _("Mounting /sys filesystem...")
+        #os.popen('mount -t sysfs none \"' + os.path.join(self.customDir, "chroot/sys") + '\"')
+        # mount 
+	print _("Mounting /dev/pts filesystem...")
+        #os.popen('mount -t devpts none \"' + os.path.join(self.customDir, "chroot/dev/pts") + '\"')
+        # copy apt.conf
+        print _("Copying apt.conf configuration...")
+        if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d")):
                 os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
-            os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
-            # copy wgetrc
-            print _("Copying wgetrc configuration...")
-            # backup
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
-            os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
-            print _("Copying hostname configuration...")
-            # backup
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
-            os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
-            os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
-            # run module script
-            os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/module-exec.sh')
-            os.system('bash \"' + os.path.join(self.customDir, "scripts/module-exec.sh")+ '\"')
-	
-	    # cleanup
-            #os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
-            # restore wgetrc
-            print _("Restoring wgetrc configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-            print _("Restoring hostname configuration...")
+        os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
+        # copy wgetrc
+        print _("Copying wgetrc configuration...")
+        # backup
+        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
+        os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
+        print _("Copying hostname configuration...")
+        # backup
+        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
+        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
+        os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
+        os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
+        # run module script
+           
+	os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/module-exec.sh')
+        os.system('bash \"' + os.path.join(self.customDir, "scripts/module-exec.sh")+ '\"')
+	        
+	# cleanup
+        #os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
+        # restore wgetrc
+        print _("Restoring wgetrc configuration...")
+        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
+        print _("Restoring hostname configuration...")
             
-	    os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
+	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
+        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
 
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-
-            # remove apt.conf
-            #print _("Removing apt.conf configuration...")
-            #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/*") + '\"')
-            # remove dns info
-            print _("Removing DNS info...")
-            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
-            # umount /proc
-            print _("Umounting /proc...")
-            os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
-	    # umount /sys
-	    print _("Umounting /sys...")
-            #os.popen('umount \"' + os.path.join(self.customDir, "chroot/sys/") + '\"')
-	    # umount /dev/pts
-	    print _("Umounting /dev/pts...")
-            #os.popen('umount \"' + os.path.join(self.customDir, "chroot/dev/pts") + '\"')
-		
+        # remove apt.conf
+        #print _("Removing apt.conf configuration...")
+        #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/*") + '\"')
+        # remove dns info
+        print _("Removing DNS info...")
+        os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
+        # umount /proc
+        print _("Umounting /proc...")
+        os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
+	# umount /sys
+	print _("Umounting /sys...")
+        #os.popen('umount \"' + os.path.join(self.customDir, "chroot/sys/") + '\"')
+	# umount /dev/pts
+	print _("Umounting /dev/pts...")
+        #os.popen('umount \"' + os.path.join(self.customDir, "chroot/dev/pts") + '\"')
+	
         
         # manual software
         # check for manual install
@@ -3804,7 +3857,15 @@ class Reconstructor:
 		   	
 		        #else:
 		            #os.popen(self.timeCmd + ' ' + mksquashfs + ' \"' + os.path.join(self.customDir, "chroot/") + '\"' + ' \"' + os.path.join(self.customDir, "remaster/casper/filesystem.squashfs") + '\"')
-
+		if self.encryption != "disabled":		
+			fscriptEncryption=open(os.path.join(self.customDir, "/tmp/encryption"), 'w')
+        		fscriptEncryption.write(self.encryption)
+        		fscriptEncryption.close()
+			fscriptPassphrase=open(os.path.join(self.customDir, "/tmp/squashfspwd"), 'w')
+        		fscriptPassphrase.write(self.encryptionpassphrase)
+        		fscriptPassphrase.close()
+			os.system('bash \"' + self.scriptDir + '/encrypt.sh\"')
+			#os.popen('sed -i \"s/boot=live/boot=live encryption=' + self.encryption + '/g\" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg") ) 
 		# remove windows programs
 		if self.LiveCdRemovePrograms == True:
 		    print _('Removing Win32 versions of Firefox, Thunderbird, etc. ...')
