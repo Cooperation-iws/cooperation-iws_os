@@ -40,7 +40,7 @@ function INSTALL
 apt-get install --assume-yes --force-yes cgiirc
 
 sed -i "s/irc.debian.org/$url_default_server/" /etc/cgiirc/cgiirc.config
-sed -i "s/127.0.0.0/8/*.*.*.* 4/" /etc/cgiirc/ipaccess
+sed -i "s/127.0.0.0/8/*.*.*.*/" /etc/cgiirc/ipaccess
 ln -s /usr/share/cgiirc/www /var/www/cgiirc
 }
 
@@ -55,10 +55,10 @@ function CREATE_WUI
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url><![CDATA[http://localhost:3000]]></item_url>
+	<item_url>/cgiirc/</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
+	<item_admin_url>/cgiirc/</item_admin_url>
 	<item_init_start>/etc/init.d/ntop start</item_init_start>
 	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
 </item>
@@ -66,10 +66,10 @@ echo "
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url><![CDATA[http://localhost:3000]]></item_url>
+	<item_url>/cgiirc/</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
+	<item_admin_url>/cgiirc/</item_admin_url>
 	<item_init_start>/etc/init.d/ntop start</item_init_start>
 	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
 </item>
@@ -83,7 +83,7 @@ echo "
 
 
 
-echo "I: Install Ntop"
+echo "I: Install Cgiirc"
 INSTALL
 CREATE_WUI
-echo "I: End of install Ntop"
+echo "I: End of install Cgiirc"

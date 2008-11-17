@@ -1,0 +1,148 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Scuttle'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Web based bookmarking system'
+RMOD_DESCRIPTION_FR='Système en ligne de marque pages sociaux'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Web-based social bookmarking system. Allows multiple users to store, share and tag their favourite links online.  "
+RMOD_VERBOSE_FR="Système en ligne de marque pages sociaux. Permet à plusieurs utilisateurs de partager et tagger leurs liens favoris.  "
+
+
+
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+NB_SCUTTLE=$nb_scuttle
+
+for (( count=1; count<=$NB_SCUTTLE; count++ ))
+do
+SCUTTLE_MYSQL_PWD[$count]=${scuttle_mysql_pwd[$count]}
+MOD_NAME[$count]=${scuttle_name[$count]}
+done
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/scuttle-0.7.4-081117.tar.gz
+tar -xzf scuttle-0.7.4-081117.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Claroline"
+WGET_MIRROIR_FREE
+for (( count=1; count<=$NB_SCUTTLE; count++ ))
+do
+##SCUTTLE
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf Scuttle/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/Scuttle/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Scuttle/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "17s/Scuttle/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${SCUTTLE_MYSQL_PWD[$count]}';
+flush privileges;" > SCUTTLE_db.sql
+
+$BIN_MYSQL -u root < SCUTTLE_db.sql mysql
+rm SCUTTLE_db.sql
+
+sed -i "s/Scuttle/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
+sed -i "s/SCUTTLE_MYSQL_PWD/${SCUTTLE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
+sed -i "s/admin@example.org/${scuttle_admin_email[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
+
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME[$count]/
+
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_SCUTTLE; count++ ))
+do
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+for (( count=1; count<=$NB_SCUTTLE; count++ ))
+do
+echo "
+
+#Claroline
+sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/platform/conf/claro_main.conf.php
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Claroline"
+INSTALL
+CREATE_WUI
+CREATE_INSTALL_SCRIPT
+echo "I: End of install Claroline"
