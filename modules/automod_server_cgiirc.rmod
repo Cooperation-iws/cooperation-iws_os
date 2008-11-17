@@ -1,0 +1,89 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Cgi IRC'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='IRC web client'
+RMOD_DESCRIPTION_FR='Client Web IRC'
+RMOD_VERBOSE="CGI:IRC is a Perl/CGI program that lets you access IRC from a web browser, it is designed to be flexible and has many uses such as an IRC gateway for an IRC network, a chat-room for a website or to access IRC when stuck behind a restrictive firewall. "
+RMOD_VERBOSE_FR="CGI:IRC est un script Perl/CGI qui permet d'accéder à un script IRC à partir d'un navigateur Web. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+. /tmp/app_params
+
+#VARIABLES
+
+NTOP_PWD="cooperation"
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes cgiirc
+
+sed -i "s/irc.debian.org/$url_default_server/" /etc/cgiirc/cgiirc.config
+sed -i "s/127.0.0.0/8/*.*.*.* 4/" /etc/cgiirc/ipaccess
+ln -s /usr/share/cgiirc/www /var/www/cgiirc
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url><![CDATA[http://localhost:3000]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
+	<item_init_start>/etc/init.d/ntop start</item_init_start>
+	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url><![CDATA[http://localhost:3000]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
+	<item_init_start>/etc/init.d/ntop start</item_init_start>
+	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ntop"
