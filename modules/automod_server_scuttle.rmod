@@ -60,7 +60,7 @@ tar -xzf scuttle-0.7.4-081117.tar.gz
 
 function INSTALL
 {
-echo "I: Download Claroline"
+echo "I: Download Scuttle"
 WGET_MIRROIR_FREE
 for (( count=1; count<=$NB_SCUTTLE; count++ ))
 do
@@ -132,7 +132,7 @@ for (( count=1; count<=$NB_SCUTTLE; count++ ))
 do
 echo "
 
-#Claroline
+#Scuttle
 sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/platform/conf/claro_main.conf.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done
@@ -141,8 +141,8 @@ done
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
-echo "I: Install Claroline"
+echo "I: Install Scuttle"
 INSTALL
 CREATE_WUI
 CREATE_INSTALL_SCRIPT
-echo "I: End of install Claroline"
+echo "I: End of install Scuttle"

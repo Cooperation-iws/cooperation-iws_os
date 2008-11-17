@@ -3474,6 +3474,7 @@ class Reconstructor:
 	if self.reqXnest == True: 
 		scriptCustomExec += 'bash \"' + self.scriptDir + 'xnest.sh\"' + ' ;\n'
 	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init_Lampp.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
+ 	scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "cert/" ) + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'end_Lampp.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'shutdown_ws.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
