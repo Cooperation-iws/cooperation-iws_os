@@ -22,6 +22,41 @@ if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
 fi
 
+echo "I: configuring persistence"
+
+echo "#!/bin/sh
+
+PREREQ=\"\"
+DESCRIPTION=\"Copying Ciws persistence...\"
+. /scripts/$CASPER_PATH-functions
+
+prereqs()
+{
+       echo \"\$PREREQ\"
+}
+
+case \$1 in
+# get pre-requisites
+prereqs)
+       prereqs
+       exit 0
+       ;;
+esac
+
+if [ ! -d /root/var/lib ]; then
+log_begin_msg \"\$DESCRIPTION\"
+echo \"
+rm /etc/rc0.d/*$CASPER_PATH* 
+rm /etc/rc6.d/*$CASPER_PATH*
+\" >> /root/etc/ciws/share/etc/rc.ciws
+
+cp -a /root/etc/ciws/* /root/var/.
+log_end_msg	
+fi
+" > /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/001cpvar
+chmod +x /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/001cpvar
+
+
 
 
 echo "I: making initramfs"

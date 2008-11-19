@@ -45,6 +45,14 @@ wget -r -l1 -nd --no-parent --retr-symlinks $URL_FREE/kolab/
 md5sum -c MD5SUMS
 sh install-kolab.sh 2>&1 | tee /root/kolab-install.log
 
+groupmod -g511 kolab
+groupmod -g512 kolab-r
+groupmod -g513 kolab-n
+usermod -u511 -g511 kolab
+usermod -u512 -g512 kolab-r
+usermod -u513 -g513 kolab-n
+
+
 mv /kolab /var/kolab
 
 ln -s /var/kolab /kolab
@@ -60,7 +68,7 @@ ln -s /var/kolab /kolab
 sed -i "s/getUserInput( \"\\\nContinue\", \"n\", \"y\", \"n\" )/\"y\"/" /kolab/etc/kolab/kolab_bootstrap 
 sed -i "s/getUserInput(\"Please enter Hostname including Domain Name (e.g. thishost.domain.tld)\", \$fqdn)/\"$HOSTNAME.$domain\"/" /kolab/etc/kolab/kolab_bootstrap 
 sed -i "s/getUserInput( \"Do you want to set up (1) a master Kolab server or (2) a slave\",/\"1\";/" /kolab/etc/kolab/kolab_bootstrap 
-sed -i "s/getUserInput(\"Enter fully qualified hostname of slave kolab server e.g. thishost.domain.tld [empty when done]\")/\"\"/" /kolab/etc/kolab/kolab_bootstrap 
+sed -i "s/getUserInput(\"Enter fully qualified hostname of slave kolab server e.g. thishost.domain.tld \[empty when done\]\")/\"\"/" /kolab/etc/kolab/kolab_bootstrap 
 sed -i "280s/^/#/" /kolab/etc/kolab/kolab_bootstrap 
 sed -i "s/getUserInput(\"Please enter your Maildomain - if you do not know your mail domain use the fqdn from above\", \$domain)/\"$domain\"/" /kolab/etc/kolab/kolab_bootstrap 
 sed -i "311s/^/#/" /kolab/etc/kolab/kolab_bootstrap 
@@ -70,18 +78,30 @@ sed -i "s/getUserInput( \"Do you want to create CA and certificates\", \"y\", \"
 sed -i "s/getUserInput( \"Do you want to create a certificate request and sign it\",/\"y\";/" /kolab/etc/kolab/kolab_bootstrap 
 sed -i "832s/^/#/" /kolab/etc/kolab/kolab_bootstrap 
 
+
 cp /tmp/cert/cert.pem /kolab/etc/kolab/
 cp /tmp/cert/key.pem /kolab/etc/kolab/
 
 /kolab/etc/kolab/kolab_bootstrap -b
-usermod -u511 kolab
-usermod -u512 kolab-r
-usermod -u513 kolab-n
+#usermod -u511 kolab
+#usermod -u512 kolab-r
+#usermod -u513 kolab-n
 
+
+
+echo "/kolab/var/kolab/www/" > /tmp/web-path
 #nohup /kolab/bin/openpkg rc all start
 
 echo "
 #Kolab
+/kolab/sbin/postalias /kolab/etc/postfix/aliases
+/kolab/sbin/newaliases
+/kolab/sbin/postmap /kolab/etc/postfix/access 
+/kolab/sbin/postmap /kolab/etc/postfix/canonical 
+/kolab/sbin/postmap /kolab/etc/postfix/relocated 
+
+sed -i \"s/127.0.0.1 localhost/127.0.0.1 localhost $HOSTNAME.$domain/\" /etc/hosts
+
 nohup /kolab/bin/openpkg rc all start
 " >> /etc/rc.local
 

@@ -24,7 +24,7 @@ function INSTALL
 {
 
 
-apt-get install --assume-yes --force-yes clamav clamav-daemon zoo unzip arj bzip2 razor pyzor clamav-freshclam mailutils
+apt-get install --assume-yes --force-yes clamav clamav-daemon zoo unzip arj bzip2 razor pyzor clamav-freshclam mailutils clamfs
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 MAIL_REPORT=$clam_mail_report
 else

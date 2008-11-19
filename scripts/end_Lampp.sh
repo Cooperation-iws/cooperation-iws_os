@@ -46,38 +46,6 @@ sed -i -e "16s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 fi
 fi
 
-echo "#!/bin/sh
-
-PREREQ=\"\"
-DESCRIPTION=\"Copying Ciws persistence...\"
-. /scripts/$CASPER_PATH-functions
-
-prereqs()
-{
-       echo \"\$PREREQ\"
-}
-
-case \$1 in
-# get pre-requisites
-prereqs)
-       prereqs
-       exit 0
-       ;;
-esac
-
-if [ ! -d /root/var/lib ]; then
-log_begin_msg \"\$DESCRIPTION\"
-echo \"
-rm /etc/rc0.d/*$CASPER_PATH* 
-rm /etc/rc6.d/*$CASPER_PATH*
-\" >> /root/etc/ciws/share/etc/rc.ciws
-
-cp -a /root/etc/ciws/* /root/var/.
-log_end_msg	
-fi
-" > /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/00cpvar
-
-chmod +x /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/00cpvar
 
 echo "I: Delete examples directory on the desktop"
 CHERCHE='chroot \/root install -o $USERNAME -g $USERNAME -d \/home\/$USERNAME\/Desktop\/'

@@ -5,5 +5,8 @@
 #Kolab 2.2
 domain="ciws.com"
 kolab_pwd="cooperation"
+#Webmin 1.4.20
+webmin_pwd=$generic_mysql_pwd
+#SSH Server
 
 
