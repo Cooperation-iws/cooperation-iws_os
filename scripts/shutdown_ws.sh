@@ -11,16 +11,19 @@ MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
 CASPER_PATH=$(cat /tmp/casper_path)
 OS_TYPE=$(cat /tmp/os_type)
-
+BIN_MYSQL=$(cat /tmp/mysql-path)
 APACHE=$(cat /tmp/apache)
 LIVEUSER=$(cat /tmp/user)
 TMPUSER=$(cat /tmp/tmp_user)
-OS_TYPE=$(cat /tmp/os_type)
 
 SILENT=$(cat /tmp/silent)
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
 fi
+
+echo "I: configuring sources.list"
+mv /etc/apt/sources.list.orig /etc/apt/sources.list
+
 
 echo "I: configuring persistence"
 
@@ -98,7 +101,16 @@ if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
 echo "I: Securing Lampp Server"
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 	if [ "$(echo $secure_mysql | awk  '{print $1}')" != "n" ]; then
-		mysql_secure_installation
+		echo "UPDATE mysql.user SET Password=PASSWORD('$mysql_root_password') WHERE User='root';
+DELETE FROM mysql.user WHERE User='';
+DELETE FROM mysql.user WHERE User='root' AND Host!='localhost';
+DROP DATABASE test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+FLUSH PRIVILEGES;
+" > /tmp/mysql_secure.sql
+$BIN_MYSQL -u root < /tmp/mysql_secure.sql
+
+
 	fi
 	if [ "$(echo $secure_admin | awk  '{print $1}')" != "n" ]; then
 

@@ -48,7 +48,6 @@ export DEBIAN_FRONTEND=noninteractive
 fi
 
 
-
 if [ "$(echo $LANG | grep 'fr')" ]; then
 LANG_UI="FR"
 else
@@ -83,6 +82,8 @@ ADD_USER
 export HOME=/home/liveusb
 echo "liveusb" > /tmp/tmp_user
 
+mv /etc/apt/sources.list /etc/apt/sources.list.orig
+
 if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
 echo "
 deb $DEB_MIRROR_PATH/ $DEB_DIST restricted main universe multiverse
@@ -114,6 +115,13 @@ echo "I: config rc.local"
 echo "#!/bin/sh
 
 " > /etc/rc.local
+
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "etch" ] || [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ] || [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "sid" ] ; then
+echo "#Debianlive Hack
+ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
+
+" >> /etc/rc.local
+fi
 
 echo "I: create persistent directory"
 mkdir $LAMPP_DIRECTORY/share/

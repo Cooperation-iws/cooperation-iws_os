@@ -325,6 +325,9 @@ class Reconstructor:
 	parser.add_option( "--keyblang", 
                     dest="keyblang", default="" ,
                     help="Keyboard Language")
+	parser.add_option( "--locale", 
+                    dest="locale", default="" ,
+                    help="OS localization")
 	parser.add_option( "--ostype", 
                     dest="ostype", default="Server" ,
                     help="Os Type (Server or Client)")
@@ -428,6 +431,7 @@ class Reconstructor:
 	    self.webconvergerLocale = options.webconvergerlocale
 	    self.encryption = options.encryption
 	    self.encryptionpassphrase = options.encryptionpassphrase
+	    self.locale = options.locale
 	else:
 	    self.commandLine = False
 
@@ -2165,7 +2169,7 @@ class Reconstructor:
                 os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
                        	
 		print _("Removing DNS info...")
-            	os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
+            	#os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
             	# umount /proc
             	print _("Umounting /proc...")
             	os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
@@ -3343,7 +3347,7 @@ class Reconstructor:
     def setupDebianLive(self):
 	lhConfig = "lh_config "
 	lhConfig += "-p " + self.DebianLiveType + " "
-	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"686\" --mirror-bootstrap \"' + self.debMirror + '\" --mirror-chroot \"' + self.debMirror + '\" --mirror-binary \"' + self.debMirror + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + self.keyLang + '\" --hostname ' + self.host + ' --username ' + self.user + ' --encryption '+ self.encryption
+	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"686\" --mirror-bootstrap \"' + self.debMirror + '\" --mirror-chroot \"' + self.debMirror + '\" --mirror-binary \"' + self.debMirror + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + self.keyLang + ' locale='+self.locale +'\" --hostname ' + self.host + ' --username ' + self.user + ' --encryption '+ self.encryption
 	
 	scriptDebianLive = 'echo "I: Creating Debian Live CD Linux flavour ' + self.DebianLiveType + ' ' + self.DebianLiveReleaseType + ' + " \n'
 	scriptDebianLive += 'echo "' + lhConfig + '"\n'
@@ -3377,7 +3381,11 @@ class Reconstructor:
 		scriptDebianLive += "sed -i \"107s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
 		scriptDebianLive += "sed -i \"114s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
 		scriptDebianLive += "sed -i \"116s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
-		scriptDebianLive += "sed -i \"73s/losetup/losetup.orig/\" " +self.customDir +"/config/common\n"
+		scriptDebianLive += "sed -i \"106s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
+		scriptDebianLive += "sed -i \"108s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
+		scriptDebianLive += "sed -i \"115s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
+		scriptDebianLive += "sed -i \"118s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
+		#scriptDebianLive += "sed -i \"73s/losetup/losetup.orig/\" " +self.customDir +"/config/common\n"
 		
 		fscriptPassphrase=open(os.path.join(self.customDir, "/tmp/squashfspwd"), 'w')
         	fscriptPassphrase.write(self.encryptionpassphrase)
@@ -3555,10 +3563,11 @@ class Reconstructor:
 	if self.commandLine == False:         
 		self.execModulesEnabled = False;
 	        self.treeModel.foreach(self.checkExecModuleEnabled)
-        
+       
         modExecScrChroot = '#!/bin/sh\n\ncd /tmp ;\n'
 	modExecScrChroot = 'export DEBIAN_FRONTEND=noninteractive\n'
 	modExecScrChroot += 'export DISPLAY=127.0.0.1:5.0 \n'
+ 	modExecScrChroot += 'export LC_ALL=C \n'
  	modExecScrChroot += 'bash \"/tmp/init.sh\"' + ' ;\n '
  	modExecScr = '#!/bin/sh\n\n'
         if self.artwork != "":
@@ -3571,7 +3580,8 @@ class Reconstructor:
 		#modExecScrChroot += 'echo "loop-aes" >> /etc/initramfs-tools/modules\n' 
 		#modExecScrChroot += 'sed -i \'495s/"loop"/"loop-aes"/\' /usr/share/initramfs-tools/scripts/live\n'    
 		#modExecScrChroot += 'sed -i \'522s/"loop"/"loop-aes"/\' /usr/share/initramfs-tools/scripts/live\n'    
-		modExecScrChroot += 'sed -i \'231s/root/$(basename ${fspath}) root:$root/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
+		#modExecScrChroot += 'sed -i \'231s/root/$(basename ${fspath}) root:$root/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
+   		modExecScrChroot += 'sed -i \'231s/root/$(basename ${fspath})/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
    		#modExecScrChroot += 'sed -i \'231s/filesystem: /filesystem: \\n/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
    		#modExecScrChroot += 'sed -i \'1054s/"-r"//\' /usr/share/initramfs-tools/scripts/live\n' 
    		modExecScrChroot += 'sed -i \'236s/\/sbin\/losetup/\/$root\/sbin\/losetup/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
@@ -3710,7 +3720,7 @@ class Reconstructor:
         #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/*") + '\"')
         # remove dns info
         print _("Removing DNS info...")
-        os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
+        #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
         # umount /proc
         print _("Umounting /proc...")
         os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
@@ -3796,7 +3806,7 @@ class Reconstructor:
             os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
            
 	    print _("Removing DNS info...")
-            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
+            #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
             # umount /proc
             print _("Umounting /proc...")
             os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
@@ -3905,13 +3915,13 @@ class Reconstructor:
 		        # build iso according to architecture
 		        if self.LiveCdArch == "x86":
 		            print _("Building x86 ISO...")
-		            os.popen(self.timeCmd + ' mkisofs -o \"' + self.buildLiveCdFilename + '\" -b \"isolinux/isolinux.bin\" -c \"isolinux/boot.cat\" -no-emul-boot -boot-load-size 4 -boot-info-table -V \"' + self.LiveCdDescription + '\" -cache-inodes -r -J -l \"' + os.path.join(self.customDir, "remaster") + '\"')
+		            os.popen('mkisofs -o \"' + self.buildLiveCdFilename + '\" -b \"isolinux/isolinux.bin\" -c \"isolinux/boot.cat\" -no-emul-boot -boot-load-size 4 -boot-info-table -V \"' + self.LiveCdDescription + '\" -cache-inodes -r -J -l \"' + os.path.join(self.customDir, "remaster") + '\"')
 		        elif self.LiveCdArch == "PowerPC":
 		            print _("Building PowerPC ISO...")
-		            os.popen(self.timeCmd + ' mkisofs  -r -V \"' + self.LiveCdDescription + '\" --netatalk -hfs -probe -map \"' + self.hfsMap + '\" -chrp-boot -iso-level 2 -part -no-desktop -hfs-bless ' + '\"' + os.path.join(self.customDir, "remaster/install") + '\" -o \"' + self.buildLiveCdFilename + '\" \"' + os.path.join(self.customDir, "remaster") + '\"')
+		            os.popen('mkisofs  -r -V \"' + self.LiveCdDescription + '\" --netatalk -hfs -probe -map \"' + self.hfsMap + '\" -chrp-boot -iso-level 2 -part -no-desktop -hfs-bless ' + '\"' + os.path.join(self.customDir, "remaster/install") + '\" -o \"' + self.buildLiveCdFilename + '\" \"' + os.path.join(self.customDir, "remaster") + '\"')
 		        elif self.LiveCdArch == "x86_64":
 		            print _("Building x86_64 ISO...")
-		            os.popen(self.timeCmd + ' mkisofs -r -o \"' + self.buildLiveCdFilename + '\" -b \"isolinux/isolinux.bin\" -c \"isolinux/boot.cat\" -no-emul-boot -V \"' + self.LiveCdDescription + '\" -J -l \"' + os.path.join(self.customDir, "remaster") + '\"')
+		            os.popen('mkisofs -r -o \"' + self.buildLiveCdFilename + '\" -b \"isolinux/isolinux.bin\" -c \"isolinux/boot.cat\" -no-emul-boot -V \"' + self.LiveCdDescription + '\" -J -l \"' + os.path.join(self.customDir, "remaster") + '\"')
 	else :
 		self.customDir = self.wTree.get_widget("entryWorkingDir").get_text()	
 		self.isoFilename  = self.wTree.get_widget("entryIsoFilename").get_text()
