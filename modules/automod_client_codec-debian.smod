@@ -1,0 +1,60 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Debian Multimedia Codecs'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Ubuntu Multimedia Codecs'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$(cat /tmp/user)
+DEB_DIST=$(cat /tmp/deb_dist)
+
+echo "
+Name: msttcorefonts/baddldir
+Template: msttcorefonts/baddldir
+Owners: msttcorefonts
+
+Name: msttcorefonts/defoma
+Template: msttcorefonts/defoma
+Value: 
+Owners: msttcorefonts
+Flags: seen
+
+Name: msttcorefonts/dldir
+Template: msttcorefonts/dldir
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/dlurl
+Template: msttcorefonts/dlurl
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/http_proxy
+Template: msttcorefonts/http_proxy
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/savedir
+Template: msttcorefonts/savedir
+Value: 
+Owners: msttcorefonts
+" >> /var/cache/debconf/config.dat
+echo "I: install codec"
+#wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key add -
+#echo "deb http://fr.packages.medibuntu.org/ $DEB_DIST free non-free" >> /etc/apt/sources.list
+apt-get update
+
+
+if [ $(cat /etc/X11/default-display-manager | grep kdm) ]; then 
+echo -e '\E[37;44m'"\033[1m display manager kdm \033[0m"
+DESK_ENV="kdm"
+apt-get remove --assume-yes --force-yes amarok kaffeine
+apt-get install --assume-yes --force-yes amarok kaffeine w32codecs kubuntu-restricted-extras
+else
+apt-get install --assume-yes --force-yes debian-multimedia-keyring gstreamer0.10-ffmpeg gstreamer0.10-plugins-base gstreamer0.10-plugins-good gstreamer0.10-plugins-bad gstreamer0.10-plugins-ugly w32codecs libdvdcss2 flashplayer-mozilla
+apt-get install --assume-yes --force-yes w32codecs libdvdcss2 msttcorefonts
+fi

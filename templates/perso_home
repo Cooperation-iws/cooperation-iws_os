@@ -1,0 +1,45 @@
+#!/bin/bash
+domain="ciws.com"
+generic_admin_email="veille@gensys-net.eu"
+generic_mysql_pwd="mysql_pwd_pwd"
+generic_login_pwd="Mekir9"
+
+###Cooperation-iws gui
+sphider_auto_index="y"
+#Lampp conf
+secure_mysql="y"
+mysql_root_password=$generic_mysql_pwd
+secure_admin="y"
+apache_admin_pwd=$generic_login_pwd
+#Proftpd
+proftpd_pwd=$generic_login_pwd
+#SSH Server
+#Jdicd 1.5
+#Net2ftp 0.97
+net2ftp_admin_mail=$generic_admin_email
+net2ftp_admin_pwd=$generic_login_pwd
+net2ftp_admin_name="admin"
+net2ftp_mysql_pwd=$generic_mysql_pwd
+net2ftp_name="Net2ftp"
+#Ossec 1.5.1 standalone
+ossec_report_address=$generic_admin_email
+#Awstats
+#Cacti 0.8.7b
+cacti_name="Cacti"
+cacti_mysql_pwd=$generic_mysql_pwd
+#Akoie 0.5
+share_akoie_smb="n"
+share_akoie_smb_pwd="n"
+#Clamav antivirus
+clam_mail_report=$generic_admin_email
+#Snort2.8 Base1.3.9 standalone
+snort_registration_key=""
+base_name="Base"
+snort_mysql_pwd=$generic_mysql_pwd
+#Postfix Relay Client
+smtp_postfix_client_relay="smtp.free.fr"
+#Trac 0.11.2 svn
+svn_admin_pwd=$generic_login_pwd
+svn_anonymous_pwd=""
+trac_admin_pwd=$generic_login_pwd
+

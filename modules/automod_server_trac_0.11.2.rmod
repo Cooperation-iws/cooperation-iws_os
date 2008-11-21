@@ -1,0 +1,230 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Trac 0.11.2 svn'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Source code management'
+RMOD_DESCRIPTION_FR='Gestion du code source'
+RMOD_VERBOSE="Subversion is a free/open-source version control system. That is, Subversion manages files and directories, and the changes made to them, over time. This allows you to recover older versions of your data, or examine the history of how your data changed. In this regard, many people think of a version control system as a sort of “time machine”. Trac is an enhanced wiki and issue tracking system for software development projects. Trac uses a minimalistic approach to web-based software project management. Our mission is to help developers write great software while staying out of the way. Trac should impose as little as possible on a team's established development process and policies. "
+RMOD_VERBOSE_FR="Subversion (en abrégé svn) est un système de gestion de versions, distribué sous licence Apache et BSD. Il a été conçu pour remplacer CVS. Ses auteurs s'appuient volontairement sur les mêmes concepts (notamment sur le principe du dépôt centralisé et unique) et considèrent que le modèle de CVS est le bon, et que seule son implémentation est en cause. Le projet a été lancé en février 2000 par CollabNet, avec l'embauche par Jim Blandy de Karl Fogel, qui travaillait déjà sur un nouveau gestionnaire de version. Trac est un système Open Source de gestion complète de projet par Internet, développé en Python."
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
+
+export LC_ALL=C
+LC_ALL=C
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+DISPLAY=127.0.0.1:5.0
+LANG_UI=$(cat /tmp/lang-wui)
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+INSTALL=$(cat /tmp/def_install)
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL_________________________________________________
+
+
+function INSTALL 
+{
+echo "I: Install SVN"
+
+aptitude install -y subversion subversion-tools
+
+mkdir /var/svn
+
+svnadmin create /var/svn/project
+
+aptitude install -y libapache2-svn
+
+sed -i -e "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
+
+echo "
+  <location /svn>
+       # Chargement du module subversion
+       DAV svn
+       # On indique le chemin complet vers le dépôt subversion
+       SVNParentPath  /var/svn
+
+       #Ici on demande une identification avec mot de passe
+       #utilisez htpasswd2 pour créer le fichier
+       AuthType Basic
+       AuthName \"Cooperation-iws : svn\"
+       AuthUserFile /var/private/svn.htpasswd
+       Require valid-user
+
+       # On indique ici le fichier de configuration des permissions d'accès au dépot subversion
+       AuthzSVNAccessFile /var/private/svnperm
+   </location>
+</VirtualHost>
+" >> /etc/apache2/sites-available/default
+
+mkdir /var/private
+
+cd /var/private/
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+htpasswd -cm -b svn.htpasswd admin $svn_admin_pwd
+htpasswd -m -b svn.htpasswd anonymous $svn_anonymous_pwd
+else
+echo "
+----------------Cooperation-iws SVN-------------------
+----------Enter the admin password for svn------------"
+
+htpasswd -cm svn.htpasswd admin
+
+echo "
+----------------Cooperation-iws SVN-------------------
+----------Enter the anonymous password for svn--------"
+
+htpasswd -m svn.htpasswd anonymous
+fi
+echo "
+[/]
+anonymous = r
+admin = rw
+" > /var/private/svnperm
+
+chown -R www-data /var/svn
+chmod -R 775 /var/svn
+
+/etc/init.d/apache2 reload
+sleep 10
+
+#echo "
+#-------------------------Cooperation-iws SVN------------------------------
+#----------Login into the svn repository with admin password---------------"
+
+#svn mkdir http://localhost/svn/project/trunk http://localhost/svn/project/branches http://localhost/svn/project/tags -m "Création des répertoires d'archivage Subversion."  --username=admin
+
+echo "I: End of Install SVN"
+echo "I: Install Trac"
+
+
+aptitude install -y trac
+apt-get install --yes --force-yes python-pygments enscript
+
+mkdir /var/trac
+cd /var/trac
+echo "
+----------------Cooperation-iws SVN-------------------------
+----------Default project name is \"project\"---------------
+----------Default path to repository is /var/svn/project----"
+
+
+trac-admin project initenv  "My Project" "sqlite:db/trac.db" "svn" "/var/svn/project" 
+
+
+
+sed -i -e "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
+echo "
+<Location /trac>
+  SetHandler mod_python
+  PythonHandler trac.web.modpython_frontend
+  PythonInterpreter main
+  PythonOption TracEnv /var/trac/project
+  PythonOption TracUriRoot /trac
+  SetEnv PYTHON_EGG_CACHE /tmp
+</Location>
+</VirtualHost>
+" >> /etc/apache2/sites-available/default
+/etc/init.d/apache2 reload
+
+chown -R www-data /var/trac
+chmod -R 775 /var/trac
+
+cd /var/private/
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+htpasswd -cm -b trac.htpasswd admin $trac_admin_pwd
+else
+echo "
+----------------Cooperation-iws SVN-------------------
+----------Enter the admin password for trac------------"
+
+
+htpasswd -cm trac.htpasswd admin
+fi
+sed -i -e "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
+echo "
+<Location \"/trac/login\">
+        AuthType Basic
+        AuthName \"trac\"
+        AuthUserFile /var/private/trac.htpasswd
+        Require valid-user
+</location>
+</VirtualHost>
+" >> /etc/apache2/sites-available/default
+/etc/init.d/apache2 reload
+
+trac-admin /var/trac/project permission add admin TRAC_ADMIN
+
+echo "I: End of install Trac"
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/svn/project</item_url>
+	<item_name>Subversion</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/svn/project</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/trac</item_url>
+	<item_name>Trac</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/trac</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/svn/project</item_url>
+	<item_name>Subversion</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/svn/project</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/trac</item_url>
+	<item_name>Trac</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/trac</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+INSTALL
+CREATE_WUI
+

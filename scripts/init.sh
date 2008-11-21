@@ -117,10 +117,7 @@ echo "#!/bin/sh
 " > /etc/rc.local
 
 if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "etch" ] || [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ] || [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "sid" ] ; then
-echo "#Debianlive Hack
-ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
-
-" >> /etc/rc.local
+sed -i 's/#send host-name "andare.fugue.com";/send host-name "<hostname>";/' /etc/dhcp3/dhclient.conf
 fi
 
 echo "I: create persistent directory"
