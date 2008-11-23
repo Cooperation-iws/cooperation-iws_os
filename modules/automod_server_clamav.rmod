@@ -24,7 +24,7 @@ function INSTALL
 {
 
 
-apt-get install --assume-yes --force-yes clamav clamav-daemon zoo unzip arj bzip2 razor pyzor clamav-freshclam mailutils clamfs
+apt-get install --assume-yes --force-yes clamav clamav-daemon zoo unzip arj bzip2 razor pyzor clamav-freshclam mailutils 
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 MAIL_REPORT=$clam_mail_report
 else
@@ -61,6 +61,7 @@ echo "04 00,04,08,12,16,20 * * * root /usr/bin/freshclam 1> /dev/null " >> /etc/
 sudo chmod +x /etc/cron.d/freshClam
 
 freshclam
+
 }
 
 #_______________________________________________________________________________________________

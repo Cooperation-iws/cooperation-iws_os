@@ -1,0 +1,204 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Clamav clamfs antivirus'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Clamav antivirus'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+LANG_UI=$(cat /tmp/lang-wui)
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
+
+HOSTNAME=$(cat /tmp/hostname)
+
+
+function INSTALL
+{
+
+
+apt-get install --assume-yes --force-yes clamav clamav-daemon zoo unzip arj bzip2 razor pyzor clamav-freshclam mailutils clamfs
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+MAIL_REPORT=$clam_mail_report
+else
+	echo "-----------------Cooperation-iws----------------------------"
+	echo "---Configure Clamav to report at a specific email address---"
+	echo "-------Else default: admin@ciws.com will be used------------"
+	echo "[N/y]"
+	read r1 < /dev/tty
+	if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
+	MAIL_REPORT="admin@ciws.com"
+	else
+	echo "-------Enter the email address the scan reports will be sent on----------"
+	read MAIL_REPORT < /dev/tty
+	fi
+
+fi
+
+echo "#/bin/bash
+#
+#
+/usr/bin/clamscan -r -i \$1 > /tmp/scan_report
+if [ -z \"\$(cat /tmp/scan_report | grep 'Infected files: 0')\" ]; then
+\$(cat /tmp/scan_report | mail $MAIL_REPORT -s \"Clamav antivirus scan: VIRUS FOUND\")
+fi
+" > /var/share/lampp/clamav_scan
+chmod +x /var/share/lampp/clamav_scan
+
+
+echo "*/14 * * * * root /var/share/lampp/clamav_scan \"/var\"" > /etc/cron.d/clamScan
+sudo chmod +x /etc/cron.d/clamScan
+echo "03 2 * * * root /var/share/lampp/clamav_scan \"/\"" > /etc/cron.d/clamScan_all
+sudo chmod +x /etc/cron.d/clamScan_all
+echo "04 00,04,08,12,16,20 * * * root /usr/bin/freshclam 1> /dev/null " >> /etc/cron.d/freshClam
+sudo chmod +x /etc/cron.d/freshClam
+
+freshclam
+mkdir /clamfs
+mkdir /clamfs/tmp
+
+cat << EOF_CLAMFS > /etc/clamfs.xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Only three options are mandatory:
+      <clamd socket="" />
+      <filesystem root="" />
+      <filesystem mountpoint="" />
+
+     All other can be removed, but this will disable related subsystem.
+     For example removing <cache ... /> will disable caching completly. -->
+
+<clamfs>
+	<!-- Clamd socket -->
+        <clamd socket="/var/run/clamav/clamd.ctl" />
+
+	<!-- File system settings
+	     root       - real directory to attach as our root
+	     mountpoint - where to attach our root
+	     public     - limit access to process owner only or make
+	    		  file system publicly available for all users
+	     nonempty	- allow mount to directory which contains
+	    		  files or sub-directories -->
+	<filesystem root="/tmp" mountpoint="/clamfs/tmp" public="yes" nonempty="yes" />
+
+	<!-- Maximal file size (in bytes).
+	     This option can speed up access to large files, as they will be
+	     never scanned. On the other hand attacker can append long portion
+	     of junk at the end of file to make it big enough to be omitted. -->
+	<file maximal-size="102097152" /> <!-- 2MiB -->
+	
+	<!-- Whitelisted files are never scanned.
+	     This can speed up access to some files, but be careful with this,
+	     some data files like JPEG, RIFF or WMF can be prepared to cause
+	     problems (like buffers overflows) in applications and thus execute
+	     malicious code even not being executable itself. Finally even text
+	     files can have "modeline" causing problems in some buggy editors. -->
+	<whitelist>
+	    <exclude extension="txt" /> <!-- text files -->
+	    <exclude extension="dbx" /> <!-- form ClamWin -->
+	    <exclude extension="tbb" /> <!-- form ClamWin -->
+	    <exclude extension="pst" /> <!-- form ClamWin -->
+	    <exclude extension="dat" /> <!-- form ClamWin -->
+	    <exclude extension="log" /> <!-- form ClamWin -->
+	    <exclude extension="nsf" /> <!-- form ClamWin -->
+	    <exclude extension="ntf" /> <!-- form ClamWin -->
+	</whitelist>
+
+	<!-- Blacklisted files are scanned regardless of their sizes -->	
+	<blacklist>
+	    <include extension="exe" /> <!-- executable file -->
+	    <include extension="com" /> <!-- executable file -->
+	    <include extension="dll" /> <!-- library -->
+	    <include extension="sys" /> <!-- system file / driver -->
+	    <include extension="vbs" /> <!-- Visual Basic Script -->
+	    <include extension="bat" /> <!-- DOS Batch file -->
+	    <include extension="cmd" /> <!-- Windows Command file -->
+	</blacklist>
+
+	<!-- How many entries to keep in cache and for how long (in ms) -->
+	<cache entries="16384" expire="10800000" /> <!-- 3h -->
+
+	<!-- Logging method (stdout, syslog or file) -->
+	<!-- <log method="stdout" verbose="yes" /> -->
+	<log method="syslog" />
+	<log method="file" filename="/var/log/clamfs.log" verbose="yes" />
+
+	<!-- Send mail when virus is found -->
+	<mail server="localhost" to="$MAIL_REPORT" from="$MAIL_REPORT"
+	subject="ClamFS: Virus detected on $HOSTNAME" />
+
+	<!-- Debug settings -->
+	<!-- <debug threads="no" fork="no" /> -->
+</clamfs>
+EOF_CLAMFS
+
+cat << EOT > /etc/init.d/clamfs
+#!/bin/bash
+
+PIDFILE=/var/run/clamfs.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "Clamfs daemon has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting Clamfs daemon"
+      clamfs /etc/clamfs.xml & > /dev/null 2>&1
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping Clamfs daemon."
+      rm -f \$PIDFILE
+      fusermount -u /clamfs/tmp
+      killall -9 clamfs 
+      
+      exit
+    fi
+      echo "Clamfs daemon is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOT
+
+chmod 0755 /etc/init.d/clamfs
+
+update-rc.d clamfs defaults
+
+echo "#clamfs
+/etc/init.d/clamfs stop
+/etc/init.d/clamfs start
+" >> /etc/rc.local
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+echo "I: Install Clamav"
+INSTALL
+echo "I: End of Install Clamav"

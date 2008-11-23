@@ -12,3 +12,4 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 echo "I: install Multimedia software"
 apt-get install --assume-yes --force-yes ekiga filezilla-locales grsync vlc avahi-discover
+apt-get install --assume-yes --force-yes firefox prism

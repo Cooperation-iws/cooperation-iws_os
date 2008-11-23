@@ -92,6 +92,8 @@ cp /tmp/cert/key.pem /kolab/etc/kolab/
 
 nohup /kolab/bin/openpkg rc all start
 
+echo "04 00,04,08,12,16,20 * * * root /kolab/bin/freshclam 1> /dev/null " >> /etc/cron.d/freshClamKolab
+sudo chmod +x /etc/cron.d/freshClamKolab
 
 echo "/kolab/var/kolab/www" > /tmp/web-path
 

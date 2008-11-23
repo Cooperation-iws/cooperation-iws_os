@@ -182,14 +182,6 @@ cp -r jdictd15/* $WWW_DIRECTORY/$MOD_NAME/.
 
 cat << EOT > /etc/init.d/jdictd
 #!/bin/bash
-# openoffice.org  headless server script
-#
-# chkconfig: 2345 80 30
-# description: headless openoffice server script
-# processname: openoffice
-# 
-# Author: Vic Vijayakumar
-# Modified by Federico Ch. Tomasczik
 #
 
 PIDFILE=/var/run/jdictd.pid
