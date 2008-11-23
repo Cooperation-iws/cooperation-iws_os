@@ -13,7 +13,7 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_VERBOSE="Kolab is a Groupware Solution for Emails, Appointments, Contacts and more. It supports mixed client environments (Outlook/KDE) because of an open storage format. Any email client speaking standard protocols can be served."
 RMOD_VERBOSE_FR="Kolab est une solution de travail collaboratif pour les eMails, les rendez vous, les contacts, ... Kolab supporte les environnements Outlook et KDE. "
-
+RMOD_REQ_APACHE=False
 LANG_UI=$(cat /tmp/lang-wui)
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
@@ -45,13 +45,19 @@ wget -r -l1 -nd --no-parent --retr-symlinks $URL_FREE/kolab/
 md5sum -c MD5SUMS
 sh install-kolab.sh 2>&1 | tee /root/kolab-install.log
 
-groupmod -g511 kolab
-groupmod -g512 kolab-r
-groupmod -g513 kolab-n
-usermod -u511 -g511 kolab
-usermod -u512 -g512 kolab-r
-usermod -u513 -g513 kolab-n
+gpasswd -a kolab kolab
+gpasswd -a kolab-r kolab-r
+gpasswd -a kolab-n kolab-n
 
+#groupmod -g511 kolab
+#groupmod -g512 kolab-r
+#groupmod -g513 kolab-n
+#usermod -u511 -g511 kolab
+#usermod -u512 -g512 kolab-r
+#usermod -u513 -g513 kolab-n
+usermod -u511 kolab
+usermod -u512 kolab-r
+usermod -u513 kolab-n
 
 mv /kolab /var/kolab
 
@@ -83,27 +89,306 @@ cp /tmp/cert/cert.pem /kolab/etc/kolab/
 cp /tmp/cert/key.pem /kolab/etc/kolab/
 
 /kolab/etc/kolab/kolab_bootstrap -b
-#usermod -u511 kolab
-#usermod -u512 kolab-r
-#usermod -u513 kolab-n
+
+nohup /kolab/bin/openpkg rc all start
 
 
-
-echo "/kolab/var/kolab/www/" > /tmp/web-path
-#nohup /kolab/bin/openpkg rc all start
+echo "/kolab/var/kolab/www" > /tmp/web-path
 
 echo "
 #Kolab
 /kolab/sbin/postalias /kolab/etc/postfix/aliases
-/kolab/sbin/newaliases
-/kolab/sbin/postmap /kolab/etc/postfix/access 
-/kolab/sbin/postmap /kolab/etc/postfix/canonical 
-/kolab/sbin/postmap /kolab/etc/postfix/relocated 
+rm /kolab/var/imapd/spool/domain/*/*/*/user/*/cyrus.header 
+rm /kolab/var/imapd/spool/domain/*/*/*/user/*/cyrus.cache
+rm /kolab/var/imapd/spool/domain/*/*/*/user/*/cyrus.index
+sudo -u kolab-r /kolab/bin/cyrreconstruct
 
 sed -i \"s/127.0.0.1 localhost/127.0.0.1 localhost $HOSTNAME.$domain/\" /etc/hosts
 
 nohup /kolab/bin/openpkg rc all start
 " >> /etc/rc.local
+
+echo "
+dn: dc=$kolab_domain_name,dc=$kolab_domain_ext
+dc: $kolab_domain_name
+objectClass: top
+objectClass: domain
+
+entryUUID: f434699e-4cff-102d-8592-251b772fc716
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164002Z
+entryCSN: 20081122164002Z#000000#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164002Z
+
+dn: k=kolab,dc=$kolab_domain_name,dc=$kolab_domain_ext
+k: kolab
+kolabHost: $HOSTNAME.$kolab_domain_name.$kolab_domain_ext
+postfix-mydomain: $kolab_domain_name.$kolab_domain_ext
+postfix-mydestination: $kolab_domain_name.$kolab_domain_ext
+postfix-mynetworks: 127.0.0.0/8
+postfix-enable-virus-scan: TRUE
+cyrus-autocreatequota: 100000
+cyrus-quotawarn: 80
+cyrus-admins: manager
+cyrus-imap: TRUE
+cyrus-pop3: FALSE
+cyrus-imaps: TRUE
+cyrus-pop3s: TRUE
+cyrus-sieve: TRUE
+apache-http: FALSE
+apache-allow-unauthenticated-fb: FALSE
+uid: freebusy
+userPassword:: ZnJlZWJ1c3k=
+objectClass: top
+objectClass: kolab
+
+entryUUID: f439ab8e-4cff-102d-8593-251b772fc716
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164002Z
+entryCSN: 20081122164002Z#000001#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164002Z
+
+dn: cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+cn: internal
+objectClass: top
+objectClass: kolabNamedObject
+
+entryUUID: f43d3c18-4cff-102d-8594-251b772fc716
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164002Z
+entryCSN: 20081122164002Z#000002#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164002Z
+
+dn: cn=domains,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+cn: domains
+objectClass: top
+objectClass: kolabNamedObject
+
+entryUUID: f44014f6-4cff-102d-8595-251b772fc716
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164002Z
+entryCSN: 20081122164002Z#000003#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164002Z
+
+dn: cn=external,dc=$kolab_domain_name,dc=$kolab_domain_ext
+cn: external
+objectClass: top
+objectClass: kolabNamedObject
+
+entryUUID: f4410316-4cff-102d-8596-251b772fc716
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164002Z
+entryCSN: 20081122164002Z#000004#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164002Z
+
+dn: cn=groups,dc=$kolab_domain_name,dc=$kolab_domain_ext
+cn: groups
+objectClass: top
+objectClass: kolabNamedObject
+
+entryUUID: f441ebaa-4cff-102d-8597-251b772fc716
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164002Z
+entryCSN: 20081122164002Z#000005#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164002Z
+
+dn: cn=resources,dc=$kolab_domain_name,dc=$kolab_domain_ext
+cn: resources
+objectClass: top
+objectClass: kolabNamedObject
+
+entryUUID: f442e500-4cff-102d-8598-251b772fc716
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164002Z
+entryCSN: 20081122164002Z#000006#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164002Z
+
+dn: cn=admin,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+cn: admin
+objectClass: top
+objectClass: kolabGroupOfNames
+member: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+
+entryUUID: f443d514-4cff-102d-8599-251b772fc716
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164002Z
+entryCSN: 20081122164002Z#000007#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164002Z
+
+dn: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+cn: manager
+sn: n/a
+uid: manager
+userPassword:: e1NTSEF9MDhHcUtaVGNjK2JYK29QSS9UM0s3b1FYeWdLdXR5SmM=
+objectClass: top
+objectClass: inetOrgPerson
+objectClass: kolabInetOrgPerson
+
+entryUUID: f446b9f0-4cff-102d-859a-251b772fc716
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164002Z
+entryCSN: 20081122164002Z#000008#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164002Z
+
+dn: cn=nobody,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+cn: nobody
+sn: n/a n/a
+uid: nobody
+userPassword:: e1NTSEF9VTQ1MkxLSDlycjZSWE1XcnpvcHEwOXlmWG04U1dZL2g=
+objectClass: top
+objectClass: inetOrgPerson
+objectClass: kolabInetOrgPerson
+
+entryUUID: f44a4778-4cff-102d-859b-251b772fc716
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164002Z
+entryCSN: 20081122164002Z#000009#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164002Z
+
+dn: cn=calendar@$kolab_domain_name.$kolab_domain_ext,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+cn: calendar@$kolab_domain_name.$kolab_domain_ext
+sn: n/a n/a
+uid: calendar@$kolab_domain_name.$kolab_domain_ext
+userPassword:: e1NTSEF9QXdGYXdaQ2thaER0U01kQXJGNjZGTW5hb2RkMkFxK2E=
+objectClass: top
+objectClass: inetOrgPerson
+objectClass: kolabInetOrgPerson
+
+entryUUID: f44c2764-4cff-102d-859c-251b772fc716
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164002Z
+entryCSN: 20081122164002Z#00000a#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164002Z
+
+dn: cn=maintainer,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+cn: maintainer
+objectClass: top
+objectClass: kolabGroupOfNames
+member: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+
+entryUUID: f44d4d42-4cff-102d-859d-251b772fc716
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164002Z
+entryCSN: 20081122164002Z#00000b#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164002Z
+
+dn: cn=domain-maintainer,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+cn: domain-maintainer
+objectClass: top
+objectClass: kolabGroupOfNames
+member: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+
+entryUUID: f44e3ef0-4cff-102d-859e-251b772fc716
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164002Z
+entryCSN: 20081122164002Z#00000c#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164002Z
+
+dn: cn=Admin admin,dc=$kolab_domain_name,dc=$kolab_domain_ext
+objectClass: top
+objectClass: inetOrgPerson
+objectClass: kolabInetOrgPerson
+sn: admin
+cn: Admin admin
+givenName: Admin
+userPassword:: e1NTSEF9RThKWVBkaDBXZmR5YUcvS3hFNVYyZENxWTNzV2dHZTg=
+mail: $kolab_admin_mail@$kolab_domain_name.$kolab_domain_ext
+uid: $kolab_admin_mail@$kolab_domain_name.$kolab_domain_ext
+kolabHomeServer: $HOSTNAME.$kolab_domain_name.$kolab_domain_ext
+kolabInvitationPolicy: ACT_MANUAL
+
+entryUUID: bd877318-4d00-102d-9587-ebf5750ba745
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164540Z
+entryCSN: 20081122164540Z#000000#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164540Z
+
+dn: cn=postmaster@$kolab_domain_name.$kolab_domain_ext,dc=$kolab_domain_name,dc=$kolab_domain_ext
+objectClass: top
+objectClass: kolabGroupOfNames
+cn: postmaster@$kolab_domain_name.$kolab_domain_ext
+mail: postmaster@$kolab_domain_name.$kolab_domain_ext
+member: cn=Admin admin,dc=$kolab_domain_name,dc=$kolab_domain_ext
+
+entryUUID: c950a480-4d00-102d-9588-ebf5750ba745
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164559Z
+entryCSN: 20081122164559Z#000000#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164559Z
+
+dn: cn=hostmaster@$kolab_domain_name.$kolab_domain_ext,dc=$kolab_domain_name,dc=$kolab_domain_ext
+objectClass: top
+objectClass: kolabGroupOfNames
+cn: hostmaster@$kolab_domain_name.$kolab_domain_ext
+mail: hostmaster@$kolab_domain_name.$kolab_domain_ext
+member: cn=Admin admin,dc=$kolab_domain_name,dc=$kolab_domain_ext
+
+entryUUID: c9520988-4d00-102d-9589-ebf5750ba745
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164559Z
+entryCSN: 20081122164559Z#000001#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164559Z
+
+dn: cn=abuse@$kolab_domain_name.$kolab_domain_ext,dc=$kolab_domain_name,dc=$kolab_domain_ext
+objectClass: top
+objectClass: kolabGroupOfNames
+cn: abuse@$kolab_domain_name.$kolab_domain_ext
+mail: abuse@$kolab_domain_name.$kolab_domain_ext
+member: cn=Admin admin,dc=$kolab_domain_name,dc=$kolab_domain_ext
+
+entryUUID: c952d0fc-4d00-102d-958a-ebf5750ba745
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164559Z
+entryCSN: 20081122164559Z#000002#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164559Z
+
+dn: cn=virusalert@$kolab_domain_name.$kolab_domain_ext,dc=$kolab_domain_name,dc=$kolab_domain_ext
+objectClass: top
+objectClass: kolabGroupOfNames
+cn: virusalert@$kolab_domain_name.$kolab_domain_ext
+mail: virusalert@$kolab_domain_name.$kolab_domain_ext
+member: cn=Admin admin,dc=$kolab_domain_name,dc=$kolab_domain_ext
+
+entryUUID: c9539ba4-4d00-102d-958b-ebf5750ba745
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164600Z
+entryCSN: 20081122164600Z#000000#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164600Z
+
+dn: cn=MAILER-DAEMON@$kolab_domain_name.$kolab_domain_ext,dc=$kolab_domain_name,dc=$kolab_domain_ext
+objectClass: top
+objectClass: kolabGroupOfNames
+cn: MAILER-DAEMON@$kolab_domain_name.$kolab_domain_ext
+mail: MAILER-DAEMON@$kolab_domain_name.$kolab_domain_ext
+member: cn=Admin admin,dc=$kolab_domain_name,dc=$kolab_domain_ext
+
+entryUUID: c95472a4-4d00-102d-958c-ebf5750ba745
+creatorsName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+createTimestamp: 20081122164600Z
+entryCSN: 20081122164600Z#000001#00#000000
+modifiersName: cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext
+modifyTimestamp: 20081122164600Z
+" > /tmp/kolab.diff
+/kolab/bin/ldapadd -D cn=manager,cn=internal,dc=$kolab_domain_name,dc=$kolab_domain_ext -x -w $kolab_pwd -f /tmp/kolab.diff -c
+
 
 }
 

@@ -995,6 +995,7 @@ class Reconstructor:
 	print "Module file name | Description | Author | Version | Require Apache | Run in chroot\n"
         self.choosenModule = []            
         # load modules into the treestore
+	self.otherApacheInstance = False
         for root, dirs, files in os.walk(self.moduleDir):
 		count = 0
                 for f in files:
@@ -1029,12 +1030,14 @@ class Reconstructor:
                        		count +=1
 				self.execModulesEnabled =True
 					
-				if bool(modProps[self.modReqApache]) == True :       
+				if modProps[self.modReqApache] == "True" and self.otherApacheInstance == False:       
 					self.ReqApache = "A"
 					fReqApache=open(os.path.join(self.customDir, "chroot/tmp/apache"), 'w')
 			    		fReqApache.write(self.ReqApache)
 			    		fReqApache.close()
-				
+				elif modProps[self.modReqApache] == "False":
+					self.otherApacheInstance = True
+					os.popen('rm '+os.path.join(self.customDir, "chroot/tmp/apache"))
 			    	if bool(modProps[self.modReqXnest]) == True:      
 					self.reqXnest = True
 				

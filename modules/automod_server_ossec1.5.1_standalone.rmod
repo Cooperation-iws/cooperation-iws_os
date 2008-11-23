@@ -38,7 +38,7 @@ HOSTNAME=$(cat /tmp/hostname)
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
-MOD_NAME="Ossec-wui"
+MOD_NAME="Ossec"
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_WEB_______________________________________
 
@@ -150,7 +150,7 @@ usermod -u501 ossec
 usermod -u502 ossecm
 usermod -u503 ossecr
 #./install.sh
-grep -q '^ossec' /etc/group && sed -i -e "/^ossec/s/$/www-data/" /etc/group
+grep -q '^ossec' /etc/group && sed -i -e "/^ossec/s/$/$apache_user/" /etc/group
 
 
 cat /etc/gdm/gdm.conf | sed -i -e "s/Exclude=nobody/Exclude=nobody,ossec,ossecm,ossecr/" /etc/gdm/gdm.conf
@@ -164,7 +164,7 @@ echo "## Server Wui Config"
 mkdir tmp >/dev/null 2>&1
 chmod 770 tmp/
 chgrp nogroup tmp/
-chown -R www-data:www-data $WWW_DIRECTORY/admin/$MOD_NAME
+chown -R $apache_user:$apache_user $WWW_DIRECTORY/admin/$MOD_NAME
 chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME
 #mkdir $DOSSIER_CHROOT/etc/skel/conf
 #mkdir $DOSSIER_CHROOT/etc/skel/conf/var

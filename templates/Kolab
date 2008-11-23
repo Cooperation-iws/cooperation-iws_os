@@ -3,10 +3,15 @@
 
 
 #Kolab 2.2
-domain="ciws.com"
+kolab_domain_name="ciws"
+kolab_domain_ext="com"
+domain="$kolab_domain_name.$kolab_domain_ext"
+kolab_admin_mail="admin.local"
 kolab_pwd="cooperation"
+apache_user="kolab"
 #Webmin 1.4.20
-webmin_pwd=$generic_mysql_pwd
+webmin_pwd="cooperation"
 #SSH Server
-
+#Ossec 1.5.1 standalone
+ossec_report_address="$kolab_admin_mail@$domain"
 

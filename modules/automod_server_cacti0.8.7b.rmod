@@ -21,7 +21,6 @@ DL_DIR=$(cat /tmp/web_install-path)
 BIN_MYSQL=$(cat /tmp/mysql-path)
 LAMPP_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
@@ -85,12 +84,12 @@ function INSTALL
 {
 echo "I: Cacti download"
 DOWNLOAD
-
-apt-get install --assume-yes --force-yes rrdtool snmp snmpd 
-
+export DEBIAN_FRONTEND=noninteractive
+apt-get install --assume-yes --force-yes rrdtool snmp snmpd mysql-server 
+apt-get remove --assume-yes --force-yes exim4-base
 #Cacti config
 
-echo "*/5 * * * * www-data /usr/bin/php $WWW_DIRECTORY/admin/$MOD_NAME/poller.php > /dev/null 2>&1" >> /etc/cron.d/cacti
+echo "*/5 * * * * $apache_user /usr/bin/php $WWW_DIRECTORY/admin/$MOD_NAME/poller.php > /dev/null 2>&1" >> /etc/cron.d/cacti
 sudo chmod +x /etc/cron.d/cacti
 
 #Cacti 
@@ -111,17 +110,18 @@ flush privileges;
 $BIN_MYSQL -u root < cacti_db.sql 
 rm cacti_db.sql
 chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/
-chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/
+chown -R $apache_user:$apache_user $WWW_DIRECTORY/admin/$MOD_NAME/
 
 sed -i "s/cacti/$MOD_NAME/g" $WWW_DIRECTORY/admin/$MOD_NAME/include/config.php
 sed -i "s/CACTI_MYSQL_PWD/$CACTI_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/include/config.php
-sed -i "s/\"\/var\/www\/admin\/Cacti\/include\"/\"\/var\/www\/admin\/$MOD_NAME\/include\"/g" $WWW_DIRECTORY/admin/$MOD_NAME/include/global.php
+WWW_DIRECTORY_FOR_SED=$(echo $WWW_DIRECTORY | sed 's/\//\\\//g')
+sed -i "s/\"\/var\/www\/admin\/Cacti\/include\"/\"$WWW_DIRECTORY_FOR_SED\/admin\/$MOD_NAME\/include\"/g" $WWW_DIRECTORY/admin/$MOD_NAME/include/global.php
 
 
 echo "
 #Cacti
 chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/
-chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/
+chown -R $apache_user $WWW_DIRECTORY/admin/$MOD_NAME/
 
 " >> /etc/rc.local
 
@@ -172,9 +172,9 @@ echo "
 #CACTI
 #rm -r $WWW_DIRECTORY/admin/$MOD_NAME/rra/*
 rm -r $WWW_DIRECTORY/admin/$MOD_NAME/log/*
-sudo chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/rra
+sudo chown -R $apache_user $WWW_DIRECTORY/admin/$MOD_NAME/rra
 sudo chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/rra
-sudo chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/log
+sudo chown -R $apache_user $WWW_DIRECTORY/admin/$MOD_NAME/log
 sudo chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/log
 " >> $LAMPP_DIRECTORY/config_post_install.sh
 
