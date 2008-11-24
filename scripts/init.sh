@@ -87,8 +87,8 @@ mv /etc/apt/sources.list /etc/apt/sources.list.orig
 if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
 echo "
 deb $DEB_MIRROR_PATH/ $DEB_DIST restricted main universe multiverse
-deb $DEB_MIRROR_PATH/ $DEB_DIST-updates restricted main universe multiverse
-deb $DEB_MIRROR_PATH/ $DEB_DIST-security restricted main universe multiverse
+deb $DEB_MIRROR_SECURITY_PATH/ $DEB_DIST-updates restricted main universe multiverse
+deb $DEB_MIRROR_SECURITY_PATH/ $DEB_DIST-security restricted main universe multiverse
 deb $DEBNONFREE_MIRROR_PATH/ $DEB_DIST free non-free
 " > /etc/apt/sources.list
 else

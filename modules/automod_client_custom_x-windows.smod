@@ -45,7 +45,10 @@ function CUST_KDM
 {
 sudo chown -R $TMPUSER /home/$TMPUSER
 sudo -E -H -u $TMPUSER kcontrol 
+echo "press enter"
+read r < /dev/tty
 sudo chown -R $TMPUSER /home/$TMPUSER
+
 }
 
 if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
