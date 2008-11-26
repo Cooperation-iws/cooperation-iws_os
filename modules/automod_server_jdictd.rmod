@@ -196,7 +196,8 @@ case "\$1" in
       exit
     fi
       echo "Starting Jdictd server"
-      java -cp $WWW_DIRECTORY/$MOD_NAME/jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini & > /dev/null 2>&1
+        cd $WWW_DIRECTORY/$MOD_NAME
+	java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini & > /dev/null 2>&1
       touch \$PIDFILE
     ;;
     stop)

@@ -88,9 +88,12 @@ $BIN_MYSQL -u root < ezpublish_db.sql mysql
 rm ezpublish_db.sql
 
 
-pear channel-discover components.ez.no
+#pear channel-discover components.ez.no
 
-pear install -a ezc/eZComponents
+#pear install -a ezc/eZComponents
+cd $DL_DIR
+wget $URL_FREE/ezc_081125.tar.gz
+tar -xzf ezc_081125.tar.gz -C /usr/share/php/
 
 sed -i "s/admin@ciws.com/$ezpublish_admin_mail/" $WWW_DIRECTORY/${MOD_NAME[$count]}/settings/override/site.ini.append.php
 

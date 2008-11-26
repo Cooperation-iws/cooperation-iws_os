@@ -5,7 +5,7 @@ generic_admin_email="admin@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
-
+#Auto upgrade
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
