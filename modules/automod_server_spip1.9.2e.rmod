@@ -1,45 +1,47 @@
 #!/bin/bash
-
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Lifetype 1.2b'
+RMOD_NAME='Spip 1.9.2e'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Content Management System portal'
 RMOD_DESCRIPTION_FR='Portail de gestion de contenu'
+RMOD_VERBOSE="SPIP is a publishing system for the Internet in which great importance is attached to collaborative working, to multilingual environments, and to simplicity of use for web authors. It is free software, distributed under the GNU/GPL licence. This means that it can be used for any Internet site, whether personal or institutional, non-profit or commercial.  "
+RMOD_VERBOSE_FR="SPIP est un système de publication pour l’Internet qui s’attache particulièrement au fonctionnement collectif, au multilinguisme et à la facilité d’emploi. C’est un logiciel libre, distribué sous la licence GNU/GPL. Il peut ainsi être utilisé pour tout site Internet, qu’il soit associatif ou institutionnel, personnel ou marchand.  "
+
+
+
+
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-RMOD_VERBOSE="LifeType is an open-source blogging platform with support for multiple blogs and users in a single installation."
-RMOD_VERBOSE_FR="Lifetype est une plateforme de blogs écrite en php avec le support multiblogs et multiutilisateurs. "
-
-
 RMOD_REQ_APACHE=True
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
 DL_DIR=$(cat /tmp/web_install-path)
 BIN_MYSQL=$(cat /tmp/mysql-path)
 SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-DISPLAY=127.0.0.1:5.0 
 LANG_UI=$(cat /tmp/lang-wui)
-
-
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
+
 INSTALL=$(cat /tmp/def_install)
 
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
-NB_LIFETYPE=$nb_lifetype
+NB_SPIP=$nb_spip
 
-for (( count=1; count<=$NB_LIFETYPE; count++ ))
+for (( count=1; count<=$NB_SPIP; count++ ))
 do
-LIFETYPE_MYSQL_PWD[$count]=${lifetype_mysql_pwd[$count]}
-MOD_NAME[$count]=${lifetype_name[$count]}
+SPIP_MYSQL_PWD[$count]=${spip_mysql_pwd[$count]}
+MOD_NAME[$count]=${spip_name[$count]}
 done
+
+
 
 
 #_______________________________________________________________________________________________
@@ -48,14 +50,15 @@ done
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/lifetype-1.2-081127.tar.gz
-tar -xzf lifetype-1.2-081127.tar.gz
-#rm zenphoto-1.1.5.zip
+
+wget $URL_FREE/spip-1.9.2e-081127.tar.gz
+tar -xzf spip-1.9.2e-081127.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -63,47 +66,36 @@ tar -xzf lifetype-1.2-081127.tar.gz
 
 function INSTALL
 {
-echo "I: Download Lifetype"
+
+echo "I: Download Spip"
 WGET_MIRROIR_FREE
 
-for (( count=1; count<=$NB_LIFETYPE; count++ ))
-do
-cd $DL_DIR
-mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
-cp -Rf Lifetype/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
-sed -i "15s/Lifetype/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-sed -i "16s/Lifetype/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+for (( count=1; count<=$NB_SPIP; count++ ))
 
+do
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cd $DL_DIR
+cp -Rf Spip/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/Spip/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Spip/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 
 echo "
-grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${LIFETYPE_MYSQL_PWD[$count]}';
-flush privileges;" > lifetype_db.sql
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${SPIP_MYSQL_PWD[$count]}';
+flush privileges;" > spip_db.sql
 
-$BIN_MYSQL -u root < lifetype_db.sql mysql
-rm lifetype_db.sql
-sed -i "30s/Lifetype/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.properties.php
-sed -i "31s/mysql_pwd/${LIFETYPE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.properties.php
-sed -i "32s/Lifetype/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.properties.php
-
-chmod -R 777 $WWW_DIRECTORY/${MOD_NAME[$count]}
+$BIN_MYSQL -u root < spip_db.sql mysql
+rm spip_db.sql
+sed -i "s/spip_connect_db('localhost','','Spip','mysql_pwd','Spip');/spip_connect_db('localhost','','${MOD_NAME[$count]}','${SPIP_MYSQL_PWD[$count]}','${MOD_NAME[$count]}');/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/connect.php 
+echo "
+UPDATE ${MOD_NAME[$count]}.spip_auteurs SET email = '${spip_admin_email[$count]}',
+maj = NOW( ) WHERE spip_auteurs.id_auteur =1 LIMIT 1 ;
+" > spip_credentials.sql
+$BIN_MYSQL -u root < spip_credentials.sql
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
-
-
-echo "<IfModule mod_dir.c>
-        DirectoryIndex summary.php index.html index.php
-</IfModule>
-" > $WWW_DIRECTORY/${MOD_NAME[$count]}/.htaccess
-
-echo "
-UPDATE ${MOD_NAME[$count]}.lt_users SET email = '${lifetype_admin_email[$count]}',
-last_login = NOW( ) WHERE lt_users.id =1 LIMIT 1 ;
-" > lifetype_credentials.sql
-$BIN_MYSQL -u root < lifetype_credentials.sql
-
+  
 done
-
 }
 
 #_______________________________________________________________________________________________
@@ -114,7 +106,7 @@ done
 
 function CREATE_WUI
 {
-for (( count=1; count<=$NB_LIFETYPE; count++ ))
+for (( count=1; count<=$NB_SPIP; count++ ))
 
 do
 echo "
@@ -123,7 +115,7 @@ echo "
 	<item_url>/${MOD_NAME[$count]}</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_admin_url>/${MOD_NAME[$count]}/ecrire/</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
 echo "
@@ -132,13 +124,12 @@ echo "
 	<item_url>/${MOD_NAME[$count]}</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_admin_url>/${MOD_NAME[$count]}/ecrire/</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 
 done
-
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -150,10 +141,10 @@ done
 function CREATE_INSTALL_SCRIPT
 {
 
-for (( count=1; count<=$NB_LIFETYPE; count++ ))
+for (( count=1; count<=$NB_SPIP; count++ ))
 do
 echo "
-#Lifetype
+#Spip
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done
 }
@@ -161,9 +152,9 @@ done
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
-
-echo "I: Install Lifetype"
+echo "I: Install Spip"
 INSTALL
 CREATE_WUI
+
 CREATE_INSTALL_SCRIPT
-echo "I: End of install Lifetype"
+echo "I: End of install Spip"
