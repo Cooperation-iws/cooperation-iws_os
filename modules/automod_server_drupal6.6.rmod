@@ -1,0 +1,162 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Drupal 6.6'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Content Management System portal'
+RMOD_DESCRIPTION_FR='Portail de gestion de contenu'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Drupal is a free software package that allows an individual or a community of users to easily publish, manage and organize a wide variety of content on a website. Tens of thousands of people and organizations are using Drupal to power scores of different web sites. "
+RMOD_VERBOSE_FR="Drupal est un CMS (gestionnaire de contenu) qui permet de créer une grande variété de sites internet : ça va du blog personnel au site internet d'une société, en passant par les sites communautaires, les sites d'informations, les boutiques en ligne… "
+
+
+
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+NB_DRUPAL=$nb_drupal
+
+for (( count=1; count<=$NB_DRUPAL; count++ ))
+do
+DRUPAL_MYSQL_PWD[$count]=${drupal_mysql_pwd[$count]}
+MOD_NAME[$count]=${drupal_name[$count]}
+done
+
+
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+
+wget $URL_FREE/drupal-6.6-081127.tar.gz
+tar -xzf drupal-6.6-081127.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo "I: Download Drupal"
+WGET_MIRROIR_FREE
+
+for (( count=1; count<=$NB_DRUPAL; count++ ))
+
+do
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cd $DL_DIR
+cp -Rf Drupal/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/Drupal/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Drupal/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${DRUPAL_MYSQL_PWD[$count]}';
+flush privileges;" > drupal_db.sql
+
+$BIN_MYSQL -u root < drupal_db.sql mysql
+rm drupal_db.sql
+sed -i "92s/Drupal:mysql_pwd@localhost\/Drupal/${MOD_NAME[$count]}:${DRUPAL_MYSQL_PWD[$count]}@localhost\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/sites/default/settings.php
+echo "
+UPDATE ${MOD_NAME[$count]}.users SET mail = '${drupal_admin_mail[$count]}',
+init = '${drupal_admin_mail[$count]}' WHERE users.uid =1 LIMIT 1 ;
+" > drupal_credential.sql
+$BIN_MYSQL -u root < drupal_credential.sql
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
+  
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_DRUPAL; count++ ))
+
+do
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+
+
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+
+for (( count=1; count<=$NB_DRUPAL; count++ ))
+do
+echo "
+#Drupal
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Drupal"
+INSTALL
+CREATE_WUI
+
+CREATE_INSTALL_SCRIPT
+echo "I: End of install Drupal"
