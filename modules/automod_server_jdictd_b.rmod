@@ -1,0 +1,187 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Jdicd 1.5b'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Translations Dictionnary'
+RMOD_DESCRIPTION_FR='Dictionnaire de traduction'
+RMOD_VERBOSE="JDictd is a set of Java programs that implement the Dictionary Server Protocol (DICT) as specified in RFC 2229. It is used to access dictionary definitions from a set of natural language dictionary databases. The software (including binaries and source code) is distributed on the terms of the GNU General Public License.  "
+RMOD_VERBOSE_FR="JDictd est une application Java qui implémente le Dictionary Server Protocol (DICT) tel que spécifié dans la RFC 2229. Elle est utilisée pour accéder aux définitions des dictionnaires en language naturel stocké en base de données. "
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+MOD_NAME="Dictionnary"
+
+
+#VARIABLES
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/jdictd-all-081128.tar.gz
+tar -xzf jdictd-all-081128.tar.gz
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________DOWNLOAD_______________________________________________
+
+function DOWNLOAD
+{
+if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
+
+WGET_MIRROIR_FREE
+fi
+
+}
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_DOWNLOAD___________________________________________
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+DOWNLOAD
+
+
+ln -s / /cow
+apt-get install --assume-yes --force-yes sun-java5-bin sun-java5-jre
+mkdir $WWW_DIRECTORY/$MOD_NAME/
+cd $DL_DIR
+cp -r Dictionnary/* $WWW_DIRECTORY/$MOD_NAME/.
+
+cat << EOT > /etc/init.d/jdictd
+#!/bin/bash
+#
+
+PIDFILE=/var/run/jdictd.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "Jdictd server has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting Jdictd server"
+        cd $WWW_DIRECTORY/$MOD_NAME
+	java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini & > /dev/null 2>&1
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping Jdictd server."
+      killall -9 soffice && killall -9 soffice.bin
+      rm -f \$PIDFILE
+      exit
+    fi
+      echo "Jdictd server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOT
+
+chmod 0755 /etc/init.d/jdictd
+
+update-rc.d jdictd defaults
+
+
+cd $WWW_DIRECTORY/$MOD_NAME
+nohup java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini &
+
+
+
+echo "
+#Jdict
+
+
+" >> /etc/rc.local
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url><![CDATA[http://localhost:2626]]></item_url>
+	<item_admin_url><![CDATA[http://localhost:2626]]></item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_init_start>/etc/init.d/jdictd start</item_init_start>
+	<item_init_stop>/etc/init.d/jdictd stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url><![CDATA[http://localhost:2626]]></item_url>
+	<item_admin_url><![CDATA[http://localhost:2626]]></item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_init_start>/etc/init.d/jdictd start</item_init_start>
+	<item_init_stop>/etc/init.d/jdictd stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Jdictd"
+INSTALL
+CREATE_WUI
+echo "I: End of install Jdictd"

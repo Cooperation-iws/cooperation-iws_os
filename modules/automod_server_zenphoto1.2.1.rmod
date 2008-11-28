@@ -1,0 +1,142 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Zenphoto1.2.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Pictures gallery'
+RMOD_DESCRIPTION_FR="Galleries d'images"
+RMOD_VERBOSE="Zenphoto is an answer to lots of calls for an online gallery solution that just makes sense. After years of bloated software that does everything and your dishes, zenphoto just shows your photos, simply. It’s got all the functionality and “features” you need, and nothing you don’t. Where the old guys put in a bunch of modules and junk, we put a lot of thought. We hope you agree with our philosopy: simpler is better. Don’t get us wrong though –zenphoto really does have everything you need for your online gallery, and you’ll even stare in awe at some of the innovative innovations we innovated upon.   "
+RMOD_VERBOSE_FR="Zenphoto est un petit logiciel de gestion de collection d'images."
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+DISPLAY=127.0.0.1:5.0 
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+INSTALL=$(cat /tmp/def_install)
+
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+NB_ZENPHOTO=$nb_zenphoto
+
+for (( count=1; count<=$NB_ZENPHOTO; count++ ))
+do
+ZENPHOTO_MYSQL_PWD[$count]=${zenphoto_mysql_pwd[$count]}
+MOD_NAME[$count]=${zenphoto_name[$count]}
+done
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/zenphoto-1.2.1-081128.tar.gz
+tar -xzf zenphoto-1.2.1-081128.tar.gz
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Zenphoto"
+WGET_MIRROIR_FREE
+
+for (( count=1; count<=$NB_ZENPHOTO; count++ ))
+do
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf Zenphoto/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/Zenphoto/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Zenphoto/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+
+
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${ZENPHOTO_MYSQL_PWD[$count]}';
+flush privileges;" > zenphoto_db.sql
+
+$BIN_MYSQL -u root < zenphoto_db.sql mysql
+rm zenphoto_db.sql
+sed -i -e "28s/\"Zenphoto\"/\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php
+sed -i -e "29s/\"mysql_pwd\"/\"${ZENPHOTO_MYSQL_PWD[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php
+sed -i -e "31s/\"Zenphoto\"/\"${MOD_NAME[$count]}\"/" $WWW_DIRECTORY/${MOD_NAME[$count]}/zp-core/zp-config.php
+
+echo "
+UPDATE ${MOD_NAME[$count]}.zp_administrators SET email = '$zenphoto_admin_email[$count]}' WHERE zp_administrators.id =1 LIMIT 1 ;
+" > zenphoto_credentials.sql
+$BIN_MYSQL -u root < zenphoto_credentials.sql
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
+
+done
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_ZENPHOTO; count++ ))
+
+do
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+
+done
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+
+echo "I: Install Zenphoto"
+INSTALL
+CREATE_WUI
+echo "I: End of install Zenphoto"

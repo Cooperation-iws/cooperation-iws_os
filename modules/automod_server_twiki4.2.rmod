@@ -60,10 +60,6 @@ tar -xzf twiki-42-081102.tar.gz
 
 function DOWNLOAD
 {
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
 if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 
 WGET_MIRROIR_FREE
@@ -75,30 +71,6 @@ fi
 #_______________________________________________________________________________________________
 #________________________________________FIN_DOWNLOAD___________________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-MOD_NAME="Twiki"
-else 
-
-MOD_NAME=$(zenity --entry --text "$MESS_NAME TWIKI")
-test $? -ne 0 && break # Bouton Annuler
-while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME=$(zenity --entry --text "$MESS_NAME TWIKI")
-test $? -ne 0 && break # Bouton Annulerdone
-done 
- 
-
-fi
-export MOD_NAME=$MOD_NAME
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
 
 
 #_______________________________________________________________________________________________
