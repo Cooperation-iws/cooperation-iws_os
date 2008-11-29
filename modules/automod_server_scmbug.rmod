@@ -1,0 +1,114 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Scmbug'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+DISPLAY=127.0.0.1:5.0
+LANG_UI=$(cat /tmp/lang-wui)
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+INSTALL=$(cat /tmp/def_install)
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes libxml-sax-perl liblog-log4perl-perl libxml-simple-perl libmail-sendmail-perl libnet-ldap-perl 
+apt-get -f install
+
+#Ntop config
+
+wget http://files.mkgnu.net/files/scmbug/SCMBUG_RELEASE_0-26-12/debs/scmbug-common_0.26.12_all.deb
+wget http://files.mkgnu.net/files/scmbug/SCMBUG_RELEASE_0-26-12/debs/scmbug-doc_0.26.12_all.deb
+wget http://files.mkgnu.net/files/scmbug/SCMBUG_RELEASE_0-26-12/debs/scmbug-server_0.26.12_all.deb
+wget http://files.mkgnu.net/files/scmbug/SCMBUG_RELEASE_0-26-12/debs/scmbug-tools_0.26.12_all.deb
+dpkg -i scmbug-common_0.26.12_all.deb
+dpkg -i scmbug-server_0.26.12_all.deb
+dpkg -i scmbug-tools_0.26.12_all.deb
+dpkg -i scmbug-doc_0.26.12_all.deb
+apt-get -f install
+WWW_DIRECTORY_FOR_SED=$(echo $WWW_DIRECTORY | sed 's/\//\\\//g')
+sed -i "s/\/usr\/share\/bugzilla/$WWW_DIRECTORY_FOR_SED\/$Bugzilla_install_directory/" /etc/scmbug/daemon.conf
+sed -i "153s/0/1/" /etc/scmbug/daemon.conf
+sed -i "156s/'example_user2'/'admin'/" /etc/scmbug/daemon.conf
+sed -i "156s/example_user2@exampledomain.com/$bugzilla_login/" /etc/scmbug/daemon.conf
+/etc/init.d/scmbug-server start
+scmbug_install_glue.pl --scm=Subversion --product=TestProduct   --repository=file://$svn_repository_path --bug=770 --binary-paths=/bin,/usr/bin   --daemon=127.0.0.1
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url><![CDATA[http://localhost:3000]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
+	<item_init_start>/etc/init.d/ntop start</item_init_start>
+	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url><![CDATA[http://localhost:3000]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
+	<item_init_start>/etc/init.d/ntop start</item_init_start>
+	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ntop"
