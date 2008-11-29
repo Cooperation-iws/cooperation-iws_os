@@ -1,0 +1,141 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Bugzilla3.0.5b'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Defect Tracking System'
+RMOD_DESCRIPTION_FR='Système de suivi des bogues'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+RMOD_VERBOSE="Bugzilla is a “Defect Tracking System” or “Bug-Tracking System”. Defect Tracking Systems allow individual or groups of developers to keep track of outstanding bugs in their product effectively. Most commercial defect-tracking software vendors charge enormous licensing fees. Despite being “free”, Bugzilla has many features its expensive counterparts lack. Consequently, Bugzilla has quickly become a favorite of hundreds of organizations across the globe. "
+RMOD_VERBOSE_FR="Bugzilla est un système de suivi des Défauts utilisé par la fondation Mozilla. "
+
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+DISPLAY=127.0.0.1:5.0
+LANG_UI=$(cat /tmp/lang-wui)
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+INSTALL=$(cat /tmp/def_install)
+NB_BUGZILLA=$nb_bugzilla
+
+for (( count=1; count<=$NB_BUGZILLA; count++ ))
+do
+BUGZILLA_MYSQL_PWD[$count]=${bugzilla_mysql_pwd[$count]}
+MOD_NAME[$count]=${bugzilla_name[$count]}
+done
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/bugzilla-3.0.5-081129.tar.gz
+tar -xzf bugzilla-3.0.5-081129.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL_________________________________________________
+
+
+function INSTALL 
+{
+
+WGET_MIRROIR_FREE
+
+apt-get install  --assume-yes --force-yes  apache2 libapache2-mod-perl2 libtemplate-perl libmime-perl \
+                libappconfig-perl libdbd-mysql-perl libtimedate-perl \
+                libgd-gd2-perl libgd-text-perl libxml-twig-perl perlmagick \
+                libemail-send-perl libemail-mime-modifier-perl libchart-perl \
+                libgd-graph-perl libhtml-scrubber-perl 
+for (( count=1; count<=$NB_BUGZILLA; count++ ))
+do
+cd $DL_DIR
+
+cp -Rf Bugzilla $WWW_DIRECTORY/${MOD_NAME[$count]}
+sed -i "15s/Bugzilla/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Bugzilla/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${BUGZILLA_MYSQL_PWD[$count]}';
+flush privileges;" > BUGZILLA_db.sql
+
+$BIN_MYSQL -u root < BUGZILLA_db.sql mysql
+rm BUGZILLA_db.sql
+sed -i -e "s/^\$db_name = 'Bugzilla';/\$db_name = '${MOD_NAME[$count]}';/" \
+       -e "s/^\$db_user = 'Bugzilla';/\$db_user = '${MOD_NAME[$count]}';/" \
+       -e "s/^\$db_pass = 'mysql_pwd';/\$db_pass = '${BUGZILLA_MYSQL_PWD[$count]}';/" $WWW_DIRECTORY/${MOD_NAME[$count]}/localconfig
+sed -i -e "s/^\$webservergroup = '.*';/\$webservergroup = 'www-data';/" $WWW_DIRECTORY/${MOD_NAME[$count]}/localconfig
+./checksetup.pl
+sed -i -e '/<\/VirtualHost>/i\
+  <Directory "\/var\/www\/'${MOD_NAME[$count]}'">\
+    Options +ExecCGI\
+    AllowOverride Limit\
+    DirectoryIndex index.cgi\
+    AddHandler cgi-script .cgi\
+  <\/Directory>' /etc/apache2/sites-available/default
+/etc/init.d/apache2 reload
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_BUGZILLA; count++ ))
+do
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+done
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+echo "I: Install Bugzilla"
+INSTALL
+CREATE_WUI
+echo "I: End of install Bugzilla"
