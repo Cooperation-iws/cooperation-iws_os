@@ -46,8 +46,8 @@ done
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/claroline-1811-081103.tar.gz
-tar -xzf claroline-1811-081103.tar.gz
+wget $URL_FREE/claroline-1811-081128.tar.gz
+tar -xzf claroline-1811-081128.tar.gz
 
 }
 
@@ -70,11 +70,8 @@ mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cp -Rf Claroline/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
 sed -i "15s/Claroline/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 sed -i "16s/Claroline/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-sed -i "17s/Claroline/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-sed -i "15s/DROP/--DROP/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-sed -i "s/latin1_swedish_ci/utf8_general_ci/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 sed -i "s/latin1/utf8/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 
 echo "
 grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${CLAROLINE_MYSQL_PWD[$count]}';
@@ -84,7 +81,7 @@ $BIN_MYSQL -u root < CLAROLINE_db.sql mysql
 rm CLAROLINE_db.sql
 
 sed -i "s/Claroline/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/platform/conf/claro_main.conf.php
-sed -i "s/CLAROLINE_MYSQL_PWD/${CLAROLINE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/platform/conf/claro_main.conf.php
+sed -i "s/mysql_pwd/${CLAROLINE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/platform/conf/claro_main.conf.php
 sed -i "s/admin@ciws.com/${claroline_admin_email[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/platform/conf/claro_main.conf.php
 
 echo "UPDATE ${MOD_NAME[$count]}.cl_user SET email = '${claroline_admin_email[$count]}' WHERE cl_user.user_id =1 LIMIT 1 ;" > claroline_credentials.sql

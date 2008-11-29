@@ -50,6 +50,8 @@ DirIcons="/icon"
 SiteDomain="$HOSTNAME"
 AllowToUpdateStatsFromBrowser=1
 AllowFullYearView=3
+ShowMenu=1
+ShowFlagLinks="en fr de it nl es al ba bg ca tw cn hr cz dk eu fi gl gr he hu is id it jp ko lv nn nb pl pt br ro ru sr sk si se th tr ua cy" 
 EOT
 mkdir /var/cache
 mkdir /var/cache/awstats

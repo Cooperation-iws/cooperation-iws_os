@@ -66,11 +66,11 @@ WGET_MIRROIR_FREE
 for (( count=1; count<=$NB_ZENPHOTO; count++ ))
 do
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
-cp -Rf Zenphoto/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+
+cp -Rf Zenphoto $WWW_DIRECTORY/${MOD_NAME[$count]}
 sed -i "15s/Zenphoto/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 sed -i "16s/Zenphoto/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 
 
 

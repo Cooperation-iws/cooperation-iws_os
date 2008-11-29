@@ -75,11 +75,11 @@ WGET_MIRROIR_FREE
 for (( count=1; count<=$NB_JOOMLA; count++ ))
 do
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
-cp -Rf Joomla/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+
+cp -Rf Joomla $WWW_DIRECTORY/${MOD_NAME[$count]}
 sed -i "15s/Joomla/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 sed -i "16s/Joomla/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root --default_character_set utf8  < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 
 echo "
 grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${JOOMLA_MYSQL_PWD[$count]}';

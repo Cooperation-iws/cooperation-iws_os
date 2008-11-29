@@ -12,6 +12,8 @@ RMOD_DESCRIPTION='Ftp server'
 RMOD_DESCRIPTION_FR='Serveur Ftp'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Proftpd is an Ftp server. To access the Ftp shares of this server, open up an Ftp Client to this server address."
+RMOD_VERBOSE_FR="Proftpd est un serveur Ftp. Pour accéder aux dossiers Ftp de ce serveur, ouvrez un client Ftp à l'adresse de ce serveur."
 
 
 WWW_DIRECTORY=$(cat /tmp/web-path)

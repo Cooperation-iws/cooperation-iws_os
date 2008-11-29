@@ -63,6 +63,9 @@ echo "I: config php"
 sed -i "270s/16/128/" /etc/php5/apache2/php.ini
 sed -i "565s/2/512/" /etc/php5/apache2/php.ini
 sed -i -e  "s/post_max_size = 8M/post_max_size = 32M/" /etc/php5/apache2/php.ini
+
+sed -i "51s/#/default-character-set=utf8/" /etc/mysql/my.cnf
+
 /etc/init.d/apache2 restart
 /etc/init.d/mysql start
 

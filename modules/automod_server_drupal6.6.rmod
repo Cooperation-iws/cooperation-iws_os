@@ -75,12 +75,12 @@ WGET_MIRROIR_FREE
 for (( count=1; count<=$NB_DRUPAL; count++ ))
 
 do
-mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+
 cd $DL_DIR
-cp -Rf Drupal/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+cp -Rf Drupal $WWW_DIRECTORY/${MOD_NAME[$count]}
 sed -i "15s/Drupal/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 sed -i "16s/Drupal/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 
 echo "
 grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${DRUPAL_MYSQL_PWD[$count]}';
@@ -94,6 +94,9 @@ UPDATE ${MOD_NAME[$count]}.users SET mail = '${drupal_admin_mail[$count]}',
 init = '${drupal_admin_mail[$count]}' WHERE users.uid =1 LIMIT 1 ;
 " > drupal_credential.sql
 $BIN_MYSQL -u root < drupal_credential.sql
+
+a2enmod rewrite
+/etc/init.d/apache2 restart
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
   

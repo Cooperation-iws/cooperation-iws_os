@@ -75,11 +75,11 @@ apt-get install --assume-yes --force-yes imagemagick
 for (( count=1; count<=$NB_GALLERY2; count++ ))
 do
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
-cp -Rf Gallery2/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+
+cp -Rf Gallery $WWW_DIRECTORY/${MOD_NAME[$count]}
 sed -i "15s/Gallery/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 sed -i "16s/Gallery/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root  --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 
 
 

@@ -12,6 +12,8 @@ RMOD_DESCRIPTION='Windows file sharing system'
 RMOD_DESCRIPTION_FR='Partage de fichiers avec les systèmes windows'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Samba is a file sharing server between Unix and Windows systems. To access the shares of this server, browse the network files directory of your Windows system."
+RMOD_VERBOSE_FR="Samba est un serveur de fichiers entre les machines Unix et les machines Windows. Pour accéder aux dossiers partagés de ce serveur, naviguez dans le voisinage réseaux de votre machine Windows."
 
 
 WWW_DIRECTORY=$(cat /tmp/web-path)

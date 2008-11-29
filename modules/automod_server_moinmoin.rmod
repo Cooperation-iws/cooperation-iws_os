@@ -126,8 +126,6 @@ echo "
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Moinmoin"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 
