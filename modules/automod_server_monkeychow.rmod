@@ -84,6 +84,7 @@ sed -i "s/Monkeychow/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/c
 sed -i "s/MONKEYCHOW_MYSQL_PWD/${MONKEYCHOW_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
 sed -i "s/email@x.com/${monkeychow_admin_email[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
 
+chmod -R 777 $WWW_DIRECTORY/$MOD_NAME[$count]/
 chown -R www-data $WWW_DIRECTORY/$MOD_NAME[$count]/
 
 done

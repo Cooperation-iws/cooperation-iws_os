@@ -6,7 +6,7 @@ RMOD_NAME='Roundcube 0.2'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Webmail'
-RMOD_DESCRIPTION_FR='E-mail en ligne'
+RMOD_DESCRIPTION_FR='eMails en ligne'
 
 RMOD_VERBOSE="RoundCube Webmail is a browser-based multilingual IMAP client with an application-like user interface. It provides full functionality you expect from an e-mail client, including MIME support, address book, folder manipulation, message searching and spell checking. RoundCube Webmail is written in PHP and requires a MySQL or Postgres database. The user interface is fully skinnable using XHTML and CSS 2."
 RMOD_VERBOSE_FR="RoundCube est client mail en ligne."

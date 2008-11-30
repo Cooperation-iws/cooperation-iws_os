@@ -77,7 +77,7 @@ for (( count=1; count<=$NB_DRUPAL; count++ ))
 do
 
 cd $DL_DIR
-cp -Rf Drupal $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -r Drupal $WWW_DIRECTORY/${MOD_NAME[$count]}
 sed -i "15s/Drupal/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 sed -i "16s/Drupal/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 $BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
@@ -96,6 +96,7 @@ init = '${drupal_admin_mail[$count]}' WHERE users.uid =1 LIMIT 1 ;
 $BIN_MYSQL -u root < drupal_credential.sql
 
 a2enmod rewrite
+sed -i "11s/AllowOverride None/AllowOverride All/" /etc/apache2/sites-available/default
 /etc/init.d/apache2 restart
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}

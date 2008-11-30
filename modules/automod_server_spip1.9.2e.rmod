@@ -92,6 +92,10 @@ UPDATE ${MOD_NAME[$count]}.spip_auteurs SET email = '${spip_admin_email[$count]}
 maj = NOW( ) WHERE spip_auteurs.id_auteur =1 LIMIT 1 ;
 " > spip_credentials.sql
 $BIN_MYSQL -u root < spip_credentials.sql
+echo "
+#Spip
+rm -r $WWW_DIRECTORY/${MOD_NAME[$count]}/tmp/cache/*
+" >> /etc/rc.local
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
   

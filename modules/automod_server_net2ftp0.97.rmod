@@ -43,8 +43,8 @@ MOD_NAME=$net2ftp_name
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/net2ftp-097-081102.tar.gz
-tar -xzf net2ftp-097-081102.tar.gz
+wget $URL_FREE/net2ftp-0.97-081129.tar.gz
+tar -xzf net2ftp-0.97-081129.tar.gz
 }
 
 #_______________________________________________________________________________________________
@@ -62,12 +62,10 @@ WGET_MIRROIR_FREE
 
 ##NET2FTP
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/admin/$MOD_NAME
-cp -Rf Net2ftp/* $WWW_DIRECTORY/admin/$MOD_NAME/.
+
+cp -Rf Net2ftp $WWW_DIRECTORY/admin/$MOD_NAME
 sed -i "15s/Net2ftp/${MOD_NAME[$count]}/" $WWW_DIRECTORY/admin/${MOD_NAME}/database.sql
 sed -i "16s/Net2ftp/${MOD_NAME[$count]}/" $WWW_DIRECTORY/admin/${MOD_NAME}/database.sql
-sed -i "17s/Net2ftp/${MOD_NAME[$count]}/" $WWW_DIRECTORY/admin/${MOD_NAME}/database.sql
-sed -i "15s/DROP/--DROP/" $WWW_DIRECTORY/admin/${MOD_NAME}/database.sql
 
 $BIN_MYSQL -u root < $WWW_DIRECTORY/admin/${MOD_NAME}/database.sql
 
@@ -84,7 +82,7 @@ sed -i "s/webmaster@enter-your-domain-here.com/$net2ftp_admin_mail/" $WWW_DIRECT
 sed -i "54s/cooperation/$net2ftp_admin_pwd/" $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php
 sed -i "53s/admin/$net2ftp_admin_name/" $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php
 sed -i "s/Net2ftp/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php
-sed -i "s/NET2FTP_MYSQL_PWD/$NET2FTP_MYSQL_PWD/g" $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php
+sed -i "s/mysql_pwd/$NET2FTP_MYSQL_PWD/g" $WWW_DIRECTORY/admin/$MOD_NAME/settings.inc.php
 
 chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/
 

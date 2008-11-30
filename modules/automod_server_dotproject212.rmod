@@ -5,12 +5,12 @@ RMOD_SUBCATEGORY='Servers'
 RMOD_NAME='Dotproject 2.1.2'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Project Management Software'
-RMOD_DESCRIPTION_FR='Logiciel de gestion de projet'
+RMOD_DESCRIPTION='Projects management'
+RMOD_DESCRIPTION_FR='Management de projets'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-RMOD_VERBOSE=" "
-RMOD_VERBOSE_FR="  "
+RMOD_VERBOSE="dotProject is a web-based project management application, designed to provide project layout and control functions.To understand dotProject, you need to understand what project management is all about. Project Management is about the structuring of a series of tasks and the schedule associated with those tasks, to achieve an outcome. The nature of those tasks and the schedules and any associated functions (such as project planning, contract negotiation, risk management, cost management and so on) will depend greatly on the nature of the projects that you can management.dotProject aims to provide the project manager with a tool to manage tasks, schedules, communication and sharing. But beware, dotProject will not be all things to all project managers - you may find that other FOSS tools are more appropriate to your particular requirements. You will need to do some investigation and testing to find the product that best suits your requirements. dotProject assumes that you understand the basic concepts of project management and what it is that you are trying to achieve in looking for a project management tool.  "
+RMOD_VERBOSE_FR=" dotProject est un logiciel de gestion de projet destiné à un usage professionnel."
 
 
 

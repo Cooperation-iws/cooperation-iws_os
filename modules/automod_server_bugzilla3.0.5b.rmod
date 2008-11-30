@@ -98,6 +98,8 @@ sed -i -e '/<\/VirtualHost>/i\
     AddHandler cgi-script .cgi\
   <\/Directory>' /etc/apache2/sites-available/default
 /etc/init.d/apache2 reload
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 done
 }
 

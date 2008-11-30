@@ -62,7 +62,7 @@ echo "
 	<item_init_start>/etc/init.d/ntop start</item_init_start>
 	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
 </item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+" >> $WWW_DIRECTORY/cooperation-wui.xml
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
@@ -73,7 +73,7 @@ echo "
 	<item_init_start>/etc/init.d/ntop start</item_init_start>
 	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
 </item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 
 }

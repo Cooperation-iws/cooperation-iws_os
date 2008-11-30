@@ -45,6 +45,10 @@ sed -i "39s/12345/cooperation/" /etc/inspircd/inspircd.conf
 sed -i "14s/127.0.0.1//" /etc/inspircd/inspircd.conf
 sed -i "s/INSPIRCD_ENABLED=0/INSPIRCD_ENABLED=1/" /etc/default/inspircd
 
+echo "
+#Inspircd
+/etc/init.d/inspircd restart
+" >> /etc/rc.local
 }
 
 #_______________________________________________________________________________________________

@@ -1,45 +1,49 @@
 #!/bin/bash
-
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Lifetype 1.2b'
+RMOD_NAME='Elgg 1.1'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Content Management System portal'
-RMOD_DESCRIPTION_FR='Portail de gestion de contenu'
+RMOD_DESCRIPTION='Social Networking'
+RMOD_DESCRIPTION_FR='Réseaux sociaux'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-RMOD_VERBOSE="LifeType is an open-source blogging platform with support for multiple blogs and users in a single installation."
-RMOD_VERBOSE_FR="Lifetype est une plateforme de blogs écrite en php avec le support multiblogs et multiutilisateurs. "
-
-
 RMOD_REQ_APACHE=True
+RMOD_VERBOSE="Elgg is an open, flexible social networking engine, designed to run at the heart of any socially-aware application. Building on Elgg is easy, and because the engine handles common web application and social functionality for you, you can concentrate on developing your idea. "
+RMOD_VERBOSE_FR="Elgg est un système de réseaux sociaux ouvert."
+
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
 DL_DIR=$(cat /tmp/web_install-path)
 BIN_MYSQL=$(cat /tmp/mysql-path)
 SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-DISPLAY=127.0.0.1:5.0 
 LANG_UI=$(cat /tmp/lang-wui)
-
-
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
+
 INSTALL=$(cat /tmp/def_install)
+
+#VARIABLES
+#MYSQL PASSWORD
+ELGG_MYSQL_PWD="ELGG_MYSQL_PWD"
+
+
 
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
-NB_LIFETYPE=$nb_lifetype
+NB_ELGG=$nb_elgg
 
-for (( count=1; count<=$NB_LIFETYPE; count++ ))
+for (( count=1; count<=$NB_ELGG; count++ ))
 do
-LIFETYPE_MYSQL_PWD[$count]=${lifetype_mysql_pwd[$count]}
-MOD_NAME[$count]=${lifetype_name[$count]}
+ELGG_MYSQL_PWD[$count]=${elgg_mysql_pwd[$count]}
+MOD_NAME[$count]=${elgg_name[$count]}
 done
+
 
 
 #_______________________________________________________________________________________________
@@ -48,9 +52,10 @@ done
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/lifetype-1.2-081130.tar.gz
-tar -xzf lifetype-1.2-081130.tar.gz
-#rm zenphoto-1.1.5.zip
+wget $URL_FREE/elgg-1.1-081130.tar.gz
+tar -xzf elgg-1.1-081130.tar.gz
+
+
 
 }
 
@@ -58,51 +63,66 @@ tar -xzf lifetype-1.2-081130.tar.gz
 #________________________________________FIN_WGET_MIRROIR_FREE__________________________________
 
 #_______________________________________________________________________________________________
+#________________________________________DOWNLOAD_______________________________________________
+
+function DOWNLOAD
+{
+
+if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
+
+WGET_MIRROIR_FREE
+fi
+
+
+}
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_DOWNLOAD___________________________________________
+
+
+#_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
 
 
 function INSTALL
 {
-echo "I: Download Lifetype"
-WGET_MIRROIR_FREE
 
-for (( count=1; count<=$NB_LIFETYPE; count++ ))
+echo "I: Download Elgg"
+DOWNLOAD
+for (( count=1; count<=$NB_ELGG; count++ ))
 do
+##ELGG
 cd $DL_DIR
-
-cp -Rf Lifetype $WWW_DIRECTORY/${MOD_NAME[$count]}
-sed -i "15s/Lifetype/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-sed -i "16s/Lifetype/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-$BIN_MYSQL -u root --default_character_set utf8  < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf Elgg/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/Elgg/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Elgg/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 
 echo "
-grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${LIFETYPE_MYSQL_PWD[$count]}';
-flush privileges;" > lifetype_db.sql
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${ELGG_MYSQL_PWD[$count]}';
+flush privileges;" > ELGG_db.sql
 
-$BIN_MYSQL -u root < lifetype_db.sql mysql
-rm lifetype_db.sql
-sed -i "30s/Lifetype/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.properties.php
-sed -i "31s/mysql_pwd/${LIFETYPE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.properties.php
-sed -i "32s/Lifetype/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.properties.php
+$BIN_MYSQL -u root < ELGG_db.sql mysql
+rm ELGG_db.sql
 
-chmod -R 777 $WWW_DIRECTORY/${MOD_NAME[$count]}
+sed -i "s/Elgg/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/engine/settings.php
+sed -i "s/mysql_pwd/${ELGG_MYSQL_PWD[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/engine/settings.php
+
+echo "UPDATE ${MOD_NAME[$count]}.elggusers_entity SET email = '${elgg_admin_email[$count]}' WHERE elggusers_entity.guid =2 LIMIT 1 ;
+UPDATE ${MOD_NAME[$count]}.elggsites_entity SET url = '/${MOD_NAME[$count]}/' WHERE elggsites_entity.guid =1 LIMIT 1 ;" > elgg_credential.sql
+
+mkdir /var/Elgg
+mkdir /var/Elgg/upload
+chown -R www-data /var/Elgg/upload
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
-
-echo "<IfModule mod_dir.c>
-        DirectoryIndex summary.php index.html index.php
-</IfModule>
-" > $WWW_DIRECTORY/${MOD_NAME[$count]}/.htaccess
-
-echo "
-UPDATE ${MOD_NAME[$count]}.lt_users SET email = '${lifetype_admin_email[$count]}',
-last_login = NOW( ) WHERE lt_users.id =1 LIMIT 1 ;
-" > lifetype_credentials.sql
-$BIN_MYSQL -u root < lifetype_credentials.sql
-
 done
+a2enmod rewrite
+
+/etc/init.d/apache2 restart 
 
 }
 
@@ -114,31 +134,29 @@ done
 
 function CREATE_WUI
 {
-for (( count=1; count<=$NB_LIFETYPE; count++ ))
-
+for (( count=1; count<=$NB_ELGG; count++ ))
 do
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
 	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
 	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
-
-
 done
-
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
@@ -150,10 +168,11 @@ done
 function CREATE_INSTALL_SCRIPT
 {
 
-for (( count=1; count<=$NB_LIFETYPE; count++ ))
+for (( count=1; count<=$NB_ELGG; count++ ))
 do
 echo "
-#Lifetype
+#Elgg
+
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done
 }
@@ -161,9 +180,9 @@ done
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
-
-echo "I: Install Lifetype"
+echo "I: Install Elgg"
 INSTALL
 CREATE_WUI
+
 CREATE_INSTALL_SCRIPT
-echo "I: End of install Lifetype"
+echo "I: End of install Elgg"
