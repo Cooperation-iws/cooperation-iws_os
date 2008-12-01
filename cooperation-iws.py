@@ -3470,10 +3470,10 @@ class Reconstructor:
 	else:
 		self.artwork = ""
 		
-	if self.comboboxCiwsCms == "Wordpress":
-		self.cms = "Wordpress"
+	if self.comboboxCiwsCms == "Wordpress-goo":
+		self.cms = "cooperation-wui-wordpress-def-0.7.0-081130.tar.gz"
 	else:
-		self.cms = "Joomla"
+		self.cms = "cooperation-wui-joomla-def-0.7.0-081130.tar.gz"
 
   	if self.checkbuttonAufs == True:
 		os.popen('sed -i "s/splash/splash union=aufs/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
@@ -3490,7 +3490,9 @@ class Reconstructor:
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'end_Lampp.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'shutdown_ws.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
 	scriptCustomExec += 'mkdir ' +  os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + ' ;\n'
- 	scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "cooperation-wui/" + self.cms ) + '/* ' +  os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + '/. ;\n'
+ 	scriptCustomExec += 'cd ' +  os.path.join(self.customDir, "chroot/tmp")+'\n'
+ 	scriptCustomExec += 'wget ' + self.entryLocalMirror +"/" + self.cms  + ' \n'
+ 	scriptCustomExec += 'tar -xzf ' + self.cms + ' -C ' +  os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + ' \n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'cooperation-iws-wui.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'chmod -R 777 ' + os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + ' ;\n'
  	scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/init.sh")   + ' ;\n'

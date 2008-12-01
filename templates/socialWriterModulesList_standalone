@@ -15,8 +15,19 @@ apache_admin_pwd=$generic_mysql_pwd
 smb_pwd=$generic_mysql_pwd
 #Proftpd
 proftpd_pwd=$generic_mysql_pwd
-#Jdicd 1.5
-#Mediawiki 1.12.0
+#Jdicd 1.5b
+#Scuttle
+nb_scuttle=1
+scuttle_mysql_pwd[1]=$generic_mysql_pwd
+scuttle_name[1]="Scuttle"
+scuttle_admin_email[1]=$generic_admin_email
+#Elgg 1.1
+nb_elgg=1
+elgg_mysql_pwd[1]=$generic_mysql_pwd
+elgg_name[1]="Elgg"
+elgg_admin_email[1]=$generic_admin_email
+#Roundcube 0.2
+#Mediawiki 1.13.0
 nb_mediawiki=1
 mediawiki_mysql_pwd[1]=$generic_mysql_pwd
 mediawiki_name[1]="Mediawiki"
@@ -27,22 +38,17 @@ nb_sedna=1
 sedna_mysql_pwd[1]=$generic_mysql_pwd
 sedna_name[1]="Sedna"
 sedna_admin_email[1]=$generic_admin_email
-#Monkeychow
-nb_monkeychow=1
-monkeychow_mysql_pwd[1]=$generic_mysql_pwd
-monkeychow_name[1]="Monkeychow"
-monkeychow_admin_email[1]=$generic_admin_email
-#Scuttle
-nb_scuttle=1
-scuttle_mysql_pwd[1]=$generic_mysql_pwd
-scuttle_name[1]="Scuttle"
-scuttle_admin_email[1]=$generic_admin_email
-#Wordpress2.5.1
+#Drupal 6.6
+nb_drupal=1
+drupal_mysql_pwd[1]=$generic_mysql_pwd
+drupal_name[1]="Drupal"
+drupal_admin_mail[1]=$generic_admin_email
+#Wordpress2.6.3
 nb_wordpress=1
 wordpress_mysql_pwd[1]=$generic_mysql_pwd
 wordpress_name[1]="Wordpress"
 wordpress_admin_email[1]=$generic_admin_email
-#Gallery 2.3RC1
+#Gallery 2.3.0
 nb_gallery=1
 gallery_name[1]="Gallery"
 gallery_mysql_pwd[1]=$generic_mysql_pwd
@@ -53,18 +59,14 @@ nb_ampache=1
 ampache_mysql_pwd[1]=$generic_mysql_pwd
 ampache_name[1]="Ampache"
 #Insoshi
-#Pligg 1.8
-nb_pligg=1
-pligg_mysql_pwd[1]=$generic_mysql_pwd
-pligg_name[1]="Pligg"
-pligg_admin_email[1]=$generic_admin_email
 #SSH Server
 #OpenGoo 1.0
 nb_opengoo=1
 opengoo_mysql_pwd[1]=$generic_mysql_pwd
 opengoo_name[1]="Opengoo"
 opengoo_admin_email[1]=$generic_admin_email
-#Roundcube 0.2
+#Ossec 1.5.1 standalone
+ossec_report_address=$generic_admin_email
 #Net2ftp 0.97
 net2ftp_admin_mail=$generic_admin_email
 net2ftp_admin_pwd=$generic_login_pwd
@@ -74,7 +76,6 @@ net2ftp_name="Net2ftp"
 #Akoie 0.5
 share_akoie_smb="y"
 share_akoie_smb_pwd="n"
-#Awstats
 #Clamav antivirus
 clam_mail_report=$generic_admin_email
 #Cooperation-iws Liveusb 0.3
@@ -83,13 +84,11 @@ webmin_pwd=$generic_mysql_pwd
 #Cacti 0.8.7b
 cacti_name="Cacti"
 cacti_mysql_pwd=$generic_mysql_pwd
-#Ossec 1.5.1 standalone
-ossec_report_address=$generic_admin_email
-#Snort2.8 Base1.3.9 standalone
+#Snort2.8 Base1.3.9 standalone Intrepid
 snort_registration_key=""
 base_name="Base"
 snort_mysql_pwd=$generic_mysql_pwd
-#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Intrepid release
 postfixadmin_name="Mail"
 postfixadmin_mysql_pwd=$generic_mysql_pwd
 public_mail="n"

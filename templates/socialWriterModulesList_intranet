@@ -15,8 +15,19 @@ apache_admin_pwd=$generic_mysql_pwd
 smb_pwd=$generic_mysql_pwd
 #Proftpd
 proftpd_pwd=$generic_mysql_pwd
-#Jdicd 1.5
-#Mediawiki 1.12.0
+#Jdicd 1.5b
+#Scuttle
+nb_scuttle=1
+scuttle_mysql_pwd[1]=$generic_mysql_pwd
+scuttle_name[1]="Scuttle"
+scuttle_admin_email[1]=$generic_admin_email
+#Elgg 1.1
+nb_elgg=1
+elgg_mysql_pwd[1]=$generic_mysql_pwd
+elgg_name[1]="Elgg"
+elgg_admin_email[1]=$generic_admin_email
+
+#Mediawiki 1.13.0
 nb_mediawiki=1
 mediawiki_mysql_pwd[1]=$generic_mysql_pwd
 mediawiki_name[1]="Mediawiki"
@@ -27,12 +38,17 @@ nb_sedna=1
 sedna_mysql_pwd[1]=$generic_mysql_pwd
 sedna_name[1]="Sedna"
 sedna_admin_email[1]=$generic_admin_email
-#Wordpress2.5.1
+#Drupal 6.6
+nb_drupal=1
+drupal_mysql_pwd[1]=$generic_mysql_pwd
+drupal_name[1]="Drupal"
+drupal_admin_mail[1]=$generic_admin_email
+#Wordpress2.6.3
 nb_wordpress=1
 wordpress_mysql_pwd[1]=$generic_mysql_pwd
 wordpress_name[1]="Wordpress"
 wordpress_admin_email[1]=$generic_admin_email
-#Gallery 2.3RC1
+#Gallery 2.3.0
 nb_gallery=1
 gallery_name[1]="Gallery"
 gallery_mysql_pwd[1]=$generic_mysql_pwd
@@ -43,11 +59,6 @@ nb_ampache=1
 ampache_mysql_pwd[1]=$generic_mysql_pwd
 ampache_name[1]="Ampache"
 #Insoshi
-#Pligg 1.8
-nb_pligg=1
-pligg_mysql_pwd[1]=$generic_mysql_pwd
-pligg_name[1]="Pligg"
-pligg_admin_email[1]=$generic_admin_email
 #SSH Server
 #OpenGoo 1.0
 nb_opengoo=1

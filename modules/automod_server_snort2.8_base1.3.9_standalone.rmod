@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Snort2.8 Base1.3.9 standalone'
+RMOD_NAME='Snort2.8 Base1.3.9 standalone Hardy'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Network Intrusion Detection System'
@@ -338,8 +338,9 @@ case "\$1" in
     stop)
     if [ -f \$PIDFILE ]; then
       echo "Stopping Snort server."
-      killall -9 snort && killall -9 snort
-      rm -f \$PIDFILE
+	rm -f \$PIDFILE      
+	killall -9 snort && killall -9 snort
+     
       exit
     fi
       echo "Snort server is not running."

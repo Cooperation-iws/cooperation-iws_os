@@ -15,27 +15,33 @@ apache_admin_pwd=$generic_login_pwd
 smb_pwd=$generic_login_pwd
 #Proftpd
 proftpd_pwd=$generic_login_pwd
-
+#Dotproject 2.1.2
+nb_dotproject=1
+dotproject_mysql_pwd[1]=$generic_mysql_pwd
+dotproject_name[1]="Dotproject"
+dotproject_admin_pwd[1]=$generic_login_pwd
+dotproject_admin_email[1]=$generic_admin_email
 #Achievo 1.3.4
 nb_achievo=1
 achievo_mysql_pwd[1]=$generic_mysql_pwd
 achievo_name[1]="Achievo"
 achievo_admin_pwd[1]=$generic_login_pwd
-#Bugzilla
-bugzilla_mysql_pwd=$generic_mysql_pwd
-bugzilla_name="Bugzilla"
-bugzilla_admin_email=$generic_admin_email
-bugzilla_admin_name="admin"
-bugzilla_admin_pwd=$generic_login_pwd
+#Bugzilla3.0.5b
+nb_bugzilla=1
+bugzilla_mysql_pwd[1]=$generic_mysql_pwd
+bugzilla_name[1]="Bugzilla"
+bugzilla_admin_email[1]=$generic_admin_email
+bugzilla_admin_name[1]="admin"
+bugzilla_admin_pwd[1]=$generic_login_pwd
 #Mantis1.1.2
 nb_mantis=1
 mantis_mysql_pwd[1]=$generic_mysql_pwd
 mantis_name[1]="Mantis"
-#Trac Subversion
+#Trac Subversion 0.11.2
 svn_admin_pwd=$generic_login_pwd
 svn_anonymous_pwd=""
 trac_admin_pwd=$generic_login_pwd
-#Taskfreak 1.8
+#Taskfreak 0.6.2
 nb_taskfreak=1
 taskfreak_mysql_pwd[1]=$generic_mysql_pwd
 taskfreak_name[1]="Taskfreak"

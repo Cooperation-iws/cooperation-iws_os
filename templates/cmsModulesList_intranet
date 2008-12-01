@@ -38,7 +38,7 @@ joomla_admin_mail[1]=$generic_admin_email
 nb_joomla=1
 joomla_mysql_pwd[1]=$generic_mysql_pwd
 joomla_name[1]="Joomla"
-# Moinmoin
+#Moinmoin 1.7.1
 moinmoin_name="Moinmoin"
 moimoin_admin_email=$generic_admin_email
 #Zenphoto1.2.1

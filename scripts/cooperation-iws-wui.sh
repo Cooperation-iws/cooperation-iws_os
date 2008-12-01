@@ -113,21 +113,21 @@ cp -r /tmp/cooperation-wui/* /var/www/.
 sed -i "15s/Sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
 sed -i "16s/Sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
 sed -i "17s/Sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
-$BIN_MYSQL -u root < $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
 
 echo "
 grant all on ${NOM_SPHIDER}.* to ${NOM_SPHIDER}@localhost identified by '$SPHIDER_MYSQL_PWD';
 flush privileges;" > SPHIDER_db.sql
 
-$BIN_MYSQL -u root < SPHIDER_db.sql mysql
+$BIN_MYSQL -u root --default_character_set utf8 < SPHIDER_db.sql mysql
 rm SPHIDER_db.sql
 
  
 
-$BIN_MYSQL -u root < $WWW_DIRECTORY/Cooperation-iws/cooperation-iws.sql
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/Cooperation-iws/cooperation-iws.sql
 echo "grant all on \`cooperation-iws\`.* to \`cooperation-iws\`@localhost identified by 'CIWS_MYSQL_PWD';
 flush privileges;" > CIWS_db.sql
-$BIN_MYSQL -u root < CIWS_db.sql mysql
+$BIN_MYSQL -u root --default_character_set utf8 < CIWS_db.sql mysql
 
 apt-get install --assume-yes --force-yes poppler-utils catdoc pstotext zip
 

@@ -4,7 +4,7 @@ generic_admin_email="admin@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
-
+#Auto upgrade
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
@@ -14,64 +14,55 @@ apache_admin_pwd=$generic_login_pwd
 #Proftpd
 proftpd_pwd=$generic_login_pwd
 #Roundcube 0.2
-#Gallery 2.3RC1
+#Gallery 2.3.0
 nb_gallery=1
 gallery_name[1]="Gallery"
 gallery_mysql_pwd[1]=$generic_mysql_pwd
 gallery_pwd[1]=$generic_login_pwd
 gallery_admin_email[1]=$generic_admin_email
-#Ezpublish4.0.1
+#Ezpublish4.0.1b
 ezpublish_admin_mail[1]=$generic_admin_email
 nb_ezpublish=1
 ezpublish_mysql_pwd[1]=$generic_mysql_pwd
 ezpublish_name[1]="Ezpublish"
-# Drupal 6.4
+# Drupal 6.6
 nb_drupal=1
 drupal_mysql_pwd[1]=$generic_mysql_pwd
 drupal_name[1]="Drupal"
 drupal_admin_mail[1]=$generic_admin_email
-#Wikini 0.5
-nb_wikini=1
-wikini_mysql_pwd[1]=$generic_mysql_pwd
-wikini_name[1]="Wikini"
-wikini_site_name[1]="Ciws"
-wikini_admin_email[1]=$generic_admin_email
-#Joomla 1.5.6
+
+#Joomla 1.5.8
 joomla_admin_mail[1]=$generic_admin_email
 nb_joomla=1
 joomla_mysql_pwd[1]=$generic_mysql_pwd
 joomla_name[1]="Joomla"
-# Twiki 4.2
-nb_twiki=1
-twiki_pwd[1]=$generic_login_pwd
-twiki_name[1]="Twiki"
-# Moinmoin
+# Moinmoin 1.7.1
 moinmoin_name="Moinmoin"
 moimoin_admin_email=$generic_admin_email
-#Zenphoto1.2
+#Zenphoto1.2.1
 nb_zenphoto=1
 zenphoto_mysql_pwd[1]=$generic_mysql_pwd
 zenphoto_name[1]="Zenphoto"
 zenphoto_admin_email[1]=$generic_admin_email
-#Wordpress2.5.1
+#Wordpress2.6.3
 nb_wordpress=1
 wordpress_mysql_pwd[1]=$generic_mysql_pwd
 wordpress_name[1]="Wordpress"
 wordpress_admin_email[1]=$generic_admin_email
 #SSH Server
-#Mediawiki 1.12.0
+#Mediawiki 1.13.0
 nb_mediawiki=1
 mediawiki_mysql_pwd[1]=$generic_mysql_pwd
 mediawiki_name[1]="Mediawiki"
 mediawiki_site_name[1]="Ciws"
 mediawiki_admin_email[1]=$generic_admin_email
-#PhpBB 3.0.2
+#PhpBB 3.0.3
 nb_phpbb=1
 phpbb_mysql_pwd[1]=$generic_mysql_pwd
 phpbb_name[1]="Phpbb"
 phpbb_admin_email[1]=$generic_admin_email
-#Jdicd 1.5
-#Dokuwiki 0.5
+#Jdicd 1.5b
+#Dokuwiki 0.5b
 nb_dokuwiki=1
 dokuwiki_name[1]="Dokuwiki"
 dokuwiki_admin_email[1]=$generic_admin_email
@@ -81,7 +72,7 @@ net2ftp_admin_pwd=$generic_login_pwd
 net2ftp_admin_name="admin"
 net2ftp_mysql_pwd=$generic_mysql_pwd
 net2ftp_name="Net2ftp"
-#Dotclear 2.0.1
+#Dotclear 2.1.3
 nb_dotclear=1
 dotclear_name[1]="Dotclear"
 dotclear_mysql_pwd[1]=$generic_mysql_pwd
@@ -89,12 +80,12 @@ dotclear_admin_email[1]=$generic_admin_email
 #Ossec 1.5.1 standalone
 ossec_report_address=$generic_admin_email
 #Awstats
-#Lifetype 1.2
+#Lifetype 1.2b
 nb_lifetype=1
 lifetype_mysql_pwd[1]=$generic_mysql_pwd
 lifetype_name[1]="Lifetype"
 lifetype_admin_email[1]=$generic_admin_email
-#Spip 1.9.2d
+#Spip 1.9.2e
 nb_spip=1
 spip_mysql_pwd[1]=$generic_mysql_pwd
 spip_name[1]="Spip"
@@ -115,7 +106,7 @@ snort_registration_key=""
 base_name="Base"
 snort_mysql_pwd=$generic_mysql_pwd
 
-#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Intrepid release
 postfixadmin_name="Mail"
 postfixadmin_mysql_pwd=$generic_mysql_pwd
 public_mail="n"

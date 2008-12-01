@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Snort2.8 client Hardy'
+RMOD_NAME='Snort2.8 Base1.3.9 standalone Intrepid'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Network Intrusion Detection System'
@@ -23,7 +23,6 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 DISPLAY=127.0.0.1:5.0
 LANG_UI=$(cat /tmp/lang-wui)
 SILENT=$(cat /tmp/silent)
-
 . /tmp/app_params
 
 #TEMP
@@ -33,56 +32,8 @@ INSTALL=$(cat /tmp/def_install)
 
 
 #VARIABLES
-SNORT_MYSQL_PWD="SNORT_MYSQL_PWD"
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGFR______________________________________________
-
-
-function LANGFR
-
-{
-MESS_NAME="Entrez le nom de l'installation "
-MESS_HOW_MANY="Combien de" 
-MESS_DO_YOU_WANT="voulez vous installez ?"
-MESS_REGISTER="Entrer votre clé d'enregistrement Snort"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGFR___________________________________________
-
-#_______________________________________________________________________________________________
-#__________________________________________LANGEN______________________________________________
-
-
-function LANGEN
-
-{
-MESS_NAME="Enter the name of the install "
-MESS_HOW_MANY="How many"
-MESS_DO_YOU_WANT="do you want to install ?"
-MESS_REGISTER="Enter your Snort registered key"
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_LANGEN___________________________________________
-
-
-#_______________________________________________________________________________________________
-#__________________________________________CHOICE_LANG___________________________________________
-
-function CHOICE_LANG
-{
-if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
-LANGFR
-
-else
-LANGEN
-
-fi
-}
-#_______________________________________________________________________________________________
-#__________________________________________FIN_CHOICE_LANG______________________________________
-
-
+SNORT_MYSQL_PWD=$snort_mysql_pwd
+MOD_NAME=$base_name
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_WEB_______________________________________
@@ -111,49 +62,15 @@ cd $DL_DIR
 wget http://mesh.dl.sourceforge.net/sourceforge/adodb/adodb498.zip
 unzip -q adodb498.zip
 #rm adodb498.zip
+cd $DL_DIR
+wget $URL_FREE/base_081101.tar.gz
+tar -xzf base_081101.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_MIRROIR_WEB___________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_LOCAL_____________________________________
-
-function WGET_MIRROIR_LOCAL
-{
-
-cd $DL_DIR
-wget http://$MIRROIR_URL/mirroir/snort-2.8.0.2.tar.gz
-tar -xzvf snort-2.8.0.2.tar.gz
-mv snort-2.8.0.2 snort
-#rm snort-2.8.0.2.tar.gz
-
-cd $DL_DIR
-wget http://$MIRROIR_URL/mirroir/Community-Rules-CURRENT.tar.gz
-tar -xzvf Community-Rules-CURRENT.tar.gz -C snort/
-#rm snortrules-pr-2.4.tar.gz
-
-cd $DL_DIR
-wget http://$MIRROIR_URL/mirroir/pcre-7.6.tar.gz
-tar -xzvf pcre-7.6.tar.gz
-mv pcre-7.6 pcre
-#rm pcre-7.6.tar.gz
-
-cd $DL_DIR
-wget http://$MIRROIR_URL/mirroir/adodb498.zip
-unzip adodb498.zip
-#rm adodb498.zip
-cacti-0.8.7b.tar.gz
-cd $DL_DIR
-MESSAGE="base download"
-tar -xvzf base-1.3.9.tar.gz
-mv base-1.3.9 base 
-#rm base-1.3.9.tar.gz
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -161,9 +78,9 @@ mv base-1.3.9 base
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/snort-2.8.0.2.tar.gz
-tar -xzf snort-2.8.0.2.tar.gz
-mv snort-2.8.0.2 snort
+wget $URL_FREE/snort-2.8.3.1.tar.gz
+tar -xzf snort-2.8.3.1.tar.gz
+mv snort-2.8.3.1 snort
 #rm snort-2.8.0.2.tar.gz
 
 cd $DL_DIR
@@ -182,6 +99,9 @@ wget $URL_FREE/adodb498.zip
 unzip -q adodb498.zip
 #rm adodb498.zip
 
+cd $DL_DIR
+wget $URL_FREE/base_081101.tar.gz
+tar -xzf base_081101.tar.gz
 }
 
 #_______________________________________________________________________________________________
@@ -200,40 +120,12 @@ if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 
 WGET_MIRROIR_FREE
 fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
-
-
-WGET_MIRROIR_LOCAL
-fi
 
 }
 
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-function CHOOSE_PARAMETERS_GUI
-{
-if [ "$(echo "${INSTALL}" | awk  '{print $1}')" == "A" ]; then 
-MOD_NAME="Base"
-else 
-MOD_NAME=$(zenity --entry --text "$MESS_NAME SNORT")
-test $? -ne 0 && break # Bouton Annuler
-
-while (echo $MOD_NAME | grep "[^a-zA-Z0-9]") 
-do
-MOD_NAME=$(zenity --entry --text "$MESS_NAME SNORT")
-test $? -ne 0 && break # Bouton Annulerdone
-done
-fi
-export MOD_NAME=$MOD_NAME
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
 
 
 
@@ -279,8 +171,9 @@ cd $DL_DIR/pcre
 make
 make install
 
-
 cd $DL_DIR/snort
+sed -i "349s/O_CREAT|O_TRUNC|O_SYNC|O_WRONLY/O_CREAT|O_TRUNC|O_SYNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH/" src/preprocessors/flow/portscan/server_stats.c
+
 ./configure -enable-dynamicplugin --with-mysql
 make
 make install
@@ -302,7 +195,7 @@ cp * /etc/snort/
 cp /usr/local/lib/libpcre.so.0 /usr/lib
 
 
-cat /etc/snort/snort.conf | sed -i -e "s/user=root password=test dbname=db host=localhost/user=$snort_remote_name password=$snort_server_mysql_pwd dbname=$snort_remote_name host=$snort_server_name/" /etc/snort/snort.conf
+cat /etc/snort/snort.conf | sed -i -e "s/user=root password=test dbname=db host=localhost/user=$MOD_NAME password=$SNORT_MYSQL_PWD dbname=$MOD_NAME host=localhost/" /etc/snort/snort.conf
 cat /etc/snort/snort.conf | sed -i -e "793s/# output/ output/" /etc/snort/snort.conf 
 cat /etc/snort/snort.conf | sed -i -e "110s/..\/rules/\/etc\/snort\/rules/" /etc/snort/snort.conf
 #cat /etc/snort/rules/web-misc.rules | sed -i -e "97s/alert/#alert/" /etc/snort/rules/web-misc.rules
@@ -425,43 +318,132 @@ sed -i "991s/^/include \$RULE_PATH\/community-web-iis.rules /" /etc/snort/snort.
 sed -i "992s/^/include \$RULE_PATH\/community-web-misc.rules /" /etc/snort/snort.conf
 sed -i "993s/^/include \$RULE_PATH\/community-web-php.rules /" /etc/snort/snort.conf
 
+cat << EOT > /etc/init.d/snort
+#!/bin/bash
+
+PIDFILE=/var/run/ossec.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "Snort server has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting Snort server"
+      /usr/local/bin/snort -c /etc/snort/snort.conf -i $NET_IFACE -D 
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping Snort server."
+	rm -f \$PIDFILE      
+	killall -9 snort && killall -9 snort
+     
+      exit
+    fi
+      echo "Snort server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOT
+
+chmod 0755 /etc/init.d/snort
+
+update-rc.d snort defaults
 
 
 
-if [ "$(echo "${NET_IFACE}" | grep '[0-9]')" ]; then
+
+
 echo "
 chmod -R +r /etc/snort/rules
 sleep 5
-/usr/local/bin/snort -c /etc/snort/snort.conf -i $NET_IFACE -D 
-sleep 10
-" >> /etc/skel/conf/etc/rc.home
-fi
-if [ "$(echo "${LOCAL_IFACE}" | grep '[0-9]')" ]; then 
-echo "
-sleep 5
-/usr/local/bin/snort -c /etc/snort/snort.conf -i $LOCAL_IFACE -D
-sleep 10
-" >> /etc/skel/conf/etc/rc.home
-else
-echo "
-chmod -R +r /etc/snort/rules
-sleep 5
-/usr/local/bin/snort -c /etc/snort/snort.conf -D 
+/etc/init.d/snort stop
+/etc/init.d/snort start
 sleep 10
 " >> /etc/rc.local
-fi
 
 
-##SNORT
+#Base config for Snort
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/admin/$MOD_NAME
+cp -Rf Base/* $WWW_DIRECTORY/admin/$MOD_NAME/.
+
+sed -i "15s/snort/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+sed -i "16s/snort/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+
+$BIN_MYSQL -u root < $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+
+sed -i "s/\$BASE_urlpath = '\/admin\/Base';/\$BASE_urlpath = '\/admin\/$MOD_NAME';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
+sed -i "s/\$alert_dbname   = 'snort';/\$alert_dbname   = '$MOD_NAME';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
+sed -i "96s/snort/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
+sed -i "s/\$alert_password = 'SNORT_MYSQL_PWD';/\$alert_password = '$SNORT_MYSQL_PWD';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
+
+cd $DL_DIR
+
+echo "
+grant insert,select on root.* to $MOD_NAME@localhost;
+set password for $MOD_NAME@localhost=password('$SNORT_MYSQL_PWD');
+grant create,delete,insert,select,update on $MOD_NAME.* to $MOD_NAME@localhost;
+grant create,delete,insert,select,update on $MOD_NAME.* to $MOD_NAME;" > snort_db.sql
+$BIN_MYSQL -u root < snort_db.sql mysql 
+rm snort_db.sql
+
+
+#Graph for base
+
+pear install Image_Color
+pear install Image_Canvas-alpha
+pear install Image_Graph-alpha 
+
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_INSTALL____________________________________________
 
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/admin/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/admin/${MOD_NAME[$count]}</item_admin_url>
+	<item_init_start>/etc/init.d/snort start</item_init_start>
+	<item_init_stop>/etc/init.d/snort stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/admin/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/admin/${MOD_NAME[$count]}</item_admin_url>
+	<item_init_start>/etc/init.d/snort start</item_init_start>
+	<item_init_stop>/etc/init.d/snort stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
 
 echo "I: Install Snort"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
-
+CREATE_WUI
 echo "I: End of install Snort"

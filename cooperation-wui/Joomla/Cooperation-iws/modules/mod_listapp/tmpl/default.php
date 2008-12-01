@@ -46,7 +46,7 @@ defined('_JEXEC') or die('Restricted access'); ?>
 							$prev_category = $category;
 						} ?>				
             </ul>
-<h3>Administration</h3>
+<center><b>Administration</b></center>
 <?php $tree_admin = simplexml_load_file('../admin/'.$xml_file);
 						$count_xml_elt=0;
 						foreach($tree_admin->item as $item) {	
