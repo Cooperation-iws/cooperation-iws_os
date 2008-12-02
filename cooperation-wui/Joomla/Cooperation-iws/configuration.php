@@ -14,8 +14,8 @@ class JConfig {
 	var $gzip = '0';
 	var $error_reporting = '-1';
 	var $xmlrpc_server = '0';
-	var $log_path = '/var/www/ciwscms/logs';
-	var $tmp_path = '/var/www/ciwscms/tmp';
+	var $log_path = '/var/www/Cooperation-iws/logs';
+	var $tmp_path = '/var/www/Cooperation-iws/tmp';
 	var $live_site = '';
 	var $offset = '0';
 	var $caching = '0';
@@ -30,7 +30,7 @@ class JConfig {
 	var $ftp_root = '';
 	var $dbtype = 'mysql';
 	var $host = 'localhost';
-	var $user = 'root';
+	var $user = 'ciwscms';
 	var $db = 'ciwscms';
 	var $dbprefix = 'jos_';
 	var $mailer = 'mail';
@@ -45,7 +45,7 @@ class JConfig {
 	var $MetaTitle = '1';
 	var $lifetime = '15';
 	var $session_handler = 'database';
-	var $password = '';
+	var $password = 'CIWS_MYSQL_PWD';
 	var $sitename = 'Cooperation-iws';
 	var $MetaDesc = 'Cooperation-iws, intranet nomad server';
 	var $MetaKeys = '';

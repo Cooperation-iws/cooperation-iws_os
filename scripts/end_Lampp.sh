@@ -13,6 +13,7 @@ CASPER_PATH=$(cat /tmp/casper_path)
 OS_TYPE=$(cat /tmp/os_type)
 TMPUSER=$(cat /tmp/tmp_user)
 SILENT=$(cat /tmp/silent)
+DEB_DIST=$(cat /tmp/deb_dist)
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
 fi
@@ -34,10 +35,18 @@ fi
 if [ "$(echo "${OS_TYPE}" | awk  '{print $1}')" == "Server" ]; then
 echo "I: configuring $CASPER_PATH"
 if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ]; then
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "intrepid" ]; then
+sed -i -e "406s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "413s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "10s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "12s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+
+else
 sed -i -e "405s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "412s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "13s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "15s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+fi
 else
 sed -i -e "904s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "1210s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH

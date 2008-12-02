@@ -49,8 +49,8 @@ done
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/knowledgetree-352c-081103.tar.gz
-tar -xzf knowledgetree-352c-081103.tar.gz
+wget $URL_FREE/knowledgetree-352c-081201.tar.gz
+tar -xzf knowledgetree-352c-081201.tar.gz
 #
 }
 
@@ -80,12 +80,11 @@ for (( count=1; count<=$NB_KT; count++ ))
 
 do
 cd $DL_DIR
-mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
-cp -Rf KnowledgeTree/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
-sed -i "15s/KnowledgeTree/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-sed -i "16s/KnowledgeTree/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-sed -i "17s/KnowledgeTree/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+cp -Rf Knowledgetree $WWW_DIRECTORY/${MOD_NAME[$count]}
+sed -i "15s/Knowledgetree/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Knowledgetree/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 echo "
 grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${KT_MYSQL_PWD[$count]}';
 flush privileges;" > kt_db.sql
@@ -93,8 +92,8 @@ $BIN_MYSQL -u root < kt_db.sql
 
 
 
-sed -i "s/KnowledgeTree/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
-sed -i "s/KNO_MYSQL_PWD/${KT_MYSQL_PWD[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
+sed -i "s/Knowledgetree/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
+sed -i "s/mysql_pwd/${KT_MYSQL_PWD[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
 sed -i "s/rootUrl = default/rootUrl = /${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
 
 echo "UPDATE ${MOD_NAME[$count]}.users SET email = '${kt_admin_email[$count]}' WHERE users.id =1 LIMIT 1 ;" > kt_credentials.sql

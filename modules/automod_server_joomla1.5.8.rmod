@@ -91,7 +91,9 @@ rm joomla_db.sql
 sed -i "16s/Joomla/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
 sed -i "17s/mysql_pwd/${JOOMLA_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
 sed -i "18s/Joomla/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
-sed -i "18s/admin@ciws.com/$joomla_admin_mail/" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
+sed -i "38s/admin@ciws.com/$joomla_admin_mail/" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
+sed -i "60s/Joomla/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
+sed -i "61s/Joomla/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
 
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}

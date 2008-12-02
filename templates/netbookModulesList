@@ -1,0 +1,92 @@
+#!/bin/bash
+domain="ciws.com"
+generic_admin_email="admin@$domain"
+generic_mysql_pwd="mysql_pwd"
+generic_login_pwd="cooperation"
+apache_user="www-data"
+
+###Cooperation-iws gui
+sphider_auto_index="y"
+#Lampp conf
+secure_mysql="y"
+secure_admin="y"
+apache_admin_pwd=$generic_login_pwd
+mysql_root_password=$generic_mysql_pwd
+#Proftpd
+proftpd_pwd=$generic_login_pwd
+#Samba
+smb_pwd=$generic_login_pwd
+#Akoie 0.5
+share_akoie_smb="y"
+share_akoie_smb_pwd="n"
+#Zenphoto1.2.1
+nb_zenphoto=1
+zenphoto_mysql_pwd[1]=$generic_mysql_pwd
+zenphoto_name[1]="Zenphoto"
+zenphoto_admin_email[1]=$generic_admin_email#Ampache 3.4.3
+nb_ampache=1
+ampache_mysql_pwd[1]=$generic_mysql_pwd
+ampache_name[1]="Ampache"
+#OpenGoo 1.0
+nb_opengoo=1
+opengoo_mysql_pwd[1]=$generic_mysql_pwd
+opengoo_name[1]="Opengoo"
+opengoo_admin_email[1]=$generic_admin_email
+#Sedna
+nb_sedna=1
+sedna_mysql_pwd[1]=$generic_mysql_pwd
+sedna_name[1]="Sedna"
+sedna_admin_email[1]=$generic_admin_email
+#Snif
+nb_snif=1
+snif_name[1]="Snif"
+share_snif_smb[1]="y"
+share_snif_smb_pwd[1]="n"
+#SSH Server
+#Jdicd 1.5b
+#Scuttle
+nb_scuttle=1
+scuttle_mysql_pwd[1]=$generic_mysql_pwd
+scuttle_name[1]="Scuttle"
+scuttle_admin_email[1]=$generic_admin_email
+#Dokuwiki 0.5b
+nb_dokuwiki=1
+dokuwiki_name[1]="Dokuwiki"
+dokuwiki_admin_email[1]=$generic_admin_email
+#Dotclear 2.1.3
+nb_dotclear=1
+dotclear_name[1]="Dotclear"
+dotclear_mysql_pwd[1]=$generic_mysql_pwd
+dotclear_admin_email[1]=$generic_admin_email
+#Wordpress2.6.3
+nb_wordpress=1
+wordpress_mysql_pwd[1]=$generic_mysql_pwd
+wordpress_name[1]="Wordpress"
+wordpress_admin_email[1]=$generic_admin_email
+
+#Ossec 1.5.1 standalone
+ossec_report_address=$generic_admin_email
+#Awstats
+#Roundcube 0.2
+#Cacti 0.8.7b
+cacti_name="Cacti"
+cacti_mysql_pwd=$generic_mysql_pwd
+#Net2ftp 0.97
+net2ftp_admin_mail=$generic_admin_email
+net2ftp_admin_pwd=$generic_login_pwd
+net2ftp_admin_name="admin"
+net2ftp_mysql_pwd=$generic_mysql_pwd
+net2ftp_name="Net2ftp"
+#Clamav antivirus
+clam_mail_report=$generic_admin_email
+#Cooperation-iws Liveusb 0.3
+#Webmin 1.4.20
+webmin_pwd=$generic_login_pwd
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Intrepid release
+postfixadmin_name="Mail"
+postfixadmin_mysql_pwd=$generic_mysql_pwd
+public_mail="n"
+mail_domain=$domain
+smtp_relay="smtp.free.fr"
+mailbox_quota="100"
+

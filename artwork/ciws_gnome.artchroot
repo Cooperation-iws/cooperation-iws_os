@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CASPER_PATH=$(cat /tmp/casper_path)
-
+DEB_DIST=$(cat /tmp/deb_dist)
 
 
 echo "I: preparing for Artwork"
@@ -10,9 +10,13 @@ mkdir /etc/skel/Desktop
 
 apt-get install --assume-yes --force-yes usplash
 cd /tmp/ciws_gnome
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "intrepid" ]; then
+dpkg -i usplash-theme-wideubuntu_1.0-1_i386.deb
+else
 dpkg -i usplash-theme-ciws_0.1-1_i386.deb 
-update-alternatives --install /usr/lib/usplash/usplash-artwork.so usplash-artwork.so /usr/lib/usplash/usplash-theme-ciws.so 10
-update-alternatives --set usplash-artwork.so /usr/lib/usplash/usplash-theme-ciws.so
+fi
+update-alternatives --install /usr/lib/usplash/usplash-artwork.so usplash-artwork.so /usr/lib/usplash/usplash-theme-wideubuntu.so 10
+update-alternatives --set usplash-artwork.so /usr/lib/usplash/usplash-theme-wideubuntu.so
 cd /tmp/ciws_gnome
 cp background.png /usr/share/gdm/themes/xubuntu
 cp logo.png /usr/share/gdm/themes/xubuntu/logo.png 1>&2 2>/dev/null
@@ -23,6 +27,13 @@ cp wallpaper.png /usr/share/xfce4/backdrops/xubuntu-jmak.png  1>&2 2>/dev/null
 cp wallpaper.png /usr/share/wallpapers/.
 cp background.png /usr/share/wallpapers/.
 cp logo.png /usr/share/apps/kdm/themes/kubuntu/
+sed -i "137s/ffffff/770000/" /usr/share/gdm/themes/xubuntu/Xubuntu.xml
+sed -i "143s/ffffff/770000/" /usr/share/gdm/themes/xubuntu/Xubuntu.xml
+sed -i "170s/ffffff/770000/" /usr/share/gdm/themes/xubuntu/Xubuntu.xml
+sed -i "188s/ffffff/770000/" /usr/share/gdm/themes/xubuntu/Xubuntu.xml
+sed -i "190s/ffffff/770000/" /usr/share/gdm/themes/xubuntu/Xubuntu.xml
+sed -i "211s/ffffff/770000/" /usr/share/gdm/themes/xubuntu/Xubuntu.xml
+sed -i "213s/ffffff/770000/" /usr/share/gdm/themes/xubuntu/Xubuntu.xml
 sed -i "s/kubuntu-wallpaper.jpg/wallpaper.png/" /etc/default/kdm.d/20_kubuntu_default_settings
 sed -i "s/kubuntu-wallpaper.jpg/background.png/" /usr/share/apps/kdm/themes/kubuntu/kubuntu.xml
 sed -i "s/Dialog.png/logo.png/" /usr/share/apps/kdm/themes/kubuntu/kubuntu.xml

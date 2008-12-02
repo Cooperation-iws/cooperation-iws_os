@@ -185,6 +185,8 @@ $BIN_MYSQL -u root <  $WWW_DIRECTORY/$MOD_NAME/SQL/mysql.initial.sql $MOD_NAME
 
 sed -i "s/mysql:\/\/roundcube:pass@localhost\/roundcubemail/mysql:\/\/${MOD_NAME}:$ROUNDCUBE_MYSQL_PWD@localhost\/${MOD_NAME}/" $WWW_DIRECTORY/$MOD_NAME/config/db.inc.php.dist
 sed -i "55s/''/'localhost'/" $WWW_DIRECTORY/$MOD_NAME/config/main.inc.php.dist
+sed -i "177s/FALSE/TRUE/" $WWW_DIRECTORY/$MOD_NAME/config/main.inc.php.dist
+sed -i "212s/googie//" $WWW_DIRECTORY/$MOD_NAME/config/main.inc.php.dist
 mv $WWW_DIRECTORY/$MOD_NAME/config/db.inc.php.dist $WWW_DIRECTORY/$MOD_NAME/config/db.inc.php
 mv $WWW_DIRECTORY/$MOD_NAME/config/main.inc.php.dist $WWW_DIRECTORY/$MOD_NAME/config/main.inc.php
 

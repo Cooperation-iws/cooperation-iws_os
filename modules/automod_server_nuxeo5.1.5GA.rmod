@@ -171,7 +171,7 @@ cp -Rf $LAMPP_DIRECTORY/$MOD_NAME/* $DOSSIER_CHROOT/var/$MOD_NAME/.
 echo "I: Starting Nuxeo"
 nohup $LAMPP_DIRECTORY/$MOD_NAME/bin/run.sh &
 sleep 10
-cat << EOT > /etc/init.d/openoffice
+cat << EOT > $DOSSIER_CHROOT/etc/init.d/openoffice
 #!/bin/bash
 # openoffice.org  headless server script
 #
@@ -216,11 +216,12 @@ esac
 exit 0
 EOT
 
-chmod 0755 /etc/init.d/openoffice
+chmod 0755 $DOSSIER_CHROOT/etc/init.d/openoffice
 
-update-rc.d openoffice defaults
 
-cat << EOT > /etc/init.d/nuxeo
+sleep 3
+
+cat << EOF_NUXEO > $DOSSIER_CHROOT/etc/init.d/nuxeo
 #!/bin/bash
 nuxeo_HOME=/var/$MOD_NAME/bin/
 PIDFILE=/var/run/nuxeo-server.pid
@@ -241,8 +242,9 @@ case "\$1" in
     stop)
     if [ -f \$PIDFILE ]; then
       echo "Stopping Nuxeo server."
+	rm -f \$PIDFILE
       \$nuxeo_HOME/shutdown.sh -S & > /dev/null 2>&1
-      rm -f \$PIDFILE
+      
       exit
     fi
       echo "Nuxeo server is not running."
@@ -253,12 +255,13 @@ case "\$1" in
     exit 1
 esac
 exit 0
-EOT
+EOF_NUXEO
 
-chmod 0755 /etc/init.d/nuxeo
-
+chmod 0755 $DOSSIER_CHROOT/etc/init.d/nuxeo
+chroot $DOSSIER_CHROOT << "EOF"
+update-rc.d openoffice defaults
 update-rc.d nuxeo defaults
-
+EOF
 
 echo "
 " >> $DOSSIER_CHROOT/etc/rc.local

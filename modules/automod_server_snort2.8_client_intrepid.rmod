@@ -34,6 +34,53 @@ INSTALL=$(cat /tmp/def_install)
 
 #VARIABLES
 SNORT_MYSQL_PWD="SNORT_MYSQL_PWD"
+NET_IFACE=$snort_listening_interface
+#_______________________________________________________________________________________________
+#__________________________________________LANGFR______________________________________________
+
+
+function LANGFR
+
+{
+MESS_NAME="Entrez le nom de l'installation "
+MESS_HOW_MANY="Combien de" 
+MESS_DO_YOU_WANT="voulez vous installez ?"
+MESS_REGISTER="Entrer votre clé d'enregistrement Snort"
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGFR___________________________________________
+
+#_______________________________________________________________________________________________
+#__________________________________________LANGEN______________________________________________
+
+
+function LANGEN
+
+{
+MESS_NAME="Enter the name of the install "
+MESS_HOW_MANY="How many"
+MESS_DO_YOU_WANT="do you want to install ?"
+MESS_REGISTER="Enter your Snort registered key"
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_LANGEN___________________________________________
+
+
+#_______________________________________________________________________________________________
+#__________________________________________CHOICE_LANG___________________________________________
+
+function CHOICE_LANG
+{
+if [ "$(echo "${LANG_UI}" | awk  '{print $1}')" == "FR" ]; then
+LANGFR
+
+else
+LANGEN
+
+fi
+}
+#_______________________________________________________________________________________________
+#__________________________________________FIN_CHOICE_LANG______________________________________
 
 
 
@@ -114,8 +161,8 @@ mv base-1.3.9 base
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/snort-2.8.3.1.tar.gz
-tar -xzf snort-2.8.3.1.tar.gz
+wget $URL_FREE/snort-2.8.0.2.tar.gz
+tar -xzf snort-2.8.0.2.tar.gz
 mv snort-2.8.0.2 snort
 #rm snort-2.8.0.2.tar.gz
 

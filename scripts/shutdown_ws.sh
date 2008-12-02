@@ -104,8 +104,6 @@ if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 		echo "UPDATE mysql.user SET Password=PASSWORD('$mysql_root_password') WHERE User='root';
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host!='localhost';
-DROP DATABASE test;
-DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 FLUSH PRIVILEGES;
 " > /tmp/mysql_secure.sql
 $BIN_MYSQL -u root < /tmp/mysql_secure.sql

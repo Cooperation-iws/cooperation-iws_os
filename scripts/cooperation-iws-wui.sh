@@ -125,7 +125,7 @@ rm SPHIDER_db.sql
  
 
 $BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/Cooperation-iws/cooperation-iws.sql
-echo "grant all on \`cooperation-iws\`.* to \`cooperation-iws\`@localhost identified by 'CIWS_MYSQL_PWD';
+echo "grant all on ciwscms.* to ciwscms@localhost identified by 'CIWS_MYSQL_PWD';
 flush privileges;" > CIWS_db.sql
 $BIN_MYSQL -u root --default_character_set utf8 < CIWS_db.sql mysql
 

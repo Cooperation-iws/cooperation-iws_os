@@ -80,7 +80,7 @@ share_akoie_smb_pwd="n"
 clam_mail_report=$generic_admin_email
 #Cooperation-iws Liveusb 0.3
 #Webmin 1.4.20
-webmin_pwd=$generic_mysql_pwd
+webmin_pwd=$generic_login_pwd
 #Cacti 0.8.7b
 cacti_name="Cacti"
 cacti_mysql_pwd=$generic_mysql_pwd
