@@ -15,4 +15,13 @@ webmin_pwd="cooperation"
 #Ossec 1.5.1 standalone
 ossec_report_address="$kolab_admin_mail@$domain"
 #Cooperation-iws Liveusb 0.3
-
+#Zabbix client 1.6
+zabbix_server_name="administration.$domain"
+#Syslog client
+syslog_server_name="administration.$domain"
+#Snort2.8 client
+snort_remote_name="Base"
+snort_registration_key=""
+snort_server_mysql_pwd=$generic_mysql_pwd
+snort_server_name="administration.$domain"
+snort_listening_interface="eth0"

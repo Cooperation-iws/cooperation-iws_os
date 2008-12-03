@@ -1,0 +1,54 @@
+#!/bin/bash
+domain="ciws.com"
+generic_admin_email="admin@$domain"
+generic_mysql_pwd="mysql_pwd"
+generic_login_pwd="cooperation"
+apache_user="www-data"
+
+###Cooperation-iws gui
+sphider_auto_index="y"
+#Lampp conf
+secure_mysql="n"
+secure_admin="n"
+apache_admin_pwd=""
+#Samba
+smb_pwd=$generic_login_pwd
+#Proftpd
+proftpd_pwd=$generic_login_pwd
+#SSH Server
+#Awstats
+#Openmeetings
+openmeeting_name="openmeetings"
+openmeeting_mysql_pwd=$generic_mysql_pwd
+#Inspircd
+#Cgi IRC
+url_default_server="localhost"
+#Ossec 1.5.1 standalone
+ossec_report_address=$generic_admin_email
+#Clamav antivirus
+clam_mail_report=$generic_admin_email
+#Net2ftp 0.97
+net2ftp_admin_mail=$generic_admin_email
+net2ftp_admin_pwd=$generic_login_pwd
+net2ftp_admin_name="admin"
+net2ftp_mysql_pwd=$generic_mysql_pwd
+net2ftp_name="Net2ftp"
+
+#Cooperation-iws Liveusb 0.3
+#Webmin 1.4.20
+webmin_pwd=$generic_login_pwd
+#Cacti 0.8.7b
+cacti_name="Cacti"
+cacti_mysql_pwd=$generic_mysql_pwd
+#Postfix Relay Client
+smtp_postfix_client_relay="mail.$domain"
+#Zabbix client 1.6
+zabbix_server_name="administration.$domain"
+#Syslog client
+syslog_server_name="administration.$domain"
+#Snort2.8 client
+snort_remote_name="Base"
+snort_registration_key=""
+snort_server_mysql_pwd=$generic_mysql_pwd
+snort_server_name="administration.$domain"
+
