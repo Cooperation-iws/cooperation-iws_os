@@ -1,16 +1,17 @@
 #!/bin/bash
 
-
-
+#Auto upgrade
+generic_mysql_pwd="mysql_pwd"
+generic_login_pwd="cooperation"
 #Kolab 2.2
-kolab_domain_name="ciws"
-kolab_domain_ext="com"
+kolab_domain_name="cooperation-iws"
+kolab_domain_ext="intra"
 domain="$kolab_domain_name.$kolab_domain_ext"
 kolab_admin_mail="admin.local"
-kolab_pwd="cooperation"
+kolab_pwd=$generic_login_pwd
 apache_user="kolab"
 #Webmin 1.4.20
-webmin_pwd="cooperation"
+webmin_pwd=$generic_login_pwd
 #SSH Server
 #Ossec 1.5.1 standalone
 ossec_report_address="$kolab_admin_mail@$domain"
@@ -19,7 +20,7 @@ ossec_report_address="$kolab_admin_mail@$domain"
 zabbix_server_name="administration.$domain"
 #Syslog client
 syslog_server_name="administration.$domain"
-#Snort2.8 client
+##Snort2.8 client Intrepid
 snort_remote_name="Base"
 snort_registration_key=""
 snort_server_mysql_pwd=$generic_mysql_pwd

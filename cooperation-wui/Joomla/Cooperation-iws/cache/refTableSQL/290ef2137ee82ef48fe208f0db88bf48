@@ -1,1 +1,0 @@
-a:7:{s:15:"fieldTablePairs";a:0:{}s:12:"tableAliases";a:0:{}s:19:"reverseTableAliases";a:0:{}s:12:"fieldAliases";a:0:{}s:19:"fieldTableAliasData";a:0:{}s:10:"fieldCount";i:3;s:3:"sql";s:70:"SELECT guest, usertype, client_id FROM jos_session WHERE client_id = 0";}

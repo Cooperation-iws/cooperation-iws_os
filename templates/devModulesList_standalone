@@ -1,16 +1,20 @@
 #!/bin/bash
-domain="ciws.com"
-generic_admin_email="admin@$domain"
+domain="cooperation-iws.intra"
+generic_admin_email="admin.local@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
-
+#Auto upgrade
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
-secure_mysql="n"
-secure_admin="n"
+###Cooperation-iws gui
+sphider_auto_index="y"
+#Lampp conf
+secure_mysql="y"
+secure_admin="y"
 apache_admin_pwd=$generic_login_pwd
+mysql_root_password=$generic_mysql_pwd
 #Samba
 smb_pwd=$generic_login_pwd
 #Proftpd
@@ -38,7 +42,7 @@ radria_mysql_pwd=$generic_mysql_pwd
 svn_admin_pwd=$generic_login_pwd
 svn_anonymous_pwd=""
 trac_admin_pwd=$generic_login_pwd
-#Taskfreak 1.8
+#Taskfreak 0.6.2
 nb_taskfreak=1
 taskfreak_mysql_pwd[1]=$generic_mysql_pwd
 taskfreak_name[1]="Taskfreak"
@@ -60,11 +64,12 @@ webmin_pwd=$generic_login_pwd
 #Cacti 0.8.7b
 cacti_name="Cacti"
 cacti_mysql_pwd=$generic_mysql_pwd
-#Snort2.8 Base1.3.9 standalone
+#Snort2.8 Base1.3.9 standalone Intrepid
 snort_registration_key=""
 base_name="Base"
 snort_mysql_pwd=$generic_mysql_pwd
-#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
+snort_listening_interface="eth0"
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Intrepid release
 postfixadmin_name="Mail"
 postfixadmin_mysql_pwd=$generic_mysql_pwd
 public_mail="n"

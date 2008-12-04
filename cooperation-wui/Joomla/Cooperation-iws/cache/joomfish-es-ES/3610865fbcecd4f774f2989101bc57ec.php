@@ -1,2 +1,0 @@
-<?php die("Access Denied"); ?>
-a:2:{s:6:"output";s:0:"";s:6:"result";s:124:"http://192.168.1.98/ciwscms/index.php?option=com_newsfeeds&amp;view=newsfeed&amp;id=1&amp;feedid=1&amp;Itemid=18&amp;lang=es";}

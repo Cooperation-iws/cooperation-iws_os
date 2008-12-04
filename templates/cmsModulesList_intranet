@@ -1,7 +1,7 @@
 #!/bin/bash
 
-domain="ciws.com"
-generic_admin_email="admin@$domain"
+domain="cooperation-iws.intra"
+generic_admin_email="admin.local@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"

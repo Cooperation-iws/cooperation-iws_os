@@ -1,17 +1,21 @@
 #!/bin/bash
-domain="ciws.com"
-generic_admin_email="admin@$domain"
+domain="cooperation-iws.intra"
+generic_admin_email="admin.local@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
 
-
+#Auto upgrade
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
-secure_mysql="n"
-secure_admin="n"
+###Cooperation-iws gui
+sphider_auto_index="y"
+#Lampp conf
+secure_mysql="y"
+secure_admin="y"
 apache_admin_pwd=$generic_login_pwd
+mysql_root_password=$generic_mysql_pwd
 #Samba
 smb_pwd=$generic_login_pwd
 #Proftpd
@@ -107,6 +111,7 @@ webmin_pwd=$generic_login_pwd
 snort_registration_key=""
 base_name="Base"
 snort_mysql_pwd=$generic_mysql_pwd
+snort_listening_interface="eth0"
 #Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner
 postfixadmin_name="Mail"
 postfixadmin_mysql_pwd=$generic_mysql_pwd

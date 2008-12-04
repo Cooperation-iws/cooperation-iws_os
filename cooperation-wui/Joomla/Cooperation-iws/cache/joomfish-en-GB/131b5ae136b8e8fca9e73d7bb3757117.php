@@ -1,2 +1,0 @@
-<?php die("Access Denied"); ?>
-a:2:{s:6:"output";s:0:"";s:6:"result";s:156:"http://192.168.1.96/ciwscms/index.php?option=com_content&amp;view=article&amp;id=5:ciws-license-guidelines&amp;catid=25:the-project&amp;Itemid=2&amp;lang=en";}

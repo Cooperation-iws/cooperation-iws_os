@@ -48,6 +48,12 @@ echo "zabbix_agent 10050/tcp # Zabbix ports
 zabbix_trap 10051/tcp
 " >> /etc/services
 
+echo "
+#zabbix agent
+mkdir /var/run/zabbix-agent
+chmod -R 777 /var/run/zabbix-agent
+" >> /etc/rc.local
+
 }
 
 #_______________________________________________________________________________________________

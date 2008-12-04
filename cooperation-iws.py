@@ -201,6 +201,8 @@ class Reconstructor:
         # shutdown scripts - without the 'K' for looping -- see  https://wiki.ubuntu.com/Teardown  for explanation
         self.shutdownScripts = ('11anacron', '11atd', '19cupsys', '20acpi-support', '20apmd', '20bittorrent', '20dbus', '20festival', '20hotkey-setup', '20makedev', '20nvidia-kernel', '20powernowd', '20rsync', '20ssh', '21acpid', '21hplip', '74bluez-utils', '88pcmcia', '88pcmciautils', '89klogd', '90syslogd')
 	self.ReqApache = "B"
+	self.nodebuntu = False
+
 
         APPDOMAIN='reconstructor'
         LANGDIR='lang'
@@ -361,10 +363,15 @@ class Reconstructor:
         parser.add_option( "--encryption", 
                     dest="encryption", default="disabled",
                     help="Debian live encryption")
+	parser.add_option( "--pfsense", 
+                    dest="pfsense", action="store_true", default=False,
+                    help="Debian live encryption")
 	parser.add_option( "--encryptionpassphrase", 
                     dest="encryptionpassphrase", default="",
                     help="Debian live encryption passphrase")
         (options, args) = parser.parse_args()
+
+
         if options.debug == True:
             self.runningDebug = True
             self.wTree.get_widget("notebookWizard").set_show_tabs(True)
@@ -432,6 +439,11 @@ class Reconstructor:
 	    self.encryption = options.encryption
 	    self.encryptionpassphrase = options.encryptionpassphrase
 	    self.locale = options.locale
+	    self.locale = options.locale
+	    self.pfsense = options.pfsense
+	    if self.pfsense == True:
+		self.nodebuntu == True
+		
 	else:
 	    self.commandLine = False
 
@@ -515,7 +527,21 @@ class Reconstructor:
     def commandLineGui(self):
 	self.checkDependencies()
 	self.saveSetupInfo()
- 	if self.checkCustomDir() == True:
+ 	if self.pfsense == True:
+		if self.checkCustomDir() == True:
+ 			if self.checkWorkingDir() == True:
+				self.setupWorkingDirectory()
+				os.popen("cp "+self.moduleFilename + " /tmp/app_params")
+				os.popen("echo \""+self.isoname+"\" > /tmp/output_iso_name")
+				fWorkDir=open('/tmp/working-directory', 'w')
+       				fWorkDir.write(self.customDir)
+       				fWorkDir.close()
+				self.cmdLoadModules()
+				fWorkDir=open('/tmp/iso-filename', 'w')
+		        	fWorkDir.write(self.isoFilename)
+		        	fWorkDir.close()
+				self.customizeNodebuntu()	
+	elif self.checkCustomDir() == True:
                 if self.checkSetup() == True:
                     if self.checkWorkingDir() == True:
 			if self.debianLive == True:			
@@ -3428,8 +3454,7 @@ class Reconstructor:
 # ---------- Customize Live ---------- #
     def customize(self):
         print _("INFO: Customizing...")
-            
-	#Set Global variable for chroot
+        #Set Global variable for chroot
 	fWorkDir=open(os.path.join(self.customDir, "chroot/tmp/user"), 'w')
         fWorkDir.write(self.user)
        	fWorkDir.close()
@@ -3831,8 +3856,30 @@ class Reconstructor:
 		os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptEndExec.sh"))
 		os.popen('bash \"' + os.path.join(self.customDir, "scriptEndExec.sh") + '\"')
 	
+    def customizeNodebuntu(self):
 
-
+	if self.execModulesEnabled == True:
+	    print _('Running modules...')
+	    modExecScr = '#!/bin/bash\n\n'
+	    # find all modules in chroot and chain together and run
+	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "scripts/")):
+		for execMod in sorted(execModFiles):
+		    ext = os.path.basename(execMod)
+		    if re.search('.rmod', ext):
+		        modExecScr += 'echo -------------------------------------------------\n'
+		        modExecScr += 'echo ------------Cooperation-iws----------------------\n'
+		        modExecScr += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
+		        modExecScr += 'echo -------------------------------------------------\n'
+		        modExecScr += 'echo -------------------------------------------------\n'
+		        modExecScr += 'bash \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(execMod) + '\"' + ' ;\n '
+ 	    modExecScr += '\necho \'--------------------\'\necho \'Modules Finished...\'\n'
+	    fModExec=open(os.path.join(self.customDir, "scripts/module-exec.sh"), 'w')
+            fModExec.write(modExecScr)
+            fModExec.close()
+	    os.popen('chmod a+x ' + os.path.join(self.customDir, "scripts/module-exec.sh"))
+    
+	    os.system('bash \"' + os.path.join(self.customDir, "scripts/module-exec.sh")+ '\"')
+	
 
 # ---------- Build ---------- #
     def build(self):

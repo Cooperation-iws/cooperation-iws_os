@@ -1,6 +1,6 @@
 #!/bin/bash
-domain="ciws.com"
-generic_admin_email="admin@$domain"
+domain="cooperation-iws.intra"
+generic_admin_email="admin.local@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
@@ -64,7 +64,6 @@ nb_wordpress=1
 wordpress_mysql_pwd[1]=$generic_mysql_pwd
 wordpress_name[1]="Wordpress"
 wordpress_admin_email[1]=$generic_admin_email
-
 #Ossec 1.5.1 standalone
 ossec_report_address=$generic_admin_email
 #Awstats

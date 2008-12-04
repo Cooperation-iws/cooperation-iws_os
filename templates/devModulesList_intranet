@@ -1,10 +1,10 @@
 #!/bin/bash
-domain="ciws.com"
-generic_admin_email="admin@$domain"
+domain="cooperation-iws.intra"
+generic_admin_email="admin.local@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
-
+#Auto upgrade
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
@@ -69,9 +69,10 @@ smtp_postfix_client_relay="mail.$domain"
 zabbix_server_name="administration.$domain"
 #Syslog client
 syslog_server_name="administration.$domain"
-#Snort2.8 client
+#Snort2.8 client Intrepid
 snort_remote_name="Base"
 snort_registration_key=""
 snort_server_mysql_pwd=$generic_mysql_pwd
 snort_server_name="administration.$domain"
+snort_listening_interface="eth0"
 #Awstats
