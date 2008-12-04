@@ -78,7 +78,7 @@ share_akoie_smb="y"
 share_akoie_smb_pwd="n"
 #Clamav antivirus
 clam_mail_report=$generic_admin_email
-#Cooperation-iws Liveusb 0.3
+#Cooperation-iws Liveusb 0.4
 #Webmin 1.4.20
 webmin_pwd=$generic_login_pwd
 #Cacti 0.8.7b

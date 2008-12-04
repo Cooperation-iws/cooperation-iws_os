@@ -103,7 +103,7 @@ openmeeting_mysql_pwd=$generic_mysql_pwd
 #Roundcube 0.2
 #Clamav antivirus
 clam_mail_report=$generic_admin_email
-#Cooperation-iws Liveusb 0.3
+#Cooperation-iws Liveusb 0.4
 #Awstats
 #Webmin 1.4.20
 webmin_pwd=$generic_login_pwd

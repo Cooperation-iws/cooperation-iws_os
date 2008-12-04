@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='Cooperation-iws Liveusb 0.3'
+RMOD_NAME='Cooperation-iws Liveusb 0.4'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Cooperation-iws Live Usb installer'
@@ -14,7 +14,7 @@ DL_DIR=$(cat /tmp/web_install-path)
 
 echo "I: installing liveusb installer"
 cd $DL_DIR
-wget $URL_FREE/cooperation-iws-liveusb-0.3.deb
+wget $URL_FREE/cooperation-iws-liveusb-0.4.deb
 dpkg -i cooperation-iws-liveusb-0.3.deb
 apt-get -f install --assume-yes --force-yes
 

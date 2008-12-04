@@ -15,7 +15,7 @@ webmin_pwd=$generic_login_pwd
 #SSH Server
 #Ossec 1.5.1 standalone
 ossec_report_address="$kolab_admin_mail@$domain"
-#Cooperation-iws Liveusb 0.3
+#Cooperation-iws Liveusb 0.4
 #Zabbix client 1.6
 zabbix_server_name="administration.$domain"
 #Syslog client

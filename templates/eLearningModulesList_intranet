@@ -93,7 +93,7 @@ share_akoie_smb="y"
 share_akoie_smb_pwd="n"
 #Clamav antivirus
 clam_mail_report=$generic_admin_email
-#Cooperation-iws Liveusb 0.3
+#Cooperation-iws Liveusb 0.4
 #Awstats
 #Postfix Relay Client
 smtp_postfix_client_relay="mail.$domain"
