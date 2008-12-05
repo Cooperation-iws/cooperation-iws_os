@@ -7,7 +7,7 @@ generic_login_pwd="cooperation"
 kolab_domain_name="cooperation-iws"
 kolab_domain_ext="intra"
 domain="$kolab_domain_name.$kolab_domain_ext"
-kolab_admin_mail="admin.local"
+kolab_admin_mail="admin.kolab"
 kolab_pwd=$generic_login_pwd
 apache_user="kolab"
 #Webmin 1.4.20

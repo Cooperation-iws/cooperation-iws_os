@@ -430,28 +430,55 @@ sed -i "993s/^/include \$RULE_PATH\/community-web-php.rules /" /etc/snort/snort.
 
 
 
-if [ "$(echo "${NET_IFACE}" | grep '[0-9]')" ]; then
+cat << EOT > /etc/init.d/snort
+#!/bin/bash
+
+PIDFILE=/var/run/ossec.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "Snort server has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting Snort server"
+      /usr/local/bin/snort -c /etc/snort/snort.conf -i $NET_IFACE -D 
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping Snort server."
+	rm -f \$PIDFILE      
+	killall -9 snort && killall -9 snort
+     
+      exit
+    fi
+      echo "Snort server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOT
+
+chmod 0755 /etc/init.d/snort
+
+update-rc.d snort defaults
+
 echo "
 chmod -R +r /etc/snort/rules
 sleep 5
-/usr/local/bin/snort -c /etc/snort/snort.conf -i $NET_IFACE -D 
-sleep 10
-" >> /etc/skel/conf/etc/rc.home
-fi
-if [ "$(echo "${LOCAL_IFACE}" | grep '[0-9]')" ]; then 
-echo "
-sleep 5
-/usr/local/bin/snort -c /etc/snort/snort.conf -i $LOCAL_IFACE -D
-sleep 10
-" >> /etc/skel/conf/etc/rc.home
-else
-echo "
-chmod -R +r /etc/snort/rules
-sleep 5
-/usr/local/bin/snort -c /etc/snort/snort.conf -D 
+/etc/init.d/snort stop
+/etc/init.d/snort start
 sleep 10
 " >> /etc/rc.local
-fi
+
+
 
 
 ##SNORT

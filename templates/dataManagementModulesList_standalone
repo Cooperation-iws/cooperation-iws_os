@@ -50,5 +50,5 @@ public_mail="n"
 mail_domain=$domain
 smtp_relay="smtp.free.fr"
 mailbox_quota="100"
-
+admin_email=$generic_admin_email
 

@@ -8,9 +8,10 @@ apache_user="www-data"
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
-secure_mysql="n"
-secure_admin="n"
+secure_mysql="y"
+secure_admin="y"
 apache_admin_pwd=$generic_login_pwd
+mysql_root_password=$generic_mysql_pwd
 #Samba
 smb_pwd=$generic_login_pwd
 #Proftpd
@@ -74,7 +75,7 @@ claroline_mysql_pwd[1]=$generic_mysql_pwd
 claroline_name[1]="Claroline"
 claroline_admin_email[1]=$generic_admin_email
 #Ossec 1.5.1 standalone
-ossec_report_address="admin@ciws.com"
+ossec_report_address=$generic_admin_email
 #Lifetype 1.2b
 nb_lifetype=1
 lifetype_mysql_pwd[1]=$generic_mysql_pwd
@@ -96,7 +97,7 @@ clam_mail_report=$generic_admin_email
 #Cooperation-iws Liveusb 0.4
 #Awstats
 #Postfix Relay Client
-smtp_postfix_client_relay="mail.$domain"
+smtp_postfix_client_relay="administration.$domain"
 #Webmin 1.4.20
 webmin_pwd=$generic_login_pwd
 #Zabbix client 1.6

@@ -394,7 +394,7 @@ echo "
 grant insert,select on root.* to $MOD_NAME@localhost;
 set password for $MOD_NAME@localhost=password('$SNORT_MYSQL_PWD');
 grant create,delete,insert,select,update on $MOD_NAME.* to $MOD_NAME@localhost;
-grant create,delete,insert,select,update on $MOD_NAME.* to $MOD_NAME;" > snort_db.sql
+" > snort_db.sql
 $BIN_MYSQL -u root < snort_db.sql mysql 
 rm snort_db.sql
 

@@ -25,7 +25,8 @@ nb_achievo=1
 achievo_mysql_pwd[1]=$generic_mysql_pwd
 achievo_name[1]="Achievo"
 achievo_admin_pwd[1]=$generic_login_pwd
-#Bugzilla
+#Bugzilla3.0.5b
+nb_bugzilla=1
 bugzilla_mysql_pwd=$generic_mysql_pwd
 bugzilla_name="Bugzilla"
 bugzilla_admin_email=$generic_admin_email
@@ -35,10 +36,7 @@ bugzilla_admin_pwd=$generic_login_pwd
 nb_mantis=1
 mantis_mysql_pwd[1]=$generic_mysql_pwd
 mantis_name[1]="Mantis"
-#Radria 0.8.4
-radria_name="Radria"
-radria_mysql_pwd=$generic_mysql_pwd
-#Trac Subversion
+#Trac Subversion 0.11.2
 svn_admin_pwd=$generic_login_pwd
 svn_anonymous_pwd=""
 trac_admin_pwd=$generic_login_pwd
@@ -47,6 +45,13 @@ nb_taskfreak=1
 taskfreak_mysql_pwd[1]=$generic_mysql_pwd
 taskfreak_name[1]="Taskfreak"
 taskfreak_admin_email[1]=$generic_admin_email
+#Dotproject 2.1.2
+nb_dotproject=1
+dotproject_mysql_pwd[1]=$generic_mysql_pwd
+dotproject_name[1]="Dotproject"
+dotproject_admin_pwd[1]=$generic_login_pwd
+dotproject_admin_email[1]=$generic_admin_email
+
 #SSH Server
 #Ossec 1.5.1 standalone
 ossec_report_address=$generic_admin_email
@@ -76,6 +81,6 @@ public_mail="n"
 mail_domain=$domain
 smtp_relay="smtp.free.fr"
 mailbox_quota="100"
-
+admin_email=$generic_admin_email
 
 

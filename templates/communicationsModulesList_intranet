@@ -8,9 +8,10 @@ apache_user="www-data"
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
-secure_mysql="n"
-secure_admin="n"
-apache_admin_pwd=""
+secure_mysql="y"
+secure_admin="y"
+apache_admin_pwd=$generic_login_pwd
+mysql_root_password=$generic_mysql_pwd
 #Samba
 smb_pwd=$generic_login_pwd
 #Proftpd
@@ -41,7 +42,7 @@ webmin_pwd=$generic_login_pwd
 cacti_name="Cacti"
 cacti_mysql_pwd=$generic_mysql_pwd
 #Postfix Relay Client
-smtp_postfix_client_relay="mail.$domain"
+smtp_postfix_client_relay="administration.$domain"
 #Zabbix client 1.6
 zabbix_server_name="administration.$domain"
 #Syslog client

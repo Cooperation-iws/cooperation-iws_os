@@ -105,7 +105,7 @@ clam_mail_report=$generic_admin_email
 #Webmin 1.4.20
 webmin_pwd=$generic_login_pwd
 #Postfix Relay Client
-smtp_postfix_client_relay="mail.$domain"
+smtp_postfix_client_relay="administration.$domain"
 #Zabbix client 1.6
 zabbix_server_name="administration.$domain"
 #Syslog client

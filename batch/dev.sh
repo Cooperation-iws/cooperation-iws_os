@@ -31,5 +31,9 @@ cd /home/esmalif/cooperation/CVS/branch/Pro/ciws_fully_auto
 
 cd /home/esmalif/cooperation/CVS/branch/Pro/ciws_fully_auto
 
-sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/pfSense-1.2-LiveCD-Installer.iso --modulesfile templates/pfsense --outputisoname cooperation-iws-pfsense-1.2-0.7.0.iso --pfsense --directory /media/partage-dev/tmp/1a16
+#sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/pfSense-1.2-LiveCD-Installer.iso --modulesfile templates/pfsense --outputisoname cooperation-iws-pfsense-1.2-0.7.0.iso --pfsense --directory /media/partage-dev/tmp/0101a16
+#sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/xubuntu-8.10-desktop-i386.iso --modulesfile templates/netbookModulesList --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/ubuntu_main/ --debmirrornonfree http://localhost:3142/ubuntu_multimedia/ --debmirrorsecurity http://localhost:3142/ubuntu_main/ --cms Joomla --directory /media/partage-dev/tmp/91a10 --host netbook --password cooperation --username ciwsadmin --artwork ciwsGnome --outputisoname cooperation-iws-netbook-standalone-0.7.0.iso --debmirrorsecurity http://localhost:3142/ubuntu_main/ --disautologin
+
+sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/xubuntu-8.10-desktop-i386.iso --modulesfile templates/Kolab --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/ubuntu_main/ --debmirrornonfree http://localhost:3142/ubuntu_multimedia/ --debmirrorsecurity http://localhost:3142/ubuntu_main/ --cms Joomla --directory /media/partage-dev/tmp/a21a2 --host mail --password cooperation --username ciwsadmin --artwork ciwsGnome --silent --outputisoname cooperation-iws-groupware-intranet-0.7.0.iso
+
 

@@ -93,7 +93,7 @@ sed -i "12s/openmeetings/${MOD_NAME}/" /usr/lib/red5/webapps/openmeetings/conf/h
 sed -i "13s/OPENMEETING_MYSQL_PWD/$OPENMEETING_MYSQL_PWD/" /usr/lib/red5/webapps/openmeetings/conf/hibernate.cfg.xml
 sed -i "18s/openmeetings/${MOD_NAME}/" /usr/lib/red5/webapps/openmeetings/conf/hibernate.cfg.xml
 
-$BIN_MYSQL -u root < /usr/lib/red5/webapps/openmeetings/database.sql
+$BIN_MYSQL -u root --default_character_set utf8 < /usr/lib/red5/webapps/openmeetings/database.sql
 
 cat << EOT > /etc/init.d/openoffice
 #!/bin/bash

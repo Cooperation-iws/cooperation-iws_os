@@ -128,7 +128,7 @@ k: kolab
 kolabHost: $HOSTNAME.$kolab_domain_name.$kolab_domain_ext
 postfix-mydomain: $kolab_domain_name.$kolab_domain_ext
 postfix-mydestination: $kolab_domain_name.$kolab_domain_ext
-postfix-mynetworks: 127.0.0.0/8
+postfix-mynetworks: 192.168.1.0/24, 127.0.0.0/8
 postfix-enable-virus-scan: TRUE
 cyrus-autocreatequota: 100000
 cyrus-quotawarn: 80

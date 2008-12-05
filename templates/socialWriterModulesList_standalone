@@ -98,5 +98,5 @@ mail_domain=$domain
 smtp_relay="smtp.free.fr"
 mailbox_quota="100"
 snort_listening_interface="eth0"
-
+admin_email=$generic_admin_email
 

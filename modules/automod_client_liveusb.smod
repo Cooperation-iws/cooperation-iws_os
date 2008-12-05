@@ -15,7 +15,7 @@ DL_DIR=$(cat /tmp/web_install-path)
 echo "I: installing liveusb installer"
 cd $DL_DIR
 wget $URL_FREE/cooperation-iws-liveusb-0.4.deb
-dpkg -i cooperation-iws-liveusb-0.3.deb
+dpkg -i cooperation-iws-liveusb-0.4.deb
 apt-get -f install --assume-yes --force-yes
 
 mkdir /etc/skel/Desktop

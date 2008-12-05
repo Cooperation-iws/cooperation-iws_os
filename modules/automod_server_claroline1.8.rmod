@@ -86,7 +86,7 @@ sed -i "s/admin@ciws.com/${claroline_admin_email[$count]}/" $WWW_DIRECTORY/${MOD
 
 echo "UPDATE ${MOD_NAME[$count]}.cl_user SET email = '${claroline_admin_email[$count]}' WHERE cl_user.user_id =1 LIMIT 1 ;" > claroline_credentials.sql
 $BIN_MYSQL -u root < claroline_credentials.sql
-chown -R www-data $WWW_DIRECTORY/$MOD_NAME[$count]/
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 
 done
 }
