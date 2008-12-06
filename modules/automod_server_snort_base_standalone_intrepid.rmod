@@ -323,7 +323,7 @@ sed -i "993s/^/include \$RULE_PATH\/community-web-php.rules /" /etc/snort/snort.
 cat << EOT > /etc/init.d/snort
 #!/bin/bash
 
-PIDFILE=/var/run/ossec.pid
+PIDFILE=/var/run/snort.pid
 
 set -e
 
