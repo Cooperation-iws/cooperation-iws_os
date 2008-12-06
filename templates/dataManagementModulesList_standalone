@@ -33,6 +33,9 @@ nuxeo_admin_email=$generic_admin_email
 ossec_report_address=$generic_admin_email
 #Awstats
 #Cacti 0.8.7b
+cacti_name="Cacti"
+cacti_mysql_pwd=$generic_mysql_pwd
+
 #Clamav antivirus
 clam_mail_report=$generic_admin_email
 #Cooperation-iws Liveusb 0.4
