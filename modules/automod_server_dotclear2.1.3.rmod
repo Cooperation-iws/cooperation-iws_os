@@ -89,7 +89,7 @@ rm dotclear_db.sql
 sed -i "20s/Dotclear/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/inc/config.php
 sed -i "26s/Dotclear/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/inc/config.php
 sed -i "23s/mysql_pwd/${DOTCLEAR_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/inc/config.php
-sed -i "39s/http:\/\/localhost\/Dotclear\/admin\//http:\/\/'.\$HTTP_SERVER_VARS[\"SERVER_NAME\"].'/${MOD_NAME[$count]}/admin//" $WWW_DIRECTORY/${MOD_NAME[$count]}/inc/config.php
+sed -i "39s/http:\/\/localhost\/Dotclear\/admin\//http:\/\/'.\$HTTP_SERVER_VARS[\"SERVER_NAME\"].'\/${MOD_NAME[$count]}\/admin\//" $WWW_DIRECTORY/${MOD_NAME[$count]}/inc/config.php
 
 echo "
 UPDATE ${MOD_NAME[$count]}.dc_user SET user_email = '${dotclear_admin_email[$count]}' WHERE CONVERT( dc_user.user_id USING utf8 ) = 'admin' LIMIT 1 ;

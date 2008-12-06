@@ -237,7 +237,6 @@ function CREATE_INSTALL_SCRIPT
 echo "
 
 #Roundcube
-sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/$MOD_NAME/platform/conf/claro_main.conf.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
 }
