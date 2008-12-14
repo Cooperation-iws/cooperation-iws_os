@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/esmalif/cooperation/CVS/branch/Pro/ciws_fully_auto
+cd /home/esmalif/cooperation/CVS/branch/ciws_fully_auto
 
 
 #sudo ./cooperation-iws.py -c --createdirectories --modulesfile templates/dev --webappmirror http://localhost:81/depot --debmirror http://ftp.fr.debian.org/debian/ --debmirrornonfree http://mirror.home-dn.net/debian-multimedia/ --debmirrorsecurity http://security.debian.org/ --directory /media/partage-dev/tmp/1a21 --host ciws-client  --outputisoname ciws-test-0.5.2.iso --isofile /media/partage-dev/ISO/64studio-live_2.0_i386.iso
@@ -29,7 +29,7 @@ cd /home/esmalif/cooperation/CVS/branch/Pro/ciws_fully_auto
 #sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/xubuntu-8.10-desktop-i386.iso --modulesfile templates/personalModulesList --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/ubuntu_main/ --debmirrornonfree http://localhost:3142/ubuntu_multimedia/ --cms Joomla --directory /media/partage-dev/tmp/0a51 --host perso --password cooperation --username ciwsadmin --artwork ciwsGnome --outputisoname ciws-cms-intranet-0.5.2.iso --debmirrorsecurity http://localhost:3142/ubuntu_main/ --silent
 #sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/xubuntu-8.10-desktop-i386.iso --modulesfile templates/netbookModulesList --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/ubuntu_main/ --debmirrornonfree http://localhost:3142/ubuntu_multimedia/ --cms Joomla --directory /media/partage-dev/tmp/0b1 --host netbook --password cooperation --username ciwsadmin --artwork ciwsGnome --outputisoname ciws-cms-intranet-0.5.2.iso --debmirrorsecurity http://localhost:3142/ubuntu_main/ --silent --disautologin
 
-cd /home/esmalif/cooperation/CVS/branch/Pro/ciws_fully_auto
+cd /home/esmalif/cooperation/CVS/branch/ciws_fully_auto
 
 #sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/pfSense-1.2-LiveCD-Installer.iso --modulesfile templates/pfsense --outputisoname cooperation-iws-pfsense-1.2-0.7.0.iso --pfsense --directory /media/partage-dev/tmp/0101a16
 #sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/xubuntu-8.10-desktop-i386.iso --modulesfile templates/netbookModulesList --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/ubuntu_main/ --debmirrornonfree http://localhost:3142/ubuntu_multimedia/ --debmirrorsecurity http://localhost:3142/ubuntu_main/ --cms Joomla --directory /media/partage-dev/tmp/91a10 --host netbook --password cooperation --username ciwsadmin --artwork ciwsGnome --outputisoname cooperation-iws-netbook-standalone-0.7.0.iso --debmirrorsecurity http://localhost:3142/ubuntu_main/ --disautologin
@@ -40,14 +40,18 @@ cd /home/esmalif/cooperation/CVS/branch/Pro/ciws_fully_auto
 
 #sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/xubuntu-8.10-desktop-i386.iso --modulesfile templates/administrationModulesList_intranet --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/ubuntu_main/ --debmirrornonfree http://localhost:3142/ubuntu_multimedia/ --debmirrorsecurity http://localhost:3142/ubuntu_main/ --cms Joomla --directory /media/partage-dev/tmp/zab4 --host administration --password cooperation --username ciwsadmin --artwork ciwsGnome --silent --outputisoname cooperation-iws-administration-intranet-0.7.0.iso
 
-cd /home/esmalif/cooperation/CVS/branch/Pro/ciws_fully_auto
+cd /home/esmalif/cooperation/CVS/branch/ciws_fully_auto
 
 #sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/xubuntu-8.10-desktop-i386.iso --modulesfile templates/cmsModulesList_intranet --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/ubuntu_main/ --debmirrornonfree http://localhost:3142/ubuntu_multimedia/ --debmirrorsecurity http://localhost:3142/ubuntu_main/ --cms Joomla --directory /media/partage-dev/tmp/zad21a3 --host cms --password cooperation --username ciwsadmin --artwork ciwsGnome --outputisoname cooperation-iws-cms-intranet-0.7.0.iso
  
-cd /home/esmalif/cooperation/CVS/branch/Pro/ciws_fully_auto
+cd /home/esmalif/cooperation/CVS/branch/ciws_fully_auto
 #sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/xubuntu-8.10-desktop-i386.iso --modulesfile templates/dataManagementModulesList_standalone --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/ubuntu_main/ --debmirrornonfree http://localhost:3142/ubuntu_multimedia/ --debmirrorsecurity http://localhost:3142/ubuntu_main/ --cms Joomla --directory /media/partage-dev/tmp/zac10a5 --host data --password cooperation --username ciwsadmin --artwork ciwsGnome --silent --outputisoname cooperation-iws-datamanagement-standalone-0.7.0.iso
  
 #cd /home/esmalif/cooperation/CVS/branch/Pro/ciws_fully_auto
 #sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/xubuntu-8.10-desktop-i386.iso --modulesfile templates/devModulesList_standalone --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/ubuntu_main/ --debmirrornonfree http://localhost:3142/ubuntu_multimedia/ --debmirrorsecurity http://localhost:3142/ubuntu_main/ --cms Joomla --directory /media/partage-dev/tmp/zac10a6 --host dev --password cooperation --username ciwsadmin --artwork ciwsGnome --outputisoname cooperation-iws-dev-standalone-0.7.0.iso
 
-sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/xubuntu-8.10-desktop-i386.iso --modulesfile templates/gateway --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/ubuntu_main/ --debmirrornonfree http://localhost:3142/ubuntu_multimedia/ --debmirrorsecurity http://localhost:3142/ubuntu_main/ --cms Wordpress --directory /media/partage-dev/tmp/a7 --host gateway --password Lokkir10 --username eskalif --artwork ciwsGnome --outputisoname cooperation-iws-gw-intranet-0.7.1.iso --disautologin 
+#sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/xubuntu-8.10-desktop-i386.iso --modulesfile templates/gateway --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/ubuntu_main/ --debmirrornonfree http://localhost:3142/ubuntu_multimedia/ --debmirrorsecurity http://localhost:3142/ubuntu_main/ --cms Wordpress --directory /media/partage-dev/tmp/a8 --host gateway --password Lokkir10 --username eskalif --artwork ciwsGnome --outputisoname cooperation-iws-gw-intranet-0.7.1.iso --disautologin
+
+
+sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/kubuntu-8.10-desktop-i386.iso --modulesfile templates/client_kubuntu --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/ubuntu_main/ --debmirrornonfree http://localhost:3142/ubuntu_multimedia/ --debmirrorsecurity http://localhost:3142/ubuntu_main/ --directory /media/partage-dev/tmp/b2 --host ciws-client --password cooperation --username ciwsadmin --outputisoname ciws-kubuntu-8.10-client-0.5.2.iso --ostype Client
+ 
