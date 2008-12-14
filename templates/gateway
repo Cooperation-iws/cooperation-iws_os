@@ -1,0 +1,31 @@
+#!/bin/bash
+domain="ciws.com"
+generic_admin_email="test@test.com"
+generic_mysql_pwd="mysql_pwd"
+generic_login_pwd="Lokkir10"
+apache_user="www-data"
+#Auto upgrade
+
+###Cooperation-iws gui
+sphider_auto_index="y"
+#Lampp conf
+secure_mysql="y"
+secure_admin="y"
+apache_admin_pwd=$generic_login_pwd
+mysql_root_password=$generic_mysql_pwd
+#Gateway 0.3
+gateway_nb_machine=10
+gateway_net_iface="eth0"
+gateway_local_iface="eth1"
+#Ntop
+#Awstats
+#Ossec 1.5.1 standalone
+ossec_report_address=$generic_admin_email
+#Snort2.8 Base1.3.9 standalone Intrepide
+snort_registration_key=""
+base_name="Base"
+snort_mysql_pwd=$generic_mysql_pwd
+snort_listening_interface="eth0"
+#Webmin 1.4.20
+webmin_pwd=$generic_login_pwd
+
