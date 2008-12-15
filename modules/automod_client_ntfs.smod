@@ -3,18 +3,17 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='Firefox & Firefox addons'
+RMOD_NAME='Ntfs-config'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Firefox & Firefox addons'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-RMOD_REQ_XNEST=True
 TMPUSER=$(cat /tmp/tmp_user)
 export HOME="/home/$TMPUSER"
 echo "I: install firefox"
 
-apt-get install --assume-yes --force-yes firefox prism thunderbird
+apt-get install --assume-yes --force-yes ntfs-config
 
 
 
