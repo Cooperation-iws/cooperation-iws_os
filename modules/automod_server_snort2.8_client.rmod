@@ -281,6 +281,9 @@ make install
 
 
 cd $DL_DIR/snort
+sed -i "2920G" src/output-plugins/spo_database.c
+sed -i "2921s/^/data->m_sock->reconnect = 1; /" src/output-plugins/spo_database.c
+
 ./configure -enable-dynamicplugin --with-mysql
 make
 make install

@@ -175,6 +175,8 @@ make install
 
 cd $DL_DIR/snort
 sed -i "349s/O_CREAT|O_TRUNC|O_SYNC|O_WRONLY/O_CREAT|O_TRUNC|O_SYNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH/" src/preprocessors/flow/portscan/server_stats.c
+sed -i "2920G" src/output-plugins/spo_database.c
+sed -i "2921s/^/data->m_sock->reconnect = 1; /" src/output-plugins/spo_database.c
 
 ./configure -enable-dynamicplugin --with-mysql
 make

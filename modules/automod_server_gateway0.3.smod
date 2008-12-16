@@ -56,7 +56,7 @@ LOCAL_IFACE=$gateway_local_iface
 
 
 
-apt-get install --assume-yes --force-yes shorewall-shell dnsmasq dhcp3-server 
+apt-get install --assume-yes --force-yes shorewall-shell dnsmasq dhcp3-server
 
 
 #dhcp3-server config
