@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Server'
-RMOD_NAME='Gateway 0.3'
+RMOD_NAME='Gateway DNS 0.3'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Firewall / Gateway'
@@ -57,22 +57,118 @@ LOCAL_IFACE=$gateway_local_iface
 
 
 apt-get install --assume-yes --force-yes shorewall-shell dnsmasq dhcp3-server bind9 dnsutils
+#bind9 config
 
+echo "controls {
+        inet 127.0.0.1 allow {localhost; } keys { \"rndc-key\"; };
+};
+" >> /etc/bind/named.conf
+
+cat << EOT_LOCAL > /etc/bind/named.conf.local
+
+include "/etc/bind/rndc.key";
+
+controls {
+        inet 127.0.0.1 allow { localhost; } keys { "rndc-key"; };
+};
+
+
+zone "$domain" {
+        type master;
+        file "/var/cache/bind/db.$domain";
+	allow-update { key "rndc-key"; };
+ 	notify yes;
+
+
+};
+
+zone "100.168.192.in-addr.arpa" {
+        type master;
+        file "/var/cache/bind/db.192.168.100";
+	allow-update { key "rndc-key"; };
+	notify yes;
+
+
+};
+EOT_LOCAL
+
+cat << EOT_VAR > /var/cache/bind/db.$domain
+\$TTL 604800
+@ IN SOA $domain. $HOSTNAME.$domain. (
+                2008080101      ;serial
+                04800           ;refresh
+                86400           ;retry        
+                2419200         ;expire
+                604800          ;negative cache TTL
+                )
+@      IN      NS      $HOSTNAME.$domain.
+@      IN      A       192.168.100.254
+$HOSTNAME    IN      A       192.168.100.254
+EOT_VAR
+
+cat << EOT_REVERSE > /var/cache/bind/db.192.168.100
+\$TTL 604800
+@ IN SOA $domain. $HOSTNAME.$domain.  (
+                2008080101      ;serial
+                604800          ;refresh
+                86400           ;retry
+                2419200         ;expire
+                604800          ;negative cache TTL
+                )
+@     IN      NS      $HOSTNAME.$domain.
+@     IN      A       192.168.100.254
+254.100.168.192.in-addr.arpa.      IN      PTR     $HOSTNAME.$domain.
+EOT_REVERSE
+
+
+
+sed -i "13s/\/\///" /etc/bind/named.conf.options 
+sed -i "14s/\/\///" /etc/bind/named.conf.options 
+sed -i "14s/0.0.0.0/DNS_1/" /etc/bind/named.conf.options 
+sed -i "15s/\/\///" /etc/bind/named.conf.options 
+
+mv /etc/bind /var/share/etc/
+ln -s /var/share/etc/bind /etc/bind
+
+
+chmod +r /etc/bind/rndc.key
 
 #dhcp3-server config
 echo "#dhcp3-server config"
 echo "
-ddns-update-style none;
+server-identifier           server;
+ddns-updates                on;
+ddns-update-style       interim;
+ddns-domainname             \"$domain.\";
+ddns-rev-domainname         \"in-addr.arpa.\";
+ignore                  client-updates;
 authoritative;
 log-facility local7;
+include \"/etc/bind/rndc.key\";
+
+zone $domain. {
+        primary 127.0.0.1;
+        key     \"rndc-key\";
+}
+
 subnet 192.168.100.0 netmask 255.255.255.0 {
       range 192.168.100.1 192.168.100.$NB_MACHINE;
-      option domain-name-servers DNS_1;
+      option domain-name-servers 192.168.100.254;
       option domain-name \"$domain\";
       option routers 192.168.100.254;
       option broadcast-address 192.168.100.255;
       default-lease-time 72000;
       max-lease-time 7200;
+	zone $HOSTNAME.$domain. {
+                primary 192.168.100.254;
+                key "rndc-key";
+        }
+
+        zone 100.168.192.in-addr.arpa. {
+                primary 192.168.100.254;
+                key "rndc-key";
+        }
+
 }
 " > /etc/dhcp3/dhcpd.conf
 
@@ -109,63 +205,21 @@ ln -s /var/share/etc/shorewall /etc/shorewall
 sed -i "s/startup=0/startup=1/" /etc/default/shorewall
 
 
-#bind9 config
-
-cat << EOT_LOCAL > /etc/bind/named.conf.local
-
-zone "$domain" {
-        type master;
-        file "db.$domain";
-};
-
-zone "100.168.192.in-addr.arpa" {
-        type master;
-        file "db.192.168.100";
-};
-EOT_LOCAL
-
-cat << EOT_VAR > /var/cache/bind/db.$domain
-
-$TTL 604800
-@ IN SOA $HOSTNAME.$domain. (
-                2008080101      ;serial
-                04800           ;refresh
-                86400           ;retry        
-                2419200         ;expire
-                604800          ;negative cache TTL
-                )
-@       IN      NS      $HOSTNAME.$domain.
-@       IN      A       192.168.100.254
- 
-EOT_VAR
-cat << EOT_REVERSE > /var/cache/bind/db.192.168.100
-$TTL 604800
-@ IN SOA $HOSTNAME.$domain.  (
-                2008080101      ;serial
-                604800          ;refresh
-                86400           ;retry
-                2419200         ;expire
-                604800          ;negative cache TTL
-                )
-@       IN      NS      $HOSTNAME.$domain.
-@       IN      A       192.168.100.254
-1       IN      PTR     $HOSTNAME.$domain.
-EOT_REVERSE
 
 
- echo "
+echo "
 #Gateway
 dhclient $NET_IFACE
 dns=\$(cat /etc/resolv.conf | grep -m 1 nameserver | cut -d' ' -f2)
-sed -i \"s/DNS_1/\$dns/\" /etc/dhcp3/dhcpd.conf
+sed -i \"s/DNS_1/\$dns/\" /etc/bind/named.conf.options 
 sudo ifconfig $LOCAL_IFACE 192.168.100.254 
 sleep 2
 /etc/init.d/shorewall stop
 /etc/init.d/dhcp3-server stop
 /etc/init.d/shorewall start
-/etc/init.d/dhcp3-server start
 sudo ifconfig $LOCAL_IFACE 192.168.100.254 
 sleep 2
+sudo /etc/init.d/bind9 restart
 sudo /etc/init.d/dhcp3-server restart
 " >> /etc/rc.local
 

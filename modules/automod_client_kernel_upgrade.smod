@@ -1,0 +1,23 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='kernel upgrade'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Update Manager'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$(cat /tmp/user)
+
+DISPLAY=127.0.0.1:5.0
+export LANG="en"
+export LC_ALL=C
+export HOME=/home/liveusb
+
+
+
+apt-get install --assume-yes --force-yes linux-generic linux-image-generic linux-restricted-modules-generic
+
+
