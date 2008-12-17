@@ -7,7 +7,7 @@ RMOD_SUBCATEGORY='OS'
 RMOD_NAME='Kerrighed'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Single OS image Cluster'
+RMOD_DESCRIPTION='Kerrighed 2.3.0 etch'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 DISPLAY=127.0.0.1:5.0
@@ -28,6 +28,7 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
+. /tmp/app_params
 
 
 function INSTALL
@@ -121,11 +122,13 @@ cat /etc/resolv.conf | cut -d' ' -f2 > /tmp/dns
 
 DNS_1=$(echo $(cat /tmp/dns) |cut -d' ' -f1)
 
-DNS_2=$(echo $(cat /tmp/dns) |cut -d' ' -f2)
 
 
 echo "
 ### PART 1
+ddns-update-style none;
+authoritative;
+log-facility local7;
 
 # GRUB magic
 option grub-menu code 150 = string;
@@ -140,12 +143,14 @@ option ntp-servers ntp.network.net;
 
 ### PART 3
 subnet 192.168.99.0 netmask 255.255.255.0 {
-option domain-name-servers ${DNS_1}, ${DNS_2};
+option domain-name-servers ${DNS_1};
 option routers 192.168.99.254;
 option broadcast-address 192.168.99.255;
 filename \"pxelinux.0\";
 option root-path \"/var/chroot\";
 range 192.168.99.1 192.168.99.253;
+default-lease-time 72000;
+      max-lease-time 7200;
 }
 
 
@@ -167,9 +172,7 @@ echo "
 #!/bin/bash
 cat /etc/resolv.conf | cut -d' ' -f2 > /tmp/dns
 DNS_1=\$(echo \$(cat /tmp/dns) |cut -d' ' -f1)
-DNS_2=\$(echo \$(cat /tmp/dns) |cut -d' ' -f2)
 sed -i \"s/${DNS_1}/\${DNS_1}/\" /etc/dhcp3/dhcpd.conf
-sed -i \"s/${DNS_2}/\${DNS_2}/\" /etc/dhcp3/dhcpd.conf
 
 ifconfig eth1 192.168.99.254
 /etc/init.d/dhcp3-server restart
@@ -203,8 +206,8 @@ chmod -R +r /srv/tftp/
 ##Shorewall
 apt-get install --assume-yes --force-yes shorewall-shell dnsmasq 
 
-NET_IFACE="eth0"
-LOCAL_IFACE="eth1"
+NET_IFACE=$gateway_net_iface
+LOCAL_IFACE=$gateway_local_iface="eth1"
 
 #mv /etc/shorewall/ /var/share/etc/shorewall
 
