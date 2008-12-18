@@ -1,0 +1,270 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='OS'
+RMOD_NAME='Kerrighed 2.3.0 etch'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Kerrighed 2.3.0 etch'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+DISPLAY=127.0.0.1:5.0
+LANG_UI=$(cat /tmp/lang-wui)
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL="mysql"
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+CASPER_PATH=$(cat /tmp/casper_path)
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
+DEBNONFREE_MIRROR_PATH=$(cat /tmp/deb-nonfree_mirror_path)
+DEB_MIRROR_SECURITY_PATH=$(cat /tmp/deb-security_mirror_path)
+
+INSTALL=$(cat /tmp/def_install)
+
+. /tmp/app_params
+
+
+function INSTALL
+{
+echo "deb http://live.debian.net/debian/ ./" >> /etc/apt/sources.list
+apt-get update
+
+apt-get install -y --force-yes live-helper cdebootstrap debian-keyring
+
+mkdir /tmp/debianlive
+cd /tmp/debianlive
+lh_config -p xfce --distribution etch --linux-flavours "686" --mirror-bootstrap "$DEB_MIRROR_PATH" --mirror-chroot "$DEB_MIRROR_PATH" --mirror-binary "$DEB_MIRROR_PATH" --apt-options "--yes  --force-yes"
+lh_bootstrap
+lh_chroot
+
+mv /tmp/debianlive/chroot /var
+echo $URL_FREE > /var/chroot/tmp/url_free
+chroot /var/chroot << "EOF"
+set passwd/root-password-crypted kj8A7sqYE9dQE
+
+rm /etc/init.d/gdm
+
+mount -t proc none /proc
+apt-get remove --assume-yes --force-yes live-initramfs
+apt-get install --yes --force-yes build-essential pkg-config rsync lsb xmlto bzip2
+
+apt-get install --assume-yes --force-yes dhcp3-common nfs-common nfsbooted 
+#/etc/init.d/portmap start
+#/etc/init.d/nfs-common start
+/etc/init.d/portmap stop
+/etc/init.d/nfs-common stop
+/etc/init.d/openbsd-inetd stop
+/etc/init.d/umountnfs.sh stop
+
+echo "
+none    /proc       proc    defaults    0 0
+none    /sys        sysfs   defaults    0 0
+none    /var/run    tmpfs   defaults    0 0
+192.168.99.254:/var/chroot/dev     /dev    nfs rw,hard,nolock 0 0
+192.168.99.254:/var/chroot/var     /var    nfs rw,hard,nolock 0 0
+192.168.99.254:/var/chroot/tmp     /tmp    nfs rw,hard,nolock 0 0
+192.168.99.254:/var/chroot/root    /root   nfs rw,hard,nolock 0 0
+" > /etc/fstab
+
+URL_FREE=$(cat /tmp/url_free)
+ln -sf /etc/network/if-up.d/mountnfs /etc/rcS.d/S35mountnfs
+wget -O /usr/src/kerrighed-latest.tar.gz $URL_FREE/kerrighed-latest.tar.gz
+wget -O /usr/src/linux-2.6.20.tar.bz2 $URL_FREE/linux-2.6.20.tar.bz2
+
+cd /usr/src
+tar zxf kerrighed-latest.tar.gz
+tar jxf linux-2.6.20.tar.bz2
+cd kerrighed-*
+./configure --with-kernel=/usr/src/linux-2.6.20 
+echo "PRESS ENTER"
+#read r < /dev/tty
+
+make patch
+make defconfig
+sed -i \"303s/=/= -fno-tree-scev-cprop/\" ../linux-2.6.20/Makefile
+make kernel
+echo "PRESS ENTER"
+#read r < /dev/tty
+make 
+echo "PRESS ENTER"
+#read r < /dev/tty
+
+make kernel-install
+echo "PRESS ENTER"
+#read r < /dev/tty
+
+make install
+echo "PRESS ENTER"
+#read r < /dev/tty
+
+echo \"session=10\" > /etc/kerrighed_nodes 
+umount /proc
+EOF
+umount /var/chroot/proc
+
+apt-get install --assume-yes --force-yes dhcp3-server nfs-common syslinux tftp-hpa tftpd-hpa
+
+/etc/init.d/portmap start
+/etc/init.d/nfs-common start
+apt-get install --assume-yes --force-yes nfs-kernel-server
+/etc/init.d/kerneloops stop
+invoke-rc.d nfs-kernel-server stop 
+/etc/init.d/nfs-kernel-server stop 
+/etc/init.d/nfs-common stop 
+/etc/init.d/portmap stop 
+/etc/init.d/exim4 stop
+/etc/init.d/inetutils-inetd stop
+/etc/init.d/tftpd-hpa stop
+
+
+
+echo "#Defaults for tftpd-hpa
+RUN_DAEMON=\"yes\"
+OPTIONS=\"-l -s /srv/tftp\" " > /etc/default/tftpd-hpa
+
+echo "" > /etc/xinetd.conf
+
+cat /etc/resolv.conf | cut -d' ' -f2 > /tmp/dns
+
+
+
+
+
+echo "
+### PART 1
+ddns-update-style none;
+authoritative;
+log-facility local7;
+
+# GRUB magic
+option grub-menu code 150 = string;
+
+# General options
+option dhcp-max-message-size 2048;
+
+
+### PART 2
+option domain-name \"mycluster.home\";
+option ntp-servers ntp.network.net;
+
+### PART 3
+subnet 192.168.99.0 netmask 255.255.255.0 {
+option domain-name-servers DNS_1;
+option routers 192.168.99.254;
+option broadcast-address 192.168.99.255;
+filename \"pxelinux.0\";
+option root-path \"/var/chroot\";
+range 192.168.99.1 192.168.99.253;
+default-lease-time 72000;
+      max-lease-time 7200;
+}
+
+
+" > /etc/dhcp3/dhcpd.conf
+
+sed -i "s/INTERFACES=\"\"/INTERFACES=\"eth1\"/" /etc/default/dhcp3-server
+chmod +r /etc/default/dhcp3-server
+
+echo "
+/var/chroot/ *(ro,async,no_root_squash,no_subtree_check,fsid=1)
+/var/chroot/tmp *(rw,sync,no_root_squash,no_subtree_check,fsid=2)
+/var/chroot/var *(rw,sync,no_root_squash,no_subtree_check,fsid=3)
+/var/chroot/dev *(rw,sync,no_root_squash,no_subtree_check,fsid=4)
+/var/chroot/root *(rw,sync,no_root_squash,no_subtree_check,fsid=5)
+" > /etc/exports
+
+echo "
+#!/bin/bash
+cat /etc/resolv.conf | cut -d' ' -f2 > /tmp/dns
+DNS_1=\$(echo \$(cat /tmp/dns) |cut -d' ' -f1)
+sed -i \"s/DNS_1/\${DNS_1}/\" /etc/dhcp3/dhcpd.conf
+
+ifconfig eth1 192.168.99.254
+/etc/init.d/dhcp3-server restart
+/etc/init.d/tftpd-hpa restart
+/etc/init.d/nfs-kernel-server restart
+/etc/init.d/shorewall restart
+" > /etc/rc.local
+
+mkdir /srv/tftp
+cp /var/chroot/boot/vmlinuz-2.6.20-krg /srv/tftp
+
+cd /srv/tftp
+cp /usr/lib/syslinux/pxelinux.0 .
+
+mkdir /srv/tftp/pxelinux.cfg
+
+echo "
+### /srv/tftp/pxelinux.cfg/default ###
+
+default patates
+label patates
+        kernel /vmlinuz-2.6.20-krg
+        append console=tty1 root=/dev/nfs nfsroot=192.168.99.254:/var/chroot,v3 ro ip=dhcp pci=nommconf 
+
+######
+" > /srv/tftp/pxelinux.cfg/default
+
+chmod -R +r /srv/tftp/
+
+
+##Shorewall
+apt-get install --assume-yes --force-yes shorewall-shell dnsmasq 
+
+NET_IFACE=$gateway_net_iface
+LOCAL_IFACE=$gateway_local_iface="eth1"
+
+#mv /etc/shorewall/ /var/share/etc/shorewall
+
+
+#ln -s /var/share/etc/shorewall /etc/shorewall
+
+
+cp /usr/share/doc/shorewall-common/examples/two-interfaces/* /etc/shorewall
+
+
+sed -i "s/eth0/$NET_IFACE/" /etc/shorewall/interfaces
+sed -i "s/eth1/$LOCAL_IFACE/" /etc/shorewall/interfaces
+sed -i "s/eth0/$NET_IFACE/" /etc/shorewall/masq
+sed -i "s/eth1/$LOCAL_IFACE/" /etc/shorewall/masq
+sed -i "s/STARTUP_ENABLED=No/STARTUP_ENABLED=Yes/" /etc/shorewall/shorewall.conf
+sed -i "43s/REJECT/ACCEPT/" /etc/shorewall/policy
+sed -i "43s/ info//" /etc/shorewall/policy
+
+chmod -R +r /etc/shorewall
+
+
+#mv /etc/default/shorewall /var/share/etc/default
+
+#ln -s /var/share/etc/default/shorewall /etc/default/shorewall
+
+sed -i "s/startup=0/startup=1/" /etc/default/shorewall
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+echo "I: Install SSH"
+INSTALL
+echo "I: End of Install SSH"

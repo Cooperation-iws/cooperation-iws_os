@@ -194,7 +194,7 @@ sed -i "s/eth1/$LOCAL_IFACE/" /etc/shorewall/masq
 sed -i "s/STARTUP_ENABLED=No/STARTUP_ENABLED=Yes/" /etc/shorewall/shorewall.conf
 sed -i "43s/REJECT/ACCEPT/" /etc/shorewall/policy
 sed -i "43s/ info//" /etc/shorewall/policy
-sed -i "s/\$FW        net        REJECT        info/\$FW        net        ACCEPT/" /etc/shorewall/policy
+#sed -i "s/\$FW        net        REJECT        info/\$FW        net        ACCEPT/" /etc/shorewall/policy
 
 chmod -R +r /etc/shorewall
 
