@@ -112,10 +112,12 @@ umount /proc
 EOF
 umount /var/chroot/proc
 
-apt-get install --assume-yes --force-yes dhcp3-server nfs-common syslinux tftp-hpa tftpd-hpa
+apt-get install --assume-yes --force-yes dhcp3-server nfs-common syslinux tftp-hpa tftpd-hpa 
 
-/etc/init.d/portmap start
-/etc/init.d/nfs-common start
+#hack for nfs-kernel-server in chroot (/proc bug)
+rm -r /etc/exports
+mkdir /etc/exports
+
 apt-get install --assume-yes --force-yes nfs-kernel-server
 /etc/init.d/kerneloops stop
 invoke-rc.d nfs-kernel-server stop 
@@ -125,7 +127,7 @@ invoke-rc.d nfs-kernel-server stop
 /etc/init.d/exim4 stop
 /etc/init.d/inetutils-inetd stop
 /etc/init.d/tftpd-hpa stop
-
+killall -9 /usr/sbin/atd
 
 
 echo "#Defaults for tftpd-hpa
@@ -175,6 +177,7 @@ default-lease-time 72000;
 sed -i "s/INTERFACES=\"\"/INTERFACES=\"eth1\"/" /etc/default/dhcp3-server
 chmod +r /etc/default/dhcp3-server
 
+rm -r /etc/exports
 echo "
 /var/chroot/ *(ro,async,no_root_squash,no_subtree_check,fsid=1)
 /var/chroot/tmp *(rw,sync,no_root_squash,no_subtree_check,fsid=2)

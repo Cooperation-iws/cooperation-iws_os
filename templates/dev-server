@@ -1,10 +1,4 @@
 #!/bin/bash
-#NX
+#NX Server
 ##SSH Server
-#Clamav antivirus
-clam_mail_report="veille.gensys-net.eu"
-#Postfix Relay Client
-smtp_postfix_client_relay="smtp.free.fr"
-#Debian Multimedia Codecs
-#ooo3 client
 

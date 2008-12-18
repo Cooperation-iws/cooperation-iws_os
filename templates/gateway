@@ -13,10 +13,11 @@ secure_mysql="y"
 secure_admin="y"
 apache_admin_pwd=$generic_login_pwd
 mysql_root_password=$generic_mysql_pwd
-#Gateway 0.3
+#Gateway DNS 0.3
 gateway_nb_machine=10
 gateway_net_iface="eth0"
 gateway_local_iface="eth1"
+domain="local.intra"
 #Ntop
 #Awstats
 #Ossec 1.5.1 standalone
@@ -28,4 +29,4 @@ snort_mysql_pwd=$generic_mysql_pwd
 snort_listening_interface="eth0"
 #Webmin 1.4.20
 webmin_pwd=$generic_login_pwd
-
+#debian netbook

@@ -10,7 +10,7 @@ mkdir /etc/skel/Desktop
 
 apt-get install --assume-yes --force-yes usplash
 cd /tmp/ciws_gnome
-if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "intrepid" ]; then
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "intrepid" ] || [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ]; then
 dpkg -i usplash-theme-wideubuntu_1.0-1_i386.deb
 else
 dpkg -i usplash-theme-ciws_0.1-1_i386.deb 

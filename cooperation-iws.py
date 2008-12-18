@@ -3194,6 +3194,15 @@ class Reconstructor:
 		self.debDist= 'lenny'
 		self.distVariant = 'lenny'	
 		print "Debian Lenny Live CD"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + '| grep \'vyatta\'') != '':
+		self.casperPath = 'live'
+		self.wTree.get_widget("hbox701").hide()
+		self.wTree.get_widget("hbox301").show()
+		self.wTree.get_widget("hbox702").show()
+		self.wTree.get_widget("labelLiveCDKeybLang3").show()	    	
+		self.debDist= 'lenny'
+		self.distVariant = 'vyatta'	
+		print "Vyatta Live CD"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'sid\'') != '':	    	
 		self.debDist= 'sid'			
 		self.casperPath = 'live'
@@ -3202,7 +3211,7 @@ class Reconstructor:
 		self.wTree.get_widget("hbox301").show()
 		self.wTree.get_widget("hbox702").show()
 		self.wTree.get_widget("labelLiveCDKeybLang3").show()	    	
-		print "Debian Lenny Live CD"
+		print "Debian Sid Live CD"
 	    	
 	    else:
 		print "Live CD not detected, Aborting"
@@ -3646,7 +3655,7 @@ class Reconstructor:
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
-                    if re.search('.scrmod', ext):
+                    if re.search('.omod', ext):
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'echo ------------Cooperation-iws----------------------\n'
                         modExecScrChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
