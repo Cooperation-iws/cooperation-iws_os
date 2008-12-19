@@ -847,7 +847,7 @@ class Reconstructor:
         for root, dirs, files in os.walk(self.moduleDir):
                 for f in files:
                     r, ext = os.path.splitext(f)
-                    if ext == '.rmod' or ext == '.smod' or ext == '.omod':
+                    if ext == '.rmod' or ext == '.smod' or ext == '.kmod':
                         print 'Module: ' + f.replace('.?mod', '') + ' found...'
 
                         modPath = os.path.join(self.moduleDir, f)
@@ -994,7 +994,7 @@ class Reconstructor:
 		count = 1
                 for f in files:
                     r, ext = os.path.splitext(f)
-                    if ext == '.rmod' or ext == '.smod' or ext == '.omod':
+                    if ext == '.rmod' or ext == '.smod' or ext == '.kmod':
                         #print 'Module: ' + f.replace('.?mod', '') + ' found...'
 
                         modPath = os.path.join(self.moduleDir, f)
@@ -1026,7 +1026,7 @@ class Reconstructor:
 		count = 0
                 for f in files:
                     r, ext = os.path.splitext(f)
-                    if ext == '.rmod' or ext == '.smod' or ext == '.omod':
+                    if ext == '.rmod' or ext == '.smod' or ext == '.kmod':
                         #print 'Module: ' + f.replace('.?mod', '') + ' found...'
 
                         modPath = os.path.join(self.moduleDir, f)
@@ -3513,7 +3513,7 @@ class Reconstructor:
 		os.popen('sed -i "s/splash/splash union=aufs/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
 	if self.casperPath == 'live':
 		os.popen('sed -i "s/initrd=\/'+self.casperPath+'\/initrd1.img/initrd=\/'+self.casperPath+'\/initrd.gz keyb='+self.keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg")) 
-	
+		os.popen('echo '+self.keyLang+' > ' + os.path.join(self.customDir, "chroot/tmp/keyblang") )
 	#XNEST
 	scriptCustomExec = '#!/bin/sh\n\n'
 	if self.reqXnest == True: 
@@ -3636,7 +3636,11 @@ class Reconstructor:
    		modExecScrChroot += 'sed -i \'1278s/ro/rw/\' /usr/share/initramfs-tools/scripts/live\n' 
    		modExecScrChroot += 'sed -i \'902s/${snapback}/${mountpoint}/\' /usr/share/initramfs-tools/scripts/live\n' 
    		#modExecScrChroot += 'sed -i \'358s/^/#/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-   		
+   	modExecLamppChroot = '#!/bin/sh\n\ncd /tmp ;\n'
+	modExecLamppChroot = 'export DEBIAN_FRONTEND=noninteractive\n'
+	modExecLamppChroot += 'export DISPLAY=127.0.0.1:5.0 \n'
+ 	modExecLamppChroot += 'export LC_ALL=C \n'
+ 		
 
 	if self.execModulesEnabled == True:
             print _('Running modules...')
@@ -3655,7 +3659,7 @@ class Reconstructor:
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
-                    if re.search('.omod', ext):
+                    if re.search('.kmod', ext):
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'echo ------------Cooperation-iws----------------------\n'
                         modExecScrChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
@@ -3667,39 +3671,39 @@ class Reconstructor:
                 for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
                     if re.search('.smod', ext):
-                        modExecScrChroot += 'echo -------------------------------------------------\n'
-                        modExecScrChroot += 'echo ------------Cooperation-iws----------------------\n'
-                        modExecScrChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
-                        modExecScrChroot += 'echo -------------------------------------------------\n'
-                        modExecScrChroot += 'echo -------------------------------------------------\n'
-                        modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
+                        modExecLamppChroot += 'echo -------------------------------------------------\n'
+                        modExecLamppChroot += 'echo ------------Cooperation-iws----------------------\n'
+                        modExecLamppChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
+                        modExecLamppChroot += 'echo -------------------------------------------------\n'
+                        modExecLamppChroot += 'echo -------------------------------------------------\n'
+                        modExecLamppChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
 	    modExecScrChroot += 'echo Running Core:  \n'
 	    if self.ReqApache == "A":    
-		modExecScrChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
-		modExecScrChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
+		modExecLamppChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
+		modExecLamppChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
 	    if self.artwork != "":  
 		modExecScrChroot += 'bash \"/tmp/artwork.amod\"' + ' ;\n '
             for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
                     if re.search('.rmod', ext):
-                        modExecScrChroot += 'echo -------------------------------------------------\n'
-                        modExecScrChroot += 'echo ------------Cooperation-iws----------------------\n'
-                        modExecScrChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
-                        modExecScrChroot += 'echo -------------------------------------------------\n'
-                        modExecScrChroot += 'echo -------------------------------------------------\n'
-                        modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
+                        modExecLamppChroot += 'echo -------------------------------------------------\n'
+                        modExecLamppChroot += 'echo ------------Cooperation-iws----------------------\n'
+                        modExecLamppChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
+                        modExecLamppChroot += 'echo -------------------------------------------------\n'
+                        modExecLamppChroot += 'echo -------------------------------------------------\n'
+                        modExecLamppChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in execModFiles:
                     ext = os.path.basename(execMod)
             
             modExecScr += '\necho \'--------------------\'\necho \'Modules Finished...\'\n'
             #modExecScr += '\n read ok < /dev/tty\n'
-            modExecScrChroot += '\necho \'--------------------\'\necho \'Modules Finished...\'\n'
-            modExecScrChroot += 'echo Running Core_end \n'
-            modExecScrChroot += 'bash \"/tmp/end_Lampp.sh\"' + ' ;\n '
+            modExecLamppChroot += '\necho \'--------------------\'\necho \'Modules Finished...\'\n'
+            modExecLamppChroot += 'echo Running Core_end \n'
+            modExecLamppChroot += 'bash \"/tmp/end_Lampp.sh\"' + ' ;\n '
 	    
-        modExecScrChroot += 'sleep 10'
+        modExecLamppChroot += 'sleep 10'
 	    
         #modExecScrChroot += 'echo \'Press [Enter] to continue...\'\nread \n'
         #print modExecScr
@@ -3712,7 +3716,12 @@ class Reconstructor:
         fModExecChroot.write(modExecScrChroot)
         fModExecChroot.close()
         os.popen('chmod a+x ' + os.path.join(self.customDir, "chroot/tmp/module-exec.sh"))
-             	   	
+        fModExecChroot=open(os.path.join(self.customDir, "chroot/tmp/lampp-exec.sh"), 'w')
+        fModExecChroot.write(modExecLamppChroot)
+        fModExecChroot.close()
+        os.popen('chmod a+x ' + os.path.join(self.customDir, "chroot/tmp/lampp-exec.sh"))
+        os.popen('echo "normal" > '+os.path.join(self.customDir, "chroot/tmp/in_chroot"))
+   	   	
 	#os.popen('xterm -title \'Reconstructor Module Exec\' -e chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/module-exec.sh')
         # copy dns info
         print _("Copying DNS info...")
@@ -3745,6 +3754,8 @@ class Reconstructor:
         # run module script
            
 	os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/module-exec.sh')
+	if commands.getoutput('cat '  +  os.path.join(self.customDir, "chroot/tmp/in_chroot")  + ' | grep \'normal\'') != '':        
+		os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/lampp-exec.sh')
         os.system('bash \"' + os.path.join(self.customDir, "scripts/module-exec.sh")+ '\"')
 	        
 	# cleanup

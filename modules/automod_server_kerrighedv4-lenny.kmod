@@ -28,6 +28,7 @@ URL_FREE=$(cat /tmp/url_mirroir)
 DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
 DEBNONFREE_MIRROR_PATH=$(cat /tmp/deb-nonfree_mirror_path)
 DEB_MIRROR_SECURITY_PATH=$(cat /tmp/deb-security_mirror_path)
+KEYBLANG = $(cat /tmp/keyblang)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -43,18 +44,49 @@ apt-get install -y --force-yes live-helper cdebootstrap debian-keyring
 
 mkdir /tmp/debianlive
 cd /tmp/debianlive
-lh_config -p xfce --distribution lenny --linux-flavours "686" --mirror-bootstrap "$DEB_MIRROR_PATH" --mirror-chroot "$DEB_MIRROR_PATH" --mirror-binary "$DEB_MIRROR_PATH" --apt-options "--yes  --force-yes"
+lh_config -p xfce --distribution lenny --linux-flavours "686" --mirror-bootstrap "$DEB_MIRROR_PATH" --mirror-chroot "$DEB_MIRROR_PATH" --mirror-binary "$DEB_MIRROR_PATH" --apt-options "--yes  --force-yes" --bootappend-live "keyb=$KEYBLANG"
 lh_bootstrap
 lh_chroot
 
 mv /tmp/debianlive/chroot /var
 echo $URL_FREE > /var/chroot/tmp/url_free
+cp -r /tmp/* /var/chroot/tmp/.
+
 chroot /var/chroot << "EOF"
+export DEBIAN_FRONTEND=noninteractive
+mount -t proc none /proc
+. /tmp/init.sh
+. /tmp/lampp-exec.sh
+echo "I: shuting down servers"
+#shutdown script
+killall -9 apache2
+killall -9 mysqld
+killall -9 mysqld_safe
+/etc/init.d/webmin stop 1>&2 2>/dev/null
+/etc/init.d/postfix stop 1>&2 2>/dev/null
+/etc/init.d/dovecot stop 1>&2 2>/dev/null
+/etc/init.d/mailscanner stop 1>&2 2>/dev/null
+/etc/init.d/clamav-daemon stop 1>&2 2>/dev/null
+/etc/init.d/open-xchange-admin stop 1>&2 2>/dev/null
+/etc/init.d/open-xchange-groupware stop 1>&2 2>/dev/null
+/etc/init.d/dhcp3-server stop 1>&2 2>/dev/null
+/etc/init.d/tftpd-hpa stop 1>&2 2>/dev/null
+/etc/init.d/portmap stop 1>&2 2>/dev/null
+/etc/init.d/nfs-common stop 1>&2 2>/dev/null
+/etc/init.d/nfs-kernel-server stop 1>&2 2>/dev/null
+/etc/init.d/syslog-ng stop 1>&2 2>/dev/null
+killall -9 ruby 1>&2 2>/dev/null
+/kolab/bin/openpkg rc all stop 1>&2 2>/dev/null
+/etc/init.d/openoffice stop 1>&2 2>/dev/null
+/opt/lps-4.0.6/Server/tomcat-5.0.24/bin/shutdown.sh 1>&2 2>/dev/null
+/etc/init.d/red5 stop 1>&2 2>/dev/null
+
+
 set passwd/root-password-crypted kj8A7sqYE9dQE
 
 rm /etc/init.d/gdm
 
-mount -t proc none /proc
+
 apt-get remove --assume-yes --force-yes live-initramfs
 apt-get install --yes --force-yes build-essential pkg-config rsync lsb xmlto bzip2
 
@@ -85,8 +117,14 @@ cd /usr/src
 tar zxf kerrighed-latest.tar.gz
 tar jxf linux-2.6.20.tar.bz2
 echo "
-EXPORT_SYMBOL(_proxy_pda);
-" >> /usr/src/linux-2.6.20/arch/i386/kernel/i386_ksyms.c
+EXPORT_SYMBOL(_proxy_pda);" >> /usr/src/linux-2.6.20/arch/i386/kernel/i386_ksyms.c
+
+sed -i "29s/0/1/" /usr/src/linux-2.6.20/arch/i386/kernel/vmlinux.lds.S
+sed -i "171G" /usr/src/linux-2.6.20/include/linux/time.h
+sed -i "171G" /usr/src/linux-2.6.20/include/linux/time.h
+sed -i '172s/^/asm("" : "+r"(ns));/' /usr/src/linux-2.6.20/include/linux/time.h
+
+
 cd kerrighed-*
 ./configure --with-kernel=/usr/src/linux-2.6.20 
 echo "PRESS ENTER"
@@ -111,23 +149,49 @@ echo "PRESS ENTER"
 #read r < /dev/tty
 
 echo \"session=10\" > /etc/kerrighed_nodes 
+
+echo "I: empty temporary directory"
+rm -r /tmp/*
+rm /var/cache/apt/archives/* > /dev/null 2>&1 
+rm /var/cache/apt/archives/partial/* > /dev/null 2>&1 
+
 umount /proc
 EOF
 umount /var/chroot/proc
 
-#apt-get install --assume-yes --force-yes dhcp3-server nfs-common syslinux tftp-hpa tftpd-hpa
+echo "I: config rc.local"
 
-/etc/init.d/portmap start
-/etc/init.d/nfs-common start
-#apt-get install --assume-yes --force-yes nfs-kernel-server
+echo "#!/bin/bash
 
+" > /var/chroot/var/share/etc/rc.ciws > /dev/null 2>&1 
+
+chmod +x /var/chroot/var/share/etc/rc.ciws > /dev/null 2>&1 
+
+echo "
+/var/share/etc/rc.ciws
+exit 0
+
+" >> /var/chroot/etc/rc.local
+chmod +x /var/chroot/etc/rc.local
+
+
+
+apt-get install --assume-yes --force-yes dhcp3-server nfs-common syslinux tftp-hpa tftpd-hpa 
+
+#hack for nfs-kernel-server in chroot (/proc bug)
+rm -r /etc/exports
+mkdir /etc/exports
+
+apt-get install --assume-yes --force-yes nfs-kernel-server
+/etc/init.d/kerneloops stop
+invoke-rc.d nfs-kernel-server stop 
 /etc/init.d/nfs-kernel-server stop 
-/etc/init.d/portmap stop 
 /etc/init.d/nfs-common stop 
+/etc/init.d/portmap stop 
 /etc/init.d/exim4 stop
 /etc/init.d/inetutils-inetd stop
 /etc/init.d/tftpd-hpa stop
-
+killall -9 /usr/sbin/atd
 
 
 echo "#Defaults for tftpd-hpa
@@ -138,7 +202,7 @@ echo "" > /etc/xinetd.conf
 
 cat /etc/resolv.conf | cut -d' ' -f2 > /tmp/dns
 
-DNS_1=$(echo $(cat /tmp/dns) |cut -d' ' -f1)
+
 
 
 
@@ -161,7 +225,7 @@ option ntp-servers ntp.network.net;
 
 ### PART 3
 subnet 192.168.99.0 netmask 255.255.255.0 {
-option domain-name-servers ${DNS_1};
+option domain-name-servers DNS_1;
 option routers 192.168.99.254;
 option broadcast-address 192.168.99.255;
 filename \"pxelinux.0\";
@@ -177,6 +241,7 @@ default-lease-time 72000;
 sed -i "s/INTERFACES=\"\"/INTERFACES=\"eth1\"/" /etc/default/dhcp3-server
 chmod +r /etc/default/dhcp3-server
 
+rm -r /etc/exports
 echo "
 /var/chroot/ *(ro,async,no_root_squash,no_subtree_check,fsid=1)
 /var/chroot/tmp *(rw,sync,no_root_squash,no_subtree_check,fsid=2)
@@ -189,7 +254,7 @@ echo "
 #!/bin/bash
 cat /etc/resolv.conf | cut -d' ' -f2 > /tmp/dns
 DNS_1=\$(echo \$(cat /tmp/dns) |cut -d' ' -f1)
-sed -i \"s/${DNS_1}/\${DNS_1}/\" /etc/dhcp3/dhcpd.conf
+sed -i \"s/DNS_1/\${DNS_1}/\" /etc/dhcp3/dhcpd.conf
 
 ifconfig eth1 192.168.99.254
 /etc/init.d/dhcp3-server restart
@@ -224,7 +289,7 @@ chmod -R +r /srv/tftp/
 apt-get install --assume-yes --force-yes shorewall-shell dnsmasq 
 
 NET_IFACE=$gateway_net_iface
-LOCAL_IFACE=$gateway_local_iface="eth1"
+LOCAL_IFACE=$gateway_local_iface
 
 #mv /etc/shorewall/ /var/share/etc/shorewall
 
@@ -253,6 +318,11 @@ chmod -R +r /etc/shorewall
 sed -i "s/startup=0/startup=1/" /etc/default/shorewall
 
 
+#Lampp
+echo "kerrighed" > /tmp/in_chroot
+
+
+
 }
 
 #_______________________________________________________________________________________________
@@ -267,6 +337,6 @@ sed -i "s/startup=0/startup=1/" /etc/default/shorewall
 
 
 
-echo "I: Install SSH"
+echo "I: Install Kerrighed"
 INSTALL
-echo "I: End of Install SSH"
+echo "I: End of Install Kerrighed"

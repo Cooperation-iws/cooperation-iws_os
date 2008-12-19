@@ -48,9 +48,9 @@ sed -i -e "13s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "15s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 fi
 else
-sed -i -e "904s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "1210s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "1218s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+#sed -i -e "904s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "1275s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "1284s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "14s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "16s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 fi
