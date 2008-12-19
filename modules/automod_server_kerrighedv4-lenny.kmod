@@ -81,6 +81,16 @@ killall -9 ruby 1>&2 2>/dev/null
 /opt/lps-4.0.6/Server/tomcat-5.0.24/bin/shutdown.sh 1>&2 2>/dev/null
 /etc/init.d/red5 stop 1>&2 2>/dev/null
 
+mv /etc/init.d/mysql /etc/init.d_mysql
+mv /etc/init.d/mysql-ndb /etc/init.d_mysql-ndb
+mv /etc/init.d/mysql-ndb-mgm /etc/init.d_mysql-ndb-mgm
+mv /etc/init.d/apache2 /etc/init.d_apache2
+mv /etc/init.d/webmin /etc/init.d_webmin
+mv /etc/init.d/clamav-daemon /etc/init.d_clamav-daemon
+mv /etc/init.d/proftpd /etc/init.d_proftd
+mv /etc/init.d/syslog-ng /etc/init.d_syslog-ng
+mv /etc/init.d/ossec /etc/init.d_ossec
+
 
 set passwd/root-password-crypted kj8A7sqYE9dQE
 
@@ -106,6 +116,7 @@ none    /var/run    tmpfs   defaults    0 0
 192.168.99.254:/var/chroot/var     /var    nfs rw,hard,nolock 0 0
 192.168.99.254:/var/chroot/tmp     /tmp    nfs rw,hard,nolock 0 0
 192.168.99.254:/var/chroot/root    /root   nfs rw,hard,nolock 0 0
+192.168.99.254:/var/chroot/etc    /etc   nfs rw,hard,nolock 0 0
 " > /etc/fstab
 
 URL_FREE=$(cat /tmp/url_free)
@@ -168,6 +179,24 @@ echo "#!/bin/bash
 chmod +x /var/chroot/var/share/etc/rc.ciws > /dev/null 2>&1 
 
 echo "
+/etc/init.d/kerrighed start
+mv /etc/init.d_mysql /etc/init.d/mysql 
+mv /etc/init.d_mysql-ndb /etc/init.d/mysql-ndb
+mv /etc/init.d_mysql-ndb-mgm /etc/init.d/mysql-ndb-mgm
+mv /etc/init.d_apache2 /etc/init.d/apache2 
+mv /etc/init.d_webmin /etc/init.d/webmin 
+mv /etc/init.d_clamav-daemon /etc/init.d/clamav-daemon 
+mv /etc/init.d_proftd /etc/init.d/proftpd 
+mv /etc/init.d_syslog-ng /etc/init.d/syslog-ng 
+mv /etc/init.d_ossec /etc/init.d/ossec 
+/etc/init.d/mysql start
+/etc/init.d/apache2 start
+/etc/init.d/webmin start
+/etc/init.d/clamav-daemon start
+/etc/init.d/proftpd start
+/etc/init.d/syslog-ng start
+/etc/init.d/ossec start
+
 /var/share/etc/rc.ciws
 exit 0
 
@@ -248,6 +277,7 @@ echo "
 /var/chroot/var *(rw,sync,no_root_squash,no_subtree_check,fsid=3)
 /var/chroot/dev *(rw,sync,no_root_squash,no_subtree_check,fsid=4)
 /var/chroot/root *(rw,sync,no_root_squash,no_subtree_check,fsid=5)
+/var/chroot/etc *(rw,sync,no_root_squash,no_subtree_check,fsid=6)
 " > /etc/exports
 
 echo "
