@@ -328,7 +328,7 @@ sed -i "s/startup=0/startup=1/" /etc/default/shorewall
 #Lampp
 echo "kerrighed" > /tmp/in_chroot
 
-
+apt-get remove --purge --assume-yes --force-yes avahi-autoipd
 
 }
 
