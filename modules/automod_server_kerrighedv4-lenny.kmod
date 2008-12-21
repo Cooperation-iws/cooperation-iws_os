@@ -48,11 +48,11 @@ lh_config -p xfce --distribution lenny --linux-flavours "686" --mirror-bootstrap
 lh_bootstrap
 lh_chroot
 
-mv /tmp/debianlive/chroot /var
-echo $URL_FREE > /var/chroot/tmp/url_free
-cp -r /tmp/* /var/chroot/tmp/.
+mv /tmp/debianlive/chroot $LAMPP_DIRECTORY/var
+echo $URL_FREE > $LAMPP_DIRECTORY/var/chroot/tmp/url_free
+cp -r /tmp/* $LAMPP_DIRECTORY/var/chroot/tmp/.
 
-chroot /var/chroot << "EOF"
+chroot $LAMPP_DIRECTORY/var/chroot << "EOF"
 export DEBIAN_FRONTEND=noninteractive
 mount -t proc none /proc
 . /tmp/init.sh
@@ -162,23 +162,23 @@ update-rc.d -f kerrighed start 05 2 3 4 5 .
 
 umount /proc
 EOF
-umount /var/chroot/proc
+umount $LAMPP_DIRECTORY/var/chroot/proc
 
 echo "I: config rc.local"
 
 echo "#!/bin/bash
 
-" > /var/chroot/var/share/etc/rc.ciws > /dev/null 2>&1 
+" > $LAMPP_DIRECTORY/var/chroot/var/share/etc/rc.ciws > /dev/null 2>&1 
 
-chmod +x /var/chroot/var/share/etc/rc.ciws > /dev/null 2>&1 
+chmod +x $LAMPP_DIRECTORY/var/chroot/var/share/etc/rc.ciws > /dev/null 2>&1 
 
 echo "
 
 /var/share/etc/rc.ciws
 exit 0
 
-" >> /var/chroot/etc/rc.local
-chmod +x /var/chroot/etc/rc.local
+" >> $LAMPP_DIRECTORY/var/chroot/etc/rc.local
+chmod +x $LAMPP_DIRECTORY/var/chroot/etc/rc.local
 
 
 

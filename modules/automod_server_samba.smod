@@ -48,11 +48,11 @@ apt-get install --assume-yes --force-yes samba
 
 #samba config
 
-mv /etc/samba /var/share/etc/
+mv /etc/samba $LAMPP_DIRECTORY/etc/
 
-ln -s /var/share/etc/samba /etc/samba
+ln -s $LAMPP_DIRECTORY/etc/samba /etc/samba
 
-cat << EOT > /var/share/etc/samba/smb.conf
+cat << EOT > $LAMPP_DIRECTORY/etc/samba/smb.conf
 #
 # Sample configuration file for the Samba suite for Debian GNU/Linux.
 #
@@ -374,7 +374,7 @@ map to guest = bad user
 	comment = var
 	writeable = yes
 	public = yes
-	path = /var/
+	path = $LAMPP_DIRECTORY/var/www
 	valid users = www-data
 
 EOT

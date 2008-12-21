@@ -249,6 +249,8 @@ echo "DROP DATABASE zabbix; " > drop_zabbix.sql
 $BIN_MYSQL -u root < drop_zabbix.sql
 $BIN_MYSQL -u root < database.sql
 
+mv /etc/zabbix $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/zabbix /etc/zabbix
 
 
 }

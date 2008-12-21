@@ -1,0 +1,466 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Snort 2.8 Base 1.3.9 server Intrepid'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Network Intrusion Detection System'
+RMOD_DESCRIPTION_FR="Système de détection d'intrusion réseau"
+RMOD_VERBOSE="Snort is a NIDS, Network Intrusion Detection System. Base is a Snort Front-end, it displays Snort alerts.  "
+RMOD_VERBOSE_FR="Snort est un NIDS (Network Intrusion Detection System), un système de détection d'intrusion réseau. Base est le front-end de Snort écrit en php, permettant d'afficher les alertes de Snort. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+DISPLAY=127.0.0.1:5.0
+LANG_UI=$(cat /tmp/lang-wui)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+INSTALL=$(cat /tmp/def_install)
+
+
+#VARIABLES
+SNORT_MYSQL_PWD=$snort_mysql_pwd
+MOD_NAME=$base_name
+NET_IFACE=$snort_listening_interface
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_WEB_______________________________________
+
+
+function WGET_MIRROIR_WEB
+{
+cd $DL_DIR
+wget http://www.snort.org/dl/old/snort-2.8.0.2.tar.gz
+tar -xzf snort-2.8.0.2.tar.gz
+mv snort-2.8.0.2 snort
+#rm snort-2.8.0.2.tar.gz
+
+cd $DL_DIR
+wget http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Community-Rules-CURRENT.tar.gz
+tar -xzf Community-Rules-CURRENT.tar.gz -C snort/
+#rm snortrules-pr-2.4.tar.gz
+
+cd $DL_DIR
+wget http://surfnet.dl.sourceforge.net/sourceforge/pcre/pcre-7.6.tar.gz
+tar -xzf pcre-7.6.tar.gz
+mv pcre-7.6 pcre
+#rm pcre-7.6.tar.gz
+
+cd $DL_DIR
+wget http://mesh.dl.sourceforge.net/sourceforge/adodb/adodb498.zip
+unzip -q adodb498.zip
+#rm adodb498.zip
+cd $DL_DIR
+wget $URL_FREE/base_081101.tar.gz
+tar -xzf base_081101.tar.gz
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/snort-2.8.0.2.tar.gz
+tar -xzf snort-2.8.0.2.tar.gz
+mv snort-2.8.0.2 snort
+#rm snort-2.8.0.2.tar.gz
+
+cd $DL_DIR
+wget $URL_FREE/Community-Rules-CURRENT.tar.gz
+tar -xzf Community-Rules-CURRENT.tar.gz -C snort/
+#rm snortrules-pr-2.4.tar.gz
+
+cd $DL_DIR
+wget $URL_FREE/pcre-7.6.tar.gz
+tar -xzf pcre-7.6.tar.gz
+mv pcre-7.6 pcre
+#rm pcre-7.6.tar.gz
+
+cd $DL_DIR
+wget $URL_FREE/adodb498.zip
+unzip -q adodb498.zip
+#rm adodb498.zip
+
+cd $DL_DIR
+wget $URL_FREE/base_081101.tar.gz
+tar -xzf base_081101.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________DOWNLOAD_______________________________________________
+
+function DOWNLOAD
+{
+if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
+
+WGET_MIRROIR_WEB
+fi
+if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
+
+WGET_MIRROIR_FREE
+fi
+
+}
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_DOWNLOAD___________________________________________
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo "I: Download Snort"
+DOWNLOAD
+
+#Snort config
+
+
+apt-get install --assume-yes --force-yes oinkmaster libpcap-dev libmysqlclient15-dev bison flex mysql-client build-essential
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+REGISTERED_KEY=$snort_registration_key
+else
+echo "$MESS_REGISTER"
+echo "key:"
+read REGISTERED_KEY < /dev/tty
+fi
+if [ "$(echo $REGISTERED_KEY | grep '[0-9a-zA-Z]')" ] ; then
+sed -i "s/url = http:\/\/www.snort.org\/dl\/rules\/snortrules-snapshot-2_2.tar.gz/url = http:\/\/www.snort.org\/pub-bin\/oinkmaster.cgi\/$REGISTERED_KEY\/snortrules-snapshot-2.8.tar.gz/" /etc/oinkmaster.conf
+
+echo "
+#!/bin/bash
+/usr/sbin/oinkmaster -C /etc/oinkmaster.conf -o /etc/snort/rules >/dev/null 2>&1
+" > /usr/local/bin/oinkdaily
+
+echo "5 30 * * * /usr/local/bin/oinkdaily" > /etc/cron.d/oinkmaster
+sudo chmod +x /etc/cron.d/oinkmaster
+sudo chmod +x /usr/local/bin/oinkdaily
+fi
+
+
+
+
+cd $DL_DIR/pcre
+./configure
+make
+make install
+
+
+cd $DL_DIR/snort
+sed -i "349s/O_CREAT|O_TRUNC|O_SYNC|O_WRONLY/O_CREAT|O_TRUNC|O_SYNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH/" src/preprocessors/flow/portscan/server_stats.c
+
+./configure -enable-dynamicplugin --with-mysql
+make
+make install
+
+
+
+
+mkdir /etc/snort /etc/snort/rules /var/log/snort
+cd $DL_DIR/snort/rules
+cp *.rules /etc/snort/rules/
+
+/usr/sbin/oinkmaster -C /etc/oinkmaster.conf -o /etc/snort/rules
+
+
+
+
+cd $DL_DIR/snort/etc
+cp * /etc/snort/
+cp /usr/local/lib/libpcre.so.0 /usr/lib
+
+
+cat /etc/snort/snort.conf | sed -i -e "s/user=root password=test dbname=db host=localhost/user=$MOD_NAME password=$SNORT_MYSQL_PWD dbname=$MOD_NAME host=localhost/" /etc/snort/snort.conf
+cat /etc/snort/snort.conf | sed -i -e "793s/# output/ output/" /etc/snort/snort.conf 
+cat /etc/snort/snort.conf | sed -i -e "110s/..\/rules/\/etc\/snort\/rules/" /etc/snort/snort.conf
+#cat /etc/snort/rules/web-misc.rules | sed -i -e "97s/alert/#alert/" /etc/snort/rules/web-misc.rules
+#cat /etc/snort/rules/web-misc.rules | sed -i -e "98s/alert/#alert/" /etc/snort/rules/web-misc.rules
+#cat /etc/snort/rules/web-misc.rules | sed -i -e "452s/alert/#alert/" /etc/snort/rules/web-misc.rules
+
+sed -i "915s/^/#/" /etc/snort/snort.conf
+
+if [ "$(echo $REGISTERED_KEY | grep '[0-9a-zA-Z]')" ] ; then
+sed -i "954s/#/ /" /etc/snort/snort.conf
+sed -i "955s/#/ /" /etc/snort/snort.conf
+sed -i "956s/#/ /" /etc/snort/snort.conf
+sed -i "957s/#/ /" /etc/snort/snort.conf
+sed -i "958s/#/ /" /etc/snort/snort.conf
+sed -i "959s/#/ /" /etc/snort/snort.conf
+sed -i "960s/#/ /" /etc/snort/snort.conf
+sed -i "961s/#/ /" /etc/snort/snort.conf
+sed -i "962s/#/ /" /etc/snort/snort.conf
+sed -i "963s/#/ /" /etc/snort/snort.conf
+sed -i "964s/#/ /" /etc/snort/snort.conf
+sed -i "965s/#/ /" /etc/snort/snort.conf
+sed -i "966s/#/ /" /etc/snort/snort.conf
+else
+sed -i "915s/^/# /" /etc/snort/snort.conf
+sed -i "916s/^/# /" /etc/snort/snort.conf
+sed -i "917s/^/# /" /etc/snort/snort.conf
+sed -i "918s/^/# /" /etc/snort/snort.conf
+sed -i "919s/^/# /" /etc/snort/snort.conf
+sed -i "920s/^/# /" /etc/snort/snort.conf
+sed -i "921s/^/# /" /etc/snort/snort.conf
+sed -i "922s/^/# /" /etc/snort/snort.conf
+sed -i "923s/^/# /" /etc/snort/snort.conf
+sed -i "924s/^/# /" /etc/snort/snort.conf
+sed -i "925s/^/# /" /etc/snort/snort.conf
+sed -i "926s/^/# /" /etc/snort/snort.conf
+sed -i "927s/^/# /" /etc/snort/snort.conf
+sed -i "928s/^/# /" /etc/snort/snort.conf
+sed -i "929s/^/# /" /etc/snort/snort.conf
+sed -i "930s/^/# /" /etc/snort/snort.conf
+sed -i "931s/^/# /" /etc/snort/snort.conf
+sed -i "932s/^/# /" /etc/snort/snort.conf
+sed -i "933s/^/# /" /etc/snort/snort.conf
+sed -i "934s/^/# /" /etc/snort/snort.conf
+sed -i "935s/^/# /" /etc/snort/snort.conf
+sed -i "936s/^/# /" /etc/snort/snort.conf
+sed -i "937s/^/# /" /etc/snort/snort.conf
+sed -i "938s/^/# /" /etc/snort/snort.conf
+sed -i "939s/^/# /" /etc/snort/snort.conf
+sed -i "940s/^/# /" /etc/snort/snort.conf
+sed -i "941s/^/# /" /etc/snort/snort.conf
+sed -i "942s/^/# /" /etc/snort/snort.conf
+sed -i "943s/^/# /" /etc/snort/snort.conf
+sed -i "944s/^/# /" /etc/snort/snort.conf
+sed -i "945s/^/# /" /etc/snort/snort.conf
+sed -i "946s/^/# /" /etc/snort/snort.conf
+sed -i "947s/^/# /" /etc/snort/snort.conf
+sed -i "948s/^/# /" /etc/snort/snort.conf
+sed -i "949s/^/# /" /etc/snort/snort.conf
+sed -i "950s/^/# /" /etc/snort/snort.conf
+sed -i "951s/^/# /" /etc/snort/snort.conf
+sed -i "952s/^/# /" /etc/snort/snort.conf
+sed -i "953s/^/# /" /etc/snort/snort.conf
+sed -i "967s/^/# /" /etc/snort/snort.conf
+fi
+
+
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+sed -i "968G" /etc/snort/snort.conf
+
+
+sed -i "968s/^/include \$RULE_PATH\/community-bot.rules /" /etc/snort/snort.conf
+sed -i "969s/^/include \$RULE_PATH\/community-deleted.rules /" /etc/snort/snort.conf
+sed -i "970s/^/include \$RULE_PATH\/community-dos.rules /" /etc/snort/snort.conf
+sed -i "971s/^/include \$RULE_PATH\/community-exploit.rules /" /etc/snort/snort.conf
+sed -i "972s/^/include \$RULE_PATH\/community-ftp.rules /" /etc/snort/snort.conf
+sed -i "973s/^/include \$RULE_PATH\/community-game.rules /" /etc/snort/snort.conf
+sed -i "974s/^/include \$RULE_PATH\/community-icmp.rules /" /etc/snort/snort.conf
+sed -i "975s/^/include \$RULE_PATH\/community-imap.rules /" /etc/snort/snort.conf
+sed -i "976s/^/include \$RULE_PATH\/community-inappropriate.rules /" /etc/snort/snort.conf
+sed -i "977s/^/include \$RULE_PATH\/community-mail-client.rules /" /etc/snort/snort.conf
+sed -i "978s/^/include \$RULE_PATH\/community-misc.rules /" /etc/snort/snort.conf
+sed -i "979s/^/include \$RULE_PATH\/community-nntp.rules /" /etc/snort/snort.conf
+sed -i "980s/^/include \$RULE_PATH\/community-oracle.rules /" /etc/snort/snort.conf
+sed -i "981s/^/include \$RULE_PATH\/community-policy.rules /" /etc/snort/snort.conf
+sed -i "982s/^/#include \$RULE_PATH\/community-sid-msg.map /" /etc/snort/snort.conf
+sed -i "983s/^/include \$RULE_PATH\/community-sip.rules /" /etc/snort/snort.conf
+sed -i "984s/^/#include \$RULE_PATH\/community-smtp.rules /" /etc/snort/snort.conf
+sed -i "985s/^/include \$RULE_PATH\/community-sql-injection.rules /" /etc/snort/snort.conf
+sed -i "986s/^/#include \$RULE_PATH\/community-virus.rules /" /etc/snort/snort.conf
+sed -i "987s/^/include \$RULE_PATH\/community-web-attacks.rules /" /etc/snort/snort.conf
+sed -i "988s/^/include \$RULE_PATH\/community-web-cgi.rules /" /etc/snort/snort.conf
+sed -i "989s/^/include \$RULE_PATH\/community-web-client.rules /" /etc/snort/snort.conf
+sed -i "990s/^/include \$RULE_PATH\/community-web-dos.rules /" /etc/snort/snort.conf
+sed -i "991s/^/include \$RULE_PATH\/community-web-iis.rules /" /etc/snort/snort.conf
+sed -i "992s/^/include \$RULE_PATH\/community-web-misc.rules /" /etc/snort/snort.conf
+sed -i "993s/^/include \$RULE_PATH\/community-web-php.rules /" /etc/snort/snort.conf
+
+
+
+
+cat << EOT > /etc/init.d/snort
+#!/bin/bash
+
+PIDFILE=/var/run/snort.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "Snort server has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting Snort server"
+      /usr/local/bin/snort -c /etc/snort/snort.conf -i $NET_IFACE -D 
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping Snort server."
+	rm -f \$PIDFILE
+      killall -9 snort && killall -9 snort
+      
+      exit
+    fi
+      echo "Snort server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOT
+
+chmod 0755 /etc/init.d/snort
+
+update-rc.d snort defaults
+
+
+
+
+
+echo "
+chmod -R +r /etc/snort/rules
+sleep 5
+/etc/init.d/snort stop
+/etc/init.d/snort start
+sleep 10
+" >> /etc/rc.local
+
+
+##SNORT
+
+
+#Base config for Snort
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/admin/$MOD_NAME
+cp -Rf Base/* $WWW_DIRECTORY/admin/$MOD_NAME/.
+
+sed -i "15s/snort/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+sed -i "16s/snort/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+
+$BIN_MYSQL -u root < $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+
+sed -i "s/\$BASE_urlpath = '\/admin\/Base';/\$BASE_urlpath = '\/admin\/$MOD_NAME';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
+sed -i "s/\$alert_dbname   = 'snort';/\$alert_dbname   = '$MOD_NAME';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
+sed -i "96s/snort/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
+sed -i "s/\$alert_password = 'SNORT_MYSQL_PWD';/\$alert_password = '$SNORT_MYSQL_PWD';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
+
+cd $DL_DIR
+echo "
+grant create,delete,insert,select,update on $MOD_NAME.* to $MOD_NAME identified by '$SNORT_MYSQL_PWD' ;
+grant create,delete,insert,select,update on $MOD_NAME.* to $MOD_NAME@localhost identified by '$SNORT_MYSQL_PWD' ;
+flush privileges;" > snort_db.sql
+$BIN_MYSQL -u root < snort_db.sql mysql 
+rm snort_db.sql
+
+
+
+#Graph for base
+
+pear install Image_Color
+pear install Image_Canvas-alpha
+pear install Image_Graph-alpha 
+
+sed -i "s/bind-address/#bind-address/" /etc/mysql/my.cnf
+
+/etc/init.d/mysql restart
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/admin/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/admin/${MOD_NAME[$count]}</item_admin_url>
+	<item_init_start>/etc/init.d/snort start</item_init_start>
+	<item_init_stop>/etc/init.d/snort stop</item_init_stop>
+
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/admin/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/admin/${MOD_NAME[$count]}</item_admin_url>
+	<item_init_start>/etc/init.d/snort start</item_init_start>
+	<item_init_stop>/etc/init.d/snort stop</item_init_stop>
+
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+echo "I: Install Snort"
+
+INSTALL
+CREATE_WUI
+echo "I: End of install Snort"

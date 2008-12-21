@@ -1,0 +1,32 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Pfsense 1.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Pfsense gateway'
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+WORKING_DIRECTORY=$(cat /tmp/working-directory)
+ISO_FILENAME=$(cat /tmp/iso-filename)
+OUTPUT_ISO_FILENAME=$(cat /tmp/output_iso_name)
+. /tmp/app_params
+
+
+sed -i "168G" $WORKING_DIRECTORY/remaster/conf.default/config.xml
+sed -i "168G" $WORKING_DIRECTORY/remaster/conf.default/config.xml
+sed -i "168G" $WORKING_DIRECTORY/remaster/conf.default/config.xml
+
+sed -i "169s/^/<ddnsdomain>$domain<\/ddnsdomain>/" $WORKING_DIRECTORY/remaster/conf.default/config.xml
+sed -i "170s/^/<ddnsupdate\/>/" $WORKING_DIRECTORY/remaster/conf.default/config.xml
+sed -i "245G" $WORKING_DIRECTORY/remaster/conf.default/config.xml
+sed -i "245G" $WORKING_DIRECTORY/remaster/conf.default/config.xml
+sed -i "245G" $WORKING_DIRECTORY/remaster/conf.default/config.xml
+sed -i "246s/^/<regdhcp\/>/" $WORKING_DIRECTORY/remaster/conf.default/config.xml
+sed -i "247s/^/<regdhcpstatic\/>/" $WORKING_DIRECTORY/remaster/conf.default/config.xml
+sed -i "10s/local/$domain/" $WORKING_DIRECTORY/remaster/conf.default/config.xml
+
+cd $WORKING_DIRECTORY/remaster
+mkisofs -L -D -R -b boot/cdboot -no-emul-boot -c boot/boot.catalog -V pfSense -o ../$OUTPUT_ISO_FILENAME .

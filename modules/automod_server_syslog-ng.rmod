@@ -227,6 +227,10 @@ destination(d_mysql);
 # Added above by cdukes for php-syslog-ng enhancements
 EOT
 
+mv /etc/syslog-ng $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/syslog-ng /etc/syslog-ng
+
 sed -i "s/bind-address/#bind-address/" /etc/mysql/my.cnf
 
 /etc/init.d/mysql restart

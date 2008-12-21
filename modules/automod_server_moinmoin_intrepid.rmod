@@ -46,9 +46,9 @@ apt-get install --assume-yes --force-yes python-moinmoin
 
 mkdir -p /var/www/moin/mywiki
 cp -r /usr/share/moin/server/moin.cgi /var/www/moin/mywiki
-mkdir -p /var/lib/moin/mywiki
-cp -r /usr/share/moin/data /usr/share/moin/underlay /var/lib/moin/mywiki
-chown -R www-data:www-data /var/lib/moin/mywiki /var/www/moin/mywiki
+mkdir -p $LAMPP_DIRECTORY/var/lib/moin/mywiki
+cp -r /usr/share/moin/data /usr/share/moin/underlay $LAMPP_DIRECTORY/var/lib/moin/mywiki
+chown -R www-data:www-data $LAMPP_DIRECTORY/var/lib/moin/mywiki /var/www/moin/mywiki
 chown -R www-data:www-data /usr/share/moin/underlay
 
 cp /etc/moin/mywiki.py /etc/moin/mywiki.py.original 
@@ -57,7 +57,8 @@ cp /etc/moin/mywiki.py /etc/moin/mywiki.py.original
 sed -i "92s/'.\//'\/usr\/share\/moin\//" /etc/moin/farmconfig.py
 sed -i "s/#mail_smarthost = \"\"/mail_smarthost = \"localhost\"/" /etc/moin/farmconfig.py
 sed -i "s/#mail_from = u\"\"/mail_from = u\"$moimoin_admin_email\"/" /etc/moin/farmconfig.py
-sed -i "33s/\/org/\/var\/lib\/moin/" /etc/moin/mywiki.py
+LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
+sed -i "33s/\/org/$LAMPP_DIRECTORY_FOR_SED\/var\/lib\/moin/" /etc/moin/mywiki.py
 
 sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
 

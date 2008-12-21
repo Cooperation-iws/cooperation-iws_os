@@ -2,7 +2,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Hardy'
+RMOD_NAME='Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Intrepid release'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='eMails administration'
@@ -122,16 +122,20 @@ sed -i "54s/Mail/$NOM_MAILSERVER/" $WWW_DIRECTORY/admin/$MOD_NAME/config.inc.php
 sed -i "15s/Mail/$NOM_MAILSERVER/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
 sed -i "16s/Mail/$NOM_MAILSERVER/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
 
-$BIN_MYSQL -u root < $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
 
 echo "
 UPDATE $NOM_MAILSERVER.domain SET domain = '$mail_domain' WHERE CONVERT( domain.domain USING utf8 ) = 'ciws.com' LIMIT 1 ;
-UPDATE $NOM_MAILSERVER.admin SET username = 'admin@$mail_domain' WHERE CONVERT( admin.username USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
-UPDATE $NOM_MAILSERVER.mailbox SET username = 'admin@$mail_domain',
-maildir = 'admin@$mail_domain/',
+UPDATE $NOM_MAILSERVER.admin SET username = '$admin_email' WHERE CONVERT( admin.username USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
+UPDATE $NOM_MAILSERVER.mailbox SET username = '$admin_email',
+maildir = '$admin_email/',
 domain = '$mail_domain' WHERE CONVERT( mailbox.username USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
+UPDATE $NOM_MAILSERVER.alias SET address = '$admin_email',
+goto = '$admin_email',
+domain = '$mail_domain' WHERE CONVERT( alias.address USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
+UPDATE $NOM_MAILSERVER.domain_admins SET username = '$admin_email' WHERE CONVERT( domain_admins.username USING utf8 ) = 'admin@ciws.com' AND CONVERT( domain_admins.domain USING utf8 ) = 'ALL' AND domain_admins.created = '2008-11-01 15:17:31' AND domain_admins.active=1 LIMIT 1 ;
 " > /tmp/update_mail_domain
-$BIN_MYSQL -u root < /tmp/update_mail_domain
+$BIN_MYSQL -u root < /tmp/update_mail_domain $NOM_MAILSERVER
 
 apt-get install --assume-yes --force-yes postfix postfix-mysql mailscanner clamav-daemon libdate-manip-perl tnef unrar unzip pyzor razor mailutils clamav-freshclam
 
@@ -148,7 +152,7 @@ recipient_delimiter = +
 inet_interfaces = all
 # Virtual mailbox settings
 virtual_mailbox_domains = proxy:mysql:/etc/postfix/mysql_virtual_domains_maps.cf
-virtual_mailbox_base = $LAMPP_DIRECTORY /var/vmail
+virtual_mailbox_base = $LAMPP_DIRECTORY/var/vmail
 virtual_mailbox_maps = proxy:mysql:/etc/postfix/mysql_virtual_mailbox_maps.cf
 virtual_alias_maps = proxy:mysql:/etc/postfix/mysql_virtual_alias_maps.cf
 virtual_minimum_uid = 150
@@ -174,7 +178,7 @@ recipient_delimiter = +
 inet_interfaces = all
 # Virtual mailbox settings
 virtual_mailbox_domains = proxy:mysql:/etc/postfix/mysql_virtual_domains_maps.cf
-virtual_mailbox_base = $LAMPP_DIRECTORY /var/vmail
+virtual_mailbox_base = $LAMPP_DIRECTORY/var/vmail
 virtual_mailbox_maps = proxy:mysql:/etc/postfix/mysql_virtual_mailbox_maps.cf
 virtual_alias_maps = proxy:mysql:/etc/postfix/mysql_virtual_alias_maps.cf
 virtual_minimum_uid = 150
@@ -286,7 +290,7 @@ syslog_facility = mail
 #verbose_ssl = no
 #
 # Where the mailboxes are located
-mail_location = maildir:$LAMPP_DIRECTORY/var/vmail/%d/%u
+mail_location = maildir:$LAMPP_DIRECTORY /var/vmail/%d/%u
 #
 mail_extra_groups = mail
 mail_debug = no
@@ -367,7 +371,7 @@ echo '#!/bin/bash
 # Script to stop and start pySieved managesieve server
 
 PIDFILE=/var/run/pysieved.pid
-PYS_HOME=/opt/pysieved
+PYS_HOME=/opt/ciws/server/var/pysieved
 
 if [ $# -ne 1 ]
 then
@@ -410,9 +414,9 @@ esac
 ' > /etc/init.d/pysieved
 chmod +x /etc/init.d/pysieved
 
-sed -i "28s/#driver =/driver = mysql/" /etc/dovecot/dovecot-sql.conf
-sed -i "57s/#connect = dbname=virtual user=virtual/connect = host=localhost dbname=$NOM_MAILSERVER user=$NOM_MAILSERVER password=$MAILSERVER_MYSQL_PWD/" /etc/dovecot/dovecot-sql.conf
-sed -i "64s/#default_pass_scheme = PLAIN-MD5/default_pass_scheme = MD5-CRYPT/" /etc/dovecot/dovecot-sql.conf
+sed -i "29s/#driver =/driver = mysql/" /etc/dovecot/dovecot-sql.conf
+sed -i "63s/#connect =/connect = host=localhost dbname=$NOM_MAILSERVER user=$NOM_MAILSERVER password=$MAILSERVER_MYSQL_PWD/" /etc/dovecot/dovecot-sql.conf
+sed -i "70s/#default_pass_scheme = PLAIN-MD5/default_pass_scheme = MD5-CRYPT/" /etc/dovecot/dovecot-sql.conf
 LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
 sed -i "112s/^/user_query = SELECT '$LAMPP_DIRECTORY_FOR_SED\/var\/vmail\/%d\/%n' as home, 'maildir:$LAMPP_DIRECTORY_FOR_SED\/var\/vmail\/%d\/%n' as mail, 150 AS uid, 8 AS gid, concat('dirsize:storage=', quota) AS quota FROM mailbox WHERE username = '%u' AND active = '1'/" /etc/dovecot/dovecot-sql.conf
 sed -i "92s/^/password_query = SELECT username as user, password FROM mailbox WHERE username = '%u' AND active = '1'/" /etc/dovecot/dovecot-sql.conf
@@ -426,10 +430,10 @@ postalias /etc/aliases
 echo "
 #Postfix hack
 postalias /etc/aliases
-rm $LAMPP_DIRECTORY/var/vmail/*/*/dovecot.index.log
-rm $LAMPP_DIRECTORY/var/vmail/*/*/.INBOX.Trash/dovecot.index.log
-rm $LAMPP_DIRECTORY/var/vmail/*/*/.INBOX.Sent/dovecot.index.log
-rm $LAMPP_DIRECTORY/var/vmail/*/*/.INBOX.Drafts/dovecot.index.log
+rm /var/vmail/*/*/dovecot.index.log
+rm /var/vmail/*/*/.INBOX.Trash/dovecot.index.log
+rm /var/vmail/*/*/.INBOX.Sent/dovecot.index.log
+rm /var/vmail/*/*/.INBOX.Drafts/dovecot.index.log
 /etc/init.d/postfix restart
 /etc/init.d/dovecot restart
 

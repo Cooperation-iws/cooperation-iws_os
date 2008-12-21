@@ -14,9 +14,9 @@ OS_TYPE=$(cat /tmp/os_type)
 TMPUSER=$(cat /tmp/tmp_user)
 SILENT=$(cat /tmp/silent)
 DEB_DIST=$(cat /tmp/deb_dist)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+
 . /tmp/app_params
-fi
+
 
 if [ "$(echo $SILENT | awk  '{print $1}')" == "" ]; then
 	echo "I: config post install script"
@@ -37,19 +37,6 @@ fi
 if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
 
 
-echo "I: displacing /etc directories"
-
-mv /etc/apache2 /var/share/etc/
-
-ln -s /var/share/etc/apache2 /etc/apache2
-
-mv /etc/php5 /var/share/etc/
-
-ln -s /var/share/etc/php5 /etc/php5
-
-mv /etc/mysql /var/share/etc/
-
-ln -s /var/share/etc/mysql /etc/mysql
 
 echo "</items>" >> $WWW_DIRECTORY/cooperation-wui.xml
 

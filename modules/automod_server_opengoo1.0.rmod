@@ -1,0 +1,159 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='OpenGoo 1.0'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Online Office suite'
+RMOD_DESCRIPTION_FR='Suite Office en ligne'
+RMOD_VERBOSE="OpenGoo is an Open Source Web Office. It is a complete solution for every organization to create, collaborate, share and publish all its internal and external documents."
+RMOD_VERBOSE_FR="OpenGoo est une suite office open source en ligne.  "
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+NB_OPENGOO=$nb_opengoo
+
+for (( count=1; count<=$NB_OPENGOO; count++ ))
+do
+OPENGOO_MYSQL_PWD[$count]=${opengoo_mysql_pwd[$count]}
+MOD_NAME[$count]=${opengoo_name[$count]}
+done
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/opengoo-10RC1-081103.tar.gz
+tar -xzf opengoo-10RC1-081103.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Opengoo"
+WGET_MIRROIR_FREE
+for (( count=1; count<=$NB_OPENGOO; count++ ))
+do
+##OPENGOO
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf Opengoo/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "15s/Opengoo/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "16s/Opengoo/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "17s/Opengoo/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "15s/DROP/--DROP/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "s/latin1_swedish_ci/utf8_general_ci/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "s/latin1/utf8/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${OPENGOO_MYSQL_PWD[$count]}';
+flush privileges;" > OPENGOO_db.sql
+
+$BIN_MYSQL -u root < OPENGOO_db.sql mysql
+rm OPENGOO_db.sql
+
+sed -i "s/Opengoo/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.php
+sed -i "s/OPENGOO_MYSQL_PWD/${OPENGOO_MYSQL_PWD[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.php
+
+echo "
+UPDATE ${MOD_NAME[$count]}.og_users SET email = '${opengoo_admin_email[$count]}' WHERE og_users.id =1 LIMIT 1 ;
+" > opengoo_credential.sql
+$BIN_MYSQL -u root < opengoo_credential.sql
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
+done
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_OPENGOO; count++ ))
+do
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+for (( count=1; count<=$NB_OPENGOO; count++ ))
+do
+echo "
+
+#Opengoo
+sed -i \"s/http:\/\/localhost/http:\/\/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.php
+
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Opengoo"
+INSTALL
+CREATE_WUI
+CREATE_INSTALL_SCRIPT
+echo "I: End of install Opengoo"

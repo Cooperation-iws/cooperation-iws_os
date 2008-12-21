@@ -150,7 +150,7 @@ if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 				public = yes
 				path = /var/www/${MOD_NAME[$count]}
 	
-			" >> /var/share/etc/samba/smb.conf
+			" >> $LAMPP_DIRECTORY/etc/samba/smb.conf
 
 		else
 			echo "[${MOD_NAME[$count]}]
@@ -159,7 +159,7 @@ if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 				public = yes
 				path = /var/www/${MOD_NAME[$count]}
 				valid users = www-data
-			" >> /var/share/etc/samba/smb.conf
+			" >> $LAMPP_DIRECTORY/etc/samba/smb.conf
 
 		fi
 	else
@@ -180,7 +180,7 @@ if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 					public = yes
 					path = /var/www/${MOD_NAME[$count]}
 	
-				" >> /var/share/etc/samba/smb.conf
+				" >> $LAMPP_DIRECTORY/etc/samba/smb.conf
 
 			else
 				echo "[${MOD_NAME[$count]}]
@@ -189,7 +189,7 @@ if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 					public = yes
 					path = /var/www/${MOD_NAME[$count]}
 					valid users = www-data
-				" >> /var/share/etc/samba/smb.conf
+				" >> $LAMPP_DIRECTORY/etc/samba/smb.conf
 
 				fi
 
@@ -239,8 +239,6 @@ done
 #________________________________________FIN_CREATE_WUI_________________________________________
 
 echo "I: Install Snif"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 echo "I: End of Install Snif"

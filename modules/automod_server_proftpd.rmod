@@ -60,9 +60,9 @@ apt-get install --assume-yes --force-yes proftpd
 
 #samba config
 cd /etc
-mv proftpd /var/share/etc/
+mv proftpd $LAMPP_DIRECTORY/etc/
 
-cat << EOT > /var/share/etc/proftpd/proftpd.conf
+cat << EOT > $LAMPP_DIRECTORY/etc/proftpd/proftpd.conf
 # This is a basic ProFTPD configuration file (rename it to 
 # 'proftpd.conf' for actual use.  It establishes a single server
 # and a single anonymous login.  It assumes that you have a user/group
@@ -110,7 +110,7 @@ EOT
 
 
 
-ln -s /var/share/etc/proftpd /etc/proftpd
+ln -s $LAMPP_DIRECTORY/etc/proftpd /etc/proftpd
 
 apt-get install --assume-yes --force-yes proftpd
 
@@ -121,7 +121,7 @@ if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 		
 		passwd=$(cat /tmp/ftppass | grep 'admin' | cut -d':' -f2)
 			
-		sed -i "s/9DyPIRj6JheLk/$passwd/" /var/share/etc/proftpd/proftpd.conf
+		sed -i "s/9DyPIRj6JheLk/$passwd/" $LAMPP_DIRECTORY/etc/proftpd/proftpd.conf
 
 
 	fi
@@ -140,7 +140,7 @@ read secure_admin < /dev/tty
 
 		passwd=$(cat /tmp/ftppass | grep 'admin' | cut -d':' -f2)
 			
-		sed -i "s/9DyPIRj6JheLk/$passwd/" /var/share/etc/proftpd/proftpd.conf
+		sed -i "s/9DyPIRj6JheLk/$passwd/" $LAMPP_DIRECTORY/etc/proftpd/proftpd.conf
 		
 		echo "CIWS: Password protection active. Please use 'admin' as user name!"
 

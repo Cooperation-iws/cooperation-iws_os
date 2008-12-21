@@ -84,6 +84,31 @@ mv /tmp/cooperation-wui-fr.xml  $WWW_DIRECTORY/cooperation-wui-fr.xml
 mv /tmp/admin_cooperation-wui.xml $WWW_DIRECTORY/admin/cooperation-wui.xml
 mv /tmp/admin_cooperation-wui-fr.xml  $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 
+echo "I: displacing /etc directories"
+
+/etc/init.d/apache2 stop
+/etc/init.d/mysql stop
+
+mv /etc/apache2 $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/apache2 /etc/apache2
+
+mv /etc/php5 $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/php5 /etc/php5
+
+mv /etc/mysql $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/mysql /etc/mysql
+
+mv /var/www $LAMPP_DIRECTORY/var
+
+ln -s $LAMPP_DIRECTORY/var/www /var/www
+
+
+/etc/init.d/apache2 start
+/etc/init.d/mysql start
+
 
 fi
 

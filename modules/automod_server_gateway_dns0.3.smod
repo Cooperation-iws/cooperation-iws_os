@@ -19,7 +19,7 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 WWW_DIRECTORY=$(cat /tmp/web-path)
 DL_DIR=$(cat /tmp/web_install-path)
 BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$WWW_DIRECTORY
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 DISPLAY=127.0.0.1:5.0
 LANG_UI=$(cat /tmp/lang-wui)
 
@@ -127,8 +127,8 @@ sed -i "14s/\/\///" /etc/bind/named.conf.options
 sed -i "14s/0.0.0.0/DNS_1/" /etc/bind/named.conf.options 
 sed -i "15s/\/\///" /etc/bind/named.conf.options 
 
-mv /etc/bind /var/share/etc/
-ln -s /var/share/etc/bind /etc/bind
+mv /etc/bind $LAMPP_DIRECTORY/etc/
+ln -s $LAMPP_DIRECTORY/etc/bind /etc/bind
 
 
 chmod +r /etc/bind/rndc.key
@@ -178,8 +178,8 @@ sed -i "s/INTERFACES=\"\"/INTERFACES=\"$LOCAL_IFACE\"/" /etc/default/dhcp3-serve
 chmod +r /etc/default/dhcp3-server
 
 
-mv /etc/dhcp3 /var/share/etc/
-ln -s /var/share/etc/dhcp3 /etc/dhcp3
+mv /etc/dhcp3 $LAMPP_DIRECTORY/etc/
+ln -s $LAMPP_DIRECTORY/etc/dhcp3 /etc/dhcp3
 
 #shorewall config
 echo "#shorewall config"
@@ -198,8 +198,8 @@ sed -i "43s/ info//" /etc/shorewall/policy
 
 chmod -R +r /etc/shorewall
 
-mv /etc/shorewall /var/share/etc/
-ln -s /var/share/etc/shorewall /etc/shorewall
+mv /etc/shorewall $LAMPP_DIRECTORY/etc/
+ln -s $LAMPP_DIRECTORY/etc/shorewall /etc/shorewall
 
 
 sed -i "s/startup=0/startup=1/" /etc/default/shorewall

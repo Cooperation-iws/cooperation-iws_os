@@ -13,6 +13,7 @@ RMOD_VERBOSE_FR="Nuxeo est le pionnier et le leader de l'Enterprise Content Mana
 
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
+
 LAMPP_DIRECTORY=$(cat /tmp/working-directory)
 DOSSIER_CHROOT=$LAMPP_DIRECTORY"/chroot"
 WWW_DIRECTORY=$DOSSIER_CHROOT"/var/www"
@@ -20,6 +21,7 @@ DL_DIR=$LAMPP_DIRECTORY"/DL"
 BIN_MYSQL="/usr/bin/mysql"
 LANG_UI=$(cat $DOSSIER_CHROOT/tmp/lang-wui)
 SILENT=$(cat $DOSSIER_CHROOT/tmp/silent)
+PERSISTENT_DIR=$(cat $DOSSIER_CHROOT/tmp/lampp-dir)
 . $DOSSIER_CHROOT/tmp/app_params
 
 DISPLAY=127.0.0.1:5.0 
@@ -164,8 +166,8 @@ rm -r $LAMPP_DIRECTORY/$MOD_NAME/server/default/data
 echo "#!/bin/sh
 cd $LAMPP_DIRECTORY/$MOD_NAME/bin/
 ./shutdown.sh -S
-mkdir $DOSSIER_CHROOT/var/$MOD_NAME/ 
-cp -Rf $LAMPP_DIRECTORY/$MOD_NAME/* $DOSSIER_CHROOT/var/$MOD_NAME/.
+mkdir $DOSSIER_CHROOT/$PERSISTENT_DIR/$MOD_NAME/ 
+cp -Rf $LAMPP_DIRECTORY/$MOD_NAME/* $DOSSIER_CHROOT/$PERSISTENT_DIR/$MOD_NAME/.
 " >> $LAMPP_DIRECTORY/scripts/shutdown_ws.sh
 
 echo "I: Starting Nuxeo"

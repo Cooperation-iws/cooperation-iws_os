@@ -49,8 +49,8 @@ echo "#/bin/bash
 if [ -z \"\$(cat /tmp/scan_report | grep 'Infected files: 0')\" ]; then
 \$(cat /tmp/scan_report | mail $MAIL_REPORT -s \"Clamav antivirus scan: VIRUS FOUND\")
 fi
-" > /var/share/lampp/clamav_scan
-chmod +x /var/share/lampp/clamav_scan
+" > $LAMPP_DIRECTORY/share/lampp/clamav_scan
+chmod +x $LAMPP_DIRECTORY/share/lampp/clamav_scan
 
 
 echo "*/14 * * * * root /var/share/lampp/clamav_scan \"/var\"" > /etc/cron.d/clamScan

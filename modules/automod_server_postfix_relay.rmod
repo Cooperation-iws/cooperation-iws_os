@@ -77,6 +77,10 @@ EOT_PUBLIC
 
 mkfifo /var/spool/postfix/public/pickup
 
+mv /etc/postfix $LAMPP_DIRECTORY/etc/
+
+ln -s $LAMPP_DIRECTORY/etc/postfix /etc/postfix
+
 /etc/init.d/postfix restart
 
 echo "

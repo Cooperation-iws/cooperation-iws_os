@@ -60,7 +60,7 @@ apt-get install --assume-yes --force-yes git-core imagemagick
 cd $DL_DIR
 wget $URL_FREE/insoshi-insoshi-081103.tar.gz
 tar -xzf insoshi-insoshi-081103.tar.gz -C /var
-cd /var
+cd $LAMPP_DIRECTORY/var
 mv insoshi-insoshi-9fe47efdd5642220d09772c8bd183195a85b2ce1 insoshi
 cd insoshi
 cp config/database.example config/database.yml
@@ -86,7 +86,7 @@ cd sphinx-0.9.8
 make clean
 make all
 make install
-cd /var/insoshi
+cd $LAMPP_DIRECTORY/var/insoshi
 rake ultrasphinx:configure RAILS_ENV=test
 rake ultrasphinx:index RAILS_ENV=test
 rake ultrasphinx:daemon:start RAILS_ENV=test
@@ -95,8 +95,8 @@ rake spec
 
 cat << EOT > /etc/init.d/insoshi
 #!/bin/bash
-insoshi_HOME=/var/insoshi/script
-PIDFILE=/var/run/nuxeo-server.pid
+insoshi_HOME=$LAMPP_DIRECTORY/var/insoshi/script
+PIDFILE=/var/run/insoshi.pid
 
 set -e
 

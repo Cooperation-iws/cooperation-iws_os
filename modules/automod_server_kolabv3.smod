@@ -59,9 +59,9 @@ usermod -u511 kolab
 usermod -u512 kolab-r
 usermod -u513 kolab-n
 
-mv /kolab /var/kolab
+mv /kolab $LAMPP_DIRECTORY/kolab
 
-ln -s /var/kolab /kolab
+ln -s $LAMPP_DIRECTORY/kolab /kolab
 
 /kolab/bin/openpkg rc all stop
 

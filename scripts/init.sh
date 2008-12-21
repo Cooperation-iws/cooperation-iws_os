@@ -23,7 +23,7 @@ echo $DL_DIR > /tmp/web_install-path
 BIN_MYSQL="/usr/bin/mysql"
 echo $BIN_MYSQL > /tmp/mysql-path
 PLUGIN_DIR="${SCRIPTS_DIR}/modules"
-LAMPP_DIRECTORY="/var"
+LAMPP_DIRECTORY="/opt/ciws/server"
 echo $LAMPP_DIRECTORY > /tmp/lampp-dir
 CHROOT_DIRECTORY="chroot"
 echo $CHROOT_DIRECTORY > /tmp/chroot-dir
@@ -121,16 +121,27 @@ sed -i 's/#send host-name "andare.fugue.com";/send host-name "<hostname>";/' /et
 fi
 
 echo "I: create persistent directory"
-mkdir $LAMPP_DIRECTORY/share/
+mkdir /opt/ciws
+mkdir /opt/ciws/server
+mkdir $LAMPP_DIRECTORY/share
 mkdir $LAMPP_DIRECTORY/share/lampp
-mkdir $LAMPP_DIRECTORY/share/etc
-mkdir $LAMPP_DIRECTORY/share/usr
-mkdir $LAMPP_DIRECTORY/share/usr/share
-mkdir $LAMPP_DIRECTORY/share/opt
+mkdir $LAMPP_DIRECTORY/etc
+mkdir $LAMPP_DIRECTORY/usr
+mkdir $LAMPP_DIRECTORY/usr/share
+mkdir $LAMPP_DIRECTORY/opt
+mkdir $LAMPP_DIRECTORY/var/
 echo "I: post install script creation"
 echo "#!/bin/bash
 WWW_DIRECTORY=\"/var/www\"
 " > $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+
+echo "I: displacing /etc directories"
+mv /etc/cron.d $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/cron.d /etc/cron.d
+
+mv /var/lib/ $LAMPP_DIRECTORY/var
+ln -s $LAMPP_DIRECTORY/var/lib /var/lib
+
 
 
 
@@ -150,41 +161,6 @@ EOT
 fi
 
 
-if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
-cat << EOT > /etc/skel/Desktop/PASSWORDS.txt
-Default login / password are : admin /cooperation
-
-Except for ftp serveur: www-data / cooperation
-
-Mantis : administrator / root
-
-Taskfreak: admin / ciws
-
-Lifetype, Achievo: administrator / cooperation
-
-Phpmyadmin / Mysql Serveur / Webmin / EyeOS: root / cooperation
-
-Mail server / Squirrelmail: admin@ciws.com / cooperation
-
--------------------------------------------------------------
-
-Les login / mot de passe par défaut sont : admin /cooperation
-
-Excepter pour le serveur ftp: www-data / cooperation
-
-Mantis : administrator / root
-
-Taskfreak: admin / ciws
-
-Lifetype / Achievo: administrator / cooperation
-
-Phpmyadmin / Mysql Serveur / Webmin /EyeOS : root / cooperation
-
-Serveur Mail / Squirrelmail: admin@ciws.com / cooperation
-EOT
-
-chmod 777 /etc/skel/Desktop/PASSWORDS.txt
-fi
 
 echo "<?xml version=\"1.0\"?>
 <items>" > /tmp/cooperation-wui.xml

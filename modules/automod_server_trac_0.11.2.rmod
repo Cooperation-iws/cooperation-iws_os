@@ -44,9 +44,9 @@ echo "I: Install SVN"
 
 aptitude install -y subversion subversion-tools
 
-mkdir /var/svn
+mkdir $LAMPP_DIRECTORY/var/svn
 
-svnadmin create /var/svn/project
+svnadmin create $LAMPP_DIRECTORY/var/svn/project
 
 aptitude install -y libapache2-svn
 
@@ -57,24 +57,24 @@ echo "
        # Chargement du module subversion
        DAV svn
        # On indique le chemin complet vers le dépôt subversion
-       SVNParentPath  /var/svn
+       SVNParentPath  $LAMPP_DIRECTORY/var/svn
 
        #Ici on demande une identification avec mot de passe
        #utilisez htpasswd2 pour créer le fichier
        AuthType Basic
        AuthName \"Cooperation-iws : svn\"
-       AuthUserFile /var/private/svn.htpasswd
+       AuthUserFile $LAMPP_DIRECTORY/var/private/svn.htpasswd
        Require valid-user
 
        # On indique ici le fichier de configuration des permissions d'accès au dépot subversion
-       AuthzSVNAccessFile /var/private/svnperm
+       AuthzSVNAccessFile $LAMPP_DIRECTORY/var/private/svnperm
    </location>
 </VirtualHost>
 " >> /etc/apache2/sites-available/default
 
 mkdir /var/private
 
-cd /var/private/
+cd $LAMPP_DIRECTORY/var/private/
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 htpasswd -cm -b svn.htpasswd admin $svn_admin_pwd
 htpasswd -m -b svn.htpasswd anonymous $svn_anonymous_pwd
@@ -95,10 +95,10 @@ echo "
 [/]
 anonymous = r
 admin = rw
-" > /var/private/svnperm
+" > $LAMPP_DIRECTORY/var/private/svnperm
 
-chown -R www-data /var/svn
-chmod -R 775 /var/svn
+chown -R www-data $LAMPP_DIRECTORY/var/svn
+chmod -R 775 $LAMPP_DIRECTORY/var/svn
 
 /etc/init.d/apache2 reload
 sleep 10
@@ -116,15 +116,15 @@ echo "I: Install Trac"
 aptitude install -y trac
 apt-get install --yes --force-yes python-pygments enscript
 
-mkdir /var/trac
-cd /var/trac
+mkdir $LAMPP_DIRECTORY/var/trac
+cd $LAMPP_DIRECTORY/var/trac
 echo "
 ----------------Cooperation-iws SVN-------------------------
 ----------Default project name is \"project\"---------------
 ----------Default path to repository is /var/svn/project----"
 
 
-trac-admin project initenv  "My Project" "sqlite:db/trac.db" "svn" "/var/svn/project" 
+trac-admin project initenv  "My Project" "sqlite:db/trac.db" "svn" "$LAMPP_DIRECTORY/var/svn/project" 
 
 
 
@@ -134,7 +134,7 @@ echo "
   SetHandler mod_python
   PythonHandler trac.web.modpython_frontend
   PythonInterpreter main
-  PythonOption TracEnv /var/trac/project
+  PythonOption TracEnv $LAMPP_DIRECTORY/var/trac/project
   PythonOption TracUriRoot /trac
   SetEnv PYTHON_EGG_CACHE /tmp
 </Location>
@@ -142,10 +142,10 @@ echo "
 " >> /etc/apache2/sites-available/default
 /etc/init.d/apache2 reload
 
-chown -R www-data /var/trac
-chmod -R 775 /var/trac
+chown -R www-data $LAMPP_DIRECTORY/var/trac
+chmod -R 775 $LAMPP_DIRECTORY/var/trac
 
-cd /var/private/
+cd $LAMPP_DIRECTORY/var/private/
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 htpasswd -cm -b trac.htpasswd admin $trac_admin_pwd
 else
@@ -168,7 +168,7 @@ echo "
 " >> /etc/apache2/sites-available/default
 /etc/init.d/apache2 reload
 
-trac-admin /var/trac/project permission add admin TRAC_ADMIN
+trac-admin $LAMPP_DIRECTORY/var/trac/project permission add admin TRAC_ADMIN
 
 echo "I: End of install Trac"
 

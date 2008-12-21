@@ -41,8 +41,8 @@ apt-get install --assume-yes --force-yes cgiirc
 
 sed -i "s/irc.debian.org/$url_default_server/" /etc/cgiirc/cgiirc.config
 sed -i "s/127.0.0.0\/8/*.*.*.*/" /etc/cgiirc/ipaccess
-mv /etc/cgiirc /var/share/etc
-ln -s /var/share/etc/cgiirc /etc/cgiirc
+mv /etc/cgiirc $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/cgiirc /etc/cgiirc
 ln -s /usr/share/cgiirc/www /var/www/cgiirc
 }
 

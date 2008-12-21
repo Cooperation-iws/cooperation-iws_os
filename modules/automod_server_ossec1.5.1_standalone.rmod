@@ -166,9 +166,9 @@ chmod 770 tmp/
 chgrp nogroup tmp/
 chown -R $apache_user:$apache_user $WWW_DIRECTORY/admin/$MOD_NAME
 chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME
-#mkdir $DOSSIER_CHROOT/etc/skel/conf
-#mkdir $DOSSIER_CHROOT/etc/skel/conf/var
-#mv $DOSSIER_CHROOT/var/ossec $DOSSIER_CHROOT/etc/skel/conf/var
+
+mv /var/ossec $LAMPP_DIRECTORY/var
+ln -s $LAMPP_DIRECTORY/var/ossec /var/ossec
 
 cat << EOT > /etc/init.d/ossec
 #!/bin/bash
@@ -185,13 +185,13 @@ case "\$1" in
       exit
     fi
       echo "Starting Ossec server"
-      /var/ossec/bin/ossec-control start & > /dev/null 2>&1
+      $LAMPP_DIRECTORY/ossec/bin/ossec-control start & > /dev/null 2>&1
       touch \$PIDFILE
     ;;
     stop)
     if [ -f \$PIDFILE ]; then
       echo "Stopping Ossec server."
-      /var/ossec/bin/ossec-control stop & > /dev/null 2>&1
+      $LAMPP_DIRECTORY/ossec/bin/ossec-control stop & > /dev/null 2>&1
       rm -f \$PIDFILE
       exit
     fi
