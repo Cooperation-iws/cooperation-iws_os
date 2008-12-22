@@ -47,6 +47,8 @@ apt-get install --yes --force-yes apache2 apache2-doc apache2-mpm-prefork apache
 
 #Debian utils
 apt-get install --yes --force-yes unzip
+/etc/init.d/apache2 stop
+/etc/init.d/mysql stop
 
 echo "I: config apache"
 echo "EnableSendfile off" >> /etc/apache2/apache2.conf
@@ -66,28 +68,21 @@ sed -i -e  "s/post_max_size = 8M/post_max_size = 32M/" /etc/php5/apache2/php.ini
 
 sed -i "51s/#/default-character-set=utf8/" /etc/mysql/my.cnf
 
-/etc/init.d/apache2 restart
-/etc/init.d/mysql start
 
 mkdir $WWW_DIRECTORY/admin/
 rm $WWW_DIRECTORY/index.html
 
-echo "I: config Cooperation-iws wui"
 
 
+mv /var/lib/mysql $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/mysql /var/lib/mysql
 
-mv /tmp/cooperation-wui.xml $WWW_DIRECTORY/cooperation-wui.xml
-mv /tmp/cooperation-wui-fr.xml  $WWW_DIRECTORY/cooperation-wui-fr.xml
+mv /var/lib/mysql-cluster $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/mysql-cluster /var/lib/mysql-cluster
 
-#ADMIN
+mv /var/lib/phpmyadmin $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/phpmyadmin /var/lib/phpmyadmin
 
-mv /tmp/admin_cooperation-wui.xml $WWW_DIRECTORY/admin/cooperation-wui.xml
-mv /tmp/admin_cooperation-wui-fr.xml  $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
-
-echo "I: displacing /etc directories"
-
-/etc/init.d/apache2 stop
-/etc/init.d/mysql stop
 
 mv /etc/apache2 $LAMPP_DIRECTORY/etc
 
@@ -101,9 +96,24 @@ mv /etc/mysql $LAMPP_DIRECTORY/etc
 
 ln -s $LAMPP_DIRECTORY/etc/mysql /etc/mysql
 
-mv /var/www $LAMPP_DIRECTORY/var
+mkdir $LAMPP_DIRECTORY/server/var
+chmod -R 777 $LAMPP_DIRECTORY/server/var
 
-ln -s $LAMPP_DIRECTORY/var/www /var/www
+mv /var/www $LAMPP_DIRECTORY/server/var
+
+ln -s $LAMPP_DIRECTORY/server/var/www /var/www
+
+
+
+echo "I: config Cooperation-iws wui"
+
+mv /tmp/cooperation-wui.xml $WWW_DIRECTORY/cooperation-wui.xml
+mv /tmp/cooperation-wui-fr.xml  $WWW_DIRECTORY/cooperation-wui-fr.xml
+
+#ADMIN
+
+mv /tmp/admin_cooperation-wui.xml $WWW_DIRECTORY/admin/cooperation-wui.xml
+mv /tmp/admin_cooperation-wui-fr.xml  $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 
 
 /etc/init.d/apache2 start

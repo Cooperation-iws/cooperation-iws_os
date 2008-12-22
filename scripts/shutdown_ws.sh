@@ -15,6 +15,7 @@ BIN_MYSQL=$(cat /tmp/mysql-path)
 APACHE=$(cat /tmp/apache)
 LIVEUSER=$(cat /tmp/user)
 TMPUSER=$(cat /tmp/tmp_user)
+DEB_DIST=$(cat /tmp/deb_dist)
 
 SILENT=$(cat /tmp/silent)
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
@@ -80,14 +81,14 @@ prereqs)
        ;;
 esac
 
-if [ ! -d /root/var/lib ]; then
+if [ ! -d /root/$LAMPP_DIRECTORY/var/lib ] && [ ! -d /root/opt/ciws/clamfs_server/var/lib ] ; then
 log_begin_msg \"\$DESCRIPTION\"
 echo \"
 rm /etc/rc0.d/*$CASPER_PATH* 
 rm /etc/rc6.d/*$CASPER_PATH*
-\" >> /root/etc/ciws/share/etc/rc.ciws
+\" >> /root/etc/ciws/server/etc/rc.ciws
 
-cp -a /root/etc/ciws/* /root/var/.
+cp -a /root/etc/ciws/* /root/opt/ciws/.
 log_end_msg	
 fi
 " > /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/001cpvar
@@ -227,12 +228,12 @@ echo "I: config rc.local"
 
 echo "#!/bin/bash
 
-" > /var/share/etc/rc.ciws > /dev/null 2>&1 
+" > $LAMPP_DIRECTORY/etc/rc.ciws > /dev/null 2>&1 
 
-chmod +x /var/share/etc/rc.ciws > /dev/null 2>&1 
+chmod +x $LAMPP_DIRECTORY/etc/rc.ciws > /dev/null 2>&1 
 
 echo "
-/var/share/etc/rc.ciws
+$LAMPP_DIRECTORY/etc/rc.ciws
 exit 0
 
 " >> /etc/rc.local
@@ -246,11 +247,19 @@ rm /var/cache/apt/archives/partial/* > /dev/null 2>&1
 
 if [ "$(echo "${OS_TYPE}" | awk  '{print $1}')" == "Server" ]; then
 
+echo "I: displacing directories"
+
+
+mv /etc/cron.d $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/cron.d /etc/cron.d
+
+
+
 echo "I: config persistent directory"
 
 
 mkdir /etc/ciws
-cp -a  /var/* /etc/ciws/.
+cp -a /opt/ciws/* /etc/ciws/.
 fi
 
 if [ "$(echo $SILENT | awk  '{print $1}')" == "" ]; then

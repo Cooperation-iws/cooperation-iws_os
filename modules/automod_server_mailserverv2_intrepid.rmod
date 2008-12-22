@@ -371,7 +371,7 @@ echo '#!/bin/bash
 # Script to stop and start pySieved managesieve server
 
 PIDFILE=/var/run/pysieved.pid
-PYS_HOME=/opt/ciws/server/var/pysieved
+PYS_HOME=/opt/ciws/var/pysieved
 
 if [ $# -ne 1 ]
 then
@@ -2774,9 +2774,6 @@ mailscanner_path=/usr/sbin/MailScanner
 stop_cmd=/etc/init.d/mailscanner stop
 EOT
 
-mv /etc/clamav $LAMPP_DIRECTORY/etc/
-
-ln -s $LAMPP_DIRECTORY/etc/clamav /etc/clamav
 
 
 mv /etc/MailScanner $LAMPP_DIRECTORY/etc/
@@ -2796,7 +2793,6 @@ freshclam
 
 echo "
 #mail server
-/etc/init.d/clamav-daemon restart
 /etc/init.d/dovecot restart
 /etc/init.d/postfix restart
 /etc/init.d/mailscanner restart

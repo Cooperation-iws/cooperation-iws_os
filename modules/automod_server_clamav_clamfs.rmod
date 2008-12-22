@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Clamav clamfs antivirus'
+RMOD_NAME='Clamav FS antivirus'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Clamav antivirus'
@@ -18,7 +18,8 @@ if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 fi
 
 HOSTNAME=$(cat /tmp/hostname)
-
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+MAIL_REPORT=$clam_mail_report
 
 function INSTALL
 {
@@ -49,20 +50,20 @@ echo "#/bin/bash
 if [ -z \"\$(cat /tmp/scan_report | grep 'Infected files: 0')\" ]; then
 \$(cat /tmp/scan_report | mail $MAIL_REPORT -s \"Clamav antivirus scan: VIRUS FOUND\")
 fi
-" > /var/share/lampp/clamav_scan
-chmod +x /var/share/lampp/clamav_scan
+" > $LAMPP_DIRECTORY/share/lampp/clamav_scan
+chmod +x $LAMPP_DIRECTORY/share/lampp/clamav_scan
 
 
-echo "*/14 * * * * root /var/share/lampp/clamav_scan \"/var\"" > /etc/cron.d/clamScan
+echo "*/14 * * * * root $LAMPP_DIRECTORY/share/lampp/clamav_scan \"/opt/ciws\"" > /etc/cron.d/clamScan
 sudo chmod +x /etc/cron.d/clamScan
-echo "03 2 * * * root /var/share/lampp/clamav_scan \"/\"" > /etc/cron.d/clamScan_all
+echo "03 2 * * * root $LAMPP_DIRECTORY/share/lampp/clamav_scan \"/\"" > /etc/cron.d/clamScan_all
 sudo chmod +x /etc/cron.d/clamScan_all
 echo "04 00,04,08,12,16,20 * * * root /usr/bin/freshclam 1> /dev/null " >> /etc/cron.d/freshClam
 sudo chmod +x /etc/cron.d/freshClam
 
 freshclam
-mkdir /clamfs
-mkdir /clamfs/tmp
+
+
 
 cat << EOF_CLAMFS > /etc/clamfs.xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -86,7 +87,7 @@ cat << EOF_CLAMFS > /etc/clamfs.xml
 	    		  file system publicly available for all users
 	     nonempty	- allow mount to directory which contains
 	    		  files or sub-directories -->
-	<filesystem root="/tmp" mountpoint="/clamfs/tmp" public="yes" nonempty="yes" />
+	<filesystem root="$LAMPP_DIRECTORY/clamfs_server" mountpoint="$LAMPP_DIRECTORY/server" public="yes" nonempty="yes" />
 
 	<!-- Maximal file size (in bytes).
 	     This option can speed up access to large files, as they will be
@@ -154,6 +155,12 @@ case "\$1" in
       exit
     fi
       echo "Starting Clamfs daemon"
+if [ ! -d $LAMPP_DIRECTORY/clamfs_server ]; then
+mv $LAMPP_DIRECTORY/server $LAMPP_DIRECTORY/clamfs_server
+mkdir $LAMPP_DIRECTORY/server
+chmod -R 777 $LAMPP_DIRECTORY
+fi
+
       clamfs /etc/clamfs.xml & > /dev/null 2>&1
       touch \$PIDFILE
     ;;
@@ -161,7 +168,7 @@ case "\$1" in
     if [ -f \$PIDFILE ]; then
       echo "Stopping Clamfs daemon."
       rm -f \$PIDFILE
-      fusermount -u /clamfs/tmp
+      fusermount -u $LAMPP_DIRECTORY/server
       killall -9 clamfs 
       
       exit
@@ -178,13 +185,25 @@ EOT
 
 chmod 0755 /etc/init.d/clamfs
 
-update-rc.d clamfs defaults
 
-echo "#clamfs
-/etc/init.d/clamfs stop
-/etc/init.d/clamfs start
-" >> /etc/rc.local
+update-rc.d -f clamfs start 04 2 3 4 5 .
 
+update-rc.d -f clamav-daemon remove
+update-rc.d -f clamav-daemon start 03 2 3 4 5 .
+
+#adduser www-data fuse
+#adduser mysql fuse
+#adduser root fuse
+
+mkdir /opt/ciws/clam/
+mkdir /opt/ciws/clam/lib
+mkdir /opt/ciws/clam/etc
+mv /var/lib/clamav /opt/ciws/clam/lib
+ln -s /opt/ciws/clam/lib/clamav /var/lib/clamav
+mv /etc/clamav /opt/ciws/clam/etc
+ln -s /opt/ciws/clam/etc/clamav /etc/clamav
+
+sed -i "9s/#//" /etc/fuse.conf
 }
 
 #_______________________________________________________________________________________________

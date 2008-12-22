@@ -125,7 +125,7 @@ else
 	fi
 fi
 chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
-
+chmod -R 777 $WWW_DIRECTORY/$MOD_NAME/images/album
 
 }
 

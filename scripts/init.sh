@@ -23,7 +23,7 @@ echo $DL_DIR > /tmp/web_install-path
 BIN_MYSQL="/usr/bin/mysql"
 echo $BIN_MYSQL > /tmp/mysql-path
 PLUGIN_DIR="${SCRIPTS_DIR}/modules"
-LAMPP_DIRECTORY="/opt/ciws/server"
+LAMPP_DIRECTORY="/opt/ciws/"
 echo $LAMPP_DIRECTORY > /tmp/lampp-dir
 CHROOT_DIRECTORY="chroot"
 echo $CHROOT_DIRECTORY > /tmp/chroot-dir
@@ -105,7 +105,7 @@ deb $DEB_MIRROR_SECURITY_PATH $DEB_DIST/updates main contrib non-free
 export DEBIAN_FRONTEND="dialog"
 fi
 if [ "$(echo "$DEBNONFREE_MIRROR_PATH" | grep 'medibuntu.org')" ]; then
-wget -q ${$DEBNONFREE_MIRROR_PATH}/medibuntu-key.gpg -O- | sudo apt-key add -
+wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key add -
 fi
 
 apt-get update
@@ -121,8 +121,8 @@ sed -i 's/#send host-name "andare.fugue.com";/send host-name "<hostname>";/' /et
 fi
 
 echo "I: create persistent directory"
-mkdir /opt/ciws
-mkdir /opt/ciws/server
+mkdir $LAMPP_DIRECTORY
+mkdir $LAMPP_DIRECTORY/server
 mkdir $LAMPP_DIRECTORY/share
 mkdir $LAMPP_DIRECTORY/share/lampp
 mkdir $LAMPP_DIRECTORY/etc
@@ -130,17 +130,13 @@ mkdir $LAMPP_DIRECTORY/usr
 mkdir $LAMPP_DIRECTORY/usr/share
 mkdir $LAMPP_DIRECTORY/opt
 mkdir $LAMPP_DIRECTORY/var/
+mkdir  $LAMPP_DIRECTORY/var/lib
+chmod -R 777 /opt/ciws
 echo "I: post install script creation"
 echo "#!/bin/bash
 WWW_DIRECTORY=\"/var/www\"
 " > $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
-echo "I: displacing /etc directories"
-mv /etc/cron.d $LAMPP_DIRECTORY/etc
-ln -s $LAMPP_DIRECTORY/etc/cron.d /etc/cron.d
-
-mv /var/lib/ $LAMPP_DIRECTORY/var
-ln -s $LAMPP_DIRECTORY/var/lib /var/lib
 
 
 

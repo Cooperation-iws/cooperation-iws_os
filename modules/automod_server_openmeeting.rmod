@@ -149,11 +149,11 @@ update-rc.d openoffice defaults
 JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun
 /etc/init.d/red5 stop
 
-mkdir $LAMPP_DIRECTORY/usr/lib
-mkdir $LAMPP_DIRECTORY/usr/lib/red5/
-mv /usr/lib/red5/webapps/ $LAMPP_DIRECTORY/usr/lib/red5/
+mkdir $LAMPP_DIRECTORY/server/usr/lib
+mkdir $LAMPP_DIRECTORY/server/usr/lib/red5/
+mv /usr/lib/red5/webapps/ $LAMPP_DIRECTORY/server/usr/lib/red5/
 
-ln -s $LAMPP_DIRECTORY/usr/lib/red5/webapps/ /usr/lib/red5/
+ln -s $LAMPP_DIRECTORY/server/usr/lib/red5/webapps/ /usr/lib/red5/
 
 #/opt/lps-4.0.6/Server/tomcat-5.0.24/bin/startup.sh
 /etc/init.d/red5 start

@@ -11,6 +11,9 @@ RMOD_DESCRIPTION='Clamav antivirus'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
+
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+
 LANG_UI=$(cat /tmp/lang-wui)
 SILENT=$(cat /tmp/silent)
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
@@ -53,14 +56,19 @@ fi
 chmod +x $LAMPP_DIRECTORY/share/lampp/clamav_scan
 
 
-echo "*/14 * * * * root /var/share/lampp/clamav_scan \"/var\"" > /etc/cron.d/clamScan
+echo "*/14 * * * * root $LAMPP_DIRECTORY/share/lampp/clamav_scan \"/var\"" > /etc/cron.d/clamScan
 sudo chmod +x /etc/cron.d/clamScan
-echo "03 2 * * * root /var/share/lampp/clamav_scan \"/\"" > /etc/cron.d/clamScan_all
+echo "03 2 * * * root $LAMPP_DIRECTORY/share/lampp/clamav_scan \"/\"" > /etc/cron.d/clamScan_all
 sudo chmod +x /etc/cron.d/clamScan_all
 echo "04 00,04,08,12,16,20 * * * root /usr/bin/freshclam 1> /dev/null " >> /etc/cron.d/freshClam
 sudo chmod +x /etc/cron.d/freshClam
 
 freshclam
+
+
+mv /var/lib/clamav $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/clamav /var/lib/clamav
+
 
 }
 
