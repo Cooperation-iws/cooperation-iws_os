@@ -238,6 +238,9 @@ if [ ! -d $LAMPP_DIRECTORY/clamfs_server ]; then
 mv $LAMPP_DIRECTORY/server $LAMPP_DIRECTORY/clamfs_server
 mkdir $LAMPP_DIRECTORY/server
 chown -R www-data $LAMPP_DIRECTORY/server
+mount -oremount,acl $LAMPP_DIRECTORY
+setfacl -R -b -d -m user:clamav:rx $LAMPP_DIRECTORY/clamfs_server
+setfacl -R -m user:clamav:rx $LAMPP_DIRECTORY/clamfs_server
 fi
 
       clamfs /etc/clamfs.xml & > /dev/null 2>&1

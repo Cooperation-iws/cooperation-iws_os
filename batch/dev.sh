@@ -69,5 +69,5 @@ cd /home/esmalif/cooperation/CVS/branch/0.7.1/ciws_clam_support
 
 sudo rm /media/partage-sauv/depot/apt-cacher-ubuntu/packages/php5-tidy_5.2.6-2ubuntu4_i386.deb
 
-sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/xubuntu-8.10-desktop-i386.iso --modulesfile templates/dev --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/fr.archive.ubuntu.com/ubuntu/ --debmirrornonfree http://localhost:3142/packages.medibuntu.org/ --debmirrorsecurity http://localhost:3142/fr.archive.ubuntu.com/ubuntu/ --cms Wordpress --directory /media/partage-sauv/tmp/z51 --host gateway --password cooperation --username esmalif --artwork ciwsGnome --outputisoname cooperation-iws-gw-intranet-0.7.1.iso 
+sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/xubuntu-8.10-desktop-i386.iso --modulesfile templates/dev --webappmirror http://localhost:81/depot --debmirror http://localhost:3142/fr.archive.ubuntu.com/ubuntu/ --debmirrornonfree http://localhost:3142/packages.medibuntu.org/ --debmirrorsecurity http://localhost:3142/fr.archive.ubuntu.com/ubuntu/ --cms Wordpress --directory /media/partage-dev/tmp/a1 --host gateway --password cooperation --username esmalif --artwork ciwsGnome --outputisoname cooperation-iws-gw-intranet-0.7.1.iso --silent
 
