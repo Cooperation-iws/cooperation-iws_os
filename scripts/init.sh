@@ -89,18 +89,22 @@ echo "
 deb $DEB_MIRROR_PATH/ $DEB_DIST restricted main universe multiverse
 deb $DEB_MIRROR_SECURITY_PATH/ $DEB_DIST-updates restricted main universe multiverse
 deb $DEB_MIRROR_SECURITY_PATH/ $DEB_DIST-security restricted main universe multiverse
+deb-src $DEB_MIRROR_PATH/ $DEB_DIST restricted main universe multiverse
+deb-src $DEB_MIRROR_SECURITY_PATH/ $DEB_DIST-updates restricted main universe multiverse
+deb-src $DEB_MIRROR_SECURITY_PATH/ $DEB_DIST-security restricted main universe multiverse
+
 deb $DEBNONFREE_MIRROR_PATH/ $DEB_DIST free non-free
 " > /etc/apt/sources.list
 else
 echo "
 deb $DEB_MIRROR_PATH/ $DEB_DIST main contrib non-free
-#deb-src $DEB_MIRROR_PATH/ $DEB_DIST main contrib 
+deb-src $DEB_MIRROR_PATH/ $DEB_DIST main contrib 
 #Multimedia
 deb $DEBNONFREE_MIRROR_PATH $DEB_DIST main 
-#deb-src http://www.debian-multimedia.org $DEB_DIST main 
+deb-src http://www.debian-multimedia.org $DEB_DIST main 
 #Security
 deb $DEB_MIRROR_SECURITY_PATH $DEB_DIST/updates main contrib non-free
-#deb-src http://security.debian.org/ $DEB_DIST/updates main contrib 
+deb-src http://security.debian.org/ $DEB_DIST/updates main contrib 
 " > /etc/apt/sources.list
 export DEBIAN_FRONTEND="dialog"
 fi
@@ -131,7 +135,7 @@ mkdir $LAMPP_DIRECTORY/usr/share
 mkdir $LAMPP_DIRECTORY/opt
 mkdir $LAMPP_DIRECTORY/var/
 mkdir  $LAMPP_DIRECTORY/var/lib
-chmod -R 777 /opt/ciws
+chown -R www-data $LAMPP_DIRECTORY/server
 echo "I: post install script creation"
 echo "#!/bin/bash
 WWW_DIRECTORY=\"/var/www\"

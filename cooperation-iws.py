@@ -2237,9 +2237,9 @@ class Reconstructor:
             # TODO: replace default terminal title with "Reconstructor Terminal"
             # use gnome-terminal if available -- more features
             print _('Launching Post install script customizations...')
-            os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/var/share/lampp/config_post_install.sh"))
+            os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/opt/ciws/share/lampp/config_post_install.sh"))
 	   
-	    os.system('chroot ' + os.path.join(self.customDir, "chroot") + ' /var/share/lampp/config_post_install.sh')
+	    os.system('chroot ' + os.path.join(self.customDir, "chroot") + ' /opt/ciws/share/lampp/config_post_install.sh')
             
             # restore wgetrc
             print _("Restoring wgetrc configuration...")

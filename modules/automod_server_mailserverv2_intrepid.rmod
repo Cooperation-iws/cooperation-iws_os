@@ -49,9 +49,6 @@ wget $URL_FREE/postfixadmin_081101.tar.gz
 tar -xzf postfixadmin_081101.tar.gz
 
 cd $DL_DIR
-wget $URL_FREE/wbmclamav-0.9.0.wbm.gz
-gunzip wbmclamav-0.9.0.wbm.gz
-cd $DL_DIR
 wget $URL_FREE/webmin-module-1.1-4.wbm
 
 
@@ -137,7 +134,7 @@ UPDATE $NOM_MAILSERVER.domain_admins SET username = '$admin_email' WHERE CONVERT
 " > /tmp/update_mail_domain
 $BIN_MYSQL -u root < /tmp/update_mail_domain $NOM_MAILSERVER
 
-apt-get install --assume-yes --force-yes postfix postfix-mysql mailscanner clamav-daemon libdate-manip-perl tnef unrar unzip pyzor razor mailutils clamav-freshclam
+apt-get install -f --assume-yes --force-yes postfix postfix-mysql mailscanner libdate-manip-perl tnef unrar unzip pyzor razor mailutils 
 
 if [ "$(echo $public_mail | awk  '{print $1}')" == "y" ]; then
 cat << EOT_PUBLIC > /etc/postfix/main.cf
@@ -354,7 +351,7 @@ plugin {
 EOT
 mkdir $LAMPP_DIRECTORY/var/sieve-scripts
 cd $LAMPP_DIRECTORY/var
-apt-get install --assume-yes --force-yes git-core curl python-mysqldb
+apt-get install -f --assume-yes --force-yes git-core curl python-mysqldb
 git clone http://woozle.org/~neale/repos/pysieved
 sed -i "s/dbuser = user/dbuser = $NOM_MAILSERVER/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
 sed -i "s/dbname = db/dbname = $NOM_MAILSERVER/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
@@ -2736,33 +2733,13 @@ chown postfix:postfix /var/spool/MailScanner/quarantine
 
 ##Webmin configuration
 cd $DL_DIR
-/usr/share/webmin/install-module.pl wbmclamav-0.9.0.wbm 
 /usr/share/webmin/install-module.pl webmin-module-1.1-4.wbm 
 
 
 rm /etc/webmin/module.infos.cache
 
-echo "clamav mailscanner" >> /etc/webmin/webmin.acl
+echo "mailscanner " >> /etc/webmin/webmin.acl
 
-mkdir /etc/webmin/clamav
-cat << EOT > /etc/webmin/clamav/config
-clamav_quarantine=/var/lib/amavis/virusmails
-clamav_clamav_log=/var/log/clamav/clamav.log
-clamav_sys_user=clamav
-clamav_spam_user=amavis
-clamav_db1=/var/lib/clamav/main.inc/main.info
-clamav_init_script=/etc/init.d/clamav-daemon
-clamav_init_restore_path=/var/backups
-clamav_freshclam_log=/var/log/clamav/freshclam.log
-clamav_working_path=/tmp
-clamav_freshclam_init_script=/etc/init.d/clamav-freshclam
-clamav_freshclam_conf=/etc/clamav/freshclam.conf
-clamav_quarantine_soft=4
-clamav_clamav_conf=/etc/clamav/clamd.conf
-clamav_db2=/var/lib/clamav/daily.cvd
-clamav_refresh_use_cron=0
-clamav_sys_group=adm
-EOT
 
 mkdir /etc/webmin/mailscanner
 cat << EOT > /etc/webmin/mailscanner/config

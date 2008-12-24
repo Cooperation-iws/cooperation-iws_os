@@ -10,7 +10,9 @@ RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Clamav antivirus'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-
+DL_DIR=$(cat /tmp/web_install-path)
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
 LANG_UI=$(cat /tmp/lang-wui)
 SILENT=$(cat /tmp/silent)
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
@@ -21,11 +23,88 @@ HOSTNAME=$(cat /tmp/hostname)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 MAIL_REPORT=$clam_mail_report
 
+
+function WGET_MIRROIR_FREE
+{
+
+cd $DL_DIR
+wget $URL_FREE/wbmclamav-0.9.0.wbm.gz
+gunzip wbmclamav-0.9.0.wbm.gz
+cd $DL_DIR
+wget $URL_FREE/clamfs-modified-081223.tar.gz
+tar -xzf clamfs-modified-081223.tar.gz
+cd $DL_DIR
+wget $URL_FREE/clamav-0.94.2.tar.gz
+tar -xzf clamav-0.94.2.tar.gz
+}
+
 function INSTALL
 {
 
+WGET_MIRROIR_FREE
 
-apt-get install --assume-yes --force-yes clamav clamav-daemon zoo unzip arj bzip2 razor pyzor clamav-freshclam mailutils clamfs
+apt-get install -f --assume-yes --force-yes zoo unzip arj bzip2 razor pyzor mailutils unrar
+
+apt-get install -f --assume-yes --force-yes fakeroot build-essential 
+apt-get build-dep --assume-yes --force-yes clamav
+
+cd $DL_DIR
+mkdir clamav
+cd clamav
+apt-get source clamav 
+cp -r ../clamav-0.94.2/libclamunrar/* clamav-*/libclamunrar/.
+cd clamav-*
+sed -i "s/--disable-unrar //" debian/rules
+
+
+echo "debian/tmp/usr/lib/libclamunrar.so.5.0.*
+debian/tmp/usr/lib/libclamunrar.so.5
+debian/tmp/usr/lib/libclamunrar_iface.so.5.0.*
+debian/tmp/usr/lib/libclamunrar_iface.so.5
+debian/tmp/usr/lib/libclamav.so.5.0.*
+debian/tmp/usr/lib/libclamav.so.5
+
+" > debian/libclamav5.install
+
+echo "debian/tmp/usr/lib/libclamunrar.so
+debian/tmp/usr/lib/libclamunrar.a
+debian/tmp/usr/lib/libclamunrar.la
+debian/tmp/usr/lib/libclamunrar_iface.so
+debian/tmp/usr/lib/libclamunrar_iface.a
+debian/tmp/usr/lib/libclamunrar_iface.la
+debian/tmp/usr/lib/libclamav.so
+debian/tmp/usr/lib/libclamav.a
+debian/tmp/usr/lib/libclamav.la
+debian/tmp/usr/include/*
+debian/tmp/usr/lib/pkgconfig/libclamav.pc usr/lib/pkgconfig/
+debian/tmp/usr/bin/clamav-config 
+" > debian/libclamav-dev.install
+
+
+dpkg-buildpackage -rfakeroot -uc -us 
+
+cd ..
+dpkg -i *.deb 
+apt-get -f install --assume-yes --force-yes
+#sed -i "s/User clamav/User root/" /etc/clamav/clamd.conf
+
+apt-get install -f --assume-yes --force-yes libxml2 libpoco5-dev librlog-dev autoconf build-essential libtool libfuse-dev libccrtp-dev
+
+
+cd $DL_DIR
+
+cd clamfs
+./autogen.sh
+./configure
+make
+
+cp src/clamfs /usr/bin/
+
+
+
+
+
+
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 MAIL_REPORT=$clam_mail_report
 else
@@ -158,7 +237,7 @@ case "\$1" in
 if [ ! -d $LAMPP_DIRECTORY/clamfs_server ]; then
 mv $LAMPP_DIRECTORY/server $LAMPP_DIRECTORY/clamfs_server
 mkdir $LAMPP_DIRECTORY/server
-chmod -R 777 $LAMPP_DIRECTORY
+chown -R www-data $LAMPP_DIRECTORY/server
 fi
 
       clamfs /etc/clamfs.xml & > /dev/null 2>&1
@@ -191,9 +270,11 @@ update-rc.d -f clamfs start 04 2 3 4 5 .
 update-rc.d -f clamav-daemon remove
 update-rc.d -f clamav-daemon start 03 2 3 4 5 .
 
-#adduser www-data fuse
+adduser clamav www-data
 #adduser mysql fuse
 #adduser root fuse
+
+
 
 mkdir /opt/ciws/clam/
 mkdir /opt/ciws/clam/lib
@@ -204,6 +285,33 @@ mv /etc/clamav /opt/ciws/clam/etc
 ln -s /opt/ciws/clam/etc/clamav /etc/clamav
 
 sed -i "9s/#//" /etc/fuse.conf
+
+cd $DL_DIR
+/usr/share/webmin/install-module.pl wbmclamav-0.9.0.wbm 
+echo "clamav " >> /etc/webmin/webmin.acl
+
+mkdir /etc/webmin/clamav
+cat << EOT > /etc/webmin/clamav/config
+clamav_quarantine=/var/lib/amavis/virusmails
+clamav_clamav_log=/var/log/clamav/clamav.log
+clamav_sys_user=clamav
+clamav_spam_user=amavis
+clamav_db1=/var/lib/clamav/main.inc/main.info
+clamav_init_script=/etc/init.d/clamav-daemon
+clamav_init_restore_path=/var/backups
+clamav_freshclam_log=/var/log/clamav/freshclam.log
+clamav_working_path=/tmp
+clamav_freshclam_init_script=/etc/init.d/clamav-freshclam
+clamav_freshclam_conf=/etc/clamav/freshclam.conf
+clamav_quarantine_soft=4
+clamav_clamav_conf=/etc/clamav/clamd.conf
+clamav_db2=/var/lib/clamav/daily.cvd
+clamav_refresh_use_cron=0
+clamav_sys_group=adm
+EOT
+
+
+freshclam
 }
 
 #_______________________________________________________________________________________________

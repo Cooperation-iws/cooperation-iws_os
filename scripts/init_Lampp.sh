@@ -97,7 +97,7 @@ mv /etc/mysql $LAMPP_DIRECTORY/etc
 ln -s $LAMPP_DIRECTORY/etc/mysql /etc/mysql
 
 mkdir $LAMPP_DIRECTORY/server/var
-chmod -R 777 $LAMPP_DIRECTORY/server/var
+
 
 mv /var/www $LAMPP_DIRECTORY/server/var
 

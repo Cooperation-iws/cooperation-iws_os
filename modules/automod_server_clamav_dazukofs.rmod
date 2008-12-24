@@ -1,0 +1,146 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Dazuko FS antivirus'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Clamav antivirus'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+DL_DIR=$(cat /tmp/web_install-path)
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+LANG_UI=$(cat /tmp/lang-wui)
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
+
+HOSTNAME=$(cat /tmp/hostname)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+MAIL_REPORT=$clam_mail_report
+
+function INSTALL
+{
+
+
+apt-get install --assume-yes --force-yes linux-generic linux-image-generic linux-restricted-modules-generic linux-headers-generic
+
+apt-get install --assume-yes --force-yes build-essential
+
+cd $DL_DIR
+wget $URL_FREE/dazukofs-3.0.0rc4-modif.tar.gz
+tar -xzf dazukofs-3.0.0rc4-modif.tar.gz
+
+cd dazukofs-3.0.0-rc4
+KERNEL=$(ls /lib/modules) 
+KERNEL=(${KERNEL[@]})
+NB_KERNEL=$(ls /lib/modules | wc -l)
+NB_KERNEL=$(expr $NB_KERNEL-1)
+
+sed -i "s/\`uname -r\`/${KERNEL[$NB_KERNEL]}/g" Makefile
+make
+
+mv $DL_DIR/dazukofs-3.0.0-rc4   /usr/share/dazukofs
+
+apt-get install --assume-yes --force-yes zoo unzip arj bzip2 razor pyzor mailutils unrar-nonfree
+
+apt-get install --assume-yes --force-yes fakeroot build-essential 
+apt-get build-dep clamav
+
+cd $DL_DIR
+mkdir clamav
+cd clamav
+apt-get source clamav 
+
+cd clamav-*
+sed -i "s/--disable-clamuko //" debian/rules
+sed -i "s/--disable-unrar //" debian/rules
+
+dpkg-buildpackage -rfakeroot -uc -us 
+
+cd ..
+sudo dpkg -i *.deb 
+
+sed -i "s/User clamav/User root/" /etc/clamav/clamd.conf
+
+echo "ClamukoScanOnAccess
+ClamukoScanOnOpen
+ClamukoScanArchive
+ClamukoIncludePath /home " >> /etc/clamav/clamd.conf
+
+cat << EOT > /etc/init.d/dazukofs
+#!/bin/bash
+
+PIDFILE=/var/run/dazukofs.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "Dazukofs daemon has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting dazukofs"
+      cd /usr/share/dazukofs
+      make dazukofs_install
+      modprobe dazukofs
+      mount -t dazukofs /opt /opt
+      mount -t dazukofs /etc /etc
+      mount -t dazukofs /var /var
+
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping dazukofs daemon."
+      umount /opt
+      umount /etc 
+      umount /var 
+ 
+      exit
+    fi
+      echo "Dazukofs is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOT
+
+chmod 0755 /etc/init.d/dazukofs
+
+
+update-rc.d -f dazukofs start 03 2 3 4 5 .
+
+update-rc.d -f clamav-daemon remove
+update-rc.d -f clamav-daemon start 04 2 3 4 5 .
+
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+echo "I: Install Clamav"
+INSTALL
+echo "I: End of Install Clamav"

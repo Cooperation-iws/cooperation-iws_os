@@ -56,7 +56,7 @@ LOCAL_IFACE=$gateway_local_iface
 
 
 
-apt-get install --assume-yes --force-yes shorewall-shell dnsmasq dhcp3-server bind9 dnsutils
+apt-get install -f --assume-yes --force-yes shorewall-shell dnsmasq dhcp3-server bind9 dnsutils
 #bind9 config
 
 echo "controls {

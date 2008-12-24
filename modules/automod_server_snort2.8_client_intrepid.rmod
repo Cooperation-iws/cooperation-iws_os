@@ -250,7 +250,7 @@ DOWNLOAD
 #Snort config
 
 
-apt-get install --assume-yes --force-yes oinkmaster libpcap-dev libmysqlclient15-dev bison flex mysql-client build-essential
+apt-get install -f --assume-yes --force-yes oinkmaster libpcap-dev libmysqlclient15-dev bison flex mysql-client build-essential
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 REGISTERED_KEY=$snort_registration_key
 else
