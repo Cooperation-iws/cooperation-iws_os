@@ -26,7 +26,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
-
+DEB_DIST=$(cat /tmp/deb_dist)
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
@@ -51,7 +51,8 @@ tar -xzf postfixadmin_081101.tar.gz
 cd $DL_DIR
 wget $URL_FREE/webmin-module-1.1-4.wbm
 
-
+cd $DL_DIR
+wget $URL_FREE/mailscanner_4.71.10-1_all.deb
 
 }
 
@@ -134,7 +135,15 @@ UPDATE $NOM_MAILSERVER.domain_admins SET username = '$admin_email' WHERE CONVERT
 " > /tmp/update_mail_domain
 $BIN_MYSQL -u root < /tmp/update_mail_domain $NOM_MAILSERVER
 
-apt-get install -f --assume-yes --force-yes postfix postfix-mysql mailscanner libdate-manip-perl tnef unrar unzip pyzor razor mailutils 
+apt-get install -f --assume-yes --force-yes postfix postfix-mysql libdate-manip-perl tnef unrar unzip pyzor razor mailutils 
+
+apt-get install --assume-yes --force-yes mailscanner 
+
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ]; then
+cd $DL_DIR
+dpkg -i mailscanner_4.71.10-1_all.deb
+apt-get -f install --assume-yes --force-yes
+fi
 
 if [ "$(echo $public_mail | awk  '{print $1}')" == "y" ]; then
 cat << EOT_PUBLIC > /etc/postfix/main.cf

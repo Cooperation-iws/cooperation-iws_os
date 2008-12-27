@@ -30,7 +30,7 @@ function INSTALL
 
 apt-get install --assume-yes --force-yes linux-generic linux-image-generic linux-restricted-modules-generic linux-headers-generic
 
-apt-get install --assume-yes --force-yes build-essential
+apt-get install --assume-yes --force-yes build-essential 
 
 cd $DL_DIR
 wget $URL_FREE/dazukofs-3.0.0rc4-modif.tar.gz

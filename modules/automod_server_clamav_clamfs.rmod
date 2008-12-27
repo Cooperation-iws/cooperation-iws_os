@@ -43,7 +43,7 @@ function INSTALL
 
 WGET_MIRROIR_FREE
 
-apt-get install -f --assume-yes --force-yes zoo unzip arj bzip2 razor pyzor mailutils unrar
+apt-get install -f --assume-yes --force-yes zoo unzip arj bzip2 razor pyzor mailutils unrar clamfs fuse-utils
 
 apt-get install -f --assume-yes --force-yes fakeroot build-essential 
 apt-get build-dep --assume-yes --force-yes clamav
@@ -86,7 +86,7 @@ dpkg-buildpackage -rfakeroot -uc -us
 cd ..
 dpkg -i *.deb 
 apt-get -f install --assume-yes --force-yes
-#sed -i "s/User clamav/User root/" /etc/clamav/clamd.conf
+sed -i "s/User clamav/User root/" /etc/clamav/clamd.conf
 
 apt-get install -f --assume-yes --force-yes libxml2 libpoco5-dev librlog-dev autoconf build-essential libtool libfuse-dev libccrtp-dev
 
@@ -237,12 +237,9 @@ case "\$1" in
 if [ ! -d $LAMPP_DIRECTORY/clamfs_server ]; then
 mv $LAMPP_DIRECTORY/server $LAMPP_DIRECTORY/clamfs_server
 mkdir $LAMPP_DIRECTORY/server
-chown -R www-data $LAMPP_DIRECTORY/server
-mount -oremount,acl $LAMPP_DIRECTORY
-setfacl -R -b -d -m user:clamav:rx $LAMPP_DIRECTORY/clamfs_server
-setfacl -R -m user:clamav:rx $LAMPP_DIRECTORY/clamfs_server
+chmod -R 755 $LAMPP_DIRECTORY/server
 fi
-
+      /etc/init.d/fuse start
       clamfs /etc/clamfs.xml & > /dev/null 2>&1
       touch \$PIDFILE
     ;;
@@ -272,6 +269,9 @@ update-rc.d -f clamfs start 04 2 3 4 5 .
 
 update-rc.d -f clamav-daemon remove
 update-rc.d -f clamav-daemon start 03 2 3 4 5 .
+
+
+
 
 adduser clamav www-data
 #adduser mysql fuse
