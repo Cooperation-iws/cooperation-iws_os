@@ -1,0 +1,38 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='ooo3 client'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Office tools for client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+URL_FREE=$(cat /tmp/url_mirroir)
+DL_DIR=$(cat /tmp/web_install-path)
+
+echo "I: installing liveusb installer"
+
+apt-get remove --assume-yes --force-yes openoffice.org* 
+
+cd $DL_DIR
+
+wget $URL_FREE/OOo_3.0.0_LinuxIntel_install_en-US_deb.tar.gz
+
+tar -xvf OOo_3.0.0_LinuxIntel_install_en-US_deb.tar.gz
+
+cd OOO300_m9_native_packed-1_en-US.9358
+
+cd DEBS
+
+sudo dpkg -i *.deb
+
+cd desktop-integration
+
+sudo dpkg -i openoffice.org3.0-debian-menus_3.0-9354_all.deb
+
+
+apt-get install --force-yes --assume-yes unixodbc cupsys-bsd libsane libxrender1 msttcorefonts pstoedit imagemagick libpaper-utils dia gimp inkscape pdfedit flpsed zip unzip wine
+
+/etc/init.d/winbind stop
