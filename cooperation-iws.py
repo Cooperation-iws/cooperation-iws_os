@@ -369,6 +369,9 @@ class Reconstructor:
 	parser.add_option( "--encryptionpassphrase", 
                     dest="encryptionpassphrase", default="",
                     help="Debian live encryption passphrase")
+	parser.add_option( "--isotype", 
+                    dest="isotype", default="" ,
+                    help="Type of Input Iso image")
         (options, args) = parser.parse_args()
 
 
@@ -441,6 +444,7 @@ class Reconstructor:
 	    self.locale = options.locale
 	    self.locale = options.locale
 	    self.pfsense = options.pfsense
+	    self.isoType = options.isotype
 	    if self.pfsense == True:
 		self.nodebuntu == True
 		
@@ -2305,6 +2309,26 @@ class Reconstructor:
 		initUserFullname = 'Live session user'
 		initHostName = 'live'
 		initBuildSystem = 'Ubuntu'
+	    elif self.distVariant == 'ozos-0.9':
+		initUsername = 'wizard'
+		initUserFullname = 'Live session user'
+		initHostName = 'oz'
+		initBuildSystem = 'OzOS'
+	    elif self.distVariant == 'poseidon-3.1':
+		initUsername = 'poseidon'
+		initUserFullname = 'Live session user'
+		initHostName = 'poseidon'
+		initBuildSystem = 'Ubuntu'
+	    elif self.distVariant == 'nubuntu_8.10':
+		initUsername = 'nubuntu'
+		initUserFullname = 'Live session user'
+		initHostName = 'nubuntu'
+		initBuildSystem = 'Ubuntu'
+	    elif self.distVariant == 'edubuntu_8.10' or self.distVariant == 'studio_8.10':
+		initUsername = 'custom'
+		initUserFullname = 'Live session user'
+		initHostName = 'custom'
+		initBuildSystem = 'client'
 	    else:
 		initUsername = 'ubuntu'
 		initUserFullname = 'Live session user'
@@ -3122,7 +3146,88 @@ class Reconstructor:
 
     def checkLiveCdVersion(self):
 		
-	    if os.path.exists(os.path.join(self.customDir, "remaster/boot/grub")) and commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/boot/grub/menu.lst") + '| grep \'Webconverger\'') != '':
+            if  self.isoType == "edubuntu_8.10":
+		self.casperPath = 'casper'	
+		self.wTree.get_widget("hbox301").hide()
+		self.wTree.get_widget("hbox701").show()
+		self.wTree.get_widget("hbox702").hide()
+		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
+		self.debDist= 'intrepid'
+		self.distVariant = 'edubuntu_8.10'		
+		print "Edubuntu 8.10 Live CD"	
+	    elif  self.isoType == "eeebuntu_8.10":
+		self.casperPath = 'casper'	
+		self.wTree.get_widget("hbox301").hide()
+		self.wTree.get_widget("hbox701").show()
+		self.wTree.get_widget("hbox702").hide()
+		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
+		self.debDist= 'intrepid'
+		self.distVariant = 'eeebuntu_8.10'		
+		print "Eeebuntu 8.10 Live CD" 
+	    elif  self.isoType == "studio_8.10":
+		self.casperPath = 'casper'	
+		self.wTree.get_widget("hbox301").hide()
+		self.wTree.get_widget("hbox701").show()
+		self.wTree.get_widget("hbox702").hide()
+		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
+		self.debDist= 'intrepid'
+		self.distVariant = 'studio_8.10'		
+		print "Ubuntu Studio 8.10 Live CD" 
+	    elif  self.isoType == "netbook-remix_8.10":
+		self.casperPath = 'casper'	
+		self.wTree.get_widget("hbox301").hide()
+		self.wTree.get_widget("hbox701").show()
+		self.wTree.get_widget("hbox702").hide()
+		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
+		self.debDist= 'intrepid'
+		self.distVariant = 'netbook-remix_8.10'		
+		print "Netbook remix 8.10 Live CD"
+	    elif  self.isoType == "nubuntu_8.10":
+		self.casperPath = 'casper'	
+		self.wTree.get_widget("hbox301").hide()
+		self.wTree.get_widget("hbox701").show()
+		self.wTree.get_widget("hbox702").hide()
+		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
+		self.debDist= 'intrepid'
+		self.distVariant = 'nubuntu_8.10'		
+		print "Nbuntu8.10 Live CD"
+	    elif  self.isoType == "maryan_8.04.1":
+		self.casperPath = 'casper'	
+		self.wTree.get_widget("hbox301").hide()
+		self.wTree.get_widget("hbox701").show()
+		self.wTree.get_widget("hbox702").hide()
+		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
+		self.debDist= 'hardy'
+		self.distVariant = 'maryan_8.04.1'		
+		print "Maryan 8.10 Live CD"	
+	    elif  self.isoType == "opengeu_8.04.1":
+		self.casperPath = 'casper'	
+		self.wTree.get_widget("hbox301").hide()
+		self.wTree.get_widget("hbox701").show()
+		self.wTree.get_widget("hbox702").hide()
+		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
+		self.debDist= 'hardy'
+		self.distVariant = 'opengeu_8.04.1'		
+		print "Opengeu 8.04.1 Live CD"
+            elif  self.isoType == "ozos-0.9":
+		self.casperPath = 'casper'	
+		self.wTree.get_widget("hbox301").hide()
+		self.wTree.get_widget("hbox701").show()
+		self.wTree.get_widget("hbox702").hide()
+		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
+		self.debDist= 'hardy'
+		self.distVariant = 'ozos-0.9'		
+		print "Ozos 0.9 Live CD"
+            elif  self.isoType == "poseidon-3.1":
+		self.casperPath = 'casper'	
+		self.wTree.get_widget("hbox301").hide()
+		self.wTree.get_widget("hbox701").show()
+		self.wTree.get_widget("hbox702").hide()
+		self.wTree.get_widget("labelLiveCDKeybLang3").hide()
+		self.debDist= 'hardy'
+		self.distVariant = 'poseidon-3.1'		
+		print "Poseidon 3.1 Live CD"		
+	    elif os.path.exists(os.path.join(self.customDir, "remaster/boot/grub")) and commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/boot/grub/menu.lst") + '| grep \'Webconverger\'') != '':
 		self.casperPath = 'live'
 		self.wTree.get_widget("hbox701").hide()
 		self.wTree.get_widget("hbox301").show()
