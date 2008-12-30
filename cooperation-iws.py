@@ -4085,7 +4085,8 @@ class Reconstructor:
 		        # update md5
 		        print _("Updating md5 sums...")
 		        os.popen('cd \"' + os.path.join(self.customDir, "remaster/") + '\"; ' + 'find . -type f -print0 | xargs -0 md5sum > md5sum.txt')
-		        # remove existing iso
+					        
+			# remove existing iso
 		        if os.path.exists(self.buildLiveCdFilename):
 		            print _("Removing existing ISO...")
 		            os.popen('rm -Rf \"' + self.buildLiveCdFilename + '\"')

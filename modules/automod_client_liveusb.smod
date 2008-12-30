@@ -13,6 +13,8 @@ URL_FREE=$(cat /tmp/url_mirroir)
 DL_DIR=$(cat /tmp/web_install-path)
 
 echo "I: installing liveusb installer"
+apt-get remove --assume-yes --force-yes liveusb
+
 cd $DL_DIR
 wget $URL_FREE/cooperation-iws-liveusb-public-0.5.deb
 dpkg -i cooperation-iws-liveusb-public-0.5.deb
