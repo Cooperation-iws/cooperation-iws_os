@@ -1,0 +1,105 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Ispconfig'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE=""
+RMOD_VERBOSE_FR=""
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+#TEMP
+MIRROIR="A"
+NOM_CACTI="Cacti"
+
+
+#VARIABLES
+
+NTOP_PWD="cooperation"
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+/etc/init.d/apparmor stop
+update-rc.d -f apparmor remove
+apt-get remove apparmor apparmor-utils
+
+apt-get install --assume-yes --force-yes binutils cpp fetchmail flex gcc libarchive-zip-perl libc6-dev libcompress-zlib-perl libdb4.3-dev libpcre3 libpopt-dev lynx m4 make ncftp nmap openssl perl perl-modules unzip zip zlib1g-dev autoconf automake1.9 libtool bison autotools-dev g++ build-essential
+
+apt-get install --assume-yes --force-yes bind9 mysql-server mysql-client libmysqlclient15-dev postfix libsasl2-2 sasl2-bin libsasl2-modules procmail apache2 apache2-doc apache2-mpm-prefork apache2-utils apache2-suexec libexpat1 ssl-cert libapache2-mod-php5 libapache2-mod-ruby libapache2-mod-python php5 php5-common php5-curl php5-dev php5-gd php5-idn php-pear php5-imagick php5-imap php5-mcrypt php5-memcache php5-mhash php5-ming php5-mysql php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl proftpd ucf ntp ntpdate webalizer libhtml-parser-perl libdb-file-lock-perl libnet-dns-perl quota
+
+cd $DL_DIR
+wget http://ovh.dl.sourceforge.net/sourceforge/ispconfig/ISPConfig-2.2.29.tar.gz
+
+tar -xvfz ISPConfig-2.2.29.tar.gz
+
+cd install_ispconfig
+
+./setup
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url><![CDATA[http://localhost:3000]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
+	<item_init_start>/etc/init.d/ntop start</item_init_start>
+	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url><![CDATA[http://localhost:3000]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
+	<item_init_start>/etc/init.d/ntop start</item_init_start>
+	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ntop"
