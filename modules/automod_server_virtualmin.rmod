@@ -1,0 +1,95 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Virtualmin'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE=""
+RMOD_VERBOSE_FR=""
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+#TEMP
+MIRROIR="A"
+NOM_CACTI="Cacti"
+
+
+#VARIABLES
+
+NTOP_PWD="cooperation"
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+cd $DL_DIR
+
+wget $URL_FREE/install_virtualmin.sh
+chmod +x install_virtualmin.sh
+./install_virtualmin.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url><![CDATA[http://localhost:3000]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
+	<item_init_start>/etc/init.d/ntop start</item_init_start>
+	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url><![CDATA[http://localhost:3000]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
+	<item_init_start>/etc/init.d/ntop start</item_init_start>
+	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ntop"
