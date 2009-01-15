@@ -39,8 +39,14 @@ nb_mantis=1
 mantis_mysql_pwd[1]=$generic_mysql_pwd
 mantis_name[1]="Mantis"
 #Trac Subversion 0.11.2
-svn_admin_pwd=$generic_login_pwd
-svn_anonymous_pwd=""
+nb_svn=2
+svn_name[1]="project_1"
+svn_admin_pwd[1]=$generic_login_pwd
+svn_anonymous_pwd[1]=""
+trac_admin_pwd=$generic_login_pwd
+svn_name[2]="project_2"
+svn_admin_pwd[2]=$generic_login_pwd
+svn_anonymous_pwd[2]=""
 trac_admin_pwd=$generic_login_pwd
 #Taskfreak 0.6.2
 nb_taskfreak=1

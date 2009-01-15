@@ -2785,6 +2785,10 @@ echo "
 
 " >> /etc/rc.local
 
+#Fix time move backwards error
+apt-get remove --assume-yes --force-yes ntpdate
+apt-get install --assume-yes --force-yes ntp
+
 
 /etc/init.d/apache2 restart
 /etc/init.d/clamav-daemon restart

@@ -16,9 +16,7 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
 SILENT=$(cat /tmp/silent)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
-fi
 
 export LC_ALL=C
 LC_ALL=C
@@ -34,6 +32,13 @@ MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 
+NB_SVN=$nb_svn
+TRAC_NAME=$trac_name
+for (( count=1; count<=$NB_SVN; count++ ))
+do
+SVN_NAME[$count]=${svn_name[$count]}
+done
+
 #_______________________________________________________________________________________________
 #________________________________________INSTALL_________________________________________________
 
@@ -43,41 +48,48 @@ function INSTALL
 echo "I: Install SVN"
 
 aptitude install -y subversion subversion-tools
-
-mkdir $LAMPP_DIRECTORY/var/svn
-
-svnadmin create $LAMPP_DIRECTORY/var/svn/project
-
 aptitude install -y libapache2-svn
+aptitude install -y trac
+apt-get install --yes --force-yes python-pygments enscript
+mkdir $LAMPP_DIRECTORY/var/trac
+mkdir $LAMPP_DIRECTORY/var/private/
+for (( count=1; count<=$NB_SVN; count++ ))
+do
+mkdir $LAMPP_DIRECTORY/var/svn$count
+
+
+svnadmin create $LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}
+
+
 
 sed -i -e "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
 
 echo "
-  <location /svn>
+  <location /svn$count>
        # Chargement du module subversion
        DAV svn
        # On indique le chemin complet vers le dépôt subversion
-       SVNParentPath  $LAMPP_DIRECTORY/var/svn
+       SVNParentPath  $LAMPP_DIRECTORY/var/svn$count
 
        #Ici on demande une identification avec mot de passe
        #utilisez htpasswd2 pour créer le fichier
        AuthType Basic
-       AuthName \"Cooperation-iws : svn\"
-       AuthUserFile $LAMPP_DIRECTORY/var/private/svn.htpasswd
+       AuthName \"Cooperation-iws : svn_${SVN_NAME[$count]}\"
+       AuthUserFile $LAMPP_DIRECTORY/var/private/svn_${SVN_NAME[$count]}.htpasswd
        Require valid-user
 
        # On indique ici le fichier de configuration des permissions d'accès au dépot subversion
-       AuthzSVNAccessFile $LAMPP_DIRECTORY/var/private/svnperm
+       AuthzSVNAccessFile $LAMPP_DIRECTORY/var/private/svnperm_${SVN_NAME[$count]}
    </location>
 </VirtualHost>
 " >> /etc/apache2/sites-available/default
 
-mkdir /var/private
+
 
 cd $LAMPP_DIRECTORY/var/private/
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
-htpasswd -cm -b svn.htpasswd admin $svn_admin_pwd
-htpasswd -m -b svn.htpasswd anonymous $svn_anonymous_pwd
+htpasswd -cm -b svn_${SVN_NAME[$count]}.htpasswd admin ${svn_admin_pwd[$count]}
+htpasswd -m -b svn_${SVN_NAME[$count]}.htpasswd anonymous ${svn_anonymous_pwd[$count]}
 else
 echo "
 ----------------Cooperation-iws SVN-------------------
@@ -95,10 +107,10 @@ echo "
 [/]
 anonymous = r
 admin = rw
-" > $LAMPP_DIRECTORY/var/private/svnperm
+" > $LAMPP_DIRECTORY/var/private/svnperm_${SVN_NAME[$count]}
 
-chown -R www-data $LAMPP_DIRECTORY/var/svn
-chmod -R 775 $LAMPP_DIRECTORY/var/svn
+chown -R www-data $LAMPP_DIRECTORY/var/svn$count
+chmod -R 775 $LAMPP_DIRECTORY/var/svn$count
 
 /etc/init.d/apache2 reload
 sleep 10
@@ -113,29 +125,24 @@ echo "I: End of Install SVN"
 echo "I: Install Trac"
 
 
-aptitude install -y trac
-apt-get install --yes --force-yes python-pygments enscript
 
-mkdir $LAMPP_DIRECTORY/var/trac
+
+
+
+
 cd $LAMPP_DIRECTORY/var/trac
-echo "
-----------------Cooperation-iws SVN-------------------------
-----------Default project name is \"project\"---------------
-----------Default path to repository is /var/svn/project----"
-
-
-trac-admin project initenv  "My Project" "sqlite:db/trac.db" "svn" "$LAMPP_DIRECTORY/var/svn/project" 
+trac-admin ${SVN_NAME[$count]} initenv  "My Project" "sqlite:db/trac.db" "svn" "$LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}" 
 
 
 
 sed -i -e "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
 echo "
-<Location /trac>
+<Location /trac_${SVN_NAME[$count]}>
   SetHandler mod_python
   PythonHandler trac.web.modpython_frontend
   PythonInterpreter main
-  PythonOption TracEnv $LAMPP_DIRECTORY/var/trac/project
-  PythonOption TracUriRoot /trac
+  PythonOption TracEnv $LAMPP_DIRECTORY/var/trac/${SVN_NAME[$count]}
+  PythonOption TracUriRoot /trac_${SVN_NAME[$count]}
   SetEnv PYTHON_EGG_CACHE /tmp
 </Location>
 </VirtualHost>
@@ -147,29 +154,29 @@ chmod -R 775 $LAMPP_DIRECTORY/var/trac
 
 cd $LAMPP_DIRECTORY/var/private/
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
-htpasswd -cm -b trac.htpasswd admin $trac_admin_pwd
+htpasswd -cm -b trac.htpasswd_${SVN_NAME[$count]} admin $trac_admin_pwd
 else
 echo "
 ----------------Cooperation-iws SVN-------------------
 ----------Enter the admin password for trac------------"
 
 
-htpasswd -cm trac.htpasswd admin
+htpasswd -cm trac.htpasswd_${SVN_NAME[$count]} admin
 fi
 sed -i -e "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
 echo "
-<Location \"/trac/login\">
+<Location \"/trac_${SVN_NAME[$count]}/login\">
         AuthType Basic
         AuthName \"trac\"
-        AuthUserFile /var/private/trac.htpasswd
+        AuthUserFile $LAMPP_DIRECTORY/var/private/trac.htpasswd_${SVN_NAME[$count]}
         Require valid-user
 </location>
 </VirtualHost>
 " >> /etc/apache2/sites-available/default
 /etc/init.d/apache2 reload
 
-trac-admin $LAMPP_DIRECTORY/var/trac/project permission add admin TRAC_ADMIN
-
+trac-admin $LAMPP_DIRECTORY/var/trac/${SVN_NAME[$count]} permission add admin TRAC_ADMIN
+done
 echo "I: End of install Trac"
 
 }
@@ -183,43 +190,45 @@ echo "I: End of install Trac"
 
 function CREATE_WUI
 {
+for (( count=1; count<=$NB_SVN; count++ ))
+do
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/svn/project</item_url>
+	<item_url>/svn$count/${SVN_NAME[$count]}</item_url>
 	<item_name>Subversion</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/svn/project</item_admin_url>
+	<item_admin_url>/svn$count/${SVN_NAME[$count]}</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/trac</item_url>
+	<item_url>/trac_${SVN_NAME[$count]}</item_url>
 	<item_name>Trac</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/trac</item_admin_url>
+	<item_admin_url>/trac_${SVN_NAME[$count]}</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui.xml
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/svn/project</item_url>
+	<item_url>/svn$count/${SVN_NAME[$count]}</item_url>
 	<item_name>Subversion</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/svn/project</item_admin_url>
+	<item_admin_url>/svn$count/${SVN_NAME[$count]}</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/trac</item_url>
+	<item_url>/trac_${SVN_NAME[$count]}</item_url>
 	<item_name>Trac</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/trac</item_admin_url>
+	<item_admin_url>/trac_${SVN_NAME[$count]}</item_admin_url>
 </item>
 " >> $WWW_DIRECTORY/cooperation-wui-fr.xml
-
+done
 
 }
 #_______________________________________________________________________________________________
