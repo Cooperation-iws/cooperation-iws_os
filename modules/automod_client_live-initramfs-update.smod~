@@ -1,0 +1,24 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='update live-initramfs'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Office tools for client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+URL_FREE=$(cat /tmp/url_mirroir)
+
+echo "I: updating live-initramfs to live-initramfs from dev"
+
+apt-get remove --assume-yes --force-yes live-initramfs
+
+cd /tmp
+
+wget $URL_FREE/live-initramfs_1.154.7+20090127.181436_all.deb
+dpkg -i live-initramfs_1.154.7+20090127.181436_all.deb
+apt-get install -f --assume-yes --force-yes 
+
+

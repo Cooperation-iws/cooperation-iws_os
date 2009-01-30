@@ -1,0 +1,35 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Cooperation-iws Liveusb 0.4'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Cooperation-iws Live Usb installer'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+URL_FREE=$(cat /tmp/url_mirroir)
+DL_DIR=$(cat /tmp/web_install-path)
+
+echo "I: installing liveusb installer"
+cd $DL_DIR
+wget $URL_FREE/cooperation-iws-liveusb-public-0.5.deb
+dpkg -i cooperation-iws-liveusb-public-0.5.deb
+apt-get -f install --assume-yes --force-yes
+
+mkdir /etc/skel/Desktop
+cat << EOT > /etc/skel/Desktop/LiveUsbinstaller.desktop
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Live usb installer
+Type=Application
+Terminal=false
+Icon[fr_BE]=gnome-panel-launcher
+Name[fr_BE]=Live usb installer
+Exec=/usr/bin/liveusb
+Icon=ubiquity
+GenericName[fr_BE]=
+EOT
+

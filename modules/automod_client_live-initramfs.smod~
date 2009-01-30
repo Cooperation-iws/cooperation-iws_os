@@ -1,0 +1,25 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='live-initramfs'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Office tools for client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+URL_FREE=$(cat /tmp/url_mirroir)
+
+echo "I: updating casper-initramfs to live-initramfs"
+
+apt-get remove --assume-yes --force-yes casper
+
+aptitude install -y live-initramfs
+
+echo "live" > /tmp/casper_path_updated
+
+mv /sbin/losetup /sbin/losetup.orig
+
+cd /sbin
+wget $URL_FREE/losetup
