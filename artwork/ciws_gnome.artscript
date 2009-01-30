@@ -2,7 +2,7 @@
 
 LAMPP_DIRECTORY=$(cat /tmp/working-directory)
 DOSSIER_CHROOT=$LAMPP_DIRECTORY"/chroot"
-CASPER_PATH=$(cat /tmp/casper_path)
+CASPER_PATH=$(cat $DOSSIER_CHROOT/tmp/casper_path_updated)
 CIWS_ROOT_DIR=$(cat /tmp/ciws-root-directory)
 
 rm -r $LAMPP_DIRECTORY/remaster/isolinux

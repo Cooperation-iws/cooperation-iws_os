@@ -2,8 +2,13 @@
 
 #Ubuntu Multimedia Codecs
 #Multimedia Client
-#Cooperation-iws Liveusb 0.3
-#ooo3 client
+#Cooperation-iws Liveusb 0.4
+#kernel upgrade
+#Qtparted
+#Ntfs-config
+#Office client
+#Wine windows emulator
+
+
 #NX Client
-#Firefox addons auto
-#Auto upgrade
+#live-initramfs

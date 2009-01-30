@@ -14,8 +14,8 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 echo "I: config nx"
 cd /tmp
-wget $URL_FREE/nxclient_3.3.0-3_i386.deb
-dpkg -i nxclient_3.3.0-3_i386.deb
+wget $URL_FREE/nxclient_3.3.0-6_i386.deb
+dpkg -i nxclient_3.3.0-6_i386.deb
 
 
 

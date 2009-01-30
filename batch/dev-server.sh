@@ -1,6 +1,5 @@
 #!/bin/bash
-cd /home/esmalif/cooperation/CVS/branch/Pro/ciws_fully_auto
-
+cd /home/esmalif/cooperation/CVS/branch/0.7.1/ciws_clam_support
 
 
 
@@ -16,5 +15,7 @@ cd /home/esmalif/cooperation/CVS/branch/Pro/ciws_fully_auto
 
 #sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/kubuntu-8.10-desktop-i386.iso --modulesfile templates/client_perso --webappmirror http://localhost:81/depot --debmirror http://localhost:81/deb/mirror/ftp.proxad.net/mirrors/ftp.ubuntu.com/ubuntu/ --debmirrornonfree http://localhost:81/deb/mirror/packages.medibuntu.org/ --directory /media/partage-dev/tmp/20a2 --host ciws-client --password Mekir9 --username esmalif --outputisoname ciws-kubuntu-8.10-client-0.5.2.iso --ostype Client --disautologin 
 
-sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/kubuntu-8.04.1-desktop-i386.iso --modulesfile templates/client_perso --webappmirror http://localhost:81/depot --debmirror http://localhost:81/deb/mirror/ftp.proxad.net/mirrors/ftp.ubuntu.com/ubuntu/ --debmirrornonfree http://localhost:81/deb/mirror/packages.medibuntu.org/ --directory /media/partage-dev/tmp/20a8 --host ciws-client --password Mekir9 --username esmalif --outputisoname ciws-kubuntu-8.10-client-0.5.2.iso --ostype Client --disautologin --debmirrorsecurity ftp://ftp.proxad.net/mirrors/ftp.ubuntu.com/ubuntu/
+#sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/kubuntu-8.04.1-desktop-i386.iso --modulesfile templates/client_perso --webappmirror http://localhost:81/depot --debmirror http://localhost:81/deb/mirror/ftp.proxad.net/mirrors/ftp.ubuntu.com/ubuntu/ --debmirrornonfree http://localhost:81/deb/mirror/packages.medibuntu.org/ --directory /media/partage-dev/tmp/20a8 --host ciws-client --password Mekir9 --username esmalif --outputisoname ciws-kubuntu-8.10-client-0.5.2.iso --ostype Client --disautologin --debmirrorsecurity ftp://ftp.proxad.net/mirrors/ftp.ubuntu.com/ubuntu/
 
+
+sudo ./cooperation-iws.py -c --createdirectories --modulesfile templates/dev-server --debmirror http://localhost:3141/ftp.fr.debian.org/debian/ --debmirrornonfree http://localhost:3141/mirror.home-dn.net/debian-multimedia/ --debmirrorsecurity http://localhost:3141/security.debian.org/ --directory /media/partage-dev/tmp/e8 --host ciwsdev  --outputisoname ciwsdev-0.7.0.iso --keyblang fr --debianlive --webappmirror http://127.0.0.1:81/depot --encryption aes256 --encryptionpassphrase 04qwerty07197604121942* --ostype Client --disautologin --password Lokkir10 --username esmalif --debianflavor gnome-desktop --silent
