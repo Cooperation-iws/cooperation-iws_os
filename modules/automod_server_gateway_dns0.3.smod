@@ -161,12 +161,12 @@ subnet 192.168.100.0 netmask 255.255.255.0 {
       max-lease-time 7200;
 	zone $HOSTNAME.$domain. {
                 primary 192.168.100.254;
-                key "rndc-key";
+                key \"rndc-key\";
         }
 
         zone 100.168.192.in-addr.arpa. {
                 primary 192.168.100.254;
-                key "rndc-key";
+                key \"rndc-key\";
         }
 
 }
@@ -225,6 +225,7 @@ sudo /etc/init.d/dhcp3-server restart
 
 dpkg --purge avahi-autoipd
 
+apt-get remove --assume-yes --force-yes network-manager avahi-daemon
 
 }
 

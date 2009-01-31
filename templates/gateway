@@ -17,7 +17,7 @@ mysql_root_password=$generic_mysql_pwd
 gateway_nb_machine=10
 gateway_net_iface="eth0"
 gateway_local_iface="eth1"
-domain="local.intra"
+domain="cooperation-iws.intra"
 #Ntop
 #Awstats
 #Ossec 1.5.1 standalone
@@ -30,3 +30,5 @@ snort_listening_interface="eth0"
 #Webmin 1.4.20
 webmin_pwd=$generic_login_pwd
 #debian netbook
+#update live-initramfs
+

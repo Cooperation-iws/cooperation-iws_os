@@ -1,5 +1,5 @@
 #!/bin/bash
 #NX Server
-##SSH Server
+#SSH Server
 #update live-initramfs
-
+#kernel bigmem lenny upgrade

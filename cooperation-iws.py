@@ -558,7 +558,7 @@ class Reconstructor:
 		os.popen("chmod +x " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
 		os.popen("echo \"A\" > "+ os.path.join(self.customDir, "chroot") + "/tmp/silent")
 		print _('Proceeding to customization...')		
-		self.customize()
+		self.customize()		
 		self.setLiveCdInfo(username=self.user, userFullname=self.userFull, userPassword=self.password, hostname=self.host)
 		
 		self.launchPostInstall()
@@ -682,7 +682,7 @@ class Reconstructor:
 	    else:
 		    installTxt = _('Installing dependencies: ')
 		    print installTxt + dependList.replace('\n', ' ')
-		    os.popen('apt-get install -y ' + dependList.replace('\n', ' '))
+		    os.popen('apt-get install -y --force-yes ' + dependList.replace('\n', ' '))
         else:
             print _('Ok.')
 
@@ -2294,10 +2294,7 @@ class Reconstructor:
 
     # Sets live cd information (username, full name, hostname) for live cd
     def setLiveCdInfo(self, username, userFullname, userPassword, hostname):
-	fHostFile=open(os.path.join(self.customDir, "chroot") + '/tmp/hostname', 'w')
-   	fHostFile.write(hostname)
-    	fHostFile.close()
-    		    
+		    
  		
 	 
 	if self.distVariant == 'mint':
@@ -3502,7 +3499,7 @@ class Reconstructor:
 	scriptDebianLive += 'apt-get remove -y --force-yes live-helper \n'
 	#scriptDebianLive += 'apt-get install -y --force-yes live-helper cdebootstrap debian-keyring \n'
 	scriptDebianLive += 'cd /tmp && wget '+self.entryLocalMirror+'/live-helper_1.0.2+20090128.011503_all.deb\n'
-	scriptDebianLive += 'apt-get install -y --force-yes cdebootstrap debian-keyring \n'
+	scriptDebianLive += 'apt-get install -y --force-yes debian-keyring \n'
 	scriptDebianLive += 'cd /tmp && dpkg -i live-helper_1.0.2+20090128.011503_all.deb\n'
 	scriptDebianLive += 'apt-get install -f --assume-yes --force-yes\n'
 	scriptDebianLive += 'cd ' +self.customDir + '\n'
@@ -3608,7 +3605,10 @@ class Reconstructor:
 	fciwsOsType=open(os.path.join(self.customDir, "chroot/tmp/os_type"), 'w')
 	fciwsOsType.write(self.ciwsOsType)
 	fciwsOsType.close()
-	
+	fHostFile=open(os.path.join(self.customDir, "chroot") + '/tmp/hostname', 'w')
+   	fHostFile.write(self.host)
+    	fHostFile.close()
+    	
 	
 	
 	if self.comboboxCiwsArtwork == "ciwsGnome":
