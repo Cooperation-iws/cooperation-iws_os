@@ -1,21 +1,26 @@
-#!/bin/sh
+#!/bin/bash
 
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='live-initramfs'
+RMOD_NAME='install live-initramfs'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Office tools for client'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 URL_FREE=$(cat /tmp/url_mirroir)
+DL_DIR=$(cat /tmp/web_install-path)
 
 echo "I: updating casper-initramfs to live-initramfs"
 
 apt-get remove --assume-yes --force-yes casper
 
-aptitude install -y live-initramfs
+cd $DL_DIR
+
+wget $URL_FREE/live-initramfs_1.154.7+20090127.181436_all.deb
+dpkg -i live-initramfs_1.154.7+20090127.181436_all.deb
+apt-get install -f --assume-yes --force-yes
 
 echo "live" > /tmp/casper_path_updated
 
@@ -23,3 +28,18 @@ mv /sbin/losetup /sbin/losetup.orig
 
 cd /sbin
 wget $URL_FREE/losetup
+
+
+apt-get install --assume-yes --force-yes loop-aes-utils aufs-source aufs-tools
+
+
+apt-get install --assume-yes --force-yes build-essential debhelper module-assistant fakesource loop-aes-utils
+
+cd $DL_DIR
+wget $URL_FREE/loop-aes-source_3.2c-2_all.deb
+dpkg -i loop-aes-source_3.2c-2_all.deb
+m-a auto-install loop-aes
+
+m-a auto-install aufs
+
+

@@ -18,7 +18,7 @@ export HOME=/home/liveusb
 
 
 
-apt-get install --assume-yes --force-yes linux-image-2.6-686-bigmem
+apt-get install --assume-yes --force-yes linux-image-2.6-686-bigmem loop-aes-modules-2.6-686-bigmem squashfs-modules-2.6.26-1-686-bigmem aufs-modules-2.6-686-bigmem
 
 echo "2.6.26-1-686-bigmem" > /tmp/kernel
 

@@ -33,6 +33,7 @@ DEB_DIST=$(cat /tmp/deb_dist)
 DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
 DEBNONFREE_MIRROR_PATH=$(cat /tmp/deb-nonfree_mirror_path)
 DEB_MIRROR_SECURITY_PATH=$(cat /tmp/deb-security_mirror_path)
+HOSTNAME=$(cat /tmp/hostname)
 
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
@@ -121,7 +122,7 @@ echo "#!/bin/sh
 " > /etc/rc.local
 
 if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "etch" ] || [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ] || [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "sid" ] ; then
-sed -i 's/#send host-name "andare.fugue.com";/send host-name "<hostname>";/' /etc/dhcp3/dhclient.conf
+sed -i "s/#send host-name \"andare.fugue.com\";/send host-name \"$HOSTNAME\";/" /etc/dhcp3/dhclient.conf
 fi
 
 echo "I: create persistent directory"
