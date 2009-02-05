@@ -121,8 +121,17 @@ echo "#!/bin/sh
 
 " > /etc/rc.local
 
-if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "etch" ] || [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ] || [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "sid" ] ; then
-sed -i "s/#send host-name \"andare.fugue.com\";/send host-name \"$HOSTNAME\";/" /etc/dhcp3/dhclient.conf
+
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ]; then
+
+echo " 
+send host-name \"<hostname>\";
+request subnet-mask, broadcast-address, time-offset, routers,
+	domain-name, domain-name-servers, domain-search, host-name,
+	netbios-name-servers, netbios-scope;
+" > /etc/dhcp3/dhclient.conf
+
+
 fi
 
 echo "I: create persistent directory"

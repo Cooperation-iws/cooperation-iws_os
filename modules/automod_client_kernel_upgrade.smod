@@ -18,6 +18,6 @@ export HOME=/home/liveusb
 
 
 
-apt-get install -f --assume-yes --force-yes linux-generic linux-image-generic linux-restricted-modules-generic
+apt-get install --assume-yes --force-yes linux-generic linux-image-generic linux-restricted-modules-generic
 
 

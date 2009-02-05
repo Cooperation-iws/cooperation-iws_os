@@ -21,4 +21,9 @@ wget $URL_FREE/live-initramfs_1.154.7+20090127.181436_all.deb
 dpkg -i live-initramfs_1.154.7+20090127.181436_all.deb
 apt-get install -f --assume-yes --force-yes 
 
+#sed -i "23G" /usr/share/initramfs-tools/scripts/live
+#sed -i '23s/^/cat \/proc\/cmdline > \/cmdline/'  /usr/share/initramfs-tools/scripts/live
+#sed -i '24s/^/sed -i "s\/bootkbd\/keyb\/" \/cmdline/'  /usr/share/initramfs-tools/scripts/live
+#sed -i '50s/\/proc//' /usr/share/initramfs-tools/scripts/live
+
 

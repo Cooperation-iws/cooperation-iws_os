@@ -41,9 +41,15 @@ sed -i -e "13s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "15s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 fi
 else
+sed -i "135G" /usr/share/initramfs-tools/scripts/live
+sed -i "135G" /usr/share/initramfs-tools/scripts/live
+sed -i '136s/^/KBD="${ARGUMENT#*=}"/' /usr/share/initramfs-tools/scripts/live
+sed -i '137s/^/export KBD/' /usr/share/initramfs-tools/scripts/live
+
 #sed -i -e "904s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "1295s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "1304s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "961s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "1297s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "1306s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "14s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "16s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 fi
@@ -81,13 +87,13 @@ prereqs)
        ;;
 esac
 
-if [ ! -d /root/$LAMPP_DIRECTORY/var/lib ] && [ ! -d /root/opt/ciws/clamfs_server/var/lib ] ; then
+if [ ! -d /root/$LAMPP_DIRECTORY/var/lib ] ; then
 log_begin_msg \"\$DESCRIPTION\"
 echo \"
 rm /etc/rc0.d/*$CASPER_PATH* 
 rm /etc/rc6.d/*$CASPER_PATH*
 \" >> /root/etc/ciws/server/etc/rc.ciws
-
+echo \"Copying Ciws persistence... please wait\"
 cp -a /root/etc/ciws/* /root/opt/ciws/.
 log_end_msg	
 fi
@@ -254,6 +260,11 @@ mv /etc/cron.d $LAMPP_DIRECTORY/etc
 ln -s $LAMPP_DIRECTORY/etc/cron.d /etc/cron.d
 
 
+if [ "$(echo "${OS_TYPE}" | awk  '{print $1}')" == "Server" ]; then
+echo "I: configuring home persistence"
+mv /home /opt/ciws
+ln -s /opt/ciws/home /home
+fi
 
 echo "I: config persistent directory"
 
