@@ -125,7 +125,7 @@ echo "#!/bin/sh
 if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ]; then
 
 echo " 
-send host-name \"<hostname>\";
+send host-name \"$HOSTNAME\";
 request subnet-mask, broadcast-address, time-offset, routers,
 	domain-name, domain-name-servers, domain-search, host-name,
 	netbios-name-servers, netbios-scope;

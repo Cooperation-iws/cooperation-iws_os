@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='install live-initramfs'
+RMOD_NAME='install live-initramfs Hardy'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Office tools for client'
@@ -18,8 +18,8 @@ apt-get remove --assume-yes --force-yes casper
 
 cd $DL_DIR
 
-wget $URL_FREE/live-initramfs_1.154.7+20090127.181436_all.deb
-dpkg -i live-initramfs_1.154.7+20090127.181436_all.deb
+wget $URL_FREE/live-initramfs_1.154.8+20090130.001702_all.deb
+dpkg -i live-initramfs_1.154.8+20090130.001702_all.deb
 apt-get install -f --assume-yes --force-yes
 
 echo "live" > /tmp/casper_path_updated
@@ -51,6 +51,9 @@ dpkg -i loop-aes-source_3.2c-2_all.deb.1
 m-a -k /usr/src/linux-headers-2.6.24-23-generic build loop-aes
 
 mv /lib/modules/2.6.24-23-generic/kernel/drivers/block/loop.ko /lib/modules/2.6.24-23-generic/kernel/drivers/block/loop.ko-old
+
+
+cd /usr/src
 
 dpkg -i aufs-modules-2.6.24-23-generic*
 

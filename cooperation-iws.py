@@ -313,7 +313,7 @@ class Reconstructor:
                     dest="custom", default=False ,
                     help="Custom install")
 	parser.add_option( "--username", 
-                    dest="username", default="ciwsadmin" ,
+                    dest="username", default="" ,
                     help="User Name")
 	parser.add_option( "--userfullname", 
                     dest="userfullname", default="" ,
@@ -3799,15 +3799,16 @@ class Reconstructor:
 	   	elif self.debDist == 'intrepid':
 			print "Updating Live-initramfs for crypt: Intrepid"
 			modExecLamppChroot += 'apt-get install --assume-yes --force-yes aespipe \n'
-			modExecLamppChroot += 'sed -i \'201s/root/$(basename ${fspath})/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'206s/\/sbin\/losetup/\/$root\/sbin\/losetup/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'200s/^/echo $(basename ${fspath}) | grep -q "home-sn" || echo $(basename ${fspath}) | grep -q "ciws-sn" \&\& root="root"  /\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'1218s/try_snap/echo try_snap \&\& try_snap/\' /usr/share/initramfs-tools/scripts/live\n' 
-			modExecLamppChroot += 'sed -i \'889s/^/echo "snapdata:$snapdata" /\' /usr/share/initramfs-tools/scripts/live\n' 
-			modExecLamppChroot += 'sed -i \'828s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -t $(get_fstype "${dev}") -o rw,noatime "${dev}" "${rootmnt}\/home"/\' /usr/share/initramfs-tools/scripts/live\n' 
-			modExecLamppChroot += 'sed -i \'307s/ro/rw/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'1170s/ro/rw/\' /usr/share/initramfs-tools/scripts/live\n' 
-	   		modExecLamppChroot += 'sed -i \'826s/${snapback}/${mountpoint}/\' /usr/share/initramfs-tools/scripts/live\n' 
+			modExecLamppChroot += 'sed -i \'231s/root/$(basename ${fspath})/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
+	   		modExecLamppChroot += 'sed -i \'236s/\/sbin\/losetup/\/$root\/sbin\/losetup/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
+	   		modExecLamppChroot += 'sed -i \'230s/^/echo $(basename ${fspath}) | grep -q "home-sn" || echo $(basename ${fspath}) | grep -q "ciws-sn" \&\& root="root"  /\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
+	   		#modExecLamppChroot += 'sed -i \'1218s/try_snap/echo try_snap \&\& try_snap/\' /usr/share/initramfs-tools/scripts/live\n' 
+			#modExecLamppChroot += 'sed -i \'889s/^/echo "snapdata:$snapdata" /\' /usr/share/initramfs-tools/scripts/live\n' 
+			modExecLamppChroot += 'sed -i \'959s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -t $(get_fstype "${dev}") -o rw,noatime "${dev}" "${rootmnt}\/home"/\' /usr/share/initramfs-tools/scripts/live\n' 
+			modExecLamppChroot += 'sed -i \'345s/ro/rw/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
+	   		modExecLamppChroot += 'sed -i \'1364s/ro/rw/\' /usr/share/initramfs-tools/scripts/live\n' 
+	   		modExecLamppChroot += 'sed -i \'902s/${snapback}/${mountpoint}/\' /usr/share/initramfs-tools/scripts/live\n' 
+	   		
 	   	else:
 			print "Updating Live-initramfs for crypt: Debian"
 		    	modExecLamppChroot += 'apt-get install --assume-yes --force-yes aespipe \n'

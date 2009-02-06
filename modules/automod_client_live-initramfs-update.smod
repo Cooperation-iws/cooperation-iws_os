@@ -17,8 +17,8 @@ apt-get remove --assume-yes --force-yes live-initramfs
 
 cd /tmp
 
-wget $URL_FREE/live-initramfs_1.154.7+20090127.181436_all.deb
-dpkg -i live-initramfs_1.154.7+20090127.181436_all.deb
+wget $URL_FREE/live-initramfs_1.154.8+20090130.001702_all.deb
+dpkg -i live-initramfs_1.154.8+20090130.001702_all.deb
 apt-get install -f --assume-yes --force-yes 
 
 #sed -i "23G" /usr/share/initramfs-tools/scripts/live

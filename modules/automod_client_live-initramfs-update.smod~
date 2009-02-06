@@ -26,8 +26,4 @@ apt-get install -f --assume-yes --force-yes
 #sed -i '24s/^/sed -i "s\/bootkbd\/keyb\/" \/cmdline/'  /usr/share/initramfs-tools/scripts/live
 #sed -i '50s/\/proc//' /usr/share/initramfs-tools/scripts/live
 
-sed -i "135G" /usr/share/initramfs-tools/scripts/live
-sed -i "135G" /usr/share/initramfs-tools/scripts/live
-sed -i '136s/^/KBD="${ARGUMENT#*=}"/' /usr/share/initramfs-tools/scripts/live
-sed -i '137s/^/export KBD/' /usr/share/initramfs-tools/scripts/live
 
