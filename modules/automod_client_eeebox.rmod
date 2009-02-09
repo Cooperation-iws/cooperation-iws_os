@@ -1,0 +1,42 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='eeebox hack'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Firefox & Firefox addons'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+TMPUSER=$(cat /tmp/tmp_user)
+export HOME="/home/$TMPUSER"
+echo "I: install eeebox hack"
+
+
+#sed -i "s/log_end_msg//" /usr/share/initramfs-tools/scripts/live-bottom/20xconfig
+
+cat << EOT_EOT >> /etc/rc.local
+
+if [ -n "\$(lspci | grep '945GM/GMS/GME')" ]; then
+
+sed -i "32G" /etc/X11/xorg.conf
+
+sed -i '33s/^/Option "monitor-LVDS" "LVDS"/' /etc/X11/xorg.conf
+
+
+sed -i '37s/^/#/' /etc/X11/xorg.conf
+sed -i "36G" /etc/X11/xorg.conf
+sed -i "36G" /etc/X11/xorg.conf
+
+
+sed -i '37s/^/Identifier "LVDS"/' /etc/X11/xorg.conf
+sed -i '38s/^/Option "Ignore" "True"/' /etc/X11/xorg.conf
+/etc/init.d/gdm restart
+/etc/init.d/kdm restart
+fi
+
+EOT_EOT
+
+
