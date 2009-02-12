@@ -279,19 +279,24 @@ wget http://\$IP:886/hostname.txt
 mv /var/cache/dns/hostname.txt /var/cache/dns/hostname_\$IP.txt
 HOSTNAME=\$(cat /var/cache/dns/hostname_\$IP.txt)
 if [ \$DOMAIN ]; then
-if [ "\$(cat /var/cache/dns/identity_array | grep \"\$DOMAIN\" | grep \"\$HOSTNAME\" )" ]; then
-if [ -z "\$(cat /var/cache/dns/identity_array | grep \"\$IP\" | grep \"\$HOSTNAME\" | grep \"\$DOMAIN\")" ]; then
+if [ "\$(cat /var/cache/dns/identity_array | grep \$DOMAIN | grep \$HOSTNAME )" ]; then
+if [ -z "\$(cat /var/cache/dns/identity_array | grep \$IP | grep \$HOSTNAME | grep \$DOMAIN)" ]; then
 sed -i "/\$HOSTNAME:\$DOMAIN/d"  /var/cache/dns/IP_list
 sed -i "/\$HOSTNAME:\$DOMAIN/d"  /var/cache/dns/identity_array
 fi
 fi
-if [ -z "\$(cat /var/cache/dns/identity_array | grep \"\$IP\" | grep \"\$HOSTNAME\" | grep \"\$DOMAIN\")" ]; then
+if [ -z "\$(cat /var/cache/dns/identity_array | grep \$IP | grep \$HOSTNAME | grep \$DOMAIN)" ]; then
 echo "\$IP" >> /var/cache/dns/IP_list
 echo "\$IP:\$HOSTNAME:\$DOMAIN" >> /var/cache/dns/identity_array
 fi
 
 if [ -z "\$(cat /etc/bind/named.conf.local | grep \$DOMAIN)" ]; then
 echo "include \"/etc/bind/named.conf.\$DOMAIN\";" >> /etc/bind/named.conf.local
+ip_address_4=\$(echo \$IP | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f4)
+sed -i "/\$HOSTNAME/d" /var/cache/bind/db.cooperation-iws.intra
+sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.100
+echo "\$ip_address_4	PTR  \$HOSTNAME.\$DOMAIN." >> /var/cache/bind/db.192.168.100
+
 cat << EOT_DOMAIN > /etc/bind/named.conf.\$DOMAIN
 zone "\$DOMAIN" {
         type slave;
@@ -300,10 +305,6 @@ zone "\$DOMAIN" {
 	allow-notify {\$IP;};
 };
 EOT_DOMAIN
-ip_address_4=\$(echo \$IP | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f4)
-sed -i "/\$HOSTNAME/d" /var/cache/bind/db.cooperation-iws.intra
-sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.100
-echo "\$ip_address_4	PTR  \$HOSTNAME.\$DOMAIN." >> /var/cache/bind/db.192.168.100
 #sed -i "/$HOSTNAME.cooperation-iws.intra/d" /var/cache/bind/db.192.168.100
 /etc/init.d/bind9 restart
 fi

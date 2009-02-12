@@ -118,7 +118,7 @@ ln -s $LAMPP_DIRECTORY/etc/bind /etc/bind
 
 echo "
 #!/bin/bash
-sleep 4
+sleep 8
 #Bind
 hostname="$HOSTNAME"
 ip_address=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1)
