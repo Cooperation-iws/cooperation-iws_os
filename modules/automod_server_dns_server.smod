@@ -145,9 +145,6 @@ sudo  /opt/ciws/etc/dhclient-exit-hook.sh &
 
 chmod +x /etc/dhcp3/dhclient-exit-hooks.d/dns_local
 
-dpkg --purge avahi-autoipd
-
-apt-get remove --assume-yes --force-yes network-manager avahi-daemon
 
 }
 

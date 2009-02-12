@@ -13,7 +13,7 @@ secure_mysql="y"
 secure_admin="y"
 apache_admin_pwd=$generic_login_pwd
 mysql_root_password=$generic_mysql_pwd
-#Gateway DNS 0.3
+#Gateway DNS 0.4
 gateway_nb_machine=10
 gateway_net_iface="eth0"
 gateway_local_iface="eth1"

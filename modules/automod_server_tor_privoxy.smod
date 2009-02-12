@@ -15,9 +15,28 @@ echo "I: install wine"
 
 apt-get install -y --assume-yes --force-yes tor privoxy
 
-sed -i -e 's/debug   1    # show each GET\/POST\/CONNECT request/#debug   1    # show each GET\/POST\/CONNECT request/' /etc/privoxy/config
-sed -i -e "1161s/#/ /" /etc/privoxy/config
-sed -i -e "1161s/127.0.0.1/localhost/" /etc/privoxy/config
+sed -i -e "1230s/#/ /" /etc/privoxy/config
+sed -i -e "1230s/127.0.0.1/localhost/" /etc/privoxy/config
+
+cp /etc/privoxy/config /etc/privoxy/config.tpl
+mv /etc/privoxy /opt/ciws/etc
+ln -s /opt/ciws/etc/privoxy /etc/privoxy
+
+cat << EOT_HOOK > /opt/ciws/etc/privoxy-dhclient-exit-hook.sh
+sleep 8
+cp /etc/privoxy/config.tpl /etc/privoxy/config
+ip_address=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1)
+sed -i "764s/127.0.0.1/\$ip_address/" /etc/privoxy/config
+EOT_HOOK
+chmod +x /opt/ciws/etc/privoxy-dhclient-exit-hook.sh
+
+echo "#!/bin/bash
+
+sudo  /opt/ciws/etc/privoxy-dhclient-exit-hook.sh &
+" > /etc/dhcp3/dhclient-exit-hooks.d/privoxy
+
+chmod +x /etc/dhcp3/dhclient-exit-hooks.d/privoxy
+
 
 /etc/init.d/tor stop
 

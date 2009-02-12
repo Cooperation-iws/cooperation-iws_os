@@ -251,11 +251,9 @@ rm /var/cache/dns/hostname_\$IP_STOR.txt
 
 else
 cd /var/cache/dns
-wget http://\$IP_STOR:886/domain.txt
-mv /var/cache/dns/domain.txt /var/cache/dns/tmp/domain_\$IP_STOR.txt
+wget http://\$IP_STOR:886/domain.txt -O /var/cache/dns/tmp/domain_\$IP_STOR.txt
 UPDT_DOMAIN=\$(cat /var/cache/dns/tmp/domain_\$IP_STOR.txt)
-wget http://\$IP_STOR:886/hostname.txt
-mv /var/cache/dns/hostname.txt /var/cache/dns/tmp/hostname_\$IP_STOR.txt
+wget http://\$IP_STOR:886/hostname.txt -O /var/cache/dns/tmp/hostname_\$IP_STOR.txt
 UPDT_HOSTNAME=\$(cat /var/cache/dns/tmp/hostname_\$IP_STOR.txt)
 if [ "\$UPDT_DOMAIN" != "\$DOMAIN" ] || [ "\$UPDT_HOSTNAME" != "\$HOSTNAME" ]; then
 sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.100
@@ -263,8 +261,6 @@ sed -i "/\$IP_STOR/d"  /var/cache/dns/IP_list
 sed -i "/\$IP_STOR/d"  /var/cache/dns/identity_array
 rm /var/cache/dns/domain_\$IP_STOR.txt
 rm /var/cache/dns/hostname_\$IP_STOR.txt
-sed -i "/\$DOMAIN/d"  /etc/bind/named.conf.local
-
 fi
 
 fi
@@ -279,11 +275,9 @@ NB_IP=\$(cat /var/lib/dhcp3/dhcpd.leases | grep 'lease' | grep "[0-9]\{1,3\}.[0-
 for IP in \$IP_LIST 
 do
 cd /var/cache/dns
-wget http://\$IP:886/domain.txt
-mv /var/cache/dns/domain.txt /var/cache/dns/domain_\$IP.txt
+wget http://\$IP:886/domain.txt -O /var/cache/dns/domain_\$IP.txt
 DOMAIN=\$(cat /var/cache/dns/domain_\$IP.txt)
-wget http://\$IP:886/hostname.txt
-mv /var/cache/dns/hostname.txt /var/cache/dns/hostname_\$IP.txt
+wget http://\$IP:886/hostname.txt -O /var/cache/dns/hostname_\$IP.txt
 HOSTNAME=\$(cat /var/cache/dns/hostname_\$IP.txt)
 if [ \$DOMAIN ]; then
 if [ "\$(cat /var/cache/dns/identity_array | grep \$DOMAIN | grep \$HOSTNAME )" ]; then
