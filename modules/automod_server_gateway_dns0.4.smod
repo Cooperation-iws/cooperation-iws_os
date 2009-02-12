@@ -239,12 +239,16 @@ for IP_STOR in \$IP_LIST_STOR
 do
 HOSTNAME=\$(cat /var/cache/dns/identity_array | grep \$IP_STOR | cut -d':' -f2)
 DOMAIN=\$(cat /var/cache/dns/identity_array | grep \$IP_STOR | cut -d':' -f3)
-IP_DOWN=\$(ping -c 8 \$IP_STOR | grep "0 received")
+IP_DOWN=\$(ping -c 4 \$IP_STOR | grep "0 received")
 if [ "\$IP_DOWN" ]; then
 sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.100
 sed -i "/\$DOMAIN/d"  /etc/bind/named.conf.local
 sed -i "/\$IP_STOR/d"  /var/cache/dns/IP_list
 sed -i "/\$IP_STOR/d"  /var/cache/dns/identity_array
+rm /var/cache/dns/domain_\$IP_STOR.txt
+rm /var/cache/dns/hostname_\$IP_STOR.txt
+
+
 else
 cd /var/cache/dns
 wget http://\$IP_STOR:886/domain.txt
@@ -257,7 +261,10 @@ if [ "\$UPDT_DOMAIN" != "\$DOMAIN" ] || [ "\$UPDT_HOSTNAME" != "\$HOSTNAME" ]; t
 sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.100
 sed -i "/\$IP_STOR/d"  /var/cache/dns/IP_list
 sed -i "/\$IP_STOR/d"  /var/cache/dns/identity_array
-sudo /opt/ciws/etc/bind.hook.sh &
+rm /var/cache/dns/domain_\$IP_STOR.txt
+rm /var/cache/dns/hostname_\$IP_STOR.txt
+sed -i "/\$DOMAIN/d"  /etc/bind/named.conf.local
+
 fi
 
 fi
@@ -316,7 +323,7 @@ EOT_CRON
 
 chmod +x /opt/ciws/etc/bind.cron.sh
 
-echo "*/5 * * * * root /opt/ciws/etc/bind.cron.sh > /dev/null 2>&1" >> /etc/cron.d/bind_auto
+echo "*/4 * * * * root /opt/ciws/etc/bind.cron.sh > /dev/null 2>&1" >> /etc/cron.d/bind_auto
 chmod +x /etc/cron.d/bind_auto
 
 
