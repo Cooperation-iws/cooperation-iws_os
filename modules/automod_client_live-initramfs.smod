@@ -70,3 +70,7 @@ copy_exec /usr/bin/wc /bin
 " >> /usr/share/initramfs-tools/hooks/live 
 
 
+#Hardy 8.04.2 hack
+echo "localhost.localdomain" > /etc/hostname
+
+

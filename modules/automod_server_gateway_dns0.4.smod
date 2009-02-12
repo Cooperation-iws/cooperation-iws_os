@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Server'
-RMOD_NAME='Gateway DNS 0.3'
+RMOD_NAME='Gateway DNS 0.4'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Firewall / Gateway'
@@ -56,15 +56,24 @@ LOCAL_IFACE=$gateway_local_iface
 
 
 
-apt-get install -f --assume-yes --force-yes shorewall-shell dnsmasq dhcp3-server bind9 dnsutils
+apt-get install -f --assume-yes --force-yes shorewall-shell dnsmasq dhcp3-server bind9 dnsutils 
 #bind9 config
+
+
+
+cd $DL_DIR
+wget $URL_FREE/dnscvsutil_0.10.2_all.deb
+dpkg -i dnscvsutil_0.10.2_all.deb
+apt-get -f install --assume-yes --force-yes
+
+groupmod -g 401 dnsadmin
 
 echo "controls {
         inet 127.0.0.1 allow {localhost; } keys { \"rndc-key\"; };
 };
 " >> /etc/bind/named.conf
 
-cat << EOT_LOCAL > /etc/bind/named.conf.local
+cat << EOT_LOCAL > /etc/bind/named.conf.local.tpl
 
 include "/etc/bind/rndc.key";
 
@@ -104,9 +113,10 @@ cat << EOT_VAR > /var/cache/bind/db.$domain
 @      IN      NS      $HOSTNAME.$domain.
 @      IN      A       192.168.100.254
 $HOSTNAME    IN      A       192.168.100.254
+wwi CNAME $HOSTNAME
 EOT_VAR
 
-cat << EOT_REVERSE > /var/cache/bind/db.192.168.100
+cat << EOT_REVERSE > /var/cache/bind/db.192.168.100.tpl
 \$TTL 604800
 @ IN SOA $domain. $HOSTNAME.$domain.  (
                 2008080101      ;serial
@@ -126,6 +136,7 @@ sed -i "13s/\/\///" /etc/bind/named.conf.options
 sed -i "14s/\/\///" /etc/bind/named.conf.options 
 sed -i "14s/0.0.0.0/DNS_1/" /etc/bind/named.conf.options 
 sed -i "15s/\/\///" /etc/bind/named.conf.options 
+sed -i "3s/^/dnssec-enable yes;/" /etc/bind/named.conf.options 
 
 mv /etc/bind $LAMPP_DIRECTORY/etc/
 ln -s $LAMPP_DIRECTORY/etc/bind /etc/bind
@@ -159,8 +170,7 @@ subnet 192.168.100.0 netmask 255.255.255.0 {
       option broadcast-address 192.168.100.255;
       default-lease-time 72000;
       max-lease-time 7200;
-      execute(\"/etc/dhcp3/dhcp3-hook.sh\");
-        zone $HOSTNAME.$domain. {
+	zone $HOSTNAME.$domain. {
                 primary 192.168.100.254;
                 key \"rndc-key\";
         }
@@ -172,7 +182,6 @@ subnet 192.168.100.0 netmask 255.255.255.0 {
 
 }
 " > /etc/dhcp3/dhcpd.conf
-
 
 
 sed -i "s/INTERFACES=\"\"/INTERFACES=\"$LOCAL_IFACE\"/" /etc/default/dhcp3-server
@@ -196,6 +205,13 @@ sed -i "s/STARTUP_ENABLED=No/STARTUP_ENABLED=Yes/" /etc/shorewall/shorewall.conf
 sed -i "43s/REJECT/ACCEPT/" /etc/shorewall/policy
 sed -i "43s/ info//" /etc/shorewall/policy
 #sed -i "s/\$FW        net        REJECT        info/\$FW        net        ACCEPT/" /etc/shorewall/policy
+sed -i "42G" /etc/shorewall/rules
+sed -i "43s/^/ACCEPT  \$FW   loc   tcp 886/" /etc/shorewall/rules
+sed -i "23G" /etc/shorewall/rules
+sed -i "23G" /etc/shorewall/rules
+sed -i "24s/^/DNS\/ACCEPT  loc   \$FW/" /etc/shorewall/rules
+sed -i "25s/^/DNS\/ACCEPT  \$FW   loc/" /etc/shorewall/rules
+
 
 chmod -R +r /etc/shorewall
 
@@ -205,6 +221,103 @@ ln -s $LAMPP_DIRECTORY/etc/shorewall /etc/shorewall
 
 sed -i "s/startup=0/startup=1/" /etc/default/shorewall
 
+#configuring dns scripts
+
+
+mkdir /var/cache/dns
+echo "" > /var/cache/dns/IP_list
+echo "" > /var/cache/dns/identity_array
+mkdir /var/cache/dns/tmp/
+chmod -R 755 /var/cache/dns
+
+cat << EOT_CRON > /opt/ciws/etc/bind.cron.sh
+#!/bin/bash
+
+#Cleaning existing IP database
+IP_LIST_STOR=\$(cat /var/cache/dns/IP_list)
+for IP_STOR in \$IP_LIST_STOR
+do
+HOSTNAME=\$(cat /var/cache/dns/identity_array | grep \$IP_STOR | cut -d':' -f2)
+DOMAIN=\$(cat /var/cache/dns/identity_array | grep \$IP_STOR | cut -d':' -f3)
+IP_DOWN=\$(ping -c 8 \$IP_STOR | grep "0 received")
+if [ "\$IP_DOWN" ]; then
+sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.100
+sed -i "/\$DOMAIN/d"  /etc/bind/named.conf.local
+sed -i "/\$IP_STOR/d"  /var/cache/dns/IP_list
+sed -i "/\$IP_STOR/d"  /var/cache/dns/identity_array
+else
+cd /var/cache/dns
+wget http://\$IP_STOR:886/domain.txt
+mv /var/cache/dns/domain.txt /var/cache/dns/tmp/domain_\$IP_STOR.txt
+UPDT_DOMAIN=\$(cat /var/cache/dns/tmp/domain_\$IP_STOR.txt)
+wget http://\$IP_STOR:886/hostname.txt
+mv /var/cache/dns/hostname.txt /var/cache/dns/tmp/hostname_\$IP_STOR.txt
+UPDT_HOSTNAME=\$(cat /var/cache/dns/tmp/hostname_\$IP_STOR.txt)
+if [ "\$UPDT_DOMAIN" != "\$DOMAIN" ] || [ "\$UPDT_HOSTNAME" != "\$HOSTNAME" ]; then
+sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.100
+sed -i "/\$IP_STOR/d"  /var/cache/dns/IP_list
+sed -i "/\$IP_STOR/d"  /var/cache/dns/identity_array
+sudo /opt/ciws/etc/bind.hook.sh &
+fi
+
+fi
+done
+
+#Adding new IP in Database
+/etc/init.d/dhcp3-server restart
+IP_LIST=\$(cat /var/lib/dhcp3/dhcpd.leases | grep 'lease' | grep "[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}" | cut -d' ' -f2)
+#IP_LIST=(${IP_LIST[@]})
+NB_IP=\$(cat /var/lib/dhcp3/dhcpd.leases | grep 'lease' | grep "[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}" | cut -d' ' -f2 | wc -l)
+
+for IP in \$IP_LIST 
+do
+cd /var/cache/dns
+wget http://\$IP:886/domain.txt
+mv /var/cache/dns/domain.txt /var/cache/dns/domain_\$IP.txt
+DOMAIN=\$(cat /var/cache/dns/domain_\$IP.txt)
+wget http://\$IP:886/hostname.txt
+mv /var/cache/dns/hostname.txt /var/cache/dns/hostname_\$IP.txt
+HOSTNAME=\$(cat /var/cache/dns/hostname_\$IP.txt)
+if [ \$DOMAIN ]; then
+if [ "\$(cat /var/cache/dns/identity_array | grep \"\$DOMAIN\" | grep \"\$HOSTNAME\" )" ]; then
+if [ -z "\$(cat /var/cache/dns/identity_array | grep \"\$IP\" | grep \"\$HOSTNAME\" | grep \"\$DOMAIN\")" ]; then
+sed -i "/\$HOSTNAME:\$DOMAIN/d"  /var/cache/dns/IP_list
+sed -i "/\$HOSTNAME:\$DOMAIN/d"  /var/cache/dns/identity_array
+fi
+fi
+if [ -z "\$(cat /var/cache/dns/identity_array | grep \"\$IP\" | grep \"\$HOSTNAME\" | grep \"\$DOMAIN\")" ]; then
+echo "\$IP" >> /var/cache/dns/IP_list
+echo "\$IP:\$HOSTNAME:\$DOMAIN" >> /var/cache/dns/identity_array
+fi
+
+if [ -z "\$(cat /etc/bind/named.conf.local | grep \$DOMAIN)" ]; then
+echo "include \"/etc/bind/named.conf.\$DOMAIN\";" >> /etc/bind/named.conf.local
+cat << EOT_DOMAIN > /etc/bind/named.conf.\$DOMAIN
+zone "\$DOMAIN" {
+        type slave;
+        file "/var/cache/bind/db.slave_\$DOMAIN";
+	masters {\$IP;};
+	allow-notify {\$IP;};
+};
+EOT_DOMAIN
+ip_address_4=\$(echo \$IP | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f4)
+sed -i "/\$HOSTNAME/d" /var/cache/bind/db.cooperation-iws.intra
+sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.100
+echo "\$ip_address_4	PTR  \$HOSTNAME.\$DOMAIN." >> /var/cache/bind/db.192.168.100
+#sed -i "/$HOSTNAME.cooperation-iws.intra/d" /var/cache/bind/db.192.168.100
+/etc/init.d/bind9 restart
+fi
+fi
+
+done
+
+EOT_CRON
+
+chmod +x /opt/ciws/etc/bind.cron.sh
+
+echo "*/5 * * * * root /opt/ciws/etc/bind.cron.sh > /dev/null 2>&1" >> /etc/cron.d/bind_auto
+chmod +x /etc/cron.d/bind_auto
+
 
 
 
@@ -213,6 +326,8 @@ echo "
 dhclient $NET_IFACE
 dns=\$(cat /etc/resolv.conf | grep -m 1 nameserver | cut -d' ' -f2)
 sed -i \"s/DNS_1/\$dns/\" /etc/bind/named.conf.options 
+cp /etc/bind/named.conf.local.tpl /etc/bind/named.conf.local
+cp /var/cache/bind/db.192.168.100.tpl /var/cache/bind/db.192.168.100
 sudo ifconfig $LOCAL_IFACE 192.168.100.254 
 sleep 2
 /etc/init.d/shorewall stop
