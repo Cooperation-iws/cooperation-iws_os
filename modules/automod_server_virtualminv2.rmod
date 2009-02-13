@@ -27,6 +27,8 @@ URL_FREE=$(cat /tmp/url_mirroir)
 #TEMP
 MIRROIR="A"
 NOM_CACTI="Cacti"
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
 
 
@@ -41,20 +43,125 @@ HOSTNAME=$(cat /tmp/hostname)
 function INSTALL
 {
 
-NB_MACHINE=$gateway_nb_machine
-NET_IFACE=$gateway_net_iface
-LOCAL_IFACE=$gateway_local_iface
 
+export $HOSTNAME
 
+export $domain
 
 cd $DL_DIR
 
-wget $URL_FREE/install_virtualmin.sh
-chmod +x install_virtualmin.sh
-./install_virtualmin.sh
+wget $URL_FREE/install_virtualminv2.sh
+chmod +x install_virtualminv2.sh
+./install_virtualminv2.sh
+
+mv /etc/apache2 /opt/ciws/etc
+ln -s /opt/ciws/etc/apache2 /etc/apache2
+
+mv /etc/awstats /opt/ciws/etc
+ln -s /opt/ciws/etc/awstats /etc/awstats
+
+mv /etc/clamav /opt/ciws/etc
+ln -s /opt/ciws/etc/clamav /etc/clamav
+
+mv /etc/dovecot /opt/ciws/etc
+ln -s /opt/ciws/etc/dovecot /etc/dovecot
+
+mv /etc/ftpusers /opt/ciws/etc
+ln -s /opt/ciws/etc/ftpusers /etc/ftpusers
+
+mv /etc/ldap /opt/ciws/etc
+ln -s /opt/ciws/etc/ldap /etc/ldap
+
+mv /etc/mail /opt/ciws/etc
+ln -s /opt/ciws/etc/mail /etc/mail
+
+mv /etc/mailman /opt/ciws/etc
+ln -s /opt/ciws/etc/mailman /etc/mailman
+
+mv /etc/mysql /opt/ciws/etc
+ln -s /opt/ciws/etc/mysql /etc/mysql
+
+mv /etc/perl /opt/ciws/etc
+ln -s /opt/ciws/etc/perl /etc/perl
+
+mv /etc/php5 /opt/ciws/etc
+ln -s /opt/ciws/etc/php5 /etc/php5
+
+mv /etc/postfix /opt/ciws/etc
+ln -s /opt/ciws/etc/postfix /etc/postfix
+
+mv /etc/postgresql /opt/ciws/etc
+ln -s /opt/ciws/etc/postgresql /etc/postgresql
+
+mv /etc/postgresql-common /opt/ciws/etc
+ln -s /opt/ciws/etc/postgresql-common /etc/postgresql-common
+
+mv /etc/proftpd /opt/ciws/etc
+ln -s /opt/ciws/etc/proftpd /etc/proftpd
+
+mv /etc/samba /opt/ciws/etc
+ln -s /opt/ciws/etc/samba /etc/samba
+
+mv /etc/spamassassin /opt/ciws/etc
+ln -s /opt/ciws/etc/spamassassin /etc/spamassassin
+
+mv /etc/ssh /opt/ciws/etc
+ln -s /opt/ciws/etc/ssh /etc/ssh
+
+mv /etc/ssl /opt/ciws/etc
+ln -s /opt/ciws/etc/ssl /etc/ssl
+
+mv /etc/thttpd /opt/ciws/etc
+ln -s /opt/ciws/etc/thttpd /etc/thttpd
+
+mv /etc/usermin /opt/ciws/etc
+ln -s /opt/ciws/etc/usermin /etc/usermin
+
+mv /etc/virtualmin-licence /opt/ciws/etc
+ln -s /opt/ciws/etc/virtualmin-licence /etc/virtualmin-licence
+
+mv /etc/warnquota.conf /opt/ciws/etc
+ln -s /opt/ciws/etc/warnquota.conf /etc/warnquota.conf
+
+mv /etc/webalizer /opt/ciws/etc
+ln -s /opt/ciws/etc/webalizer /etc/webalizer
+
+mv /etc/webmin /opt/ciws/etc
+ln -s /opt/ciws/etc/webmin /etc/webmin
+
+cat << EOT_CRON > /opt/ciws/etc/domain-watch.cron.sh
+#!/bin/bash
+
+#cleaning domains list
+UPDT_DOMAIN_LIST="\$( cat /opt/ciws/var/identity/domain.txt )"
+
+for UPDT_DOMAIN in \$UPDT_DOMAIN_LIST
+do
+if [ -z "\$(cat /etc/bind/named.conf.local | grep \$UPDT_DOMAIN)" ]; then
+sed -i "/\$UPDT_DOMAIN/d" /opt/ciws/var/identity/domain.txt
+fi
+done
+
+#adding new domains
+DOMAIN_LIST="\$(cat /etc/bind/named.conf.local | grep 'zone' | cut -d'"' -f2)"
+
+for DOMAIN in \$DOMAIN_LIST
+do
+if [ -z "\$(cat /opt/ciws/var/identity/domain.txt | grep \$DOMAIN)" ]; then
+echo "\$DOMAIN" >> /opt/ciws/var/identity/domain.txt
+fi
+done
+EOT_CRON
+
+chmod +x /opt/ciws/etc/domain-watch.cron.sh
+
+echo "*/3 * * * * root /opt/ciws/etc/domain-watch.cron.sh > /dev/null 2>&1" > /etc/cron.d/domain_detection
+chmod +x /etc/cron.d/domain_detection
 
 
-dpkg --purge avahi-autoipd
+
+
+
 
 
 }

@@ -1,0 +1,5 @@
+#!/bin/bash
+#DNS server hardy
+domain="hosting.intra"
+#update live-initramfs
+#Virtualmin v2

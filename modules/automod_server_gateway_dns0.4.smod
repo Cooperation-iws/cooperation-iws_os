@@ -238,24 +238,28 @@ IP_LIST_STOR=\$(cat /var/cache/dns/IP_list)
 for IP_STOR in \$IP_LIST_STOR
 do
 HOSTNAME=\$(cat /var/cache/dns/identity_array | grep \$IP_STOR | cut -d':' -f2)
-DOMAIN=\$(cat /var/cache/dns/identity_array | grep \$IP_STOR | cut -d':' -f3)
+DOMAIN_LIST=\$(cat /var/cache/dns/identity_array | grep \$IP_STOR | cut -d':' -f3)
 IP_DOWN=\$(ping -c 4 \$IP_STOR | grep "0 received")
 if [ "\$IP_DOWN" ]; then
+for DOMAIN in \$DOMAIN_LIST
+do
+logger "removing \$IP_STOR:\$HOSTNAME:\$DOMAIN"
 sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.100
 sed -i "/\$DOMAIN/d"  /etc/bind/named.conf.local
 sed -i "/\$IP_STOR/d"  /var/cache/dns/IP_list
 sed -i "/\$IP_STOR/d"  /var/cache/dns/identity_array
 rm /var/cache/dns/domain_\$IP_STOR.txt
 rm /var/cache/dns/hostname_\$IP_STOR.txt
-
+done
 
 else
 cd /var/cache/dns
 wget http://\$IP_STOR:886/domain.txt -O /var/cache/dns/tmp/domain_\$IP_STOR.txt
-UPDT_DOMAIN=\$(cat /var/cache/dns/tmp/domain_\$IP_STOR.txt)
+UPDT_DOMAIN_LIST=\$(cat /var/cache/dns/tmp/domain_\$IP_STOR.txt)
 wget http://\$IP_STOR:886/hostname.txt -O /var/cache/dns/tmp/hostname_\$IP_STOR.txt
 UPDT_HOSTNAME=\$(cat /var/cache/dns/tmp/hostname_\$IP_STOR.txt)
 if [ "\$UPDT_DOMAIN" != "\$DOMAIN" ] || [ "\$UPDT_HOSTNAME" != "\$HOSTNAME" ]; then
+logger "removing \$IP_STOR:\$HOSTNAME:\$DOMAIN"
 sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.100
 sed -i "/\$IP_STOR/d"  /var/cache/dns/IP_list
 sed -i "/\$IP_STOR/d"  /var/cache/dns/identity_array
@@ -271,15 +275,16 @@ done
 IP_LIST=\$(cat /var/lib/dhcp3/dhcpd.leases | grep 'lease' | grep "[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}" | cut -d' ' -f2)
 #IP_LIST=(${IP_LIST[@]})
 NB_IP=\$(cat /var/lib/dhcp3/dhcpd.leases | grep 'lease' | grep "[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}" | cut -d' ' -f2 | wc -l)
-
+sleep 60
 for IP in \$IP_LIST 
 do
 cd /var/cache/dns
 wget http://\$IP:886/domain.txt -O /var/cache/dns/domain_\$IP.txt
-DOMAIN=\$(cat /var/cache/dns/domain_\$IP.txt)
+DOMAIN_LIST=\$(cat /var/cache/dns/domain_\$IP.txt)
 wget http://\$IP:886/hostname.txt -O /var/cache/dns/hostname_\$IP.txt
 HOSTNAME=\$(cat /var/cache/dns/hostname_\$IP.txt)
-if [ \$DOMAIN ]; then
+for DOMAIN in \$DOMAIN_LIST
+do
 if [ "\$(cat /var/cache/dns/identity_array | grep \$DOMAIN | grep \$HOSTNAME )" ]; then
 if [ -z "\$(cat /var/cache/dns/identity_array | grep \$IP | grep \$HOSTNAME | grep \$DOMAIN)" ]; then
 sed -i "/\$HOSTNAME:\$DOMAIN/d"  /var/cache/dns/IP_list
@@ -287,17 +292,23 @@ sed -i "/\$HOSTNAME:\$DOMAIN/d"  /var/cache/dns/identity_array
 fi
 fi
 if [ -z "\$(cat /var/cache/dns/identity_array | grep \$IP | grep \$HOSTNAME | grep \$DOMAIN)" ]; then
+if [ -z "\$(cat /var/cache/dns/IP_list | grep \$IP)" ]; then
 echo "\$IP" >> /var/cache/dns/IP_list
+fi
 echo "\$IP:\$HOSTNAME:\$DOMAIN" >> /var/cache/dns/identity_array
 fi
 
 if [ -z "\$(cat /etc/bind/named.conf.local | grep \$DOMAIN)" ]; then
+logger "adding \$IP:\$HOSTNAME:\$DOMAIN"
 echo "include \"/etc/bind/named.conf.\$DOMAIN\";" >> /etc/bind/named.conf.local
 ip_address_4=\$(echo \$IP | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f4)
+logger "removing old entries for $HOSTNAME"
 sed -i "/\$HOSTNAME/d" /var/cache/bind/db.cooperation-iws.intra
-sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.100
+sed -i "/\$HOSTNAME.$domain/d"  /var/cache/bind/db.192.168.100
+if [ -z "\$(cat /var/cache/bind/db.192.168.100 | grep \$HOSTNAME)" ]; then
 echo "\$ip_address_4	PTR  \$HOSTNAME.\$DOMAIN." >> /var/cache/bind/db.192.168.100
-
+fi
+logger "adding new zone for \$DOMAIN"
 cat << EOT_DOMAIN > /etc/bind/named.conf.\$DOMAIN
 zone "\$DOMAIN" {
         type slave;
@@ -309,7 +320,7 @@ EOT_DOMAIN
 #sed -i "/$HOSTNAME.cooperation-iws.intra/d" /var/cache/bind/db.192.168.100
 /etc/init.d/bind9 restart
 fi
-fi
+done
 
 done
 
