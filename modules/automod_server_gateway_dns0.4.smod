@@ -272,6 +272,7 @@ done
 
 #Adding new IP in Database
 /etc/init.d/dhcp3-server restart
+/etc/init.d/bind9 restart
 IP_LIST=\$(cat /var/lib/dhcp3/dhcpd.leases | grep 'lease' | grep "[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}" | cut -d' ' -f2)
 #IP_LIST=(${IP_LIST[@]})
 NB_IP=\$(cat /var/lib/dhcp3/dhcpd.leases | grep 'lease' | grep "[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}" | cut -d' ' -f2 | wc -l)

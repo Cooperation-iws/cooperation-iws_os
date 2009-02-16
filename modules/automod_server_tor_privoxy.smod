@@ -27,6 +27,8 @@ sleep 8
 cp /etc/privoxy/config.tpl /etc/privoxy/config
 ip_address=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1)
 sed -i "764s/127.0.0.1/\$ip_address/" /etc/privoxy/config
+/etc/init.d/privoxy restart
+
 EOT_HOOK
 chmod +x /opt/ciws/etc/privoxy-dhclient-exit-hook.sh
 
