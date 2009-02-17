@@ -1,4 +1,4 @@
 #!/bin/bash
 #SSH Server
 #NX Server
-#update live-initramfs
+#install live-initramfs Hardy

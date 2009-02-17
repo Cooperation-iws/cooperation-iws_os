@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='install live-initramfs Hardy'
+RMOD_NAME='install live-initramfs Intrepid'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Office tools for client'
@@ -27,10 +27,10 @@ echo "live" > /tmp/casper_path_updated
 mv /sbin/losetup /sbin/losetup.orig
 
 cd /sbin
-wget $URL_FREE/losetup
+#wget $URL_FREE/losetup
 
 
-apt-get install --assume-yes --force-yes loop-aes-utils aufs-source aufs-tools
+apt-get install --assume-yes --force-yes loop-aes-utils aufs-tools
 
 apt-get install --assume-yes --force-yes linux-generic linux-image-generic linux-restricted-modules-generic linux-headers-generic
 
@@ -40,37 +40,36 @@ apt-get build-dep --assume-yes --force-yes linux-source
 
 
 
-m-a -k /usr/src/linux-headers-2.6.24-23-generic fakesource
+m-a -k /usr/src/linux-headers-2.6.27-11-generic fakesource
 
-m-a -k /usr/src/linux-headers-2.6.24-23-generic build aufs
 
 wget $URL_FREE/loop-aes-source_3.2c-2_all.deb.1
 
 dpkg -i loop-aes-source_3.2c-2_all.deb.1
 
-m-a -k /usr/src/linux-headers-2.6.24-23-generic build loop-aes
+m-a -k /usr/src/linux-headers-2.6.27-11-generic build loop-aes
 
-mv /lib/modules/2.6.24-23-generic/kernel/drivers/block/loop.ko /lib/modules/2.6.24-23-generic/kernel/drivers/block/loop.ko-old
+mv /lib/modules/2.6.27-11-generic/kernel/drivers/block/loop.ko /lib/modules/2.6.27-11-generic/kernel/drivers/block/loop.ko-old
 
 
 cd /usr/src
 
-dpkg -i aufs-modules-2.6.24-23-generic*
 
-dpkg -i loop-aes-modules-2.6.24-23-generic*
+dpkg -i loop-aes-modules-2.6.27-11-generic*
 
-cp /lib/modules/2.6.24-23-generic/updates/loop.ko /lib/modules/2.6.24-23-generic/kernel/drivers/block/
+cp /lib/modules/2.6.27-11-generic/updates/loop.ko /lib/modules/2.6.27-11-generic/kernel/drivers/block/
 
 echo "loop" >> /etc/modules
 
 
 echo "aufs" >> /etc/modules
+
+echo "2.6.27-11-generic" > /tmp/kernel
+
 echo "
 copy_exec /usr/bin/wc /bin
+copy_exec /lib/libpcre.so.3 /lib
 " >> /usr/share/initramfs-tools/hooks/live 
 
-
-#Hardy 8.04.2 hack
-echo "localhost.localdomain" > /etc/hostname
 
 
