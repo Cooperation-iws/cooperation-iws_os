@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='kernel upgrade intrepid'
+RMOD_NAME='kernel upgrade hardy'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Update Manager'
@@ -20,6 +20,5 @@ export HOME=/home/liveusb
 apt-get update
 apt-get install --assume-yes --force-yes linux-generic linux-image-generic linux-restricted-modules-generic
 
-echo "2.6.27-11-generic" > /tmp/kernel
 
 
