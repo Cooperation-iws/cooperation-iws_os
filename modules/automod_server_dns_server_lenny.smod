@@ -1,0 +1,191 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Server'
+RMOD_NAME='DNS server lenny'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='DNS server'
+RMOD_DESCRIPTION_FR='Serveur DNS'
+RMOD_VERBOSE=""
+RMOD_VERBOSE_FR=""
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+DISPLAY=127.0.0.1:5.0
+LANG_UI=$(cat /tmp/lang-wui)
+
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+INSTALL=$(cat /tmp/def_install)
+
+HOSTNAME=$(cat /tmp/hostname)
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL()
+{
+
+apt-get install --assume-yes --force-yes thttpd
+/etc/init.d/thttpd stop
+
+killall thttpd
+
+
+
+sed -i "11s/\/var\/www/\/opt\/ciws\/var\/identity\//" /etc/thttpd/thttpd.conf
+mkdir /opt/ciws/var/identity
+sed -i "7s/80/886/" /etc/thttpd/thttpd.conf
+echo "" > /opt/ciws/var/identity/index.html
+echo "$HOSTNAME" > /opt/ciws/var/identity/hostname.txt
+echo "$domain" > /opt/ciws/var/identity/domain.txt
+
+
+apt-get install --assume-yes --force-yes bind9 dnsutils
+#bind9 config
+
+
+cat << EOT_LOCAL > /etc/bind/named.conf.local
+
+zone "$domain" {
+        type master;
+        file "/var/cache/bind/db.$domain";
+	
+};
+include "/etc/bind/named.conf.rev";
+EOT_LOCAL
+
+cat << EOT_REV > /etc/bind/named.conf.rev.tpl
+zone "100.168.192.in-addr.arpa" {
+        type slave;
+        file "/var/cache/bind/db.slave_rev";
+	masters {ip_gateway;};
+	allow-notify {ip_gateway;};
+};
+EOT_REV
+chmod +r-w /etc/bind/named.conf.rev.tpl
+
+cat << EOT_VAR > /var/cache/bind/db.$domain.tpl
+\$TTL 604800
+@ IN SOA $domain. $HOSTNAME.$domain. (
+                2008080101      ;serial
+                04800           ;refresh
+                86400           ;retry        
+                2419200         ;expire
+                604800          ;negative cache TTL
+                )
+@      IN      NS      $HOSTNAME.$domain.
+@      IN      A       ip_address
+$HOSTNAME    IN      A       ip_address
+wwi CNAME $HOSTNAME
+EOT_VAR
+
+chmod +r-w /var/cache/bind/db.$domain.tpl
+
+
+sed -i "13s/\/\///" /etc/bind/named.conf.options 
+sed -i "14s/\/\///" /etc/bind/named.conf.options 
+sed -i "14s/0.0.0.0/DNS_1/" /etc/bind/named.conf.options 
+sed -i "15s/\/\///" /etc/bind/named.conf.options 
+sed -i "3s/^/dnssec-enable yes;/" /etc/bind/named.conf.options 
+
+cp /etc/bind/named.conf.options /etc/bind/named.conf.options.tpl
+chmod +r-w /etc/bind/named.conf.options.tpl
+
+mv /etc/bind $LAMPP_DIRECTORY/etc/
+ln -s $LAMPP_DIRECTORY/etc/bind /etc/bind
+
+
+
+
+echo "
+#!/bin/bash
+sleep 8
+#Bind
+hostname="$HOSTNAME"
+ip_address=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1)
+ip_address_1=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1 | cut -d'.' -f1)
+ip_address_2=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1 | cut -d'.' -f2)
+ip_address_3=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f3)
+ip_address_4=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f4)
+ip_gateway=\$(route -n | grep UG | sed 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/&*/g'| sed 's/ //g' | cut -d'*'  -f2)
+cp /etc/bind/named.conf.rev.tpl /etc/bind/named.conf.rev
+cp /var/cache/bind/db.$domain.tpl /var/cache/bind/db.$domain
+sed -i \"s/ip_gateway/\$ip_gateway/g\" /etc/bind/named.conf.rev
+sed -i \"s/ip_address/\$ip_address/g\" /var/cache/bind/db.$domain
+sed -i \"s/100.168.192/\$ip_address_3.\$ip_address_2.\$ip_address_1/g\" /etc/bind/named.conf.rev
+dns=\$(cat /etc/resolv.conf | grep -m 1 nameserver | cut -d' ' -f2)
+cp /etc/bind/named.conf.options.tpl /etc/bind/named.conf.options 
+sed -i \"s/DNS_1/\$dns/\" /etc/bind/named.conf.options
+sleep 2
+sudo /etc/init.d/bind9 restart
+" > /opt/ciws/etc/dhclient-exit-hook.sh 
+chmod +x /opt/ciws/etc/dhclient-exit-hook.sh 
+echo "#!/bin/bash
+sudo  /opt/ciws/etc/dhclient-exit-hook.sh &
+" > /etc/dhcp3/dhclient-exit-hooks.d/dns_local
+
+chmod +x /etc/dhcp3/dhclient-exit-hooks.d/dns_local
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url></item_admin_url>
+	<item_init_start>/etc/init.d/ntop start</item_init_start>
+	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
+</item>
+" >> /tmp/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url></item_admin_url>
+	<item_init_start>/etc/init.d/ntop start</item_init_start>
+	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
+</item>
+" >> /tmp/cooperation-wui-fr.xml
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+INSTALL
+CREATE_WUI
+

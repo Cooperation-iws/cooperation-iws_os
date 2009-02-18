@@ -1,8 +1,8 @@
 #!/bin/bash
-domain="cooperation-iws.intra"
-generic_admin_email="admin.dev@$domain"
+domain="lokaleskif.intra"
+generic_admin_email="admin.perso@$domain"
 generic_mysql_pwd="dev_pwd"
-generic_login_pwd="Lokkir10"
+generic_login_pwd="Lokkir11"
 apache_user="www-data"
 #SSH Server
 #update live-initramfs
@@ -41,3 +41,6 @@ smtp_relay="smtp.free.fr"
 mailbox_quota="1000"
 admin_email=$generic_admin_email
 #Roundcube 0.2
+#DNS server lenny
+domain="lokaleskif.intra"
+
