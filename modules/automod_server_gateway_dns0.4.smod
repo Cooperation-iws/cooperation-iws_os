@@ -91,9 +91,9 @@ zone "$domain" {
 
 };
 
-zone "100.168.192.in-addr.arpa" {
+zone "1.168.192.in-addr.arpa" {
         type master;
-        file "/var/cache/bind/db.192.168.100";
+        file "/var/cache/bind/db.192.168.1";
 	allow-update { key "rndc-key"; };
 	notify yes;
 
@@ -111,12 +111,12 @@ cat << EOT_VAR > /var/cache/bind/db.$domain
                 604800          ;negative cache TTL
                 )
 @      IN      NS      $HOSTNAME.$domain.
-@      IN      A       192.168.100.254
-$HOSTNAME    IN      A       192.168.100.254
+@      IN      A       192.168.1.254
+$HOSTNAME    IN      A       192.168.1.254
 wwi CNAME $HOSTNAME
 EOT_VAR
 
-cat << EOT_REVERSE > /var/cache/bind/db.192.168.100.tpl
+cat << EOT_REVERSE > /var/cache/bind/db.192.168.1.tpl
 \$TTL 604800
 @ IN SOA $domain. $HOSTNAME.$domain.  (
                 2008080101      ;serial
@@ -126,8 +126,8 @@ cat << EOT_REVERSE > /var/cache/bind/db.192.168.100.tpl
                 604800          ;negative cache TTL
                 )
 @     IN      NS      $HOSTNAME.$domain.
-@     IN      A       192.168.100.254
-254.100.168.192.in-addr.arpa.      IN      PTR     $HOSTNAME.$domain.
+@     IN      A       192.168.1.254
+254.1.168.192.in-addr.arpa.      IN      PTR     $HOSTNAME.$domain.
 EOT_REVERSE
 
 
@@ -162,21 +162,21 @@ zone $domain. {
         key     \"rndc-key\";
 }
 
-subnet 192.168.100.0 netmask 255.255.255.0 {
-      range 192.168.100.1 192.168.100.$NB_MACHINE;
-      option domain-name-servers 192.168.100.254;
+subnet 192.168.1.0 netmask 255.255.255.0 {
+      range 192.168.1.1 192.168.1.$NB_MACHINE;
+      option domain-name-servers 192.168.1.254;
       option domain-name \"$domain\";
-      option routers 192.168.100.254;
-      option broadcast-address 192.168.100.255;
+      option routers 192.168.1.254;
+      option broadcast-address 192.168.1.255;
       default-lease-time 72000;
       max-lease-time 7200;
 	zone $HOSTNAME.$domain. {
-                primary 192.168.100.254;
+                primary 192.168.1.254;
                 key \"rndc-key\";
         }
 
-        zone 100.168.192.in-addr.arpa. {
-                primary 192.168.100.254;
+        zone 1.168.192.in-addr.arpa. {
+                primary 192.168.1.254;
                 key \"rndc-key\";
         }
 
@@ -244,7 +244,7 @@ if [ "\$IP_DOWN" ]; then
 for DOMAIN in \$DOMAIN_LIST
 do
 logger "removing \$IP_STOR:\$HOSTNAME:\$DOMAIN"
-sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.100
+sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.1
 sed -i "/\$DOMAIN/d"  /etc/bind/named.conf.local
 sed -i "/\$IP_STOR/d"  /var/cache/dns/IP_list
 sed -i "/\$IP_STOR/d"  /var/cache/dns/identity_array
@@ -260,7 +260,7 @@ wget http://\$IP_STOR:886/hostname.txt -O /var/cache/dns/tmp/hostname_\$IP_STOR.
 UPDT_HOSTNAME=\$(cat /var/cache/dns/tmp/hostname_\$IP_STOR.txt)
 if [ "\$UPDT_DOMAIN" != "\$DOMAIN" ] || [ "\$UPDT_HOSTNAME" != "\$HOSTNAME" ]; then
 logger "removing \$IP_STOR:\$HOSTNAME:\$DOMAIN"
-sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.100
+sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.1
 sed -i "/\$IP_STOR/d"  /var/cache/dns/IP_list
 sed -i "/\$IP_STOR/d"  /var/cache/dns/identity_array
 rm /var/cache/dns/domain_\$IP_STOR.txt
@@ -305,9 +305,9 @@ echo "include \"/etc/bind/named.conf.\$DOMAIN\";" >> /etc/bind/named.conf.local
 ip_address_4=\$(echo \$IP | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f4)
 logger "removing old entries for $HOSTNAME"
 sed -i "/\$HOSTNAME/d" /var/cache/bind/db.cooperation-iws.intra
-sed -i "/\$HOSTNAME.$domain/d"  /var/cache/bind/db.192.168.100
-if [ -z "\$(cat /var/cache/bind/db.192.168.100 | grep \$HOSTNAME)" ]; then
-echo "\$ip_address_4	PTR  \$HOSTNAME.\$DOMAIN." >> /var/cache/bind/db.192.168.100
+sed -i "/\$HOSTNAME.$domain/d"  /var/cache/bind/db.192.168.1
+if [ -z "\$(cat /var/cache/bind/db.192.168.1 | grep \$HOSTNAME)" ]; then
+echo "\$ip_address_4	PTR  \$HOSTNAME.\$DOMAIN." >> /var/cache/bind/db.192.168.1
 fi
 logger "adding new zone for \$DOMAIN"
 cat << EOT_DOMAIN > /etc/bind/named.conf.\$DOMAIN
@@ -341,24 +341,24 @@ dhclient $NET_IFACE
 dns=\$(cat /etc/resolv.conf | grep -m 1 nameserver | cut -d' ' -f2)
 sed -i \"s/DNS_1/\$dns/\" /etc/bind/named.conf.options 
 cp /etc/bind/named.conf.local.tpl /etc/bind/named.conf.local
-cp /var/cache/bind/db.192.168.100.tpl /var/cache/bind/db.192.168.100
-sudo ifconfig $LOCAL_IFACE 192.168.100.254 
+cp /var/cache/bind/db.192.168.1.tpl /var/cache/bind/db.192.168.1
+sudo ifconfig $LOCAL_IFACE 192.168.1.254 
 sleep 2
 /etc/init.d/shorewall stop
 /etc/init.d/dhcp3-server stop
 /etc/init.d/shorewall start
-sudo ifconfig $LOCAL_IFACE 192.168.100.254 
+sudo ifconfig $LOCAL_IFACE 192.168.1.254 
 sleep 2
 sudo /etc/init.d/bind9 restart
 sudo /etc/init.d/dhcp3-server restart
 " >> /etc/rc.local
 
 echo "
-#reject 192.168.100.254;
+#reject 192.168.1.254;
 " >> /etc/dhcp3/dhclient.conf
 
 echo "
-ifconfig $LOCAL_IFACE 192.168.100.254
+ifconfig $LOCAL_IFACE 192.168.1.254
 " > /etc/dhcp3/dhclient-exit-hooks.d/ifconfig_local
 
 chmod +x /etc/dhcp3/dhclient-exit-hooks.d/ifconfig_local

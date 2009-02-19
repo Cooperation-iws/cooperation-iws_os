@@ -1,10 +1,11 @@
 #!/bin/bash
-domain="cooperation-iws.intra"
+domain="admin.intra"
 generic_admin_email="admin.local@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
-#Auto upgrade
+#kernel bigmem lenny upgrade
+#update live-initramfs
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
@@ -40,7 +41,7 @@ cacti_name="Cacti"
 cacti_mysql_pwd=$generic_mysql_pwd
 #Roundcube 0.2
 #Horde 1.2
-#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Intrepid release
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Lenny releases
 postfixadmin_name="Mail"
 postfixadmin_mysql_pwd=$generic_mysql_pwd
 public_mail="y"
@@ -54,4 +55,4 @@ phpsyslogng_name="Phpsyslogng"
 #Zabbix 1.6
 zabbix_name="zabbix"
 zabbix_mysql_pwd=$generic_mysql_pwd
-
+#DNS server lenny

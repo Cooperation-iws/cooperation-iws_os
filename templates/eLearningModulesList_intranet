@@ -1,10 +1,11 @@
 #!/bin/bash
-domain="cooperation-iws.intra"
-generic_admin_email="admin.local@$domain"
+domain="claroline-elearning.intra"
+generic_admin_email="admin.local@admin.intra"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
-#Auto upgrade
+#kernel bigmem lenny upgrade
+#update live-initramfs
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
@@ -97,16 +98,17 @@ clam_mail_report=$generic_admin_email
 #Cooperation-iws Liveusb 0.4
 #Awstats
 #Postfix Relay Client
-smtp_postfix_client_relay="administration.$domain"
+smtp_postfix_client_relay="administration.admin.intra"
 #Webmin 1.4.20
 webmin_pwd=$generic_login_pwd
 #Zabbix client 1.6
-zabbix_server_name="administration.$domain"
-#Syslog client
-syslog_server_name="administration.$domain"
+zabbix_server_name="administration.admin.intra"
+#Syslog client lenny
+syslog_server_name="administration.admin.intra"
 #Snort2.8 client Intrepid
 snort_remote_name="Base"
 snort_registration_key=""
 snort_server_mysql_pwd=$generic_mysql_pwd
-snort_server_name="administration.$domain"
+snort_server_name="administration.admin.intra"
 snort_listening_interface="eth0"
+#DNS server lenny

@@ -1,6 +1,6 @@
 #!/bin/bash
-domain="ciws.com"
-generic_admin_email="test@test.com"
+domain="cooperation-iws.intra"
+generic_admin_email="admin.local@admin.intra"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="Lokkir10"
 apache_user="www-data"
@@ -22,7 +22,7 @@ domain="cooperation-iws.intra"
 #Awstats
 #Ossec 1.5.1 standalone
 ossec_report_address=$generic_admin_email
-#Snort2.8 Base1.3.9 standalone Intrepide
+#Snort2.8 Base1.3.9 standalone Intrepid
 snort_registration_key=""
 base_name="Base"
 snort_mysql_pwd=$generic_mysql_pwd
@@ -31,4 +31,6 @@ snort_listening_interface="eth0"
 webmin_pwd=$generic_login_pwd
 #debian netbook
 #update live-initramfs
+#Postfix Relay Client
+smtp_postfix_client_relay="administration.admin.intra"
 

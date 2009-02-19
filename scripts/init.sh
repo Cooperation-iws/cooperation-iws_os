@@ -155,7 +155,7 @@ WWW_DIRECTORY=\"/var/www\"
 
 
 
-if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
+if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "intrepid" ]; then
 cat << EOT > /etc/skel/Desktop/Cooperation-iws.desktop
 [Desktop Entry]
 Version=1.0

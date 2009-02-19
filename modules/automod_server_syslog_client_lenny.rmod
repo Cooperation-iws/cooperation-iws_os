@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Syslog client intrepid'
+RMOD_NAME='Syslog client lenny'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Distributed monitoring solution'
@@ -37,11 +37,11 @@ function INSTALL
 
 
 
-echo "*.*            @$syslog_server_name" >> /etc/syslog.conf
+echo "*.*            @$syslog_server_name" >> /etc/rsyslog.conf
 
 echo "
 #Syslog client
-/etc/init.d/sysklogd restart
+/etc/init.d/rsyslog restart
 
 " >> /etc/rc.local
 
