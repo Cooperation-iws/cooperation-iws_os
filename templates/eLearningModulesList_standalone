@@ -1,11 +1,12 @@
 #!/bin/bash
-domain="cooperation-iws.intra"
+domain="elearning-sta.intra"
 generic_admin_email="admin.local@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
-
-#Auto upgrade
+#DNS server lenny
+#kernel bigmem lenny upgrade
+#update live-initramfs
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
@@ -115,8 +116,7 @@ webmin_pwd=$generic_login_pwd
 snort_registration_key=""
 base_name="Base"
 snort_mysql_pwd=$generic_mysql_pwd
-snort_listening_interface="eth0"
-#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Intrepid release
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Lenny releases
 postfixadmin_name="Mail"
 postfixadmin_mysql_pwd=$generic_mysql_pwd
 public_mail="n"
