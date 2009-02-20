@@ -49,7 +49,7 @@ snort_registration_key=""
 base_name="Base"
 snort_mysql_pwd=$generic_mysql_pwd
 snort_listening_interface="eth0"
-#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Intrepid release
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Lenny releases
 postfixadmin_name="Mail"
 postfixadmin_mysql_pwd=$generic_mysql_pwd
 public_mail="n"

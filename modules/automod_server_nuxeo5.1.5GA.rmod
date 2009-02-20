@@ -109,9 +109,9 @@ chmod -R 777 $LAMPP_DIRECTORY/$MOD_NAME
 cd $DL_DIR
 cp -Rf Nuxeo/* $LAMPP_DIRECTORY/$MOD_NAME
 cd $DL_DIR
-sed -i "15s/Nuxeo/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/$MOD_NAME/database.sql
-sed -i "16s/Nuxeo/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/$MOD_NAME/database.sql
-sed -i "17s/Nuxeo/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/$MOD_NAME/database.sql
+sed -i "15s/Nuxeo/${MOD_NAME}/" $LAMPP_DIRECTORY/$MOD_NAME/database.sql
+sed -i "16s/Nuxeo/${MOD_NAME}/" $LAMPP_DIRECTORY/$MOD_NAME/database.sql
+sed -i "17s/Nuxeo/${MOD_NAME}/" $LAMPP_DIRECTORY/$MOD_NAME/database.sql
 cp $LAMPP_DIRECTORY/$MOD_NAME/database.sql $DOSSIER_CHROOT/tmp/nuxeo_db.sql
 chroot $DOSSIER_CHROOT << "EOF"
 /usr/bin/mysql -u root < /tmp/nuxeo_db.sql
