@@ -166,8 +166,8 @@ rm -r $LAMPP_DIRECTORY/$MOD_NAME/server/default/data
 echo "#!/bin/sh
 cd $LAMPP_DIRECTORY/$MOD_NAME/bin/
 ./shutdown.sh -S
-mkdir $DOSSIER_CHROOT/$PERSISTENT_DIR/$MOD_NAME/ 
-cp -Rf $LAMPP_DIRECTORY/$MOD_NAME/* $DOSSIER_CHROOT/$PERSISTENT_DIR/$MOD_NAME/.
+mkdir $DOSSIER_CHROOT/$PERSISTENT_DIR/server/$MOD_NAME/ 
+cp -Rf $LAMPP_DIRECTORY/$MOD_NAME/* $DOSSIER_CHROOT/$PERSISTENT_DIR/server/$MOD_NAME/.
 " >> $LAMPP_DIRECTORY/scripts/shutdown_ws.sh
 
 echo "I: Starting Nuxeo"
@@ -225,7 +225,7 @@ sleep 3
 
 cat << EOF_NUXEO > $DOSSIER_CHROOT/etc/init.d/nuxeo
 #!/bin/bash
-nuxeo_HOME=/var/$MOD_NAME/bin/
+nuxeo_HOME=/$PERSISTENT_DIR/server/$MOD_NAME/bin/
 PIDFILE=/var/run/nuxeo-server.pid
 
 set -e
@@ -279,7 +279,7 @@ echo "
 
 function CREATE_WUI
 {
-sed -i "s/<\/items>//" $WWW_DIRECTORY/cooperation-wui.xml
+sed -i "s/<\/items>//" $DOSSIER_CHROOT/$PERSISTENT_DIR/server/var/www/cooperation-wui.xml
 
 echo "
 <item>
@@ -292,9 +292,9 @@ echo "
 	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
 </item>
 </items>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
+" >> $DOSSIER_CHROOT/$PERSISTENT_DIR/server/var/www/cooperation-wui.xml
 
-sed -i "s/<\/items>//" $WWW_DIRECTORY/cooperation-wui-fr.xml
+sed -i "s/<\/items>//" $DOSSIER_CHROOT/$PERSISTENT_DIR/server/var/www/cooperation-wui-fr.xml
 
 echo "
 <item>
@@ -307,7 +307,7 @@ echo "
 	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
 </item>
 </items>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+" >> $DOSSIER_CHROOT/$PERSISTENT_DIR/server/var/www/cooperation-wui-fr.xml
 
 
 
@@ -319,15 +319,6 @@ echo "
 #________________________________________CREATE_INSTALL_SCRIPT__________________________________
 
 
-function CREATE_INSTALL_SCRIPT
-{
-
-echo "
-#NUXEO
-
-" >> $DOSSIER_CHROOT/var/share/lampp/config_post_install.sh
-
-}
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
@@ -336,5 +327,4 @@ echo "
 echo "I: Install Nuxeo"
 INSTALL
 CREATE_WUI
-CREATE_INSTALL_SCRIPT
 echo "I: End of install Nuxeo"

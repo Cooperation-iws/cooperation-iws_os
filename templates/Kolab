@@ -19,7 +19,7 @@ ossec_report_address="$kolab_admin_mail@$domain"
 #Cooperation-iws Liveusb 0.4
 #Zabbix client 1.6
 zabbix_server_name="administration.admin.intra"
-#Syslog client
+#Syslog client lenny
 syslog_server_name="administration.admin.intra"
 ##Snort2.8 client Intrepid
 snort_remote_name="Base"

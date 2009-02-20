@@ -1,10 +1,12 @@
 #!/bin/bash
-domain="cooperation-iws.intra"
+domain="cms-sta.intra"
 generic_admin_email="admin.local@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
-#Auto upgrade
+#DNS server lenny
+#kernel bigmem lenny upgrade
+#update live-initramfs
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
@@ -102,7 +104,7 @@ clam_mail_report=$generic_admin_email
 #Cooperation-iws Liveusb 0.4
 #Webmin 1.4.20
 webmin_pwd=$generic_login_pwd
-#Snort2.8 Base1.3.9 standalone Intrepide
+#Snort2.8 Base1.3.9 standalone Intrepid
 snort_registration_key=""
 base_name="Base"
 snort_mysql_pwd=$generic_mysql_pwd

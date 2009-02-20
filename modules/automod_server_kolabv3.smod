@@ -37,6 +37,9 @@ HOSTNAME=$(cat /tmp/hostname)
 function INSTALL
 {
 
+apt-get remove --assume-yes --force-yes exim4 exim4-base exim4-daemon-light exim4-config
+killall -9 exim4
+
 cd $DL_DIR
 mkdir kolabtemp
 cd kolabtemp

@@ -1,10 +1,12 @@
 #!/bin/bash
-domain="cooperation-iws.intra"
-generic_admin_email="admin.local@$domain"
+domain="social.intra"
+generic_admin_email="admin.local@admin.intra"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
-#Auto upgrade
+#DNS server lenny
+#kernel bigmem lenny upgrade
+#update live-initramfs
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
@@ -86,15 +88,15 @@ webmin_pwd=$generic_login_pwd
 cacti_name="Cacti"
 cacti_mysql_pwd=$generic_mysql_pwd
 #Postfix Relay Client
-smtp_postfix_client_relay="administration.$domain"
+smtp_postfix_client_relay="administration.admin.intra"
 #Zabbix client 1.6
-zabbix_server_name="administration.$domain"
-#Syslog client
-syslog_server_name="administration.$domain"
+zabbix_server_name="administration.admin.intra"
+#Syslog client lenny
+syslog_server_name="administration.admin.intra"
 #Snort2.8 client Intrepid
 snort_remote_name="Base"
 snort_registration_key=""
 snort_server_mysql_pwd=$generic_mysql_pwd
-snort_server_name="administration.$domain"
+snort_server_name="administration.admin.intra"
 snort_listening_interface="eth0"
 #Awstats
