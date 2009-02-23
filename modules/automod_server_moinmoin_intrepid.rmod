@@ -60,13 +60,12 @@ sed -i "s/#mail_from = u\"\"/mail_from = u\"$moimoin_admin_email\"/" /etc/moin/f
 LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
 sed -i "33s/\/org/$LAMPP_DIRECTORY_FOR_SED\/var\/lib\/moin/" /etc/moin/mywiki.py
 
-sed -i "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
 
 echo "
 Alias /moin_static171 \"/usr/share/moin/htdocs/\"
 ScriptAlias /$MOD_NAME \"/var/www/moin/mywiki/moin.cgi\" 
-</VirtualHost>
-" >> /etc/apache2/sites-available/default
+
+" >> /etc/apache2/conf.d/moin
 
 mv /etc/moin /var/share/etc/
 

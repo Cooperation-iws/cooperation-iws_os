@@ -1,5 +1,5 @@
 #!/bin/bash
-domain="cooperation-iws.intra"
+domain="svn.intra"
 generic_admin_email="admin.perso@$domain"
 generic_mysql_pwd="dev_pwd"
 generic_login_pwd="Lokkir12"
@@ -7,6 +7,7 @@ apache_user="www-data"
 #SSH Server
 #update live-initramfs
 #kernel bigmem lenny upgrade
+#ssl
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
@@ -42,5 +43,5 @@ mailbox_quota="1000"
 admin_email=$generic_admin_email
 #Roundcube 0.2
 #DNS server lenny
-domain="cooperation-iws.intra"
+
 

@@ -62,7 +62,6 @@ svnadmin create $LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}
 
 
 
-sed -i -e "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
 
 echo "
   <location /svn$count>
@@ -81,8 +80,8 @@ echo "
        # On indique ici le fichier de configuration des permissions d'accès au dépot subversion
        AuthzSVNAccessFile $LAMPP_DIRECTORY/var/private/svnperm_${SVN_NAME[$count]}
    </location>
-</VirtualHost>
-" >> /etc/apache2/sites-available/default
+
+" >> /etc/apache2/conf.d/svn_$count
 
 
 
@@ -135,7 +134,6 @@ trac-admin ${SVN_NAME[$count]} initenv  "My Project" "sqlite:db/trac.db" "svn" "
 
 
 
-sed -i -e "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
 echo "
 <Location /trac_${SVN_NAME[$count]}>
   SetHandler mod_python
@@ -145,8 +143,7 @@ echo "
   PythonOption TracUriRoot /trac_${SVN_NAME[$count]}
   SetEnv PYTHON_EGG_CACHE /tmp
 </Location>
-</VirtualHost>
-" >> /etc/apache2/sites-available/default
+" >> /etc/apache2/conf.d/trac_$count
 /etc/init.d/apache2 reload
 
 chown -R www-data $LAMPP_DIRECTORY/var/trac
@@ -163,16 +160,14 @@ echo "
 
 htpasswd -cm trac.htpasswd_${SVN_NAME[$count]} admin
 fi
-sed -i -e "s/<\/VirtualHost>//" /etc/apache2/sites-available/default
 echo "
 <Location \"/trac_${SVN_NAME[$count]}/login\">
         AuthType Basic
         AuthName \"trac\"
         AuthUserFile $LAMPP_DIRECTORY/var/private/trac.htpasswd_${SVN_NAME[$count]}
         Require valid-user
-</location>
-</VirtualHost>
-" >> /etc/apache2/sites-available/default
+</Location>
+" >> /etc/apache2/conf.d/trac_admin_$count
 /etc/init.d/apache2 reload
 
 trac-admin $LAMPP_DIRECTORY/var/trac/${SVN_NAME[$count]} permission add admin TRAC_ADMIN

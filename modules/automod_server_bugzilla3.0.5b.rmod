@@ -90,13 +90,14 @@ sed -i -e "s/^\$db_name = 'Bugzilla';/\$db_name = '${MOD_NAME[$count]}';/" \
        -e "s/^\$db_pass = 'mysql_pwd';/\$db_pass = '${BUGZILLA_MYSQL_PWD[$count]}';/" $WWW_DIRECTORY/${MOD_NAME[$count]}/localconfig
 sed -i -e "s/^\$webservergroup = '.*';/\$webservergroup = 'www-data';/" $WWW_DIRECTORY/${MOD_NAME[$count]}/localconfig
 ./checksetup.pl
-sed -i -e '/<\/VirtualHost>/i\
-  <Directory "\/var\/www\/'${MOD_NAME[$count]}'">\
-    Options +ExecCGI\
-    AllowOverride Limit\
-    DirectoryIndex index.cgi\
-    AddHandler cgi-script .cgi\
-  <\/Directory>' /etc/apache2/sites-available/default
+cat << EOT_BUG >> /etc/apache2/conf.d/bugzilla_$count
+  <Directory "/var/www/'${MOD_NAME[$count]}'">
+    Options +ExecCGI
+    AllowOverride Limit
+    DirectoryIndex index.cgi
+    AddHandler cgi-script .cgi
+  </Directory>
+EOT_BUG 
 /etc/init.d/apache2 reload
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
