@@ -1,0 +1,67 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Havp'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Antivirus proxy'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$(cat /tmp/user)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+HOSTNAME=$(cat /tmp/hostname)
+
+echo "I: install wine"
+
+apt-get install -y --assume-yes --force-yes havp
+
+apt-get install -f --assume-yes --force-yes
+if [[ "$havp_privoxy_forward" == "y" ]]; then
+sed -i "144s/#//" /etc/havp/havp.config
+sed -i "145s/#//" /etc/havp/havp.config
+sed -i "145s/3128/8118/" /etc/havp/havp.config
+fi
+cp /etc/havp/havp.config /etc/havp/havp.config.tpl
+mv /etc/havp /opt/ciws/etc
+ln -s /opt/ciws/etc/havp /etc/havp
+
+
+if [[ "$fixed_ip" == "y" ]]; then
+cat << EOT_HOOK_1 > /opt/ciws/etc/havp-dhclient-exit-hook.sh
+sleep 8
+cp /etc/havp/havp.config.tpl /etc/havp/havp.config
+ip_address="$proxy_ip"
+sed -i "144s/localhost/\$ip_address/" /etc/havp/havp.config
+/etc/init.d/havp restart
+
+EOT_HOOK_1
+
+else
+cat << EOT_HOOK_2 > /opt/ciws/etc/havp-dhclient-exit-hook.sh
+sleep 8
+cp /etc/havp/havp.config.tpl /etc/havp/havp.config
+ip_address=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1)
+sed -i "144s/localhost/\$ip_address/" /etc/havp/havp.config
+/etc/init.d/havp restart
+
+EOT_HOOK_2
+fi
+
+chmod +x /opt/ciws/etc/havp-dhclient-exit-hook.sh
+
+echo "#!/bin/bash
+
+sudo  /opt/ciws/etc/havp-dhclient-exit-hook.sh &
+" > /etc/dhcp3/dhclient-exit-hooks.d/havp
+
+chmod +x /etc/dhcp3/dhclient-exit-hooks.d/havp
+
+
+/etc/init.d/havp stop
+
+
+
+

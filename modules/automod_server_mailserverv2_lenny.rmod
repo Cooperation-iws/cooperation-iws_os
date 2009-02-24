@@ -442,6 +442,7 @@ rm /var/vmail/*/*/.INBOX.Trash/dovecot.index.log
 rm /var/vmail/*/*/.INBOX.Sent/dovecot.index.log
 rm /var/vmail/*/*/.INBOX.Drafts/dovecot.index.log
 /etc/init.d/postfix restart
+/etc/init.d/mailscanner restart
 /etc/init.d/dovecot restart
 
 " >> /etc/rc.local
@@ -2778,13 +2779,6 @@ ln -s $LAMPP_DIRECTORY/etc/dovecot /etc/dovecot
 
 freshclam
 
-echo "
-#mail server
-/etc/init.d/dovecot restart
-/etc/init.d/postfix restart
-/etc/init.d/mailscanner restart
-
-" >> /etc/rc.local
 
 #Fix time move backwards error
 apt-get remove --assume-yes --force-yes ntpdate

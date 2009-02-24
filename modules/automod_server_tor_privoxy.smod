@@ -10,8 +10,10 @@ RMOD_DESCRIPTION='Anonymous Surfing'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 LIVEUSER=$(cat /tmp/user)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
 
-echo "I: install wine"
+echo "I: install tor privoxy"
 
 apt-get install -y --assume-yes --force-yes tor privoxy
 
@@ -21,15 +23,27 @@ sed -i -e "1230s/127.0.0.1/localhost/" /etc/privoxy/config
 cp /etc/privoxy/config /etc/privoxy/config.tpl
 mv /etc/privoxy /opt/ciws/etc
 ln -s /opt/ciws/etc/privoxy /etc/privoxy
+if [[ "$fixed_ip" == "y" ]]; then
+cat << EOT_HOOK_1 > /opt/ciws/etc/privoxy-dhclient-exit-hook.sh
+sleep 8
+cp /etc/privoxy/config.tpl /etc/privoxy/config
+ip_address="$proxy_ip"
+sed -i "764s/127.0.0.1/\$ip_address/" /etc/privoxy/config
+/etc/init.d/privoxy restart
 
-cat << EOT_HOOK > /opt/ciws/etc/privoxy-dhclient-exit-hook.sh
+EOT_HOOK_1
+
+else
+cat << EOT_HOOK_2 > /opt/ciws/etc/privoxy-dhclient-exit-hook.sh
 sleep 8
 cp /etc/privoxy/config.tpl /etc/privoxy/config
 ip_address=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1)
 sed -i "764s/127.0.0.1/\$ip_address/" /etc/privoxy/config
 /etc/init.d/privoxy restart
 
-EOT_HOOK
+EOT_HOOK_2
+fi
+
 chmod +x /opt/ciws/etc/privoxy-dhclient-exit-hook.sh
 
 echo "#!/bin/bash

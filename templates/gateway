@@ -4,7 +4,10 @@ generic_admin_email="admin.local@admin.intra"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="Lokkir10"
 apache_user="www-data"
-#Auto upgrade
+#SSH Server
+#update live-initramfs
+#kernel bigmem lenny upgrade
+#ssl
 
 ###Cooperation-iws gui
 sphider_auto_index="y"
@@ -27,10 +30,7 @@ snort_registration_key=""
 base_name="Base"
 snort_mysql_pwd=$generic_mysql_pwd
 snort_listening_interface="eth0"
-#Webmin 1.4.20
-webmin_pwd=$generic_login_pwd
 #debian netbook
-#update live-initramfs
 #Postfix Relay Client
 smtp_postfix_client_relay="administration.admin.intra"
 

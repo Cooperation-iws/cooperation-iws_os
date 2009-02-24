@@ -4,4 +4,7 @@ domain="proxy.intra"
 #Tor Privoxy
 #debian netbook
 #update live-initramfs
+#Havp
+havp_privoxy_forward="y"
+#SSH Server
 
