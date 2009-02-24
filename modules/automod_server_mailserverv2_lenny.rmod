@@ -326,6 +326,7 @@ auth_debug = no
 auth_debug_passwords = no
 #
 auth default {
+count=1
 mechanisms = plain
 passdb sql {
 args = /etc/dovecot/dovecot-sql.conf
