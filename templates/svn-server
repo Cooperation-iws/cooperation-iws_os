@@ -1,8 +1,8 @@
 #!/bin/bash
-domain="svn.intra"
-generic_admin_email="admin.perso@$domain"
+domain="svn-backup.intra"
+generic_admin_email="admin.local@$domain"
 generic_mysql_pwd="dev_pwd"
-generic_login_pwd="Lokkir12"
+generic_login_pwd="Lokkir11"
 apache_user="www-data"
 #SSH Server
 #update live-initramfs

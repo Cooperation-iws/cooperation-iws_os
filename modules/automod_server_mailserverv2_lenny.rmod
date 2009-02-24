@@ -2796,6 +2796,11 @@ apt-get install --assume-yes --force-yes ntp
 /etc/init.d/postfix restart
 /etc/init.d/mailscanner restart
 
+update-rc.d -f dovecot remove
+update-rc.d -f dovecot start 81 2 3 4 5 .
+
+
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_INSTALL____________________________________________

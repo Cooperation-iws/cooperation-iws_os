@@ -244,6 +244,7 @@ if [ "\$IP_DOWN" ]; then
 for DOMAIN in \$DOMAIN_LIST
 do
 logger "removing \$IP_STOR:\$HOSTNAME:\$DOMAIN"
+sed -i "/\$HOSTNAME/d" /var/cache/bind/db.cooperation-iws.intra
 sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.1
 sed -i "/\$DOMAIN/d"  /etc/bind/named.conf.local
 sed -i "/\$IP_STOR/d"  /var/cache/dns/IP_list
