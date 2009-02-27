@@ -1,5 +1,5 @@
 #!/bin/bash
-domain="svn-backup.intra"
+domain="lokaleskif-backup.intra"
 generic_admin_email="admin.local@$domain"
 generic_mysql_pwd="dev_pwd"
 generic_login_pwd="Lokkir11"

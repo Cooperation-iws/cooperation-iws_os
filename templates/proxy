@@ -5,6 +5,6 @@ domain="proxy.intra"
 #debian netbook
 #update live-initramfs
 #Havp
-havp_privoxy_forward="y"
+havp_privoxy_forward="n"
 #SSH Server
 

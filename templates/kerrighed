@@ -6,35 +6,8 @@ generic_login_pwd="cooperation"
 apache_user="www-data"
 
 
-#Kerrighed 2.3.0 lenny
+#Kerrighed v5 lenny
 gateway_net_iface="eth0"
 gateway_local_iface="eth1"
 
-###Cooperation-iws gui
-sphider_auto_index="y"
-#Lampp conf
-secure_mysql="y"
-secure_admin="y"
-apache_admin_pwd=$generic_login_pwd
-mysql_root_password=$generic_mysql_pwd
-#Snort 2.8 Base 1.3.9 server Intrepid
-snort_registration_key=""
-base_name="Base"
-snort_mysql_pwd=$generic_mysql_pwd
-snort_listening_interface="eth0"
-#SSH Server
-#Ossec 1.5.1 standalone
-ossec_report_address=$generic_admin_email
-#Awstats
-#Clamav antivirus
-clam_mail_report=$generic_admin_email
-#Webmin 1.4.20
-webmin_pwd=$generic_login_pwd
-#Cacti 0.8.7b
-cacti_name="Cacti"
-cacti_mysql_pwd=$generic_mysql_pwd
-#Syslog-ng server
-syslog_admin_email=$generic_admin_email
-phpsyslog_mysql_pwd=$generic_mysql_pwd
-phpsyslogng_name="Phpsyslogng"
 
