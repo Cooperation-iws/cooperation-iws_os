@@ -1,3 +1,12 @@
 #!/bin/bash
 
+#Indefero Subversion
+indefero_name="Indefero"
+indefero_mysql_pwd="test"
+svn_name="project_1"
+svn_admin_pwd="test"
+svn_anonymous_pwd=""
+
+#Gitweb
+
 
