@@ -229,6 +229,9 @@ killall -9 ruby 1>&2 2>/dev/null
 /etc/init.d/openoffice stop 1>&2 2>/dev/null
 /opt/lps-4.0.6/Server/tomcat-5.0.24/bin/shutdown.sh 1>&2 2>/dev/null
 /etc/init.d/red5 stop 1>&2 2>/dev/null
+/etc/init.d/mongrel_cluster stop 1>&2 2>/dev/null
+killall -9 mongrel_rails 1>&2 2>/dev/null
+
 
 echo "I: config rc.local"
 

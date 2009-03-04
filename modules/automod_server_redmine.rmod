@@ -1,0 +1,263 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Redmine init'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='SCM'
+RMOD_DESCRIPTION_FR='SCM'
+RMOD_VERBOSE="Redmine is a source code management software. "
+RMOD_VERBOSE_FR="Redmine est un logiciel de gestion du code source. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+REDMINE_MYSQL_PWD=${redmine_mysql_pwd}
+MOD_NAME=${redmine_name}
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+export HOME=/home/liveusb
+aptitude install -y ruby rake librmagick-ruby libmysql-ruby rubygems libfcgi-ruby1.8 libopenssl-ruby1.8 ruby-pkg-tools build-essential libdbd-pg-perl libapache-dbi-perl libapache2-mod-perl2 libdigest-sha1-perl libmysqlclient15-dev ruby1.8-dev subversion libapache2-svn
+cd $DL_DIR
+wget $URL_FREE/rubygems-1.3.1.tgz
+tar -xzf rubygems-1.3.1.tgz
+cd rubygems-1.3.1/
+ruby setup.rb
+gem install rails --include-dependencies
+cd $DL_DIR
+wget $URL_FREE/redmine-0.8.1.tar.gz
+tar -xzf redmine-0.8.1.tar.gz
+
+mv redmine-0.8.1 $LAMPP_DIRECTORY/var/$MOD_NAME
+echo "
+create database ${MOD_NAME} character set utf8;
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '${REDMINE_MYSQL_PWD}';
+flush privileges;" > REDMINE_db.sql
+
+$BIN_MYSQL -u root < REDMINE_db.sql mysql
+rm REDMINE_db.sql.
+
+echo " 
+# MySQL (default setup).  Versions 4.1 and 5.0 are recommended.
+#
+# Get the fast C bindings:
+#   gem install mysql
+#   (on OS X: gem install mysql -- --include=/usr/local/lib)
+# And be sure to use new-style password hashing:
+#   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
+
+production:
+  adapter: mysql
+  database: ${MOD_NAME}
+  host: localhost
+  username: ${MOD_NAME}
+  password: ${REDMINE_MYSQL_PWD}
+  encoding: utf8
+ 
+development:
+  adapter: mysql
+  database: redmine_development
+  host: localhost
+  username: root
+  password:
+  encoding: utf8
+
+test:
+  adapter: mysql
+  database: redmine_test
+  host: localhost
+  username: root
+  password:
+  encoding: utf8
+
+test_pgsql:
+  adapter: postgresql
+  database: redmine_test
+  host: localhost
+  username: postgres
+  password: \"postgres\"
+
+test_sqlite3:
+  adapter: sqlite3
+  dbfile: db/test.db
+  
+demo:
+  adapter: sqlite3
+  dbfile: db/demo.db
+" > $LAMPP_DIRECTORY/var/$MOD_NAME/config/database.yml
+
+
+gem install sys-proctable
+gem install mysql
+
+cd $LAMPP_DIRECTORY/var/$MOD_NAME
+/usr/bin/rake db:migrate RAILS_ENV="production"
+
+#rake redmine:load_default_data RAILS_ENV="production"
+
+gem install mongrel mongrel_cluster --include-dependencies
+
+mkdir $LAMPP_DIRECTORY/var/svn_redmine
+chmod 0750 $LAMPP_DIRECTORY/var/svn_redmine
+
+a2enmod dav
+a2enmod dav_svn
+a2enmod perl
+
+mkdir /usr/lib/perl5/Apache/Authn
+cp /$LAMPP_DIRECTORY/var/$MOD_NAME/extra/svn/Redmine.pm /usr/lib/perl5/Apache/Authn
+echo "
+PerlLoadModule Apache::Authn::Redmine
+
+<Location /svn_redmine>
+    DAV svn
+    SVNParentPath \"$LAMPP_DIRECTORY/var/svn_redmine\"
+
+    AuthType Basic
+    Authname \"Redmine Project Tracking\"
+    Require valid-user
+
+     PerlAccessHandler Apache::Authn::Redmine::access_handler
+     PerlAuthenHandler Apache::Authn::Redmine::authen_handler
+
+     ## for mysql
+     RedmineDSN \"DBI:mysql:database=$MOD_NAME;host=localhost\"
+     RedmineDbUser \"$MOD_NAME\"
+     RedmineDbPass \"${REDMINE_MYSQL_PWD}\"
+     </Location>
+" > /etc/apache2/conf.d/svn_redmine
+chown -R www-data $LAMPP_DIRECTORY/var/svn_redmine
+
+cat << EOT_MONGREL > $LAMPP_DIRECTORY/var/$MOD_NAME/config/mongrel_cluster.yml
+user: root
+cwd: $LAMPP_DIRECTORY/var/$MOD_NAME
+port: "9000"
+environment: production
+group: root
+address: 0.0.0.0
+pid_file: log/mongrel.pid
+servers: 2
+EOT_MONGREL
+
+mkdir /etc/mongrel_cluster
+ln -s $LAMPP_DIRECTORY/var/$MOD_NAME/config/mongrel_cluster.yml /etc/mongrel_cluster/redmine.yml
+cp  /usr/lib/ruby/gems/1.8/gems/mongrel_cluster-1.0.5/resources/mongrel_cluster /etc/init.d
+chmod +x /etc/init.d/mongrel_cluster
+/usr/sbin/update-rc.d -f mongrel_cluster defaults
+
+a2enmod proxy
+a2enmod proxy_http
+a2enmod proxy_balancer
+a2enmod rewrite
+
+if [ "$domain" ] && [ -d /etc/bind ]; then
+
+echo "
+  <VirtualHost *>
+
+  ServerAdmin support@$domain
+  DocumentRoot $LAMPP_DIRECTORY/var/$MOD_NAME
+  ServerName redmine.$domain
+  ErrorLog $LAMPP_DIRECTORY/var/$MOD_NAME/log/error.log
+
+  ProxyPass /images !
+  ProxyPass /stylesheets !
+  ProxyPass /javascripts !
+  ProxyPass /favicon.ico !
+  ProxyPass /static !
+  ProxyPass /holding !
+  ProxyPass /templates !
+  ProxyPass / balancer://redmine_cluster
+  ProxyPreserveHost On
+
+  <Proxy balancer://redmine_cluster>
+    BalancerMember http://127.0.0.1:9000
+    BalancerMember http://127.0.0.1:9001
+  </Proxy>
+
+  RewriteEngine On
+   # Redirect all non-static requests to cluster
+  RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_FILENAME} !-f
+  RewriteRule ^/(.*)$ balancer://redmine_cluster%{REQUEST_URI} [P,QSA,L]
+</VirtualHost>
+" > /etc/apache2/sites-available/redmine
+
+a2ensite redmine
+REDMINE_URL="redmine.$domain"
+
+echo "10 * * * * root ruby $LAMPP_DIRECTORY/var/$MOD_NAME/extra/svn/reposman.rb --redmine redmine.$domain --svn-dir $LAMPP_DIRECTORY/var/svn_redmine --owner www-data --url http://localhost/svn_redmine/" > /etc/cron.d/redmine
+chmod +x /etc/cron.d/redmine
+else
+echo "10 * * * * root ruby $LAMPP_DIRECTORY/var/$MOD_NAME/extra/svn/reposman.rb --redmine http://localhost:9000 --svn-dir $LAMPP_DIRECTORY/var/svn_redmine --owner www-data --url http://localhost/svn_redmine/" > /etc/cron.d/redmine
+chmod +x /etc/cron.d/redmine
+REDMINE_URL="<![CDATA[http://localhost:9000]]>"
+fi
+
+
+/etc/init.d/apache2 restart
+/etc/init.d/mongrel_cluster start
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/$REDMINE_URL</item_url>
+	<item_admin_url>/$REDMINE_URL</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/$REDMINE_URL</item_url>
+	<item_admin_url>/$REDMINE_URL</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ntop"
