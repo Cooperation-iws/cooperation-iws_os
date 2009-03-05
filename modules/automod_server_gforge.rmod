@@ -299,6 +299,7 @@ Flags: seen
 
 export LC_ALL=C
 DEBIAN_FRONTEND=noninteractive
+echo "$domain" > /etc/hostname
 apt-get install --assume-yes --force-yes postgresql postgresql-client
 apt-get install --assume-yes --force-yes gforge gforge-plugin-scmsvn libapache2-svn gforge-dns-bind9
 a2dissite default
