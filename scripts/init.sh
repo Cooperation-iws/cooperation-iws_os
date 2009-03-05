@@ -113,7 +113,7 @@ if [ "$(echo "$DEBNONFREE_MIRROR_PATH" | grep 'medibuntu.org')" ]; then
 wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key add -
 fi
 
-apt-get update
+apt-get update --fix-missing
 
 
 echo "I: config rc.local"

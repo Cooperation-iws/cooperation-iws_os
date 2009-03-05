@@ -368,6 +368,9 @@ dpkg --purge avahi-autoipd
 
 apt-get remove --assume-yes --force-yes network-manager avahi-daemon
 
+mv /var/lib/dhcp3 $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/dhcp3 /var/lib/dhcp3
+
 }
 
 #_______________________________________________________________________________________________

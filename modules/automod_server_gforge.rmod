@@ -1,0 +1,411 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Gforge Lenny'
+RMOD_AUTHOR=''
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='SCM'
+RMOD_DESCRIPTION_FR='SCM'
+RMOD_VERBOSE="Gforge is a source code management software. "
+RMOD_VERBOSE_FR="Gforge est un système de gestion du code source. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+HOSTNAME=$(cat /tmp/hostname)
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "
+Name: gforge/shared/admin_login
+Template: gforge/shared/admin_login
+Value: admin
+Owners: gforge-db-postgresql
+Flags: seen
+
+Name: gforge/shared/db_host
+Template: gforge/shared/db_host
+Value: 127.0.0.1
+Owners: gforge-db-postgresql
+Flags: seen
+
+Name: gforge/shared/db_name
+Template: gforge/shared/db_name
+Value: gforge
+Owners: gforge-db-postgresql
+Flags: seen
+
+Name: gforge/shared/db_user
+Template: gforge/shared/db_user
+Value: gforge
+Owners: gforge-db-postgresql
+Flags: seen
+
+Name: gforge/shared/domain_name
+Template: gforge/shared/domain_name
+Value: $domain
+Owners: gforge-common, gforge-db-postgresql, gforge-mta-exim4
+Flags: seen
+
+Name: gforge/shared/download_host
+Template: gforge/shared/download_host
+Value: download.$domain
+Owners: gforge-db-postgresql, gforge-web-apache2
+Flags: seen
+
+Name: gforge/shared/ftpuploadhost
+Template: gforge/shared/ftpuploadhost
+Value: upload.$domain
+Owners: gforge-web-apache2
+Flags: seen
+
+Name: gforge/shared/ip_address
+Template: gforge/shared/ip_address
+Value: 127.0.1.1
+Owners: gforge-db-postgresql, gforge-web-apache2
+Flags: seen
+
+Name: gforge/shared/jabber_host
+Template: gforge/shared/jabber_host
+Value: jabber.$domain
+Owners: gforge-web-apache2
+Flags: seen
+
+Name: gforge/shared/lists_host
+Template: gforge/shared/lists_host
+Value: lists.$domain
+Owners: gforge-db-postgresql, gforge-mta-exim4, gforge-web-apache2
+Flags: seen
+
+Name: gforge/shared/newsadmin_groupid
+Template: gforge/shared/newsadmin_groupid
+Value: 2
+Owners: gforge-db-postgresql, gforge-web-apache2
+Flags: seen
+
+Name: gforge/shared/noreply_to_bitbucket
+Template: gforge/shared/noreply_to_bitbucket
+Value: true
+Owners: gforge-mta-exim4
+Flags: seen
+
+Name: gforge/shared/peerrating_groupid
+Template: gforge/shared/peerrating_groupid
+Value: 4
+Owners: gforge-db-postgresql, gforge-web-apache2
+Flags: seen
+
+Name: gforge/shared/server_admin
+Template: gforge/shared/server_admin
+Value: webmaster@$domain
+Owners: gforge-common, gforge-db-postgresql, gforge-mta-exim4
+Flags: seen
+
+Name: gforge/shared/shell_host
+Template: gforge/shared/shell_host
+Value: shell.$domain
+Owners: gforge-db-postgresql, gforge-web-apache2
+Flags: seen
+
+Name: gforge/shared/skill_list
+Template: gforge/shared/skill_list
+Value: Ada;C;C++;HTML;LISP;Perl;PHP;Python;SQL
+Owners: gforge-db-postgresql
+Flags: seen
+
+Name: gforge/shared/statsadmin_groupid
+Template: gforge/shared/statsadmin_groupid
+Value: 3
+Owners: gforge-db-postgresql, gforge-web-apache2
+Flags: seen
+
+Name: gforge/shared/sys_lang
+Template: gforge/shared/sys_lang
+Value: English
+Owners: gforge-db-postgresql, gforge-web-apache2
+Flags: seen
+
+Name: gforge/shared/sys_theme
+Template: gforge/shared/sys_theme
+Value: gforge
+Owners: gforge-db-postgresql, gforge-web-apache2
+Flags: seen
+
+Name: gforge/shared/system_name
+Template: gforge/shared/system_name
+Value: GForge
+Owners: gforge-common, gforge-db-postgresql, gforge-mta-exim4
+Flags: seen
+
+Name: gforge/shared/upload_host
+Template: gforge/shared/upload_host
+Value: upload.$domain
+Owners: gforge-web-apache2
+Flags: seen
+
+Name: gforge/shared/users_host
+Template: gforge/shared/users_host
+Value: users.$domain
+Owners: gforge-db-postgresql, gforge-mta-exim4, gforge-web-apache2
+Name: exim4-base/drec
+Template: exim4-base/drec
+Owners: exim4-base
+Flags: seen
+
+Name: exim4-daemon-heavy/drec
+Template: exim4-daemon-heavy/drec
+Owners: exim4-daemon-heavy
+Flags: seen
+
+Name: exim4-daemon-light/drec
+Template: exim4-daemon-light/drec
+Owners: exim4-daemon-light
+Flags: seen
+
+Name: exim4/dc_eximconfig_configtype
+Template: exim4/dc_eximconfig_configtype
+Value: local delivery only; not on a network
+Owners: exim4-config
+Flags: seen
+
+Name: exim4/dc_local_interfaces
+Template: exim4/dc_local_interfaces
+Value: 127.0.0.1
+Owners: exim4-config
+Flags: seen
+
+Name: exim4/dc_localdelivery
+Template: exim4/dc_localdelivery
+Value: mbox format in /var/mail/
+Owners: exim4-config
+Flags: seen
+
+Name: exim4/dc_minimaldns
+Template: exim4/dc_minimaldns
+Value: false
+Owners: exim4-config
+Flags: seen
+
+Name: exim4/dc_other_hostnames
+Template: exim4/dc_other_hostnames
+Value: $HOSTNAME.$domain
+Owners: exim4-config
+Flags: mailname
+Variables:
+ fqdn = $HOSTNAME.$domain
+
+Name: exim4/dc_postmaster
+Template: exim4/dc_postmaster
+Value: 
+Owners: exim4-config
+Flags: seen
+
+Name: exim4/dc_readhost
+Template: exim4/dc_readhost
+Owners: exim4-config
+Flags: seen
+
+Name: exim4/dc_relay_domains
+Template: exim4/dc_relay_domains
+Owners: exim4-config
+Flags: seen
+
+Name: exim4/dc_relay_nets
+Template: exim4/dc_relay_nets
+Owners: exim4-config
+Flags: seen
+
+Name: exim4/dc_smarthost
+Template: exim4/dc_smarthost
+Owners: exim4-config
+Flags: seen
+
+Name: exim4/drec
+Template: exim4/drec
+Owners: exim4
+Flags: seen
+
+Name: exim4/exim4-config-title
+Template: exim4/exim4-config-title
+Owners: exim4-config
+Flags: seen
+
+Name: exim4/hide_mailname
+Template: exim4/hide_mailname
+Owners: exim4-config
+Flags: seen
+
+Name: exim4/mailname
+Template: exim4/mailname
+Value: $HOSTNAME.$domain
+Owners: exim4-config
+Flags: seen
+
+Name: exim4/no_config
+Template: exim4/no_config
+Owners: exim4-config
+Flags: seen
+
+Name: exim4/purge_spool
+Template: exim4/purge_spool
+Owners: exim4-base
+Flags: seen
+
+Name: exim4/use_split_config
+Template: exim4/use_split_config
+Value: false
+Owners: exim4-config
+Flags: seen
+" >> /var/cache/debconf/config.dat
+
+
+echo "
+Name: gforge/shared/admin_password
+Template: gforge/shared/admin_password
+Value: cooperation
+Owners: gforge-db-postgresql
+Flags: seen
+
+Name: gforge/shared/admin_password_confirm
+Template: gforge/shared/admin_password_confirm
+Value: cooperation
+Owners: gforge-db-postgresql
+Flags: seen
+
+
+" >> /var/cache/debconf/passwords.dat
+
+export LC_ALL=C
+DEBIAN_FRONTEND=noninteractive
+apt-get install --assume-yes --force-yes postgresql postgresql-client
+apt-get install --assume-yes --force-yes gforge gforge-plugin-scmsvn libapache2-svn gforge-dns-bind9
+a2dissite default
+a2ensite gforge
+a2enmod dav_svn
+apt-get remove --purge --assume-yes --force-yes openbsd-inetd
+
+mv /etc/apache2 $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/apache2 /etc/apache2
+
+mv /etc/gforge $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/gforge /etc/gforge
+
+mv /usr/share/gforge $LAMPP_DIRECTORY/usr/share
+ln -s $LAMPP_DIRECTORY/usr/share/gforge /usr/share/gforge
+
+mv /var/lib/gforge $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/gforge /var/lib/gforge
+
+mv /usr/lib/gforge $LAMPP_DIRECTORY/usr/lib
+ln -s $LAMPP_DIRECTORY/usr/lib/gforge /usr/lib/gforge
+
+mv /etc/subversion $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/subversion /etc/subversion
+
+mv /etc/postgresql $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/postgresql /etc/postgresql
+
+mv /etc/postgresql-common $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/postgresql-common /etc/postgresql-common
+
+mv /etc/mailman $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/mailman /etc/mailman
+
+mv /etc/proftpd $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/proftpd  /etc/proftpd 
+
+sed -i "45s/www/wwi/" /etc/gforge/httpd.conf
+sed -i "112s/www/wwi/" /etc/gforge/httpd.conf
+sed -i "20s/www/wwi/" /var/lib/gforge/bind/dns.head.template
+sed -i "s/ident sameuser/trust/g" /etc/postgresql/8.3/main/pg_hba.conf
+sed -i "34s/true/false/" /etc/gforge/local.pl
+sed -i "37s/^/#/" /usr/lib/gforge/bin/dns_conf.pl
+sed -i "39s/^/#/" /usr/lib/gforge/bin/dns_conf.pl
+sed -i "s/\/var\/cache\/bind\/db.dev.intra/\/var\/lib\/gforge\/bind\/dns.zone/" /etc/bind/named.conf.local
+chown www-data:www-data /etc/gforge/local.inc
+
+
+cp /etc/gforge/local.pl /etc/gforge/local.pl.tpl
+echo "
+#!/bin/bash
+ip_address=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1)
+cp /etc/gforge/local.pl.tpl /etc/gforge/local.pl
+sed -i \"s/127.0.1.1/$ip_address/\" /etc/gforge/local.pl
+/usr/lib/gforge/bin/install-dns.sh configure
+chmod -R +r /var/lib/gforge/bind/dns.zone
+sudo /etc/init.d/bind9 restart
+" > /opt/ciws/etc/gforge-dhclient-exit-hook.sh 
+chmod +x /opt/ciws/etc/gforge-dhclient-exit-hook.sh 
+echo "
+/opt/ciws/etc/gforge-dhclient-exit-hook.sh 
+" >> /opt/ciws/etc/dhclient-exit-hook.sh 
+
+/etc/init.d/apache2 restart
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url><![CDATA[http://localhost:3000]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
+	<item_init_start>/etc/init.d/ntop start</item_init_start>
+	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url><![CDATA[http://localhost:3000]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url><![CDATA[http://localhost:3000]]></item_admin_url>
+	<item_init_start>/etc/init.d/ntop start</item_init_start>
+	<item_init_stop>/etc/init.d/ntop stop</item_init_stop>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+
+echo "I: End of install Ntop"
