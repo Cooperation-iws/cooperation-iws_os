@@ -1622,7 +1622,7 @@ class Reconstructor:
 	if self.comboboxCiwsCms == "Wordpress-goo":
 		self.cms = "cooperation-wui-wordpress-def-0.7.0-081130.tar.gz"
 	else:
-		self.cms = "cooperation-wui-joomla-def-0.7.0-081130.tar.gz"
+		self.cms = "cooperation-wui-joomla-def-0.8.0-090306.tar.gz"
 
   	if self.checkbuttonAufs == True:
 		os.popen('sed -i "s/splash/splash union=aufs/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
