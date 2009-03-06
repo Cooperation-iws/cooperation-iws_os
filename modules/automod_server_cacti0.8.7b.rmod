@@ -19,17 +19,19 @@ RMOD_VERBOSE_FR="Cacti est une interface graphique à l'outil rrd. Cacti permet 
 WWW_DIRECTORY=$(cat /tmp/web-path)
 DL_DIR=$(cat /tmp/web_install-path)
 BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/script-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
-#TEMP
-MIRROIR=$(cat /tmp/mirroir)
-URL_FREE=$(cat /tmp/url_mirroir)
-INSTALL=$(cat /tmp/def_install)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
-
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
+DEB_DIST=$(cat /tmp/deb_dist)
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
 
 #VARIABLES
 #MYSQL PASSWORD

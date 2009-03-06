@@ -92,7 +92,8 @@ log_begin_msg \"\$DESCRIPTION\"
 echo \"
 rm /etc/rc0.d/*$CASPER_PATH* 
 rm /etc/rc6.d/*$CASPER_PATH*
-\" >> /root/etc/ciws/server/etc/rc.ciws
+\" >> /root/etc/ciws/etc/rc.ciws
+
 echo \"Copying Ciws persistence... please wait\"
 cp -a /root/etc/ciws/* /root/opt/ciws/.
 log_end_msg	
@@ -234,6 +235,8 @@ killall -9 mongrel_rails 1>&2 2>/dev/null
 /etc/init.d/postgresql-8.3 stop 1>&2 2>/dev/null
 /etc/init.d/exim4 stop 1>&2 2>/dev/null
 /etc/init.d/mailman stop 1>&2 2>/dev/null
+/etc/init.d/tigase stop 1>&2 2>/dev/null
+/etc/init.d/libresource stop 1>&2 2>/dev/null
 
 
 echo "I: config rc.local"

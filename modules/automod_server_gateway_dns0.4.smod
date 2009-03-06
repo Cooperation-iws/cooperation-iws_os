@@ -320,6 +320,7 @@ zone "\$DOMAIN" {
 };
 EOT_DOMAIN
 #sed -i "/$HOSTNAME.cooperation-iws.intra/d" /var/cache/bind/db.192.168.100
+rm /var/cache/bind/db.slave_*
 /etc/init.d/bind9 restart
 fi
 done

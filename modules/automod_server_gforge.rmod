@@ -119,7 +119,7 @@ Flags: seen
 
 Name: gforge/shared/server_admin
 Template: gforge/shared/server_admin
-Value: webmaster@$domain
+Value: $gforge_admin_email
 Owners: gforge-common, gforge-db-postgresql, gforge-mta-exim4
 Flags: seen
 
@@ -298,10 +298,10 @@ Flags: seen
 " >> /var/cache/debconf/passwords.dat
 
 export LC_ALL=C
-DEBIAN_FRONTEND=noninteractive
+#DEBIAN_FRONTEND=noninteractive
 echo "$domain" > /etc/hostname
 apt-get install --assume-yes --force-yes postgresql postgresql-client
-apt-get install --assume-yes --force-yes gforge gforge-plugin-scmsvn libapache2-svn gforge-dns-bind9
+apt-get install --assume-yes --force-yes postfix gforge-plugin-scmsvn libapache2-svn gforge-dns-bind9 gforge-mta-postfix
 a2dissite default
 a2ensite gforge
 a2enmod dav_svn
@@ -313,12 +313,16 @@ ln -s $LAMPP_DIRECTORY/etc/apache2 /etc/apache2
 mv /etc/gforge $LAMPP_DIRECTORY/etc
 ln -s $LAMPP_DIRECTORY/etc/gforge /etc/gforge
 
+mv /etc/postfix $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/postfix /etc/postfix
+
 mv /usr/share/gforge $LAMPP_DIRECTORY/usr/share
 ln -s $LAMPP_DIRECTORY/usr/share/gforge /usr/share/gforge
 
 mv /var/lib/gforge $LAMPP_DIRECTORY/var/lib
 ln -s $LAMPP_DIRECTORY/var/lib/gforge /var/lib/gforge
 
+mkdir $LAMPP_DIRECTORY/usr/lib
 mv /usr/lib/gforge $LAMPP_DIRECTORY/usr/lib
 ln -s $LAMPP_DIRECTORY/usr/lib/gforge /usr/lib/gforge
 
@@ -330,6 +334,9 @@ ln -s $LAMPP_DIRECTORY/etc/postgresql /etc/postgresql
 
 mv /etc/postgresql-common $LAMPP_DIRECTORY/etc
 ln -s $LAMPP_DIRECTORY/etc/postgresql-common /etc/postgresql-common
+
+mv /var/lib/postgresql $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/postgresql /var/lib/postgresql
 
 mv /etc/mailman $LAMPP_DIRECTORY/etc
 ln -s $LAMPP_DIRECTORY/etc/mailman /etc/mailman
@@ -344,16 +351,25 @@ sed -i "s/ident sameuser/trust/g" /etc/postgresql/8.3/main/pg_hba.conf
 sed -i "34s/true/false/" /etc/gforge/local.pl
 sed -i "37s/^/#/" /usr/lib/gforge/bin/dns_conf.pl
 sed -i "39s/^/#/" /usr/lib/gforge/bin/dns_conf.pl
-sed -i "s/\/var\/cache\/bind\/db.dev.intra/\/var\/lib\/gforge\/bind\/dns.zone/" /etc/bind/named.conf.local
+tmp_hostname="$(hostname)"
+sed -i "s/$tmp_hostname/$domain/g" /etc/gforge/httpd.conf
+sed -i "s/$tmp_hostname/$domain/g" /etc/gforge/local.inc
+sed -i "s/$tmp_hostname/$domain/g" /etc/gforge/local.pl
+sed -i "s/$tmp_hostname/$domain/g" /etc/gforge/gforge.conf
+sed -i "s/$tmp_hostname/$domain/g" /etc/postfix/main.cf
+sed -i "s/cvs1/scm/" /var/lib/gforge/bind/dns.head.template
 chown www-data:www-data /etc/gforge/local.inc
-
-
+sed -i "s/\/var\/cache\/bind\/db.$domain/\/var\/lib\/gforge\/bind\/dns.zone/" /etc/bind/named.conf.local
+echo "
+relayhost = $smtp_postfix_client_relay
+" >> /etc/postfix/main.cf
 cp /etc/gforge/local.pl /etc/gforge/local.pl.tpl
 echo "
 #!/bin/bash
 ip_address=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1)
 cp /etc/gforge/local.pl.tpl /etc/gforge/local.pl
-sed -i \"s/127.0.1.1/$ip_address/\" /etc/gforge/local.pl
+sed -i \"s/127.0.1.1/\$ip_address/\" /etc/gforge/local.pl
+
 /usr/lib/gforge/bin/install-dns.sh configure
 chmod -R +r /var/lib/gforge/bind/dns.zone
 sudo /etc/init.d/bind9 restart

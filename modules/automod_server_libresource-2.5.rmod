@@ -1,0 +1,236 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Libresource 2.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='SCM'
+RMOD_DESCRIPTION_FR='SCM'
+RMOD_VERBOSE="LibreSource is an Open Source web portal, gathering in one place all the necessary tools to share and communicate within your project team."
+RMOD_VERBOSE_FR="LibreSource est un portail web open source, rassemblant en une seule place tous les éléments nécessaires pour partager des documents et communiquer dans les projets. "
+
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_RUN_IN_CHROOT=True
+RMOD_REQ_APACHE=True
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+DEB_DIST=$(cat /tmp/deb_dist)
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+
+
+LIBRESOURCE_PSGSQL_PWD=$libresource_psgsql_pwd
+MOD_NAME=$libresource_name
+
+mkdir $DL_DIR
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/libresource-2.5-090306.tar.gz
+tar -xzf libresource-2.5-090306.tar.gz
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Nuxeo"
+WGET_MIRROIR_FREE
+apt-get autoremove --assume-yes --force-yes java-gcj-compat
+apt-get autoremove --assume-yes --force-yes gcj
+echo "Name: shared/accepted-sun-dlj-v1-1
+Template: shared/accepted-sun-dlj-v1-1
+Value: true
+Owners: sun-java5-bin, sun-java5-jre
+Flags: seen
+" >> /var/cache/debconf/config.dat
+
+ln -s / /cow
+apt-get install --assume-yes --force-yes sun-java6-bin sun-java6-jre sun-java6-jdk
+
+apt-get install --assume-yes --force-yes postgresql postgresql-client
+
+cd $DL_DIR
+mv Libresource $LAMPP_DIRECTORY/server/$MOD_NAME
+sudo -u postgres createdb $MOD_NAME
+sudo -u postgres psql $MOD_NAME < $LAMPP_DIRECTORY/server/$MOD_NAME/database.psql
+
+echo "
+ALTER USER postgres WITH ENCRYPTED PASSWORD '$LIBRESOURCE_PSGSQL_PWD';
+
+"  > libresource_db.sql
+sudo -u postgres psql postgres < libresource_db.sql
+
+sed -i "2s/libresource/$MOD_NAME/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
+sed -i "4s/postgres/$LIBRESOURCE_PSGSQL_PWD/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
+LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
+sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceConfig.properties
+sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/start.sh
+sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/stop.sh
+
+sleep 3
+
+cat << EOF_LIBRESOURCE > /etc/init.d/libresource
+#!/bin/bash
+libresource_HOME=$LAMPP_DIRECTORY/server/$MOD_NAME
+PIDFILE=/var/run/libresource-server.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "Libresource server has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting Libresource server"
+      \$libresource_HOME/start.sh & > /dev/null 2>&1
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping Libresource server."
+	rm -f \$PIDFILE
+      \$libresource_HOME/stop.sh & > /dev/null 2>&1
+      
+      exit
+    fi
+      echo "Libresource server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOF_LIBRESOURCE
+
+
+cat << EOF_JABBER > /etc/init.d/tigase
+#!/bin/bash
+tigase_HOME=$LAMPP_DIRECTORY/server/$MOD_NAME/tigase-server-2.8.5-b422
+PIDFILE=/var/run/tigase-server.pid
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      echo "Tigase server has already started."
+      sleep 5
+      exit
+    fi
+      echo "Starting Tigase server"
+      \$tigase_HOME/start-tigase.sh & > /dev/null 2>&1
+      touch \$PIDFILE
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      echo "Stopping Tigase server."
+	rm -f \$PIDFILE
+      \$tigase_HOME/stop.sh & > /dev/null 2>&1
+      
+      exit
+    fi
+      echo "Tigase server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOF_JABBER
+
+chmod 0755 /etc/init.d/libresource
+chmod 0755 /etc/init.d/tigase
+
+update-rc.d tigase defaults
+update-rc.d libresource defaults
+
+/etc/init.d/tigase start
+/etc/init.d/libresource start
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url><![CDATA[http://localhost:8999]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url><![CDATA[http://localhost:8999]]></item_admin_url>
+	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/nuxeo start</item_init_start>
+	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
+</item>
+
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
+
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url><![CDATA[http://localhost:8999]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url><![CDATA[http://localhost:8999]]></item_admin_url>
+	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/nuxeo start</item_init_start>
+	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
+</item>
+
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+
+echo "I: Install Nuxeo"
+INSTALL
+CREATE_WUI
+echo "I: End of install Nuxeo"

@@ -7,7 +7,8 @@ apache_user="www-data"
 #DNS server lenny
 #kernel bigmem lenny upgrade
 #update live-initramfs
-
-#Gforge Lenny
+#Libresource 2.5
+libresource_name="Libresource"
+libresource_psgsql_pwd="test"
 
 

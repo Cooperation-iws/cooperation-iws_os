@@ -9,5 +9,6 @@ apache_user="www-data"
 #update live-initramfs
 
 #Gforge Lenny
-
+smtp_postfix_client_relay="ciwsvn.cooperation-iws.intra"
+gforge_admin_email="admin.dev@cooperation-iws.intra"
 
