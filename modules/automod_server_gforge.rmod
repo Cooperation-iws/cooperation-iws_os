@@ -354,6 +354,7 @@ sed -i "39s/^/#/" /usr/lib/gforge/bin/dns_conf.pl
 tmp_hostname="$(hostname)"
 sed -i "s/$tmp_hostname/$domain/g" /etc/gforge/httpd.conf
 sed -i "s/$tmp_hostname/$domain/g" /etc/gforge/local.inc
+chmod 770  /etc/gforge/local.pl
 sed -i "s/$tmp_hostname/$domain/g" /etc/gforge/local.pl
 sed -i "s/$tmp_hostname/$domain/g" /etc/gforge/gforge.conf
 sed -i "s/$tmp_hostname/$domain/g" /etc/postfix/main.cf
