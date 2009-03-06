@@ -158,7 +158,7 @@ chown -R www-data $LAMPP_DIRECTORY/var/svn_redmine
 cat << EOT_MONGREL > $LAMPP_DIRECTORY/var/$MOD_NAME/config/mongrel_cluster.yml
 user: root
 cwd: $LAMPP_DIRECTORY/var/$MOD_NAME
-port: "9000"
+port: "19000"
 environment: production
 group: root
 address: 0.0.0.0
@@ -198,8 +198,8 @@ echo "
   ProxyPreserveHost On
 
   <Proxy balancer://redmine_cluster>
-    BalancerMember http://127.0.0.1:9000
-    BalancerMember http://127.0.0.1:9001
+    BalancerMember http://127.0.0.1:19000
+    BalancerMember http://127.0.0.1:19001
   </Proxy>
 
   RewriteEngine On
@@ -217,7 +217,7 @@ chmod +x /etc/cron.d/redmine
 else
 echo "10 * * * * root ruby $LAMPP_DIRECTORY/var/$MOD_NAME/extra/svn/reposman.rb --redmine http://localhost:9000 --svn-dir $LAMPP_DIRECTORY/var/svn_redmine --owner www-data --url http://localhost/svn_redmine/" > /etc/cron.d/redmine
 chmod +x /etc/cron.d/redmine
-REDMINE_URL="<![CDATA[http://localhost:9000]]>"
+REDMINE_URL="<![CDATA[http://localhost:19000]]>"
 fi
 
 rm /opt/ciws/var/$MOD_NAME/log/mongrel.9001.pid

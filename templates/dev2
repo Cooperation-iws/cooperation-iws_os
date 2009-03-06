@@ -7,8 +7,19 @@ apache_user="www-data"
 #DNS server lenny
 #kernel bigmem lenny upgrade
 #update live-initramfs
-#Libresource 2.5
-libresource_name="Libresource"
-libresource_psgsql_pwd="test"
-
+###Cooperation-iws gui
+sphider_auto_index="y"
+#Lampp conf
+secure_mysql="y"
+secure_admin="y"
+apache_admin_pwd=$generic_login_pwd
+mysql_root_password=$generic_mysql_pwd
+#Awstats
+#Wordpress2.6.3
+nb_wordpress=1
+wordpress_mysql_pwd[1]=$generic_mysql_pwd
+wordpress_name[1]="Wordpress"
+wordpress_admin_email[1]=$generic_admin_email
+#Clickheat 1.8
+clickheat_name="Clickheat"
 

@@ -244,7 +244,6 @@ if [ "\$IP_DOWN" ]; then
 for DOMAIN in \$DOMAIN_LIST
 do
 logger "removing \$IP_STOR:\$HOSTNAME:\$DOMAIN"
-sed -i "/\$HOSTNAME/d" /var/cache/bind/db.cooperation-iws.intra
 sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.1
 sed -i "/\$DOMAIN/d"  /etc/bind/named.conf.local
 sed -i "/\$IP_STOR/d"  /var/cache/dns/IP_list
@@ -305,7 +304,6 @@ logger "adding \$IP:\$HOSTNAME:\$DOMAIN"
 echo "include \"/etc/bind/named.conf.\$DOMAIN\";" >> /etc/bind/named.conf.local
 ip_address_4=\$(echo \$IP | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f4)
 logger "removing old entries for $HOSTNAME"
-sed -i "/\$HOSTNAME/d" /var/cache/bind/db.cooperation-iws.intra
 sed -i "/\$HOSTNAME.$domain/d"  /var/cache/bind/db.192.168.1
 if [ -z "\$(cat /var/cache/bind/db.192.168.1 | grep \$HOSTNAME)" ]; then
 echo "\$ip_address_4	PTR  \$HOSTNAME.\$DOMAIN." >> /var/cache/bind/db.192.168.1
