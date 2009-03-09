@@ -101,7 +101,35 @@ fi
 " > /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/001cpvar
 chmod +x /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/001cpvar
 
+echo "I:Configuring sources.list"
+if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
+echo "
+deb http://archive.ubuntu.com/ubuntu/ $DEB_DIST restricted main universe multiverse
+deb http://archive.ubuntu.com/ubuntu/ $DEB_DIST-updates restricted main universe multiverse
+deb http://security.ubuntu.com/ubuntu/ $DEB_DIST-security restricted main universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu/ $DEB_DIST restricted main universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu/ $DEB_DIST-updates restricted main universe multiverse
+deb-src http://security.ubuntu.com/ubuntu/ $DEB_DIST-security restricted main universe multiverse
 
+deb http://packages.medibuntu.org/ $DEB_DIST free non-free
+" > /etc/apt/sources.list
+else
+echo "
+deb ftp://ftp.debian.org/debian/ $DEB_DIST main contrib non-free
+deb-src ftp://ftp.debian.org/debian/ $DEB_DIST main contrib 
+#Multimedia
+deb http://www.debian-multimedia.org $DEB_DIST main 
+deb-src http://www.debian-multimedia.org $DEB_DIST main 
+#Security
+deb http://security.debian.org/ $DEB_DIST/updates main contrib non-free
+deb-src http://security.debian.org/ $DEB_DIST/updates main contrib 
+" > /etc/apt/sources.list
+export DEBIAN_FRONTEND="dialog"
+fi
+if [ "$(echo "$DEBNONFREE_MIRROR_PATH" | grep 'medibuntu.org')" ]; then
+wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key add -
+fi
+apt-get update
 
 
 echo "I: making initramfs"
@@ -237,7 +265,7 @@ killall -9 mongrel_rails 1>&2 2>/dev/null
 /etc/init.d/mailman stop 1>&2 2>/dev/null
 /etc/init.d/tigase stop 1>&2 2>/dev/null
 /etc/init.d/libresource stop 1>&2 2>/dev/null
-
+/etc/init.d/tomcat5.5 stop 1>&2 2>/dev/null
 
 echo "I: config rc.local"
 

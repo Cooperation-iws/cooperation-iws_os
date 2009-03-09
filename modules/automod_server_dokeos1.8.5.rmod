@@ -65,10 +65,10 @@ function INSTALL
 echo "I: Download Dokeos"
 WGET_MIRROIR_FREE
 if [ "$dokeos_videoconf" == "y" ]; then
+aptitude install -y imagemagick gs-gpl swftools sun-java5-bin sun-java5-demo libart-2.0-2 libt1-5 libungif4g
+update-alternatives --set java /usr/lib/jvm/java-1.5.0-sun/jre/bin/java
 cd $DL_DIR
 dpkg -i red5_0.6.3-1_all.deb
-apt-get install --assume-yes --force-yes sun-java5-bin sun-java5-jre
-update-alternatives --set java /usr/lib/jvm/java-1.5.0-sun/jre/bin/java
 apt-get -f install --assume-yes --force-yes
 fi
 for (( count=1; count<=$NB_DOKEOS; count++ ))
@@ -121,6 +121,7 @@ cp dokeos-recorder-2.0.0-SNAPSHOT.war /usr/lib/red5/webapps/dokeos-recorder.war
 
 echo "JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun" > /etc/default/red5
 
+mkdir $LAMPP_DIRECTORY/usr/lib/
 mv /usr/lib/red5 $LAMPP_DIRECTORY/usr/lib
 ln -s $LAMPP_DIRECTORY/usr/lib/red5 /usr/lib/red5
 /etc/init.d/red5 stop
