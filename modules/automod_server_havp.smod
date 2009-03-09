@@ -59,6 +59,11 @@ sudo  /opt/ciws/etc/havp-dhclient-exit-hook.sh &
 
 chmod +x /etc/dhcp3/dhclient-exit-hooks.d/havp
 
+#Intrepid hack
+mkdir /var/run/havp
+chmod -R 755 /var/run/havp
+apt-get -f install --assume-yes --force-yes
+
 
 /etc/init.d/havp stop
 

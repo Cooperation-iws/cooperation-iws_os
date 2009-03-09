@@ -1,0 +1,31 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='mixx'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Update Manager'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$(cat /tmp/user)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+
+apt-get remove --assume-yes --force-yes mixxx
+
+cd /tmp
+
+wget $URL_FREE/hdjmod-dkms_1.28_all.deb
+dpkg -i hdjmod-dkms_1.28_all.deb
+
+wget $URL_FREE/mixxx_1.6.1+Herc-0ubuntu1_i386.deb
+dpkg -i mixxx_1.6.1+Herc-0ubuntu1_i386.deb
+
+wget $URL_FREE/hdjcpl_1.09-1_i386.deb
+dpkg -i hdjcpl_1.09-1_i386.deb
+
+apt-get -f install --assume-yes --force-yes
+
+

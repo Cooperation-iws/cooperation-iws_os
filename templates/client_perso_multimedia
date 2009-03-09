@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#Ubuntu Multimedia Codecs
+#Multimedia Client
+#Cooperation-iws Liveusb 0.4
+#kernel upgrade intrepid
+#Virtualbox-prop Intrepid
+#SSH Server
+#Ntfs-config
+#Office client
+#Wine windows emulator
+#Remastersys fix
+#mixxx
+#Tor Privoxy Intrepid
+#Havp
+havp_privoxy_forward="n"
+#Truecrypt client
+#Clamtk client

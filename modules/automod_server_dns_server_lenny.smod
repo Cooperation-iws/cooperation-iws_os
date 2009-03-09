@@ -145,6 +145,10 @@ sudo  /opt/ciws/etc/dhclient-exit-hook.sh &
 
 chmod +x /etc/dhcp3/dhclient-exit-hooks.d/dns_local
 
+echo "*/4 * * * * root dhclient > /dev/null 2>&1" >> /etc/cron.d/dhclient
+chmod +x /etc/cron.d/dhclient
+
+
 
 }
 
