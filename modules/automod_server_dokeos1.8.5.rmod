@@ -119,6 +119,8 @@ ln -s $LAMPP_DIRECTORY/etc/dokeos /etc/dokeos
 cd $DL_DIR
 cp dokeos-recorder-2.0.0-SNAPSHOT.war /usr/lib/red5/webapps/dokeos-recorder.war
 
+echo "JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun" > /etc/default/red5
+
 mv /usr/lib/red5 $LAMPP_DIRECTORY/usr/lib
 ln -s $LAMPP_DIRECTORY/usr/lib/red5 /usr/lib/red5
 /etc/init.d/red5 stop

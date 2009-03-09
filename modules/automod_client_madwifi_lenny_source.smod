@@ -1,0 +1,31 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Madwifi source Lenny '
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION=''
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$(cat /tmp/user)
+DEB_DIST=$(cat /tmp/deb_dist)
+
+
+export LC_ALL=C
+
+aptitude install -y madwifi-tools madwifi-source
+
+apt-get install --assume-yes --force-yes linux-headers-2.6-686-bigmem
+
+apt-get install --assume-yes --force-yes build-essential debhelper module-assistant
+
+apt-get build-dep --assume-yes --force-yes linux-source-2.6.26
+
+m-a -k /usr/src/linux-headers-2.6.26-1-686-bigmem fakesource
+
+m-a -k /usr/src/linux-headers-2.6.26-1-686-bigmem build madwifi
+
+cd /usr/src/
+dpkg -i madwifi-modules-2.6.26-1-686-bigmem_*

@@ -1,0 +1,20 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Madwifi Lenny source'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION=''
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$(cat /tmp/user)
+DEB_DIST=$(cat /tmp/deb_dist)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+
+cd $DL_DIR
+wget $URL_FREE/madwifi-modules-2.6.26-1-686-bigmem_0.9.4+r3772.20080716-1+2.6.26-13_i386.deb
+
+dpkg -i madwifi-modules-2.6.26-1-686-bigmem_0.9.4+r3772.20080716-1+2.6.26-13_i386.deb
