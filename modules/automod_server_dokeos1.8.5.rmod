@@ -1,0 +1,192 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Dokeos 1.8.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='eLearning portal'
+RMOD_DESCRIPTION_FR='Portail de télé-enseignement'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Dokeos is a learning suite that allows you create, organise, follow and coach learning activities. Here is a quick preview. "
+RMOD_VERBOSE_FR="Dokeos est une suite e-learning qui vous permet de créer, organiser, superviser et coacher des activités d'apprentissage.  "
+
+
+
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+NB_DOKEOS=$nb_dokeos
+
+for (( count=1; count<=$NB_DOKEOS; count++ ))
+do
+DOKEOS_MYSQL_PWD[$count]=${dokeos_mysql_pwd[$count]}
+MOD_NAME[$count]=${dokeos_name[$count]}
+done
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/dokeos-1.8.5-090309.tar.gz
+tar -xzf dokeos-1.8.5-090309.tar.gz
+wget $URL_FREE/red5_0.6.3-1_all.deb
+wget $URL_FREE/dokeos-recorder-2.0.0-SNAPSHOT.war
+wget $URL_FREE/dokeos-1.8.4-patch-videoconference-2.0.tar.gz
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Dokeos"
+WGET_MIRROIR_FREE
+if [ "$dokeos_videoconf" == "y" ]; then
+cd $DL_DIR
+dpkg -i red5_0.6.3-1_all.deb
+apt-get install --assume-yes --force-yes sun-java5-bin sun-java5-jre
+update-alternatives --set java /usr/lib/jvm/java-1.5.0-sun/jre/bin/java
+apt-get -f install --assume-yes --force-yes
+fi
+for (( count=1; count<=$NB_DOKEOS; count++ ))
+do
+##DOKEOS
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf Dokeos/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "21s/Dokeos/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "22s/Dokeos/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+rm $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${DOKEOS_MYSQL_PWD[$count]}';
+flush privileges;" > DOKEOS_db.sql
+
+$BIN_MYSQL -u root < DOKEOS_db.sql mysql
+rm DOKEOS_db.sql
+
+sed -i "s/Dokeos/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/main/inc/conf/configuration.php
+sed -i "s/DOKEOS_MYSQL_PWD/${DOKEOS_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/main/inc/conf/configuration.php
+
+echo "UPDATE ${MOD_NAME[$count]}.user SET email = '${dokeos_admin_email[$count]}' WHERE user.user_id =1 LIMIT 1 ;" > dokeos_credentials.sql
+$BIN_MYSQL -u root < dokeos_credentials.sql
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
+## Video Conferencing
+if [ "$dokeos_videoconf" == "y" ]; then
+mkdir /etc/dokeos
+
+echo "
+<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+  <videoconference-config>
+    <server-keys>
+      <server-key host=\"${MOD_NAME[$count]}.$domain_\" key=\"PaSSw0rd\" />
+      <server-key host=\"localhost_${MOD_NAME[$count]}_\" key=\"p4ssWoRD\" />
+    </server-keys>
+    <moderator-check-on-whiteboard>false</moderator-check-on-whiteboard>
+    <video-streams-dir>$LAMPP_DIRECTORY/opt/dokeos/recorded-streams</video-streams-dir>
+    <vod-streams-dir>$LAMPP_DIRECTORY/opt/dokeos/vod-streams</vod-streams-dir>
+  </videoconference-config>
+" > /etc/dokeos/videoconference-config.xml
+
+mkdir $LAMPP_DIRECTORY/opt/dokeos
+
+mv /etc/dokeos $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/dokeos /etc/dokeos
+
+cd $DL_DIR
+cp dokeos-recorder-2.0.0-SNAPSHOT.war /usr/lib/red5/webapps/dokeos-recorder.war
+
+mv /usr/lib/red5 $LAMPP_DIRECTORY/usr/lib
+ln -s $LAMPP_DIRECTORY/usr/lib/red5 /usr/lib/red5
+/etc/init.d/red5 stop
+/etc/init.d/red5 start
+
+cd $WWW_DIRECTORY/${MOD_NAME[$count]}
+tar xzf $DL_DIR/dokeos-1.8.4-patch-videoconference-2.0.tar.gz
+php videoset.php  .  localhost  1935  p4ssWoRD  1  0
+rm videoset.php
+rm videosetweb.php
+fi
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_DOKEOS; count++ ))
+do
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+for (( count=1; count<=$NB_DOKEOS; count++ ))
+do
+echo "
+
+#Dokeos
+sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/platform/conf/claro_main.conf.php
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Dokeos"
+INSTALL
+CREATE_WUI
+CREATE_INSTALL_SCRIPT
+echo "I: End of install Dokeos"
