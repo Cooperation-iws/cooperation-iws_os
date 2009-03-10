@@ -5,8 +5,8 @@ RMOD_SUBCATEGORY='Servers'
 RMOD_NAME='PhpmyResa 0.7.5'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Content editing'
-RMOD_DESCRIPTION_FR='Edition de contenu'
+RMOD_DESCRIPTION='Resources management'
+RMOD_DESCRIPTION_FR='Gestion des ressources'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_VERBOSE="PHPMyResa is a web-based software used for management of ressources booking, such as room booking, car booking, ... "
@@ -91,6 +91,7 @@ pear install http://pear.php.net/get/Spreadsheet_Excel_Writer
 
 mkdir $WWW_DIRECTORY/Calendar
 chown -R www-data $WWW_DIRECTORY/Calendar
+chown -R www-data $WWW_DIRECTORY/phpicalendar
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 mkdir /opt/ciws/var/resa
 chown -R www-data /opt/ciws/var/resa
@@ -141,7 +142,6 @@ do
 echo "
 
 #Resa
-sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/platform/conf/claro_main.conf.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done
 }

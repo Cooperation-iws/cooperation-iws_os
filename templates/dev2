@@ -5,6 +5,7 @@ generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
 #kernel bigmem lenny upgrade
+#update live-initramfs
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
@@ -23,4 +24,23 @@ nb_dokeos=1
 dokeos_mysql_pwd[1]=$generic_mysql_pwd
 dokeos_name[1]="Dokeos"
 dokeos_videoconf="y"
+#Promethee 7.6
+nb_promethee=1
+promethee_mysql_pwd[1]=$generic_mysql_pwd
+promethee_name[1]="Promethee"
+#Agora
+nb_agora=1
+agora_mysql_pwd[1]=$generic_mysql_pwd
+agora_name[1]="Agora"
+agora_admin_email[1]=$generic_admin_email
+#Lodel 0.7.5
+nb_lodel=1
+lodel_mysql_pwd[1]=$generic_mysql_pwd
+lodel_name[1]="Lodel"
+lodel_admin_email[1]=$generic_admin_email
+#PhpmyResa 0.7.5
+nb_resa=1
+resa_mysql_pwd[1]=$generic_mysql_pwd
+resa_name[1]="Resa"
+resa_admin_email[1]=$generic_admin_email
 

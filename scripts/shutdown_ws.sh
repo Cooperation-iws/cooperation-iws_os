@@ -163,7 +163,7 @@ userdel -r $TMPUSER
 }
 REMOVE_USER
 
-rm -r /home/*
+
 
 if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
 

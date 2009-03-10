@@ -16,8 +16,17 @@ export LANG="en"
 export LC_ALL=C
 export HOME=/home/liveusb
 
+mount -t sysfs none /sys
+cd /dev
+MAKEDEV generic
+mount -t devpts none /dev/pts
+/etc/init.d/dhald start
+/etc/init.d/dbus start
+
 
 apt-get update
 apt-get upgrade --assume-yes --force-yes
 
-
+/etc/init.d/dbus stop
+/etc/init.d/hald stop
+umount -a
