@@ -152,26 +152,6 @@ echo "#!/bin/bash
 WWW_DIRECTORY=\"/var/www\"
 " > $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
-echo "#!/bin/bash
-sleep 15
-ip_address=\$(ifconfig | grep -m 1 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr'| cut -d':' -f2 | cut -d' ' -f1)
-network_card=\$(ifconfig | grep -m 1 'UP BROADCAST RUNNING MULTICAST' --before-context=3 | cut -d' ' -f1)
-if [ ! -e /tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card ] && [[ \"\$ip_adress\" ]]; then
-echo \"
-ifconfig \$network_card \$ip_address
-\" > /tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card
-chmod +x /tmp/dhclient-exit-hooks.d_ifconfig_local
-fi
-bash \"/tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card\"
-" > /opt/ciws/etc/dhclient-exit-hooks.d_ifconfig_local
-
-chmod +x /opt/ciws/etc/dhclient-exit-hooks.d_ifconfig_local
-
-echo "#!/bin/bash
-/opt/ciws/etc/dhclient-exit-hooks.d_ifconfig_local &
-"  > /etc/dhcp3/dhclient-exit-hooks.d/ifconfig_local
-
-chmod +x /etc/dhcp3/dhclient-exit-hooks.d/ifconfig_local
 
 
 
