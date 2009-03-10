@@ -2,15 +2,15 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Lodel 0.7.5'
+RMOD_NAME='PhpmyResa 0.7.5'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Content editing'
 RMOD_DESCRIPTION_FR='Edition de contenu'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-RMOD_VERBOSE="Lodel is a Content Editing tool. It's simplicity and ease of use make it very suitable for all specific uses. "
-RMOD_VERBOSE_FR="Lodel est un logiciel d’édition électronique. Il est simple d'utilisation et facile à adapter à des usages particuliers. "
+RMOD_VERBOSE="PHPMyResa is a web-based software used for management of ressources booking, such as room booking, car booking, ... "
+RMOD_VERBOSE_FR="PHPMyResa est un logiciel web servant à gérer des réservations de ressources."
 
 
 
@@ -33,12 +33,12 @@ INSTALL=$(cat /tmp/def_install)
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
-NB_LODEL=$nb_lodel
+NB_RESA=$nb_resa
 
-for (( count=1; count<=$NB_LODEL; count++ ))
+for (( count=1; count<=$NB_RESA; count++ ))
 do
-LODEL_MYSQL_PWD[$count]=${lodel_mysql_pwd[$count]}
-MOD_NAME[$count]=${lodel_name[$count]}
+RESA_MYSQL_PWD[$count]=${resa_mysql_pwd[$count]}
+MOD_NAME[$count]=${resa_name[$count]}
 done
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -46,8 +46,8 @@ done
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/lodel-0.7.5-090320.tar.gz
-tar -xzf lodel-0.7.5-090320.tar.gz
+wget $URL_FREE/phpmyresa-4.0-090310.tar.gz
+tar -xzf phpmyresa-4.0-090310.tar.gz
 
 }
 
@@ -60,35 +60,40 @@ tar -xzf lodel-0.7.5-090320.tar.gz
 
 function INSTALL
 {
-echo "I: Download Lodel"
+echo "I: Download Resa"
 WGET_MIRROIR_FREE
 
-for (( count=1; count<=$NB_LODEL; count++ ))
+for (( count=1; count<=$NB_RESA; count++ ))
 do
-##LODEL
+##RESA
 cd $DL_DIR
 mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
-cp -Rf Lodel/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
-sed -i "21s/Lodel/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-sed -i "22s/Lodel/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+cp -Rf Resa/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+cp -Rf phpicalendar $WWW_DIRECTORY/
+sed -i "21s/Resa/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "22s/Resa/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 $BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 rm $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 echo "
-GRANT USAGE ON *.* to ${MOD_NAME[$count]}@localhost identified by '${LODEL_MYSQL_PWD[$count]}';
-grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${LODEL_MYSQL_PWD[$count]}';
-flush privileges;" > LODEL_db.sql
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${RESA_MYSQL_PWD[$count]}';
+flush privileges;" > RESA_db.sql
 
-$BIN_MYSQL -u root < LODEL_db.sql mysql
-rm LODEL_db.sql
+$BIN_MYSQL -u root < RESA_db.sql mysql
+rm RESA_db.sql
 
-sed -i "s/Lodel/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/lodelconfig.php
-sed -i "s/LODEL_MYSQL_PWD/${LODEL_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lodelconfig.php
-sed -i "s/admin@ciws.com/${lodel_admin_email[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lodelconfig.php
+sed -i "s/Resa/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/commun/database.php
+sed -i "s/RESA_MYSQL_PWD/${RESA_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/commun/database.php
+sed -i "s/admin@ciws.com/${resa_admin_email[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/commun/config.php
+sed -i "s/ciws.com/$domain/" $WWW_DIRECTORY/${MOD_NAME[$count]}/commun/config.php
 
+pear install http://pear.php.net/get/OLE
+pear install http://pear.php.net/get/Spreadsheet_Excel_Writer
 
+mkdir $WWW_DIRECTORY/Calendar
+chown -R www-data $WWW_DIRECTORY/Calendar
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
-mkdir /opt/ciws/var/lodel
-chown -R www-data /opt/ciws/var/lodel
+mkdir /opt/ciws/var/resa
+chown -R www-data /opt/ciws/var/resa
 done
 }
 
@@ -100,7 +105,7 @@ done
 
 function CREATE_WUI
 {
-for (( count=1; count<=$NB_LODEL; count++ ))
+for (( count=1; count<=$NB_RESA; count++ ))
 do
 echo "
 <item>
@@ -131,11 +136,11 @@ done
 
 function CREATE_INSTALL_SCRIPT
 {
-for (( count=1; count<=$NB_LODEL; count++ ))
+for (( count=1; count<=$NB_RESA; count++ ))
 do
 echo "
 
-#Lodel
+#Resa
 sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/platform/conf/claro_main.conf.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done
@@ -144,8 +149,8 @@ done
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
-echo "I: Install Lodel"
+echo "I: Install Resa"
 INSTALL
 CREATE_WUI
 CREATE_INSTALL_SCRIPT
-echo "I: End of install Lodel"
+echo "I: End of install Resa"
