@@ -2,15 +2,15 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Promethee 7.6'
+RMOD_NAME='Lodel 0.7.5'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Virtual Learning Environment'
-RMOD_DESCRIPTION_FR='Environnement numérique de travail'
+RMOD_DESCRIPTION='Content editing'
+RMOD_DESCRIPTION_FR='Edition de contenu'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-RMOD_VERBOSE="Prométhée is a project initiated by the LEGTA of Gap and Digne which aims to provide a \"ready to use\" Virtual Learning Environment for schools. Thus we hope to ease the exchanges and everyone's job by offering new communication tools in the form of Free Softwares.. "
-RMOD_VERBOSE_FR="Prométhée est un projet initié par les LEGTA de Gap et de Digne qui vise à fournir un Espace Numérique de Travail \"clef en main\" Libre et gratuit aux établissements scolaires. Nous espérons ainsi faciliter les échanges et le travail de chacun en offrant de nouveaux outils de communication sous forme de Logiciels Libres."
+RMOD_VERBOSE="Lodel is a Content Editing tool. It's simplicity and ease of use make it very suitable for all specific uses. "
+RMOD_VERBOSE_FR="Lodel est un logiciel d’édition électronique. Il est simple d'utilisation et facile à adapter à des usages particuliers. "
 
 
 
@@ -33,12 +33,12 @@ INSTALL=$(cat /tmp/def_install)
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
-NB_PROMETHEE=$nb_promethee
+NB_LODEL=$nb_lodel
 
-for (( count=1; count<=$NB_PROMETHEE; count++ ))
+for (( count=1; count<=$NB_LODEL; count++ ))
 do
-PROMETHEE_MYSQL_PWD[$count]=${promethee_mysql_pwd[$count]}
-MOD_NAME[$count]=${promethee_name[$count]}
+LODEL_MYSQL_PWD[$count]=${lodel_mysql_pwd[$count]}
+MOD_NAME[$count]=${lodel_name[$count]}
 done
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
@@ -46,8 +46,8 @@ done
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/promethee-7.6-090310.tar.gz
-tar -xzf promethee-7.6-090310.tar.gz
+wget $URL_FREE/lodel-0.7.5-090320.tar.gz
+tar -xzf lodel-0.7.5-090320.tar.gz
 
 }
 
@@ -60,31 +60,37 @@ tar -xzf promethee-7.6-090310.tar.gz
 
 function INSTALL
 {
-echo "I: Download Promethee"
+echo "I: Download Lodel"
 WGET_MIRROIR_FREE
-for (( count=1; count<=$NB_PROMETHEE; count++ ))
+apt-get install --assume-yes --force-yes poppler-utils catdoc pstotext zip openoffice.org-headless openoffice.org sun-java5-bin sun-java5-demo sun-java5-jre
+update-alternatives --set java /usr/lib/jvm/java-1.5.0-sun/jre/bin/java
+
+for (( count=1; count<=$NB_LODEL; count++ ))
 do
-##PROMETHEE
+##LODEL
 cd $DL_DIR
 mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
-cp -Rf Promethee/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
-sed -i "21s/Promethee/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-sed -i "22s/Promethee/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+cp -Rf Lodel/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "21s/Lodel/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "22s/Lodel/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 $BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 rm $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-
 echo "
-grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${PROMETHEE_MYSQL_PWD[$count]}';
-flush privileges;" > PROMETHEE_db.sql
+GRANT USAGE ON *.* to ${MOD_NAME[$count]}@localhost identified by '${LODEL_MYSQL_PWD[$count]}';
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${LODEL_MYSQL_PWD[$count]}';
+flush privileges;" > LODEL_db.sql
 
-$BIN_MYSQL -u root < PROMETHEE_db.sql mysql
-rm PROMETHEE_db.sql
+$BIN_MYSQL -u root < LODEL_db.sql mysql
+rm LODEL_db.sql
 
-sed -i "s/Promethee/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
-sed -i "s/PROMETHEE_MYSQL_PWD/${PROMETHEE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
+sed -i "s/Lodel/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/lodelconfig.php
+sed -i "s/LODEL_MYSQL_PWD/${LODEL_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lodelconfig.php
+sed -i "s/admin@ciws.com/${lodel_admin_email[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lodelconfig.php
+
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
-
+mkdir /opt/ciws/var/lodel
+chown -R www-data /opt/ciws/var/lodel
 done
 }
 
@@ -96,7 +102,7 @@ done
 
 function CREATE_WUI
 {
-for (( count=1; count<=$NB_PROMETHEE; count++ ))
+for (( count=1; count<=$NB_LODEL; count++ ))
 do
 echo "
 <item>
@@ -127,11 +133,11 @@ done
 
 function CREATE_INSTALL_SCRIPT
 {
-for (( count=1; count<=$NB_PROMETHEE; count++ ))
+for (( count=1; count<=$NB_LODEL; count++ ))
 do
 echo "
 
-#Promethee
+#Lodel
 sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/platform/conf/claro_main.conf.php
 " >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 done
@@ -140,8 +146,8 @@ done
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
-echo "I: Install Promethee"
+echo "I: Install Lodel"
 INSTALL
 CREATE_WUI
 CREATE_INSTALL_SCRIPT
-echo "I: End of install Promethee"
+echo "I: End of install Lodel"
