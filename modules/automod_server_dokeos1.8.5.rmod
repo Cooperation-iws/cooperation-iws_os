@@ -32,6 +32,7 @@ URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
+HOSTNAME=$(cat /tmp/hostname)
 
 NB_DOKEOS=$nb_dokeos
 
@@ -50,6 +51,7 @@ wget $URL_FREE/dokeos-1.8.5-090309.tar.gz
 tar -xzf dokeos-1.8.5-090309.tar.gz
 wget $URL_FREE/red5_0.6.3-1_all.deb
 wget $URL_FREE/dokeos-recorder-2.0.0-SNAPSHOT.war
+wget $URL_FREE/dokeos-videoconf-2.0.0-SNAPSHOT.war
 wget $URL_FREE/dokeos-1.8.4-patch-videoconference-2.0.tar.gz
 }
 
@@ -98,18 +100,48 @@ chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 if [ "$dokeos_videoconf" == "y" ]; then
 mkdir /etc/dokeos
 
-echo "
-<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
   <videoconference-config>
     <server-keys>
-      <server-key host=\"${MOD_NAME[$count]}.$domain_\" key=\"PaSSw0rd\" />
+      <server-key host=\"$HOSTNAME.${domain}_${MOD_NAME[$count]}_\" key=\"p4ssWoRD\" />
       <server-key host=\"localhost_${MOD_NAME[$count]}_\" key=\"p4ssWoRD\" />
+      <server-key host=\"-ip-address-_${MOD_NAME[$count]}_\" key=\"p4ssWoRD\" />
     </server-keys>
     <moderator-check-on-whiteboard>false</moderator-check-on-whiteboard>
     <video-streams-dir>$LAMPP_DIRECTORY/opt/dokeos/recorded-streams</video-streams-dir>
     <vod-streams-dir>$LAMPP_DIRECTORY/opt/dokeos/vod-streams</vod-streams-dir>
   </videoconference-config>
 " > /etc/dokeos/videoconference-config.xml
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+  <recorder-config>
+    <server-keys>
+      <server-key host=\"$HOSTNAME.${domain}_${MOD_NAME[$count]}_\" key=\"p4ssWoRD\" />
+      <server-key host=\"localhost_${MOD_NAME[$count]}_\" key=\"p4ssWoRD\" />
+      <server-key host=\"-ip-address-_${MOD_NAME[$count]}_\" key=\"p4ssWoRD\" />
+    </server-keys>
+    <moderator-check-on-whiteboard>false</moderator-check-on-whiteboard>
+    <video-streams-dir>$LAMPP_DIRECTORY/opt/dokeos/recorded-streams</video-streams-dir>
+    <vod-streams-dir>$LAMPP_DIRECTORY/opt/dokeos/vod-streams</vod-streams-dir>
+  </recorder-config>
+" > /etc/dokeos/recorder-config.xml
+
+echo "#!/bin/bash
+sleep 15
+ip_address=\$(ifconfig | grep -m 1 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr'| cut -d':' -f2 | cut -d' ' -f1)
+sed -i \"s/-ip-address-/\$ip_address/\" /etc/dokeos/videoconference-config.xml
+sed -i \"s/-ip-address-/\$ip_address/\" /etc/dokeos/recorder-config.xml
+etc/init.d/red5 restart
+" > /opt/ciws/etc/dhclient-exit-hooks.d_dokeos
+
+chmod +x /opt/ciws/etc/dhclient-exit-hooks.d_dokeos
+
+echo "#!/bin/bash
+/opt/ciws/etc/dhclient-exit-hooks.d_dokeos &
+"  > /etc/dhcp3/dhclient-exit-hooks.d/dokeos
+
+chmod +x /etc/dhcp3/dhclient-exit-hooks.d/dokeos
+
+
 
 mkdir $LAMPP_DIRECTORY/opt/dokeos
 
@@ -118,6 +150,7 @@ ln -s $LAMPP_DIRECTORY/etc/dokeos /etc/dokeos
 
 cd $DL_DIR
 cp dokeos-recorder-2.0.0-SNAPSHOT.war /usr/lib/red5/webapps/dokeos-recorder.war
+cp dokeos-videoconf-2.0.0-SNAPSHOT.war /usr/lib/red5/webapps/dokeos-videoconf.war
 
 echo "JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun" > /etc/default/red5
 
@@ -130,8 +163,7 @@ ln -s $LAMPP_DIRECTORY/usr/lib/red5 /usr/lib/red5
 cd $WWW_DIRECTORY/${MOD_NAME[$count]}
 tar xzf $DL_DIR/dokeos-1.8.4-patch-videoconference-2.0.tar.gz
 php videoset.php  .  localhost  1935  p4ssWoRD  1  0
-rm videoset.php
-rm videosetweb.php
+php videoset.php  .  $HOSTNAME.${domain}  1935  p4ssWoRD  1  0
 fi
 done
 }
