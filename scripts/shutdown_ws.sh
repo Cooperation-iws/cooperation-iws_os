@@ -102,7 +102,7 @@ fi
 chmod +x /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/001cpvar
 
 echo "I:Configuring sources.list"
-if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "lenny" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
 echo "
 deb http://archive.ubuntu.com/ubuntu/ $DEB_DIST restricted main universe multiverse
 deb http://archive.ubuntu.com/ubuntu/ $DEB_DIST-updates restricted main universe multiverse

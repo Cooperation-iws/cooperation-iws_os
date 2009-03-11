@@ -12,6 +12,8 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 URL_FREE=$(cat /tmp/url_mirroir)
 DL_DIR=$(cat /tmp/web_install-path)
 
+kernel="2.6.24-23-generic"
+
 echo "I: updating casper-initramfs to live-initramfs"
 
 apt-get remove --assume-yes --force-yes casper
@@ -26,9 +28,19 @@ echo "live" > /tmp/casper_path_updated
 
 mv /sbin/losetup /sbin/losetup.orig
 
-cd /sbin
-wget $URL_FREE/losetup
+mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.orig
+cat > /usr/sbin/policy-rc.d << EOF
+#!/bin/sh
 
+echo
+echo "Warning: invoke-rc.d policy in action. Skipping daemon starting"
+
+exit 101
+EOF
+chmod 0755 /usr/sbin/policy-rc.d
+
+cp /sbin/lrm-manager /sbin/lrm-manager.orig
+sed -i "s/\$(uname -r)/$kernel/" /sbin/lrm-manager 
 
 apt-get install --assume-yes --force-yes loop-aes-utils aufs-source aufs-tools
 
@@ -68,6 +80,11 @@ echo "aufs" >> /etc/modules
 echo "
 copy_exec /usr/bin/wc /bin
 " >> /usr/share/initramfs-tools/hooks/live 
+rm /usr/sbin/policy-rc.d
+mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
+mv /sbin/lrm-manager.orig /sbin/lrm-manager
+#cd /sbin
+#wget $URL_FREE/losetup
 
 
 #Hardy 8.04.2 hack

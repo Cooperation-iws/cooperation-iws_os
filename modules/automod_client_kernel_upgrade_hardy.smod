@@ -15,10 +15,13 @@ DISPLAY=127.0.0.1:5.0
 export LANG="en"
 export LC_ALL=C
 export HOME=/home/liveusb
-
+kernel="2.6.24-23-generic"
+cp /sbin/lrm-manager /sbin/lrm-manager.orig
+sed -i "s/\$(uname -r)/$kernel/" /sbin/lrm-manager 
 
 apt-get update
 apt-get install --assume-yes --force-yes linux-generic linux-image-generic linux-restricted-modules-generic
 
+mv /sbin/lrm-manager.orig /sbin/lrm-manager
 
 

@@ -85,7 +85,7 @@ echo "liveusb" > /tmp/tmp_user
 
 mv /etc/apt/sources.list /etc/apt/sources.list.orig
 
-if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "lenny" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
 echo "
 deb $DEB_MIRROR_PATH/ $DEB_DIST restricted main universe multiverse
 deb $DEB_MIRROR_SECURITY_PATH/ $DEB_DIST-updates restricted main universe multiverse

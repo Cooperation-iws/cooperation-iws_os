@@ -24,7 +24,10 @@ apt-get install -f --assume-yes --force-yes
 
 echo "live" > /tmp/casper_path_updated
 
-mv /sbin/losetup /sbin/losetup.orig
+cp /sbin/lrm-manager /sbin/lrm-manager.orig
+sed -i "s/\$(uname -r)/$kernel/" /sbin/lrm-manager 
+
+#mv /sbin/losetup /sbin/losetup.orig
 
 cd /sbin
 #wget $URL_FREE/losetup
@@ -70,6 +73,7 @@ echo "
 copy_exec /usr/bin/wc /bin
 copy_exec /lib/libpcre.so.3 /lib
 " >> /usr/share/initramfs-tools/hooks/live 
+mv /sbin/lrm-manager.orig /sbin/lrm-manager
 
 
 
