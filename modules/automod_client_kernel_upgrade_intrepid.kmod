@@ -16,7 +16,7 @@ export LANG="en"
 export LC_ALL=C
 export HOME=/home/liveusb
 
-
+mkdir /boot/grub
 apt-get update
 apt-get install --assume-yes --force-yes linux-generic linux-image-generic linux-restricted-modules-generic
 

@@ -20,13 +20,27 @@ mount -t sysfs none /sys
 cd /dev
 MAKEDEV generic
 mount -t devpts none /dev/pts
-/etc/init.d/dhald start
+/etc/init.d/hal start
 /etc/init.d/dbus start
+mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.orig
+cat > /usr/sbin/policy-rc.d << EOF
+#!/bin/sh
 
+echo
+echo "Warning: invoke-rc.d policy in action. Skipping daemon starting"
+
+exit 101
+EOF
+chmod 0755 /usr/sbin/policy-rc.d
 
 apt-get update
 apt-get upgrade --assume-yes --force-yes
 
 /etc/init.d/dbus stop
-/etc/init.d/hald stop
+/etc/init.d/hal stop
 umount -a
+rm /usr/sbin/policy-rc.d
+mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
+
+#Hardy hostname hack
+echo "localhost.localdomain" > /etc/hostname.orig

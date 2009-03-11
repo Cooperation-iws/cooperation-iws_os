@@ -5,12 +5,12 @@ RMOD_SUBCATEGORY='Servers'
 RMOD_NAME='Agora'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='eLearning portal'
-RMOD_DESCRIPTION_FR='Portail de télé-enseignement'
+RMOD_DESCRIPTION='Groupware'
+RMOD_DESCRIPTION_FR='Plateforme collaborative'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_VERBOSE="Agora-Project is collaborative applications to share files, contact and tasks. "
-RMOD_VERBOSE_FR="Agora-Project est une plateforme de travail collaboratif complète & intuitive. "
+RMOD_VERBOSE_FR="Agora-Project est une plateforme de travail collaboratif complète et intuitive. "
 
 
 
