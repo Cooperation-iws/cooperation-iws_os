@@ -27,7 +27,7 @@ apt-get install -f --assume-yes --force-yes
 
 echo "live" > /tmp/casper_path_updated
 
-mv /sbin/losetup /sbin/losetup.orig
+#mv /sbin/losetup /sbin/losetup.orig
 
 mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.orig
 cat > /usr/sbin/policy-rc.d << EOF
@@ -45,7 +45,7 @@ sed -i "s/\$(uname -r)/$kernel/" /sbin/lrm-manager
 
 apt-get install --assume-yes --force-yes loop-aes-utils aufs-source aufs-tools
 
-apt-get install --assume-yes --force-yes linux-image-$kernel linux-ubuntu-modules-$kernel linux-restricted-modules-$kernel
+apt-get install --assume-yes --force-yes linux-image-$kernel linux-ubuntu-modules-$kernel linux-restricted-modules-$kernel linux-headers-$kernel
 
 apt-get install --assume-yes --force-yes build-essential debhelper module-assistant
 
@@ -85,8 +85,9 @@ rm /usr/sbin/policy-rc.d
 mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
 mv /sbin/lrm-manager.orig /sbin/lrm-manager
 #cd /sbin
+#mv losetup losetup.old
 #wget $URL_FREE/losetup
-
+#chmod +x losetup
 
 #Hardy 8.04.2 hack
 echo "localhost.localdomain" > /etc/hostname
