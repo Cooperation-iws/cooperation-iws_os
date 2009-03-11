@@ -43,16 +43,16 @@ apt-get build-dep --assume-yes --force-yes linux-source
 
 
 
-m-a -k /usr/src/linux-headers-2.6.27-11-generic fakesource
+m-a -k /usr/src/linux-headers-$kernel fakesource
 
 
 wget $URL_FREE/loop-aes-source_3.2c-2_all.deb.1
 
 dpkg -i loop-aes-source_3.2c-2_all.deb.1
 
-m-a -k /usr/src/linux-headers-2.6.27-11-generic build loop-aes
+m-a -k /usr/src/linux-headers-$kernel build loop-aes
 
-mv /lib/modules/2.6.27-11-generic/kernel/drivers/block/loop.ko /lib/modules/2.6.27-11-generic/kernel/drivers/block/loop.ko-old
+mv /lib/modules/$kernel/kernel/drivers/block/loop.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko-old
 
 
 cd /usr/src
@@ -60,7 +60,7 @@ cd /usr/src
 
 dpkg -i loop-aes-modules-2.6.27-11-generic*
 
-cp /lib/modules/2.6.27-11-generic/updates/loop.ko /lib/modules/2.6.27-11-generic/kernel/drivers/block/
+cp /lib/modules/$kernel/updates/loop.ko /lib/modules/$kernel/kernel/drivers/block/
 
 echo "loop" >> /etc/modules
 

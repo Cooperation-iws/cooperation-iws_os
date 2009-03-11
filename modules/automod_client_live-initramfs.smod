@@ -12,7 +12,8 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 URL_FREE=$(cat /tmp/url_mirroir)
 DL_DIR=$(cat /tmp/web_install-path)
 
-kernel="2.6.24-23-generic"
+
+. /tmp/app_params
 
 echo "I: updating casper-initramfs to live-initramfs"
 
@@ -52,26 +53,26 @@ apt-get build-dep --assume-yes --force-yes linux-source
 
 
 
-m-a -k /usr/src/linux-headers-2.6.24-23-generic fakesource
+m-a -k /usr/src/linux-headers-$kernel fakesource
 
-m-a -k /usr/src/linux-headers-2.6.24-23-generic build aufs
+m-a -k /usr/src/linux-headers-$kernel build aufs
 
 wget $URL_FREE/loop-aes-source_3.2c-2_all.deb.1
 
 dpkg -i loop-aes-source_3.2c-2_all.deb.1
 
-m-a -k /usr/src/linux-headers-2.6.24-23-generic build loop-aes
+m-a -k /usr/src/linux-headers-$kernel build loop-aes
 
-mv /lib/modules/2.6.24-23-generic/kernel/drivers/block/loop.ko /lib/modules/2.6.24-23-generic/kernel/drivers/block/loop.ko-old
+mv /lib/modules/$kernel/kernel/drivers/block/loop.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko-old
 
 
 cd /usr/src
 
-dpkg -i aufs-modules-2.6.24-23-generic*
+dpkg -i aufs-modules-$kernel*
 
-dpkg -i loop-aes-modules-2.6.24-23-generic*
+dpkg -i loop-aes-modules-$kernel*
 
-cp /lib/modules/2.6.24-23-generic/updates/loop.ko /lib/modules/2.6.24-23-generic/kernel/drivers/block/
+cp /lib/modules/$kernel/updates/loop.ko /lib/modules/$kernel/kernel/drivers/block/
 
 echo "loop" >> /etc/modules
 

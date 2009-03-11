@@ -10,12 +10,13 @@ RMOD_DESCRIPTION='Update Manager'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 LIVEUSER=$(cat /tmp/user)
+. /tmp/app_params
 
 DISPLAY=127.0.0.1:5.0
 export LANG="en"
 export LC_ALL=C
 export HOME=/home/liveusb
-kernel="2.6.24-23-generic"
+
 cp /sbin/lrm-manager /sbin/lrm-manager.orig
 sed -i "s/\$(uname -r)/$kernel/" /sbin/lrm-manager 
 
