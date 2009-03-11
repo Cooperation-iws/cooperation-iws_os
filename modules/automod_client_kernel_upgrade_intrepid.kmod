@@ -22,7 +22,7 @@ sed -i "s/\$(uname -r)/$kernel/" /sbin/lrm-manager
 
 mkdir /boot/grub
 apt-get update
-apt-get install --assume-yes --force-yes linux-generic linux-image-generic linux-restricted-modules-generic
+apt-get install --assume-yes --force-yes linux-image-$kernel linux-ubuntu-modules-$kernel linux-restricted-modules-$kernel
 mv /sbin/lrm-manager.orig /sbin/lrm-manager
 
 

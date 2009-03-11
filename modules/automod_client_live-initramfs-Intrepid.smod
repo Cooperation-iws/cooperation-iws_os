@@ -11,6 +11,7 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 URL_FREE=$(cat /tmp/url_mirroir)
 DL_DIR=$(cat /tmp/web_install-path)
+. /tmp/app_params
 
 echo "I: updating casper-initramfs to live-initramfs"
 
@@ -35,7 +36,7 @@ cd /sbin
 
 apt-get install --assume-yes --force-yes loop-aes-utils aufs-tools
 
-apt-get install --assume-yes --force-yes linux-generic linux-image-generic linux-restricted-modules-generic linux-headers-generic
+apt-get install --assume-yes --force-yes linux-image-$kernel linux-ubuntu-modules-$kernel linux-restricted-modules-$kernel
 
 apt-get install --assume-yes --force-yes build-essential debhelper module-assistant
 
