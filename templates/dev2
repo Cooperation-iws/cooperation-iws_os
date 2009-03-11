@@ -27,6 +27,11 @@ piwigo_admin_email[1]=$generic_admin_email
 #Lilina 1.0
 nb_lilina=1
 lilina_name[1]="Lilina"
+#Laconica 1.8
+nb_piwigo=1
+piwigo_mysql_pwd[1]=$generic_mysql_pwd
+piwigo_name[1]="Piwigo"
+piwigo_admin_email[1]=$generic_admin_email
 
 
 

@@ -1,0 +1,164 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Laconica 1.8'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Micro Blogging'
+RMOD_DESCRIPTION_FR='Micro Blogging'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Laconica is an Open Source eLearning and eWorking platform allowing teachers to build effective online courses and to manage learning and collaborative activities on the web. Translated into 35 languages, Laconica has a large worldwide users’ and developers’ community. "
+RMOD_VERBOSE_FR="Laconica est une plate-forme Open Source de formation à distance et de travail collaboratif. Elle permet aux formateurs de créer des espaces de cours en ligne et de gérer des activités de formation sur Internet. Traduite en 35 langues, Laconica bénéficie de l'appui d'une communauté mondiale d'utilisateurs et de développeurs.  "
+
+
+
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+NB_LACONICA=$nb_laconica
+
+for (( count=1; count<=$NB_LACONICA; count++ ))
+do
+LACONICA_MYSQL_PWD[$count]=${laconica_mysql_pwd[$count]}
+MOD_NAME[$count]=${laconica_name[$count]}
+done
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/laconica-0.7.1-090311.tar.gz
+tar -xzf laconica-0.7.1-090311.tar.gz
+#wget $URL_FREE/sphinx-0.9.8.1.tar.gz
+#tar -xzf sphinx-0.9.8.1.tar.gz
+#wget $URL_FREE/sphinx_0.9.8.1-1_i386.deb
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Laconica"
+WGET_MIRROIR_FREE
+#aptitude install -y libmysql++-dev libmysqlclient15-dev checkinstall
+cd $DL_DIR
+#cd sphinx-0.9.8.1
+#./configure
+#make
+#checkinstall
+#dpkg -i sphinx_0.9.8.1-1_i386.deb
+#apt-get -f install -assume-yes --force-yes
+apt-get install --assume-yes --force-yes ejabberd
+sed -i "s/{acl, admin, {user, \"\", \"localhost\"}}./{acl, admin, {user, \"laconica_user\", \"$domain\"}}./" /etc/ejabberd/ejabberd.cfg
+ejabberdctl register laconica $domain laconica_pwd
+
+for (( count=1; count<=$NB_LACONICA; count++ ))
+do
+##LACONICA
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf Laconica/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "21s/Laconica/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "22s/Laconica/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${LACONICA_MYSQL_PWD[$count]}';
+flush privileges;" > LACONICA_db.sql
+
+$BIN_MYSQL -u root < LACONICA_db.sql mysql
+rm LACONICA_db.sql
+
+sed -i "s/Laconica/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
+sed -i "s/mysql_pwd/${LACONICA_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
+sed -i "s/admin@ciws.com/${laconica_admin_email[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
+mv $WWW_DIRECTORY/${MOD_NAME[$count]}/classes/laconica.ini $WWW_DIRECTORY/${MOD_NAME[$count]}/classes/${MOD_NAME[$count]}.ini 
+
+chmod -R 750 $WWW_DIRECTORY/${MOD_NAME[$count]}/
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
+
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_LACONICA; count++ ))
+do
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+for (( count=1; count<=$NB_LACONICA; count++ ))
+do
+echo "
+
+#Laconica
+sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/platform/conf/claro_main.conf.php
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Laconica"
+INSTALL
+CREATE_WUI
+CREATE_INSTALL_SCRIPT
+echo "I: End of install Laconica"
