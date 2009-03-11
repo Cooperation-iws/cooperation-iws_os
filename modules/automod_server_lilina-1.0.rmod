@@ -7,8 +7,8 @@ RMOD_SUBCATEGORY='Servers'
 RMOD_NAME='Lilina 1.0'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
-RMOD_DESCRIPTION='Heatmap of Clicks'
-RMOD_DESCRIPTION_FR='Outil de cartographie des clicks'
+RMOD_DESCRIPTION='Rss agregator'
+RMOD_DESCRIPTION_FR='Agrégateur Rss'
 RMOD_VERBOSE="Lilina is a free, open source aggregator for your server."
 RMOD_VERBOSE_FR="Lilina est un aggrégateur open source."
 

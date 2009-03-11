@@ -86,7 +86,7 @@ cp -Rf Laconica/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
 sed -i "21s/Laconica/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 sed -i "22s/Laconica/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 $BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-
+rm $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 echo "
 grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${LACONICA_MYSQL_PWD[$count]}';
 flush privileges;" > LACONICA_db.sql
@@ -95,9 +95,10 @@ $BIN_MYSQL -u root < LACONICA_db.sql mysql
 rm LACONICA_db.sql
 
 sed -i "s/Laconica/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
-sed -i "s/mysql_pwd/${LACONICA_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
+sed -i "s/LACONICA_MYSQL_PWD/${LACONICA_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
 sed -i "s/admin@ciws.com/${laconica_admin_email[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
 mv $WWW_DIRECTORY/${MOD_NAME[$count]}/classes/laconica.ini $WWW_DIRECTORY/${MOD_NAME[$count]}/classes/${MOD_NAME[$count]}.ini 
+mv $WWW_DIRECTORY/${MOD_NAME[$count]}/classes/laconica.links.ini $WWW_DIRECTORY/${MOD_NAME[$count]}/classes/${MOD_NAME[$count]}.links.ini
 
 chmod -R 750 $WWW_DIRECTORY/${MOD_NAME[$count]}/
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
