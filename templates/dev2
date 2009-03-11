@@ -19,28 +19,14 @@ nb_wordpress=1
 wordpress_mysql_pwd[1]=$generic_mysql_pwd
 wordpress_name[1]="Wordpress"
 wordpress_admin_email[1]=$generic_admin_email
-#Dokeos 1.8.5
-nb_dokeos=1
-dokeos_mysql_pwd[1]=$generic_mysql_pwd
-dokeos_name[1]="Dokeos"
-dokeos_videoconf="y"
-#Promethee 7.6
-nb_promethee=1
-promethee_mysql_pwd[1]=$generic_mysql_pwd
-promethee_name[1]="Promethee"
-#Agora
-nb_agora=1
-agora_mysql_pwd[1]=$generic_mysql_pwd
-agora_name[1]="Agora"
-agora_admin_email[1]=$generic_admin_email
-#Lodel 0.7.5
-nb_lodel=1
-lodel_mysql_pwd[1]=$generic_mysql_pwd
-lodel_name[1]="Lodel"
-lodel_admin_email[1]=$generic_admin_email
-#PhpmyResa 0.7.5
-nb_resa=1
-resa_mysql_pwd[1]=$generic_mysql_pwd
-resa_name[1]="Resa"
-resa_admin_email[1]=$generic_admin_email
+#Piwigo 2.0.0
+nb_piwigo=1
+piwigo_mysql_pwd[1]=$generic_mysql_pwd
+piwigo_name[1]="Piwigo"
+piwigo_admin_email[1]=$generic_admin_email
+#Lilina 1.0
+nb_lilina=1
+lilina_name[1]="Lilina"
+
+
 

@@ -124,5 +124,27 @@ mail_domain=$domain
 smtp_relay="smtp.free.fr"
 mailbox_quota="100"
 admin_email=$generic_admin_email
-
+#Agora
+nb_agora=1
+agora_mysql_pwd[1]=$generic_mysql_pwd
+agora_name[1]="Agora"
+agora_admin_email[1]=$generic_admin_email
+#Clickheat 1.8
+clickheat_name="Clickheat"
+#Dokeos 1.8.5
+nb_dokeos=1
+dokeos_mysql_pwd[1]=$generic_mysql_pwd
+dokeos_name[1]="Dokeos"
+dokeos_admin_email[1]=$generic_admin_email
+dokeos_videoconf="n"
+#Lodel 0.7.5
+nb_lodel=1
+lodel_mysql_pwd[1]=$generic_mysql_pwd
+lodel_name[1]="Lodel"
+lodel_admin_email[1]=$generic_admin_email
+#PhpmyResa 0.7.5
+nb_resa=1
+resa_mysql_pwd[1]=$generic_mysql_pwd
+resa_name[1]="Resa"
+resa_admin_email[1]=$generic_admin_email
 

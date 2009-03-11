@@ -1,0 +1,141 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Piwigo 2.0.0'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Pictures gallery'
+RMOD_DESCRIPTION_FR="Galleries d'images"
+RMOD_VERBOSE="Piwigo is a photo gallery software for the web. The project started in 2002. Built by an active community of users and developers, it comes with powerful features to publish and manage your photos."
+RMOD_VERBOSE_FR="Piwigo est un logiciel de galerie photo pour le web. Le projet a démarré en 2002. Bâti autour d'une communauté active d'utilisateurs et de développeurs, Piwigo dispose de fonctionnalités puissantes pour publier et gérer vos photos.."
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+DISPLAY=127.0.0.1:5.0 
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+INSTALL=$(cat /tmp/def_install)
+
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+NB_PIWIGO=$nb_piwigo
+
+for (( count=1; count<=$NB_PIWIGO; count++ ))
+do
+PIWIGO_MYSQL_PWD[$count]=${piwigo_mysql_pwd[$count]}
+MOD_NAME[$count]=${piwigo_name[$count]}
+done
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/piwigo-2.0.0-090311.tar.gz
+tar -xzf piwigo-2.0.0-090311.tar.gz
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Piwigo"
+WGET_MIRROIR_FREE
+
+for (( count=1; count<=$NB_PIWIGO; count++ ))
+do
+cd $DL_DIR
+
+cp -Rf Piwigo $WWW_DIRECTORY/${MOD_NAME[$count]}
+sed -i "21s/Piwigo/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "22s/Piwigo/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+
+
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${PIWIGO_MYSQL_PWD[$count]}';
+flush privileges;" > piwigo_db.sql
+
+$BIN_MYSQL -u root < piwigo_db.sql mysql
+rm piwigo_db.sql
+sed -i -e "s/Piwigo/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/include/mysql.inc.php
+sed -i -e "s/PIWIGO_MYSQL_PWD/${PIWIGO_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/include/mysql.inc.php
+
+echo "
+UPDATE ${MOD_NAME[$count]}.piwigo_users SET username = '${piwigo_admin_email[$count]}' WHERE piwigo_users.id =1 LIMIT 1 ;
+" > piwigo_credentials.sql
+$BIN_MYSQL -u root < piwigo_credentials.sql
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
+
+done
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_PIWIGO; count++ ))
+
+do
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+
+done
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+
+echo "I: Install Piwigo"
+INSTALL
+CREATE_WUI
+echo "I: End of install Piwigo"
