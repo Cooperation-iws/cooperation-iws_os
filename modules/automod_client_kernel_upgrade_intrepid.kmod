@@ -25,4 +25,19 @@ apt-get update
 apt-get install --assume-yes --force-yes linux-image-$kernel linux-ubuntu-modules-$kernel linux-restricted-modules-$kernel
 mv /sbin/lrm-manager.orig /sbin/lrm-manager
 
+sed -i "17s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "18s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "19s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "20s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "21s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "22s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "23s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "24s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "1049s/^/#/" /var/lib/dpkg/info/linux-image-$kernel.postinst
+sed -i "1050s/^/#/" /var/lib/dpkg/info/linux-image-$kernel.postinst
+sed -i "1051s/^/#/" /var/lib/dpkg/info/linux-image-$kernel.postinst
+sed -i "1052s/^/#/" /var/lib/dpkg/info/linux-image-$kernel.postinst
+sed -i "1053s/^/#/" /var/lib/dpkg/info/linux-image-$kernel.postinst
+
+apt-get -f install --assume-yes --force-yes
 
