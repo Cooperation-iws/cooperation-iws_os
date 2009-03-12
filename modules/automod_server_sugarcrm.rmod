@@ -1,0 +1,146 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='SugarCRM 5.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Customer Relationship management'
+RMOD_DESCRIPTION_FR='Gestion de la relation client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="SugarCRM is an Open Source Customer Relationship management software."
+RMOD_VERBOSE_FR="SugarCRM est une plate-forme Open Source de gestion de la relation client."
+
+
+
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+NB_SUGARCRM=$nb_sugarcrm
+
+for (( count=1; count<=$NB_SUGARCRM; count++ ))
+do
+SUGARCRM_MYSQL_PWD[$count]=${sugarcrm_mysql_pwd[$count]}
+MOD_NAME[$count]=${sugarcrm_name[$count]}
+done
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/sugarcrm-5.2.0-090312.tar.gz
+tar -xzf sugarcrm-5.2.0-090312.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download SugarCRM"
+WGET_MIRROIR_FREE
+for (( count=1; count<=$NB_SUGARCRM; count++ ))
+do
+##SUGARCRM
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf SugarCRM/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+sed -i "21s/SugarCRM/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "22s/SugarCRM/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+rm $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${SUGARCRM_MYSQL_PWD[$count]}';
+flush privileges;" > SUGARCRM_db.sql
+
+$BIN_MYSQL -u root < SUGARCRM_db.sql mysql
+rm SUGARCRM_db.sql
+
+sed -i "s/SugarCRM/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
+sed -i "s/SUGARCRM_MYSQL_PWD/${SUGARCRM_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
+
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_SUGARCRM; count++ ))
+do
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/${MOD_NAME[$count]}</item_url>
+	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+for (( count=1; count<=$NB_SUGARCRM; count++ ))
+do
+echo "
+
+#SugarCRM
+sed -i \"122s/''/'localhost'/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/platform/conf/claro_main.conf.php
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install SugarCRM"
+INSTALL
+CREATE_WUI
+CREATE_INSTALL_SCRIPT
+echo "I: End of install SugarCRM"

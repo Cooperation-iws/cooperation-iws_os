@@ -31,7 +31,9 @@ sed -i "s/\$(uname -r)/$kernel/" /sbin/lrm-manager
 
 apt-get install --assume-yes --force-yes loop-aes-utils aufs-tools
 
-apt-get install --assume-yes --force-yes linux-image-$kernel linux-ubuntu-modules-$kernel linux-restricted-modules-$kernel linux-headers-$kernel
+#apt-get install --assume-yes --force-yes linux-image-$kernel linux-ubuntu-modules-$kernel linux-restricted-modules-$kernel linux-headers-$kernel
+apt-get install --assume-yes --force-yes linux-image-$kernel linux-restricted-modules-$kernel linux-headers-$kernel
+
 
 apt-get install --assume-yes --force-yes build-essential debhelper module-assistant
 
