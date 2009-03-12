@@ -4,7 +4,6 @@ generic_admin_email="admin.local@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
-#DNS server lenny
 #kernel bigmem lenny upgrade
 #update live-initramfs
 ###Cooperation-iws gui

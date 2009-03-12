@@ -1,0 +1,48 @@
+#!/bin/bash
+domain="cms-sta.intra"
+generic_admin_email="admin.local@$domain"
+generic_mysql_pwd="mysql_pwd"
+generic_login_pwd="cooperation"
+apache_user="www-data"
+#kernel bigmem lenny upgrade
+#update live-initramfs
+###Cooperation-iws gui
+sphider_auto_index="y"
+#Lampp conf
+secure_mysql="y"
+secure_admin="y"
+apache_admin_pwd=$generic_login_pwd
+mysql_root_password=$generic_mysql_pwd
+#Proftpd
+proftpd_pwd=$generic_login_pwd
+#Roundcube 0.2
+#SugarCRM 5.2
+nb_sugarcrm=1
+sugarcrm_mysql_pwd[1]=$generic_mysql_pwd
+sugarcrm_name[1]="SugarCRM"
+sugarcrm_admin_email[1]=$generic_admin_email
+#Cacti 0.8.7b
+cacti_name="Cacti"
+cacti_mysql_pwd=$generic_mysql_pwd
+#Akoie 0.5
+share_akoie_smb="n"
+share_akoie_smb_pwd="n"
+#Clamav antivirus
+clam_mail_report=$generic_admin_email
+#Cooperation-iws Liveusb 0.4
+#Webmin 1.4.20
+webmin_pwd=$generic_login_pwd
+#Snort2.8 Base1.3.9 standalone Intrepid
+snort_registration_key=""
+base_name="Base"
+snort_mysql_pwd=$generic_mysql_pwd
+snort_listening_interface="eth0"
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Lenny releases
+postfixadmin_name="Mail"
+postfixadmin_mysql_pwd=$generic_mysql_pwd
+public_mail="n"
+mail_domain=$domain
+smtp_relay="smtp.free.fr"
+mailbox_quota="100"
+admin_email=$generic_admin_email
+
