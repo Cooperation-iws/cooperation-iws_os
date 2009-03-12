@@ -44,3 +44,15 @@ mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
 
 #Hardy hostname hack
 echo "localhost.localdomain" > /etc/hostname.orig
+
+#Hardy hal hack
+sed "80s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed "81s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed "82s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed "83s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed "84s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed "85s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed "86s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed "87s/^/#/" /var/lib/dpkg/info/hal.postinst
+
+apt-get -f install --assume-yes --force-yes

@@ -1,0 +1,209 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Scenari'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Web logs tracking analysis tool'
+RMOD_DESCRIPTION_FR='Outil de surveillance des logs du serveur web'
+RMOD_VERBOSE="AWStats is a free powerful and featureful tool that generates advanced web, streaming, ftp or mail server statistics, graphically. This log analyzer works as a CGI or from command line and shows you all possible information your log contains, in few graphical web pages. It uses a partial information file to be able to process large log files, often and quickly. It can analyze log files from all major server tools like Apache log files (NCSA combined/XLF/ELF log format or common/CLF log format), WebStar, IIS (W3C log format) and a lot of other web, proxy, wap, streaming servers, mail servers and some ftp servers. "
+RMOD_VERBOSE_FR="AWStats est un outil qui génère des statistiques avancées sur les serveurs webs, mail, ftp, .... "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+#VARIABLES
+
+HOSTNAME=$(cat /tmp/hostname)
+
+MOD_NAME=$sakai_name
+SAKAI_MYSQL_PWD=$sakai_mysql_pwd
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+#Tomcat
+apt-get install --assume-yes --force-yes sun-java5-jdk tomcat5.5 tomcat5.5-admin tomcat5.5-webapps ant sun-java5-jre
+update-alternatives --set java /usr/lib/jvm/java-1.5.0-sun/jre/bin/java
+apt-get install --assume-yes --force-yes openoffice.org-headless openoffice.org xvfb msttcorefonts imagemagick
+
+sed -i "s/<\/tomcat-users>//"  /var/lib/tomcat5.5/conf/tomcat-users.xml 
+echo "
+<role rolename=\"manager\"/>
+<role rolename=\"admin\"/>
+<user username=\"admin\" password=\"cooperation\" roles=\"admin,manager\"/>
+</tomcat-users>
+" >> /var/lib/tomcat5.5/conf/tomcat-users.xml 
+
+mkdir $LAMPP_DIRECTORY/etc/default
+mv /etc/default/tomcat5.5 $LAMPP_DIRECTORY/etc/default
+ln -s $LAMPP_DIRECTORY/etc/default/tomcat5.5 /etc/default/tomcat5.5
+
+mv /etc/tomcat5.5 $LAMPP_DIRECTORY/etc/
+ln -s $LAMPP_DIRECTORY/etc/tomcat5.5 /etc/tomcat5.5
+
+mkdir $LAMPP_DIRECTORY/var/lib/
+mv /var/lib/tomcat5.5 $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/tomcat5.5 /var/lib/tomcat5.5
+
+rm /var/lib/tomcat5.5/logs
+rm /var/lib/tomcat5.5/work 
+ln -s /var/log/tomcat5.5 /var/lib/tomcat5.5/logs
+ln -s /var/cache/tomcat5.5 /var/lib/tomcat5.5/work 
+cd $DL_DIR
+wget $URL_FREE/mysql-connector-java-5.1.6.tar.gz
+tar -xzf mysql-connector-java-5.1.6.tar.gz
+cp mysql-connector-java-5.1.6/mysql-connector-java-5.1.6-bin.jar /usr/share/tomcat5.5/common/lib
+chmod +x /usr/share/tomcat5.5/common/lib/mysql-connector-java-5.1.6-bin.jar
+
+sed -i "9s/#//" /etc/default/tomcat5.5
+sed -i "9s/\/usr\/lib\/jvm\/java-6-sun/\/usr\/lib\/jvm\/java-1.5.0-sun/" /etc/default/tomcat5.5
+sed -i "17s/#//" /etc/default/tomcat5.5
+sed -i "17s/-Djava.awt.headless=true -Xmx128M/-Djava.awt.headless=true -Xms512m -Xmx1024m -XX:PermSize=128m -XX:MaxPermSize=196m -XX:NewSize=192m -XX:MaxNewSize=384m/" /etc/default/tomcat5.5
+echo "#==============================================================================
+# OpenOffice Configuration
+
+# Set DISPLAY variable if you want OpenOffice to use a specific display
+export DISPLAY=\":1.0\"
+
+# If set this stops the recovery dialog prompting you as OO.o starts up
+# after a crash - instead the recovery files are just silently
+# accumulated.
+export OOO_DISABLE_RECOVERY=1
+
+export UNO_PATH=/usr/lib/openoffice/program/
+
+#==============================================================================
+" >> /etc/default/tomcat5.5
+
+cd $DL_DIR
+wget $URL_FREE/SCENARIserver_3.5.202_lin.tgz
+tar -xzf SCENARIserver_3.5.202_lin.tgz
+cd SCENARIserver3.5
+LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
+sed -i "s/\/var\/opt/$LAMPP_DIRECTORY_FOR_SED\/server/g"  build.property 
+sed -i "s/8080/8180/" build.property
+chmod +x buiWebApp.sh 
+./buiWebApp.sh
+cp SCENARIserver3.war /var/lib/tomcat5.5/webapps/
+mkdir $LAMPP_DIRECTORY/server/SCENARIserver3
+cp -r libext/*  /usr/share/tomcat5.5/common/lib/.
+cp -r data/* $LAMPP_DIRECTORY/server/SCENARIserver3/.
+sed -i "s/test/cooperation/" $LAMPP_DIRECTORY/server/SCENARIserver3/users/ac/admin/acdef.xml
+cat << EOT_XVFB >> /etc/init.d/xvfb
+#!/bin/sh
+# chkconfig: 345 91 10
+# description: Start/stop/restart the virtual frame buffer based X Server (Xvfb)
+#
+
+#==============================================================================
+# Configuration
+xvfb_path=/usr/bin/Xvfb
+xvfb_display=1
+killall_path=/usr/bin/killall
+#==============================================================================
+
+xvfb_start() {
+  if [ -x \$xvfb_path ]; then
+    echo "Starting Virtual Frame Buffer X Server (Xvfb)."
+    $xvfb_path :\$xvfb_display -screen 0 800x600x16 &
+  else
+    echo "Error: Could not find \$xvfb_path. Cannot start Xvfb."
+  fi
+}
+
+xvfb_stop() {
+  if [ -x \$killall_path ]; then
+    echo "Stopping Virtual Frame Buffer X Server (Xvfb)."
+    \$killall_path Xvfb 2> /dev/null
+  else
+    echo "Error: Could not find \$killall_path. Cannot stop Xvfb."
+  fi
+}
+
+case "\$1" in
+  'start')
+    xvfb_start
+    ;;
+  'stop')
+    xvfb_stop
+    ;;
+  'restart')
+    xvfb_stop
+    sleep 1
+    xvfb_start
+    ;;
+  *)
+    if [ -x /usr/bin/basename ]; then
+      echo "usage: `/usr/bin/basename \$0` start|stop|restart"
+    else
+      echo "usage: \$0 start|stop|restart"
+    fi
+esac
+EOT_XVFB
+update-rc.d xvfb defaults
+
+
+/etc/init.d/tomcat5.5 restart
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/cgi-bin/awstats.pl?config=$HOSTNAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/cgi-bin/awstats.pl?config=$HOSTNAME</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/cgi-bin/awstats.pl?config=$HOSTNAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/cgi-bin/awstats.pl?config=$HOSTNAME</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Awstats"
+INSTALL
+CREATE_WUI
+echo "I: End of install Awstats"
