@@ -1,0 +1,22 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Gcompris'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Update Manager'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$(cat /tmp/user)
+. /tmp/app_params
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+
+
+apt-get install --assume-yes --force-yes gcompris
+
+
