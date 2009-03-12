@@ -22,7 +22,7 @@ sed -i "s/\$(uname -r)/$kernel/" /sbin/lrm-manager
 
 mkdir /boot/grub
 apt-get update
-apt-get install --assume-yes --force-yes linux-image-$kernel linux-ubuntu-modules-$kernel linux-restricted-modules-$kernel
+apt-get install --assume-yes --force-yes linux-image-$kernel linux-restricted-modules-$kernel
 mv /sbin/lrm-manager.orig /sbin/lrm-manager
 
 sed -i "17s/^/#/" /var/lib/dpkg/info/grub.postinst
