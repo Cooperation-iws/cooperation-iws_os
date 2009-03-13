@@ -19,7 +19,16 @@ export HOME=/home/liveusb
 
 cp /sbin/lrm-manager /sbin/lrm-manager.orig
 sed -i "s/\$(uname -r)/$kernel/" /sbin/lrm-manager 
+mv /sbin/update-grub /sbin/update-grub.orig
+echo "#!/bin/bash
+exit 0" > /sbin/update-grub
+mv /usr/sbin/update-grub /usr/sbin/update-grub.orig
 
+echo "#!/bin/bash
+exit 0" > /usr/sbin/update-grub
+echo "aufs / aufs rw 0 0
+tmpfs /tmp tmpfs nosuid,nodev 0 0
+" > /etc/fstab
 mkdir /boot/grub
 apt-get update
 apt-get install --assume-yes --force-yes linux-image-$kernel linux-restricted-modules-$kernel
@@ -39,8 +48,8 @@ sed -i "1051s/^/#/" /var/lib/dpkg/info/linux-image-$kernel.postinst
 sed -i "1052s/^/#/" /var/lib/dpkg/info/linux-image-$kernel.postinst
 sed -i "1053s/^/#/" /var/lib/dpkg/info/linux-image-$kernel.postinst
 
-mv /sbin/update-grub /sbin/update-grub.orig
 echo "#!/bin/bash
 exit 0" > /sbin/update-grub
 apt-get -f install --assume-yes --force-yes
 mv /sbin/update-grub.orig /sbin/update-grub
+mv /usr/sbin/update-grub.orig /usr/sbin/update-grub
