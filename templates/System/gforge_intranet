@@ -6,9 +6,20 @@ generic_login_pwd="cooperation"
 apache_user="www-data"
 #DNS server lenny
 #kernel bigmem lenny upgrade
+kernel="2.6.26-1-686-bigmem"
 #update live-initramfs
 
 #Gforge Lenny
-smtp_postfix_client_relay="ciwsvn.cooperation-iws.intra"
+smtp_postfix_client_relay="administration.admin.intra"
 gforge_admin_email="admin.dev@cooperation-iws.intra"
+#Zabbix client 1.6
+zabbix_server_name="administration.admin.intra"
+#Syslog client lenny
+syslog_server_name="administration.admin.intra"
+#Snort2.8 client Intrepid
+snort_remote_name="Base"
+snort_registration_key=""
+snort_server_mysql_pwd=$generic_mysql_pwd
+snort_server_name="administration.admin.intra"
+snort_listening_interface="eth0"
 

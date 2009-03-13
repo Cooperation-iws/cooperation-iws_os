@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #kernel bigmem lenny upgrade
+kernel="2.6.26-1-686-bigmem"
 #update live-initramfs
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"

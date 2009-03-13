@@ -5,6 +5,7 @@ generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
 #kernel bigmem lenny upgrade
+kernel="2.6.26-1-686-bigmem"
 #update live-initramfs
 ###Cooperation-iws gui
 sphider_auto_index="y"
@@ -91,5 +92,5 @@ redmine_name="Redmine"
 #Libresource 2.5
 libresource_name="Libresource"
 libresource_psgsql_pwd="test"
-
+#Mercurial
 

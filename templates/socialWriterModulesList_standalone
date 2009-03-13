@@ -4,7 +4,9 @@ generic_admin_email="admin.local@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
-#Auto upgrade
+#kernel bigmem lenny upgrade
+kernel="2.6.26-1-686-bigmem"
+#update live-initramfs
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf

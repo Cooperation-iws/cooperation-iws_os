@@ -7,6 +7,7 @@ apache_user="www-data"
 #SSH Server
 #update live-initramfs
 #kernel bigmem lenny upgrade
+kernel="2.6.26-1-686-bigmem"
 #ssl
 
 ###Cooperation-iws gui

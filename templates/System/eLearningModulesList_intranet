@@ -1,10 +1,11 @@
 #!/bin/bash
-domain="claroline-elearning.intra"
+domain="elearning.intra"
 generic_admin_email="admin.local@admin.intra"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
 #kernel bigmem lenny upgrade
+kernel="2.6.26-1-686-bigmem"
 #update live-initramfs
 ###Cooperation-iws gui
 sphider_auto_index="y"
@@ -112,3 +113,27 @@ snort_server_mysql_pwd=$generic_mysql_pwd
 snort_server_name="administration.admin.intra"
 snort_listening_interface="eth0"
 #DNS server lenny
+#Agora
+nb_agora=1
+agora_mysql_pwd[1]=$generic_mysql_pwd
+agora_name[1]="Agora"
+agora_admin_email[1]=$generic_admin_email
+#Clickheat 1.8
+clickheat_name="Clickheat"
+#Dokeos 1.8.5
+nb_dokeos=1
+dokeos_mysql_pwd[1]=$generic_mysql_pwd
+dokeos_name[1]="Dokeos"
+dokeos_admin_email[1]=$generic_admin_email
+dokeos_videoconf="n"
+#Lodel 0.7.5
+nb_lodel=1
+lodel_mysql_pwd[1]=$generic_mysql_pwd
+lodel_name[1]="Lodel"
+lodel_admin_email[1]=$generic_admin_email
+#PhpmyResa 0.7.5
+nb_resa=1
+resa_mysql_pwd[1]=$generic_mysql_pwd
+resa_name[1]="Resa"
+resa_admin_email[1]=$generic_admin_email
+

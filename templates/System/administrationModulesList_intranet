@@ -5,7 +5,9 @@ generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"
 apache_user="www-data"
 #kernel bigmem lenny upgrade
+kernel="2.6.26-1-686-bigmem"
 #update live-initramfs
+#DNS server lenny
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf
@@ -55,4 +57,4 @@ phpsyslogng_name="Phpsyslogng"
 #Zabbix 1.6
 zabbix_name="zabbix"
 zabbix_mysql_pwd=$generic_mysql_pwd
-#DNS server lenny
+

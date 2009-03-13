@@ -7,4 +7,20 @@ domain="proxy.intra"
 #Havp
 havp_privoxy_forward="n"
 #SSH Server
+#kernel bigmem lenny upgrade
+kernel="2.6.26-1-686-bigmem"
+#Postfix Relay Client
+smtp_postfix_client_relay="administration.admin.intra"
+#Zabbix client 1.6
+zabbix_server_name="administration.admin.intra"
+#Syslog client lenny
+syslog_server_name="administration.admin.intra"
+#Snort2.8 client Intrepid
+snort_remote_name="Base"
+snort_registration_key=""
+snort_server_mysql_pwd=$generic_mysql_pwd
+snort_server_name="administration.admin.intra"
+snort_listening_interface="eth0"
+#Ossec 1.5.1 standalone
+ossec_report_address=$generic_admin_email
 
