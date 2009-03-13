@@ -817,8 +817,7 @@ class Reconstructor:
 		        print lblRemasterText
 		    if rootExists == False:
 		        print lblRootText
-	if workingDirOk== True :
-		 self.checkLiveCdVersion()
+	
         return workingDirOk
 
    
@@ -2066,7 +2065,7 @@ class Reconstructor:
 	# print status message
         statusMsgFinish = _('     <b>Finished.</b>     ')
         statusMsgISO = _('      <b>Finished.</b> ISO located at: ')
-        print "\033[1m "+ self.buildLiveCdFilename + "\033[0m\n"
+        print "\033[1m "+ statusMsgISO + "\033[0m\n"+ self.buildLiveCdFilename
 
         print "Build Complete..."
 
