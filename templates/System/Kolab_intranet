@@ -29,3 +29,6 @@ snort_server_mysql_pwd=$generic_mysql_pwd
 snort_server_name="administration.admin.intra"
 snort_listening_interface="eth0"
 #DNS server lenny
+#Flashplayer Lenny
+#Madwifi Lenny
+

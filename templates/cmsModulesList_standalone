@@ -7,6 +7,9 @@ apache_user="www-data"
 #kernel bigmem lenny upgrade
 kernel="2.6.26-1-686-bigmem"
 #update live-initramfs
+#Flashplayer Lenny
+#Madwifi Lenny
+#ssl
 ###Cooperation-iws gui
 sphider_auto_index="y"
 #Lampp conf

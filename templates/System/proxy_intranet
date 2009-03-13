@@ -23,4 +23,6 @@ snort_server_name="administration.admin.intra"
 snort_listening_interface="eth0"
 #Ossec 1.5.1 standalone
 ossec_report_address=$generic_admin_email
+#Flashplayer Lenny
+#Madwifi Lenny
 
