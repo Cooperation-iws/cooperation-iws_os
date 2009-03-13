@@ -136,7 +136,7 @@ echo "I: making initramfs"
 if [ "$(cat /tmp/kernel)" ]; then
 kernel="$(cat /tmp/kernel)"
 fi
-echo "building kernel"
+echo "building kernel $kernel"
 mkinitramfs -o /initrd.gz $kernel
 rm /vmlinuz
 cp /boot/vmlinuz-$kernel /vmlinuz

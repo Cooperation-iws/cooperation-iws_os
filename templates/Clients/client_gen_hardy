@@ -3,16 +3,24 @@
 #Ubuntu Multimedia Codecs
 #Multimedia Client
 #Cooperation-iws Liveusb 0.4
-#Virtualbox-prop Intrepid
+#Virtualbox-ose
+#Auto upgrade
+#kernel upgrade
 #SSH Server
+#Qtparted
 #Ntfs-config
 #Office client
 #Wine windows emulator
+#languages support
 #Remastersys fix
-#mixxx
+#Ubuntu Multimedia Codecs
+#Multimedia Client
+#Cooperation-iws Liveusb 0.4
+#eeebox hack
+#install live-initramfs Hardy
+kernel="2.6.24-23-generic"
 #Tor Privoxy Intrepid
 #Havp
 havp_privoxy_forward="n"
 #Truecrypt client
 #Clamtk client
-#sound-juicer
