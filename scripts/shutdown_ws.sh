@@ -51,6 +51,14 @@ sed -i -e "1297s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER
 sed -i -e "1306s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "14s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "16s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+
+sed -i "138G" /usr/share/initramfs-tools/scripts/live
+sed -i "138G" /usr/share/initramfs-tools/scripts/live
+sed -i '139s/^/LOCALE="${KBD}"/' /usr/share/initramfs-tools/scripts/live
+sed -i '140s/^/export LOCALE/' /usr/share/initramfs-tools/scripts/live
+
+
+				
 fi
 fi
 

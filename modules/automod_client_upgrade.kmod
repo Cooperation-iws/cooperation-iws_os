@@ -10,7 +10,7 @@ RMOD_DESCRIPTION='Update Manager'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 LIVEUSER=$(cat /tmp/user)
-
+. /tmp/app_params
 DISPLAY=127.0.0.1:5.0
 export LANG="en"
 export LC_ALL=C
@@ -46,14 +46,14 @@ mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
 echo "localhost.localdomain" > /etc/hostname.orig
 
 #Hardy hal hack
-sed "80s/^/#/" /var/lib/dpkg/info/hal.postinst
-sed "81s/^/#/" /var/lib/dpkg/info/hal.postinst
-sed "82s/^/#/" /var/lib/dpkg/info/hal.postinst
-sed "83s/^/#/" /var/lib/dpkg/info/hal.postinst
-sed "84s/^/#/" /var/lib/dpkg/info/hal.postinst
-sed "85s/^/#/" /var/lib/dpkg/info/hal.postinst
-sed "86s/^/#/" /var/lib/dpkg/info/hal.postinst
-sed "87s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed -i  "80s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed -i  "81s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed -i  "82s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed -i  "83s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed -i  "84s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed -i  "85s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed -i  "86s/^/#/" /var/lib/dpkg/info/hal.postinst
+sed -i  "87s/^/#/" /var/lib/dpkg/info/hal.postinst
 sed -i "17s/^/#/" /var/lib/dpkg/info/grub.postinst
 sed -i "18s/^/#/" /var/lib/dpkg/info/grub.postinst
 sed -i "19s/^/#/" /var/lib/dpkg/info/grub.postinst
