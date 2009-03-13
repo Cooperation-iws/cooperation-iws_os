@@ -90,37 +90,65 @@ cp -r Dictionnary/* $WWW_DIRECTORY/$MOD_NAME/.
 cat << EOT > /etc/init.d/jdictd
 #!/bin/bash
 #
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+NAME=jdictd-daemon
+PIDFILE=/var/run/\$NAME.pid
+DESC="the jdictd daemon"
+DAEMON="java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini "
+DAEMON_OPTS=""
+test -x \$DAEMON || exit 0
 
-PIDFILE=/var/run/jdictd.pid
-
+[ -r /etc/default/jdictd-daemon ] && . /etc/default/jdictd-daemon
+. /lib/lsb/init-functions
 set -e
+start_jdictd() {
+	cd $WWW_DIRECTORY/$MOD_NAME
+	start-stop-daemon --start --quiet --pidfile \$PIDFILE --startas \$DAEMON -- \$DAEMON_OPTS
+}
 
+stop_jdictd() {
+	start-stop-daemon --stop --quiet --pidfile \$PIDFILE 
+	rm -f \$PIDFILE
+}
+
+status_jdictd() {
+	start-stop-daemon --stop --test --quiet --pidfile \$PIDFILE >/dev/null 2>&1
+}
 case "\$1" in
-    start)
-    if [ -f \$PIDFILE ]; then
-      echo "Jdictd server has already started."
-      sleep 5
-      exit
-    fi
-      echo "Starting Jdictd server"
-        cd $WWW_DIRECTORY/$MOD_NAME
-	java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini & > /dev/null 2>&1
-      touch \$PIDFILE
-    ;;
-    stop)
-    if [ -f \$PIDFILE ]; then
-      echo "Stopping Jdictd server."
-      #killall -9 soffice && killall -9 soffice.bin
-      #rm -f \$PIDFILE
-      exit
-    fi
-      echo "Jdictd server is not running."
-      exit
-    ;;
-    *)
-    echo "Usage: \$0 {start|stop}"
-    exit 1
+  start)
+	log_begin_msg "Starting \$DESC"
+	start_jdictd
+	log_end_msg 0
+	;;
+  stop)
+	log_begin_msg "Stopping \$DESC"
+	stop_jdictd
+	log_end_msg 0
+	;;
+  status)
+	log_begin_msg "Testing \$DESC: "
+	if status_jdictd
+	then
+		log_success_msg "Running"
+		exit 0
+	else
+		log_failure_msg "Not running"
+		exit 1
+	fi
+	;;
+  restart|force-reload)
+	log_begin_msg "Restarting \$DESC"
+	stop_jdictd
+	sleep 1
+	start_jdictd
+	log_end_msg 0
+	;;
+  *)
+	echo "Usage: \$0 {start|stop|restart|force-reload|status}" >&2
+	exit 1
+	;;
 esac
+
 exit 0
 EOT
 

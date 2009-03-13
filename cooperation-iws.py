@@ -267,7 +267,7 @@ class Reconstructor:
                     dest="password", default="" ,
                     help="User Admin Password")
 	parser.add_option( "--host", 
-                    dest="host", default="ciws-host" ,
+                    dest="host", default="" ,
                     help="Host Name")
 	parser.add_option( "--keyblang", 
                     dest="keyblang", default="" ,

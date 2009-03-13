@@ -22,8 +22,7 @@ if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
 fi
 
-echo "I: configuring sources.list"
-mv /etc/apt/sources.list.orig /etc/apt/sources.list
+
 
 if [ "$(echo "${OS_TYPE}" | awk  '{print $1}')" == "Server" ]; then
 echo "I: configuring $CASPER_PATH"
