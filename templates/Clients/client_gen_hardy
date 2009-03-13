@@ -24,3 +24,7 @@ kernel="2.6.24-23-generic"
 havp_privoxy_forward="n"
 #Truecrypt client
 #Clamtk client
+#Gimp client
+#inkscape client
+#latex client
+#Le Littre
