@@ -1,0 +1,43 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='kernel upgrade intrepid'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Update Manager'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$(cat /tmp/user)
+
+DISPLAY=127.0.0.1:5.0
+export LANG="en"
+export LC_ALL=C
+export HOME=/home/liveusb
+
+mkdir /boot/grub
+apt-get update
+apt-get install --assume-yes --force-yes linux-generic linux-image-generic linux-restricted-modules-generic
+
+echo "2.6.27-11-generic" > /tmp/kernel
+
+sed -i "17s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "18s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "19s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "20s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "21s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "22s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "23s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "24s/^/#/" /var/lib/dpkg/info/grub.postinst
+sed -i "1049s/^/#/" /var/lib/dpkg/info/linux-image-$kernel.postinst
+sed -i "1050s/^/#/" /var/lib/dpkg/info/linux-image-$kernel.postinst
+sed -i "1051s/^/#/" /var/lib/dpkg/info/linux-image-$kernel.postinst
+sed -i "1052s/^/#/" /var/lib/dpkg/info/linux-image-$kernel.postinst
+sed -i "1053s/^/#/" /var/lib/dpkg/info/linux-image-$kernel.postinst
+
+mv /sbin/update-grub /sbin/update-grub.orig
+echo "#!/bin/bash
+exit 0" > /sbin/update-grub
+apt-get -f install --assume-yes --force-yes
+mv /sbin/update-grub.orig /sbin/update-grub
