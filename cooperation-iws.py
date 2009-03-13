@@ -1215,97 +1215,97 @@ class Reconstructor:
 		self.casperPath = 'casper'	
 		self.debDist= 'intrepid'
 		self.distVariant = 'edubuntu_8.10'		
-		print "Edubuntu 8.10 Live CD"	
+		print "\033[1m Edubuntu 8.10 Live CD\033[0m\n"	
 	    elif  self.isoType == "eeebuntu_8.10":
 		self.casperPath = 'casper'	
 		self.debDist= 'intrepid'
 		self.distVariant = 'eeebuntu_8.10'		
-		print "Eeebuntu 8.10 Live CD" 
+		print "\033[1m Eeebuntu 8.10 Live CD\033[0m\n" 
 	    elif  self.isoType == "studio_8.10":
 		self.casperPath = 'casper'	
 		self.debDist= 'intrepid'
 		self.distVariant = 'studio_8.10'		
-		print "Ubuntu Studio 8.10 Live CD" 
+		print "\033[1m Ubuntu Studio 8.10 Live CD\033[0m\n" 
 	    elif  self.isoType == "netbook-remix_8.10":
 		self.casperPath = 'casper'	
 		self.debDist= 'intrepid'
 		self.distVariant = 'netbook-remix_8.10'		
-		print "Netbook remix 8.10 Live CD"
+		print "\033[1m Netbook remix 8.10 Live CD\033[0m\n"
 	    elif  self.isoType == "nubuntu_8.10":
 		self.casperPath = 'casper'	
 		self.debDist= 'intrepid'
 		self.distVariant = 'nubuntu_8.10'		
-		print "Nbuntu8.10 Live CD"
+		print "\033[1m Nbuntu8.10 Live CD\033[0m\n"
 	    elif  self.isoType == "maryan_8.04.1":
 		self.casperPath = 'casper'	
 		self.debDist= 'hardy'
 		self.distVariant = 'maryan_8.04.1'		
-		print "Maryan 8.10 Live CD"	
+		print "\033[1m Maryan 8.10 Live CD\033[0m\n"	
 	    elif  self.isoType == "opengeu_8.04.1":
 		self.casperPath = 'casper'	
 		self.debDist= 'hardy'
 		self.distVariant = 'opengeu_8.04.1'		
-		print "Opengeu 8.04.1 Live CD"
+		print "\033[1m Opengeu 8.04.1 Live CD\033[0m\n"
             elif  self.isoType == "ozos-0.9":
 		self.casperPath = 'casper'	
 		self.debDist= 'hardy'
 		self.distVariant = 'ozos-0.9'		
-		print "Ozos 0.9 Live CD"
+		print "\033[1m Ozos 0.9 Live CD\033[0m\n"
             elif  self.isoType == "poseidon-3.1":
 		self.casperPath = 'casper'	
 		self.debDist= 'hardy'
 		self.distVariant = 'poseidon-3.1'		
-		print "Poseidon 3.1 Live CD"		
+		print "\033[1m Poseidon 3.1 Live CD\033[0m\n"		
 	    elif os.path.exists(os.path.join(self.customDir, "remaster/boot/grub")) and commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/boot/grub/menu.lst") + '| grep \'Webconverger\'') != '':
 		self.casperPath = 'live'
 		self.debDist= 'lenny'
 		self.distVariant = 'webconverger'	
-		print "Webconverger Live CD"
+		print "\033[1m Webconverger Live CD\033[0m\n"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' | grep \'Elyssa\'') != '':
 		self.casperPath = 'casper'
 		self.debDist = 'hardy'
 		self.distVariant = 'mint'			
-		print "Linux Mint 5 Elyssa"
+		print "\033[1m Linux Mint 5 Elyssa\033[0m\n"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' | grep \'nUbuntu\'') != '' and commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '':
 		self.casperPath = 'casper'
 		self.debDist = 'hardy'
 		self.distVariant = 'nUbuntu'			
-		print "nUbuntu 8.04"
+		print "\033[1m  nUbuntu 8.04\033[0m\n"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'etch\'') != '':
 		self.casperPath = 'casper'
 		self.debDist= 'etch'
 		self.distVariant = 'etch'			
-		print "Debian Etch Live CD"
+		print "\033[1m Debian Etch Live CD\033[0m\n"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'20070727\'') != '':
 		self.casperPath = 'casper'
 		self.debDist= 'studio64'
 		self.distVariant = 'studio64'			
-		print "Studio 64 Live CD"
+		print "\033[1m Studio 64 Live CD\033[0m\n"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '' or commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'hardy\'') != '':
 		self.casperPath = 'casper'	
 		self.debDist= 'hardy'
 		self.distVariant = 'hardy'		
-		print "Ubuntu 8.04 Live CD"
+		print "\033[1m Ubuntu 8.04 Live CD\033[0m\n"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.10\'') != '':
 		self.casperPath = 'casper'	
 		self.debDist= 'intrepid'
 		self.distVariant = 'intrepid'		
-		print "Ubuntu 8.10 Live CD"
+		print "\033[1m Ubuntu 8.10 Live CD\033[0m\n"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'lenny\'') != '':
 		self.casperPath = 'live'
 		self.debDist= 'lenny'
 		self.distVariant = 'lenny'	
-		print "Debian Lenny Live CD"
+		print "Debian Lenny Live CD\033[0m\n"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + '| grep \'vyatta\'') != '':
 		self.casperPath = 'live'
 		self.debDist= 'lenny'
 		self.distVariant = 'vyatta'	
-		print "Vyatta Live CD"
+		print "\033[1m Vyatta Live CD\033[0m\n"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'sid\'') != '':	    	
 		self.debDist= 'sid'			
 		self.casperPath = 'live'
 		self.distVariant = 'sid'
-		print "Debian Sid Live CD"
+		print "\033[1m Debian Sid Live CD\033[0m\n"
 	    	
 	    else:
 		print "Live CD not detected, Aborting"
@@ -1402,8 +1402,7 @@ class Reconstructor:
             # unmount iso/cd-rom
             os.popen("umount " + self.mountDir)
 	
-	    #Identify Live CD
-	    self.checkLiveCdVersion()
+	    
 	
         # custom root dir
         if self.createCustomRoot == True:
@@ -1628,6 +1627,7 @@ class Reconstructor:
 		os.popen('sed -i "s/splash/splash union=aufs/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
 		
 	if self.casperPath == 'live' or self.casperPathUpdated == "live":
+		os.popen('sed -i "s/vmlinuz1/vmlinuz/g" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg")) 
 		os.popen('sed -i "s/initrd=\/'+self.casperPath+'\/initrd1.img/initrd=\/'+self.casperPathUpdated+'\/initrd.gz keyb='+self.keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg")) 
 		os.popen('echo '+self.keyLang+' > ' + os.path.join(self.customDir, "chroot/tmp/keyblang") )
 	#XNEST
@@ -2066,7 +2066,7 @@ class Reconstructor:
 	# print status message
         statusMsgFinish = _('     <b>Finished.</b>     ')
         statusMsgISO = _('      <b>Finished.</b> ISO located at: ')
-        
+        print "\033[1m "+ self.buildLiveCdFilename + "\033[0m\n"
 
         print "Build Complete..."
 
