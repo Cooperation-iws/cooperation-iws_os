@@ -1334,7 +1334,6 @@ class Reconstructor:
 				self.setupDebianLive()           		
 			else:
 				self.setupWorkingDirectory()
-		self.checkLiveCdVersion()
 		self.cmdLoadModules()
 		os.popen("cp "+self.moduleFilename + " " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
 		os.popen("chmod +x " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
@@ -1402,7 +1401,8 @@ class Reconstructor:
             os.popen("umount " + self.mountDir)
 	
 	    
-	
+	self.checkLiveCdVersion()
+
         # custom root dir
         if self.createCustomRoot == True:
             #if os.path.exists(os.path.join(self.customDir, "root")):

@@ -18,9 +18,9 @@ TMPUSER=$(cat /tmp/tmp_user)
 DEB_DIST=$(cat /tmp/deb_dist)
 
 SILENT=$(cat /tmp/silent)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+
 . /tmp/app_params
-fi
+
 
 
 
@@ -132,18 +132,14 @@ apt-get update
 
 
 echo "I: making initramfs"
-KERNEL=$(ls /lib/modules) 
-KERNEL=(${KERNEL[@]})
-NB_KERNEL=$(ls /lib/modules | wc -l)
-NB_KERNEL=$(expr $NB_KERNEL-1)
+
 if [ "$(cat /tmp/kernel)" ]; then
-KERNEL[0]="$(cat /tmp/kernel)"
-NB_KERNEL=0
+kernel="$(cat /tmp/kernel)"
 fi
-echo "building ${KERNEL[$NB_KERNEL]}"
-mkinitramfs -o /initrd.gz ${KERNEL[$NB_KERNEL]}
+echo "building kernel"
+mkinitramfs -o /initrd.gz $kernel
 rm /vmlinuz
-cp /boot/vmlinuz-${KERNEL[$NB_KERNEL]} /vmlinuz
+cp /boot/vmlinuz-$kernel /vmlinuz
 
 
 echo "I: Removing chroot user"
