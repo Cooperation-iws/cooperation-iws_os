@@ -22,13 +22,12 @@ sed -i "s/\$(uname -r)/$kernel/" /sbin/lrm-manager
 mv /sbin/update-grub /sbin/update-grub.orig
 echo "#!/bin/bash
 exit 0" > /sbin/update-grub
+chmod +x /sbin/update-grub
 mv /usr/sbin/update-grub /usr/sbin/update-grub.orig
 
 echo "#!/bin/bash
 exit 0" > /usr/sbin/update-grub
-echo "aufs / aufs rw 0 0
-tmpfs /tmp tmpfs nosuid,nodev 0 0
-" > /etc/fstab
+chmod +x /usr/sbin/update-grub
 mkdir /boot/grub
 apt-get update
 apt-get install --assume-yes --force-yes linux-image-$kernel linux-restricted-modules-$kernel

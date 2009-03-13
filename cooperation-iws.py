@@ -2064,7 +2064,7 @@ class Reconstructor:
 		
 	# print status message
         statusMsgFinish = _('     <b>Finished.</b>     ')
-        statusMsgISO = _('      <b>Finished.</b> ISO located at: ')
+        statusMsgISO = _('      Finished. ISO located at: ')
         print "\033[1m "+ statusMsgISO + "\033[0m\n"+ self.buildLiveCdFilename
 
         print "Build Complete..."
