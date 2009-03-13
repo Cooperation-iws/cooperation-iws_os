@@ -1209,7 +1209,7 @@ class Reconstructor:
 
     #detect Live CD version
     def checkLiveCdVersion(self):
-		
+	    print "Live CD type is:"
             if  self.isoType == "edubuntu_8.10":
 		self.casperPath = 'casper'	
 		self.debDist= 'intrepid'
