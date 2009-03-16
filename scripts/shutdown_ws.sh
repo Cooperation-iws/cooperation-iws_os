@@ -52,10 +52,10 @@ sed -i -e "1306s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER
 sed -i -e "14s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 sed -i -e "16s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
 
-sed -i "138G" /usr/share/initramfs-tools/scripts/live
-sed -i "138G" /usr/share/initramfs-tools/scripts/live
-sed -i '139s/^/LOCALE="${KBD}"/' /usr/share/initramfs-tools/scripts/live
-sed -i '140s/^/export LOCALE/' /usr/share/initramfs-tools/scripts/live
+sed -i "137G" /usr/share/initramfs-tools/scripts/live
+sed -i "137G" /usr/share/initramfs-tools/scripts/live
+sed -i '138s/^/LOCALE="${KBD}"/' /usr/share/initramfs-tools/scripts/live
+sed -i '139s/^/export LOCALE/' /usr/share/initramfs-tools/scripts/live
 
 
 				
@@ -136,6 +136,8 @@ fi
 if [ "$(echo "$DEBNONFREE_MIRROR_PATH" | grep 'medibuntu.org')" ]; then
 wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key add -
 fi
+rm /etc/apt/sources.list.d/*
+echo "" > /var/log/dpkg.log
 apt-get update
 
 
