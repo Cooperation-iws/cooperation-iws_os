@@ -70,9 +70,6 @@ bugzilla_admin_pwd[1]=$generic_login_pwd
 #Redmine 0.8.1
 redmine_mysql_pwd=$generic_mysql_pwd
 redmine_name="Redmine"
-#Libresource 2.5
-libresource_name="Libresource"
-libresource_psgsql_pwd=$generic_mysql_pwd
 #Lilina 1.0
 nb_lilina=1
 lilina_name[1]="Lilina"

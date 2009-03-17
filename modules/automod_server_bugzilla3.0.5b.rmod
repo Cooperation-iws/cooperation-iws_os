@@ -69,7 +69,7 @@ apt-get install  --assume-yes --force-yes  apache2 libapache2-mod-perl2 libtempl
                 libappconfig-perl libdbd-mysql-perl libtimedate-perl \
                 libgd-gd2-perl libgd-text-perl libxml-twig-perl perlmagick \
                 libemail-send-perl libemail-mime-modifier-perl libchart-perl \
-                libgd-graph-perl libhtml-scrubber-perl 
+                libgd-graph-perl libhtml-scrubber-perl libcgi-pm-perl 
 for (( count=1; count<=$NB_BUGZILLA; count++ ))
 do
 cd $DL_DIR
@@ -89,16 +89,19 @@ sed -i -e "s/^\$db_name = 'Bugzilla';/\$db_name = '${MOD_NAME[$count]}';/" \
        -e "s/^\$db_user = 'Bugzilla';/\$db_user = '${MOD_NAME[$count]}';/" \
        -e "s/^\$db_pass = 'mysql_pwd';/\$db_pass = '${BUGZILLA_MYSQL_PWD[$count]}';/" $WWW_DIRECTORY/${MOD_NAME[$count]}/localconfig
 sed -i -e "s/^\$webservergroup = '.*';/\$webservergroup = 'www-data';/" $WWW_DIRECTORY/${MOD_NAME[$count]}/localconfig
+cd $WWW_DIRECTORY/${MOD_NAME[$count]}
 ./checksetup.pl
-cat << EOT_BUG >> /etc/apache2/conf.d/bugzilla_$count
-  <Directory "/var/www/'${MOD_NAME[$count]}'">
+cat << EOT_BUGZILLA > /etc/apache2/conf.d/bugzilla_$count
+  <Directory "/var/www/${MOD_NAME[$count]}">
     Options +ExecCGI
     AllowOverride Limit
     DirectoryIndex index.cgi
     AddHandler cgi-script .cgi
   </Directory>
-EOT_BUG 
+EOT_BUGZILLA
 /etc/init.d/apache2 reload
+echo "UPDATE ${MOD_NAME[$count]}.profiles SET login_name = '${bugzilla_admin_email[$count]}' WHERE profiles.userid =1 LIMIT 1 ;" > bugzilla_credentials.sql
+$BIN_MYSQL -u root < bugzilla_credentials.sql
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 done

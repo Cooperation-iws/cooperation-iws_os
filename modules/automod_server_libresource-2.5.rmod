@@ -31,6 +31,7 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
+HOSTNAME=$(cat /tmp/hostname)
 
 
 LIBRESOURCE_PSGSQL_PWD=$libresource_psgsql_pwd
@@ -86,11 +87,13 @@ ALTER USER postgres WITH ENCRYPTED PASSWORD '$LIBRESOURCE_PSGSQL_PWD';
 sudo -u postgres psql postgres < libresource_db.sql
 
 sed -i "2s/libresource/$MOD_NAME/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
+sed -i "29s/localhost/$HOSTNAME.$domain/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
 sed -i "4s/postgres/$LIBRESOURCE_PSGSQL_PWD/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
 LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
 sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceConfig.properties
 sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/start.sh
 sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/stop.sh
+sed -i "s/ident sameuser/trust/g" /etc/postgresql/8.3/main/pg_hba.conf
 
 sleep 3
 
@@ -155,15 +158,15 @@ case "\$1" in
       
     fi
       log_begin_msg "Starting Tigase server"
-      \$tigase_HOME/start-tigase.sh & > /dev/null 2>&1
+      nohup \$tigase_HOME/start-tigase.sh & > /dev/null 2>&1
       touch \$PIDFILE
       log_end_msg 0
     ;;
     stop)
     if [ -f \$PIDFILE ]; then
       log_begin_msg "Stopping Tigase server."
-	rm -f \$PIDFILE
-      \$tigase_HOME/stop.sh & > /dev/null 2>&1
+      rm -f \$PIDFILE
+      nohup \$tigase_HOME/stop.sh & > /dev/null 2>&1
       log_end_msg 0
       exit
     fi
@@ -211,10 +214,10 @@ function CREATE_WUI
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url><![CDATA[http://localhost:8999]]></item_url>
+	<item_url><![CDATA[http://localhost:9000]]></item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url><![CDATA[http://localhost:8999]]></item_admin_url>
+	<item_admin_url><![CDATA[http://localhost:9000]]></item_admin_url>
 	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/nuxeo start</item_init_start>
 	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
 </item>
@@ -225,10 +228,10 @@ echo "
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url><![CDATA[http://localhost:8999]]></item_url>
+	<item_url><![CDATA[http://localhost:9000]]></item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url><![CDATA[http://localhost:8999]]></item_admin_url>
+	<item_admin_url><![CDATA[http://localhost:9000]]></item_admin_url>
 	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/nuxeo start</item_init_start>
 	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
 </item>

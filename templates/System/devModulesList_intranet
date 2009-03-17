@@ -94,6 +94,6 @@ redmine_mysql_pwd=$generic_mysql_pwd
 redmine_name="Redmine"
 #Libresource 2.5
 libresource_name="Libresource"
-libresource_psgsql_pwd="test"
+libresource_psgsql_pwd=$generic_mysql_pwd
 #Mercurial
 

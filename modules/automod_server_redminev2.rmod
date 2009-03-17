@@ -215,8 +215,9 @@ REDMINE_URL="redmine.$domain"
 echo "10 * * * * root ruby $LAMPP_DIRECTORY/var/$MOD_NAME/extra/svn/reposman.rb --redmine redmine.$domain --svn-dir $LAMPP_DIRECTORY/var/svn_redmine --owner www-data --url http://localhost/svn_redmine/" > /etc/cron.d/redmine
 chmod +x /etc/cron.d/redmine
 REDMINE_URL="<![CDATA[http://redmine.$domain]]>"
+echo "redmine    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
 else
-echo "10 * * * * root ruby $LAMPP_DIRECTORY/var/$MOD_NAME/extra/svn/reposman.rb --redmine http://localhost:9000 --svn-dir $LAMPP_DIRECTORY/var/svn_redmine --owner www-data --url http://localhost/svn_redmine/" > /etc/cron.d/redmine
+echo "10 * * * * root ruby $LAMPP_DIRECTORY/var/$MOD_NAME/extra/svn/reposman.rb --redmine http://localhost:19000 --svn-dir $LAMPP_DIRECTORY/var/svn_redmine --owner www-data --url http://localhost/svn_redmine/" > /etc/cron.d/redmine
 chmod +x /etc/cron.d/redmine
 REDMINE_URL="<![CDATA[http://localhost:19000]]>"
 fi

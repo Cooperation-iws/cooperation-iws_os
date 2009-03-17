@@ -84,7 +84,7 @@ sed -i "s/mysql_pwd/${DOTPROJECT_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[
 
 echo "UPDATE ${MOD_NAME[$count]}.contacts SET contact_email = '${dotproject_admin_email[$count]}' WHERE contacts.contact_id =1 LIMIT 1 ;" > dotproject_credentials.sql
 $BIN_MYSQL -u root < dotproject_credentials.sql
-chown -R www-data $WWW_DIRECTORY/$MOD_NAME[$count]/
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 
 done
 }

@@ -168,15 +168,15 @@ cat << EOT_IDF_CONF >  $LAMPP_DIRECTORY/var/indefero/src/IDF/conf/idf.php
 #
 #
 \$cfg['idf_base'] = "/${MOD_NAME}/index.php";
-\$cfg['url_base'] = 'http://'.\$_SERVER["SERVER_NAME"].'/';
+\$cfg['url_base'] = "/";
 
 # Url to access the media folder which is in the www folder 
 # of the archive
-\$cfg['url_media'] = 'http://'.\$_SERVER["SERVER_NAME"]."/${MOD_NAME}/media";
+\$cfg['url_media'] = "/${MOD_NAME}/media";
 
 # Url to access a folder in which the files you upload through
 # the downloads tab will be stored.
-\$cfg['url_upload'] = 'http://'.\$_SERVER["SERVER_NAME"]."/${MOD_NAME}/media/upload";
+\$cfg['url_upload'] = "/${MOD_NAME}/media/upload";
 # Path to the upload folder
 \$cfg['upload_path'] = "/var/www/${MOD_NAME}/media/upload";
 
@@ -231,12 +231,12 @@ cat << EOT_IDF_CONF >  $LAMPP_DIRECTORY/var/indefero/src/IDF/conf/idf.php
 # -- From this point you should not need to update anything. --
 \$cfg['pear_path'] = '/usr/share/php';
 
-\$cfg['login_success_url'] = \$cfg['url_base'].\$cfg['idf_base'];
-\$cfg['after_logout_page'] = \$cfg['url_base'].\$cfg['idf_base'];
+\$cfg['login_success_url'] = "/${MOD_NAME}/index.php";
+\$cfg['after_logout_page'] = "/${MOD_NAME}/index.php";
 
 # Caching of the scm commands.
 \$cfg['cache_engine'] = 'Pluf_Cache_File';
-\$cfg['cache_timeout'] = 300;
+\$cfg['cache_timeout'] = 0;
 \$cfg['cache_file_folder'] = \$cfg['tmp_folder'].'/cache';
 
 # The folder in which the templates of the application are located.
