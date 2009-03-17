@@ -150,8 +150,8 @@ usermod -u501 ossec
 usermod -u502 ossecm
 usermod -u503 ossecr
 #./install.sh
-grep -q '^ossec' /etc/group && sed -i -e "/^ossec/s/$/$apache_user/" /etc/group
-
+#grep -q '^ossec' /etc/group && sed -i -e "/^ossec/s/$/$apache_user/" /etc/group
+usermod -a -G ossec www-data
 
 cat /etc/gdm/gdm.conf | sed -i -e "s/Exclude=nobody/Exclude=nobody,ossec,ossecm,ossecr/" /etc/gdm/gdm.conf
 
@@ -174,28 +174,33 @@ cat << EOT > /etc/init.d/ossec
 #!/bin/bash
 
 PIDFILE=/var/run/ossec.pid
+. /lib/lsb/init-functions
 
 set -e
 
 case "\$1" in
     start)
     if [ -f \$PIDFILE ]; then
-      echo "Ossec server has already started."
+      log_begin_msg "Ossec server has already started."
       sleep 5
+      log_end_msg 0
       exit
     fi
-      echo "Starting Ossec server"
-      /var/ossec/bin/ossec-control start & > /dev/null 2>&1
+      log_begin_msg "Starting Ossec server"
+      nohup /var/ossec/bin/ossec-control start 1>&2 2>/dev/null &
       touch \$PIDFILE
+      log_end_msg 0
     ;;
     stop)
     if [ -f \$PIDFILE ]; then
-      echo "Stopping Ossec server."
-      /var/ossec/bin/ossec-control stop & > /dev/null 2>&1
+      log_begin_msg "Stopping Ossec server."
+      nohup /var/ossec/bin/ossec-control stop 1>&2 2>/dev/null &
       rm -f \$PIDFILE
+      log_end_msg 0
       exit
     fi
-      echo "Ossec server is not running."
+      log_begin_msg "Ossec server is not running."
+      log_end_msg 0
       exit
     ;;
     *)

@@ -84,7 +84,7 @@ sed -i -e "s/Piwigo/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/in
 sed -i -e "s/PIWIGO_MYSQL_PWD/${PIWIGO_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/include/mysql.inc.php
 
 echo "
-UPDATE ${MOD_NAME[$count]}.piwigo_users SET username = '${piwigo_admin_email[$count]}' WHERE piwigo_users.id =1 LIMIT 1 ;
+UPDATE ${MOD_NAME[$count]}.piwigo_users SET mail_address = '${piwigo_admin_email[$count]}' WHERE piwigo_users.id =1 LIMIT 1 ;
 " > piwigo_credentials.sql
 $BIN_MYSQL -u root < piwigo_credentials.sql
 

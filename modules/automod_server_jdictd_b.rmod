@@ -103,16 +103,18 @@ test -x \$DAEMON || exit 0
 set -e
 start_jdictd() {
 	cd $WWW_DIRECTORY/$MOD_NAME
-	start-stop-daemon --start --quiet --pidfile \$PIDFILE --startas \$DAEMON -- \$DAEMON_OPTS
+	java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini & echo \$! >\$PIDFILE
+
 }
 
 stop_jdictd() {
-	start-stop-daemon --stop --quiet --pidfile \$PIDFILE 
-	rm -f \$PIDFILE
+	 pid="\$(<\$PIDFILE)"
+	 kill \$pid || return 1
+         rm -f \$PIDFILE
 }
 
 status_jdictd() {
-	start-stop-daemon --stop --test --quiet --pidfile \$PIDFILE >/dev/null 2>&1
+	echo "Not implemented"
 }
 case "\$1" in
   start)

@@ -31,7 +31,7 @@ Terminal=false
 Icon[fr_BE]=gnome-panel-launcher
 Name[fr_BE]=Live usb installer
 Exec=/usr/bin/liveusb
-Icon=ubiquity
+Icon=gparted
 GenericName[fr_BE]=
 EOT
 

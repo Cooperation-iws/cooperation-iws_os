@@ -361,8 +361,10 @@ plugin {
 EOT
 mkdir $LAMPP_DIRECTORY/var/sieve-scripts
 cd $LAMPP_DIRECTORY/var
-apt-get install -f --assume-yes --force-yes git-core curl python-mysqldb
-git clone http://woozle.org/~neale/repos/pysieved
+apt-get install -f --assume-yes --force-yes curl python-mysqldb
+wget  $URL_FREE/pysieved-090317.tar.gz
+tar -xzf pysieved-090317.tar.gz
+rm pysieved-090317.tar.gz
 sed -i "s/dbuser = user/dbuser = $NOM_MAILSERVER/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
 sed -i "s/dbname = db/dbname = $NOM_MAILSERVER/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
 sed -i "s/dbpass = pass/dbpass = $MAILSERVER_MYSQL_PWD/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
@@ -437,10 +439,10 @@ postalias /etc/aliases
 echo "
 #Postfix hack
 postalias /etc/aliases
-rm /var/vmail/*/*/dovecot.index.log
-rm /var/vmail/*/*/.INBOX.Trash/dovecot.index.log
-rm /var/vmail/*/*/.INBOX.Sent/dovecot.index.log
-rm /var/vmail/*/*/.INBOX.Drafts/dovecot.index.log
+rm /var/vmail/*/*/dovecot.index.log 1>&2 2>/dev/null
+rm /var/vmail/*/*/.INBOX.Trash/dovecot.index.log 1>&2 2>/dev/null
+rm /var/vmail/*/*/.INBOX.Sent/dovecot.index.log 1>&2 2>/dev/null
+rm /var/vmail/*/*/.INBOX.Drafts/dovecot.index.log 1>&2 2>/dev/null
 /etc/init.d/postfix restart
 /etc/init.d/mailscanner restart
 /etc/init.d/dovecot restart
@@ -2779,6 +2781,7 @@ ln -s $LAMPP_DIRECTORY/etc/dovecot /etc/dovecot
 
 freshclam
 
+sed -i "s/ENABLED=0/ENABLED=1/" /etc/default/spamassassin
 
 #Fix time move backwards error
 apt-get remove --assume-yes --force-yes ntpdate

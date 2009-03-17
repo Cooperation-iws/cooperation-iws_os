@@ -18,3 +18,5 @@ cd $DL_DIR
 wget $URL_FREE/madwifi-modules-2.6.26-1-686-bigmem_0.9.4+r3772.20080716-1+2.6.26-13_i386.deb
 
 dpkg -i madwifi-modules-2.6.26-1-686-bigmem_0.9.4+r3772.20080716-1+2.6.26-13_i386.deb
+
+apt-get -f install --assume-yes --force-yes

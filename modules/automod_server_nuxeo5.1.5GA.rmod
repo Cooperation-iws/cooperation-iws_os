@@ -189,26 +189,30 @@ SOFFICE_PATH=\$OOo_HOME/soffice
 PIDFILE=/var/run/openoffice-server.pid
 
 set -e
+. /lib/lsb/init-functions
 
 case "\$1" in
     start)
     if [ -f \$PIDFILE ]; then
-      echo "OpenOffice headless server has already started."
+      log_begin_msg "OpenOffice headless server has already started."
       sleep 5
+      log_end_msg 0
       exit
     fi
-      echo "Starting OpenOffice headless server"
+      log_begin_msg "Starting OpenOffice headless server"
       \$SOFFICE_PATH -headless -nologo -nofirststartwizard -accept="socket,host=127.0.0.1,port=8100;urp" & > /dev/null 2>&1
       touch \$PIDFILE
+      log_end_msg 0
     ;;
     stop)
     if [ -f \$PIDFILE ]; then
-      echo "Stopping OpenOffice headless server."
+      log_begin_msg "Stopping OpenOffice headless server."
       killall -9 soffice && killall -9 soffice.bin
       rm -f \$PIDFILE
+      log_end_msg 0
       exit
     fi
-      echo "Openoffice headless server is not running."
+      log_begin_msg "Openoffice headless server is not running."
       exit
     ;;
     *)
@@ -233,23 +237,25 @@ set -e
 case "\$1" in
     start)
     if [ -f \$PIDFILE ]; then
-      echo "Nuxeo server has already started."
+      log_begin_msg "Nuxeo server has already started."
       sleep 5
+      log_end_msg 0
       exit
     fi
-      echo "Starting Nuxeo server"
-      \$nuxeo_HOME/run.sh & > /dev/null 2>&1
+      log_begin_msg "Starting Nuxeo server"
+      nohup \$nuxeo_HOME/run.sh & > /dev/null 2>&1
       touch \$PIDFILE
+      log_end_msg 0
     ;;
     stop)
     if [ -f \$PIDFILE ]; then
-      echo "Stopping Nuxeo server."
-	rm -f \$PIDFILE
-      \$nuxeo_HOME/shutdown.sh -S & > /dev/null 2>&1
-      
-      exit
+      log_begin_msg "Stopping Nuxeo server."
+       rm -f \$PIDFILE
+       nohup \$nuxeo_HOME/shutdown.sh -S & > /dev/null 2>&1
+       log_end_msg 0
+       exit
     fi
-      echo "Nuxeo server is not running."
+      log_begin_msg "Nuxeo server is not running."
       exit
     ;;
     *)

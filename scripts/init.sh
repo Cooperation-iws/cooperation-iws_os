@@ -111,6 +111,10 @@ export DEBIAN_FRONTEND="dialog"
 fi
 if [ "$(echo "$DEBNONFREE_MIRROR_PATH" | grep 'medibuntu.org')" ]; then
 wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key add -
+else
+cd $DL_DIR
+wget $URL_FREE/debian-multimedia-keyring_2008.10.16_all.deb
+dpkg -i debian-multimedia-keyring_2008.10.16_all.deb
 fi
 
 apt-get update --fix-missing

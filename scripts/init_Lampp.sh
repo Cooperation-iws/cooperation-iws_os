@@ -40,7 +40,11 @@ killall -9 httpd
 killall -9 apache2
 killall -9 mysqld
 killall -9 mysqld_safe
-
+#temporary hack for debian mirror
+cd $DL_DIR
+#wget $URL_FREE/mysql-server-5.0_5.0.51a-24_i386.deb
+#dpkg -i mysql-server-5.0_5.0.51a-24_i386.deb
+#apt-get -f install --assume-yes --force-yes
 
 apt-get install --yes --force-yes apache2 apache2-doc apache2-mpm-prefork apache2-utils apache2.2-common mysql-server php5 libapache2-mod-php5 php5-mysql phpmyadmin php-pear php5-cli php5-gd php5-xsl php5-curl libapache2-mod-python php-pear libphp-adodb libexpat1 ssl-cert php5-imagick php5-imap php5-mcrypt php5-memcache php5-mhash php5-ming php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl php5-cli imagemagick
 

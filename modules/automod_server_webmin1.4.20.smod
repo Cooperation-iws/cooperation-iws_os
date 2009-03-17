@@ -211,6 +211,18 @@ CHOIX_PASS
 fi
 echo "I: Download Webmin"
 DOWNLOAD
+mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.orig
+cat > /usr/sbin/policy-rc.d << EOF
+#!/bin/sh
+
+echo
+echo "Warning: invoke-rc.d policy in action. Skipping daemon starting"
+
+exit 101
+EOF
+chmod 0755 /usr/sbin/policy-rc.d
+
+
 DEBIAN_FRONTEND="dialog"
 apt-get install --assume-yes --force-yes libnet-ssleay-perl libauthen-pam-perl libio-pty-perl libmd5-perl openssl
 #WEBMIN CONFIG
@@ -240,6 +252,8 @@ mv /usr/share/webmin $LAMPP_DIRECTORY/usr/share
 ln -s $LAMPP_DIRECTORY/etc/webmin /etc/webmin
 
 ln -s $LAMPP_DIRECTORY/usr/share/webmin /usr/share/webmin
+rm /usr/sbin/policy-rc.d
+mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
 
 }
 

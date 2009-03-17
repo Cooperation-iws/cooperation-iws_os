@@ -221,11 +221,26 @@ chmod +x /etc/cron.d/redmine
 REDMINE_URL="<![CDATA[http://localhost:19000]]>"
 fi
 
-rm /opt/ciws/var/$MOD_NAME/log/mongrel.9001.pid
-rm /opt/ciws/var/$MOD_NAME/log/mongrel.9000.pid
+rm /opt/ciws/var/$MOD_NAME/log/mongrel.19001.pid
+rm /opt/ciws/var/$MOD_NAME/log/mongrel.19000.pid
+
+echo "
+#Redmine
+rm /opt/ciws/var/$MOD_NAME/log/mongrel.*.pid
+" >> /opt/ciws/share/lampp/config_post_install.sh
+
+echo "
+#Redmine
+rm /opt/ciws/var/$MOD_NAME/log/mongrel.*.pid
+/etc/init.d/mongrel_cluster restart
+
+" >> /etc/rc.local
 
 /etc/init.d/apache2 restart
 /etc/init.d/mongrel_cluster start
+
+#init script hack to avoid mongrel user error
+sed -i "28s/^/#/" /etc/init.d/mongrel_cluster
 
 }
 
@@ -240,8 +255,8 @@ function CREATE_WUI
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/$REDMINE_URL</item_url>
-	<item_admin_url>/$REDMINE_URL</item_admin_url>
+	<item_url>$REDMINE_URL</item_url>
+	<item_admin_url>$REDMINE_URL</item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 </item>
@@ -249,8 +264,8 @@ echo "
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/$REDMINE_URL</item_url>
-	<item_admin_url>/$REDMINE_URL</item_admin_url>
+	<item_url>$REDMINE_URL</item_url>
+	<item_admin_url>$REDMINE_URL</item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 </item>

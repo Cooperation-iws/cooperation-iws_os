@@ -73,7 +73,7 @@ ln -s / /cow
 apt-get install --assume-yes --force-yes sun-java6-bin sun-java6-jre sun-java6-jdk
 
 apt-get install --assume-yes --force-yes postgresql postgresql-client
-
+apt-get remove --purge --assume-yes --force-yes openbsd-inetd
 cd $DL_DIR
 mv Libresource $LAMPP_DIRECTORY/server/$MOD_NAME
 sudo -u postgres createdb $MOD_NAME
@@ -98,30 +98,36 @@ cat << EOF_LIBRESOURCE > /etc/init.d/libresource
 #!/bin/bash
 libresource_HOME=$LAMPP_DIRECTORY/server/$MOD_NAME
 PIDFILE=/var/run/libresource-server.pid
+. /lib/lsb/init-functions
 
 set -e
 
 case "\$1" in
     start)
     if [ -f \$PIDFILE ]; then
-      echo "Libresource server has already started."
+      log_begin_msg "Libresource server has already started."
       sleep 5
+      log_end_msg 0
       exit
     fi
-      echo "Starting Libresource server"
-      \$libresource_HOME/start.sh & > /dev/null 2>&1
+      log_begin_msg "Starting Libresource server"
+      nohup \$libresource_HOME/start.sh 1>&2 2>/dev/null &
       touch \$PIDFILE
+      log_end_msg 0
     ;;
     stop)
     if [ -f \$PIDFILE ]; then
-      echo "Stopping Libresource server."
+      log_begin_msg "Stopping Libresource server."
 	rm -f \$PIDFILE
-      \$libresource_HOME/stop.sh & > /dev/null 2>&1
-      
+        nohup \$libresource_HOME/stop.sh 1>&2 2>/dev/null &
+        log_end_msg 0
       exit
     fi
-      echo "Libresource server is not running."
+      log_begin_msg "Libresource server is not running."
+      
+      log_end_msg 0
       exit
+      
     ;;
     *)
     echo "Usage: \$0 {start|stop}"
@@ -135,29 +141,34 @@ cat << EOF_JABBER > /etc/init.d/tigase
 #!/bin/bash
 tigase_HOME=$LAMPP_DIRECTORY/server/$MOD_NAME/tigase-server-2.8.5-b422
 PIDFILE=/var/run/tigase-server.pid
+. /lib/lsb/init-functions
 
 set -e
 
 case "\$1" in
     start)
     if [ -f \$PIDFILE ]; then
-      echo "Tigase server has already started."
+      log_begin_msg "Tigase server has already started."
       sleep 5
+      log_end_msg 0
       exit
+      
     fi
-      echo "Starting Tigase server"
+      log_begin_msg "Starting Tigase server"
       \$tigase_HOME/start-tigase.sh & > /dev/null 2>&1
       touch \$PIDFILE
+      log_end_msg 0
     ;;
     stop)
     if [ -f \$PIDFILE ]; then
-      echo "Stopping Tigase server."
+      log_begin_msg "Stopping Tigase server."
 	rm -f \$PIDFILE
       \$tigase_HOME/stop.sh & > /dev/null 2>&1
-      
+      log_end_msg 0
       exit
     fi
-      echo "Tigase server is not running."
+      log_begin_msg "Tigase server is not running."
+      log_end_msg 0
       exit
     ;;
     *)
@@ -176,7 +187,16 @@ update-rc.d libresource defaults
 /etc/init.d/tigase start
 /etc/init.d/libresource start
 
+/etc/init.d/postgresql-8.3 stop
+mv /etc/postgresql $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/postgresql /etc/postgresql
 
+mv /etc/postgresql-common $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/postgresql-common /etc/postgresql-common
+
+mv /var/lib/postgresql $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/postgresql /var/lib/postgresql
+/etc/init.d/postgresql-8.3 start
 }
 
 #_______________________________________________________________________________________________

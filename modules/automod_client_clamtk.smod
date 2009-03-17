@@ -13,6 +13,7 @@ URL_FREE=$(cat /tmp/url_mirroir)
 DL_DIR=$(cat /tmp/web_install-path)
 
 echo "I: installing clamav clamtk"
+export DEBIAN_FRONTEND=noninteractive
 
 aptitude install -y clamav clamav-daemon clamav-freshclam
 

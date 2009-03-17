@@ -56,6 +56,8 @@ sed -i "137G" /usr/share/initramfs-tools/scripts/live
 sed -i "137G" /usr/share/initramfs-tools/scripts/live
 sed -i '138s/^/LOCALE="${KBD}"/' /usr/share/initramfs-tools/scripts/live
 sed -i '139s/^/export LOCALE/' /usr/share/initramfs-tools/scripts/live
+#temporary hack to delete lang2local warning bug
+sed -i '189s/^/#/' /usr/share/initramfs-tools/scripts/live
 
 
 				
@@ -138,7 +140,7 @@ wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key ad
 fi
 rm /etc/apt/sources.list.d/*
 echo "" > /var/log/dpkg.log
-apt-get update
+#apt-get update
 
 
 echo "I: making initramfs"

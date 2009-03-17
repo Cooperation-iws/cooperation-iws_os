@@ -54,7 +54,7 @@ apt-get install --assume-yes --force-yes libmysql++-dev apache2-prefork-dev
 gem install mysql
 gem install chronic
 gem install BlueCloth
-gem install mongrel mongrel_cluster --include-dependencies
+#gem install mongrel mongrel_cluster --include-dependencies
 
 apt-get install --assume-yes --force-yes imagemagick 
 
@@ -80,7 +80,7 @@ rake db:test:prepare
 rake spec
 
 cd $DL_DIR
-wget http://www.sphinxsearch.com/downloads/sphinx-0.9.8.tar.gz
+wget $URL_FREE/sphinx-0.9.8.tar.gz
 tar -xzf sphinx-0.9.8.tar.gz
 cd sphinx-0.9.8
 ./configure --with-mysql
@@ -98,29 +98,33 @@ cat << EOT > /etc/init.d/insoshi
 #!/bin/bash
 insoshi_HOME=$LAMPP_DIRECTORY/server/insoshi/script
 PIDFILE=/var/run/insoshi.pid
+. /lib/lsb/init-functions
 
 set -e
 
 case "\$1" in
     start)
     if [ -f \$PIDFILE ]; then
-      echo "Insoshi server has already started."
+      log_begin_msg "Insoshi server has already started."
       sleep 5
+      log_end_msg 0
       exit
     fi
-      echo "Starting Insoshi server"
-      \$insoshi_HOME/server -p 3020 & > /dev/null 2>&1
+      log_begin_msg "Starting Insoshi server"
+      nohup \$insoshi_HOME/server -p 3020 1>&2 2>/dev/null &
       touch \$PIDFILE
+      log_end_msg 0
     ;;
     stop)
     if [ -f \$PIDFILE ]; then
-      echo "Stopping Nuxeo server."
-     killall -9 insoshi
-
-	 rm -f \$PIDFILE
+      log_begin_msg "Stopping Insoshi server."
+      rm -f \$PIDFILE
+      killall -9 insoshi && killall -9 insoshi 
+      log_end_msg 0
       exit
     fi
-      echo "Insoshi server is not running."
+      log_begin_msg "Insoshi server is not running."
+      log_end_msg 0
       exit
     ;;
     *)

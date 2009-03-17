@@ -19,6 +19,15 @@ export HOME=/home/liveusb
 
 cp /sbin/lrm-manager /sbin/lrm-manager.orig
 sed -i "s/\$(uname -r)/$kernel/" /sbin/lrm-manager 
+echo "#!/bin/bash
+exit 0" > /sbin/update-grub
+chmod +x /sbin/update-grub
+mv /usr/sbin/update-grub /usr/sbin/update-grub.orig
+
+echo "#!/bin/bash
+exit 0" > /usr/sbin/update-grub
+chmod +x /usr/sbin/update-grub
+mkdir /boot/grub
 
 apt-get update
 apt-get install --assume-yes --force-yes linux-image-$kernel linux-ubuntu-modules-$kernel linux-restricted-modules-$kernel
@@ -26,3 +35,6 @@ apt-get install --assume-yes --force-yes linux-image-$kernel linux-ubuntu-module
 mv /sbin/lrm-manager.orig /sbin/lrm-manager
 
 
+apt-get -f install --assume-yes --force-yes
+mv /sbin/update-grub.orig /sbin/update-grub
+mv /usr/sbin/update-grub.orig /usr/sbin/update-grub

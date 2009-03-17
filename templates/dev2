@@ -7,4 +7,15 @@ apache_user="www-data"
 #kernel bigmem lenny upgrade
 kernel="2.6.26-1-686-bigmem"
 #update live-initramfs
+#Flashplayer Lenny
+#Madwifi Lenny
+#ssl
+###Cooperation-iws gui
+sphider_auto_index="y"
+#Lampp conf
+secure_mysql="y"
+secure_admin="y"
+apache_admin_pwd=$generic_login_pwd
+mysql_root_password=$generic_mysql_pwd
+#Roundcube 0.2
 

@@ -917,6 +917,7 @@ class Reconstructor:
 
     def endInstall(self):
     	# execute last config 
+		self.launchPostInstall()
 		os.system('bash \"'+ os.path.join(self.customDir, "scripts/shutdown_ws.sh") + '\"')
 			
 		print _("Copying DNS info...")
@@ -993,9 +994,7 @@ class Reconstructor:
             os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
             os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
             os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
-	    # HACK: create temporary script for chrooting
-            scr = '#!/bin/sh\n#\n#\t(c) cooperation-iws, 2008\n#\nchroot ' + os.path.join(self.customDir, "chroot") + " /var/share/lampp/config_post_install.sh" + '\n'
-            # TODO: replace default terminal title with "Reconstructor Terminal"
+	    # TODO: replace default terminal title with "Reconstructor Terminal"
             # use gnome-terminal if available -- more features
             print _('Launching Post install script customizations...')
             os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/opt/ciws/share/lampp/config_post_install.sh"))
@@ -1342,7 +1341,6 @@ class Reconstructor:
 		self.customize()		
 		self.setLiveCdInfo(username=self.user, userFullname=self.userFull, userPassword=self.password, hostname=self.host)
 		
-		self.launchPostInstall()
 		if self.silent == False:
 			self.launchTerminal()
 		self.endInstall()

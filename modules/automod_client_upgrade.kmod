@@ -39,8 +39,6 @@ apt-get upgrade --assume-yes --force-yes
 /etc/init.d/dbus stop
 /etc/init.d/hal stop
 umount -a
-rm /usr/sbin/policy-rc.d
-mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
 
 #Hardy hostname hack
 echo "localhost.localdomain" > /etc/hostname.orig
@@ -81,3 +79,6 @@ chmod +x /usr/sbin/update-grub
 apt-get -f install --assume-yes --force-yes
 mv /sbin/update-grub.orig /sbin/update-grub
 mv /usr/sbin/update-grub.orig /usr/sbin/update-grub
+rm /usr/sbin/policy-rc.d
+mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
+

@@ -167,18 +167,18 @@ cat << EOT_IDF_CONF >  $LAMPP_DIRECTORY/var/indefero/src/IDF/conf/idf.php
 #
 #
 #
-\$cfg['idf_base'] = '/Indefero/index.php';
-\$cfg['url_base'] = 'http://localhost/';
+\$cfg['idf_base'] = "/${MOD_NAME}/index.php";
+\$cfg['url_base'] = 'http://'.\$_SERVER["SERVER_NAME"].'/';
 
 # Url to access the media folder which is in the www folder 
 # of the archive
-\$cfg['url_media'] = 'http://localhost/Indefero/media';
+\$cfg['url_media'] = 'http://'.\$_SERVER["SERVER_NAME"]."/${MOD_NAME}/media";
 
 # Url to access a folder in which the files you upload through
 # the downloads tab will be stored.
-\$cfg['url_upload'] = 'http://localhost/Indefero/media/upload';
+\$cfg['url_upload'] = 'http://'.\$_SERVER["SERVER_NAME"]."/${MOD_NAME}/media/upload";
 # Path to the upload folder
-\$cfg['upload_path'] = '/var/www/Indefero/media/upload';
+\$cfg['upload_path'] = "/var/www/${MOD_NAME}/media/upload";
 
 #
 # The following path *MUST NOT* be accessible through a web browser 

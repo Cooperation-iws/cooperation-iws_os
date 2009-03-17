@@ -51,6 +51,7 @@ hg serve -n "Mercurial repo" -p 701 &
 
 echo "
 #Mercurial
+cd $LAMPP_DIRECTORY/var/mercurial/repositories/project
 hg serve -n \"Mercurial repo\" -p 701 &
 " >> /etc/rc.local
 

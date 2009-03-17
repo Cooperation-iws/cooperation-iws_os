@@ -8,7 +8,7 @@ RMOD_NAME='ssl'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Socket secured layer'
-RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_DESCRIPTION_FR='Protocole de chiffrement'
 RMOD_VERBOSE=""
 RMOD_VERBOSE_FR=""
 
@@ -108,5 +108,5 @@ echo "
 
 echo "I: Install Ntop"
 INSTALL
-CREATE_WUI
+
 echo "I: End of install Ntop"

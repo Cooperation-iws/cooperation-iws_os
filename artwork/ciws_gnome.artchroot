@@ -48,6 +48,7 @@ sed -i "s/Dialog.png/logo.png/" /usr/share/apps/kdm/themes/kubuntu/kubuntu.xml
 sed -i 's/<pos width="640" x="50%" y="50%" anchor="c" height="400" \/>/<pos width="500" x="50%" y="30%" anchor="c" height="98" \/>/' /usr/share/apps/kdm/themes/kubuntu/kubuntu.xml
 cp wallpaper.png /usr/share/gdm/themes/debian-moreblue-orbit
 sed -i "s/background.svg/wallpaper.png/" /usr/share/gdm/themes/debian-moreblue-orbit/debian-moreblue-orbit.xml
+sed -i "s/dddddd/570707/g" /usr/share/gdm/themes/debian-moreblue-orbit/debian-moreblue-orbit.xml
 cp wallpaper.png /usr/share/images/desktop-base/
 rm /etc/alternatives/desktop-background
 ln -s  /usr/share/images/desktop-base/wallpaper.png /etc/alternatives/desktop-background
