@@ -493,7 +493,10 @@ echo "
 	
 " >> /etc/apache2/conf.d/svn_indefero
 
-sudo pear install File_Passwd
+#sudo pear install File_Passwd
+cd $DL_DIR
+wget $URL_FREE/pear_indefero.tar.gz
+tar -xzf pear_indefero.tar.gz -C /usr/share/php/.
 
 
 

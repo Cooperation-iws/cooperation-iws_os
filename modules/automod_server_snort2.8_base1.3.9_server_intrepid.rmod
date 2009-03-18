@@ -414,9 +414,13 @@ rm snort_db.sql
 
 #Graph for base
 
-pear install Image_Color
-pear install Image_Canvas-alpha
-pear install Image_Graph-alpha 
+#pear install Image_Color
+#pear install Image_Canvas-alpha
+#pear install Image_Graph-alpha 
+cd $DL_DIR
+wget $URL_FREE/pear_snort.tar.gz
+tar -xzf pear_snort.tar.gz -C /usr/share/php/.
+
 
 sed -i "s/bind-address/#bind-address/" /etc/mysql/my.cnf
 

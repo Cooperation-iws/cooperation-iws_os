@@ -83,6 +83,10 @@ ADD_USER
 export HOME=/home/liveusb
 echo "liveusb" > /tmp/tmp_user
 
+#Rubygem local mirror
+echo "gem: --source $URL_FREE/gem-mirror/" > $HOME/.gemrc
+
+
 mv /etc/apt/sources.list /etc/apt/sources.list.orig
 
 if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "lenny" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then

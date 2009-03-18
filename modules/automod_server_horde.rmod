@@ -195,9 +195,15 @@ $BIN_MYSQL -u root < HORDE_db.sql mysql
 
 apt-get install --assume-yes --force-yes php-pear php5-dev imagemagick libmagic-dev make 
 
-pear install --onlyreqdeps Log Mail Mail_Mime DB File Date 
+#pear install --onlyreqdeps Log Mail Mail_Mime DB File Date 
+cd $DL_DIR
+wget $URL_FREE/pear_horde.tar.gz
+tar -xzf pear_horde.tar.gz -C /usr/share/php/.
+cd $DL_DIR
+wget $URL_FREE/pecl_fileinfo.tar.gz
+tar -xzf pecl_fileinfo.tar.gz -C /usr/lib/php5/.
 
-pecl install -s fileinfo
+#pecl install -s fileinfo
 #pecl install -s memcache
 
 echo "

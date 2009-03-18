@@ -86,8 +86,13 @@ sed -i "s/RESA_MYSQL_PWD/${RESA_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$
 sed -i "s/admin@ciws.com/${resa_admin_email[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/commun/config.php
 sed -i "s/ciws.com/$domain/" $WWW_DIRECTORY/${MOD_NAME[$count]}/commun/config.php
 
-pear install http://pear.php.net/get/OLE
-pear install http://pear.php.net/get/Spreadsheet_Excel_Writer
+#pear install http://pear.php.net/get/OLE
+#pear install http://pear.php.net/get/Spreadsheet_Excel_Writer
+cd $DL_DIR
+wget $URL_FREE/pear_php_resa.tar.gz
+tar -xzf pear_php_resa.tar.gz -C /usr/share/php/.
+
+
 
 mkdir $WWW_DIRECTORY/Calendar
 chown -R www-data $WWW_DIRECTORY/Calendar
