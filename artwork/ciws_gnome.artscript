@@ -9,4 +9,5 @@ rm -r $LAMPP_DIRECTORY/remaster/isolinux
 cp -r $DOSSIER_CHROOT/tmp/ciws_gnome/isolinux $LAMPP_DIRECTORY/remaster
 sed -i "s/casper/$CASPER_PATH/g" $LAMPP_DIRECTORY/remaster/isolinux/isolinux.cfg
 sed -i "s/quiet/vga=791/g" $LAMPP_DIRECTORY/remaster/isolinux/isolinux.cfg	
+sed -i "s/splash//g" $LAMPP_DIRECTORY/remaster/isolinux/isolinux.cfg	
 	
