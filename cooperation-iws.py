@@ -1626,6 +1626,7 @@ class Reconstructor:
 	if self.casperPath == 'live' or self.casperPathUpdated == "live":
 		os.popen('sed -i "s/vmlinuz1/vmlinuz/g" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg")) 
 		os.popen('sed -i "s/initrd=\/'+self.casperPath+'\/initrd1.img/initrd=\/'+self.casperPathUpdated+'\/initrd.gz keyb='+self.keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg")) 
+		os.popen('sed -i "s/quiet splash//g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
 		os.popen('echo '+self.keyLang+' > ' + os.path.join(self.customDir, "chroot/tmp/keyblang") )
 	#XNEST
 	scriptCustomExec = '#!/bin/sh\n\n'
