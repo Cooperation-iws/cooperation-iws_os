@@ -15,7 +15,7 @@
 #Multimedia Client
 #Cooperation-iws Liveusb 0.4
 #eeebox hack
-#install live-initramfs Hardy
+#install live-initramfs Intrepid
 kernel="2.6.27-11-generic"
 #Tor Privoxy Intrepid
 #Havp
