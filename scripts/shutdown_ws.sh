@@ -62,6 +62,15 @@ sed -i '189s/^/#/' /usr/share/initramfs-tools/scripts/live
 
 				
 fi
+elif [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "live" ]; then
+sed -i "135G" /usr/share/initramfs-tools/scripts/live
+sed -i "135G" /usr/share/initramfs-tools/scripts/live
+sed -i '136s/^/KBD="${ARGUMENT#*=}"/' /usr/share/initramfs-tools/scripts/live
+sed -i '137s/^/export KBD/' /usr/share/initramfs-tools/scripts/live
+#temporary hack to delete lang2local warning bug
+sed -i '189s/^/#/' /usr/share/initramfs-tools/scripts/live
+
+
 fi
 
 
