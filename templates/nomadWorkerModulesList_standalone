@@ -20,6 +20,7 @@ mysql_root_password=$generic_mysql_pwd
 #Proftpd
 proftpd_pwd=$generic_login_pwd
 #Roundcube 0.2
+#Jdicd 1.5b
 #SugarCRM 5.2
 nb_sugarcrm=1
 sugarcrm_mysql_pwd[1]=$generic_mysql_pwd

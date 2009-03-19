@@ -93,7 +93,7 @@ if [ ! -f ~/.sec_filedel_agreed ]; then
 	ackn8="any and all data loss due to your use of it!  Select, 'OK' to"
 	ackn9="acknowledge."
 	ackn10="(NOTE: This notice will only be shown once unless you decline to acknowledge!)"
-	feedback=`echo \$ackn1 \$ackn2 \$ackn3 \$ackn4 \$ackn5 \$ackn6 \$ackn7 \$ackn8 \$ackn9 \$ackn10 \$ackn11 \$ackn12`
+	feedback="$(echo \$ackn1 \$ackn2 \$ackn3 \$ackn4 \$ackn5 \$ackn6 \$ackn7 \$ackn8 \$ackn9 \$ackn10 \$ackn11 \$ackn12)"
 	zenity --title "\$dialog_title" "\$dialog_type" --text "\$feedback"
 	if [ "\$?" == "0" ]; then
 		touch ~/.sec_filedel_agreed
@@ -169,4 +169,5 @@ else
 fi
 exit 0
 EOT_SECURE_DELETE
+chmod 755 /etc/skel/.gnome2/nautilus-scripts/secure-delete
 fi
