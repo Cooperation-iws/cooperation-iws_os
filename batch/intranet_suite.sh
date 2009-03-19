@@ -13,7 +13,7 @@ sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/IS
 
 
 
-sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/lenny-gnome-090313.iso --modulesfile templates/System/Kolab_intranet --webappmirror http://localhost:81/depot --debmirror http://localhost:3141/ftp.fr.debian.org/debian/ --debmirrornonfree http://localhost:3141/mirror.home-dn.net/debian-multimedia/ --debmirrorsecurity http://localhost:3141/security.debian.org/ --cms Joomla --directory /media/partage-dev/tmp/zaa71a2 --host mail --password cooperation --username ciwsadmin --artwork ciwsGnome --outputisoname cooperation-iws-groupware-intranet-0.8.0.iso --disautologin
+sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/lenny-gnome-090313.iso --modulesfile templates/System/Kolab_intranet --webappmirror http://localhost:81/depot --debmirror http://localhost:3141/ftp.fr.debian.org/debian/ --debmirrornonfree http://localhost:3141/mirror.home-dn.net/debian-multimedia/ --debmirrorsecurity http://localhost:3141/security.debian.org/ --cms Joomla --directory /media/partage-dev/tmp/zaa71a2 --host mail --password cooperation --username ciwsadmin --artwork ciwsGnome --outputisoname cooperation-iws-groupware-intranet-0.8.0.iso --disautologin --silent 
 
 
 
