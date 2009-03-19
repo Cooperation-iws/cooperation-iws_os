@@ -67,9 +67,12 @@ sed -i "135G" /usr/share/initramfs-tools/scripts/live
 sed -i "135G" /usr/share/initramfs-tools/scripts/live
 sed -i '136s/^/KBD="${ARGUMENT#*=}"/' /usr/share/initramfs-tools/scripts/live
 sed -i '137s/^/export KBD/' /usr/share/initramfs-tools/scripts/live
+sed -i "137G" /usr/share/initramfs-tools/scripts/live
+sed -i "137G" /usr/share/initramfs-tools/scripts/live
+sed -i '138s/^/LOCALE="${KBD}"/' /usr/share/initramfs-tools/scripts/live
+sed -i '139s/^/export LOCALE/' /usr/share/initramfs-tools/scripts/live
 #temporary hack to delete lang2local warning bug
 sed -i '189s/^/#/' /usr/share/initramfs-tools/scripts/live
-
 
 fi
 
