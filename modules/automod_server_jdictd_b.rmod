@@ -96,7 +96,6 @@ PIDFILE=/var/run/\$NAME.pid
 DESC="the jdictd daemon"
 DAEMON="java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini "
 DAEMON_OPTS=""
-test -x \$DAEMON || exit 0
 
 [ -r /etc/default/jdictd-daemon ] && . /etc/default/jdictd-daemon
 . /lib/lsb/init-functions
