@@ -1,5 +1,5 @@
 #!/bin/bash
-domain="cms-sta.intra"
+domain="cooperation-iws.intra"
 generic_admin_email="admin.local@$domain"
 generic_mysql_pwd="mysql_pwd"
 generic_login_pwd="cooperation"

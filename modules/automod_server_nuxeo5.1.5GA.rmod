@@ -231,6 +231,7 @@ cat << EOF_NUXEO > $DOSSIER_CHROOT/etc/init.d/nuxeo
 #!/bin/bash
 nuxeo_HOME=/$PERSISTENT_DIR/server/$MOD_NAME/bin/
 PIDFILE=/var/run/nuxeo-server.pid
+. /lib/lsb/init-functions
 
 set -e
 

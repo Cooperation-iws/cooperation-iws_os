@@ -227,12 +227,12 @@ rm /opt/ciws/var/$MOD_NAME/log/mongrel.19000.pid
 
 echo "
 #Redmine
-rm /opt/ciws/var/$MOD_NAME/log/mongrel.*.pid
+rm $LAMPP_DIRECTORY/var/$MOD_NAME/log/mongrel.*.pid
 " >> /opt/ciws/share/lampp/config_post_install.sh
 
 echo "
 #Redmine
-rm /opt/ciws/var/$MOD_NAME/log/mongrel.*.pid
+rm $LAMPP_DIRECTORY/var/$MOD_NAME/log/mongrel.*.pid
 /etc/init.d/mongrel_cluster restart
 
 " >> /etc/rc.local
@@ -242,7 +242,8 @@ rm /opt/ciws/var/$MOD_NAME/log/mongrel.*.pid
 
 #init script hack to avoid mongrel user error
 sed -i "28s/^/#/" /etc/init.d/mongrel_cluster
-
+LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
+sed _i "s/\/var\/run\/mongrel_cluster/$LAMPP_DIRECTORY_FOR_SED\/var\/$MOD_NAME\/log/" /etc/init.d/mongrel_cluster
 }
 
 #_______________________________________________________________________________________________
