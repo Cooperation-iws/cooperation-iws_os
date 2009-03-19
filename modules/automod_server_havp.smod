@@ -15,6 +15,17 @@ SILENT=$(cat /tmp/silent)
 HOSTNAME=$(cat /tmp/hostname)
 
 echo "I: install wine"
+mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.orig
+cat > /usr/sbin/policy-rc.d << EOF
+#!/bin/sh
+
+echo
+echo "Warning: invoke-rc.d policy in action. Skipping daemon starting"
+
+exit 101
+EOF
+chmod 0755 /usr/sbin/policy-rc.d
+
 
 apt-get install -y --assume-yes --force-yes havp
 
@@ -67,6 +78,8 @@ apt-get -f install --assume-yes --force-yes
 
 /etc/init.d/havp stop
 
+rm /usr/sbin/policy-rc.d
+mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
 
 
 
