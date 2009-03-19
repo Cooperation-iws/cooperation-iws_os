@@ -1,7 +1,17 @@
 #!/bin/bash
-#DNS server hardy
+#DNS server lenny
 domain="hosting.intra"
 #install live-initramfs Hardy
 kernel="2.6.24-23-generic"
 #Virtualmin v2
+#Zabbix client 1.6
+zabbix_server_name="administration.admin.intra"
+#Syslog client intrepid
+syslog_server_name="administration.admin.intra"
+#Snort2.8 client Intrepid
+snort_remote_name="Base"
+snort_registration_key=""
+snort_server_mysql_pwd=$generic_mysql_pwd
+snort_server_name="administration.admin.intra"
+snort_listening_interface="eth0"
 
