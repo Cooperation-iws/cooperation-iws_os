@@ -14,4 +14,4 @@ snort_registration_key=""
 snort_server_mysql_pwd=$generic_mysql_pwd
 snort_server_name="administration.admin.intra"
 snort_listening_interface="eth0"
-
+#Cooperation-iws Liveusb Ubuntu 0.4

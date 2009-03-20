@@ -25,4 +25,5 @@ snort_listening_interface="eth0"
 ossec_report_address=$generic_admin_email
 #Flashplayer Lenny
 #Madwifi Lenny
+#Cooperation-iws Liveusb 0.4
 

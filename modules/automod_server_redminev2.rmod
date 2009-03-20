@@ -209,6 +209,9 @@ echo "
 </VirtualHost>
 " > /etc/apache2/sites-available/redmine
 
+sed -i "9s/Order deny,allow/Order allow,deny/" /etc/apache2/mods-available/proxy.conf
+sed -i "10s/Deny/Allow/" /etc/apache2/mods-available/proxy.conf
+
 a2ensite redmine
 REDMINE_URL="redmine.$domain"
 

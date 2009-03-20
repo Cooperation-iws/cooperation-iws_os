@@ -21,6 +21,7 @@ SILENT=$(cat /tmp/silent)
 
 . /tmp/app_params
 
+HOSTNAME=$(cat /tmp/hostname)
 
 
 
@@ -76,6 +77,24 @@ sed -i '189s/^/#/' /usr/share/initramfs-tools/scripts/live
 
 fi
 
+echo "I: Configuring Apache2 for domains"
+
+if [ "$domain" ] && [ -d /etc/bind ]; then
+sed -i "3G" /etc/apache2/sites-available/default
+sed -i "3G" /etc/apache2/sites-available/default
+sed -i "3G" /etc/apache2/sites-available/default
+sed -i "3s/^/ServerName $domain/" /etc/apache2/sites-available/default
+sed -i "4s/^/ServerAlias wwi.$domain/" /etc/apache2/sites-available/default
+sed -i "5s/^/ServerAlias $HOSTNAME.$domain/" /etc/apache2/sites-available/default
+
+sed -i "4G" /etc/apache2/sites-available/default-ssl
+sed -i "4G" /etc/apache2/sites-available/default-ssl
+sed -i "4G" /etc/apache2/sites-available/default-ssl
+sed -i "4s/^/ServerName $domain/" /etc/apache2/sites-available/default-ssl
+sed -i "5s/^/ServerAlias wwi.$domain/" /etc/apache2/sites-available/default-ssl
+sed -i "6s/^/ServerAlias $HOSTNAME.$domain/" /etc/apache2/sites-available/default-ssl
+
+fi
 
 echo "I: Delete examples directory on the desktop"
 CHERCHE='chroot \/root install -o $USERNAME -g $USERNAME -d \/home\/$USERNAME\/Desktop\/'

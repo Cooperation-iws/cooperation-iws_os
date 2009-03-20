@@ -87,7 +87,7 @@ ALTER USER postgres WITH ENCRYPTED PASSWORD '$LIBRESOURCE_PSGSQL_PWD';
 sudo -u postgres psql postgres < libresource_db.sql
 
 sed -i "2s/libresource/$MOD_NAME/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
-sed -i "29s/localhost/$HOSTNAME.$domain/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
+sed -i "29s/localhost/$HOSTNAME.$domain/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceConfig.properties
 sed -i "4s/postgres/$LIBRESOURCE_PSGSQL_PWD/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
 LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
 sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceConfig.properties
