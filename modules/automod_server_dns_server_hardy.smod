@@ -121,11 +121,11 @@ echo "
 sleep 8
 #Bind
 hostname="$HOSTNAME"
-ip_address=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1)
-ip_address_1=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1 | cut -d'.' -f1)
-ip_address_2=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1 | cut -d'.' -f2)
-ip_address_3=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f3)
-ip_address_4=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f4)
+ip_address=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr'| cut -d':' -f2 | cut -d' ' -f1)
+ip_address_1=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1 | cut -d'.' -f1)
+ip_address_2=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1 | cut -d'.' -f2)
+ip_address_3=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f3)
+ip_address_4=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f4)
 ip_gateway=\$(route -n | grep UG | sed 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/&*/g'| sed 's/ //g' | cut -d'*'  -f2)
 cp /etc/bind/named.conf.rev.tpl /etc/bind/named.conf.rev
 cp /var/cache/bind/db.$domain.tpl /var/cache/bind/db.$domain
@@ -144,6 +144,31 @@ sudo  /opt/ciws/etc/dhclient-exit-hook.sh &
 " > /etc/dhcp3/dhclient-exit-hooks.d/dns_local
 
 chmod +x /etc/dhcp3/dhclient-exit-hooks.d/dns_local
+
+
+echo "#!/bin/bash
+sleep 15
+ip_address=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep 'inet addr' | cut -d':' -f2 | cut -d' ' -f1)
+for ip in \$ip_address
+do
+network_card=\$(ifconfig | grep -m 1 \$ip --before-context=1 | cut -d' ' -f1)
+if [ ! -e /tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card ] && [[ \"\$ip\" ]]; then
+echo \"
+ifconfig \$network_card \$ip
+\" > /tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card
+chmod +x /tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card
+fi
+bash \"/tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card\"
+done
+" > /opt/ciws/etc/dhclient-exit-hooks.d_ifconfig_local
+
+chmod +x /opt/ciws/etc/dhclient-exit-hooks.d_ifconfig_local
+
+echo "#!/bin/bash
+/opt/ciws/etc/dhclient-exit-hooks.d_ifconfig_local &
+"  > /etc/dhcp3/dhclient-exit-hooks.d/ifconfig_local
+
+chmod +x /etc/dhcp3/dhclient-exit-hooks.d/ifconfig_local
 
 
 }
