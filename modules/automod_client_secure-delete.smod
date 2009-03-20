@@ -74,10 +74,10 @@ the_file=$1
 if [ "\$NAUTILUS_SCRIPT_CURRENT_URI" == "x-nautilus-desktop:///" ]; then
 	files_path=\$HOME"/Desktop"
 else
-	files_path=`echo "\$NAUTILUS_SCRIPT_CURRENT_URI" | sed -e 's/^file:\/\///; s/%20/\ /g'`
+	files_path=$(echo "\$NAUTILUS_SCRIPT_CURRENT_URI" | sed -e 's/^file:\/\///; s/%20/\ /g')
 fi
-gui=`which zenity`
-secure_delete=`which wipe`
+gui=$(which zenity)
+secure_delete=$(which wipe)
 
 # Secure file deletion disclaimer
 if [ ! -f ~/.sec_filedel_agreed ]; then
