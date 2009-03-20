@@ -1,4 +1,7 @@
 #!/bin/bash
+generic_admin_email="admin.local@admin.intra"
+generic_mysql_pwd="mysql_pwd"
+
 #DNS server lenny
 domain="proxy.intra"
 #Tor Privoxy

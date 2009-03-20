@@ -179,8 +179,7 @@ a2enmod rewrite
 
 if [ "$domain" ] && [ -d /etc/bind ]; then
 
-echo "
-  <VirtualHost *>
+echo "<VirtualHost *:80>
 
   ServerAdmin support@$domain
   DocumentRoot $LAMPP_DIRECTORY/var/$MOD_NAME

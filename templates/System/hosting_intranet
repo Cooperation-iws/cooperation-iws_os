@@ -1,4 +1,6 @@
 #!/bin/bash
+generic_mysql_pwd="mysql_pwd"
+
 #DNS server lenny
 domain="hosting.intra"
 #install live-initramfs Hardy

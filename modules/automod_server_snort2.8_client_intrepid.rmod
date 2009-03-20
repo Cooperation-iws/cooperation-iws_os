@@ -14,7 +14,7 @@ RMOD_VERBOSE_FR="Snort est un NIDS (Network Intrusion Detection System), un syst
 
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation.gensys-net.eu/update/modules/'
-RMOD_REQ_APACHE=True
+
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
 DL_DIR=$(cat /tmp/web_install-path)
