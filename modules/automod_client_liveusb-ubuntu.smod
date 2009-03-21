@@ -16,8 +16,8 @@ echo "I: installing liveusb installer"
 apt-get remove --assume-yes --force-yes liveusb
 
 cd $DL_DIR
-wget $URL_FREE/cooperation-iws-liveusb-public-0.5.deb
-dpkg -i cooperation-iws-liveusb-public-0.5.deb
+wget $URL_FREE/cooperation-iws-liveusb-public-0.6.deb
+dpkg -i cooperation-iws-liveusb-public-0.6.deb
 apt-get -f install --assume-yes --force-yes
 
 mkdir /etc/skel/Desktop

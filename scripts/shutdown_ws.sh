@@ -79,7 +79,7 @@ fi
 
 echo "I: Configuring Apache2 for domains"
 
-if [ "$domain" ] && [ -d /etc/bind ]; then
+if [ "$domain" ] && [ -d /etc/bind ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ]; then
 sed -i "3G" /etc/apache2/sites-available/default
 sed -i "3G" /etc/apache2/sites-available/default
 sed -i "3G" /etc/apache2/sites-available/default
