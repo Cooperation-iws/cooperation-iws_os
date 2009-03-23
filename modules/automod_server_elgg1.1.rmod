@@ -116,6 +116,8 @@ UPDATE ${MOD_NAME[$count]}.elggsites_entity SET url = '/${MOD_NAME[$count]}/' WH
 mkdir /var/Elgg
 mkdir /var/Elgg/upload
 chown -R www-data /var/Elgg/upload
+mv /var/Elgg $LAMPP_DIRECTORY/server/
+ln -s $LAMPP_DIRECTORY/server/Elgg /var/Elgg
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 

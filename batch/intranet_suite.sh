@@ -37,7 +37,7 @@ sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/IS
 sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/lenny-gnome-090313.iso --modulesfile templates/System/socialWriterModulesList_intranet --webappmirror http://localhost:81/depot --debmirror http://localhost:3141/ftp.fr.debian.org/debian/ --debmirrornonfree http://localhost:3141/mirror.home-dn.net/debian-multimedia/ --debmirrorsecurity http://localhost:3141/security.debian.org/ --cms Joomla --directory /media/partage-dev/tmp/zdaa31a8 --host social --password cooperation --username ciwsadmin --artwork ciwsGnome --silent --outputisoname cooperation-iws-socialwriter-intranet-0.8.0.iso --disautologin
  
 
-sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/lenny-gnome-090313.iso --modulesfile templates/System/gforge_intranet --webappmirror http://localhost:81/depot --debmirror http://localhost:3141/ftp.fr.debian.org/debian/ --debmirrornonfree http://localhost:3141/mirror.home-dn.net/debian-multimedia/ --debmirrorsecurity http://localhost:3141/security.debian.org/ --cms Joomla --directory /media/partage-dev/tmp/zcaa31a8 --host forge --password cooperation --username ciwsadmin --artwork ciwsGnome --silent --outputisoname cooperation-iws-gforge-intranet-0.8.0.iso --disautologin
+#sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/lenny-gnome-090313.iso --modulesfile templates/System/gforge_intranet --webappmirror http://localhost:81/depot --debmirror http://localhost:3141/ftp.fr.debian.org/debian/ --debmirrornonfree http://localhost:3141/mirror.home-dn.net/debian-multimedia/ --debmirrorsecurity http://localhost:3141/security.debian.org/ --cms Joomla --directory /media/partage-dev/tmp/zcaa31a8 --host forge --password cooperation --username ciwsadmin --artwork ciwsGnome --silent --outputisoname cooperation-iws-gforge-intranet-0.8.0.iso --disautologin
  
 
 sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/lenny-gnome-090313.iso --modulesfile templates/System/proxy_intranet --webappmirror http://localhost:81/depot --debmirror http://localhost:3141/ftp.fr.debian.org/debian/ --debmirrornonfree http://localhost:3141/mirror.home-dn.net/debian-multimedia/ --debmirrorsecurity http://localhost:3141/security.debian.org/ --cms Joomla --directory /media/partage-dev/tmp/zbaa31a8 --host proxy --password cooperation --username ciwsadmin --artwork ciwsGnome --silent --outputisoname cooperation-iws-proxy-intranet-0.8.0.iso --disautologin
@@ -47,7 +47,7 @@ sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/IS
 
 
 
-sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/pfSense-1.2-LiveCD-Installer.iso --modulesfile templates/System/pfsense_intranet --outputisoname cooperation-iws-pfsense-1.2-0.7.0.iso --pfsense --directory /media/partage-dev/tmp/zaa21a12
+#sudo ./cooperation-iws.py -c --createdirectories --isofile /media/partage-dev/ISO/pfSense-1.2-LiveCD-Installer.iso --modulesfile templates/System/pfsense_intranet --outputisoname cooperation-iws-pfsense-1.2-0.7.0.iso --pfsense --directory /media/partage-dev/tmp/zaa21a12
 
 
 

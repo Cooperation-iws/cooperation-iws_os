@@ -96,7 +96,6 @@ class Reconstructor:
         self.buildLiveCdFilename = ''
         self.setupComplete = False
         self.manualInstall = False
-        self.watch = gtk.gdk.Cursor(gtk.gdk.WATCH)
         self.working = None
         self.workingDlg = None
         self.runningDebug = False
