@@ -25,6 +25,11 @@ apt-get install -f --assume-yes --force-yes
 
 echo "live" > /tmp/casper_path_updated
 
+cd $DL_DIR
+wget $URL_FREE/casper-bottom-hardy-090326.tar.gz
+tar -xzf casper-bottom-hardy-090326.tar.gz -C /usr/share/initramfs-tools/scripts/live-bottom
+chmod -R +x /usr/share/initramfs-tools/scripts/live-bottom
+
 cp /sbin/lrm-manager /sbin/lrm-manager.orig
 sed -i "s/\$(uname -r)/$kernel/" /sbin/lrm-manager 
 
@@ -71,6 +76,31 @@ echo "
 copy_exec /usr/bin/wc /bin
 copy_exec /lib/libpcre.so.3 /lib
 " >> /usr/share/initramfs-tools/hooks/live 
+
+echo "
+copy_exec /lib/udev/cdrom_id /lib/udev
+" >>  /usr/share/initramfs-tools/hooks/udev
+
+
+sed -i "s/respawn//" /etc/event.d/tty1
+#echo "respawn" >> /etc/event.d/tty1
+sed -i "s/respawn//" /etc/event.d/tty2
+#echo "respawn" >> /etc/event.d/tty2
+sed -i "s/respawn//" /etc/event.d/tty3
+#echo "respawn" >> /etc/event.d/tty3
+sed -i "s/respawn//" /etc/event.d/tty4
+#echo "respawn" >> /etc/event.d/tty4
+sed -i "s/respawn//" /etc/event.d/tty5
+#echo "respawn" >> /etc/event.d/tty5
+sed -i "s/respawn//" /etc/event.d/tty6
+#echo "respawn" >> /etc/event.d/tty6
+
+sed -i "30s/$/ 1>\&2 2>\/dev\/null/" /usr/share/initramfs-tools/scripts/init-bottom/udev
+sed -i "31s/$/ 1>\&2 2>\/dev\/null/" /usr/share/initramfs-tools/scripts/init-bottom/udev
+
+sed -i "200s/$/ 1>\&2 2>\/dev\/null/" /usr/share/initramfs-tools/init
+sed -i "201s/$/ 1>\&2 2>\/dev\/null/" /usr/share/initramfs-tools/init
+
 mv /sbin/lrm-manager.orig /sbin/lrm-manager
 
 #cd /sbin

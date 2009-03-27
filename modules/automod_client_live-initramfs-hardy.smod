@@ -27,6 +27,11 @@ apt-get install -f --assume-yes --force-yes
 
 echo "live" > /tmp/casper_path_updated
 
+cd $DL_DIR
+wget $URL_FREE/casper-bottom-hardy-090326.tar.gz
+tar -xzf casper-bottom-hardy-090326.tar.gz -C /usr/share/initramfs-tools/scripts/live-bottom
+chmod -R +x /usr/share/initramfs-tools/scripts/live-bottom
+
 #mv /sbin/losetup /sbin/losetup.orig
 
 mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.orig
@@ -81,6 +86,10 @@ echo "aufs" >> /etc/modules
 echo "
 copy_exec /usr/bin/wc /bin
 " >> /usr/share/initramfs-tools/hooks/live 
+echo "
+copy_exec /lib/udev/cdrom_id /lib/udev
+" >>  /usr/share/initramfs-tools/hooks/udev
+
 rm /usr/sbin/policy-rc.d
 mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
 mv /sbin/lrm-manager.orig /sbin/lrm-manager
@@ -92,4 +101,16 @@ mv /sbin/lrm-manager.orig /sbin/lrm-manager
 #Hardy 8.04.2 hack
 echo "localhost.localdomain" > /etc/hostname
 
+sed -i "s/respawn//" /etc/event.d/tty1
+#echo "respawn" >> /etc/event.d/tty1
+sed -i "s/respawn//" /etc/event.d/tty2
+#echo "respawn" >> /etc/event.d/tty2
+sed -i "s/respawn//" /etc/event.d/tty3
+#echo "respawn" >> /etc/event.d/tty3
+sed -i "s/respawn//" /etc/event.d/tty4
+#echo "respawn" >> /etc/event.d/tty4
+sed -i "s/respawn//" /etc/event.d/tty5
+#echo "respawn" >> /etc/event.d/tty5
+sed -i "s/respawn//" /etc/event.d/tty6
+#echo "respawn" >> /etc/event.d/tty6
 

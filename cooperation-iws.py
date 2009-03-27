@@ -1995,7 +1995,7 @@ class Reconstructor:
                 scriptMksquashfs += 'cd ' + self.customDir + '\n'
 		scriptMksquashfs += 'if [[ -n $(dpkg-query --list | grep squashfs | grep 1:3.3-1) ]]; then\n'
 	        scriptMksquashfs += 'apt-get remove -y -force-yes squashfs-tools\n'
-	        scriptMksquashfs += 'wget http://ftp.de.debian.org/debian/pool/main/s/squashfs/squashfs-tools_3.3-7_i386.deb\n'
+	        scriptMksquashfs += 'wget '+self.entryLocalMirror+'/squashfs-tools_3.3-7_i386.deb\n'
 	        scriptMksquashfs += 'dpkg -i squashfs-tools_3.3-7_i386.deb\n'
 	        scriptMksquashfs += 'fi \necho \"I: Building squashfs\" \n'
 	        scriptMksquashfs += 'cp chroot/initrd.gz remaster/' + self.casperPath + '/. \n'

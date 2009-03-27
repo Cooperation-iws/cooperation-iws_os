@@ -1,31 +1,4 @@
 #!/bin/bash
-domain="cooperation-iws.intra"
-generic_admin_email="admin.local@$domain"
-generic_mysql_pwd="mysql_pwd"
-generic_login_pwd="cooperation"
-apache_user="www-data"
-#kernel bigmem lenny upgrade
-kernel="2.6.26-1-686-bigmem"
-#update live-initramfs
-#Flashplayer Lenny
-#Madwifi Lenny
-#ssl
-###Cooperation-iws gui
-sphider_auto_index="y"
-#Lampp conf
-secure_mysql="y"
-secure_admin="y"
-apache_admin_pwd=$generic_login_pwd
-mysql_root_password=$generic_mysql_pwd
-#Roundcube 0.2
-#Bugzilla3.0.5b
-nb_bugzilla=1
-bugzilla_mysql_pwd[1]=$generic_mysql_pwd
-bugzilla_name[1]="Bugzilla"
-bugzilla_admin_email[1]=$generic_admin_email
-bugzilla_admin_name[1]="admin"
-bugzilla_admin_pwd[1]=$generic_login_pwd
-#Indefero Subversion
-indefero_name="Indefero"
-indefero_mysql_pwd=$generic_mysql_pwd
+#install live-initramfs Intrepid
+kernel="2.6.27-11-generic"
 
