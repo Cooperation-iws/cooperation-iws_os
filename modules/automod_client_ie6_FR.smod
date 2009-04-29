@@ -20,6 +20,6 @@ wget $URL_FREE/ie6-FR-090423.tar.gz
 
 tar -xzf ie6-FR-090423.tar.gz -C /etc/skel
 
-
+apt-get install --assume-yes --force-yes wine
 
 

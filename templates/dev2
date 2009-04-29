@@ -1,4 +1,4 @@
 #!/bin/bash
-#install live-initramfs Intrepid
-kernel="2.6.27-11-generic"
+#install live-initramfs Jaunty
+kernel="2.6.28-11-generic"
 

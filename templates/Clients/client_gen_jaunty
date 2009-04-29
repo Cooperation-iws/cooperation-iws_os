@@ -1,11 +1,9 @@
 #!/bin/bash
 
-
-#Virtualbox-prop Intrepid
 #Ubuntu Multimedia Codecs
 #Multimedia Client
 #Cooperation-iws Liveusb Ubuntu 0.4
-
+#Virtualbox-ose
 #SSH Server
 #Qtparted
 #Ntfs-config
@@ -16,8 +14,8 @@
 #Ubuntu Multimedia Codecs
 #Multimedia Client
 #Cooperation-iws Liveusb Ubuntu 0.4
-#install live-initramfs Intrepid
-kernel="2.6.27-11-generic"
+#install live-initramfs Jaunty
+kernel="2.6.28-11-generic"
 #Tor Privoxy Intrepid
 #Havp
 havp_privoxy_forward="n"

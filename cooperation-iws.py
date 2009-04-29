@@ -1074,7 +1074,7 @@ class Reconstructor:
 		initUserFullname = 'Live session user'
 		initHostName = 'nubuntu'
 		initBuildSystem = 'Ubuntu'
-	elif self.distVariant == 'edubuntu_8.10' or self.distVariant == 'studio_8.10':
+	elif self.distVariant == 'edubuntu_8.10' or self.distVariant == 'studio_8.10' or self.distVariant == 'studio_9.04':
 		initUsername = 'custom'
 		initUserFullname = 'Live session user'
 		initHostName = 'custom'
@@ -1223,6 +1223,11 @@ class Reconstructor:
 		self.debDist= 'intrepid'
 		self.distVariant = 'studio_8.10'		
 		print "\033[1m Ubuntu Studio 8.10 Live CD\033[0m\n" 
+	   elif  self.isoType == "studio_9.04"
+		self.casperPath = 'casper'	
+		self.debDist= 'jaunty'
+		self.distVariant = 'studio_9.04'		
+		print "\033[1m Ubuntu Studio 9.04 Live CD\033[0m\n" 
 	    elif  self.isoType == "netbook-remix_8.10":
 		self.casperPath = 'casper'	
 		self.debDist= 'intrepid'
@@ -1283,6 +1288,11 @@ class Reconstructor:
 		self.debDist= 'hardy'
 		self.distVariant = 'hardy'		
 		print "\033[1m Ubuntu 8.04 Live CD\033[0m\n"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'9.04\'') != '':
+		self.casperPath = 'casper'	
+		self.debDist= 'jaunty'
+		self.distVariant = 'jaunty'		
+		print "\033[1m Ubuntu 9.04 Live CD\033[0m\n"
 	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.10\'') != '':
 		self.casperPath = 'casper'	
 		self.debDist= 'intrepid'
