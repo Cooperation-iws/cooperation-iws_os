@@ -1223,7 +1223,7 @@ class Reconstructor:
 		self.debDist= 'intrepid'
 		self.distVariant = 'studio_8.10'		
 		print "\033[1m Ubuntu Studio 8.10 Live CD\033[0m\n" 
-	   elif  self.isoType == "studio_9.04"
+	    elif  self.isoType == "studio_9.04":
 		self.casperPath = 'casper'	
 		self.debDist= 'jaunty'
 		self.distVariant = 'studio_9.04'		
