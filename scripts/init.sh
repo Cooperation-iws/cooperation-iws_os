@@ -189,3 +189,15 @@ echo "<?xml version=\"1.0\"?>
 echo "<?xml version=\"1.0\"?>
 <items>" > /tmp/admin_cooperation-wui-fr.xml
 
+#start-up inhibition
+#mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.orig
+#cat > /usr/sbin/policy-rc.d << EOF
+#!/bin/sh
+
+#echo
+#echo "Warning: invoke-rc.d policy in action. Skipping daemon starting"
+
+#exit 101
+#EOF
+#chmod 0755 /usr/sbin/policy-rc.d
+

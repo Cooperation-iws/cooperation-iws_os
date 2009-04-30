@@ -18,9 +18,18 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 function INSTALL
 {
+mount -t sysfs none /sys
+cd /dev
+MAKEDEV generic
+mount -t devpts none /dev/pts
+/etc/init.d/hal start
+/etc/init.d/dbus start
 
 
 apt-get install --assume-yes --force-yes openssh-server
+/etc/init.d/dbus stop
+/etc/init.d/hal stop
+umount -a
 
 }
 

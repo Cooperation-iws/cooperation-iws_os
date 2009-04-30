@@ -30,7 +30,16 @@ chmod -R +x /usr/share/initramfs-tools/scripts/live-bottom
 
 cp /sbin/lrm-manager /sbin/lrm-manager.orig
 sed -i "s/\$(uname -r)/$kernel/" /sbin/lrm-manager 
+mv /sbin/update-grub /sbin/update-grub.orig
+echo "#!/bin/bash
+exit 0" > /sbin/update-grub
+chmod +x /sbin/update-grub
+mv /usr/sbin/update-grub /usr/sbin/update-grub.orig
 
+echo "#!/bin/bash
+exit 0" > /usr/sbin/update-grub
+chmod +x /usr/sbin/update-grub
+mkdir /boot/grub
 
 apt-get install --assume-yes --force-yes loop-aes-utils aufs-tools
 
@@ -44,6 +53,11 @@ dpkg -i linux-headers-2.6.28-11-generic_2.6.28-11.42_i386.deb
 cd $DL_DIR
 wget $URL_FREE/linux-image-2.6.28-11-generic_2.6.28-11.42_i386.deb
 dpkg -i linux-image-2.6.28-11-generic_2.6.28-11.42_i386.deb
+echo "#!/bin/bash
+exit 0" > /sbin/update-grub
+apt-get -f install --assume-yes --force-yes
+mv /sbin/update-grub.orig /sbin/update-grub
+mv /usr/sbin/update-grub.orig /usr/sbin/update-grub
 
 apt-get install --assume-yes --force-yes build-essential debhelper module-assistant
 

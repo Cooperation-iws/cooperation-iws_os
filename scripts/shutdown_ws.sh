@@ -173,6 +173,10 @@ rm /etc/apt/sources.list.d/*
 echo "" > /var/log/dpkg.log
 #apt-get update
 
+#Removing start-up inhibition
+#rm /usr/sbin/policy-rc.d
+#mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
+
 
 echo "I: making initramfs"
 
