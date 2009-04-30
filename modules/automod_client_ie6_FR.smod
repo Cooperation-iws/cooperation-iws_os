@@ -11,6 +11,8 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 LIVEUSER=$(cat /tmp/user)
 DEB_DIST=$(cat /tmp/deb_dist)
+URL_FREE=$(cat /tmp/url_mirroir)
+DL_DIR=$(cat /tmp/web_install-path)
 
 
 
@@ -20,6 +22,10 @@ wget $URL_FREE/ie6-FR-090423.tar.gz
 
 tar -xzf ie6-FR-090423.tar.gz -C /etc/skel
 
-apt-get install --assume-yes --force-yes wine
+apt-get install --assume-yes --force-yes wine cabextract
+
+/etc/init.d/binfmt-support stop
+
+/etc/init.d/winbind stop
 
 

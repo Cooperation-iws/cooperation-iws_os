@@ -11,6 +11,7 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 URL_FREE=$(cat /tmp/url_mirroir)
 DL_DIR=$(cat /tmp/web_install-path)
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 
 echo "I: installing clamav clamtk"
 export DEBIAN_FRONTEND=noninteractive
@@ -26,3 +27,7 @@ wget $URL_FREE/clamtk_4.10-1_all.deb
 dpkg -i clamtk_4.10-1_all.deb
 
 apt-get -f install --assume-yes --force-yes
+
+mv /var/lib/clamav $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/clamav /var/lib/clamav
+

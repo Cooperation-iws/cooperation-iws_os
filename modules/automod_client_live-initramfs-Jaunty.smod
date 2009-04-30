@@ -113,4 +113,6 @@ mv /sbin/lrm-manager.orig /sbin/lrm-manager
 #mv losetup losetup.old
 #wget $URL_FREE/losetup
 #chmod +x losetup
+#Jaunty hostname hack
+echo "localhost.localdomain" > /etc/hostname.orig
 

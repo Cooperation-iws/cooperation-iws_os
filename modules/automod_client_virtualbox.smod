@@ -14,5 +14,5 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 echo "I: install virtualbox"
 
-apt-get install --assume-yes --force-yes virtualbox-ose virtualbox-ose-source linux-headers-generic dkms
+apt-get install --assume-yes --force-yes virtualbox-ose virtualbox-ose-source dkms
 

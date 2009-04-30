@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='Virtualbox-prop Intrepid'
+RMOD_NAME='Virtualbox-prop Jaunty'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='NoMachine NX remote admin management client'
@@ -15,7 +15,7 @@ URL_FREE=$(cat /tmp/url_mirroir)
 echo "I: install virtualbox"
 
 echo "
-deb http://download.virtualbox.org/virtualbox/debian intrepid non-free
+deb http://download.virtualbox.org/virtualbox/debian jaunty non-free
 " >> /etc/apt/sources.list
 
 wget -q http://download.virtualbox.org/virtualbox/debian/sun_vbox.asc -O- | sudo apt-key add -
