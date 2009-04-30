@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='NX Client'
+RMOD_NAME='NX Jaunty Client'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='NoMachine NX remote admin management client'
@@ -17,10 +17,24 @@ cd /tmp
 wget $URL_FREE/nxclient_3.3.0-6_i386.deb
 dpkg -i nxclient_3.3.0-6_i386.deb
 
-
+cat << EOT_EOT >> /etc/rc.local
 echo '
 Section "ServerFlags"
 Option "AutoAddDevices" "false"
-EndSection' >> /etc/X11/xorg.conf
+EndSection
+
+Section "InputDevice"
+        Identifier  "Keyboard0"
+        Driver      "kbd"
+        Option      "XkbModel" "pc105"
+        Option      "XkbLayout" "fr"
+EndSection
+' >> /etc/X11/xorg.conf
+
+/etc/init.d/gdm restart
+/etc/init.d/kdm restart
+
+
+EOT_EOT
 
 

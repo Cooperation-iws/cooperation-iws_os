@@ -1,6 +1,4 @@
 #!/bin/bash
 #install live-initramfs Jaunty
 kernel="2.6.28-11-generic"
-#Jaunty_havp
-havp_privoxy_forward="n"
-#SSH Server
+#NX Jaunty Client

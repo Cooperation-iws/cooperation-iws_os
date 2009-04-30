@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#!/bin/bash
+
 #install live-initramfs Jaunty
 kernel="2.6.28-11-generic"
 #Tor Privoxy Jaunty
@@ -23,6 +25,7 @@ havp_privoxy_forward="n"
 #latex client
 #Le Littre
 #secure-delete client
-#ie6_EN
-#Virtualbox-ose
+#ie6_FR
+#Virtualbox-prop Jaunty
+#NX Jaunty Client
 #sound-juicer
