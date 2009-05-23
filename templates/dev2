@@ -1,4 +1,5 @@
 #!/bin/bash
-#install live-initramfs Jaunty
-kernel="2.6.28-11-generic"
-#NX Jaunty Client
+#kernel bigmem lenny upgrade
+kernel="2.6.26-1-686-bigmem"
+#update live-initramfs
+

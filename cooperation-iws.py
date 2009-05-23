@@ -1926,7 +1926,8 @@ class Reconstructor:
 	print _("Umounting /dev/pts...")
         #os.popen('umount \"' + os.path.join(self.customDir, "chroot/dev/pts") + '\"')
 	self.casperPathUpdated = commands.getoutput('cat '  +  os.path.join(self.customDir, "chroot/tmp/casper_path_updated"))
-        os.popen('mv \"' + os.path.join(self.customDir, "remaster/casper") + '\" \"' + os.path.join(self.customDir, "remaster/"+self.casperPathUpdated ) + '\"')
+	if self.casperPath == "casper" :        
+		os.popen('mv \"' + os.path.join(self.customDir, "remaster/"+self.casperPath) + '\" \"' + os.path.join(self.customDir, "remaster/"+self.casperPathUpdated ) + '\"')
 	self.casperPath = self.casperPathUpdated
         # manual software
         # check for manual install
