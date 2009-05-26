@@ -1,4 +1,6 @@
 #!/bin/bash
+domain="dev-server.intra"
+#DNS server lenny
 #kernel bigmem lenny upgrade
 kernel="2.6.26-1-686-bigmem"
 #update live-initramfs

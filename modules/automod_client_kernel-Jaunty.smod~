@@ -1,0 +1,40 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='kernel Jaunty'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Office tools for client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+URL_FREE=$(cat /tmp/url_mirroir)
+DL_DIR=$(cat /tmp/web_install-path)
+. /tmp/app_params
+
+apt-get install fakeroot build-essential makedumpfile
+
+apt-get install kernel-package gcc libncurses5 libncurses5-dev libqt3-mt-dev
+
+apt-get build-dep --assume-yes --force-yes linux-image-$kernel
+
+cd /usr/src
+
+apt-get source linux-image-$kernel
+
+apt-get build-dep --assume-yes --force-yes linux-restricted-modules-common
+
+apt-get source linux-restricted-modules-common
+
+sed -i "s/CONFIG_BLK_DEV_LOOP=y/CONFIG_BLK_DEV_LOOP=m/" linux-2.6.28/debian/config/i386/config
+
+cd linux-2.6.28
+AUTOBUILD=1 NOEXTRAS=1 skipabi=true fakeroot debian/rules binary-generic
+
+
+cd ../linux-restricted-modules-2.6.28
+
+AUTOBUILD=1 skipabi=true fakeroot debian/rules binary-indep binary-arch KDIR=../linux-2.6.28
+
+

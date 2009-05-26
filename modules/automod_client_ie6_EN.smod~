@@ -1,0 +1,31 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='ie6_EN'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION=''
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$(cat /tmp/user)
+DEB_DIST=$(cat /tmp/deb_dist)
+
+
+
+cd $DL_DIR
+
+wget $URL_FREE/ie6-EN-090423.tar.gz
+
+tar xzf ie6-EN-090423.tar.gz -C /etc/skel
+
+
+apt-get install --assume-yes --force-yes wine cabextract
+
+/etc/init.d/binfmt-support stop
+
+/etc/init.d/winbind stop
+
+
+

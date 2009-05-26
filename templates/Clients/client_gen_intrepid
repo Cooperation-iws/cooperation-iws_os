@@ -20,7 +20,7 @@ kernel="2.6.27-11-generic"
 #Havp
 havp_privoxy_forward="n"
 #Truecrypt client
-#Clamtk client
+#Clamtk 4.10-1
 #Gimp client
 #inkscape client
 #latex client

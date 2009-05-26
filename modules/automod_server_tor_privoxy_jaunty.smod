@@ -1,0 +1,70 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Tor Privoxy Jaunty'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Anonymous Surfing'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$(cat /tmp/user)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+URL_FREE=$(cat /tmp/url_mirroir)
+DL_DIR=$(cat /tmp/web_install-path)
+
+echo "I: install tor privoxy"
+
+apt-get install --assume-yes --force-yes privoxy torbutton-extension
+
+cd $DL_DIR
+wget $URL_FREE/tor_0.2.0.31-1_i386.deb
+dpkg -i tor_0.2.0.31-1_i386.deb
+
+apt-get -f install --assume-yes --force-yes
+
+sed -i -e "1230s/#/ /" /etc/privoxy/config
+sed -i -e "1230s/127.0.0.1/localhost/" /etc/privoxy/config
+
+cp /etc/privoxy/config /etc/privoxy/config.tpl
+mv /etc/privoxy /opt/ciws/etc
+ln -s /opt/ciws/etc/privoxy /etc/privoxy
+if [[ "$fixed_ip" == "y" ]]; then
+cat << EOT_HOOK_1 > /opt/ciws/etc/privoxy-dhclient-exit-hook.sh
+sleep 8
+cp /etc/privoxy/config.tpl /etc/privoxy/config
+ip_address="$proxy_ip"
+sed -i "764s/127.0.0.1/\$ip_address/" /etc/privoxy/config
+/etc/init.d/privoxy restart
+
+EOT_HOOK_1
+
+else
+cat << EOT_HOOK_2 > /opt/ciws/etc/privoxy-dhclient-exit-hook.sh
+sleep 8
+cp /etc/privoxy/config.tpl /etc/privoxy/config
+ip_address=\$(ifconfig | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1)
+sed -i "764s/127.0.0.1/\$ip_address/" /etc/privoxy/config
+/etc/init.d/privoxy restart
+
+EOT_HOOK_2
+fi
+
+chmod +x /opt/ciws/etc/privoxy-dhclient-exit-hook.sh
+
+echo "#!/bin/bash
+
+sudo  /opt/ciws/etc/privoxy-dhclient-exit-hook.sh &
+" > /etc/dhcp3/dhclient-exit-hooks.d/privoxy
+
+chmod +x /etc/dhcp3/dhclient-exit-hooks.d/privoxy
+
+
+/etc/init.d/tor stop
+
+/etc/init.d/privoxy stop
+
+
+

@@ -8,7 +8,7 @@ proxy_ip="127.0.0.1"
 #Havp
 havp_privoxy_forward="n"
 #Truecrypt client
-#Clamtk client
+#Clamtk 4.10-1
 #Ubuntu Multimedia Codecs
 #Multimedia Jaunty Client
 #SSH Server

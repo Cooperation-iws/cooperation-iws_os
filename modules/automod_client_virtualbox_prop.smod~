@@ -1,0 +1,26 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Virtualbox-prop Intrepid'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='NoMachine NX remote admin management client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$(cat /tmp/user)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+echo "I: install virtualbox"
+
+echo "
+deb http://download.virtualbox.org/virtualbox/debian intrepid non-free
+" >> /etc/apt/sources.list
+
+wget -q http://download.virtualbox.org/virtualbox/debian/sun_vbox.asc -O- | sudo apt-key add -
+
+apt-get update
+
+apt-get install --assume-yes --force-yes virtualbox-2.0 linux-headers-generic dkms
+
