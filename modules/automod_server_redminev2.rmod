@@ -224,6 +224,23 @@ chmod +x /etc/cron.d/redmine
 REDMINE_URL="<![CDATA[http://localhost:19000]]>"
 fi
 
+mv /usr/bin/svnserve /usr/bin/svnserve.bin
+
+echo "#!/bin/sh
+# wrap in order to put root in by default
+# Script implemented by Adrian Robert <arobert@cogsci.ucsd.edu>
+exec /usr/bin/svnserve.bin -r $LAMPP_DIRECTORY/var/svn_redmine \"$@\"
+" > /usr/bin/svnserve
+chmod +x /usr/bin/svnserve
+
+
+echo "10 * * * * root sed -i '12s/#//' $LAMPP_DIRECTORY/var/svn_redmine/*/conf/svnserve.conf" > /etc/cron.d/svnserve.1
+echo "10 * * * * root sed -i '13s/#//' $LAMPP_DIRECTORY/var/svn_redmine/*/conf/svnserve.conf" > /etc/cron.d/svnserve.2
+
+chmod +x /etc/cron.d/svnserve.1
+chmod +x /etc/cron.d/svnserve.2
+
+
 rm /opt/ciws/var/$MOD_NAME/log/mongrel.19001.pid
 rm /opt/ciws/var/$MOD_NAME/log/mongrel.19000.pid
 

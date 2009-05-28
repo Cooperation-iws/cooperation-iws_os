@@ -78,6 +78,7 @@ tar -xzvf xml2sql-0.5.tar.gz
 mv xml2sql-0.5 xml2sql
 
 wget $URL_FREE/mwdumper.jar
+wget $URL_FREE/mediawiki_parser_functions_090527.tar.gz
 
 }
 
@@ -130,7 +131,13 @@ sed -i "s/wikiadmin/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/Adm
 sed -i "s/adminpass/${MEDIAWIKI_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.php
 
 #fix image display
+
 sed -i 's/$wgUploadPath = "images";/#$wgUploadPath = "images";/' $WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php
+
+cd $DL_DIR
+tar -xzf mediawiki_parser_functions_090527.tar.gz -C $WWW_DIRECTORY/${MOD_NAME[$count]}/extensions/
+
+echo 'require_once( "$IP/extensions/ParserFunctions/ParserFunctions.php" );' >> $WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
@@ -211,7 +218,8 @@ $BIN_MYSQL -u root < frwiki-latest-page.sql ${MOD_NAME[$count]}
 
 echo "php $WWW_DIRECTORY/${MOD_NAME[$count]}/maintenance/refreshLinks.php --update > /tmp/refresh_links"
 php $WWW_DIRECTORY/${MOD_NAME[$count]}/maintenance/refreshLinks.php --update > /tmp/refresh_links
-#php $WWW_DIRECTORY/${MOD_NAME[$count]}/maintenance/initStats.php --update
+echo "php $WWW_DIRECTORY/${MOD_NAME[$count]}/maintenance/initStats.php --update"
+php $WWW_DIRECTORY/${MOD_NAME[$count]}/maintenance/initStats.php --update
 
 
 

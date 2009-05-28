@@ -53,6 +53,14 @@ aptitude install -y trac
 apt-get install --yes --force-yes python-pygments enscript
 mkdir $LAMPP_DIRECTORY/var/trac
 mkdir $LAMPP_DIRECTORY/var/private/
+
+mv /usr/bin/svnserve /usr/bin/svnserve.bin
+
+echo "#!/bin/sh
+# wrap in order to put root in by default
+# Script implemented by Adrian Robert <arobert@cogsci.ucsd.edu>
+" > /usr/bin/svnserve
+
 for (( count=1; count<=$NB_SVN; count++ ))
 do
 mkdir $LAMPP_DIRECTORY/var/svn$count
@@ -119,6 +127,15 @@ sleep 10
 #----------Login into the svn repository with admin password---------------"
 
 #svn mkdir http://localhost/svn/project/trunk http://localhost/svn/project/branches http://localhost/svn/project/tags -m "Création des répertoires d'archivage Subversion."  --username=admin
+echo "
+exec /usr/bin/svnserve.bin -r $LAMPP_DIRECTORY/var/svn$count \"$@\"
+" >> /usr/bin/svnserve
+
+chmod +x /usr/bin/svnserve
+
+sed -i '12s/#//' $LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}/conf/svnserve.conf
+sed -i '13s/#//' $LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}/conf/svnserve.conf
+
 
 echo "I: End of Install SVN"
 echo "I: Install Trac"

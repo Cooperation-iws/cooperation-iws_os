@@ -5,7 +5,7 @@ generic_mysql_pwd="mysql_pwd"
 domain="hosting.intra"
 #install live-initramfs Hardy
 kernel="2.6.24-23-generic"
-#Virtualmin v2
+#Virtualmin Hardy
 #Zabbix client 1.6
 zabbix_server_name="administration.admin.intra"
 #Syslog client intrepid
