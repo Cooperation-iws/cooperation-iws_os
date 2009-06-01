@@ -19,11 +19,12 @@ secure_mysql="y"
 secure_admin="y"
 apache_admin_pwd=$generic_login_pwd
 mysql_root_password=$generic_mysql_pwd
-#Gateway DNS 0.4
+#Gateway DNS 0.5
 gateway_nb_machine=10
 gateway_net_iface="eth0"
 gateway_local_iface="eth1"
 domain="cooperation-iws.intra"
+range="32"
 #Ntop
 #Awstats
 #Ossec 1.5.1 standalone
@@ -35,5 +36,5 @@ snort_mysql_pwd=$generic_mysql_pwd
 snort_listening_interface="eth0"
 #debian netbook
 #Postfix Relay Client
-smtp_postfix_client_relay="administration.admin.intra"
+smtp_postfix_client_relay="wwi.svn-server.intra"
 

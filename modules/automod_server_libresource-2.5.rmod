@@ -72,8 +72,21 @@ Flags: seen
 
 ln -s / /cow
 apt-get install --assume-yes --force-yes sun-java6-bin sun-java6-jre sun-java6-jdk
+#cancel inhibition for mysql
+if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
+
+mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.postgresql
+cp /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
+fi
 
 apt-get install --assume-yes --force-yes postgresql postgresql-client
+
+if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
+
+mv /usr/sbin/policy-rc.d.postgresql /usr/sbin/policy-rc.d 
+fi
+
+
 apt-get remove --purge --assume-yes --force-yes openbsd-inetd
 cd $DL_DIR
 mv Libresource $LAMPP_DIRECTORY/server/$MOD_NAME

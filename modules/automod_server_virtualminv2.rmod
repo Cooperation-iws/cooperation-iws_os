@@ -49,10 +49,20 @@ export $HOSTNAME
 export $domain
 
 cd $DL_DIR
+#cancel inhibition for mysql
+if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
+
+mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.virtualmin
+cp /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
+fi
 
 wget $URL_FREE/install_virtualminv2.sh
 chmod +x install_virtualminv2.sh
 ./install_virtualminv2.sh
+if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
+
+mv /usr/sbin/policy-rc.d.virtualmin /usr/sbin/policy-rc.d 
+fi
 
 mv /etc/apache2 /opt/ciws/etc
 ln -s /opt/ciws/etc/apache2 /etc/apache2

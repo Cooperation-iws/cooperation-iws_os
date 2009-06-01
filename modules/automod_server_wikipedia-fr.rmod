@@ -127,8 +127,8 @@ sed -i "64s/mysql_pwd/${MEDIAWIKI_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME
 
 mv  $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.sample $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.php
 
-sed -i "s/wikiadmin/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.php
-sed -i "s/adminpass/${MEDIAWIKI_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.php
+sed -i "s/Mediawiki/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.php
+sed -i "s/mysql_pwd/${MEDIAWIKI_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.php
 
 #fix image display
 
@@ -185,30 +185,30 @@ cd $DL_DIR
 echo "bunzip2 -c frwiki-latest-pages-articles.xml.bz2 | xml2sql\n"
 bunzip2 -c frwiki-latest-pages-articles.xml.bz2 | xml2sql
 echo "/usr/bin/mysqlimport -u root ${MOD_NAME[$count]} /$DL_DIR/page.txt\n"
-/usr/bin/mysqlimport -u root ${MOD_NAME[$count]} /$DL_DIR/page.txt
+/usr/bin/mysqlimport -u root --default_character_set utf8 ${MOD_NAME[$count]} /$DL_DIR/page.txt
 echo "/usr/bin/mysqlimport -u root ${MOD_NAME[$count]} /$DL_DIR/revision.txt"
-/usr/bin/mysqlimport -u root ${MOD_NAME[$count]} /$DL_DIR/revision.txt
+/usr/bin/mysqlimport -u root --default_character_set utf8 ${MOD_NAME[$count]} /$DL_DIR/revision.txt
 echo "/usr/bin/mysqlimport -u root ${MOD_NAME[$count]} /$DL_DIR/text.txt"
-/usr/bin/mysqlimport -u root ${MOD_NAME[$count]} /$DL_DIR/text.txt
+/usr/bin/mysqlimport -u root --default_character_set utf8 ${MOD_NAME[$count]} /$DL_DIR/text.txt
 
 
 cd $DL_DIR 
 echo "$BIN_MYSQL -u root < frwiki-latest-categorylinks.sql ${MOD_NAME[$count]}"
-$BIN_MYSQL -u root < frwiki-latest-categorylinks.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root --default_character_set utf8 < frwiki-latest-categorylinks.sql ${MOD_NAME[$count]}
 echo "$BIN_MYSQL -u root < frwiki-latest-externallinks.sql ${MOD_NAME[$count]}"
-$BIN_MYSQL -u root < frwiki-latest-externallinks.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root --default_character_set utf8 < frwiki-latest-externallinks.sql ${MOD_NAME[$count]}
 echo "$BIN_MYSQL -u root < frwiki-latest-image.sql ${MOD_NAME[$count]}"
-$BIN_MYSQL -u root < frwiki-latest-image.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root --default_character_set utf8 < frwiki-latest-image.sql ${MOD_NAME[$count]}
 echo "$BIN_MYSQL -u root < frwiki-latest-imagelinks.sql ${MOD_NAME[$count]}"
-$BIN_MYSQL -u root < frwiki-latest-imagelinks.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root --default_character_set utf8 < frwiki-latest-imagelinks.sql ${MOD_NAME[$count]}
 echo "$BIN_MYSQL -u root < frwiki-latest-langlinks.sql ${MOD_NAME[$count]}"
-$BIN_MYSQL -u root < frwiki-latest-langlinks.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root --default_character_set utf8 < frwiki-latest-langlinks.sql ${MOD_NAME[$count]}
 echo "$BIN_MYSQL -u root < frwiki-latest-pagelinks.sql ${MOD_NAME[$count]}"
-$BIN_MYSQL -u root < frwiki-latest-pagelinks.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root --default_character_set utf8 < frwiki-latest-pagelinks.sql ${MOD_NAME[$count]}
 echo "$BIN_MYSQL -u root < frwiki-latest-templatelinks.sql ${MOD_NAME[$count]}"
-$BIN_MYSQL -u root < frwiki-latest-templatelinks.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root --default_character_set utf8 < frwiki-latest-templatelinks.sql ${MOD_NAME[$count]}
 echo "$BIN_MYSQL -u root < frwiki-latest-page.sql ${MOD_NAME[$count]}"
-$BIN_MYSQL -u root < frwiki-latest-page.sql ${MOD_NAME[$count]}
+$BIN_MYSQL -u root --default_character_set utf8 < frwiki-latest-page.sql ${MOD_NAME[$count]}
 
 
 
@@ -216,8 +216,8 @@ $BIN_MYSQL -u root < frwiki-latest-page.sql ${MOD_NAME[$count]}
 
 
 
-echo "php $WWW_DIRECTORY/${MOD_NAME[$count]}/maintenance/refreshLinks.php --update > /tmp/refresh_links"
-php $WWW_DIRECTORY/${MOD_NAME[$count]}/maintenance/refreshLinks.php --update > /tmp/refresh_links
+#echo "php $WWW_DIRECTORY/${MOD_NAME[$count]}/maintenance/refreshLinks.php --update > /tmp/refresh_links"
+#php $WWW_DIRECTORY/${MOD_NAME[$count]}/maintenance/refreshLinks.php --update > /tmp/refresh_links
 echo "php $WWW_DIRECTORY/${MOD_NAME[$count]}/maintenance/initStats.php --update"
 php $WWW_DIRECTORY/${MOD_NAME[$count]}/maintenance/initStats.php --update
 

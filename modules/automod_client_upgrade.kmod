@@ -26,7 +26,7 @@ mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.orig
 cat > /usr/sbin/policy-rc.d << EOF
 #!/bin/sh
 
-echo
+
 echo "Warning: invoke-rc.d policy in action. Skipping daemon starting"
 
 exit 101

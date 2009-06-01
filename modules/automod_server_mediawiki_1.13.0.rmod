@@ -101,8 +101,8 @@ sed -i "64s/mysql_pwd/${MEDIAWIKI_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME
 
 mv  $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.sample $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.php
 
-sed -i "s/wikiadmin/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.php
-sed -i "s/adminpass/${MEDIAWIKI_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.php
+sed -i "s/Mediawiki/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.php
+sed -i "s/mysql_pwd/${MEDIAWIKI_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/AdminSettings.php
 
 #fix image display
 sed -i 's/$wgUploadPath = "images";/#$wgUploadPath = "images";/' $WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php

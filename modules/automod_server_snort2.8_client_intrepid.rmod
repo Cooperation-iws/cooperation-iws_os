@@ -296,7 +296,10 @@ mkdir /etc/snort /etc/snort/rules /var/log/snort
 cd $DL_DIR/snort/rules
 cp *.rules /etc/snort/rules/
 
+if [ "$(echo $REGISTERED_KEY | grep '[0-9a-zA-Z]')" ] ; then
 /usr/sbin/oinkmaster -C /etc/oinkmaster.conf -o /etc/snort/rules
+fi
+
 
 
 

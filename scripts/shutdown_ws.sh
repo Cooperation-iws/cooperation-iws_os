@@ -18,12 +18,17 @@ TMPUSER=$(cat /tmp/tmp_user)
 DEB_DIST=$(cat /tmp/deb_dist)
 
 SILENT=$(cat /tmp/silent)
+SILENT_INSTALL=$(cat /tmp/silent_install)
 
 . /tmp/app_params
 
 HOSTNAME=$(cat /tmp/hostname)
 
+if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
 
+rm /usr/sbin/policy-rc.d
+mv /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
+fi
 
 if [ "$(echo "${OS_TYPE}" | awk  '{print $1}')" == "Server" ]; then
 echo "I: configuring $CASPER_PATH"
@@ -99,7 +104,9 @@ fi
 echo "I: Delete examples directory on the desktop"
 CHERCHE='chroot \/root install -o $USERNAME -g $USERNAME -d \/home\/$USERNAME\/Desktop\/'
 sed -i "s/^[ \t]*${CHERCHE}/#${CHERCHE}/" \
-	/usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/10adduser
+	/usr/share/initramfs-tools/scripts/$Crm /usr/sbin/policy-rc.d
+mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
+ASPER_PATH-bottom/10adduser
 #Désactiver alias Examples sur bureau
 CHERCHE='mv \/root\/home\/$USERNAME\/Examples \/root\/home\/$USERNAME\/Desktop\/'
 sed -i "s/^[ \t]*${CHERCHE}/#${CHERCHE}/" \

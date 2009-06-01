@@ -490,9 +490,12 @@ chmod +x /usr/bin/svnserve
 
 echo "10 * * * * root sed -i '12s/#//' /home/svn/repositories/*/conf/svnserve.conf" > /etc/cron.d/svnserve.1
 echo "10 * * * * root sed -i '13s/#//' /home/svn/repositories/*/conf/svnserve.conf" > /etc/cron.d/svnserve.2
+#might have security issue, fix svn+ssh write permission
+echo "10 * * * * root chmod -R 777 /home/svn" > /etc/cron.d/svn-chmod
 
 chmod +x /etc/cron.d/svnserve.1
 chmod +x /etc/cron.d/svnserve.2
+chmod +x /etc/cron.d/svn-chmod
 
 
 echo "

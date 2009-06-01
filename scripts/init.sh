@@ -34,6 +34,7 @@ DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
 DEBNONFREE_MIRROR_PATH=$(cat /tmp/deb-nonfree_mirror_path)
 DEB_MIRROR_SECURITY_PATH=$(cat /tmp/deb-security_mirror_path)
 HOSTNAME=$(cat /tmp/hostname)
+SILENT_INSTALL=$(cat /tmp/silent_install)
 
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
@@ -190,14 +191,18 @@ echo "<?xml version=\"1.0\"?>
 <items>" > /tmp/admin_cooperation-wui-fr.xml
 
 #start-up inhibition
-#mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.orig
-#cat > /usr/sbin/policy-rc.d << EOF
+
+if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
+
+mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.silent_install
+cat > /usr/sbin/policy-rc.d << EOF
 #!/bin/sh
 
-#echo
-#echo "Warning: invoke-rc.d policy in action. Skipping daemon starting"
 
-#exit 101
-#EOF
-#chmod 0755 /usr/sbin/policy-rc.d
+echo "Warning: invoke-rc.d policy in action. Skipping daemon starting"
+
+exit 101
+EOF
+chmod 0755 /usr/sbin/policy-rc.d
+fi
 

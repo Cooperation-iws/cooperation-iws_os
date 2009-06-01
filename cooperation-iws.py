@@ -1722,7 +1722,12 @@ class Reconstructor:
         fDefaultInstallWebApp.write(defaultInstall)
         fDefaultInstallWebApp.close() 
 	
+	if self.silent == True:
+		fsilentinstall=open(os.path.join(self.customDir, "chroot/tmp/silent_install"), 'w')
+        	fsilentinstall.write("silent")
+        	fsilentinstall.close() 
 	
+
         # run modules
         # HACK: check for run on boot scripts and clear previous if new ones selected
 	if self.commandLine == False:         
