@@ -2,7 +2,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Akoie 0.5'
+RMOD_NAME='Aie 0.5'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Web images editor'
@@ -37,7 +37,7 @@ fi
 #VARIABLES
 #MYSQL PASSWORD
 AKOIE_MYSQL_PWD="AKOIE_MYSQL_PWD"
-MOD_NAME="Akoie"
+MOD_NAME=$aie_name
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________

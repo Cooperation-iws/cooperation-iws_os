@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='Virtualbox-ose'
+RMOD_NAME='Virtualbox-ose 0.1'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='NoMachine NX remote admin management client'

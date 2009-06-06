@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Bugzilla3.0.5b'
+RMOD_NAME='Bugzilla 3.0.5b'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Defect Tracking System'
@@ -32,7 +32,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
-NB_BUGZILLA=$nb_bugzilla
+NB_BUGZILLA=${#bugzilla_name[*]}
 
 for (( count=1; count<=$NB_BUGZILLA; count++ ))
 do

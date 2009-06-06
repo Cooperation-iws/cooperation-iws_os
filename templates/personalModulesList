@@ -94,7 +94,8 @@ drupal_admin_mail[1]=$generic_admin_email
 #Cacti 0.8.7b
 cacti_name="Cacti"
 cacti_mysql_pwd=$generic_mysql_pwd
-#Akoie 0.5
+#Aie 0.5
+aie_name="Aie"
 share_akoie_smb="y"
 share_akoie_smb_pwd="n"
 #Clamav antivirus
