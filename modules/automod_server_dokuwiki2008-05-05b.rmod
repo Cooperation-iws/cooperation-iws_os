@@ -30,7 +30,7 @@ INSTALL=$(cat /tmp/def_install)
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
-NB_DOKUWIKI=$nb_dokuwiki
+NB_DOKUWIKI=${#dokuwiki_name[*]}
 
 for (( count=1; count<=$NB_DOKUWIKI; count++ ))
 do

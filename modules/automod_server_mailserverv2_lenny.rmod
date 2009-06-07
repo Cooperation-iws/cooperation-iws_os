@@ -2,7 +2,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Lenny release'
+RMOD_NAME='Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Lenny'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='eMails administration'
@@ -124,14 +124,14 @@ $BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/admin/$MOD_NAME
 
 echo "
 UPDATE $NOM_MAILSERVER.domain SET domain = '$mail_domain' WHERE CONVERT( domain.domain USING utf8 ) = 'ciws.com' LIMIT 1 ;
-UPDATE $NOM_MAILSERVER.admin SET username = '$admin_email' WHERE CONVERT( admin.username USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
-UPDATE $NOM_MAILSERVER.mailbox SET username = '$admin_email',
-maildir = '$admin_email/',
+UPDATE $NOM_MAILSERVER.admin SET username = '$postfix_admin_email' WHERE CONVERT( admin.username USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
+UPDATE $NOM_MAILSERVER.mailbox SET username = '$postfix_admin_email',
+maildir = '$postfix_admin_email/',
 domain = '$mail_domain' WHERE CONVERT( mailbox.username USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
-UPDATE $NOM_MAILSERVER.alias SET address = '$admin_email',
-goto = '$admin_email',
+UPDATE $NOM_MAILSERVER.alias SET address = '$postfix_admin_email',
+goto = '$postfix_admin_email',
 domain = '$mail_domain' WHERE CONVERT( alias.address USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
-UPDATE $NOM_MAILSERVER.domain_admins SET username = '$admin_email' WHERE CONVERT( domain_admins.username USING utf8 ) = 'admin@ciws.com' AND CONVERT( domain_admins.domain USING utf8 ) = 'ALL' AND domain_admins.created = '2008-11-01 15:17:31' AND domain_admins.active=1 LIMIT 1 ;
+UPDATE $NOM_MAILSERVER.domain_admins SET username = '$postfix_admin_email' WHERE CONVERT( domain_admins.username USING utf8 ) = 'admin@ciws.com' AND CONVERT( domain_admins.domain USING utf8 ) = 'ALL' AND domain_admins.created = '2008-11-01 15:17:31' AND domain_admins.active=1 LIMIT 1 ;
 " > /tmp/update_mail_domain
 $BIN_MYSQL -u root < /tmp/update_mail_domain $NOM_MAILSERVER
 

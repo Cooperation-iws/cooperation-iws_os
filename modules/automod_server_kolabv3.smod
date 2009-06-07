@@ -24,8 +24,9 @@ DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 . /tmp/app_params
-
-
+kolab_domain_name=$(echo $domain | cut -d'.' -f1)
+kolab_domain_ext=$(echo $domain | cut -d'.' -f2)
+kolab_admin_mail=$(echo kolab_admin_mail |  cut -d'@' -f1) 
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)

@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Snif'
+RMOD_NAME='Snif 0.1'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Files display'
@@ -31,7 +31,7 @@ if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
 fi
 
-NB_SNIF=$nb_snif
+NB_SNIF=${#snif_name[*]}
 
 for (( count=1; count<=$NB_SNIF; count++ ))
 do

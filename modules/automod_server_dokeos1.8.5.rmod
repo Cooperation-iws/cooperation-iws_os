@@ -34,7 +34,7 @@ SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 HOSTNAME=$(cat /tmp/hostname)
 
-NB_DOKEOS=$nb_dokeos
+NB_DOKEOS=${#dokeos_name[*]}
 
 for (( count=1; count<=$NB_DOKEOS; count++ ))
 do

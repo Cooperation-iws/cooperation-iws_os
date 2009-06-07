@@ -36,7 +36,7 @@ ELGG_MYSQL_PWD="ELGG_MYSQL_PWD"
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
-NB_ELGG=$nb_elgg
+NB_ELGG=${#elgg_name[*]}
 
 for (( count=1; count<=$NB_ELGG; count++ ))
 do

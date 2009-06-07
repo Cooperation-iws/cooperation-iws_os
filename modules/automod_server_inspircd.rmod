@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Inspircd'
+RMOD_NAME='Inspircd 0.1'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='IRC Server'
@@ -27,6 +27,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 #VARIABLES
 
 HOSTNAME=$(cat /tmp/hostname)
+. /tmp/app_params
 
 
 
@@ -39,9 +40,9 @@ function INSTALL
 
 apt-get install --assume-yes --force-yes inspircd
 
-sed -i "12s/root@localhost/admin@ciws.com/" /etc/inspircd/inspircd.conf
-sed -i "38s/root/Admin/" /etc/inspircd/inspircd.conf
-sed -i "39s/12345/cooperation/" /etc/inspircd/inspircd.conf
+sed -i "12s/root@localhost/$inspircd_admin_email/" /etc/inspircd/inspircd.conf
+sed -i "38s/root/$inspircd_login_name/" /etc/inspircd/inspircd.conf
+sed -i "39s/12345/$inspircd_login_pwd/" /etc/inspircd/inspircd.conf
 sed -i "14s/127.0.0.1//" /etc/inspircd/inspircd.conf
 sed -i "s/INSPIRCD_ENABLED=0/INSPIRCD_ENABLED=1/" /etc/default/inspircd
 

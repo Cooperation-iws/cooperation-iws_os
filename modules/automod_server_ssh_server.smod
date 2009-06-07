@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Server'
-RMOD_NAME='SSH Server'
+RMOD_NAME='Openssh server 0.1'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Secure Shell server'
@@ -14,6 +14,7 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 LANG_UI=$(cat /tmp/lang-wui)
 
 
+. /tmp/app_params
 
 
 function INSTALL
@@ -27,6 +28,11 @@ mount -t devpts none /dev/pts
 
 
 apt-get install --assume-yes --force-yes openssh-server
+
+if [ "$(echo "$deactivate_ssh_root_login" | awk  '{print $1}')" =="y" ] ; then
+sed -i "s/PermitRootLogin yes/PermitRootLogin no/" /etc/ssh/sshd_config
+fi
+
 /etc/init.d/dbus stop
 /etc/init.d/hal stop
 umount -a
