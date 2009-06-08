@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='Cooperation-iws Liveusb Ubuntu 0.4'
+RMOD_NAME='Cooperation-iws Liveusb Ubuntu 0.7'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Cooperation-iws Live Usb installer'
@@ -16,8 +16,8 @@ echo "I: installing liveusb installer"
 apt-get remove --assume-yes --force-yes liveusb
 
 cd $DL_DIR
-wget $URL_FREE/cooperation-iws-liveusb-public-0.6.deb
-dpkg -i cooperation-iws-liveusb-public-0.6.deb
+wget $URL_FREE/cooperation-iws-liveusb-public-0.7.deb
+dpkg -i cooperation-iws-liveusb-public-0.7.deb
 apt-get -f install --assume-yes --force-yes
 
 mkdir /etc/skel/Desktop
