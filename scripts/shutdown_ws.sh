@@ -104,9 +104,7 @@ fi
 echo "I: Delete examples directory on the desktop"
 CHERCHE='chroot \/root install -o $USERNAME -g $USERNAME -d \/home\/$USERNAME\/Desktop\/'
 sed -i "s/^[ \t]*${CHERCHE}/#${CHERCHE}/" \
-	/usr/share/initramfs-tools/scripts/$Crm /usr/sbin/policy-rc.d
-mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
-ASPER_PATH-bottom/10adduser
+	/usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/10adduser
 #Désactiver alias Examples sur bureau
 CHERCHE='mv \/root\/home\/$USERNAME\/Examples \/root\/home\/$USERNAME\/Desktop\/'
 sed -i "s/^[ \t]*${CHERCHE}/#${CHERCHE}/" \

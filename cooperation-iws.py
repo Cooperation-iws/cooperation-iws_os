@@ -1609,6 +1609,9 @@ class Reconstructor:
 	fHostFile=open(os.path.join(self.customDir, "chroot") + '/tmp/hostname', 'w')
    	fHostFile.write(self.host)
     	fHostFile.close()
+    	fPasswordFile=open(os.path.join(self.customDir, "chroot") + '/tmp/os_password', 'w')
+   	fPasswordFile.write(self.password)
+    	fPasswordFile.close()
     	
 	
 	

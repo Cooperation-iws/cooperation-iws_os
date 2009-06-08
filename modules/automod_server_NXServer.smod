@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Server'
-RMOD_NAME='NX Server'
+RMOD_NAME='NX Server 0.1'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='NoMachine NX remote admin management'
@@ -20,7 +20,7 @@ wget $URL_FREE/nxserver_3.3.0-8_i386.deb
 dpkg -i nxclient_3.3.0-3_i386.deb
 dpkg -i nxnode_3.3.0-3_i386.deb
 dpkg -i nxserver_3.3.0-8_i386.deb
-/usr/NX/bin/nxserver --useradd $LIVEUSER --system --administrator
+(echo $(cat /tmp/os_password); echo $(cat /tmp/os_password)) | /usr/NX/bin/nxserver --useradd $LIVEUSER --system --administrator
 userdel -r $LIVEUSER
 
 

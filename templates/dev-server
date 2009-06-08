@@ -4,6 +4,6 @@ kernel="2.6.26-1-686-bigmem"
 #update live-initramfs
 #Flashplayer Lenny
 #Madwifi Lenny
-#SSH Server
-#NX Server
+#Openssh server 0.1
+#NX Server 0.1
 
