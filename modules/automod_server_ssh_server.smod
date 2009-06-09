@@ -19,7 +19,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 function INSTALL
 {
-mount -t sysfs none /sys
+#mount -t sysfs none /sys
 cd /dev
 MAKEDEV generic
 mount -t devpts none /dev/pts
@@ -28,6 +28,7 @@ mount -t devpts none /dev/pts
 
 
 apt-get install --assume-yes --force-yes openssh-server
+/etc/init.d/ssh stop
 
 if [ "$(echo $deactivate_ssh_root_login | awk  '{print $1}')" =="y" ] ; then
 sed -i "s/PermitRootLogin yes/PermitRootLogin no/" /etc/ssh/sshd_config

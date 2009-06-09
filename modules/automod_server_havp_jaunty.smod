@@ -30,7 +30,7 @@ EOF
 chmod 0755 /usr/sbin/policy-rc.d
 
 
-mount -t sysfs none /sys
+#mount -t sysfs none /sys
 cd /dev
 MAKEDEV generic
 mount -t devpts none /dev/pts
@@ -94,8 +94,10 @@ apt-get -f install --assume-yes --force-yes
 
 rm /usr/sbin/policy-rc.d
 mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
+if [ ! -d $LAMPP_DIRECTORY/var/lib/clamav ]; then
 mv /var/lib/clamav $LAMPP_DIRECTORY/var/lib
 ln -s $LAMPP_DIRECTORY/var/lib/clamav /var/lib/clamav
+fi
 
 
 

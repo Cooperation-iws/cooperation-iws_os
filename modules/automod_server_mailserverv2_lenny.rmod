@@ -2778,6 +2778,11 @@ mv /etc/dovecot $LAMPP_DIRECTORY/etc/
 
 ln -s $LAMPP_DIRECTORY/etc/dovecot /etc/dovecot
 
+if [ ! -d $LAMPP_DIRECTORY/var/lib/clamav ]; then
+mv /var/lib/clamav $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/clamav /var/lib/clamav
+fi
+
 
 freshclam
 

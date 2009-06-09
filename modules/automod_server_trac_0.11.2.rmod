@@ -128,7 +128,7 @@ sleep 10
 
 #svn mkdir http://localhost/svn/project/trunk http://localhost/svn/project/branches http://localhost/svn/project/tags -m "Création des répertoires d'archivage Subversion."  --username=admin
 echo "
-exec /usr/bin/svnserve.bin -r $LAMPP_DIRECTORY/var/svn$count \"$@\"
+exec /usr/bin/svnserve.bin -r $LAMPP_DIRECTORY/var/svn$count \"\$@\"
 " >> /usr/bin/svnserve
 
 chmod +x /usr/bin/svnserve

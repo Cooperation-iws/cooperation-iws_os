@@ -92,6 +92,9 @@ sed -i "23s/mysql_pwd/${DOTCLEAR_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[
 sed -i "39s/http:\/\/localhost\/Dotclear\/admin\//http:\/\/'.\$HTTP_SERVER_VARS[\"SERVER_NAME\"].'\/${MOD_NAME[$count]}\/admin\//" $WWW_DIRECTORY/${MOD_NAME[$count]}/inc/config.php
 
 echo "
+UPDATE ${MOD_NAME[$count]}.dc_setting SET setting_value = '/${MOD_NAME[$count]}/public' WHERE  CONVERT( dc_setting.setting_id USING utf8 ) = CAST( 0x7075626c69635f75726c AS BINARY ) AND CONVERT( dc_setting.blog_id USING utf8 ) = CAST( 0x64656661756c74 AS BINARY ) AND CONVERT( dc_setting.setting_ns USING utf8 ) = CAST( 0x73797374656d AS BINARY ) AND CONVERT( dc_setting.setting_type USING utf8 ) = CAST( 0x737472696e67 AS BINARY ) AND CONVERT( dc_setting.setting_label USING utf8 ) = CAST( 0x55524c20746f207075626c6963206469726563746f7279 AS BINARY ) LIMIT 1 ;
+UPDATE ${MOD_NAME[$count]}.dc_setting SET setting_value = '/${MOD_NAME[$count]}/themes' WHERE CONVERT( dc_setting.setting_id USING utf8 ) = CAST( 0x7468656d65735f75726c AS BINARY ) AND CONVERT( dc_setting.blog_id USING utf8 ) = CAST( 0x64656661756c74 AS BINARY ) AND CONVERT( dc_setting.setting_ns USING utf8 ) = CAST( 0x73797374656d AS BINARY ) AND CONVERT( dc_setting.setting_value USING utf8 ) = CAST( 0x2f446f74636c6561722f7468656d6573 AS BINARY ) AND CONVERT( dc_setting.setting_type USING utf8 ) = CAST( 0x737472696e67 AS BINARY ) AND CONVERT( dc_setting.setting_label USING utf8 ) = CAST( 0x5468656d657320726f6f742055524c AS BINARY ) LIMIT 1 ;
+UPDATE Dotclear_1.dc_blog SET blog_url = '/${MOD_NAME[$count]}/index.php?' WHERE CONVERT( dc_blog.blog_id USING utf8 ) = CAST( 0x64656661756c74 AS BINARY ) LIMIT 1 ;
 UPDATE ${MOD_NAME[$count]}.dc_user SET user_email = '${dotclear_admin_email[$count]}' WHERE CONVERT( dc_user.user_id USING utf8 ) = 'admin' LIMIT 1 ;
 " > dotclear_credentials.sql
 $BIN_MYSQL -u root < dotclear_credentials.sql

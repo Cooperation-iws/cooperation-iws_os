@@ -52,10 +52,7 @@ fi
 
 apt-get install --yes --force-yes mysql-server
 
-if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
 
-mv /usr/sbin/policy-rc.d.mysql /usr/sbin/policy-rc.d 
-fi
 
 apt-get install --yes --force-yes apache2 apache2-doc apache2-mpm-prefork apache2-utils apache2.2-common php5 libapache2-mod-php5 php5-mysql phpmyadmin php-pear php5-cli php5-gd php5-xsl php5-curl libapache2-mod-python php-pear libphp-adodb libexpat1 ssl-cert php5-imagick php5-imap php5-mcrypt php5-memcache php5-mhash php5-ming php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl php5-cli imagemagick
 
@@ -131,9 +128,14 @@ mv /tmp/admin_cooperation-wui.xml $WWW_DIRECTORY/admin/cooperation-wui.xml
 mv /tmp/admin_cooperation-wui-fr.xml  $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 
 
-/etc/init.d/apache2 start
-/etc/init.d/mysql start
 
+/etc/init.d/mysql start
+if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
+
+mv /usr/sbin/policy-rc.d.mysql /usr/sbin/policy-rc.d 
+else
+/etc/init.d/apache2 start
+fi
 
 fi
 
