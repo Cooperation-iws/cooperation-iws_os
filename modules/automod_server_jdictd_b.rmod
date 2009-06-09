@@ -157,11 +157,12 @@ chmod 0755 /etc/init.d/jdictd
 
 update-rc.d jdictd defaults
 
+if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" == "" ]; then
 
 cd $WWW_DIRECTORY/$MOD_NAME
 nohup java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini &
 
-
+fi
 
 echo "
 #Jdict

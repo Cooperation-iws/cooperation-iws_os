@@ -1764,7 +1764,8 @@ class Reconstructor:
                         modExecScr += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
                         modExecScr += 'echo -------------------------------------------------\n'
                         modExecScr += 'echo -------------------------------------------------\n'
-                        modExecScr += 'bash \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(execMod) + '\"' + ' ;\n '
+			modExecScr += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
+                        modExecScr += 'bash \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(execMod) + '\"' + ' >> /tmp/ls.log;\n '
             modExecScrChroot += 'echo Running OS:  \n'
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
@@ -1775,7 +1776,8 @@ class Reconstructor:
                         modExecScrChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'echo -------------------------------------------------\n'
-                        modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
+                        modExecScrChroot += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
+                        modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' >> /tmp/ls.log;\n'
 	    modExecScrChroot += 'echo Running Servers:  \n'
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
@@ -1786,7 +1788,8 @@ class Reconstructor:
                         modExecLamppChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
                         modExecLamppChroot += 'echo -------------------------------------------------\n'
                         modExecLamppChroot += 'echo -------------------------------------------------\n'
-                        modExecLamppChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
+                        modExecLamppChroot += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
+                        modExecLamppChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' >> /tmp/ls.log;\n'
 	    if self.ReqApache == "A":    
 		modExecLamppChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
 		modExecLamppChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
@@ -1871,7 +1874,7 @@ class Reconstructor:
         fModExecChroot.close()
         os.popen('chmod a+x ' + os.path.join(self.customDir, "chroot/tmp/lampp-exec.sh"))
         os.popen('echo "normal" > '+os.path.join(self.customDir, "chroot/tmp/in_chroot"))
-   	   	
+   	
 	#os.popen('xterm -title \'Reconstructor Module Exec\' -e chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/module-exec.sh')
         # copy dns info
         print _("Copying DNS info...")
@@ -1907,7 +1910,7 @@ class Reconstructor:
 	if commands.getoutput('cat '  +  os.path.join(self.customDir, "chroot/tmp/in_chroot")  + ' | grep \'normal\'') != '':        
 		os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/lampp-exec.sh')
         os.system('bash \"' + os.path.join(self.customDir, "scripts/module-exec.sh")+ '\"')
-	        
+	os.popen ('cp '	 + os.path.join(self.customDir, "chroot/tmp/ls.log") + ' '+self.customDir)        
 	# cleanup
         #os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
         # restore wgetrc
