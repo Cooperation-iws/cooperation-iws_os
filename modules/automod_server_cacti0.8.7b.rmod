@@ -118,7 +118,7 @@ sed -i "s/cacti/$MOD_NAME/g" $WWW_DIRECTORY/admin/$MOD_NAME/include/config.php
 sed -i "s/CACTI_MYSQL_PWD/$CACTI_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/include/config.php
 WWW_DIRECTORY_FOR_SED=$(echo $WWW_DIRECTORY | sed 's/\//\\\//g')
 sed -i "s/\"\/var\/www\/admin\/Cacti\/include\"/\"$WWW_DIRECTORY_FOR_SED\/admin\/$MOD_NAME\/include\"/g" $WWW_DIRECTORY/admin/$MOD_NAME/include/global.php
-
+sed -i "42s/Cacti/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/include/global.php
 
 echo "
 #Cacti

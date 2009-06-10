@@ -29,14 +29,14 @@ mount -t devpts none /dev/pts
 
 apt-get install --assume-yes --force-yes openssh-server
 /etc/init.d/ssh stop
-
+apt-get remove --purge --assume-yes --force-yes openbsd-inetd
 if [ "$(echo $deactivate_ssh_root_login | awk  '{print $1}')" =="y" ] ; then
 sed -i "s/PermitRootLogin yes/PermitRootLogin no/" /etc/ssh/sshd_config
 fi
 
 /etc/init.d/dbus stop
 /etc/init.d/hal stop
-umount -a
+umount /dev/pts
 
 }
 

@@ -93,7 +93,8 @@ echo "
 UPDATE ${MOD_NAME[$count]}.og_users SET email = '${opengoo_admin_email[$count]}' WHERE og_users.id =1 LIMIT 1 ;
 " > opengoo_credential.sql
 $BIN_MYSQL -u root < opengoo_credential.sql
-
+#clear cache
+rm $WWW_DIRECTORY/${MOD_NAME[$count]}/cache/autoloader.php
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 done
 
