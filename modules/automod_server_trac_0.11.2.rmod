@@ -32,7 +32,7 @@ MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 
-NB_SVN=$nb_svn
+NB_SVN=${#svn_name[*]}
 TRAC_NAME=$trac_name
 for (( count=1; count<=$NB_SVN; count++ ))
 do

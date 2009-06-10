@@ -67,10 +67,11 @@ cd $DL_DIR
 mkdir $WWW_DIRECTORY/$MOD_NAME
 cp -Rf Horde/* $WWW_DIRECTORY/$MOD_NAME/.
 
+sed -i "15s/Horde/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/scripts/sql/Horde_ciws.sql 
+sed -i "16s/Horde/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/scripts/sql/Horde_ciws.sql 
 
 
-
-$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/sql/Horde_ciws.sql 
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/$MOD_NAME/scripts/sql/Horde_ciws.sql 
 
 echo "grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$HORDE_MYSQL_PWD';
 flush privileges;" > HORDE_db.sql

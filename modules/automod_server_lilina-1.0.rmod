@@ -49,7 +49,7 @@ wget $URL_FREE/lilina-1.0-090311.tar.gz
 tar -xzf lilina-1.0-090311.tar.gz
 for (( count=1; count<=$NB_LILINA; count++ ))
 do
-mv Lilina $WWW_DIRECTORY/$MOD_NAME
+mv Lilina $WWW_DIRECTORY/${MOD_NAME[$count]}
 sed -i "s/Lilina/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/content/system/config/settings.php
 #sed -i "s/lilina/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/config/config.php
 chmod -R 755  $WWW_DIRECTORY/${MOD_NAME[$count]}/cache
