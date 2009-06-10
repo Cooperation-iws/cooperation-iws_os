@@ -32,7 +32,7 @@ URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 MOD_NAME="Dictionnary"
-
+SILENT=$(cat /tmp/silent)
 
 #VARIABLES
 
@@ -157,7 +157,7 @@ chmod 0755 /etc/init.d/jdictd
 
 update-rc.d jdictd defaults
 
-if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" == "" ]; then
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 
 cd $WWW_DIRECTORY/$MOD_NAME
 nohup java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini &
