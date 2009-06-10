@@ -1211,7 +1211,7 @@ class Reconstructor:
             if  self.debianLive == True:
 		self.casperPath = 'live'	
 		self.debDist= self.DebianLiveReleaseType
-		self.distVariant = 'lenny'		
+		self.distVariant = self.DebianLiveReleaseType		
 		print "\033[1m Edubuntu 8.10 Live CD\033[0m\n"
 	    elif  self.isoType == "edubuntu_8.10":
 		self.casperPath = 'casper'	
@@ -1573,7 +1573,10 @@ class Reconstructor:
 	fcasper.close()
 	fdebDist=open(os.path.join(self.customDir, "chroot/tmp/deb_dist"), 'w')
 	fdebDist.write(self.debDist)
-	fdebDist.close()  
+	fdebDist.close()
+	self.checkLiveCdVersion()
+ 
+	
 	
 # ---------- Customize Live ---------- #
     def customize(self):
@@ -1770,7 +1773,7 @@ class Reconstructor:
                         modExecScr += 'echo -------------------------------------------------\n'
                         modExecScr += 'echo -------------------------------------------------\n'
 			modExecScr += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
-                        modExecScr += 'bash \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(execMod) + '\"' + ' >> /tmp/ls.log;\n '
+                        modExecScr += 'bash \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(execMod) + '\"' + ';\n '
             modExecScrChroot += 'echo Running OS:  \n'
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
@@ -1782,7 +1785,7 @@ class Reconstructor:
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'echo -------------------------------------------------\n'
                         modExecScrChroot += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
-                        modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' >> /tmp/ls.log;\n'
+                        modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
 	    modExecScrChroot += 'echo Running Servers:  \n'
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
@@ -1794,7 +1797,7 @@ class Reconstructor:
                         modExecLamppChroot += 'echo -------------------------------------------------\n'
                         modExecLamppChroot += 'echo -------------------------------------------------\n'
                         modExecLamppChroot += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
-                        modExecLamppChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' >> /tmp/ls.log;\n'
+                        modExecLamppChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
 	    if self.ReqApache == "A":    
 		modExecLamppChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
 		modExecLamppChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
