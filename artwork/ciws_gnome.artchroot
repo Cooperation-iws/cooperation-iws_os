@@ -24,6 +24,7 @@ dpkg -i usplash-theme-ciws_0.1-1_i386.deb
 update-alternatives --install /usr/lib/usplash/usplash-artwork.so usplash-artwork.so /usr/lib/usplash/usplash-theme-ciws.so 10
 update-alternatives --set usplash-artwork.so /usr/lib/usplash/usplash-theme-ciws.so
 fi
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ]; then
 cd /tmp/ciws_gnome
 cp background.png /usr/share/gdm/themes/xubuntu
 cp logo.png /usr/share/gdm/themes/xubuntu/logo.png 1>&2 2>/dev/null
@@ -55,5 +56,5 @@ rm /etc/alternatives/desktop-background
 ln -s  /usr/share/images/desktop-base/wallpaper.png /etc/alternatives/desktop-background
 rm /etc/alternatives/desktop-splash
 ln -s  /usr/share/images/desktop-base/wallpaper.png /etc/alternatives/desktop-splash
-
+fi
 

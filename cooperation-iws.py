@@ -2030,7 +2030,7 @@ class Reconstructor:
 	        scriptMksquashfs += 'fi \necho \"I: Building squashfs\" \n'
 	        scriptMksquashfs += 'cp chroot/initrd.gz remaster/' + self.casperPath + '/. \n'
 	      	scriptMksquashfs += 'cp chroot/vmlinuz remaster/' + self.casperPath + '/. \n'
-	      	scriptMksquashfs += 'mksquashfs chroot remaster/' + self.casperPath + '/filesystem.squashfs \n'
+	      	scriptMksquashfs += 'mksquashfs chroot remaster/' + self.casperPath + '/filesystem.squashfs -no-progress\n'
 	        scriptMksquashfs += 'exit 0 \n'
 		fscriptMksquashfs=open(os.path.join(self.customDir, "scriptMksquashfs.sh"), 'w')
 		fscriptMksquashfs.write(scriptMksquashfs)
