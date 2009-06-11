@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='Cooperation-iws Liveusb crypt 0.6'
+RMOD_NAME='Cooperation-iws Liveusb crypt 0.7'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Cooperation-iws Live Usb installer'

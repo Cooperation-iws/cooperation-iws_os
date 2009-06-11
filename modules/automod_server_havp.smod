@@ -39,10 +39,10 @@ mount -t devpts none /dev/pts
 apt-get install --assume-yes --force-yes havp
 
 apt-get install -f --assume-yes --force-yes
-
+/etc/init.d/havp stop
 /etc/init.d/dbus stop
 /etc/init.d/hal stop
-umount -a
+umount /dev/pts
 
 if [[ "$havp_privoxy_forward" == "y" ]]; then
 sed -i "144s/#//" /etc/havp/havp.config

@@ -1500,13 +1500,13 @@ class Reconstructor:
 	
 	scriptDebianLive = 'echo "I: Creating Debian Live CD Linux flavour ' + self.DebianLiveType + ' ' + self.DebianLiveReleaseType + ' + " \n'
 	scriptDebianLive += 'echo "' + lhConfig + '"\n'
-	scriptDebianLive += 'echo "deb http://live.debian.net/debian/ ./" >> /etc/apt/sources.list\n'
-	scriptDebianLive += 'apt-get update\n'
+	#scriptDebianLive += 'echo "deb http://live.debian.net/debian/ ./" >> /etc/apt/sources.list\n'
+	#scriptDebianLive += 'apt-get update\n'
 	scriptDebianLive += 'apt-get remove -y --force-yes live-helper \n'
 	#scriptDebianLive += 'apt-get install -y --force-yes live-helper cdebootstrap debian-keyring \n'
-	scriptDebianLive += 'cd /tmp && wget '+self.entryLocalMirror+'/live-helper_1.0.2+20090128.011503_all.deb\n'
+	scriptDebianLive += 'cd /tmp && wget '+self.entryLocalMirror+'/live-helper_1.0.4+20090604.135747_all.deb \n'
 	scriptDebianLive += 'apt-get install -y --force-yes debian-keyring \n'
-	scriptDebianLive += 'cd /tmp && dpkg -i live-helper_1.0.2+20090128.011503_all.deb\n'
+	scriptDebianLive += 'cd /tmp && dpkg -i live-helper_1.0.4+20090604.135747_all.deb\n'
 	scriptDebianLive += 'apt-get install -f --assume-yes --force-yes\n'
 	scriptDebianLive += 'cd ' +self.customDir + '\n'
 	

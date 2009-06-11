@@ -168,7 +168,7 @@ chmod -R 775 $LAMPP_DIRECTORY/var/trac
 
 cd $LAMPP_DIRECTORY/var/private/
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
-htpasswd -cm -b trac.htpasswd_${SVN_NAME[$count]} admin $trac_admin_pwd
+htpasswd -cm -b trac.htpasswd_${SVN_NAME[$count]} admin ${trac_admin_pwd[$count]}
 else
 echo "
 ----------------Cooperation-iws SVN-------------------

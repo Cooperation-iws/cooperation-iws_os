@@ -39,6 +39,7 @@ for (( count=1; count<=$NB_GALLERY2; count++ ))
 do
 GALLERY2_MYSQL_PWD[$count]=${gallery_mysql_pwd[$count]}
 MOD_NAME[$count]=${gallery_name[$count]}
+gallery_pwd[$count]=$gen_login_pwd
 done
 #_______________________________________________________________________________________________
 #________________________________________WGET_MIRROIR_FREE______________________________________
