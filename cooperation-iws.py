@@ -1530,10 +1530,10 @@ class Reconstructor:
 	else:
 		scriptDebianLive += lhConfig + '\n'
 	if self.encryption != "disabled":
-		scriptDebianLive += "sed -i \"100s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
-		scriptDebianLive += "sed -i \"102s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
-		scriptDebianLive += "sed -i \"109s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
-		scriptDebianLive += "sed -i \"111s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
+		scriptDebianLive += "sed -i \"105s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
+		scriptDebianLive += "sed -i \"107s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
+		scriptDebianLive += "sed -i \"111s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
+		scriptDebianLive += "sed -i \"113s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
 		scriptDebianLive += "sed -i \"106s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
 		scriptDebianLive += "sed -i \"108s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
 		scriptDebianLive += "sed -i \"115s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		

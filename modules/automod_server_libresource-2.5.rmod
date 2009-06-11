@@ -61,8 +61,8 @@ function INSTALL
 {
 echo "I: Download Nuxeo"
 WGET_MIRROIR_FREE
-apt-get autoremove --assume-yes --force-yes java-gcj-compat
-apt-get autoremove --assume-yes --force-yes gcj
+#apt-get autoremove --assume-yes --force-yes java-gcj-compat
+#apt-get autoremove --assume-yes --force-yes gcj
 echo "Name: shared/accepted-sun-dlj-v1-1
 Template: shared/accepted-sun-dlj-v1-1
 Value: true
@@ -72,6 +72,9 @@ Flags: seen
 
 ln -s / /cow
 apt-get install --assume-yes --force-yes sun-java6-bin sun-java6-jre sun-java6-jdk
+
+update-alternatives --set java /usr/lib/jvm/java-6-sun-1.6.0.12/jre/bin/java
+
 #cancel inhibition for mysql
 if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
 
