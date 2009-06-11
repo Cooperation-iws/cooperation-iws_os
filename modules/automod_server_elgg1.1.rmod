@@ -96,8 +96,8 @@ do
 cd $DL_DIR
 mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cp -Rf Elgg/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
-sed -i "15s/Elgg/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-sed -i "16s/Elgg/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "21s/Elgg/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "22s/Elgg/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 $BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 
 echo "
