@@ -113,6 +113,8 @@ sed -i "s/mysql_pwd/${ELGG_MYSQL_PWD[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$coun
 echo "UPDATE ${MOD_NAME[$count]}.elggusers_entity SET email = '${elgg_admin_email[$count]}' WHERE elggusers_entity.guid =2 LIMIT 1 ;
 UPDATE ${MOD_NAME[$count]}.elggsites_entity SET url = '/${MOD_NAME[$count]}/' WHERE elggsites_entity.guid =1 LIMIT 1 ;" > elgg_credential.sql
 
+$BIN_MYSQL -u root < elgg_credential.sql ${MOD_NAME[$count]}
+
 mkdir /var/Elgg
 mkdir /var/Elgg/upload
 chown -R www-data /var/Elgg/upload

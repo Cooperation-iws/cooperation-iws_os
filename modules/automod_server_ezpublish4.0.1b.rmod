@@ -110,6 +110,8 @@ sed -i "11s/AllowOverride None/AllowOverride All/" /etc/apache2/sites-available/
 
 /etc/init.d/apache2 reload
 
+rm -r $WWW_DIRECTORY/${MOD_NAME[$count]}/var/ezflow_site/cache/*
+
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
   
 done

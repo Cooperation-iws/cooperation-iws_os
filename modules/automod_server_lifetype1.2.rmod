@@ -71,8 +71,8 @@ do
 cd $DL_DIR
 
 cp -Rf Lifetype $WWW_DIRECTORY/${MOD_NAME[$count]}
-sed -i "15s/Lifetype/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
-sed -i "16s/Lifetype/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "21s/Lifetype/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+sed -i "22s/Lifetype/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 $BIN_MYSQL -u root --default_character_set utf8  < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
 
 
