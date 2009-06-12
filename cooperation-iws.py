@@ -1804,7 +1804,6 @@ class Reconstructor:
 	    if self.artwork != "":  
 		modExecScrChroot += 'bash \"/tmp/artwork.amod\"' + ' ;\n '
 	    if self.encryption != "disabled":
-		os.popen('sed -i "s/quiet splash//g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
 		if self.debDist == 'hardy':
 			print "Updating Live-initramfs for crypt: Hardy"
 			modExecLamppChroot += 'apt-get install --assume-yes --force-yes aespipe \n'
@@ -2048,7 +2047,7 @@ class Reconstructor:
 		fscriptPassphrase.write(self.encryptionpassphrase)
 		fscriptPassphrase.close()
 		os.system('bash \"' + self.scriptDir + '/encrypt.sh\"')
-		#os.popen('sed -i \"s/boot=live/boot=live encryption=' + self.encryption + '/g\" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg") ) 
+		os.popen('sed -i \"s/boot=live/boot=live encryption=' + self.encryption + '/g\" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") ) 
 	# remove windows programs
 	if self.LiveCdRemovePrograms == True:
 	    print _('Removing Win32 versions of Firefox, Thunderbird, etc. ...')
