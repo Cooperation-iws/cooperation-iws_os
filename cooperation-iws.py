@@ -1074,7 +1074,7 @@ class Reconstructor:
 		initUserFullname = 'Live session user'
 		initHostName = 'nubuntu'
 		initBuildSystem = 'Ubuntu'
-	elif self.distVariant == 'edubuntu_8.10' or self.distVariant == 'studio_8.10' or self.distVariant == 'studio_9.04':
+	elif self.distVariant == 'edubuntu_8.10' or self.distVariant == 'studio_8.10' or self.distVariant == 'studio_9.04' or self.distVariant == 'edubuntu_9.04':
 		initUsername = 'custom'
 		initUserFullname = 'Live session user'
 		initHostName = 'custom'
@@ -1216,7 +1216,11 @@ class Reconstructor:
 	    elif  self.isoType == "edubuntu_8.10":
 		self.casperPath = 'casper'	
 		self.debDist= 'intrepid'
-		self.distVariant = 'edubuntu_8.10'		
+		self.distVariant = 'edubuntu_8.10'
+	    elif  self.isoType == "edubuntu_9.04":
+		self.casperPath = 'casper'	
+		self.debDist= 'jaunty'
+		self.distVariant = 'edubuntu_9.04'		
 		print "\033[1m Edubuntu 8.10 Live CD\033[0m\n"	
 	    elif  self.isoType == "eeebuntu_8.10":
 		self.casperPath = 'casper'	
@@ -1808,6 +1812,7 @@ class Reconstructor:
 			print "Updating Live-initramfs for crypt: Hardy"
 			modExecLamppChroot += 'apt-get install --assume-yes --force-yes aespipe \n'
 			modExecLamppChroot += 'sed -i \'231s/root/$(basename ${fspath})/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
+	   		modExecLamppChroot += 'sed -i \'231s/Enter/\\n Enter/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
 	   		modExecLamppChroot += 'sed -i \'236s/\/sbin\/losetup/\/$root\/sbin\/losetup/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
 	   		modExecLamppChroot += 'sed -i \'230s/^/echo $(basename ${fspath}) | grep -q "home-sn" || echo $(basename ${fspath}) | grep -q "ciws-sn" \&\& root="root"  /\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
 	   		#modExecLamppChroot += 'sed -i \'1218s/try_snap/echo try_snap \&\& try_snap/\' /usr/share/initramfs-tools/scripts/live\n' 

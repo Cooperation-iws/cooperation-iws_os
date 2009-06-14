@@ -38,6 +38,9 @@ fi
 /etc/init.d/hal stop
 umount /dev/pts
 
+mv /etc/ssh /opt/ciws/etc/.
+ln -s /opt/ciws/etc/ssh /etc/ssh
+
 }
 
 #_______________________________________________________________________________________________

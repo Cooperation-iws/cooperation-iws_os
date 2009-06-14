@@ -348,6 +348,8 @@ if [ "$(echo "${OS_TYPE}" | awk  '{print $1}')" == "Server" ]; then
 echo "I: configuring home persistence"
 mv /home /opt/ciws
 ln -s /opt/ciws/home /home
+mv /root /opt/ciws
+ln -s /opt/ciws/root /root
 fi
 
 echo "I: config persistent directory"

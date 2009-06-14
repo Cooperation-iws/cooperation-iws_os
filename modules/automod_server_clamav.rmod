@@ -56,7 +56,7 @@ fi
 chmod +x $LAMPP_DIRECTORY/share/lampp/clamav_scan
 
 
-echo "*/14 * * * * root $LAMPP_DIRECTORY/share/lampp/clamav_scan \"/var\"" > /etc/cron.d/clamScan
+echo "*/14 * * * * root $LAMPP_DIRECTORY/share/lampp/clamav_scan \"/opt/ciws\"" > /etc/cron.d/clamScan
 sudo chmod +x /etc/cron.d/clamScan
 echo "03 2 * * * root $LAMPP_DIRECTORY/share/lampp/clamav_scan \"/\"" > /etc/cron.d/clamScan_all
 sudo chmod +x /etc/cron.d/clamScan_all
