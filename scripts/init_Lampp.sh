@@ -64,9 +64,9 @@ apt-get install --yes --force-yes unzip
 
 echo "I: config apache"
 echo "EnableSendfile off" >> /etc/apache2/apache2.conf
-sed -i -e "31s/#/AddType image\/svg+xml .svg/" /etc/apache2/mods-available/mime.conf
-sed -i -e "8s/None/All/" /etc/apache2/sites-available/default
-sed -i -e "12s/None/All/" /etc/apache2/sites-available/default
+sed -i "31s/#/AddType image\/svg+xml .svg/" /etc/apache2/mods-available/mime.conf
+sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/sites-available/default
+sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/sites-available/default-ssl
 
 
 echo "I: config phpmyadmin"

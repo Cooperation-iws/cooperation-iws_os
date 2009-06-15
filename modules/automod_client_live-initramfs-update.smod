@@ -28,19 +28,7 @@ chmod 755 /usr/share/live-initramfs/languagelist
 #sed -i '24s/^/sed -i "s\/bootkbd\/keyb\/" \/cmdline/'  /usr/share/initramfs-tools/scripts/live
 #sed -i '50s/\/proc//' /usr/share/initramfs-tools/scripts/live
 
-sed -i '31s/^/cp \/usr\/share\/keymaps\/i386\/azerty\/fr.kmap.gz ${DESTDIR}\/etc\//' /usr/share/initramfs-tools/hooks/keymap
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '176s/^/if [ "$KBD" = "fr" ];then/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '177s/^/if [ -x \/bin\/loadkeys -a -r \/etc\/fr.kmap.gz ]/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '178s/^/then/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '179s/^/loadkeys \/etc\/fr.kmap.gz/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '180s/^/fi/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '181s/^/else/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '185G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '186s/^/fi/' /usr/share/initramfs-tools/scripts/live-helpers
+echo "
+copy_exec /bin/loadkeys /bin
+mkdir \${DESTDIR}/usr/share ; cp -r /usr/share/keymaps \${DESTDIR}/usr/share/." >> /usr/share/initramfs-tools/hooks/live 
 

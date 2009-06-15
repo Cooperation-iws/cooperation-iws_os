@@ -64,6 +64,9 @@ sed -i '138s/^/LOCALE="${KBD}"/' /usr/share/initramfs-tools/scripts/live
 sed -i '139s/^/export LOCALE/' /usr/share/initramfs-tools/scripts/live
 #temporary hack to delete lang2local warning bug
 sed -i '189s/^/#/' /usr/share/initramfs-tools/scripts/live
+sed -i '31s/^/mkdir \/usr\/share ; cp -r \/usr\/share\/keymaps \/usr\/share\/./' /usr/share/initramfs-tools/hooks/keymap
+sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '176s/^/loadkeys $KBD/' /usr/share/initramfs-tools/scripts/live-helpers
 
 
 				
@@ -79,6 +82,9 @@ sed -i '138s/^/LOCALE="${KBD}"/' /usr/share/initramfs-tools/scripts/live
 sed -i '139s/^/export LOCALE/' /usr/share/initramfs-tools/scripts/live
 #temporary hack to delete lang2local warning bug
 sed -i '189s/^/#/' /usr/share/initramfs-tools/scripts/live
+sed -i '31s/^/mkdir ${DESTDIR}\/usr\/share ; cp -r \/usr\/share\/keymaps ${DESTDIR}\/usr\/share\/./' /usr/share/initramfs-tools/hooks/keymap
+sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '176s/^/loadkeys $KBD/' /usr/share/initramfs-tools/scripts/live-helpers
 
 fi
 

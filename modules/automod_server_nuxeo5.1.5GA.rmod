@@ -10,7 +10,7 @@ RMOD_DESCRIPTION='Data management portal'
 RMOD_DESCRIPTION_FR='Portail de gestion des données'
 RMOD_VERBOSE="Nuxeo is a commercial opensource CMS (Content Management System). It is developped in Java."
 RMOD_VERBOSE_FR="Nuxeo est le pionnier et le leader de l'Enterprise Content Management (ECM) open source. La plateforme, Nuxeo EP 5 est une solution pour la gestion de tous les documents et contenus numériques. Nuxeo est développé en Java. "
-
+RMOD_REQ_APACHE=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 

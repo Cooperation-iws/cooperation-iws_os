@@ -1204,7 +1204,25 @@ class Reconstructor:
 	    if self.checkbuttonDisableAutologin == True:
 		sed = 'sed -i \'s/true/false/g\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
 		cmd = commands.getoutput(sed)
-
+		sed = 'sed -i \'60s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
+		cmd = commands.getoutput(sed)
+		sed = 'sed -i \'s/true/false/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
+		sed = 'sed -i \'61s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
+		cmd = commands.getoutput(sed)
+		sed = 'sed -i \'63s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
+		cmd = commands.getoutput(sed)
+		sed = 'sed -i \'s/true/false/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
+		sed = 'sed -i \'64s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
+		cmd = commands.getoutput(sed)
+		sed = 'sed -i \'65s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
+		cmd = commands.getoutput(sed)
+		sed = 'sed -i \'66s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
+		cmd = commands.getoutput(sed)
+		sed = 'sed -i \'67s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
+		cmd = commands.getoutput(sed)
+		sed = 'sed -i \'69s/elif/if/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
+		cmd = commands.getoutput(sed)
+		
     #detect Live CD version
     def checkLiveCdVersion(self):
 	    print "\nLive CD type is:"

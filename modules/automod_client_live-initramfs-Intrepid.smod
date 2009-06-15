@@ -75,6 +75,8 @@ echo "2.6.27-11-generic" > /tmp/kernel
 echo "
 copy_exec /usr/bin/wc /bin
 copy_exec /lib/libpcre.so.3 /lib
+mkdir \${DESTDIR}/usr/share ; cp -r /usr/share/keymaps \${DESTDIR}/usr/share/.
+copy_exec /bin/loadkeys /bin
 " >> /usr/share/initramfs-tools/hooks/live 
 
 echo "
@@ -109,19 +111,4 @@ mv /sbin/lrm-manager.orig /sbin/lrm-manager
 #chmod +x losetup
 apt-get install --assume-yes --force-yes console-data
 
-sed -i '31s/^/cp \/usr\/share\/keymaps\/i386\/azerty\/fr.kmap.gz ${DESTDIR}\/etc\//' /usr/share/initramfs-tools/hooks/keymap
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '176s/^/if [ "$KBD" = "fr" ];then/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '177s/^/if [ -x \/bin\/loadkeys -a -r \/etc\/fr.kmap.gz ]/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '178s/^/then/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '179s/^/loadkeys \/etc\/fr.kmap.gz/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '180s/^/fi/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '181s/^/else/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '185G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '186s/^/fi/' /usr/share/initramfs-tools/scripts/live-helpers
 
