@@ -197,10 +197,14 @@ echo "#shorewall config"
 cp /usr/share/doc/shorewall-common/examples/two-interfaces/* /etc/shorewall
 
 
-sed -i "s/eth0/$NET_IFACE/" /etc/shorewall/interfaces
-sed -i "s/eth1/$LOCAL_IFACE/" /etc/shorewall/interfaces
-sed -i "s/eth0/$NET_IFACE/" /etc/shorewall/masq
-sed -i "s/eth1/$LOCAL_IFACE/" /etc/shorewall/masq
+sed -i "s/eth0/NET_IFACE/" /etc/shorewall/interfaces
+sed -i "s/eth1/LOCAL_IFACE/" /etc/shorewall/interfaces
+sed -i "s/eth0/NET_IFACE/" /etc/shorewall/masq
+sed -i "s/eth1/LOCAL_IFACE/" /etc/shorewall/masq
+sed -i "s/NET_IFACE/$NET_IFACE/" /etc/shorewall/interfaces
+sed -i "s/LOCAL_IFACE/$LOCAL_IFACE/" /etc/shorewall/interfaces
+sed -i "s/NET_IFACE/$NET_IFACE/" /etc/shorewall/masq
+sed -i "s/LOCAL_IFACE/$LOCAL_IFACE/" /etc/shorewall/masq
 sed -i "s/STARTUP_ENABLED=No/STARTUP_ENABLED=Yes/" /etc/shorewall/shorewall.conf
 sed -i "43s/REJECT/ACCEPT/" /etc/shorewall/policy
 sed -i "43s/ info//" /etc/shorewall/policy
