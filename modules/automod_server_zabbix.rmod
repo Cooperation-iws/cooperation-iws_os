@@ -249,6 +249,9 @@ echo "DROP DATABASE zabbix; " > drop_zabbix.sql
 $BIN_MYSQL -u root < drop_zabbix.sql
 $BIN_MYSQL -u root < database.sql
 
+
+echo "UPDATE $MOD_NAME.drules SET iprange = '$zabbix_ip_range' WHERE drules.druleid =2 LIMIT 1 ;" > zabbix_credentials.sql
+$BIN_MYSQL -u root $MOD_NAME < zabbix_credentials.sql
 mv /etc/zabbix $LAMPP_DIRECTORY/etc
 ln -s $LAMPP_DIRECTORY/etc/zabbix /etc/zabbix
 
