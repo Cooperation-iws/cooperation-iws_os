@@ -64,6 +64,8 @@ wget $URL_FREE/virtualmin1.0.3/install_virtualminv3.sh
 chmod +x install_virtualminv3.sh
 ./install_virtualminv3.sh
 
+usermod -u621 deniedssh
+
 mv /etc/apache2 /opt/ciws/etc
 ln -s /opt/ciws/etc/apache2 /etc/apache2
 
