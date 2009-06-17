@@ -56,6 +56,6 @@ apt-get remove --assume-yes --force-yes amarok kaffeine
 apt-get install --assume-yes --force-yes amarok kaffeine w32codecs kubuntu-restricted-extras
 else
 apt-get install --assume-yes --force-yes gstreamer0.10-plugins-good gstreamer0.10-plugins-ugly gstreamer0.10-tools gstreamer0.10-plugins-ugly-multiverse
-apt-get install --assume-yes --force-yes w32codecs ubuntu-restricted-extras
+apt-get install --assume-yes --force-yes ubuntu-restricted-extras
 apt-get remove --assume-yes --force-yes ttf-mscorefonts-installer 
 fi
