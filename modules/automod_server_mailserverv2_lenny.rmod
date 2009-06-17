@@ -2784,7 +2784,12 @@ ln -s $LAMPP_DIRECTORY/var/lib/clamav /var/lib/clamav
 fi
 
 
+cd $DL_DIR
+wget $URL_FREE/latest_clamav_updates.tar.gz
+tar -xzf latest_clamav_updates.tar.gz -C /var/lib/clamav/.
+
 freshclam
+
 
 sed -i "s/ENABLED=0/ENABLED=1/" /etc/default/spamassassin
 

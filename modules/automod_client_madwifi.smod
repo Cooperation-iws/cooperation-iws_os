@@ -1,0 +1,19 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Madwifi Jaunty'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION=''
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$(cat /tmp/user)
+DEB_DIST=$(cat /tmp/deb_dist)
+
+
+
+apt-get install --assume-yes --force-yes madwifi-tools
+
+sed -i 's/blacklist ath_pci/#blacklist ath_pci/g' /etc/modprobe.d/blacklist-ath_pci.conf

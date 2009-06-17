@@ -155,14 +155,13 @@ fi
 done
 
 #adding new domains
-DOMAIN_LIST="\$(cat /etc/bind/named.conf.local | grep 'zone' | cut -d'\"' -f2)"
+DOMAIN_LIST="\$(cat /etc/bind/named.conf.local | grep 'zone' | cut -d'"' -f2)"
 
 for DOMAIN in \$DOMAIN_LIST
 do
 if [ -z "\$(cat /opt/ciws/var/identity/domain.txt | grep \$DOMAIN)" ]; then
 echo "\$DOMAIN" >> /opt/ciws/var/identity/domain.txt
-ip_gateway=\$(route -n | grep UG | sed 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/&*/g'| sed 's/ //g' | cut -d'*'  -f2)
-sed -i "s/localnets/\$ip_gateway/" /etc/bind/named.conf.local
+sed -i "s/www/wwi/" /etc/bind/\$DOMAIN.hosts
 fi
 done
 EOT_CRON

@@ -94,6 +94,12 @@ apt-get -f install --assume-yes --force-yes
 
 rm /usr/sbin/policy-rc.d
 mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
+cd $DL_DIR
+wget $URL_FREE/latest_clamav_updates.tar.gz
+tar -xzf latest_clamav_updates.tar.gz -C /var/lib/clamav/.
+
+freshclam
+
 if [ ! -d $LAMPP_DIRECTORY/var/lib/clamav ]; then
 mv /var/lib/clamav $LAMPP_DIRECTORY/var/lib
 ln -s $LAMPP_DIRECTORY/var/lib/clamav /var/lib/clamav

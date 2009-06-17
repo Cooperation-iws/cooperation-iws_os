@@ -62,6 +62,10 @@ echo "03 2 * * * root $LAMPP_DIRECTORY/share/lampp/clamav_scan \"/\"" > /etc/cro
 sudo chmod +x /etc/cron.d/clamScan_all
 echo "04 00,04,08,12,16,20 * * * root /usr/bin/freshclam 1> /dev/null " >> /etc/cron.d/freshClam
 sudo chmod +x /etc/cron.d/freshClam
+cd $DL_DIR
+wget $URL_FREE/latest_clamav_updates.tar.gz
+tar -xzf latest_clamav_updates.tar.gz -C /var/lib/clamav/.
+
 
 freshclam
 
