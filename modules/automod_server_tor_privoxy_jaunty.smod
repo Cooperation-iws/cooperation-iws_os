@@ -15,6 +15,10 @@ SILENT=$(cat /tmp/silent)
 URL_FREE=$(cat /tmp/url_mirroir)
 DL_DIR=$(cat /tmp/web_install-path)
 
+#quick hack to make Tor button work out of the box
+fixed_ip="y"
+proxy_ip="127.0.0.1"
+
 echo "I: install tor privoxy"
 
 apt-get install --assume-yes --force-yes privoxy torbutton-extension

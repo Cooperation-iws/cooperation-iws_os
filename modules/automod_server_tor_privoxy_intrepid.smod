@@ -12,6 +12,9 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 LIVEUSER=$(cat /tmp/user)
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
+#quick hack to make Tor button work out of the box
+fixed_ip="y"
+proxy_ip="127.0.0.1"
 
 echo "I: install tor privoxy"
 
