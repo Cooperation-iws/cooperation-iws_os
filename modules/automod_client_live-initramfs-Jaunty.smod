@@ -132,6 +132,12 @@ mv /sbin/lrm-manager.orig /sbin/lrm-manager
 #Jaunty hostname hack
 echo "localhost.localdomain" > /etc/hostname.orig
 
+mkdir /var/log/news
+touch /var/log/news/news.err
+touch /var/log/news/news.notice
+touch /var/log/news/news.crit
+
+
 
 apt-get install --assume-yes --force-yes console-data
 
