@@ -168,6 +168,21 @@ virtual_transport = dovecot
 dovecot_destination_recipient_limit = 1
 
 EOT_PUBLIC
+
+if [ "$postfix_relay_authentication_name" != "" ]; then
+
+echo "
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+" >> /etc/postfix/main.cf
+
+echo "$smtp_postfix_client_relay $postfix_relay_authentication_name:$postfix_relay_authentication_password" >> /etc/postfix/sasl_passwd
+chown root:root /etc/postfix/sasl_passwd && chmod 600 /etc/postfix/sasl_passwd
+postmap hash:/etc/postfix/sasl_passwd
+
+fi
+
 else
 cat << EOT_PRIVATE > /etc/postfix/main.cf
 smtpd_banner = \$myhostname ESMTP \$mail_name 
