@@ -137,7 +137,7 @@ sed -i "14s/\/\///" /etc/bind/named.conf.options
 sed -i "14s/0.0.0.0/DNS_1/" /etc/bind/named.conf.options 
 sed -i "15s/\/\///" /etc/bind/named.conf.options 
 sed -i "3s/^/dnssec-enable yes;/" /etc/bind/named.conf.options 
-
+cp /etc/bind/named.conf.options  /etc/bind/named.conf.options.tpl
 mv /etc/bind $LAMPP_DIRECTORY/etc/
 ln -s $LAMPP_DIRECTORY/etc/bind /etc/bind
 
@@ -345,6 +345,7 @@ echo "
 #Gateway
 dhclient $NET_IFACE
 dns=\$(cat /etc/resolv.conf | grep -m 1 nameserver | cut -d' ' -f2)
+cp /etc/bind/named.conf.options.tpl /etc/bind/named.conf.options 
 sed -i \"s/DNS_1/\$dns/\" /etc/bind/named.conf.options 
 cp /etc/bind/named.conf.local.tpl /etc/bind/named.conf.local
 cp /var/cache/bind/db.192.168.$range.tpl /var/cache/bind/db.192.168.$range
