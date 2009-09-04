@@ -311,7 +311,7 @@ syslog_facility = mail
 #verbose_ssl = no
 #
 # Where the mailboxes are located
-mail_location = maildir:$LAMPP_DIRECTORY /var/vmail/%d/%u
+mail_location = maildir:$LAMPP_DIRECTORY/var/vmail/%d/%u
 #
 mail_extra_groups = mail
 mail_debug = no
