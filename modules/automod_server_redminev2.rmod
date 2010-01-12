@@ -121,8 +121,9 @@ cd $LAMPP_DIRECTORY/var/$MOD_NAME
 #/usr/bin/rake db:migrate RAILS_ENV="production"
 
 #rake redmine:load_default_data RAILS_ENV="production"
-
+echo 'Installing mongrel cluster'
 gem install mongrel mongrel_cluster --include-dependencies
+echo 'end of install mongrel cluster'
 
 mkdir $LAMPP_DIRECTORY/var/svn_redmine
 chmod 0750 $LAMPP_DIRECTORY/var/svn_redmine
@@ -237,12 +238,12 @@ chmod +x /usr/bin/svnserve
 echo "*/10 * * * * root sed -i '12s/#//' $LAMPP_DIRECTORY/var/svn_redmine/*/conf/svnserve.conf" > /etc/cron.d/svnserve.1
 echo "*/10 * * * * root sed -i '13s/#//' $LAMPP_DIRECTORY/var/svn_redmine/*/conf/svnserve.conf" > /etc/cron.d/svnserve.2
 #terrible hack to make svn+ssh work, can have security issue
-#echo "*/10 * * * * root chmod -R 777 $LAMPP_DIRECTORY/var/svn_redmine" > /etc/cron.d/svn-chmod
+echo "*/58 * * * * root chmod -R 777 $LAMPP_DIRECTORY/var/svn_redmine" > /etc/cron.d/svn-chmod
 #can login into ssh as root
 
 chmod +x /etc/cron.d/svnserve.1
 chmod +x /etc/cron.d/svnserve.2
-#chmod +x /etc/cron.d/svn-chmod
+chmod +x /etc/cron.d/svn-chmod
 
 
 rm /opt/ciws/var/$MOD_NAME/log/mongrel.19001.pid

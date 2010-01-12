@@ -328,6 +328,86 @@ killall -9 mongrel_rails 1>&2 2>/dev/null
 /etc/init.d/libresource stop 1>&2 2>/dev/null
 /etc/init.d/tomcat5.5 stop 1>&2 2>/dev/null
 
+echo "I: config password and group files"
+
+echo '
+if [ ! -e /opt/ciws/etc/passwd ]; then
+cp /etc/passwd /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/passwd- ]; then
+cp  /etc/passwd- /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/opasswd_a ]; then
+cp /etc/opasswd_a /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/sudoers ]; then
+cp /etc/sudoers /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/shadow ]; then
+cp /etc/shadow /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/shadow- ]; then
+cp /etc/shadow- /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/oshadow_a ]; then
+cp /etc/oshadow_a /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/gshadow ]; then
+cp /etc/gshadow /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/gshadow- ]; then
+cp /etc/gshadow- /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/group ]; then
+cp /etc/group /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/group- ]; then
+cp /etc/group- /opt/ciws/etc
+fi
+
+
+rm /etc/passwd 
+rm /etc/passwd- 
+rm /etc/opasswd_a 
+if [ -e /opt/ciws/etc/sudoers ]; then
+rm /etc/sudoers 
+fi
+rm /etc/shadow 
+rm /etc/shadow- 
+rm /etc/oshadow_a 
+rm /etc/gshadow 
+rm /etc/gshadow- 
+rm /etc/group 
+rm /etc/group- 
+
+ln -s /opt/ciws/etc/passwd /etc/passwd
+ln -s /opt/ciws/etc/passwd- /etc/passwd-
+ln -s /opt/ciws/etc/opasswd_a /etc/opasswd_a
+if [ -e /opt/ciws/etc/sudoers ]; then
+cp /opt/ciws/etc/sudoers /etc/sudoers
+fi
+ln -s /opt/ciws/etc/shadow /etc/shadow
+ln -s /opt/ciws/etc/shadow- /etc/shadow-
+ln -s /opt/ciws/etc/oshadow_a /etc/oshadow_a
+ln -s /opt/ciws/etc/gshadow /etc/gshadow
+ln -s /opt/ciws/etc/gshadow- /etc/gshadow-
+ln -s /opt/ciws/etc/group /etc/group
+ln -s /opt/ciws/etc/group- /etc/group-
+' >> /etc/rc.local
+
+echo "*/2 * * * * root cp /etc/sudoers /opt/ciws/etc/sudoers" > /etc/cron.d/sudoers
+chmod +x /etc/cron.d/sudoers
+
 echo "I: config rc.local"
 
 echo "#!/bin/bash
@@ -365,6 +445,10 @@ ln -s /opt/ciws/home /home
 mv /root /opt/ciws
 ln -s /opt/ciws/root /root
 fi
+
+echo "I: configuring log persistence"
+mv /var/log /opt/ciws/var
+ln -s /opt/ciws/var/log /var/log
 
 echo "I: config persistent directory"
 

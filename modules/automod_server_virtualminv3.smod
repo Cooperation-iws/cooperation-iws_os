@@ -64,7 +64,24 @@ wget $URL_FREE/virtualmin1.0.3/install_virtualminv3.sh
 chmod +x install_virtualminv3.sh
 ./install_virtualminv3.sh
 
-usermod -u621 deniedssh
+/etc/init.d/dovecot stop
+
+groupmod -g621 deniedssh
+
+
+mv /var/lib/ /opt/ciws/var/
+rm -rf /var/lib
+ln -s /opt/ciws/var/lib/ /var/lib
+
+mv /var/usermin /opt/ciws/var
+ln -s /opt/ciws/var/usermin /var/usermin
+
+mv /var/webmin /opt/ciws/var
+ln -s /opt/ciws/var/webmin /var/webmin
+
+
+mv /var/log /opt/ciws/var/log
+ln -s /opt/ciws/var/log /var/log
 
 mv /etc/apache2 /opt/ciws/etc
 ln -s /opt/ciws/etc/apache2 /etc/apache2
@@ -77,6 +94,7 @@ ln -s /opt/ciws/etc/clamav /etc/clamav
 
 mv /etc/dovecot /opt/ciws/etc
 ln -s /opt/ciws/etc/dovecot /etc/dovecot
+
 
 mv /etc/ftpusers /opt/ciws/etc
 ln -s /opt/ciws/etc/ftpusers /etc/ftpusers
@@ -138,41 +156,66 @@ ln -s /opt/ciws/etc/warnquota.conf /etc/warnquota.conf
 mv /etc/webalizer /opt/ciws/etc
 ln -s /opt/ciws/etc/webalizer /etc/webalizer
 
+mkdir /opt/ciws/usr/share
+
 mv /etc/webmin /opt/ciws/etc
 ln -s /opt/ciws/etc/webmin /etc/webmin
+mv /usr/share/webmin /opt/ciws/usr/share
+ln -s /opt/ciws/usr/share/webmin /usr/share/webmin
 
-cat << EOT_CRON > /opt/ciws/etc/domain-watch.cron.sh
+mv /usr/share/usermin /opt/ciws/usr/share
+ln -s /opt/ciws/usr/share/usermin /usr/share/usermin
+
+
+echo "
 #!/bin/bash
 
 #cleaning domains list
-UPDT_DOMAIN_LIST="\$( cat /opt/ciws/var/identity/domain.txt )"
+UPDT_DOMAIN_LIST=\"\$( cat /opt/ciws/var/identity/domain.txt )\"
 
 for UPDT_DOMAIN in \$UPDT_DOMAIN_LIST
 do
-if [ -z "\$(cat /etc/bind/named.conf.local | grep \$UPDT_DOMAIN)" ]; then
-sed -i "/\$UPDT_DOMAIN/d" /opt/ciws/var/identity/domain.txt
+if [ -z \"$(cat /etc/bind/named.conf.local | grep \$UPDT_DOMAIN)\" ]; then
+sed -i \"/$UPDT_DOMAIN/d\" /opt/ciws/var/identity/domain.txt
 fi
 done
 
 #adding new domains
-DOMAIN_LIST="\$(cat /etc/bind/named.conf.local | grep 'zone' | cut -d'"' -f2)"
+DOMAIN_LIST=\$(cat /etc/bind/named.conf.local | grep \"zone\" | cut -d'\"' -f2)
 
 for DOMAIN in \$DOMAIN_LIST
 do
-if [ -z "\$(cat /opt/ciws/var/identity/domain.txt | grep \$DOMAIN)" ]; then
-echo "\$DOMAIN" >> /opt/ciws/var/identity/domain.txt
-sed -i "s/www/wwi/" /etc/bind/\$DOMAIN.hosts
+if [ -z \"\$(cat /opt/ciws/var/identity/domain.txt | grep \$DOMAIN)\" ]; then
+echo \"\$DOMAIN\" >> /opt/ciws/var/identity/domain.txt
+sed -i \"s/www/wwi/\" /etc/bind/\$DOMAIN.hosts
+sed -i \"s/www/wwi/g\" /etc/apache2/sites-available/*.conf
+ip_address=\$(sudo ifconfig | grep \"RX\" --before-context=4 | grep \"UP BROADCAST RUNNING MULTICAST\" --before-context=2 | grep -m 1 \"inet adr\"| cut -d\":\" -f2 | cut -d\" \" -f1)
+sed -i \"s/\$ip_address/*/g\" /etc/apache2/sites-available/*.conf
+sed -i 's/_default_/\*/' /etc/apache2/sites-available/*.conf
+cp /etc/bind/\$DOMAIN.hosts /etc/bind/\$DOMAIN.hosts.tpl
+sed -i \"s/\$ip_address/ip_address/g\" /etc/bind/\$DOMAIN.hosts.tpl
+sed -i \"s/\$ip_address/*/g\" /etc/apache2/apache2.conf
+sudo /etc/init.d/apache2 reload
 fi
 done
-EOT_CRON
+" > /opt/ciws/etc/domain-watch.cron.sh
 
 chmod +x /opt/ciws/etc/domain-watch.cron.sh
 
 echo "*/3 * * * * root /opt/ciws/etc/domain-watch.cron.sh > /dev/null 2>&1" > /etc/cron.d/domain_detection
 chmod +x /etc/cron.d/domain_detection
 
+echo '
 
-
+cd /etc/bind/
+for file in /etc/bind/*.hosts.tpl
+do
+name=$(echo $file | cut -d"/" -f4 | sed "s/.tpl//")
+cat $file | sed "s/ip_address/$ip_address/g" > /etc/bind/$name
+done
+sudo /etc/init.d/bind9 restart
+sudo /etc/init.d/apache2 reload
+' >> /opt/ciws/etc/dhclient-exit-hook.sh
 
 
 
