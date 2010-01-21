@@ -30,3 +30,8 @@ echo "
 /usr/NX/bin/nxserver --start
 " >> /etc/rc.local
 chmod +x /etc/rc.local
+
+/usr/NX/bin/nxserver --stop
+
+mv /usr/NX /opt/ciws/usr/.
+ln -s /opt/ciws/usr/NX /usr/NX

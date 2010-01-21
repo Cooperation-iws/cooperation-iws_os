@@ -217,6 +217,112 @@ sudo /etc/init.d/bind9 restart
 sudo /etc/init.d/apache2 reload
 ' >> /opt/ciws/etc/dhclient-exit-hook.sh
 
+sudo apt-get install --assume-yes --force-yes rsync
+
+echo '
+
+if [ ! -e /opt/ciws/etc/opasswd_a ]; then
+rsync -p /etc/opasswd_a /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/sudoers ]; then
+cp /etc/sudoers /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/shadow ]; then
+rsync -p /etc/shadow /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/shadow- ]; then
+rsync -p /etc/shadow- /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/oshadow_a ]; then
+rsync -p /etc/oshadow_a /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/gshadow ]; then
+rsync -p /etc/gshadow /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/gshadow- ]; then
+rsync -p /etc/gshadow- /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/group ]; then
+rsync -p /etc/group /opt/ciws/etc
+fi
+
+if [ ! -e /opt/ciws/etc/group- ]; then
+rsync -p /etc/group- /opt/ciws/etc
+fi
+
+
+if [ -e /opt/ciws/etc/passwd  ]; then
+rsync -p /opt/ciws/etc/passwd /etc/passwd
+fi
+
+if [ -e /opt/ciws/etc/passwd- ]; then
+rsync -p /opt/ciws/etc/passwd- /etc/passwd-
+fi
+
+if [ -e /opt/ciws/etc/opasswd_a ]; then
+rsync -p /opt/ciws/etc/opasswd_a /etc/opasswd_a
+fi
+
+if [ -e /opt/ciws/etc/sudoers ]; then
+rsync -p /opt/ciws/etc/sudoers /etc/sudoers
+fi
+
+if [ -e /opt/ciws/etc/shadow ]; then
+rsync -p /opt/ciws/etc/shadow /etc/shadow
+fi
+if [ -e /opt/ciws/etc/shadow- ]; then
+
+rsync -p /opt/ciws/etc/shadow- /etc/shadow-
+fi
+
+if [ -e /opt/ciws/etc/oshadow_a ]; then
+rsync -p /opt/ciws/etc/oshadow_a /etc/oshadow_a
+fi
+
+if [ -e /opt/ciws/etc/gshadow ]; then
+rsync -p /opt/ciws/etc/gshadow /etc/gshadow
+fi
+
+if [ -e /opt/ciws/etc/gshadow- ]; then
+rsync -p /opt/ciws/etc/gshadow- /etc/gshadow-
+fi
+
+if [ -e /opt/ciws/etc/group ]; then
+rsync -p /opt/ciws/etc/group /etc/group
+fi
+
+if [ -e /opt/ciws/etc/group ]; then
+rsync -p /opt/ciws/etc/group- /etc/group-
+fi
+
+
+' >> /etc/rc.local
+
+echo "
+rsync -p /etc/passwd /opt/ciws/etc
+rsync -p  /etc/passwd- /opt/ciws/etc
+rsync -p /etc/opasswd_a /opt/ciws/etc
+rsync -p /etc/sudoers /opt/ciws/etc
+rsync -p /etc/shadow /opt/ciws/etc
+rsync -p /etc/shadow- /opt/ciws/etc
+rsync -p /etc/oshadow_a /opt/ciws/etc
+rsync -p /etc/gshadow /opt/ciws/etc
+rsync -p /etc/gshadow- /opt/ciws/etc
+rsync -p /etc/group /opt/ciws/etc
+rsync -p /etc/group- /opt/ciws/etc
+"> /opt/ciws/etc/cron_user.sh
+
+chmod +x /opt/ciws/etc/cron_user.sh
+
+echo "*/1 * * * * root /opt/ciws/etc/cron_user.sh" > /etc/cron.d/sudoers
+chmod +x /etc/cron.d/sudoers
 
 
 

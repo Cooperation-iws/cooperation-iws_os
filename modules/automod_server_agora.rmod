@@ -81,9 +81,10 @@ rm AGORA_db.sql
 
 sed -i "s/Agora/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/stock_fichiers/config.inc.php
 sed -i "s/AGORA_MYSQL_PWD/${AGORA_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/stock_fichiers/config.inc.php
+sed -i "153s/3/ /" $WWW_DIRECTORY/${MOD_NAME[$count]}/commun/javascript.js
 
 
-echo "UPDATE ${MOD_NAME[$count]}.gt_utilisateur SET email = '${agora_admin_email[$count]}' WHERE gt_utilisateur.id_utilisateur =1 LIMIT 1 ;" > agora_credentials.sql
+echo "UPDATE ${MOD_NAME[$count]}.gt_utilisateur SET mail = '${agora_admin_email[$count]}' WHERE gt_utilisateur.id_utilisateur =1 LIMIT 1 ;" > agora_credentials.sql
 $BIN_MYSQL -u root < agora_credentials.sql
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 

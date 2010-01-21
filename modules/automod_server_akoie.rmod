@@ -124,6 +124,8 @@ else
 
 	fi
 fi
+sed -i "s/Akoie/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/akoie/config.inc.php
+
 chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 chmod -R 777 $WWW_DIRECTORY/$MOD_NAME/images/album
 

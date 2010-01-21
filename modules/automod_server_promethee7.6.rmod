@@ -85,6 +85,25 @@ sed -i "s/PROMETHEE_MYSQL_PWD/${PROMETHEE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 
+echo "UPDATE ${MOD_NAME[$count]}.user_id SET 
+_passwd = 'cooperation' WHERE _ident = 'director' LIMIT 1 ;
+UPDATE ${MOD_NAME[$count]}.user_id SET 
+_passwd = 'cooperation' WHERE _ident = 'admin' LIMIT 1 ;
+UPDATE ${MOD_NAME[$count]}.user_id SET 
+_passwd = 'cooperation' WHERE _ident = 'webmaster' LIMIT 1 ;
+
+UPDATE ${MOD_NAME[$count]}.user_id SET 
+_passwd = 'julesferry' WHERE _ident = 'profesor' LIMIT 1 ;
+UPDATE ${MOD_NAME[$count]}.user_id SET 
+_passwd = 'julesferry' WHERE _ident = 'prof' LIMIT 1 ;
+UPDATE ${MOD_NAME[$count]}.user_id SET 
+_passwd = 'julesferry' WHERE _ident = 'teacher' LIMIT 1 ;
+" > promethee_credential.sql
+$BIN_MYSQL -u root < promethee_credential.sql
+
+rm promethee_credential.sql
+
+
 done
 }
 
