@@ -1,0 +1,184 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Aie 0.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Web images editor'
+RMOD_DESCRIPTION_FR="Editeur d'image en ligne"
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+RMOD_VERBOSE="Akoie (AKanai Online Image Editor) is a rich internet application for manipulating images online. It's works with Mozilla Firefox and Internet Explorer. It uses HTML, JavaScript and Ext JS on client side and ImageMagick and PHP on server side."
+RMOD_VERBOSE_FR="Akoie (AKanai Online Image Editor) est un client web riche pour manipuler des images en ligne. Il fonctionne avec Mozilla Firefox et Internet Explorer. Il utilise HTML, JavaScript et Ext JS côté client et ImageMagick et PHP côté serveur."
+
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+
+
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+SILENT=$(cat /tmp/silent)
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/app_params
+fi
+
+
+#VARIABLES
+#MYSQL PASSWORD
+AKOIE_MYSQL_PWD="AKOIE_MYSQL_PWD"
+MOD_NAME=$aie_name
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/akoie-customv2-0.5.tar.gz
+tar -xzf akoie-customv2-0.5.tar.gz
+}
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Akoie"
+WGET_MIRROIR_FREE
+
+##AKOIE
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf Akoie/* $WWW_DIRECTORY/$MOD_NAME/.
+
+apt-get install --assume-yes --force-yes imagemagick 
+if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+	if [ "$(echo $share_akoie_smb | awk  '{print $1}')" != "n" ]; then
+
+		if [ "$(echo $share_akoie_smb_pwd | awk  '{print $1}')" != "y" ]; then
+		echo "[$MOD_NAME]
+			comment = $MOD_NAME
+			writeable = yes
+			public = yes
+			path = /var/www/$MOD_NAME/images/album
+	
+		" >> $LAMPP_DIRECTORY/etc/samba/smb.conf
+
+		else
+		echo "[$MOD_NAME]
+			comment = $MOD_NAME
+			writeable = yes
+			public = yes
+			path = /var/www/$MOD_NAME/images/album
+			valid users = www-data
+		" >> $LAMPP_DIRECTORY/etc/samba/smb.conf
+
+		fi
+
+	fi
+
+else
+
+	echo "Configure Samba Server to share upload images directory ?"
+	echo "[Y/n]"
+	read r1 < /dev/tty
+
+	if [ "$(echo $r1 | awk  '{print $1}')" != "n" ]; then
+		echo "Protect this directory with a password ?"
+		echo "[N/y]"
+		read r2 < /dev/tty
+
+		if [ "$(echo $r1 | awk  '{print $1}')" != "y" ]; then
+			echo "[$MOD_NAME]
+				comment = $MOD_NAME
+				writeable = yes
+				public = yes
+				path = /var/www/$MOD_NAME/images/album
+	
+			" >> $LAMPP_DIRECTORY/etc/samba/smb.conf
+
+		else
+			echo "[$MOD_NAME]
+				comment = $MOD_NAME
+				writeable = yes
+				public = yes
+				path = /var/www/$MOD_NAME/images/album
+				valid users = www-data
+			" >> $LAMPP_DIRECTORY/etc/samba/smb.conf
+
+		fi
+
+	fi
+fi
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
+chmod -R 777 $WWW_DIRECTORY/$MOD_NAME/images/album
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url>/$MOD_NAME</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url>/$MOD_NAME</item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url>/$MOD_NAME</item_admin_url>
+</item>
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+
+echo "
+
+#Akoie
+
+" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Akoie"
+INSTALL
+CREATE_WUI
+CREATE_INSTALL_SCRIPT
+echo "I: End of install Akoie"

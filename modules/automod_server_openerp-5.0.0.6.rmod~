@@ -1,0 +1,450 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='OpenERP 5.0.0.6'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='ERP'
+RMOD_DESCRIPTION_FR='ERP'
+RMOD_VERBOSE="OpenERP is a complete Enterprise Resources Planning solution."
+RMOD_VERBOSE_FR="Open Erp est une solution complète de gestion intégrée."
+
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_RUN_IN_CHROOT=True
+RMOD_REQ_APACHE=True
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
+SILENT=$(cat /tmp/silent)
+. /tmp/app_params
+
+DEB_DIST=$(cat /tmp/deb_dist)
+#TEMP
+MIRROIR=$(cat /tmp/mirroir)
+URL_FREE=$(cat /tmp/url_mirroir)
+
+INSTALL=$(cat /tmp/def_install)
+
+HOSTNAME=$(cat /tmp/hostname)
+
+
+OPENERP_PSGSQL_PWD=$openerp_psgsql_pwd
+ROOT_PSGSQL_PWD=$root_psgsql_pwd
+MOD_NAME=$openerp_name
+
+mkdir $DL_DIR
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+cd $DL_DIR
+wget $URL_FREE/openerp_5.0.0.6_dep.tar.gz
+cd $DL_DIR
+wget $URL_FREE/openerp-web-5.0.6.tar.gz
+tar -xzf openerp-web-5.0.6.tar.gz
+
+cd $DL_DIR
+wget $URL_FREE/openerp_database_dump.sql
+
+cd $DL_DIR
+wget $URL_FREE/openerp-server-5.0.6.tar.gz
+tar -xzf openerp-server-5.0.6.tar.gz
+
+cd $DL_DIR
+wget $URL_FREE/python-numpy_1.1.0-3+lenny1_i386.deb
+
+cd $DL_DIR
+wget $URL_FREE/open_erp_missing_pagkage.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+function INSTALL
+{
+echo "I: Download Openerp"
+
+WGET_MIRROIR_FREE
+
+cd $DL_DIR
+dpkg -i python-numpy_1.1.0-3+lenny1_i386.deb
+tar -xzf open_erp_missing_pagkage.tar.gz
+dpkg -i erp_p/*
+
+sudo apt-get install --assume-yes --force-yes python2.5 python-xml python-libxml2 python-libxslt1 python-lxml python-psycopg2 python-imaging python-pyparsing python-reportlab python-pychart graphviz python-tz python-pyopenssl python-matplotlib python-numeric python-pydot python-setuptools
+
+
+#if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
+
+#mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.postgresql
+#cp /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
+#fi
+
+#apt-get install --assume-yes --force-yes postgresql postgresql-client phppgadmin
+apt-get install --assume-yes --force-yes postgresql postgresql-client 
+
+#if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
+
+#mv /usr/sbin/policy-rc.d.postgresql /usr/sbin/policy-rc.d 
+#fi
+
+#rm /etc/apache2/conf.d/phppgadmin
+
+#ln -s /etc/phppgadmin/apache.conf /etc/apache2/conf.d/phppgadmin
+
+
+#sed -i '10s/^/#/' /etc/phppgadmin/apache.conf
+#sed -i '11s/^/#/' /etc/phppgadmin/apache.conf
+#sed -i '12s/^/#/' /etc/phppgadmin/apache.conf
+#sed -i '13s/#//' /etc/phppgadmin/apache.conf
+sudo /etc/init.d/postgresql-8.3 restart
+sudo -u postgres createuser openerp --no-superuser --createdb --no-createrole 
+sudo -u postgres psql template1 -U postgres -c "alter user openerp with password '$OPENERP_PSGSQL_PWD'"
+
+
+echo "
+CREATE DATABASE cooperation OWNER openerp;
+"  > openerp_db.sql
+sudo -u postgres psql postgres < openerp_db.sql
+
+cd $DL_DIR
+sudo -u postgres psql cooperation < openerp_database_dump.sql
+
+echo "
+
+ALTER USER postgres WITH PASSWORD '$ROOT_PSGSQL_PWD';
+
+"  > openerp_db.sql
+
+sudo -u postgres psql postgres < openerp_db.sql
+
+sudo sed -i 's/\(local[[:space:]]*all[[:space:]]*all[[:space:]]*\)\(ident[[:space:]]*sameuser\)/\1md5/g' /etc/postgresql/8.3/main/pg_hba.conf
+
+cd $DL_DIR
+tar -xzf openerp_5.0.0.6_dep.tar.gz -C /usr/lib/python2.5/site-packages/.
+echo "#######INSTALLING SERVER###########"
+cd $DL_DIR/openerp-server-5.0.6
+sudo python setup.py install > /dev/null
+echo "#######INSTALLING WEB###########"
+cd $DL_DIR/openerp-client-web-5.0.6
+sudo python setup.py install
+
+sudo /usr/sbin/adduser --quiet --system openerp
+usermod -u601 openerp
+
+
+sed -i "48s/False/'localhost'/" /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
+#sed -i '49s/False//' /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
+#sed -i '50s/False//' /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
+sed -i "51s/False/'openerp'/" /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
+sed -i "52s/False/'$OPENERP_PSGSQL_PWD'/" /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
+
+echo "
+[options]
+without_demo = False
+netport = 8070
+secure = False
+demo = {}
+syslog = False
+cache_timeout = 100000
+port = 8069
+reportgz = False
+secure_pkey_file = server.pkey
+netinterface = 
+log_level = info
+admin_passwd = cooperation
+smtp_port = 25
+smtp_server = localhost
+db_user = openerp
+price_accuracy = 2
+login_message = False
+import_partial = 
+soap = False
+pidfile = None
+db_maxconn = 64
+smtp_password = False
+xmlrpc = True
+db_port = False
+debug_mode = False
+netrpc = True
+secure_cert_file = server.cert
+interface = 
+logfile = None
+csv_internal_sep = ,
+pg_path = None
+translate_modules = ['all']
+stop_after_init = False
+root_path = /usr/lib/python2.5/site-packages/openerp-server
+smtp_user = False
+db_password = $OPENERP_PSGSQL_PWD
+db_name = cooperation
+db_host = localhost
+assert_exit_level = warn
+email_from = False
+addons_path = /usr/lib/python2.5/site-packages/openerp-server/addons
+
+" > /root/.openerp_serverrc
+
+sudo chmod 777 /usr/lib/python2.5/site-packages/openerp-server/addons
+
+mkdir $LAMPP_DIRECTORY/usr
+mkdir $LAMPP_DIRECTORY/usr/lib
+mkdir $LAMPP_DIRECTORY/usr/lib/python2.5
+mv /usr/lib/python2.5/site-packages $LAMPP_DIRECTORY/usr/lib/python2.5/
+
+ln -s $LAMPP_DIRECTORY/usr/lib/python2.5/site-packages /usr/lib/python2.5/site-packages
+ 
+sudo /etc/init.d/postgresql stop
+
+if [ ! -d $LAMPP_DIRECTORY/etc/postgresql ]; then
+mv /etc/postgresql $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/postgresql /etc/postgresql
+
+mv /etc/postgresql-common $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/postgresql-common /etc/postgresql-common
+
+mv /var/lib/postgresql $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/postgresql /var/lib/postgresql
+
+fi
+
+
+
+#####################################################################################
+# openerp-server init script
+#####################################################################################
+cat > /tmp/openerp-server <<"EOF"
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:		openerp-server
+# Required-Start:	$syslog
+# Required-Stop:	$syslog
+# Should-Start:		$network
+# Should-Stop:		$network
+# Default-Start:	2 3 4 5
+# Default-Stop:		0 1 6
+# Short-Description:	Enterprise Resource Management software
+# Description:		OpenERP is a complete ERP and CRM software.
+### END INIT INFO
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/bin/openerp-server
+NAME=openerp-server
+DESC=openerp-server
+USER=openerp
+
+test -x ${DAEMON} || exit 0
+
+set -e
+
+case "${1}" in
+	start)
+		echo -n "Starting ${DESC}: "
+
+		start-stop-daemon --start --quiet --pidfile /var/run/${NAME}.pid \
+			--chuid ${USER} --background --make-pidfile \
+			--exec ${DAEMON} -- --config=/etc/openerp-server.conf
+
+		echo "${NAME}."
+		;;
+
+	stop)
+		echo -n "Stopping ${DESC}: "
+
+		start-stop-daemon --stop --quiet --pidfile /var/run/${NAME}.pid \
+			--oknodo
+
+		echo "${NAME}."
+		;;
+
+	restart|force-reload)
+		echo -n "Restarting ${DESC}: "
+
+		start-stop-daemon --stop --quiet --pidfile /var/run/${NAME}.pid \
+			--oknodo
+
+		sleep 1
+
+		start-stop-daemon --start --quiet --pidfile /var/run/${NAME}.pid \
+			--chuid ${USER} --background --make-pidfile \
+			--exec ${DAEMON} -- --config=/etc/openerp-server.conf
+
+		echo "${NAME}."
+		;;
+
+	*)
+		N=/etc/init.d/${NAME}
+		echo "Usage: ${NAME} {start|stop|restart|force-reload}" >&2
+		exit 1
+		;;
+esac
+
+exit 0
+
+EOF
+
+sudo cp /tmp/openerp-server /etc/init.d/
+sudo chmod +x /etc/init.d/openerp-server
+#Create /var/log/openerp with proper ownership:
+sudo mkdir -p /var/log/openerp
+sudo touch /var/log/openerp/openerp.log
+sudo chown -R openerp.root /var/log/openerp/
+
+#####################################################################################
+# openerp-server config file
+#####################################################################################
+cat > /tmp/openerp-server.conf <<"EOT2"
+# /etc/openerp-server.conf(5) - configuration file for openerp-server(1)
+
+[options]
+# Enable the debugging mode (default False).
+#verbose = True 
+
+# The file where the server pid will be stored (default False).
+#pidfile = /var/run/openerp.pid
+
+# The file where the server log will be stored (default False).
+logfile = /var/log/openerp/openerp.log
+
+# The IP address on which the server will bind.
+# If empty, it will bind on all interfaces (default empty).
+#interface = localhost
+interface = 
+# The TCP port on which the server will listen (default 8069).
+port = 8069
+
+# Enable debug mode (default False).
+#debug_mode = True 
+
+# Launch server over https instead of http (default False).
+secure = False
+
+# Specify the SMTP server for sending email (default localhost).
+smtp_server = localhost
+
+# Specify the SMTP user for sending email (default False).
+smtp_user = False
+
+# Specify the SMTP password for sending email (default False).
+smtp_password = False
+
+# Specify the database name.
+db_name = cooperation
+
+# Specify the database user name (default None).
+db_user = openerp
+
+# Specify the database password for db_user (default None).
+db_password = 
+
+# Specify the database host (default localhost).
+db_host =
+
+# Specify the database port (default None).
+db_port = 5432
+
+EOT2
+
+sudo cp /tmp/openerp-server.conf /etc/
+sudo chown openerp.root /etc/openerp-server.conf
+sudo chmod 640 /etc/openerp-server.conf
+
+sudo sed -i "s/db_password =/db_password = $OPENERP_PSGSQL_PWD/g" /etc/openerp-server.conf
+
+#####################################################################################
+# openerp-web init script
+#####################################################################################
+
+sudo cp /usr/lib/python2.5/site-packages/openerp_web-5.0.6-py2.5.egg/scripts/openerp-web /etc/init.d/
+sudo chmod +x /etc/init.d/openerp-web
+sudo cp /usr/lib/python2.5/site-packages/openerp_web-5.0.6-py2.5.egg/config/openerp-web.cfg /etc/
+#ln -s /usr/lib/python2.5/site-packages/openerp_web-5.0.3-py2.5.egg/config/openerp-web.cfg /etc/openerp-web.cfg
+sudo chown openerp.root /etc/openerp-web.cfg
+sudo chmod 640 /etc/openerp-web.cfg
+
+#OpenERP Web configuration:
+#    tools.proxy.on = True
+sudo sed -i "s/^#tools\.proxy\.on.*/tools.proxy.on = True/g" /etc/openerp-web.cfg 
+
+#Create /var/log/openerp-web.log with proper ownership:
+sudo mkdir -p /var/log/openerp-web
+sudo touch /var/log/openerp-web/access.log
+sudo touch /var/log/openerp-web/error.log
+sudo chown -R openerp.root /var/log/openerp-web/
+
+#Now run following command to start the OpenERP Web automatically on system startup (Debian/Ubuntu):
+sudo update-rc.d openerp-server start 21 2 3 4 5 . stop 21 0 1 6 .
+sudo update-rc.d openerp-web start 70 2 3 4 5 . stop 20 0 1 6 .
+
+############################################################################################
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION</item_category>
+	<item_url><![CDATA[http://localhost:8080]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE</item_desc>
+	<item_admin_url><![CDATA[http://localhost:8080]]></item_admin_url>
+	<item_init_start>/etc/init.d/openerp-server start\/etc/init.d/openerp-web start</item_init_start>
+	<item_init_stop>/etc/init.d/openerp-server stop\/etc/init.d/openerp-web stop</item_init_stop>
+</item>
+
+" >> $WWW_DIRECTORY/cooperation-wui.xml
+
+
+echo "
+<item>
+	<item_category>$RMOD_DESCRIPTION_FR</item_category>
+	<item_url><![CDATA[http://localhost:8080]]></item_url>
+	<item_name>$RMOD_NAME</item_name>
+	<item_desc>$RMOD_VERBOSE_FR</item_desc>
+	<item_admin_url><![CDATA[http://localhost:8080]]></item_admin_url>
+	<item_init_start>/etc/init.d/openerp-server start\/etc/init.d/openerp-web start</item_init_start>
+	<item_init_stop>/etc/init.d/openerp-server stop\/etc/init.d/openerp-web stop</item_init_stop>
+</item>
+
+" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+
+echo "I: Install Nuxeo"
+INSTALL
+CREATE_WUI
+echo "I: End of install Nuxeo"
