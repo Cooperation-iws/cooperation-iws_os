@@ -197,7 +197,10 @@ assert_exit_level = warn
 email_from = False
 addons_path = /usr/lib/python2.5/site-packages/openerp-server/addons
 
-" > /root/.openerp_serverrc
+" > /home/openerp/.openerp_serverrc
+
+chown openerp.root /home/openerp/.openerp_serverrc
+chmod 775 /home/openerp/.openerp_serverrc
 
 sudo chmod 777 /usr/lib/python2.5/site-packages/openerp-server/addons
 
@@ -256,7 +259,7 @@ case "${1}" in
 	start)
 		echo -n "Starting ${DESC}: "
 
-		nohup /usr/bin/openerp-server &
+		sudo -u $USER /usr/bin/openerp-server &
 		echo $! > /var/run/${NAME}.pid
 
 		echo "${NAME}."
@@ -276,7 +279,7 @@ case "${1}" in
 
 		sleep 1
 
-		nohup /usr/bin/openerp-server &
+		sudo -u $USER /usr/bin/openerp-server &
 		echo $! > /var/run/${NAME}.pid
 
 		echo "${NAME}."
