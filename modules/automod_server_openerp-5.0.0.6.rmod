@@ -154,52 +154,7 @@ sed -i "48s/False/'localhost'/" /usr/lib/python2.5/site-packages/openerp-server/
 sed -i "51s/False/'openerp'/" /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
 sed -i "52s/False/'$OPENERP_PSGSQL_PWD'/" /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
 
-echo "[options]
-without_demo = False
-netport = 8070
-secure = False
-demo = {}
-syslog = False
-cache_timeout = 10000
-port = 8069
-reportgz = False
-secure_pkey_file = server.pkey
-netinterface = 
-log_level = info
-admin_passwd = cooperation
-smtp_port = 25
-smtp_server = localhost
-db_user = openerp
-price_accuracy = 2
-login_message = False
-import_partial = 
-soap = False
-pidfile = None
-db_maxconn = 64
-smtp_password = False
-xmlrpc = True
-db_port = False
-debug_mode = False
-netrpc = True
-secure_cert_file = server.cert
-interface = 
-logfile = None
-csv_internal_sep = ,
-pg_path = None
-translate_modules = ['all']
-stop_after_init = False
-root_path = /opt/ciws/usr/lib/python2.5/site-packages/openerp-server
-smtp_user = False
-db_password = $OPENERP_PSGSQL_PWD
-db_name = False
-db_host = localhost
-assert_exit_level = warn
-email_from = False
-addons_path = /opt/ciws/usr/lib/python2.5/site-packages/openerp-server/addons
-" > /home/openerp/.openerp_serverrc
 
-chown openerp.root /home/openerp/.openerp_serverrc
-chmod 775 /home/openerp/.openerp_serverrc
 
 sudo chmod 777 /usr/lib/python2.5/site-packages/openerp-server/addons
 
