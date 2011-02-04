@@ -452,7 +452,7 @@ sudo a2enmod proxy_ftp
 sudo a2enmod headers
 
 
-REDMINE_URL="openerp.$domain"
+REDMINE_URL="http://openerp.$domain"
 echo "openerp    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
 
 else
