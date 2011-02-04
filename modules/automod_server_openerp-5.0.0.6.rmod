@@ -92,23 +92,23 @@ sudo apt-get install --assume-yes --force-yes python2.5 python-xml python-libxml
 #cp /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
 #fi
 
-#apt-get install --assume-yes --force-yes postgresql postgresql-client phppgadmin
-apt-get install --assume-yes --force-yes postgresql postgresql-client 
+apt-get install --assume-yes --force-yes postgresql postgresql-client phppgadmin
+#apt-get install --assume-yes --force-yes postgresql postgresql-client 
 
 #if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
 
 #mv /usr/sbin/policy-rc.d.postgresql /usr/sbin/policy-rc.d 
 #fi
 
-#rm /etc/apache2/conf.d/phppgadmin
+rm /etc/apache2/conf.d/phppgadmin
 
-#ln -s /etc/phppgadmin/apache.conf /etc/apache2/conf.d/phppgadmin
+ln -s /etc/phppgadmin/apache.conf /etc/apache2/conf.d/phppgadmin
 
 
-#sed -i '10s/^/#/' /etc/phppgadmin/apache.conf
-#sed -i '11s/^/#/' /etc/phppgadmin/apache.conf
-#sed -i '12s/^/#/' /etc/phppgadmin/apache.conf
-#sed -i '13s/#//' /etc/phppgadmin/apache.conf
+sed -i '10s/^/#/' /etc/phppgadmin/apache.conf
+sed -i '11s/^/#/' /etc/phppgadmin/apache.conf
+sed -i '12s/^/#/' /etc/phppgadmin/apache.conf
+sed -i '13s/#//' /etc/phppgadmin/apache.conf
 sudo /etc/init.d/postgresql-8.3 restart
 sudo -u postgres createuser openerp --no-superuser --createdb --no-createrole 
 sudo -u postgres psql template1 -U postgres -c "alter user openerp with password '$OPENERP_PSGSQL_PWD'"
@@ -160,7 +160,7 @@ netport = 8070
 secure = False
 demo = {}
 syslog = False
-cache_timeout = 100000
+cache_timeout = 10
 port = 8069
 reportgz = False
 secure_pkey_file = server.pkey
@@ -256,9 +256,8 @@ case "${1}" in
 	start)
 		echo -n "Starting ${DESC}: "
 
-		start-stop-daemon --start --quiet --pidfile /var/run/${NAME}.pid \
-			--chuid ${USER} --background --make-pidfile \
-			--exec ${DAEMON} -- --config=/etc/openerp-server.conf
+		nohup /usr/bin/openerp-server &
+		echo $! > /var/run/${NAME}.pid
 
 		echo "${NAME}."
 		;;
@@ -266,23 +265,19 @@ case "${1}" in
 	stop)
 		echo -n "Stopping ${DESC}: "
 
-		start-stop-daemon --stop --quiet --pidfile /var/run/${NAME}.pid \
-			--oknodo
-
+		kill -9 $(cat /var/run/${NAME}.pid)
 		echo "${NAME}."
 		;;
 
 	restart|force-reload)
 		echo -n "Restarting ${DESC}: "
 
-		start-stop-daemon --stop --quiet --pidfile /var/run/${NAME}.pid \
-			--oknodo
+		kill -9 $(cat /var/run/${NAME}.pid)
 
 		sleep 1
 
-		start-stop-daemon --start --quiet --pidfile /var/run/${NAME}.pid \
-			--chuid ${USER} --background --make-pidfile \
-			--exec ${DAEMON} -- --config=/etc/openerp-server.conf
+		nohup /usr/bin/openerp-server &
+		echo $! > /var/run/${NAME}.pid
 
 		echo "${NAME}."
 		;;
@@ -379,7 +374,10 @@ sudo chmod 640 /etc/openerp-web.cfg
 
 #OpenERP Web configuration:
 #    tools.proxy.on = True
-sudo sed -i "s/^#tools\.proxy\.on.*/tools.proxy.on = True/g" /etc/openerp-web.cfg 
+#sudo sed -i "s/^#tools\.proxy\.on.*/tools.proxy.on = True/g" /etc/openerp-web.cfg 
+
+
+
 
 #Create /var/log/openerp-web.log with proper ownership:
 sudo mkdir -p /var/log/openerp-web
