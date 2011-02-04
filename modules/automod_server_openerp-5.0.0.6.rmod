@@ -53,7 +53,7 @@ wget $URL_FREE/openerp-web-5.0.6.tar.gz
 tar -xzf openerp-web-5.0.6.tar.gz
 
 cd $DL_DIR
-wget $URL_FREE/openerp_database_dump.sql
+wget $URL_FREE/openerp_ciws_sa.dump
 
 cd $DL_DIR
 wget $URL_FREE/openerp-server-5.0.6.tar.gz
@@ -111,16 +111,19 @@ sed -i '12s/^/#/' /etc/phppgadmin/apache.conf
 sed -i '13s/#//' /etc/phppgadmin/apache.conf
 sudo /etc/init.d/postgresql-8.3 restart
 sudo -u postgres createuser openerp --no-superuser --createdb --no-createrole 
-sudo -u postgres psql template1 -U postgres -c "alter user openerp with password '$OPENERP_PSGSQL_PWD'"
+sudo /usr/sbin/adduser --quiet --system openerp
+usermod -u601 openerp
 
 
 echo "
-CREATE DATABASE cooperation OWNER openerp;
+SET client_encoding = 'UTF8';
+CREATE DATABASE ciws_sa OWNER openerp ENCODING 'UTF8';
 "  > openerp_db.sql
 sudo -u postgres psql postgres < openerp_db.sql
 
 cd $DL_DIR
-sudo -u postgres psql cooperation < openerp_database_dump.sql
+sudo -u openerp pg_restore -d ciws_sa openerp_ciws_sa.dump
+sudo -u postgres psql template1 -U postgres -c "alter user openerp with password '$OPENERP_PSGSQL_PWD'"
 
 echo "
 
@@ -143,8 +146,6 @@ sudo python setup.py install
 
 sudo /etc/init.d/postgresql-8.3 stop
 
-sudo /usr/sbin/adduser --quiet --system openerp
-usermod -u601 openerp
 
 
 sed -i "48s/False/'localhost'/" /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
@@ -153,14 +154,13 @@ sed -i "48s/False/'localhost'/" /usr/lib/python2.5/site-packages/openerp-server/
 sed -i "51s/False/'openerp'/" /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
 sed -i "52s/False/'$OPENERP_PSGSQL_PWD'/" /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
 
-echo "
-[options]
+echo "[options]
 without_demo = False
 netport = 8070
 secure = False
 demo = {}
 syslog = False
-cache_timeout = 10
+cache_timeout = 10000
 port = 8069
 reportgz = False
 secure_pkey_file = server.pkey
@@ -188,15 +188,14 @@ csv_internal_sep = ,
 pg_path = None
 translate_modules = ['all']
 stop_after_init = False
-root_path = /usr/lib/python2.5/site-packages/openerp-server
+root_path = /opt/ciws/usr/lib/python2.5/site-packages/openerp-server
 smtp_user = False
 db_password = $OPENERP_PSGSQL_PWD
-db_name = cooperation
+db_name = False
 db_host = localhost
 assert_exit_level = warn
 email_from = False
-addons_path = /usr/lib/python2.5/site-packages/openerp-server/addons
-
+addons_path = /opt/ciws/usr/lib/python2.5/site-packages/openerp-server/addons
 " > /home/openerp/.openerp_serverrc
 
 chown openerp.root /home/openerp/.openerp_serverrc
@@ -259,7 +258,7 @@ case "${1}" in
 	start)
 		echo -n "Starting ${DESC}: "
 
-		sudo -u $USER /usr/bin/openerp-server &
+		sudo -u $USER /usr/bin/openerp-server -c /etc/openerp-server.conf >> /var/log/openerp/openerp.log &
 		echo $! > /var/run/${NAME}.pid
 
 		echo "${NAME}."
@@ -279,7 +278,7 @@ case "${1}" in
 
 		sleep 1
 
-		sudo -u $USER /usr/bin/openerp-server &
+		sudo -u $USER /usr/bin/openerp-server -c /etc/openerp-server.conf >> /var/log/openerp/openerp.log &
 		echo $! > /var/run/${NAME}.pid
 
 		echo "${NAME}."
@@ -316,6 +315,8 @@ cat > /tmp/openerp-server.conf <<"EOT2"
 # The file where the server pid will be stored (default False).
 #pidfile = /var/run/openerp.pid
 
+admin_passwd = cooperation
+
 # The file where the server log will be stored (default False).
 logfile = /var/log/openerp/openerp.log
 
@@ -342,7 +343,7 @@ smtp_user = False
 smtp_password = False
 
 # Specify the database name.
-db_name = cooperation
+db_name = 
 
 # Specify the database user name (default None).
 db_user = openerp
@@ -377,9 +378,21 @@ sudo chmod 640 /etc/openerp-web.cfg
 
 #OpenERP Web configuration:
 #    tools.proxy.on = True
-#sudo sed -i "s/^#tools\.proxy\.on.*/tools.proxy.on = True/g" /etc/openerp-web.cfg 
+sudo sed -i "s/^#tools\.proxy\.on.*/tools.proxy.on = True/g" /etc/openerp-web.cfg 
 
+echo '<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /openerp   http://127.0.0.1:8080/
+	ProxyPassReverse /openerp   http://127.0.0.1:8080/
 
+        
+
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+' > /etc/apache2/conf.d/openerp
 
 
 #Create /var/log/openerp-web.log with proper ownership:
