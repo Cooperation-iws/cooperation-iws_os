@@ -375,25 +375,89 @@ sudo cp /usr/lib/python2.5/site-packages/openerp_web-5.0.6-py2.5.egg/config/open
 #ln -s /usr/lib/python2.5/site-packages/openerp_web-5.0.3-py2.5.egg/config/openerp-web.cfg /etc/openerp-web.cfg
 sudo chown openerp.root /etc/openerp-web.cfg
 sudo chmod 640 /etc/openerp-web.cfg
-
+if [ "$domain" ] && [ -d /etc/bind ]; then
 #OpenERP Web configuration:
 #    tools.proxy.on = True
 sudo sed -i "s/^#tools\.proxy\.on.*/tools.proxy.on = True/g" /etc/openerp-web.cfg 
 
-echo '<Proxy *>
+echo "<VirtualHost *:443>
+	ServerName openerp.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	SSLEngine on
+	SSLCertificateFile /etc/apache2/ssl/apache.pem
+	<Proxy *>
 	  Order deny,allow
 	  Allow from all
 	</Proxy>
 	ProxyRequests Off
-	ProxyPass        /openerp   http://127.0.0.1:8080/
-	ProxyPassReverse /openerp   http://127.0.0.1:8080/
+	ProxyPass        /   http://127.0.0.1:8080/
+	ProxyPassReverse /   http://127.0.0.1:8080/
 
-        
+        RequestHeader set \"X-Forwarded-Proto\" \"https\"
 
         # Fix IE problem (http error 408/409)
         SetEnv proxy-nokeepalive 1
-' > /etc/apache2/conf.d/openerp
 
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /tmp/default-ssl 
+sudo cp /tmp/default-ssl /etc/apache2/sites-available/openerp-ssl
+sudo chown root.root /etc/apache2/sites-available/openerp-ssl
+sudo chmod 644 /etc/apache2/sites-available/openerp-ssl
+
+echo "<VirtualHost *:80>
+	ServerName openerp.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:8080/
+	ProxyPassReverse /   http://127.0.0.1:8080/
+
+        
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /tmp/default
+sudo cp /tmp/default /etc/apache2/sites-available/openerp
+sudo chown root.root /etc/apache2/sites-available/openerp
+sudo chmod 644 /etc/apache2/sites-available/openerp
+
+sed -i "9s/Order deny,allow/Order allow,deny/" /etc/apache2/mods-available/proxy.conf
+sed -i "10s/Deny/Allow/" /etc/apache2/mods-available/proxy.conf
+a2dissite default-ssl
+a2ensite openerp
+a2ensite openerp-ssl
+sudo a2enmod rewrite
+sudo a2enmod suexec
+sudo a2enmod include
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod proxy_connect
+sudo a2enmod proxy_ftp
+sudo a2enmod headers
+
+
+REDMINE_URL="openerp.$domain"
+echo "openerp    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+
+else
+REDMINE_URL="<![CDATA[http://localhost:8080]]>"
+fi
 
 #Create /var/log/openerp-web.log with proper ownership:
 sudo mkdir -p /var/log/openerp-web
@@ -421,7 +485,7 @@ function CREATE_WUI
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url><![CDATA[http://localhost:8080]]></item_url>
+	<item_url>$REDMINE_URL</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 	<item_admin_url><![CDATA[http://localhost:8080]]></item_admin_url>
@@ -435,7 +499,7 @@ echo "
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url><![CDATA[http://localhost:8080]]></item_url>
+	<item_url>$REDMINE_URL</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 	<item_admin_url><![CDATA[http://localhost:8080]]></item_admin_url>
@@ -460,7 +524,7 @@ echo "
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 
-echo "I: Install Nuxeo"
+echo "I: Install Openerp"
 INSTALL
 CREATE_WUI
-echo "I: End of install Nuxeo"
+echo "I: End of install Openerp"
