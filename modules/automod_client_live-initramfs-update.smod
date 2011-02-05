@@ -32,3 +32,4 @@ echo "
 copy_exec /bin/loadkeys /bin
 mkdir \${DESTDIR}/usr/share ; cp -r /usr/share/keymaps \${DESTDIR}/usr/share/." >> /usr/share/initramfs-tools/hooks/live 
 
+sed -i "s/modprobe -q loop/modprobe -q loop max_loop=255/" /usr/share/initramfs-tools/scripts/local-top/loopaes
