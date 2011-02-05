@@ -160,8 +160,23 @@ mkdir /opt/ciws/usr/share
 
 mv /etc/webmin /opt/ciws/etc
 ln -s /opt/ciws/etc/webmin /etc/webmin
+
 mv /usr/share/webmin /opt/ciws/usr/share
 ln -s /opt/ciws/usr/share/webmin /usr/share/webmin
+
+mv /etc/exim4 /opt/ciws/etc
+ln -s /opt/ciws/etc/exim4 /etc/exim4
+
+mv /etc/pam.d /opt/ciws/etc
+ln -s /opt/ciws/etc/pam.d /etc/pam.d
+
+mv /etc/PolicyKit /opt/ciws/etc
+ln -s /opt/ciws/etc/PolicyKit /etc/PolicyKit
+
+mv /etc/default /opt/ciws/etc
+ln -s /opt/ciws/etc/default /etc/default
+
+
 
 mv /usr/share/usermin /opt/ciws/usr/share
 ln -s /opt/ciws/usr/share/usermin /usr/share/usermin
@@ -220,6 +235,17 @@ sudo /etc/init.d/apache2 reload
 
 echo '
 ##UPDATING USER
+mkdir /opt/ciws/etc/passwd.back
+cp /opt/ciws/etc/passwd.tpl /opt/ciws/etc/passwd.back/passwd.$(date --rfc-3339 seconds | sed "s/ /_/")
+cp /opt/ciws/etc/shadow.tpl /opt/ciws/etc/passwd.back/shadow.$(date --rfc-3339 seconds | sed "s/ /_/")
+chmod -R 700 /opt/ciws/etc/passwd.back
+
+
+cp /opt/ciws/etc/passwd.tpl /opt/ciws/etc/passwd
+cp /opt/ciws/etc/shadow.tpl /opt/ciws/etc/shadow
+chmod 700 /opt/ciws/etc/passwd
+chmod 700 /opt/ciws/etc/shadow
+
 for row in $(cat /opt/ciws/etc/passwd)
 do
 
@@ -234,7 +260,7 @@ echo $row_path
 echo $row_shell
 echo $row_passwd
 adduser --home $row_path --shell $row_shell --no-create-home --force-badname --quiet --gecos " " --disabled-password $row_name
-(echo $row_passwd; echo $row_passwd) | passwd $row_name
+echo "$row_name:$row_passwd" | chpasswd -e
 addgroup www-data $row_name
 fi
 
@@ -244,10 +270,10 @@ done
 ' >> /etc/rc.local
 
 echo "
-cp /etc/passwd /opt/ciws/etc
-cp /etc/shadow /opt/ciws/etc
-chmod 700 /opt/ciws/etc/passwd
-chmod 700 /opt/ciws/etc/shadow
+cp /etc/passwd /opt/ciws/etc/passwd.tpl
+cp /etc/shadow /opt/ciws/etc/shadow.tpl
+chmod 700 /opt/ciws/etc/passwd.tpl
+chmod 700 /opt/ciws/etc/shadow.tpl
 
 "> /opt/ciws/etc/cron_user.sh
 
