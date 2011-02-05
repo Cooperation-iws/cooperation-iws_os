@@ -246,6 +246,8 @@ done
 echo "
 cp /etc/passwd /opt/ciws/etc
 cp /etc/shadow /opt/ciws/etc
+chmod 700 /opt/ciws/etc/passwd
+chmod 700 /opt/ciws/etc/shadow
 
 "> /opt/ciws/etc/cron_user.sh
 
