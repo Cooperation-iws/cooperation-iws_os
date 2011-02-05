@@ -246,7 +246,7 @@ cp /opt/ciws/etc/shadow.tpl /opt/ciws/etc/shadow
 chmod 700 /opt/ciws/etc/passwd
 chmod 700 /opt/ciws/etc/shadow
 
-for row in $(cat /opt/ciws/etc/passwd)
+for row in $(sed "s/ //g" /opt/ciws/etc/passwd)
 do
 
 row_name=$(echo $row | cut -d":" -f1)
@@ -254,7 +254,7 @@ row_path=$(echo $row | cut -d":" -f6)
 row_shell=$(echo $row | cut -d":" -f7)
 row_passwd=$(cat /opt/ciws/etc/shadow | grep $row_name | cut -d":" -f2)
 
-if [ -z "$(cat /etc/passwd | grep $row_name)" ]; then
+if [[ ! $(cat /etc/passwd | grep "$row_name:") ]]; then
 echo $row_name
 echo $row_path
 echo $row_shell
@@ -324,7 +324,7 @@ echo "
 
 
 
-echo "I: Install Ntop"
+echo "I: Install Virtualmin"
 INSTALL
 CREATE_WUI
-echo "I: End of install Ntop"
+echo "I: End of install Virtualmin"
