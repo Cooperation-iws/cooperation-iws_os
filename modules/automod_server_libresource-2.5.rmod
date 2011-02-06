@@ -46,8 +46,17 @@ mkdir $DL_DIR
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/libresource-2.5-090306.tar.gz
-tar -xzf libresource-2.5-090306.tar.gz
+wget $URL_FREE/Libresource_sql_110206.dump
+
+cd $DL_DIR
+wget $URL_FREE/Libresource_110206.tar.gz
+tar -xzf  Libresource_110206.tar.gz
+
+cd $DL_DIR
+wget $URL_FREE/psql_missing_package_110206.tar.gz
+tar -xzf  psql_missing_package_110206.tar.gz
+
+
 }
 
 #_______________________________________________________________________________________________
@@ -59,7 +68,7 @@ tar -xzf libresource-2.5-090306.tar.gz
 
 function INSTALL
 {
-echo "I: Download Nuxeo"
+echo "I: Download Libresource"
 WGET_MIRROIR_FREE
 #apt-get autoremove --assume-yes --force-yes java-gcj-compat
 #apt-get autoremove --assume-yes --force-yes gcj
@@ -70,52 +79,59 @@ Owners: sun-java5-bin, sun-java5-jre
 Flags: seen
 " >> /var/cache/debconf/config.dat
 
+ 
+
+apt-get autoremove --assume-yes --force-yes java-gcj-compat
+apt-get autoremove --assume-yes --force-yes gcj
+
 ln -s / /cow
-apt-get install --assume-yes --force-yes sun-java6-bin sun-java6-jre sun-java6-jdk
+apt-get install --assume-yes --force-yes sun-java5-bin sun-java5-jre sun-java5-jdk
 
-update-alternatives --set java /usr/lib/jvm/java-6-sun-1.6.0.12/jre/bin/java
-
-#cancel inhibition for mysql
-if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
-
-mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.postgresql
-cp /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
-fi
-
-apt-get install --assume-yes --force-yes postgresql postgresql-client
-
-if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
-
-mv /usr/sbin/policy-rc.d.postgresql /usr/sbin/policy-rc.d 
-fi
+sudo update-alternatives --set java /usr/lib/jvm/java-1.5.0-sun/jre/bin/java
 
 
-apt-get remove --purge --assume-yes --force-yes openbsd-inetd
 cd $DL_DIR
-mv Libresource $LAMPP_DIRECTORY/server/$MOD_NAME
-sudo -u postgres createdb $MOD_NAME
-sudo -u postgres psql $MOD_NAME < $LAMPP_DIRECTORY/server/$MOD_NAME/database.psql
+dpkg -i psql/*.deb
+
+apt-get install --assume-yes --force-yes postgresql postgresql-client phppgadmin
+
+
+rm /etc/apache2/conf.d/phppgadmin
+
+ln -s /etc/phppgadmin/apache.conf /etc/apache2/conf.d/phppgadmin
+
+
+sed -i '10s/^/#/' /etc/phppgadmin/apache.conf
+sed -i '11s/^/#/' /etc/phppgadmin/apache.conf
+sed -i '12s/^/#/' /etc/phppgadmin/apache.conf
+sed -i '13s/#//' /etc/phppgadmin/apache.conf
+sudo /etc/init.d/postgresql-8.3 restart
+cd $DL_DIR
+mv Libresource $LAMPP_DIRECTORY/server/
+sudo -u postgres createdb Libresource
+sudo -u postgres pg_restore -d Libresource Libresource_sql_110206.dump
 
 echo "
-ALTER USER postgres WITH ENCRYPTED PASSWORD '$LIBRESOURCE_PSGSQL_PWD';
-
+ALTER USER postgres WITH PASSWORD 'postgres';
 "  > libresource_db.sql
 sudo -u postgres psql postgres < libresource_db.sql
 
-sed -i "2s/libresource/$MOD_NAME/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
-sed -i "29s/localhost/$HOSTNAME.$domain/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceConfig.properties
-sed -i "4s/postgres/$LIBRESOURCE_PSGSQL_PWD/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
-LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
-sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceConfig.properties
-sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/start.sh
-sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/stop.sh
-sed -i "s/ident sameuser/trust/g" /etc/postgresql/8.3/main/pg_hba.conf
+#sed -i "2s/libresource/$MOD_NAME/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
+#sed -i "29s/localhost/$HOSTNAME.$domain/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceConfig.properties
+#sed -i "4s/postgres/$LIBRESOURCE_PSGSQL_PWD/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
+#LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
+#sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceConfig.properties
+#sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/start.sh
+#sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/stop.sh
+#sed -i "s/ident sameuser/trust/g" /etc/postgresql/8.3/main/pg_hba.conf
+
+sudo sed -i 's/\(local[[:space:]]*all[[:space:]]*all[[:space:]]*\)\(ident[[:space:]]*sameuser\)/\1md5/g' /etc/postgresql/8.3/main/pg_hba.conf
 
 sleep 3
 
 cat << EOF_LIBRESOURCE > /etc/init.d/libresource
 #!/bin/bash
-libresource_HOME=$LAMPP_DIRECTORY/server/$MOD_NAME
+libresource_HOME=/opt/ciws/server/Libresource
 PIDFILE=/var/run/libresource-server.pid
 . /lib/lsb/init-functions
 
@@ -158,7 +174,7 @@ EOF_LIBRESOURCE
 
 cat << EOF_JABBER > /etc/init.d/tigase
 #!/bin/bash
-tigase_HOME=$LAMPP_DIRECTORY/server/$MOD_NAME/tigase-server-2.8.5-b422
+tigase_HOME=/opt/ciws/server/Libresource/tigase-server-2.8.5-b422
 PIDFILE=/var/run/tigase-server.pid
 . /lib/lsb/init-functions
 
@@ -217,6 +233,84 @@ mv /var/lib/postgresql $LAMPP_DIRECTORY/var/lib
 ln -s $LAMPP_DIRECTORY/var/lib/postgresql /var/lib/postgresql
 #/etc/init.d/postgresql-8.3 start
 #/etc/init.d/postgresql-8.3 stop
+echo "<VirtualHost *:443>
+	ServerName $MOD_NAME.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	SSLEngine on
+	SSLCertificateFile /etc/apache2/ssl/apache.pem
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:8080/
+	ProxyPassReverse /   http://127.0.0.1:8080/
+
+        RequestHeader set \"X-Forwarded-Proto\" \"https\"
+
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /tmp/default-ssl 
+sudo cp /tmp/default-ssl /etc/apache2/sites-available/libresource-ssl
+sudo chown root.root /etc/apache2/sites-available/libresource-ssl
+sudo chmod 644 /etc/apache2/sites-available/libresource-ssl
+
+
+
+echo "<VirtualHost *:80>
+	ServerName $MOD_NAME.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:9000/
+	ProxyPassReverse /   http://127.0.0.1:9000/
+
+        
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /tmp/default
+sudo cp /tmp/default /etc/apache2/sites-available/libresource
+sudo chown root.root /etc/apache2/sites-available/libresource
+sudo chmod 644 /etc/apache2/sites-available/libresource
+
+sed -i "9s/Order deny,allow/Order allow,deny/" /etc/apache2/mods-available/proxy.conf
+sed -i "10s/Deny/Allow/" /etc/apache2/mods-available/proxy.conf
+
+a2dissite default-ssl
+a2ensite libresource
+a2ensite libresource-ssl
+
+
+
+sudo a2enmod rewrite
+sudo a2enmod suexec
+sudo a2enmod include
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod proxy_connect
+sudo a2enmod proxy_ftp
+sudo a2enmod headers
+
+
 }
 
 #_______________________________________________________________________________________________
@@ -231,7 +325,7 @@ function CREATE_WUI
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url><![CDATA[http://localhost:9000]]></item_url>
+	<item_url>http://$MOD_NAME.$domain</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 	<item_admin_url><![CDATA[http://localhost:9000]]></item_admin_url>
@@ -245,7 +339,7 @@ echo "
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url><![CDATA[http://localhost:9000]]></item_url>
+	<item_url>http://$MOD_NAME.$domain</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 	<item_admin_url><![CDATA[http://localhost:9000]]></item_admin_url>

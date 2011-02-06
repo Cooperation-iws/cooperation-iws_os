@@ -47,7 +47,7 @@ mkdir $LAMPP_DIRECTORY/var/mercurial/repositories
 mkdir $LAMPP_DIRECTORY/var/mercurial/repositories/project
 cd $LAMPP_DIRECTORY/var/mercurial/repositories/project
 hg init
-hg serve -n "Mercurial repo" -p 701 &
+#hg serve -n "Mercurial repo" -p 701 &
 
 echo "
 #Mercurial

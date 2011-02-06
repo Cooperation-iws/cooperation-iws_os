@@ -31,6 +31,19 @@ SILENT=$(cat /tmp/silent)
 
 HOSTNAME=$(cat /tmp/hostname)
 
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+
+cd $DL_DIR
+wget $URL_FREE/open_erp_missing_pagkage.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -38,6 +51,13 @@ HOSTNAME=$(cat /tmp/hostname)
 
 function INSTALL
 {
+WGET_MIRROIR_FREE
+cd $DL_DIR
+tar -xzf open_erp_missing_pagkage.tar.gz
+dpkg -i erp_p/*
+
+
+
 echo "
 Name: gforge/shared/admin_login
 Template: gforge/shared/admin_login
@@ -380,7 +400,11 @@ echo "
 /opt/ciws/etc/gforge-dhclient-exit-hook.sh 
 " >> /opt/ciws/etc/dhclient-exit-hook.sh 
 
-/etc/init.d/apache2 restart
+#/etc/init.d/apache2 stop
+/etc/init.d/postgresql-8.3 stop
+/etc/init.d/mailman stop
+/etc/init.d/proftpd stop
+/etc/init.d/postfix stop
 
 }
 
