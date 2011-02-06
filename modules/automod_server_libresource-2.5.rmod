@@ -108,17 +108,19 @@ sed -i '13s/#//' /etc/phppgadmin/apache.conf
 sudo /etc/init.d/postgresql-8.3 restart
 cd $DL_DIR
 mv Libresource $LAMPP_DIRECTORY/server/
+sudo chown -R root $LAMPP_DIRECTORY/server/Libresource
+sudo chmod -R 777 $LAMPP_DIRECTORY/server/Libresource/tmp-work/
 sudo -u postgres createdb Libresource
 sudo -u postgres pg_restore -d Libresource Libresource_sql_110206.dump
 
 echo "
-ALTER USER postgres WITH PASSWORD 'postgres';
+ALTER USER postgres WITH PASSWORD '$LIBRESOURCE_PSGSQL_PWD';
 "  > libresource_db.sql
 sudo -u postgres psql postgres < libresource_db.sql
 
 #sed -i "2s/libresource/$MOD_NAME/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
-#sed -i "29s/localhost/$HOSTNAME.$domain/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceConfig.properties
-#sed -i "4s/postgres/$LIBRESOURCE_PSGSQL_PWD/" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceDS.properties
+sed -i "29s/localhost/$HOSTNAME.$domain/" /opt/ciws/server/Libresource/JONAS_4_7_6/conf/libresourceConfig.properties
+sed -i "4s/postgres/$LIBRESOURCE_PSGSQL_PWD/" /opt/ciws/server/Libresource/JONAS_4_7_6/conf/libresourceDS.properties
 #LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
 #sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/JONAS_4_7_6/conf/libresourceConfig.properties
 #sed -i "s/\/opt\/ciws\/server/$LAMPP_DIRECTORY_FOR_SED\/server\/$MOD_NAME/g" $LAMPP_DIRECTORY/server/$MOD_NAME/start.sh
@@ -299,6 +301,7 @@ a2dissite default-ssl
 a2ensite libresource
 a2ensite libresource-ssl
 
+echo "$MOD_NAME    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
 
 
 sudo a2enmod rewrite
