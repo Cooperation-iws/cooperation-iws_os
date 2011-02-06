@@ -110,6 +110,7 @@ cd $DL_DIR
 mv Libresource $LAMPP_DIRECTORY/server/
 sudo chown -R root $LAMPP_DIRECTORY/server/Libresource
 sudo chmod -R 777 $LAMPP_DIRECTORY/server/Libresource/tmp-work/
+rm $LAMPP_DIRECTORY/server/Libresource/*.tar.gz
 sudo -u postgres createdb Libresource
 sudo -u postgres pg_restore -d Libresource Libresource_sql_110206.dump
 
