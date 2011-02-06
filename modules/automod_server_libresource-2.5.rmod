@@ -203,8 +203,8 @@ chmod 0755 /etc/init.d/tigase
 update-rc.d tigase defaults
 update-rc.d libresource defaults
 
-/etc/init.d/tigase start
-/etc/init.d/libresource start
+#/etc/init.d/tigase start
+#/etc/init.d/libresource start
 
 /etc/init.d/postgresql-8.3 stop
 mv /etc/postgresql $LAMPP_DIRECTORY/etc
@@ -215,7 +215,8 @@ ln -s $LAMPP_DIRECTORY/etc/postgresql-common /etc/postgresql-common
 
 mv /var/lib/postgresql $LAMPP_DIRECTORY/var/lib
 ln -s $LAMPP_DIRECTORY/var/lib/postgresql /var/lib/postgresql
-/etc/init.d/postgresql-8.3 start
+#/etc/init.d/postgresql-8.3 start
+#/etc/init.d/postgresql-8.3 stop
 }
 
 #_______________________________________________________________________________________________
