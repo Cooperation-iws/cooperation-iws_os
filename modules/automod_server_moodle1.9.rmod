@@ -64,7 +64,7 @@ tar -xzf moodle-19-081103.tar.gz
 function INSTALL
 {
 echo "I: Download Moodle"
-DOWNLOAD
+WGET_MIRROIR_FREE
 for (( count=1; count<=$NB_MOODLE; count++ ))
 do
 ##MOODLE
@@ -166,8 +166,6 @@ done
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Moodle"
-CHOICE_LANG
-CHOOSE_PARAMETERS_GUI
 INSTALL
 CREATE_WUI
 CREATE_INSTALL_SCRIPT
