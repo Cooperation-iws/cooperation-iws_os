@@ -233,7 +233,7 @@ sudo /etc/init.d/apache2 reload
 ' >> /opt/ciws/etc/dhclient-exit-hook.sh
 
 
-echo '
+echo '#!/bin/bash
 ##UPDATING USER
 mkdir /opt/ciws/etc/passwd.back
 cp /opt/ciws/etc/passwd.tpl /opt/ciws/etc/passwd.back/passwd.$(date --rfc-3339 seconds | sed "s/ /_/")
@@ -252,7 +252,7 @@ do
 row_name=$(echo $row | cut -d":" -f1)
 row_path=$(echo $row | cut -d":" -f6)
 row_shell=$(echo $row | cut -d":" -f7)
-row_passwd=$(sed "s/ //g" /opt/ciws/etc/shadow | grep $row_name | cut -d":" -f2)
+row_passwd=$(cat /opt/ciws/etc/shadow | grep "$row_name:" | cut -d":" -f2)
 
 if [[ ! $(cat /etc/passwd | grep "$row_name:") ]]; then
 echo $row_name
@@ -267,7 +267,11 @@ fi
 
 done
 
-' >> /etc/rc.local
+' > /opt/ciws/etc/user_creation.sh
+
+echo "
+/opt/ciws/etc/user_creation.sh
+" >> /etc/rc.local
 
 echo "
 cp /etc/passwd /opt/ciws/etc/passwd.tpl
