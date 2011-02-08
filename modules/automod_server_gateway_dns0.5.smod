@@ -284,9 +284,9 @@ sleep 60
 for IP in \$IP_LIST 
 do
 cd /var/cache/dns
-wget http://\$IP:886/domain.txt -O /var/cache/dns/domain_\$IP.txt
+wget -t 3 -T 8 http://\$IP:886/domain.txt -O /var/cache/dns/domain_\$IP.txt
 DOMAIN_LIST=\$(cat /var/cache/dns/domain_\$IP.txt)
-wget http://\$IP:886/hostname.txt -O /var/cache/dns/hostname_\$IP.txt
+wget -t 3 -T 8 http://\$IP:886/hostname.txt -O /var/cache/dns/hostname_\$IP.txt
 HOSTNAME=\$(cat /var/cache/dns/hostname_\$IP.txt)
 for DOMAIN in \$DOMAIN_LIST
 do

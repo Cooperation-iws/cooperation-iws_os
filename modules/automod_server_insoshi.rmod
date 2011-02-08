@@ -38,6 +38,11 @@ INSOSHI_MYSQL_PWD=$insoshi_mysql_pwd
 
 function INSTALL
 {
+cd $DL_DIR
+wget $URL_FREE/apache2-prefork-dev_2.2.9-10+lenny3_i386.deb
+dpkg -i apache2-prefork-dev_2.2.9-10+lenny3_i386.deb
+apt-get -f install --assume-yes --force-yes
+
 export HOME=/home/liveusb
 apt-get --assume-yes --force-yes install ruby-full build-essential
 cd $DL_DIR
@@ -139,11 +144,59 @@ chmod 0755 /etc/init.d/insoshi
 update-rc.d insoshi defaults
 
 
-/etc/init.d/insoshi start
+#/etc/init.d/insoshi start
 echo "
 #Insoshi
 
 " >> /etc/rc.local
+if [ "$domain" ] && [ -d /etc/bind ]; then
+
+echo "<VirtualHost *:80>
+	ServerName $MOD_NAME.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:3020/
+	ProxyPassReverse /   http://127.0.0.1:3020/
+
+        
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /tmp/default
+sudo cp /tmp/default /etc/apache2/sites-available/insoshi
+sudo chown root.root /etc/apache2/sites-available/insoshi
+sudo chmod 644 /etc/apache2/sites-available/insoshi
+
+sed -i "9s/Order deny,allow/Order allow,deny/" /etc/apache2/mods-available/proxy.conf
+sed -i "10s/Deny/Allow/" /etc/apache2/mods-available/proxy.conf
+
+
+a2ensite insoshi
+sudo a2enmod rewrite
+sudo a2enmod suexec
+sudo a2enmod include
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod proxy_connect
+sudo a2enmod proxy_ftp
+sudo a2enmod headers
+
+INSOSHI_URL="http://$MOD_NAME.$domain"
+echo "$MOD_NAME    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+else
+INSOSHI_URL="<![CDATA[http://localhost:3020]]>"
+fi
 
 
 }
@@ -159,7 +212,7 @@ function CREATE_WUI
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url><![CDATA[http://localhost:3020]]></item_url>
+	<item_url>$INSOSHI_URL</item_url>
 	<item_admin_url><![CDATA[http://localhost:3020]]></item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
@@ -171,7 +224,7 @@ echo "
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url><![CDATA[http://localhost:3020]]></item_url>
+	<item_url>$INSOSHI_URL</item_url>
 	<item_admin_url><![CDATA[http://localhost:3020]]></item_admin_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
