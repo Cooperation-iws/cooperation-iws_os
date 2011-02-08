@@ -297,6 +297,9 @@ class Reconstructor:
 	parser.add_option( "--debianflavor", 
                     dest="debianLiveFlavor", default="xfce" ,
                     help="Debian flavor (xfce, gnome, kde)")
+	parser.add_option( "--arch", 
+                    dest="arch", default="686" ,
+                    help="Debian architecture (686, amd64)")
 	parser.add_option( "--webconverger", 
                     dest="webconverger", action="store_true",
                     default=False ,
@@ -382,6 +385,8 @@ class Reconstructor:
 	    self.locale = options.locale
 	    self.pfsense = options.pfsense
 	    self.isoType = options.isotype
+	    self.arch=options.arch
+
 	    if self.pfsense == True:
 		self.nodebuntu == True
 		
@@ -1540,7 +1545,7 @@ class Reconstructor:
     def setupDebianLive(self):
 	lhConfig = "lh_config "
 	lhConfig += "-p " + self.DebianLiveType + " "
-	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"686\" --mirror-bootstrap \"' + self.debMirror + '\" --mirror-chroot \"' + self.debMirror + '\" --mirror-binary \"' + self.debMirror + '\"  --mirror-chroot-security \"' + self.debMirrorSecurity + '\" --mirror-binary-security \"' + self.debMirrorSecurity + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + self.keyLang + ' locale='+self.locale +'\" --hostname ' + self.host + ' --username ' + self.user + ' --encryption '+ self.encryption
+	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"' + self.arch + '\" --mirror-bootstrap \"' + self.debMirror + '\" --mirror-chroot \"' + self.debMirror + '\" --mirror-binary \"' + self.debMirror + '\"  --mirror-chroot-security \"' + self.debMirrorSecurity + '\" --mirror-binary-security \"' + self.debMirrorSecurity + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + self.keyLang + ' locale='+self.locale +'\" --hostname ' + self.host + ' --username ' + self.user + ' --encryption '+ self.encryption
 	
 	scriptDebianLive = 'echo "I: Creating Debian Live CD Linux flavour ' + self.DebianLiveType + ' ' + self.DebianLiveReleaseType + ' + " \n'
 	scriptDebianLive += 'echo "' + lhConfig + '"\n'

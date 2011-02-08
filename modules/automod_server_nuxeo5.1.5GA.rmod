@@ -275,6 +275,56 @@ EOF
 echo "
 " >> $DOSSIER_CHROOT/etc/rc.local
 
+if [ "$domain" ] && [ -d /etc/bind ]; then
+
+echo "<VirtualHost *:80>
+	ServerName $MOD_NAME.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:8080/
+	ProxyPassReverse /   http://127.0.0.1:8080/
+
+        
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > $DOSSIER_CHROOT//tmp/default
+sudo cp /tmp/default $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
+sudo chown root.root $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
+sudo chmod 644 $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
+
+sed -i "9s/Order deny,allow/Order allow,deny/" $DOSSIER_CHROOT//etc/apache2/mods-available/proxy.conf
+sed -i "10s/Deny/Allow/" $DOSSIER_CHROOT//etc/apache2/mods-available/proxy.conf
+
+chroot $DOSSIER_CHROOT << "EOF"
+a2ensite nuxeo
+sudo a2enmod rewrite
+sudo a2enmod suexec
+sudo a2enmod include
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod proxy_connect
+sudo a2enmod proxy_ftp
+sudo a2enmod headers
+EOF
+
+NUXEO_URL="http://$MOD_NAME.$domain/nuxeo"
+echo "$MOD_NAME    IN      A       ip_address" >> $DOSSIER_CHROOT/var/cache/bind/db.$domain.tpl
+else
+NUXEO_URL="<![CDATA[http://localhost:8080/nuxeo]]>"
+fi
+
 
 }
 
@@ -291,7 +341,7 @@ sed -i "s/<\/items>//" $DOSSIER_CHROOT/$PERSISTENT_DIR/server/var/www/cooperatio
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url><![CDATA[http://localhost:8080/nuxeo]]></item_url>
+	<item_url>$NUXEO_URL</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 	<item_admin_url><![CDATA[http://localhost:8080/nuxeo]]></item_admin_url>
@@ -306,7 +356,7 @@ sed -i "s/<\/items>//" $DOSSIER_CHROOT/$PERSISTENT_DIR/server/var/www/cooperatio
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url><![CDATA[http://localhost:8080/nuxeo]]></item_url>
+	<item_url>$NUXEO_URL</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 	<item_admin_url><![CDATA[http://localhost:8080/nuxeo]]></item_admin_url>
