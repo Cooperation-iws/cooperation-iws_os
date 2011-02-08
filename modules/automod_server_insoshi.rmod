@@ -152,7 +152,7 @@ echo "
 if [ "$domain" ] && [ -d /etc/bind ]; then
 
 echo "<VirtualHost *:80>
-	ServerName $MOD_NAME.$domain
+	ServerName insoshi.$domain
         ServerAdmin support@$domain
 	#DocumentRoot /var/www/
 	<Proxy *>
@@ -192,8 +192,8 @@ sudo a2enmod proxy_connect
 sudo a2enmod proxy_ftp
 sudo a2enmod headers
 
-INSOSHI_URL="http://$MOD_NAME.$domain"
-echo "$MOD_NAME    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+INSOSHI_URL="http://insoshi.$domain"
+echo "insoshi    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
 else
 INSOSHI_URL="<![CDATA[http://localhost:3020]]>"
 fi

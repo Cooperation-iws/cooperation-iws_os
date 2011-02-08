@@ -171,7 +171,7 @@ cp -Rf $LAMPP_DIRECTORY/$MOD_NAME/* $DOSSIER_CHROOT/$PERSISTENT_DIR/server/$MOD_
 " >> $LAMPP_DIRECTORY/scripts/shutdown_ws.sh
 
 echo "I: Starting Nuxeo"
-nohup $LAMPP_DIRECTORY/$MOD_NAME/bin/run.sh &
+#nohup $LAMPP_DIRECTORY/$MOD_NAME/bin/run.sh &
 sleep 10
 cat << EOT > $DOSSIER_CHROOT/etc/init.d/openoffice
 #!/bin/bash
@@ -278,7 +278,7 @@ echo "
 if [ "$domain" ] && [ -d /etc/bind ]; then
 
 echo "<VirtualHost *:80>
-	ServerName $MOD_NAME.$domain
+	ServerName nuxeo.$domain
         ServerAdmin support@$domain
 	#DocumentRoot /var/www/
 	<Proxy *>
@@ -319,8 +319,8 @@ sudo a2enmod proxy_ftp
 sudo a2enmod headers
 EOF
 
-NUXEO_URL="http://$MOD_NAME.$domain/nuxeo"
-echo "$MOD_NAME    IN      A       ip_address" >> $DOSSIER_CHROOT/var/cache/bind/db.$domain.tpl
+NUXEO_URL="http://nuxeo.$domain/nuxeo"
+echo "nuxeo    IN      A       ip_address" >> $DOSSIER_CHROOT/var/cache/bind/db.$domain.tpl
 else
 NUXEO_URL="<![CDATA[http://localhost:8080/nuxeo]]>"
 fi

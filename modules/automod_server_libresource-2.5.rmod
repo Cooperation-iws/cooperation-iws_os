@@ -269,7 +269,7 @@ sudo chmod 644 /etc/apache2/sites-available/libresource-ssl
 
 
 echo "<VirtualHost *:80>
-	ServerName $MOD_NAME.$domain
+	ServerName libresource.$domain
         ServerAdmin support@$domain
 	#DocumentRoot /var/www/
 	<Proxy *>
@@ -302,7 +302,7 @@ a2dissite default-ssl
 a2ensite libresource
 a2ensite libresource-ssl
 
-echo "$MOD_NAME    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+echo "libresource    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
 
 
 sudo a2enmod rewrite
@@ -329,7 +329,7 @@ function CREATE_WUI
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>http://$MOD_NAME.$domain</item_url>
+	<item_url>http://libresource.$domain</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE</item_desc>
 	<item_admin_url><![CDATA[http://localhost:9000]]></item_admin_url>
@@ -343,7 +343,7 @@ echo "
 echo "
 <item>
 	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>http://$MOD_NAME.$domain</item_url>
+	<item_url>http://libresource.$domain</item_url>
 	<item_name>$RMOD_NAME</item_name>
 	<item_desc>$RMOD_VERBOSE_FR</item_desc>
 	<item_admin_url><![CDATA[http://localhost:9000]]></item_admin_url>
