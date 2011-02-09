@@ -12,25 +12,26 @@ RMOD_VERBOSE="Nuxeo is a commercial opensource CMS (Content Management System). 
 RMOD_VERBOSE_FR="Nuxeo est le pionnier et le leader de l'Enterprise Content Management (ECM) open source. La plateforme, Nuxeo EP 5 est une solution pour la gestion de tous les documents et contenus numériques. Nuxeo est développé en Java. "
 RMOD_REQ_APACHE=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_RUN_IN_CHROOT=True
 
+RMOD_REQ_APACHE=True
+LANG_UI=$(cat /tmp/lang-wui)
 
-LAMPP_DIRECTORY=$(cat /tmp/working-directory)
-DOSSIER_CHROOT=$LAMPP_DIRECTORY"/chroot"
-WWW_DIRECTORY=$DOSSIER_CHROOT"/var/www"
-DL_DIR=$LAMPP_DIRECTORY"/DL"
-BIN_MYSQL="/usr/bin/mysql"
-LANG_UI=$(cat $DOSSIER_CHROOT/tmp/lang-wui)
-SILENT=$(cat $DOSSIER_CHROOT/tmp/silent)
-PERSISTENT_DIR=$(cat $DOSSIER_CHROOT/tmp/lampp-dir)
-. $DOSSIER_CHROOT/tmp/app_params
-
-DISPLAY=127.0.0.1:5.0 
+WWW_DIRECTORY=$(cat /tmp/web-path)
+DL_DIR=$(cat /tmp/web_install-path)
+BIN_MYSQL=$(cat /tmp/mysql-path)
+SCRIPT_DIRECTORY=$(cat /tmp/script-path)
+DISPLAY=127.0.0.1:5.0
+LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+LANG_UI=$(cat /tmp/lang-wui)
 
 
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
 URL_FREE=$(cat /tmp/url_mirroir)
+
 INSTALL=$(cat /tmp/def_install)
+. /tmp/app_params
 
 
 
@@ -63,14 +64,6 @@ echo "I: Download Nuxeo"
 WGET_MIRROIR_FREE
 apt-get autoremove --assume-yes --force-yes java-gcj-compat
 apt-get autoremove --assume-yes --force-yes gcj
-chroot $DOSSIER_CHROOT << "EOF" 
-apt-get autoremove --assume-yes --force-yes java-gcj-compat
-EOF
-chroot $DOSSIER_CHROOT << "EOF" 
-apt-get autoremove --assume-yes --force-yes gcj
-EOF
-
-chroot $DOSSIER_CHROOT << "EOF" 
 
 ln -s / /cow
 apt-get install --assume-yes --force-yes sun-java5-bin sun-java5-jre
@@ -99,81 +92,75 @@ fi
 
 
 if [ "$(echo "${OOO}" | awk  '{print $1}')" == "y" ]; then
-chroot $DOSSIER_CHROOT << "EOF"
+
 apt-get install --assume-yes --force-yes openoffice.org-headless openoffice.org
-EOF
+
 fi
 
-mkdir $LAMPP_DIRECTORY/$MOD_NAME
-chmod -R 777 $LAMPP_DIRECTORY/$MOD_NAME
+mkdir /opt/ciws/server/$MOD_NAME
+chmod -R 777 /opt/ciws/server/$MOD_NAME
 cd $DL_DIR
-cp -Rf Nuxeo/* $LAMPP_DIRECTORY/$MOD_NAME
+cp -Rf Nuxeo/* /opt/ciws/server/$MOD_NAME
 cd $DL_DIR
-sed -i "15s/Nuxeo/${MOD_NAME}/" $LAMPP_DIRECTORY/$MOD_NAME/database.sql
-sed -i "16s/Nuxeo/${MOD_NAME}/" $LAMPP_DIRECTORY/$MOD_NAME/database.sql
-sed -i "17s/Nuxeo/${MOD_NAME}/" $LAMPP_DIRECTORY/$MOD_NAME/database.sql
-cp $LAMPP_DIRECTORY/$MOD_NAME/database.sql $DOSSIER_CHROOT/tmp/nuxeo_db.sql
-chroot $DOSSIER_CHROOT << "EOF"
+sed -i "15s/Nuxeo/${MOD_NAME}/" /opt/ciws/server/$MOD_NAME/database.sql
+sed -i "16s/Nuxeo/${MOD_NAME}/" /opt/ciws/server/$MOD_NAME/database.sql
+sed -i "17s/Nuxeo/${MOD_NAME}/" /opt/ciws/server/$MOD_NAME/database.sql
+cp /opt/ciws/server/$MOD_NAME/database.sql /tmp/nuxeo_db.sql
+
 /usr/bin/mysql -u root < /tmp/nuxeo_db.sql
-EOF
+
 
 echo "
 grant all on $MOD_NAME.* to $MOD_NAME@localhost identified by '$NUXEO_MYSQL_PWD';
 flush privileges;
-" > $DOSSIER_CHROOT/tmp/nuxeo_priv_db.sql
-chroot $DOSSIER_CHROOT << "EOF"
+" > /tmp/nuxeo_priv_db.sql
+
 /usr/bin/mysql -u root < /tmp/nuxeo_priv_db.sql mysql
-EOF
-
-sed -i "s/Nuxeo/$MOD_NAME/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
-
-sed -i "s/Nuxeo/$MOD_NAME/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxaudit-logs-ds.xml
-sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxaudit-logs-ds.xml
-
-sed -i "s/Nuxeo/$MOD_NAME/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxplaceful-ds.xml
-sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxplaceful-ds.xml
-
-sed -i "s/Nuxeo/$MOD_NAME/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxuidsequencer-ds.xml
-sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxuidsequencer-ds.xml
-
-sed -i "s/Nuxeo/$MOD_NAME/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-document-ds.xml
-sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-document-ds.xml
-
-sed -i "s/Nuxeo/$MOD_NAME/g"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-jbpm-ds.xml
-sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-jbpm-ds.xml
 
 
-sed -i "s/Nuxeo/$MOD_NAME/g"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxrelations-default-jena-ds.xml
-sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxrelations-default-jena-ds.xml
+sed -i "s/Nuxeo/$MOD_NAME/g"  /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/g"  /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/config/default-repository-config.xml
 
-sed -i "s/Nuxeo/$MOD_NAME/g"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsearch-compass-ds.xml
-sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsearch-compass-ds.xml
+sed -i "s/Nuxeo/$MOD_NAME/g"  /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxaudit-logs-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxaudit-logs-ds.xml
 
-sed -i "s/Nuxeo/$MOD_NAME/g"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsqldirectory-ds.xml
-sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsqldirectory-ds.xml
+sed -i "s/Nuxeo/$MOD_NAME/g"  /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxplaceful-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxplaceful-ds.xml
 
-sed -i "s/Nuxeo/$MOD_NAME/g"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxcomment-jena-ds.xml
-sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"   $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxcomment-jena-ds.xml
+sed -i "s/Nuxeo/$MOD_NAME/g"  /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxuidsequencer-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxuidsequencer-ds.xml
 
-sed -i "33s/admin@ciws.com/$nuxeo_admin_email/" $LAMPP_DIRECTORY/$MOD_NAME/server/default/deploy/mail-service.xml
+sed -i "s/Nuxeo/$MOD_NAME/g"  /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-document-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-document-ds.xml
 
-rm -r $LAMPP_DIRECTORY/$MOD_NAME/server/default/work
-rm -r $LAMPP_DIRECTORY/$MOD_NAME/server/default/log
-rm -r $LAMPP_DIRECTORY/$MOD_NAME/server/default/tmp
-rm -r $LAMPP_DIRECTORY/$MOD_NAME/server/default/data
+sed -i "s/Nuxeo/$MOD_NAME/g"  /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-jbpm-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"  /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxworkflow-jbpm-ds.xml
 
-echo "#!/bin/sh
-cd $LAMPP_DIRECTORY/$MOD_NAME/bin/
-./shutdown.sh -S
-mkdir $DOSSIER_CHROOT/$PERSISTENT_DIR/server/$MOD_NAME/ 
-cp -Rf $LAMPP_DIRECTORY/$MOD_NAME/* $DOSSIER_CHROOT/$PERSISTENT_DIR/server/$MOD_NAME/.
-" >> $LAMPP_DIRECTORY/scripts/shutdown_ws.sh
+
+sed -i "s/Nuxeo/$MOD_NAME/g"   /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxrelations-default-jena-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"   /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxrelations-default-jena-ds.xml
+
+sed -i "s/Nuxeo/$MOD_NAME/g"   /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsearch-compass-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"   /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsearch-compass-ds.xml
+
+sed -i "s/Nuxeo/$MOD_NAME/g"   /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsqldirectory-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"   /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxsqldirectory-ds.xml
+
+sed -i "s/Nuxeo/$MOD_NAME/g"   /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxcomment-jena-ds.xml
+sed -i "s/NUXEO_MYSQL_PWD/$NUXEO_MYSQL_PWD/"   /opt/ciws/server//$MOD_NAME/server/default/deploy/nuxeo.ear/datasources/nxcomment-jena-ds.xml
+
+sed -i "33s/admin@ciws.com/$nuxeo_admin_email/" /opt/ciws/server//$MOD_NAME/server/default/deploy/mail-service.xml
+
+rm -r /opt/ciws/server//$MOD_NAME/server/default/work
+rm -r /opt/ciws/server//$MOD_NAME/server/default/log
+rm -r /opt/ciws/server//$MOD_NAME/server/default/tmp
+rm -r /opt/ciws/server//$MOD_NAME/server/default/data
+
 
 echo "I: Starting Nuxeo"
-#nohup $LAMPP_DIRECTORY/$MOD_NAME/bin/run.sh &
+#nohup /opt/ciws/server//$MOD_NAME/bin/run.sh &
 sleep 10
-cat << EOT > $DOSSIER_CHROOT/etc/init.d/openoffice
+cat << EOT > /etc/init.d/openoffice
 #!/bin/bash
 # openoffice.org  headless server script
 #
@@ -222,14 +209,14 @@ esac
 exit 0
 EOT
 
-chmod 0755 $DOSSIER_CHROOT/etc/init.d/openoffice
+chmod 0755 /etc/init.d/openoffice
 
 
 sleep 3
 
-cat << EOF_NUXEO > $DOSSIER_CHROOT/etc/init.d/nuxeo
+cat << EOF_NUXEO > /etc/init.d/nuxeo
 #!/bin/bash
-nuxeo_HOME=/$PERSISTENT_DIR/server/$MOD_NAME/bin/
+nuxeo_HOME=/opt/ciws/server/$MOD_NAME/bin/
 PIDFILE=/var/run/nuxeo-server.pid
 . /lib/lsb/init-functions
 
@@ -266,14 +253,14 @@ esac
 exit 0
 EOF_NUXEO
 
-chmod 0755 $DOSSIER_CHROOT/etc/init.d/nuxeo
-chroot $DOSSIER_CHROOT << "EOF"
+chmod 0755 /etc/init.d/nuxeo
+
 update-rc.d openoffice defaults
 update-rc.d nuxeo defaults
-EOF
+
 
 echo "
-" >> $DOSSIER_CHROOT/etc/rc.local
+" >> /etc/rc.local
 
 if [ "$domain" ] && [ -d /etc/bind ]; then
 
@@ -299,15 +286,15 @@ echo "<VirtualHost *:80>
         LogLevel warn
         CustomLog /var/log/apache2/access-ssl.log combined
         ServerSignature On
-</VirtualHost>" > $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
+</VirtualHost>" > /etc/apache2/sites-available/nuxeo
 #sudo cp $DOSSIER_CHROOT//tmp/default $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
-sudo chown root.root $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
-sudo chmod 644 $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
+sudo chown root.root /etc/apache2/sites-available/nuxeo
+sudo chmod 644 /etc/apache2/sites-available/nuxeo
 
-sed -i "9s/Order deny,allow/Order allow,deny/" $DOSSIER_CHROOT//etc/apache2/mods-available/proxy.conf
-sed -i "10s/Deny/Allow/" $DOSSIER_CHROOT//etc/apache2/mods-available/proxy.conf
+sed -i "9s/Order deny,allow/Order allow,deny/" /etc/apache2/mods-available/proxy.conf
+sed -i "10s/Deny/Allow/" /etc/apache2/mods-available/proxy.conf
 
-chroot $DOSSIER_CHROOT << "EOF"
+
 a2ensite nuxeo
 sudo a2enmod rewrite
 sudo a2enmod suexec
@@ -317,10 +304,10 @@ sudo a2enmod proxy_http
 sudo a2enmod proxy_connect
 sudo a2enmod proxy_ftp
 sudo a2enmod headers
-EOF
+
 
 NUXEO_URL="http://nuxeo.$domain/nuxeo"
-echo "nuxeo    IN      A       ip_address" >> $DOSSIER_CHROOT/var/cache/bind/db.$domain.tpl
+echo "nuxeo    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
 else
 NUXEO_URL="<![CDATA[http://localhost:8080/nuxeo]]>"
 fi
@@ -336,7 +323,7 @@ fi
 
 function CREATE_WUI
 {
-sed -i "s/<\/items>//" $DOSSIER_CHROOT/$PERSISTENT_DIR/server/var/www/cooperation-wui.xml
+
 
 echo "
 <item>
@@ -348,10 +335,10 @@ echo "
 	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/nuxeo start</item_init_start>
 	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
 </item>
-</items>
-" >> $DOSSIER_CHROOT/$PERSISTENT_DIR/server/var/www/cooperation-wui.xml
 
-sed -i "s/<\/items>//" $DOSSIER_CHROOT/$PERSISTENT_DIR/server/var/www/cooperation-wui-fr.xml
+" >> /opt/ciws/server/var/www/cooperation-wui.xml
+
+
 
 echo "
 <item>
@@ -363,8 +350,8 @@ echo "
 	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/nuxeo start</item_init_start>
 	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
 </item>
-</items>
-" >> $DOSSIER_CHROOT/$PERSISTENT_DIR/server/var/www/cooperation-wui-fr.xml
+
+" >> /opt/ciws/server/var/www/cooperation-wui-fr.xml
 
 
 
