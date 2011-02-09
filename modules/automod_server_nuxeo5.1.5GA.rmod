@@ -300,7 +300,7 @@ echo "<VirtualHost *:80>
         CustomLog /var/log/apache2/access-ssl.log combined
         ServerSignature On
 </VirtualHost>" > $DOSSIER_CHROOT//tmp/default
-sudo cp /tmp/default $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
+sudo cp $DOSSIER_CHROOT//tmp/default $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
 sudo chown root.root $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
 sudo chmod 644 $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
 
