@@ -28,7 +28,7 @@ SILENT=$(cat /tmp/silent)
 
 DEB_DIST=$(cat /tmp/deb_dist)
 #TEMP
-MIRROIR=$(cat /tmp/mirroir)
+
 URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)

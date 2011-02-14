@@ -23,7 +23,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 CASPER_PATH=$(cat /tmp/casper_path)
 
 #TEMP
-MIRROIR=$(cat /tmp/mirroir)
+
 URL_FREE=$(cat /tmp/url_mirroir)
 DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
 DEBNONFREE_MIRROR_PATH=$(cat /tmp/deb-nonfree_mirror_path)

@@ -35,7 +35,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 HOSTNAME=$(cat /tmp/hostname)
 
 #TEMP
-MIRROIR=$(cat /tmp/mirroir)
+
 URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 MOD_NAME="Ossec"

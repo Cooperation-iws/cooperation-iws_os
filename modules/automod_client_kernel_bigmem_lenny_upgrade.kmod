@@ -18,6 +18,7 @@ export HOME=/home/liveusb
 
 . /tmp/app_params
 
+echo "do_initrd = Yes" >  /etc/kernel-img.conf
 
 apt-get install --assume-yes --force-yes linux-image-$kernel loop-aes-modules-$kernel squashfs-modules-$kernel aufs-modules-$kernel
 
@@ -40,3 +41,5 @@ Flags: seen
 " >> /var/cache/debconf/config.dat
 
 apt-get -f install --assume-yes --force-yes
+
+

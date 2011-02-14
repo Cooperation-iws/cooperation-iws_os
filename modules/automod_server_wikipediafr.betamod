@@ -20,7 +20,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 APACHE=$(cat /tmp/apache)
 
 #TEMP
-MIRROIR=$(cat /tmp/mirroir)
+
 URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)

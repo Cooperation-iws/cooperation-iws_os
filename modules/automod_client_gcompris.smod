@@ -12,7 +12,7 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 LIVEUSER=$(cat /tmp/user)
 . /tmp/app_params
 #TEMP
-MIRROIR=$(cat /tmp/mirroir)
+
 URL_FREE=$(cat /tmp/url_mirroir)
 
 

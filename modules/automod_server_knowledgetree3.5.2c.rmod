@@ -27,7 +27,7 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
-MIRROIR=$(cat /tmp/mirroir)
+
 URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 SILENT=$(cat /tmp/silent)

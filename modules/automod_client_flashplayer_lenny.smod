@@ -19,3 +19,4 @@ cd $DL_DIR
 wget $URL_FREE/install_flash_player_10_linux.deb
 
 dpkg -i install_flash_player_10_linux.deb
+apt-get -f install --assume-yes --force-yes

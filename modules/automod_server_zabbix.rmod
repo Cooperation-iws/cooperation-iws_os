@@ -22,7 +22,7 @@ BIN_MYSQL=$(cat /tmp/mysql-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 HOSTNAME=$(cat /tmp/hostname)
-MIRROIR=$(cat /tmp/mirroir)
+
 URL_FREE=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 LANG_UI=$(cat /tmp/lang-wui)

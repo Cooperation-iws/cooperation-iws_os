@@ -27,101 +27,34 @@ import gettext
 import re
 import commands
 import urllib
-sys.path.append(os.getcwd() + '/lib/')
-# import Reconstructor modules
-from Reconstructor.PackageHelper import PackageHelper
-
-try:
-     import pygtk
-     pygtk.require("2.0")
-except Exception, detail:
-    print detail
-    pass
-try:
-    import gtk
-    import gtk.glade
-    import gobject
-    import pango
-except Exception, detail:
-    print detail
-    sys.exit(1)
 
 
-class Reconstructor:
+class Cooperationiws:
 
-    """Reconstructor - Creates custom ubuntu cds..."""
+    
     def __init__(self):
         # vars
         
 
-	self.hosting = "http://cooperation.gensys.free.fr/v0.3"
-	self.mirrorFree = "http://cooperation.gensys.free.fr/mirroir/v0.5"
-	self.mirrorBerlios1 = "http://download.berlios.de/ciws"
-	self.mirrorBerlios2 = "http://download2.berlios.de/ciws"
+	
 	self.appName = "Cooperation-iws"
-        self.codeName = " \"\" "
         self.appVersion = "0.9.0"
         self.updateId = "325"
         self.cdUbuntuVersion = ''
-        self.altCdUbuntuVersion = ''
-        self.altCdUbuntuArch = ''
-        self.altCdUbuntuDist = ''
-        self.ubuntuCodename = ''
-        self.dapperVersion = '6.06'
-        self.edgyVersion = '6.10'
-        self.feistyVersion = '7.04'
-        self.gutsyVersion = '7.10'
-        self.hardyVersion = '8.04'
         self.moduleDir = os.getcwd() + '/modules/'
 	self.scriptDir = os.getcwd() + '/scripts/'
 	self.ciwsRootDir = os.getcwd()
         self.mountDir = '/media/cdrom'
         self.tmpDir = "tmp"
-        self.altRemasterDir = "remaster_alt"
-        self.altInitrdRoot = "initrd_alt"
-        self.altRemasterRepo = "remaster_alt_repo"
-        self.tmpPackageDir = "tmp_packages"
-        # Alternate GPG Key vars
-        self.discType = ""
-        self.altBaseTypeStandard = 0
-        self.altBaseTypeServer = 1
-        self.altBaseTypeDesktop = 2
         self.customDir = ""
         self.createRemasterDir = False
         self.createCustomRoot = False
         self.createInitrdRoot = False
-        self.createAltRemasterDir = False
-        self.createAltInitrdRoot = False
         self.isoFilename = ""
         self.buildLiveCdFilename = ''
-        self.setupComplete = False
         self.manualInstall = False
-        self.working = None
-        self.workingDlg = None
-        self.runningDebug = False
-        self.interactiveEdit = False
-        self.pageWelcome = 0
-	self.pageInstallType = 1        
-	self.pageLiveSetup = 2
-        self.pageDebianLiveSetup = 5
-        self.pageLiveCustomize = 3
-        #self.pageLiveCustomizeGnome = 1
-        self.pageLiveCustomizeOptimization = 1
-        self.pageLiveBuild = 4
-        self.pageUsbSetup = 9
-        self.pageAltCustomize = 6
-        self.pageAltBuild = 7
-        self.pageFinish = 8
-        self.gdmBackgroundColor = None
-        self.enableExperimental = False
-        self.gnomeBinPath = '/usr/bin/gnome-session'
         self.f = sys.stdout
-        self.webUrl = "http://cooperation-iws.gensys-net.eu"
-        self.updateInfo = "http://cooperation-iws.gensys-net.eu/update/info"
-        self.updateFile = "http://cooperation-iws.gensys-net.eu/update/update.tar.gz"
         self.treeModel = None
-        self.treeView = None
-
         self.modEngineKey = 'RMOD_ENGINE'
         self.modCategoryKey = 'RMOD_CATEGORY'
         self.modSubCategoryKey = 'RMOD_SUBCATEGORY'
@@ -134,7 +67,6 @@ class Reconstructor:
         self.modReqApache='RMOD_REQ_APACHE'
 	self.modReqXnest='RMOD_REQ_XNEST'
 	self.modules =  {}
-
         self.regexUbuntuVersion = '^DISTRIB_RELEASE=([0-9.]+)\n'
         self.regexModEngine = '^RMOD_ENGINE=([A-Za-z0-9.\s\w]+)\n'
         self.regexModCategory = '^RMOD_CATEGORY=([A-Za-z0-9\'\"\w]+)\s'
@@ -150,52 +82,25 @@ class Reconstructor:
         self.regexUbuntuAltCdVersion = '^[a-zA-Z0-9-.]*\s+([0-9.]+)\s+'
         self.regexUbuntuAltCdInfo = '([\w-]+)\s+(\d+.\d+)\s+\D+Release\s(\w+)\s+'
         self.regexUbuntuAltPackages = '^Package:\s+(\S*)\n'
-
-        self.iterCategoryAdministration = None
-        self.iterCategoryEducation = None
-        self.iterCategorySoftware = None
-        self.iterCategoryServer = None
-        self.iterCategoryClient = None
-        self.iterCategoryOs = None
-        self.iterCategoryMultimedia = None
-        self.iterCategoryPlugins = None
-        self.iterCategoryProductivity = None
-        self.iterCategoryNetworking = None
-        self.iterCategoryVirtualization = None
-        self.iterCategoryMisc = None
-        self.moduleColumnCategory = 0
-        self.moduleColumnExecute = 1
-        self.moduleColumnName = 3
-        self.moduleColumnVersion = 4
-        self.moduleColumnAuthor = 5
-        self.moduleColumnDescription = 6
-        self.moduleColumnRunInChroot = 7
-        self.moduleColumnUpdateUrl = 8
-        self.moduleColumnPath = 9
-        self.moduleColumnReqApache = 10
         self.execModulesEnabled = False
-        self.bootModulesEnabled = False
         # time command for timing operations
         self.timeCmd = commands.getoutput('which time') + ' -f \"\nBuild Time: %E  CPU: %P\n\"'
 	self.reqXnest = False
-        self.shutdownScripts = ('11anacron', '11atd', '19cupsys', '20acpi-support', '20apmd', '20bittorrent', '20dbus', '20festival', '20hotkey-setup', '20makedev', '20nvidia-kernel', '20powernowd', '20rsync', '20ssh', '21acpid', '21hplip', '74bluez-utils', '88pcmcia', '88pcmciautils', '89klogd', '90syslogd')
-	self.ReqApache = "B"
+        self.ReqApache = "B"
 	self.nodebuntu = False
 
 
-        APPDOMAIN='reconstructor'
+        APPDOMAIN='cooperationiws'
         LANGDIR='lang'
         # locale
         locale.setlocale(locale.LC_ALL, '')
         gettext.bindtextdomain(APPDOMAIN, LANGDIR)
-        gtk.glade.bindtextdomain(APPDOMAIN, LANGDIR)
-        gtk.glade.textdomain(APPDOMAIN)
         gettext.textdomain(APPDOMAIN)
         gettext.install(APPDOMAIN, LANGDIR, unicode=1)
 
  	# print copyright
         print " "
-        print self.appName + " -- (c) Cooperation-iws Team, 2008"
+        print self.appName + " -- (c) Cooperation-iws Team, 2011"
         print "       Version: " + self.appVersion
         print "        http://www.cooperation-iws.eu"
         print " "
@@ -205,12 +110,7 @@ class Reconstructor:
         parser.add_option("-d", "--debug",
                     action="store_true", dest="debug", default=False,
                     help="run as debug")
-        parser.add_option("-v", "--version",
-                    action="store_true", dest="version", default=False,
-                    help="show version and exit")
-        parser.add_option("-e", "--experimental",
-                    action="store_true", dest="experimental", default=False,
-                    help="enable experimental features")
+       
         parser.add_option("-u", "--update",
                     action="store_true", dest="update", default=False,
                     help="automatically update to latest version")
@@ -322,17 +222,8 @@ class Reconstructor:
         (options, args) = parser.parse_args()
 
 
-        if options.version == True:
-            print " "
-            print self.appName + " -- (c) Reconstructor Team, 2006-2008"
-            print "       Version: " + self.appVersion + " rev. " + self.updateId
-            print "        http://reconstructor.aperantis.com"
-            print " "
-            #gtk.main_quit()
-            sys.exit(0)
-        if options.experimental == True:
-            print _('INFO: Enabling Experimental Features...')
-            self.enableExperimental = True
+        
+        
         if options.update == True:
             print _('INFO: Updating...')
             self.update()
@@ -468,23 +359,7 @@ class Reconstructor:
             print _('Ok.')
 
 
-    # load live cd ubuntu version
-    def loadCdVersion(self):
-        if self.customDir != '':
-            # reset version
-            self.cdUbuntuVersion = 'unknown'
-            # build regex
-            r = re.compile(self.regexUbuntuVersion, re.IGNORECASE)
-            f = file(os.path.join(self.customDir, "chroot/etc/lsb-release"), 'r')
-            for l in f:
-                if r.match(l) != None:
-                    self.cdUbuntuVersion = r.match(l).group(1)
-            f.close()
-
-            print 'Ubuntu Version: ' + self.cdUbuntuVersion
-            self.wTree.get_widget("labelCustomizeUbuntuLiveVersion").set_text(self.wTree.get_widget("labelCustomizeUbuntuLiveVersion").get_text() + " " + self.cdUbuntuVersion)
-            
-        return
+    
 
     # Handle Module Properties
     def getModuleProperties(self, moduleName):
@@ -671,36 +546,7 @@ class Reconstructor:
 					    os.popen('chmod a+x \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(modPath) + '\"')
 
 
-    def copyExecuteModule(self, model, path, iter):
-     
-	modName = model.get_value(iter, self.moduleColumnName)
-	modExecute = model.get_value(iter, self.moduleColumnExecute)
-	modPath = model.get_value(iter, self.moduleColumnPath)
-	modRunInChroot = model.get_value(iter, self.moduleColumnRunInChroot)
-	modReqApache = model.get_value(iter, self.moduleColumnReqApache)
-
-	# check for module and skip category
- 	if modExecute == True:	
-		if modReqApache == True:       
-	        	self.ReqApache="A"
-			fReqApache=open(os.path.join(self.customDir, "chroot/tmp/apache"), 'w')
-	    		fReqApache.write(self.ReqApache)
-	    		fReqApache.close()
-	    
-	if modPath != None:
-	    # check for execute
-	    if modExecute == True:
-	        #print modName, modRunInChroot
-	        if modRunInChroot == True:
-	            #print modName + ' - Running in chroot...'
-	            os.popen('cp -R \"' + modPath + '\" \"' + os.path.join(self.customDir, "chroot/tmp/") + '\"')
-	            os.popen('chmod a+x \"' + os.path.join(self.customDir, "chroot/tmp/") + os.path.basename(modPath) + '\"')
-
-	        else:
-	            print modName + ' - Running in custom directory...'
-	            os.popen('cp -R \"' + modPath + '\" \"' + os.path.join(self.customDir, "scripts/") + '\"')
-	            os.popen('chmod a+x \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(modPath) + '\"')
-
+    
     def cmdCopyExecuteModule(self, model):
      
 	modName = model[0]
@@ -733,11 +579,7 @@ class Reconstructor:
 	
    
 
-    def checkExecModuleEnabled(self, model, path, iter):
-        modExecute = model.get_value(iter, self.moduleColumnExecute)
-        if modExecute == True:
-            self.execModulesEnabled = True
-
+    
     def checkSetup(self):
         setup = False
         if self.createRemasterDir == True:
@@ -749,17 +591,7 @@ class Reconstructor:
             setup = False
         return setup
 
-    def checkAltSetup(self):
-        setup = False
-        if self.createAltRemasterDir == True:
-            setup = True
-        elif self.createAltInitrdRoot == True:
-            setup = True
-        else:
-            # nothing to be done
-            setup = False
-        return setup
-
+   
     def checkCustomDir(self):
         if self.customDir == "":
             return False
@@ -1511,17 +1343,7 @@ class Reconstructor:
             print _("Finished extracting squashfs root...")
         
 
-        # get ubuntu version
-        #self.loadCdVersion()
-        # get current boot options menu text color
-        #self.loadBootMenuColor()
-        # get current gdm background color
-        #self.loadGdmBackgroundColor()
-        # load comboboxes for customization
-        #self.loadGdmThemes()
-        #self.loadGnomeThemes()
-        #self.hideWorking()
-	
+        	
 	      
 	print _("Finished setting up working directory...")
         print " "
@@ -1741,31 +1563,14 @@ class Reconstructor:
         fWorkDir.close()
 
 	#Mirrors
-	if self.comboboxWebAppMirrors == "Free.fr":
-	    mirrorWebApp = "B"
-	    mirrorUrl = self.mirrorFree
-	elif self.comboboxWebAppMirrors == "Berlios1.de":
- 	    mirrorWebApp = "B"
-	    mirrorUrl = self.mirrorBerlios1
-	elif self.comboboxWebAppMirrors == "Berlios2.de":
- 	    mirrorWebApp = "B"
-	    mirrorUrl = self.mirrorBerlios2
-	elif self.comboboxWebAppMirrors == "Web":
- 	    mirrorWebApp = "A"
-	    mirrorUrl = self.mirrorFree
-	elif self.checkbuttonLocalMirror == True:
-	    mirrorWebApp = "B"
-	    mirrorUrl = self.entryLocalMirror
-	fMirrorWebApp=open(os.path.join(self.customDir, "chroot/tmp/mirroir"), 'w')
-        fMirrorWebApp.write(mirrorWebApp)
-        fMirrorWebApp.close() 
+
+	
+	mirrorUrl = self.entryLocalMirror
+	
 	fMirrorUrl=open(os.path.join(self.customDir, "chroot/tmp/url_mirroir"), 'w')
         fMirrorUrl.write(mirrorUrl)
         fMirrorUrl.close() 
 	
-	fMirrorWebApp=open("/tmp/mirroir", 'w')
-        fMirrorWebApp.write(mirrorWebApp)
-        fMirrorWebApp.close() 
 	fMirrorUrl=open("/tmp/url_mirroir", 'w')
         fMirrorUrl.write(mirrorUrl)
         fMirrorUrl.close() 
@@ -1790,9 +1595,7 @@ class Reconstructor:
 
         # run modules
         # HACK: check for run on boot scripts and clear previous if new ones selected
-	if self.commandLine == False:         
-		self.execModulesEnabled = False;
-	        self.treeModel.foreach(self.checkExecModuleEnabled)
+	
        
         modExecScrChroot = '#!/bin/sh\n\ncd /tmp ;\n'
 	modExecScrChroot = 'export DEBIAN_FRONTEND=noninteractive\n'
@@ -2045,12 +1848,6 @@ class Reconstructor:
 # ---------- Build ---------- #
     def build(self):
 
-	# check for custom mksquashfs (for multi-threading, new features, etc.)
-	mksquashfs = ''
-	if commands.getoutput('echo $MKSQUASHFS') != '':
-	    mksquashfs = commands.getoutput('echo $MKSQUASHFS')
-	    print 'Using alternative mksquashfs: ' + ' Version: ' + commands.getoutput(mksquashfs + ' -version')
-	
 	print " "
 	print _("INFO: Starting Build...")
 	print " "
@@ -2075,11 +1872,7 @@ class Reconstructor:
 	        #if mksquashfs == '':
 		scriptMksquashfs = '#!/bin/bash \n'
                 scriptMksquashfs += 'cd ' + self.customDir + '\n'
-		scriptMksquashfs += 'if [[ -n $(dpkg-query --list | grep squashfs | grep 1:3.3-1) ]]; then\n'
-	        scriptMksquashfs += 'apt-get remove -y -force-yes squashfs-tools\n'
-	        scriptMksquashfs += 'wget '+self.entryLocalMirror+'/squashfs-tools_3.3-7_i386.deb\n'
-	        scriptMksquashfs += 'dpkg -i squashfs-tools_3.3-7_i386.deb\n'
-	        scriptMksquashfs += 'fi \necho \"I: Building squashfs\" \n'
+		scriptMksquashfs += 'echo \"I: Building squashfs\" \n'
 	        scriptMksquashfs += 'cp chroot/initrd.gz remaster/' + self.casperPath + '/. \n'
 	      	scriptMksquashfs += 'cp chroot/vmlinuz remaster/' + self.casperPath + '/. \n'
 	      	scriptMksquashfs += 'mksquashfs chroot remaster/' + self.casperPath + '/filesystem.squashfs -no-progress\n'
@@ -2152,18 +1945,16 @@ class Reconstructor:
 # ---------- MAIN ----------
 
 if __name__ == "__main__":
-    APPDOMAIN='reconstructor'
+    APPDOMAIN='cooperationiws'
     LANGDIR='lang'
     # locale
     locale.setlocale(locale.LC_ALL, '')
     gettext.bindtextdomain(APPDOMAIN, LANGDIR)
-    gtk.glade.bindtextdomain(APPDOMAIN, LANGDIR)
-    gtk.glade.textdomain(APPDOMAIN)
     gettext.textdomain(APPDOMAIN)
     gettext.install(APPDOMAIN, LANGDIR, unicode=1)
 
     # check credentials
-    rec = Reconstructor()
+    rec = Cooperationiws()
       
        
 

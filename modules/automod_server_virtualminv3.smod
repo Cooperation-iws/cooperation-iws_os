@@ -21,7 +21,7 @@ DL_DIR=$(cat /tmp/web_install-path)
 BIN_MYSQL=$(cat /tmp/mysql-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
-MIRROIR=$(cat /tmp/mirroir)
+
 URL_FREE=$(cat /tmp/url_mirroir)
 DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
 #TEMP

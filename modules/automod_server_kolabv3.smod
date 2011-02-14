@@ -28,7 +28,7 @@ kolab_domain_name=$(echo $domain | cut -d'.' -f1)
 kolab_domain_ext=$(echo $domain | cut -d'.' -f2)
 kolab_admin_mail=$(echo kolab_admin_mail |  cut -d'@' -f1) 
 #TEMP
-MIRROIR=$(cat /tmp/mirroir)
+
 URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)

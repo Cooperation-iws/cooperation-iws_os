@@ -28,7 +28,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 
 #TEMP
-MIRROIR=$(cat /tmp/mirroir)
+
 URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
