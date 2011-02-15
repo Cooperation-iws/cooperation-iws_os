@@ -566,8 +566,7 @@ class Cooperationiws:
                 for f in files:
                     r, ext = os.path.splitext(f)
                     if ext == '.rmod' or ext == '.smod' or ext == '.kmod':
-                        #print 'Module: ' + f.replace('.?mod', '') + ' found...'
-
+                        
                         modPath = os.path.join(self.moduleDir, f)
 
                         # Refactoring! triplem
@@ -802,10 +801,9 @@ class Cooperationiws:
         print _("INFO: Setting up working directory...")
 	if not os.path.exists(os.path.join(self.customDir, "scripts")):
 		os.makedirs(os.path.join(self.customDir, "scripts"))        
+	
 	#create shutdown_ws script
-	#Shutdown script initialisation
 	modExecShutdownWs = '#!/bin/sh\n'
-	#print modExecShutdownWs
 	fModExec=open(os.path.join(self.customDir, "scripts/shutdown_ws.sh"), 'w')
 	fModExec.write(modExecShutdownWs)
 	fModExec.close()
@@ -836,7 +834,7 @@ class Cooperationiws:
 	    # unmount iso/cd-rom
             os.popen("umount " + self.mountDir)
 	
-	    
+	# check version of the input livecd    
 	self.checkLiveCdVersion()
 
         # custom root dir
@@ -847,7 +845,6 @@ class Cooperationiws:
             # check for existing directories and remove if necessary
             if os.path.exists(os.path.join(self.customDir, "tmpsquash")):
                 print _("INFO: Removing existing tmpsquash directory...")
-
                 os.popen('rm -Rf \"' + os.path.join(self.customDir, "tmpsquash") + '\"')
 
             # extract squashfs into custom root
@@ -855,17 +852,14 @@ class Cooperationiws:
            
             print _("Using ISO for squashfs root...")
             os.popen('mount -o loop \"' + self.isoFilename + '\" ' + self.mountDir)
-
             # copy remaster files
             os.mkdir(os.path.join(self.customDir, "tmpsquash"))
             # mount squashfs root
             print _("Mounting squashfs...")
             os.popen('mount -t squashfs -o loop ' + self.mountDir + '/' + self.casperPath + '/filesystem.squashfs \"' + os.path.join(self.customDir, "tmpsquash") + '\"')
             print _("Extracting squashfs root...")
-
             # copy squashfs root
             os.popen('rsync -at --del \"' + os.path.join(self.customDir, "tmpsquash") + '\"/ \"' + os.path.join(self.customDir, "chroot/") + '\"')
-
             # umount tmpsquashfs
             print _("Unmounting tmpsquash...")
             os.popen('umount --force \"' + os.path.join(self.customDir, "tmpsquash") + '\"')
@@ -1421,10 +1415,6 @@ class Cooperationiws:
 
         return
 
- 
-
-
-	
 
 # ---------- End of Install ---------- #
 
@@ -1532,7 +1522,7 @@ class Cooperationiws:
 	            print _("Building x86 ISO...")
 	            os.popen('mkisofs -o \"' + self.buildLiveCdFilename + '\" -b \"isolinux/isolinux.bin\" -c \"isolinux/boot.cat\" -no-emul-boot -boot-load-size 4 -boot-info-table -V \"' + self.LiveCdDescription + '\" -cache-inodes -r -J -l \"' + os.path.join(self.customDir, "remaster") + '\"')
 	        elif self.LiveCdArch == "amd64":
-	            print _("Building x86_64 ISO...")
+	            print _("Building amd64 ISO...")
 	            os.popen('mkisofs -r -o \"' + self.buildLiveCdFilename + '\" -b \"isolinux/isolinux.bin\" -c \"isolinux/boot.cat\" -no-emul-boot -V \"' + self.LiveCdDescription + '\" -J -l \"' + os.path.join(self.customDir, "remaster") + '\"')
 		
 	# print status message

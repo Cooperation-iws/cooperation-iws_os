@@ -9,7 +9,7 @@ RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Installs'
 RMOD_RUN_IN_CHROOT=True
-RMOD_UPDATE_URL='http://reconstructor.aperantis.com/update/modules/'
+RMOD_UPDATE_URL=''
 
 
 
@@ -34,21 +34,17 @@ DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
 DEBNONFREE_MIRROR_PATH=$(cat /tmp/deb-nonfree_mirror_path)
 DEB_MIRROR_SECURITY_PATH=$(cat /tmp/deb-security_mirror_path)
 HOSTNAME=$(cat /tmp/hostname)
-SILENT_INSTALL=$(cat /tmp/silent_install)
+
 
 #TEMP
 
 URL_FREE=$(cat /tmp/url_mirroir)
-
 INSTALL=$(cat /tmp/def_install)
+
+
 export LANG="en"
 export LC_ALL=C
-SILENT=$(cat /tmp/silent)
-
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 export DEBIAN_FRONTEND=noninteractive
-fi
-
 
 if [ "$(echo $LANG | grep 'fr')" ]; then
 LANG_UI="FR"
@@ -193,7 +189,7 @@ echo "<?xml version=\"1.0\"?>
 
 #start-up inhibition
 
-if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
+
 
 mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.silent_install
 cat > /usr/sbin/policy-rc.d << EOF
@@ -205,5 +201,5 @@ echo "Warning: invoke-rc.d policy in action. Skipping daemon starting"
 exit 101
 EOF
 chmod 0755 /usr/sbin/policy-rc.d
-fi
+
 

@@ -9,7 +9,6 @@ RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Installs'
 RMOD_RUN_IN_CHROOT=True
-RMOD_UPDATE_URL='http://reconstructor.aperantis.com/update/modules/'
 
 
 
@@ -25,13 +24,8 @@ APACHE=$(cat /tmp/apache)
 URL_FREE=$(cat /tmp/url_mirroir)
 CASPER_PATH=$(cat /tmp/casper_path)
 
-SILENT=$(cat /tmp/silent)
-SILENT_INSTALL=$(cat /tmp/silent_install)
 
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 export DEBIAN_FRONTEND=noninteractive
-fi
-
 
 if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
 
@@ -44,11 +38,11 @@ killall -9 mysqld_safe
 
 
 #cancel inhibition for mysql
-if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
+
 
 mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.mysql
 cp /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
-fi
+
 
 apt-get install --yes --force-yes mysql-server
 
@@ -127,15 +121,10 @@ mv /tmp/cooperation-wui-fr.xml  $WWW_DIRECTORY/cooperation-wui-fr.xml
 mv /tmp/admin_cooperation-wui.xml $WWW_DIRECTORY/admin/cooperation-wui.xml
 mv /tmp/admin_cooperation-wui-fr.xml  $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 
-
-
 /etc/init.d/mysql start
-if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
 
 mv /usr/sbin/policy-rc.d.mysql /usr/sbin/policy-rc.d 
-else
-/etc/init.d/apache2 start
-fi
+
 
 fi
 

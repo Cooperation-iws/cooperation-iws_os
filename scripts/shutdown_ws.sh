@@ -17,18 +17,16 @@ LIVEUSER=$(cat /tmp/user)
 TMPUSER=$(cat /tmp/tmp_user)
 DEB_DIST=$(cat /tmp/deb_dist)
 
-SILENT=$(cat /tmp/silent)
-SILENT_INSTALL=$(cat /tmp/silent_install)
 
 . /tmp/app_params
 
 HOSTNAME=$(cat /tmp/hostname)
 
-if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
+
 
 rm /usr/sbin/policy-rc.d
 mv /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
-fi
+
 
 
 echo "I: Configuring Apache2 for domains"
@@ -116,11 +114,6 @@ wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key ad
 fi
 rm /etc/apt/sources.list.d/*
 echo "" > /var/log/dpkg.log
-#apt-get update
-
-#Removing start-up inhibition
-#rm /usr/sbin/policy-rc.d
-#mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
 
 
 echo "I: making initramfs"
@@ -156,7 +149,7 @@ if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
 
 
 echo "I: Securing Lampp Server"
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+
 	if [ "$(echo $secure_mysql | awk  '{print $1}')" != "n" ]; then
 		echo "UPDATE mysql.user SET Password=PASSWORD('$mysql_root_password') WHERE User='root';
 DELETE FROM mysql.user WHERE User='';
@@ -183,44 +176,7 @@ $BIN_MYSQL -u root < /tmp/mysql_secure.sql
 		chmod a+r /var/www/admin/.htaccess
 		echo "CIWS: Password protection active. Please use 'admin' as user name!"
 	fi
-else
-	echo "
-	---------------Cooperation-iws----------------------------
-	-------Do you want to secure your mysql server ?----------
-	--------Curently there is no root password (none)---------
-	[Y/n]:
-	"
-	read secure_mysql < /dev/tty
 
-	if [ "$(echo $secure_mysql | awk  '{print $1}')" != "n" ]; then
-		mysql_secure_installation
-	fi
-
-	echo "
-	---------------Cooperation-iws----------------------------
-	-------Do you want to secure your admin pages ?----------
-	--------Curently there is no password (none)---------
-	[Y/n]:
-	"
-	read secure_admin < /dev/tty
-
-	if [ "$(echo $secure_admin | awk  '{print $1}')" != "n" ]; then
-
-		mkdir /var/private
-		cd /var/private/	
-	
-
-		echo "
-		AuthName \"Ciws user\"                 
-		AuthType Basic    
-		AuthUserFile /var/private/lampp.users
-		require valid-user                    
-		" >  /var/www/admin/.htaccess
-		htpasswd -cm lampp.users admin
-		chmod a+r /var/www/admin/.htaccess
-		echo "CIWS: Password protection active. Please use 'admin' as user name!"
-	fi
-fi
 fi
 echo "I: shuting down servers"
 #shutdown script
