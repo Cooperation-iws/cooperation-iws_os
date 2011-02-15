@@ -463,7 +463,7 @@ class Cooperationiws:
 	modReqXnest = None      
 	modUpdateUrl = ''
 
-      # HACK: regex through module to get info
+        # regex through module to get info
         reModCategory = re.compile(self.regexModCategory, re.IGNORECASE)
         reModSubCategory = re.compile(self.regexModSubCategory, re.IGNORECASE)
         reModName = re.compile(self.regexModName, re.IGNORECASE)
