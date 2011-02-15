@@ -141,4 +141,49 @@ touch /var/log/news/news.crit
 
 apt-get install --assume-yes --force-yes console-data
 
+sed -i "3s/user/$(cat /tmp/user)/" /etc/live.conf
+
+sed -i "s/USERNAME=\"user\"/USERNAME=\"$(cat /tmp/user)\"/"  /usr/share/initramfs-tools/scripts/live
+
+sed -i "s/USERFULLNAME=\"Debian Live user\"/USERFULLNAME=\"$(cat /tmp/user_full_name)\"/" /etc/live.conf
+
+sed -i "s/USERFULLNAME=\"Live user\"/USERFULLNAME=\"$(cat /tmp/user_full_name)\"/" /usr/share/initramfs-tools/scripts/live
+
+sed -i "s/HOSTNAME=\"debian\"/HOSTNAME=\"$(cat /tmp/hostname)\"/" /etc/live.conf
+
+sed -i "s/HOSTNAME=\"host\"/HOSTNAME=\"$(cat /tmp/hostname)\"/" /usr/share/initramfs-tools/scripts/live
+
+sed -i "s/8Ab05sVQ4LLps/$(cat /tmp/crypt_user_pass)/" /usr/share/initramfs-tools/scripts/live-bottom/10adduser
+
+sed -i "s/ NOPASSWD://" /usr/share/initramfs-tools/scripts/live-bottom/10adduser
+
+if [ -e /tmp/disable_autologin ]; then
+
+sed -i "s/true/false/g" /usr/share/initramfs-tools/scripts/live-bottom/15autologin 
+
+sed -i "63s/^/#/" /usr/share/initramfs-tools/scripts/live-bottom/15autologin 
+sed -i "64s/^/#/" /usr/share/initramfs-tools/scripts/live-bottom/15autologin 
+sed -i "65s/^/#/" /usr/share/initramfs-tools/scripts/live-bottom/15autologin 
+sed -i "66s/^/#/" /usr/share/initramfs-tools/scripts/live-bottom/15autologin 
+sed -i "67s/^/#/" /usr/share/initramfs-tools/scripts/live-bottom/15autologin 
+sed -i "68s/^/#/" /usr/share/initramfs-tools/scripts/live-bottom/15autologin  
+sed -i "69s/^/#/" /usr/share/initramfs-tools/scripts/live-bottom/15autologin  
+sed -i "70s/^/#/" /usr/share/initramfs-tools/scripts/live-bottom/15autologin  
+
+fi
+
+if [ -e /tmp/encryption ]; then
+
+apt-get install --assume-yes --force-yes aespipe
+sed -i '231s/root/$(basename ${fspath})/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '231s/Enter/\\n Enter/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '236s/\/sbin\/losetup/\/$root\/sbin\/losetup/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '230s/^/echo $(basename ${fspath}) | grep -q "home-sn" || echo $(basename ${fspath}) | grep -q "ciws-sn" \&\& root="root"  /' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '959s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -o rw,noatime "${dev}" "${rootmnt}\/home"/' /usr/share/initramfs-tools/scripts/live
+sed -i '345s/ro/rw/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '1364s/ro/rw/' /usr/share/initramfs-tools/scripts/live
+sed -i '902s/${snapback}/${mountpoint}/' /usr/share/initramfs-tools/scripts/live
+
+fi
+
 

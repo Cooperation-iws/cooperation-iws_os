@@ -38,7 +38,7 @@ class Cooperationiws:
 
 	
 	self.appName = "Cooperation-iws"
-        self.appVersion = "0.9.0"
+        self.appVersion = "0.9.2"
         self.updateId = "325"
         self.cdUbuntuVersion = ''
         self.moduleDir = os.getcwd() + '/modules/'
@@ -257,7 +257,7 @@ class Cooperationiws:
 	    self.password = options.password
 	    self.userFull = options.userfullname
 	    self.host = options.host
-	    self.checkbuttonDisableAutologin = options.disautologin
+	    self.disableAutologin = options.disautologin
 	    self.debMirror = options.debmirror
             self.debMirrorNonfree = options.debmirrorNonfree
             self.debMirrorSecurity = options.debmirrorsecurity
@@ -321,14 +321,6 @@ class Cooperationiws:
 	if commands.getoutput('which mtools') == '':
             print _('mtools NOT FOUND (needed for Remastering ISO)')
             dependList += 'mtools\n'
-        # dapper usplash dependency
-        if os.path.exists('/usr/include/bogl') == False:
-            print _('libbogl-dev NOT FOUND (needed for Dapper Usplash Generation)')
-            dependList += 'libbogl-dev\n'
-        # edgy usplash dependency
-        if commands.getoutput('which pngtousplash') == '':
-            print _('libusplash-dev NOT FOUND (needed for Usplash Generation)')
-            dependList += 'libusplash-dev\n'
         # gpg
         if commands.getoutput('which gpg') == '':
             print _('gpg NOT FOUND (needed for Alternate Key Signing)')
@@ -883,204 +875,8 @@ class Cooperationiws:
 
         return
 
-    # Sets live cd information (username, full name, hostname) for live cd
-    def setLiveCdInfo(self, username, userFullname, userPassword, hostname):
-	 
-	if self.distVariant == 'mint':
-		initUsername = 'mint'
-		initUserFullname = 'Live session user'
-		initHostName = 'mint'
-		initBuildSystem = 'Ubuntu'
-	elif self.distVariant == 'nUbuntu':
-		initUsername = 'nubuntu'
-		initUserFullname = 'Live session user'
-		initHostName = 'live'
-		initBuildSystem = 'Ubuntu'
-	elif self.distVariant == 'ozos-0.9':
-		initUsername = 'wizard'
-		initUserFullname = 'Live session user'
-		initHostName = 'oz'
-		initBuildSystem = 'OzOS'
-	elif self.distVariant == 'poseidon-3.1':
-		initUsername = 'poseidon'
-		initUserFullname = 'Live session user'
-		initHostName = 'poseidon'
-		initBuildSystem = 'Ubuntu'
-	elif self.distVariant == 'nubuntu_8.10':
-		initUsername = 'nubuntu'
-		initUserFullname = 'Live session user'
-		initHostName = 'nubuntu'
-		initBuildSystem = 'Ubuntu'
-	elif self.distVariant == 'edubuntu_8.10' or self.distVariant == 'studio_8.10' or self.distVariant == 'studio_9.04' or self.distVariant == 'edubuntu_9.04':
-		initUsername = 'custom'
-		initUserFullname = 'Live session user'
-		initHostName = 'custom'
-		initBuildSystem = 'client'
-	else:
-		initUsername = 'ubuntu'
-		initUserFullname = 'Live session user'
-		initHostName = 'ubuntu'
-		initBuildSystem = 'Ubuntu'
+    
 
-	if self.casperPathUpdated  == 'casper':
-	    if username != '':
-		    print ('Username: ' + username)
-		    sed = 'sed -i \'5s/' + initUsername + '/' + username + '/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPathUpdated  + ".conf")
-		    cmd = commands.getoutput(sed)
-	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
-	    	    #sed = 'sed -i \'s/USERNAME=casper/USERNAME=' + username + '/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/casper")
-		    #cmd = commands.getoutput(sed)
-	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
-	    
-	    if userFullname != '':
-		    print ('User Full Name: ' + userFullname)
-		    sed = 'sed -i \'s/USERFULLNAME=\"' + initUserFullname + '\"/USERFULLNAME=\"' + userFullname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPathUpdated  + ".conf") 
-		    cmd = commands.getoutput(sed)
-	 	    #print ('Sed User Full Name: \n ' + sed + '\n' + cmd)
-	    	    #sed = 'sed -i \'s/USERFULLNAME=\"Live session user\"/USERFULLNAME=\"' + userFullname + '\"/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPath )
-		    cmd = commands.getoutput(sed)
-	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
-	    
-	    if hostname != '':
-		    print ('Hostname: ' + hostname)
-		    sed = 'sed -i \'s/HOST=\"' + initHostName + '\"/HOST=\"' + hostname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPathUpdated  + ".conf") 
-		    cmd = commands.getoutput(sed)
-	 	    #print ('Sed 1 Hostname: \n ' + sed + '\n' + cmd)
-		    sed = 'sed -i \'s/BUILD_SYSTEM=\"' + initBuildSystem + '\"/BUILD_SYSTEM=\"' + hostname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPathUpdated  + ".conf")
-		    cmd = commands.getoutput(sed)
-	 	    #print ('Sed 2 Hostname: \n ' + sed + '\n' + cmd)
-		    sed = 'sed -i \'s/HOST=live/HOST=' + hostname + '/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  )
-		    cmd = commands.getoutput(sed)
-	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
-	    	    sed = 'sed -i \'s/BUILD_SYSTEM=Custom/BUILD_SYSTEM=' + hostname +'/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated )
-		    cmd = commands.getoutput(sed)
-	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
-	    	   
-		    #cmd = commands.getoutput('chmod +r+x '+ os.path.join(self.customDir, "chroot/etc/casper.conf"))	
-       
-           
-            if userPassword != '':
-                #print ('Password: ' + l)
-                passwordText = _('Setting Live CD Password... ')
-                print passwordText
-                #print "DEBUG: Password: " + userPassword + " des Hash: " + commands.getoutput('echo ' + userPassword + ' | mkpasswd -s -H des')
-		crypt_pass = commands.getoutput('mkpasswd -s ' + userPassword )			
-		while  commands.getoutput(' echo  ' + crypt_pass + ' | grep "[/.]" ') != '' :
-               		crypt_pass = commands.getoutput('mkpasswd -s ' + userPassword )
-		sed = 'sed -i \'s/set passwd\/user-password-crypted U6aMy0wojraho/set passwd\/user-password-crypted ' + crypt_pass +'/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/10adduser") 
-		cmd = commands.getoutput(sed)
- 	        #print ('Sed 1 password:\n ' + sed + '\n' + cmd)
-		sed = 'sed -i \'s/ALL=(ALL) NOPASSWD: ALL/ALL=(ALL) ALL/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/10adduser") 
-		cmd = commands.getoutput(sed)
- 	        #print ('Sed 2 password: \n ' + sed + '\n' + cmd)
-		sed = 'sed -i \'46s/NOPASSWD: //\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/10adduser")
-		cmd = commands.getoutput(sed)
- 	        #print ('Sed 3 password:\n ' + sed + '\n' + cmd)
-		#cmd = commands.getoutput('chmod +r+x '+ os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/casper-bottom/10adduser"))	
-
-                
-            
-	    if self.checkbuttonDisableAutologin == True:
-		sed = 'sed -i \'34s/true/false/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-		cmd = commands.getoutput(sed)
- 	        #print ('Sed 1 autologin:\n ' + sed + '\n' + cmd)
-		sed = 'sed -i \'36s/true/false/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-		cmd = commands.getoutput(sed)
- 	        #print ('Sed 1 autologin:\n ' + sed + '\n' + cmd)
-		sed = 'sed -i \'45s/true/false/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-		cmd = commands.getoutput(sed)
- 	        #print ('Sed 1 autologin:\n ' + sed + '\n' + cmd)
-		sed = 'sed -i \'54s/true/false/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-		cmd = commands.getoutput(sed)
- 	        #print ('Sed 1 autologin:\n ' + sed + '\n' + cmd)
-		
-            
-        else:
-	    if username != '':
-		    print ('Username: ' + username)
-		    sed = 'sed -i \'3s/user/' + username + '/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPathUpdated  + ".conf")
-		    cmd = commands.getoutput(sed)
-	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
-	    	    sed = 'sed -i \'s/USERNAME=\"user\"/USERNAME=\"' + username + '\"/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated )
-		    cmd = commands.getoutput(sed)
-	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
-	    
-	    if userFullname != '':
-		    print ('User Full Name: ' + userFullname)
-		    sed = 'sed -i \'s/USERFULLNAME=\"Debian Live user\"/USERFULLNAME=\"' + userFullname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPathUpdated  + ".conf") 
-		    cmd = commands.getoutput(sed)
-	 	    #print ('Sed User Full Name: \n ' + sed + '\n' + cmd)
-	    	    sed = 'sed -i \'s/USERFULLNAME=\"Live user\"/USERFULLNAME=\"' + userFullname + '\"/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  )
-		    cmd = commands.getoutput(sed)
-	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
-	    
-	    if hostname != '':
-		    print ('Hostname: ' + hostname)
-		    sed = 'sed -i \'s/HOSTNAME=\"debian\"/HOSTNAME=\"' + hostname + '\"/\' ' + os.path.join(self.customDir, "chroot/etc/" + self.casperPathUpdated  + ".conf") 
-		    cmd = commands.getoutput(sed)
-	 	    #print ('Sed 1 Hostname: \n ' + sed + '\n' + cmd)
-		    #print ('Sed 2 Hostname: \n ' + sed + '\n' + cmd)
-		    sed = 'sed -i \'s/HOSTNAME=\"host\"/HOSTNAME=\"' + hostname + '\"/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  )
-		    cmd = commands.getoutput(sed)
-	    	    #print ('Sed Username: \n ' + sed + ' \n ' + cmd)
-             
-            if userPassword != '':
-                #print ('Password: ' + l)
-                passwordText = _('Setting Live CD Password... ')
-                print passwordText
-                #print "DEBUG: Password: " + userPassword + " des Hash: " + commands.getoutput('echo ' + userPassword + ' | mkpasswd -s -H des')
-		crypt_pass = commands.getoutput('mkpasswd -s ' + userPassword )			
-		while  commands.getoutput(' echo  ' + crypt_pass + ' | grep "[/.]" ') != '' :
-               		crypt_pass = commands.getoutput('mkpasswd -s ' + userPassword )
-		sed = 'sed -i \'s/8Ab05sVQ4LLps/' + crypt_pass +'/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/10adduser") 
-		cmd = commands.getoutput(sed)
- 	        sed = 'sed -i \'s/ NOPASSWD://\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/10adduser") 
-		cmd = commands.getoutput(sed)
-                
-            
-	    if self.checkbuttonDisableAutologin == True:
-		if self.debDist == 'lenny':
-			sed = 'sed -i \'s/true/false/g\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'60s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'s/true/false/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			sed = 'sed -i \'61s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'63s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'s/true/false/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			sed = 'sed -i \'64s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'65s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'66s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'67s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'69s/elif/if/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-		else:
-			sed = 'sed -i \'s/true/false/g\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'63s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'s/true/false/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			sed = 'sed -i \'64s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'65s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'s/true/false/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			sed = 'sed -i \'66s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'67s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'68s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'69s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
-			sed = 'sed -i \'70s/^/#/\' ' + os.path.join(self.customDir, "chroot/usr/share/initramfs-tools/scripts/" + self.casperPathUpdated  + "-bottom/15autologin") 
-			cmd = commands.getoutput(sed)
 		
     #detect Live CD version
     def checkLiveCdVersion(self):
@@ -1234,7 +1030,6 @@ class Cooperationiws:
 		os.popen("echo \"A\" > "+ os.path.join(self.customDir, "chroot") + "/tmp/silent")
 		print _('Proceeding to customization...')		
 		self.customize()		
-		self.setLiveCdInfo(username=self.user, userFullname=self.userFull, userPassword=self.password, hostname=self.host)
 		
 		if self.silent == False:
 			self.launchTerminal()
@@ -1457,24 +1252,35 @@ class Cooperationiws:
 	fWorkDir=open(os.path.join(self.customDir, "chroot/tmp/user"), 'w')
         fWorkDir.write(self.user)
        	fWorkDir.close()
+
+        fuserFull=open(os.path.join(self.customDir, "chroot/tmp/user_full_name"), 'w')
+        fuserFull.write(self.userFull)
+       	fuserFull.close()
+
         fcasper=open(os.path.join(self.customDir, "chroot/tmp/casper_path"), 'w')
 	fcasper.write(self.casperPath)
-	fcasper.close()  
+	fcasper.close() 
+ 
 	fcasper=open("/tmp/casper_path", 'w')
 	fcasper.write(self.casperPath)
 	fcasper.close()
+
 	fcasperupdated=open(os.path.join(self.customDir, "chroot/tmp/casper_path_updated"), 'w')
 	fcasperupdated.write(self.casperPathUpdated)
-	fcasperupdated.close()  
+	fcasperupdated.close()
+  
 	fcasperupdated=open("/tmp/casper_path_updated", 'w')
 	fcasperupdated.write(self.casperPathUpdated)
 	fcasperupdated.close()
+
 	fdebDist=open(os.path.join(self.customDir, "chroot/tmp/deb_dist"), 'w')
 	fdebDist.write(self.debDist)
-	fdebDist.close()  
+	fdebDist.close()
+  
 	fDebMirror=open(os.path.join(self.customDir, "chroot/tmp/deb_mirror_path"), 'w')
 	fDebMirror.write(self.debMirror)
 	fDebMirror.close()
+
 	fDebMirrorNonfree=open(os.path.join(self.customDir, "chroot/tmp/deb-nonfree_mirror_path"), 'w')
 	fDebMirrorNonfree.write(self.debMirrorNonfree)
 	fDebMirrorNonfree.close()
@@ -1482,17 +1288,35 @@ class Cooperationiws:
 	fDebMirrorSecurity=open(os.path.join(self.customDir, "chroot/tmp/deb-security_mirror_path"), 'w')
 	fDebMirrorSecurity.write(self.debMirrorSecurity)
 	fDebMirrorSecurity.close()
+
 	fciwsOsType=open(os.path.join(self.customDir, "chroot/tmp/os_type"), 'w')
 	fciwsOsType.write(self.ciwsOsType)
 	fciwsOsType.close()
+
 	fHostFile=open(os.path.join(self.customDir, "chroot") + '/tmp/hostname', 'w')
    	fHostFile.write(self.host)
     	fHostFile.close()
+
     	fPasswordFile=open(os.path.join(self.customDir, "chroot") + '/tmp/os_password', 'w')
    	fPasswordFile.write(self.password)
     	fPasswordFile.close()
-    	
-	
+
+    	crypt_pass = commands.getoutput('mkpasswd -s ' + self.password )			
+	while  commands.getoutput(' echo  ' + crypt_pass + ' | grep "[/.]" ') != '' :
+        	crypt_pass = commands.getoutput('mkpasswd -s ' + self.password )
+	fcrypt_pass=open(os.path.join(self.customDir, "chroot/tmp/crypt_user_pass"), 'w')
+        fcrypt_pass.write(crypt_pass)
+       	fcrypt_pass.close()
+
+        if self.disableAutologin == True:
+		fdisableAutologin=open(os.path.join(self.customDir, "chroot/tmp/disable_autologin"), 'w')
+        	fdisableAutologin.write("TRUE")
+       		fdisableAutologin.close()
+
+        if self.encryption != "disabled":
+		fencryption=open(os.path.join(self.customDir, "chroot/tmp/encryption"), 'w')
+        	fencryption.write("TRUE")
+       		fencryption.close()
 	
 	if self.comboboxCiwsArtwork == "ciwsGnome":
 		self.artwork = "ciws_gnome"
@@ -1655,49 +1479,7 @@ class Cooperationiws:
 		modExecLamppChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
 	    if self.artwork != "":  
 		modExecScrChroot += 'bash \"/tmp/artwork.amod\"' + ' ;\n '
-	    if self.encryption != "disabled":
-		if self.debDist == 'hardy':
-			print "Updating Live-initramfs for crypt: Hardy"
-			modExecLamppChroot += 'apt-get install --assume-yes --force-yes aespipe \n'
-			modExecLamppChroot += 'sed -i \'231s/root/$(basename ${fspath})/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'231s/Enter/\\n Enter/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'236s/\/sbin\/losetup/\/$root\/sbin\/losetup/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'230s/^/echo $(basename ${fspath}) | grep -q "home-sn" || echo $(basename ${fspath}) | grep -q "ciws-sn" \&\& root="root"  /\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		#modExecLamppChroot += 'sed -i \'1218s/try_snap/echo try_snap \&\& try_snap/\' /usr/share/initramfs-tools/scripts/live\n' 
-			#modExecLamppChroot += 'sed -i \'889s/^/echo "snapdata:$snapdata" /\' /usr/share/initramfs-tools/scripts/live\n' 
-			#modExecLamppChroot += 'sed -i \'959s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -t $(get_fstype "${dev}") -o rw,noatime "${dev}" "${rootmnt}\/home"/\' /usr/share/initramfs-tools/scripts/live\n' 
-			modExecLamppChroot += 'sed -i \'959s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -o rw,noatime "${dev}" "${rootmnt}\/home"/\' /usr/share/initramfs-tools/scripts/live\n' 
-			modExecLamppChroot += 'sed -i \'345s/ro/rw/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'1364s/ro/rw/\' /usr/share/initramfs-tools/scripts/live\n' 
-	   		modExecLamppChroot += 'sed -i \'902s/${snapback}/${mountpoint}/\' /usr/share/initramfs-tools/scripts/live\n' 
-	   		
-	   	elif self.debDist == 'intrepid':
-			print "Updating Live-initramfs for crypt: Intrepid"
-			modExecLamppChroot += 'apt-get install --assume-yes --force-yes aespipe \n'
-			modExecLamppChroot += 'sed -i \'231s/root/$(basename ${fspath})/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'236s/\/sbin\/losetup/\/$root\/sbin\/losetup/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'230s/^/echo $(basename ${fspath}) | grep -q "home-sn" || echo $(basename ${fspath}) | grep -q "ciws-sn" \&\& root="root"  /\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		#modExecLamppChroot += 'sed -i \'1218s/try_snap/echo try_snap \&\& try_snap/\' /usr/share/initramfs-tools/scripts/live\n' 
-			#modExecLamppChroot += 'sed -i \'889s/^/echo "snapdata:$snapdata" /\' /usr/share/initramfs-tools/scripts/live\n' 
-			#modExecLamppChroot += 'sed -i \'959s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -t $(get_fstype "${dev}") -o rw,noatime "${dev}" "${rootmnt}\/home"/\' /usr/share/initramfs-tools/scripts/live\n' 
-			modExecLamppChroot += 'sed -i \'959s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -o rw,noatime "${dev}" "${rootmnt}\/home"/\' /usr/share/initramfs-tools/scripts/live\n' 
-			modExecLamppChroot += 'sed -i \'345s/ro/rw/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'1364s/ro/rw/\' /usr/share/initramfs-tools/scripts/live\n' 
-	   		modExecLamppChroot += 'sed -i \'902s/${snapback}/${mountpoint}/\' /usr/share/initramfs-tools/scripts/live\n' 
-	   		
-	   	else:
-			print "Updating Live-initramfs for crypt: Debian"
-		    	modExecLamppChroot += 'apt-get install --assume-yes --force-yes aespipe \n'
-			modExecLamppChroot += 'sed -i \'231s/root/$(basename ${fspath})/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'236s/\/sbin\/losetup/\/$root\/sbin\/losetup/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'230s/^/echo $(basename ${fspath}) | grep -q "home-sn" || echo $(basename ${fspath}) | grep -q "ciws-sn" \&\& root="root"  /\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		#modExecLamppChroot += 'sed -i \'1218s/try_snap/echo try_snap \&\& try_snap/\' /usr/share/initramfs-tools/scripts/live\n' 
-			#modExecLamppChroot += 'sed -i \'889s/^/echo "snapdata:$snapdata" /\' /usr/share/initramfs-tools/scripts/live\n' 
-			#modExecLamppChroot += 'sed -i \'959s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -t $(get_fstype "${dev}") -o rw,noatime "${dev}" "${rootmnt}\/home"/\' /usr/share/initramfs-tools/scripts/live\n' 
-			modExecLamppChroot += 'sed -i \'959s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -o rw,noatime "${dev}" "${rootmnt}\/home"/\' /usr/share/initramfs-tools/scripts/live\n' 
-			modExecLamppChroot += 'sed -i \'345s/ro/rw/\' /usr/share/initramfs-tools/scripts/live-helpers\n' 
-	   		modExecLamppChroot += 'sed -i \'1364s/ro/rw/\' /usr/share/initramfs-tools/scripts/live\n' 
-	   		modExecLamppChroot += 'sed -i \'902s/${snapback}/${mountpoint}/\' /usr/share/initramfs-tools/scripts/live\n' 
+	    
 	   		
             modExecLamppChroot += 'echo Running Core:  \n'
 	    
