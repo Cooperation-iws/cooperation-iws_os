@@ -1,4 +1,0 @@
-#!/bin/bash
-#kernel upgrade intrepid
-kernel="2.6.27-11-generic"
-#Auto upgrade

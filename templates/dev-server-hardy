@@ -1,7 +1,0 @@
-#!/bin/bash
-#SSH Server
-#NX Server
-#install live-initramfs Hardy
-kernel="2.6.24-23-generic"
-#Auto upgrade
-

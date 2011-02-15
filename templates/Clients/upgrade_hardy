@@ -1,5 +1,0 @@
-#!/bin/bash
-#kernel upgrade hardy
-kernel="2.6.24-23-generic"
-#Auto upgrade
-

@@ -301,12 +301,6 @@ class Cooperationiws:
         if commands.getoutput('which mkisofs') == '':
             print _('mkisofs NOT FOUND (needed for ISO generation)')
             dependList += 'mkisofs\n'
-        if commands.getoutput('which gcc') == '':
-            print _('gcc NOT FOUND (needed for Usplash generation and VMWare/Qemu installation)')
-            dependList += 'gcc\n'
-        if commands.getoutput('which make') == '':
-            print _('make NOT FOUND (needed for VMWare/Qemu installation)')
-            dependList += 'make\n'
         if commands.getoutput('which rsync') == '':
             print _('rsync NOT FOUND (needed for Remastering ISO)')
             dependList += 'rsync\n'
@@ -316,34 +310,12 @@ class Cooperationiws:
 	if commands.getoutput('which mtools') == '':
             print _('mtools NOT FOUND (needed for Remastering ISO)')
             dependList += 'mtools\n'
-        # gpg
-        if commands.getoutput('which gpg') == '':
-            print _('gpg NOT FOUND (needed for Alternate Key Signing)')
-            dependList += 'gpg\n'
-        # dpkg-buildpackage
-        if commands.getoutput('which dpkg-buildpackage') == '':
-            print _('dpkg-dev NOT FOUND (needed for Alternate Key Package Building)')
-            dependList += 'dpkg-dev\n'
-        # fakeroot
-        if commands.getoutput('which fakeroot') == '':
-            print _('fakeroot NOT FOUND (needed for Alternate Key Package Building)')
-            dependList += 'fakeroot\n'
-        # apt-ftparchive
-        if commands.getoutput('which apt-ftparchive') == '':
-            print _('apt-utils NOT FOUND (needed for Extra Repository Generation)')
-            dependList += 'apt-utils\n'
-	if commands.getoutput('which liveusb') == '':
-            print _('liveusb NOT FOUND (needed for liveusb Generation)')
-            wgetlist = 'liveusb\n'
-        if dependList != '' or wgetlist != '':
+	if dependList != '' or wgetlist != '':
             print _('\nThe following dependencies are not met: ')
             print dependList
             print _('Please install the dependencies.')
-            installTxt = _('Installing dependencies: ')
-	    print installTxt + dependList.replace('\n', ' ')
-	    os.popen('apt-get install -y --force-yes ' + dependList.replace('\n', ' '))
-        else:
-            print _('Ok.')
+            exit(0)
+        
 
 
         #detect Live CD version

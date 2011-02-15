@@ -1,9 +1,0 @@
-#!/bin/bash
-#kernel bigmem lenny upgrade
-kernel="2.6.26-1-686-bigmem"
-#update live-initramfs
-#Flashplayer Lenny
-#Madwifi Lenny
-#Openssh server 0.1
-
-#Virtualmin Lenny
