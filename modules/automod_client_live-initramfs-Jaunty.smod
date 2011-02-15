@@ -84,7 +84,10 @@ dpkg -i loop-aes-modules-2.6.28-11-generic*
 cp /lib/modules/$kernel/updates/loop.ko /lib/modules/$kernel/kernel/drivers/block/
 #rm /lib/modules/$kernel/updates/loop.ko
 
-echo "loop max_loop=255" >> /etc/modules
+echo "loop" >> /etc/modules
+
+echo "
+modprobe -q loop max_loop=255" >> /usr/share/initramfs-tools/scripts/live-premount/modules
 
 
 echo "aufs" >> /etc/modules

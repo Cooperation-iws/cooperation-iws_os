@@ -49,7 +49,6 @@ class Cooperationiws:
         self.createInitrdRoot = False
         self.isoFilename = ""
         self.buildLiveCdFilename = ''
-        self.manualInstall = False
         self.f = sys.stdout
         self.treeModel = None
         self.modEngineKey = 'RMOD_ENGINE'
@@ -81,7 +80,7 @@ class Cooperationiws:
         self.regexUbuntuAltPackages = '^Package:\s+(\S*)\n'
         self.execModulesEnabled = False
         # time command for timing operations
-        self.reqXnest = False
+        
         self.ReqApache = "B"
 	self.nodebuntu = False
 
@@ -636,8 +635,7 @@ class Cooperationiws:
 				elif modProps[self.modReqApache] == "False":
 					self.otherApacheInstance = True
 					os.popen('rm '+os.path.join(self.customDir, "chroot/tmp/apache"))
-			    	if bool(modProps[self.modReqXnest]) == True:      
-					self.reqXnest = True
+			    	
 				
 				if modPath != None:
 				   	# check for execute
@@ -725,20 +723,14 @@ class Cooperationiws:
         remasterExists = None
         rootExists = None
         initrdExists = None
-	
+	workingDirOk = True
 	if os.path.exists(os.path.join(self.customDir, "remaster")) == False:
             if self.createRemasterDir == False:
-                remasterExists = False
+                workingDirOk = False
         if os.path.exists(os.path.join(self.customDir, "chroot")) == False:
             if self.createCustomRoot == False:
-                rootExists = False
+                workingDirOk = False
 	
-	workingDirOk = True
-        if remasterExists == False:
-            workingDirOk = False
-        if rootExists == False:
-            workingDirOk = False
-        
         if workingDirOk == False:
 		    lblWarningText = _("  <b>Please fix the errors below before continuing.</b>   \n")
 		    lblRemasterText = _("  There is no remaster directory.  Please select create remaster option.  ")
@@ -750,19 +742,7 @@ class Cooperationiws:
 		        print lblRootText
 	
         return workingDirOk
-
-   
-    def createShutdownScript(self):
-	    #Shutdown script initialisation
-            modExecShutdownWs = '#!/bin/sh\n'
-            #print modExecShutdownWs
-            fModExec=open(os.path.join(self.customDir, "scripts/shutdown_ws.sh"), 'w')
-            fModExec.write(modExecShutdownWs)
-            fModExec.close()
-	    
-   
-
-		
+	
 
 # ---------- Main thread ---------- #
     
@@ -823,7 +803,13 @@ class Cooperationiws:
 	if not os.path.exists(os.path.join(self.customDir, "scripts")):
 		os.makedirs(os.path.join(self.customDir, "scripts"))        
 	#create shutdown_ws script
-	self.createShutdownScript()	
+	#Shutdown script initialisation
+	modExecShutdownWs = '#!/bin/sh\n'
+	#print modExecShutdownWs
+	fModExec=open(os.path.join(self.customDir, "scripts/shutdown_ws.sh"), 'w')
+	fModExec.write(modExecShutdownWs)
+	fModExec.close()
+
 	# remaster dir
         if self.createRemasterDir == True:
             # check for existing directories and remove if necessary
@@ -847,11 +833,7 @@ class Cooperationiws:
             # copy remaster files
             os.popen('rsync -at --del ' + self.mountDir + '/ \"' + os.path.join(self.customDir, "remaster") + '\"')
             print _("Finished copying files...")
-	    
-	    
-	
-			
-            # unmount iso/cd-rom
+	    # unmount iso/cd-rom
             os.popen("umount " + self.mountDir)
 	
 	    
@@ -898,9 +880,6 @@ class Cooperationiws:
             os.popen('chmod 6755 \"' + os.path.join(self.customDir, "chroot/usr/bin/sudo") + '\"')
             os.popen('chmod 0440 \"' + os.path.join(self.customDir, "chroot/etc/sudoers") + '\"')
             print _("Finished extracting squashfs root...")
-        
-
-        	
 	      
 	print _("Finished setting up working directory...")
         print " "
@@ -1090,10 +1069,8 @@ class Cooperationiws:
 		os.popen('sed -i "s/initrd=\/'+self.casperPath+'\/initrd1.img/initrd=\/'+self.casperPathUpdated+'\/initrd.gz keyb='+self.keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg")) 
 		os.popen('sed -i "s/splash//g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
 		os.popen('echo '+self.keyLang+' > ' + os.path.join(self.customDir, "chroot/tmp/keyblang") )
-	#XNEST
+	
 	scriptCustomExec = '#!/bin/sh\n\n'
-	if self.reqXnest == True: 
-		scriptCustomExec += 'bash \"' + self.scriptDir + 'xnest.sh\"' + ' ;\n'
 	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init_Lampp.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "cert/" ) + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
@@ -1313,10 +1290,7 @@ class Cooperationiws:
 	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
         os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
 
-        # remove apt.conf
-        #print _("Removing apt.conf configuration...")
-        #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/*") + '\"')
-        # remove dns info
+       # remove dns info
         print _("Removing DNS info...")
         #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
         # umount /proc
@@ -1334,20 +1308,9 @@ class Cooperationiws:
 	self.casperPath = self.casperPathUpdated
         # manual software
         # check for manual install
-        if self.manualInstall == True:
-            print _("Manually installing all existing .deb archives in /var/cache/apt/archives...")
-            os.popen('chroot \"' + os.path.join(self.customDir, "chroot/") + '\"' + ' dpkg -i -R /var/cache/apt/archives/ 1>&2 2>/dev/null')
-            os.popen('chroot \"' + os.path.join(self.customDir, "chroot/") + '\"' + ' apt-get clean')
-            os.popen('chroot \"' + os.path.join(self.customDir, "chroot/") + '\"' + ' apt-get autoclean')
-
+        
 	#END SCRIPTS
-	if self.reqXnest == True: 
-		scriptEndExec = 'bash \"' + self.scriptDir + 'xnest_end.sh\"' + ' ;\n '
-	 	fscriptEndExec=open(os.path.join(self.customDir, "scriptEndExec.sh"), 'w')
-		fscriptEndExec.write(scriptEndExec)
-		fscriptEndExec.close()
-		os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptEndExec.sh"))
-		os.popen('bash \"' + os.path.join(self.customDir, "scriptEndExec.sh") + '\"')
+	
 	
 
 # ---------- Customize a non debian derivative operating system ---------- #
@@ -1460,89 +1423,13 @@ class Cooperationiws:
 
  
 
-# ---------- Post install ---------- #	
 
-    def launchPostInstall(self):
-        try:
-            # setup environment
-            # copy dns info
-            print _("Copying DNS info...")
-            os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
-            # mount /proc
-            print _("Mounting /proc filesystem...")
-            os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
-            # copy apt.conf
-            print _("Copying apt configuration...")
-            if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/")):
-                os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/"))
-            os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/"))
-            # copy wgetrc
-            print _("Copying wgetrc configuration...")
-            # backup
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
-            os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
-            print _("Copying hostname configuration...")
-            # backup
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
-            os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
-            os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
-	    # use gnome-terminal if available -- more features
-            print _('Launching Post install script customizations...')
-            os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/opt/ciws/share/lampp/config_post_install.sh"))
-	   
-	    os.system('chroot ' + os.path.join(self.customDir, "chroot") + ' /opt/ciws/share/lampp/config_post_install.sh')
-            
-            # restore wgetrc
-            print _("Restoring wgetrc configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-            
-            # remove dns info
-            print _("Restoring hostname configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-           
-	    print _("Removing DNS info...")
-            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
-            # umount /proc
-            print _("Umounting /proc...")
-            os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
-            
-            
-
-        except Exception, detail:
-            # restore settings
-            # restore wgetrc
-            print _("Restoring wgetrc configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-            # remove apt.conf
-            #print _("Removing apt.conf configuration...")
-            #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf") + '\"')
-            # remove dns info
-            print _("Restoring hostname configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-           
-	    print _("Removing DNS info...")
-            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
-            # umount /proc
-            print _("Umounting /proc...")
-            os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
-            
-            
-
-            errText = _('Error launching terminal: ')
-            print errText, detail
-            pass
-
-        return
 	
 
 # ---------- End of Install ---------- #
 
     def endInstall(self):
     	# execute last config 
-		self.launchPostInstall()
 		os.system('bash \"'+ os.path.join(self.customDir, "scripts/shutdown_ws.sh") + '\"')
 			
 		print _("Copying DNS info...")
@@ -1569,6 +1456,10 @@ class Cooperationiws:
            
            	#execute shutdown web server script
 		print _("Execute shutdown actions...")
+		os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/opt/ciws/share/lampp/config_post_install.sh"))
+	   
+	        os.system('chroot ' + os.path.join(self.customDir, "chroot") + ' /opt/ciws/share/lampp/config_post_install.sh')
+            
 		os.system('chroot \"' + os.path.join(self.customDir,"chroot/") +'\" /tmp/shutdown_ws.sh')
 		# cleanup
             	os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
@@ -1605,28 +1496,9 @@ class Cooperationiws:
 	        print _("Updating File lists...")
 	        q = ' dpkg-query -W --showformat=\'${Package} ${Version}\n\' '
 	        os.popen('chroot \"' + os.path.join(self.customDir, "chroot/") + '\"' + q + ' > \"' + os.path.join(self.customDir, "remaster/" + self.casperPath + "/filesystem.manifest") + '\"' )
-	        os.popen('cp -f \"' + os.path.join(self.customDir, "remaster/" + self.casperPath + "/filesystem.manifest") + '\" \"' + os.path.join(self.customDir, "remaster/" + self.casperPath + "/filesystem.manifest-desktop") + '\"')
-	        # check for existing squashfs root
-	        if os.path.exists(os.path.join(self.customDir, "remaster/" + self.casperPath + "/filesystem.squashfs")):
-	            print _("Removing existing SquashFS chroot...")
-	            os.popen('rm -Rf \"' + os.path.join(self.customDir, "remaster/" + self.casperPath + "/filesystem.squashfs") + '\"')
 	        print _("Building SquashFS root...")
-	        # check for alternate mksquashfs
-	        #if mksquashfs == '':
-		scriptMksquashfs = '#!/bin/bash \n'
-                scriptMksquashfs += 'cd ' + self.customDir + '\n'
-		scriptMksquashfs += 'echo \"I: Building squashfs\" \n'
-	        scriptMksquashfs += 'cp chroot/initrd.gz remaster/' + self.casperPath + '/. \n'
-	      	scriptMksquashfs += 'cp chroot/vmlinuz remaster/' + self.casperPath + '/. \n'
-	      	scriptMksquashfs += 'mksquashfs chroot remaster/' + self.casperPath + '/filesystem.squashfs -no-progress\n'
-	        scriptMksquashfs += 'exit 0 \n'
-		fscriptMksquashfs=open(os.path.join(self.customDir, "scriptMksquashfs.sh"), 'w')
-		fscriptMksquashfs.write(scriptMksquashfs)
-		fscriptMksquashfs.close()
-		os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptMksquashfs.sh"))
-		os.system('bash \"' + os.path.join(self.customDir, "scriptMksquashfs.sh")+ '\"')
+	        os.system('bash \"' + self.scriptDir + '/mksquashfs.sh\" \"' + self.customDir + '\" \"' + self.casperPath + '\"')
 	   	
-	       
 	if self.encryption != "disabled":		
 		fscriptEncryption=open(os.path.join(self.customDir, "/tmp/encryption"), 'w')
 		fscriptEncryption.write(self.encryption)
@@ -1652,7 +1524,7 @@ class Cooperationiws:
 	    if os.path.exists(os.path.join(self.customDir, "remaster")):
 	        print _("Creating ISO...")
 	        # add disc id
-	        os.popen('echo \"Built by Cooperation-iws ' + self.appVersion + ' - Rev ' + self.updateId + ' (c) Cooperation-iws Team, 2008 - http://cooperation-iws.gensys-net.eu\" > \"' + os.path.join(self.customDir, "remaster/.disc_id") + '\"')
+	        
 	        # update md5
 	        print _("Updating md5 sums...")
 	        os.popen('cd \"' + os.path.join(self.customDir, "remaster/") + '\"; ' + 'find . -type f -print0 | xargs -0 md5sum > md5sum.txt')
@@ -1671,8 +1543,6 @@ class Cooperationiws:
 	        elif self.LiveCdArch == "amd64":
 	            print _("Building x86_64 ISO...")
 	            os.popen('mkisofs -r -o \"' + self.buildLiveCdFilename + '\" -b \"isolinux/isolinux.bin\" -c \"isolinux/boot.cat\" -no-emul-boot -V \"' + self.LiveCdDescription + '\" -J -l \"' + os.path.join(self.customDir, "remaster") + '\"')
-	
-		
 		
 	# print status message
        

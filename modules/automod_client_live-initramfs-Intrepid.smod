@@ -67,6 +67,9 @@ cp /lib/modules/$kernel/updates/loop.ko /lib/modules/$kernel/kernel/drivers/bloc
 
 echo "loop" >> /etc/modules
 
+echo "
+modprobe -q loop max_loop=255" >> /usr/share/initramfs-tools/scripts/live-premount/modules
+
 
 echo "aufs" >> /etc/modules
 

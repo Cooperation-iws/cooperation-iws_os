@@ -27,10 +27,10 @@ echo "
 copy_exec /bin/loadkeys /bin
 mkdir \${DESTDIR}/usr/share ; cp -r /usr/share/keymaps \${DESTDIR}/usr/share/." >> /usr/share/initramfs-tools/hooks/live 
 
-#echo "
-#modprobe -q loop max_loop=255" >> /usr/share/initramfs-tools/scripts/live-premount/modules
+echo "
+modprobe -q loop max_loop=255" >> /usr/share/initramfs-tools/scripts/live-premount/modules
 
-echo "loop  max_loop=255" >> /etc/modules
+
 
 
 sed -i "3s/user/$(cat /tmp/user)/" /etc/live.conf

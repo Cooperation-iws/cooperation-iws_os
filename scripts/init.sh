@@ -37,7 +37,7 @@ HOSTNAME=$(cat /tmp/hostname)
 SILENT_INSTALL=$(cat /tmp/silent_install)
 
 #TEMP
-MIRROIR=$(cat /tmp/mirroir)
+
 URL_FREE=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)

@@ -21,7 +21,7 @@ DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 
 APACHE=$(cat /tmp/apache)
-MIRROIR=$(cat /tmp/mirroir)
+
 URL_FREE=$(cat /tmp/url_mirroir)
 CASPER_PATH=$(cat /tmp/casper_path)
 
