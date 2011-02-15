@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
-# Cooperation-iws -- http://www.cooperation-iws.eu
-#    Copyright (c) 2008-2009  Cooperation-iws Team <olivier@cooperation-iws.eu>
+# Cooperation-iws --
+#    Copyright (c) 2008-2011  Cooperation-iws Team 
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,7 +31,9 @@ import urllib
 
 class Cooperationiws:
 
-    
+
+# ---------- INIT ---------- # 
+  
     def __init__(self):
         # vars
  	self.appName = "Cooperation-iws"
@@ -102,13 +104,7 @@ class Cooperationiws:
 	
         #command options parser
         parser = optparse.OptionParser()
-        parser.add_option("-d", "--debug",
-                    action="store_true", dest="debug", default=False,
-                    help="run as debug")
-       
-        parser.add_option("-u", "--update",
-                    action="store_true", dest="update", default=False,
-                    help="automatically update to latest version")
+        
 	parser.add_option("-c", "--commandline",
                     action="store_true", dest="commandline", default=False,
                     help="command line option")
@@ -118,14 +114,15 @@ class Cooperationiws:
 	parser.add_option( "--directory",
                     dest="directory", default="" ,
                     help="Install directory")
+	#Deprecated, only here for compatibility purpose
 	parser.add_option( "--createdirectories", action="store_true",
                     dest="createdirectories", default=False ,
-                    help="Create install directory")
+                    help="Deprecated")
 	parser.add_option( "--isofile", 
                     dest="isofile", default="" ,
                     help="Initial Cd image")
 	parser.add_option( "--modulesfile", 
-                    dest="modulesfile", default="templates/empty" ,
+                    dest="modulesfile", default="bash/templates/empty" ,
                     help="Modules list file")
 	parser.add_option( "--artwork", 
                     dest="artwork", default="" ,
@@ -137,7 +134,7 @@ class Cooperationiws:
                     dest="aufs", default=False ,
                     help="Use aufs")
 	parser.add_option( "--webappmirror", 
-                    dest="webappmirror", default="http://download.berlios.de/ciws" ,
+                    dest="webappmirror", default="http://localhost:81" ,
                     help="Web applictions mirror url")
 	parser.add_option( "--debmirror", 
                     dest="debmirror", default="ftp://ftp.proxad.net/mirrors/ftp.ubuntu.com/ubuntu/" ,
@@ -174,7 +171,7 @@ class Cooperationiws:
                     help="Os Type (Server or Client)")
 	parser.add_option( "--disautologin", action="store_true",
                     dest="disautologin", default=False ,
-                    help="Use aufs")
+                    help="Disable autologin to your system")
 	parser.add_option( "--outputisoname", 
                     dest="outputisoname", default="cooperation-iws-server.iso" ,
                     help="Output iso image name")
@@ -205,9 +202,6 @@ class Cooperationiws:
         parser.add_option( "--encryption", 
                     dest="encryption", default="disabled",
                     help="Debian live encryption")
-	parser.add_option( "--pfsense", 
-                    dest="pfsense", action="store_true", default=False,
-                    help="Debian live encryption")
 	parser.add_option( "--encryptionpassphrase", 
                     dest="encryptionpassphrase", default="",
                     help="Debian live encryption passphrase")
@@ -215,77 +209,86 @@ class Cooperationiws:
                     dest="isotype", default="" ,
                     help="Type of Input Iso image")
         (options, args) = parser.parse_args()
-
-
         
-        
-        if options.update == True:
-            print _('INFO: Updating...')
-            self.update()
-	if options.commandline == True:
-            print _('INFO: Text only version...')
-            self.commandLine = True
-	    
-	    if options.listmodules == True:
+        print _('INFO: Text only version...')
+
+	#Init parameters and variables
+
+	self.commandLine = True
+
+	if options.listmodules == True:
 		self.listModules()
 		exit(0)
-	    self.customDir = options.directory
-	    if options.createdirectories == True:
-		self.createRemasterDir = True
-           	self.createCustomRoot = True
-	    self.isoFilename = options.isofile     
-	    if options.modulesfile == "":
+	self.customDir = options.directory
+	self.createRemasterDir = True
+	self.createCustomRoot = True
+	self.isoFilename = options.isofile     
+	if options.modulesfile == "":
 		print _("You need to specify a Modules list file")
 		exit(0)
-	    self.moduleFilename = options.modulesfile  
-	    self.comboboxCiwsArtwork = options.artwork       
-  	    self.comboboxCiwsCms = options.cms
-	    self.checkbuttonAufs = options.aufs
-	    self.checkbuttonLocalMirror = True
-	    self.entryLocalMirror = options.webappmirror
-	    self.comboboxWebAppMirrors = ""
-	    self.radiobuttonDefaultInstall = True
-	    self.user = options.username
-	    if self.user != "" and self.checkUserName() == False:
+	self.moduleFilename = options.modulesfile  
+	self.comboboxCiwsArtwork = options.artwork       
+	self.comboboxCiwsCms = options.cms
+	self.checkbuttonAufs = options.aufs
+	self.checkbuttonLocalMirror = True
+	self.entryLocalMirror = options.webappmirror
+	self.comboboxWebAppMirrors = ""
+	self.radiobuttonDefaultInstall = True
+	self.user = options.username
+	if self.user != "" and self.checkUserName() == False:
 		print _("You need to specify a username with at least 6 characters in this field of characters: [a-z0-9_-*.]")
 		exit(0)
-	    self.password = options.password
-	    self.userFull = options.userfullname
-	    self.host = options.host
-	    self.disableAutologin = options.disautologin
-	    self.debMirror = options.debmirror
-            self.debMirrorNonfree = options.debmirrorNonfree
-            self.debMirrorSecurity = options.debmirrorsecurity
-            self.keyLang = options.keyblang
-	    self.ciwsOsType = options.ostype
-	    self.isoname = options.outputisoname
-	    self.silent = options.silent
-	    self.debianLive = options.debianlive
-	    self.DebianLiveType =  options.debianLiveFlavor       
-	    self.DebianLiveReleaseType =  options.debianLiveOS         
-	    self.webconverger = options.webconverger
-	    self.webconvergerLocale = options.webconvergerlocale
-	    self.encryption = options.encryption
-	    self.encryptionpassphrase = options.encryptionpassphrase
-	    self.locale = options.locale
-	    self.locale = options.locale
-	    self.pfsense = options.pfsense
-	    self.isoType = options.isotype
-	    self.LiveCdArch=options.arch
+	self.password = options.password
+	self.userFull = options.userfullname
+	self.host = options.host
+	self.disableAutologin = options.disautologin
+	self.debMirror = options.debmirror
+	self.debMirrorNonfree = options.debmirrorNonfree
+	self.debMirrorSecurity = options.debmirrorsecurity
+	self.keyLang = options.keyblang
+	self.ciwsOsType = options.ostype
+	self.isoname = options.outputisoname
+	self.silent = options.silent
+	self.debianLive = options.debianlive
+	self.DebianLiveType =  options.debianLiveFlavor       
+	self.DebianLiveReleaseType =  options.debianLiveOS         
+	self.webconverger = options.webconverger
+	self.webconvergerLocale = options.webconvergerlocale
+	self.encryption = options.encryption
+	self.encryptionpassphrase = options.encryptionpassphrase
+	self.locale = options.locale
+	self.locale = options.locale
+	self.isoType = options.isotype
+	self.LiveCdArch=options.arch
 
-	    if self.pfsense == True:
-		self.nodebuntu == True
-		
-	else:
-	    self.commandLine = False
-
-
-
-	if os.path.exists(self.mountDir) == False:
-		    print _('INFO: Creating mount directory...')
-		    os.makedirs(self.mountDir)
-
+	#Init the app
         self.commandLineGui()
+
+
+# ---------- Verify Custom Dir has been created ---------- #
+    
+    def checkCustomDir(self):
+        if self.customDir == "":
+            return False
+        else:
+            if os.path.exists(self.customDir) == False:
+                os.makedirs(self.customDir)
+            return True
+
+
+# ---------- Verify Username is correctly formated ---------- #    
+       
+    def checkUserName(self):
+	if int(commands.getoutput('echo ' + self.user + ' | wc -m')) > 6 :
+		if commands.getoutput('echo '  + self.user + '| grep \'^[a-z0-9_-*.]*$\'') != '':
+	    		return True
+		else:
+	    		return False
+        else:
+            	return False
+
+
+# ---------- Check dependencies ---------- #
 
     # Check for Application Dependencies
     def checkDependencies(self):
@@ -317,8 +320,8 @@ class Cooperationiws:
             exit(0)
         
 
-
-        #detect Live CD version
+# ---------- Detect Live CD version ---------- #
+       
     def checkLiveCdVersion(self):
 	    print "\nLive CD type is:"
             if  self.debianLive == True:
@@ -440,7 +443,8 @@ class Cooperationiws:
 		print "Live CD not detected, Aborting"
 
 
-    # Handle Module Properties
+# ---------- Handle Module Properties ---------- #
+     
     def getModuleProperties(self, moduleName):
 	if self.commandLine == False:         
 		print _('Loading module properties...')
@@ -526,6 +530,7 @@ class Cooperationiws:
         return properties
 
                             
+# ---------- List Modules ---------- #
 
     def listModules(self):
 	print _('Listing modules...')
@@ -556,6 +561,9 @@ class Cooperationiws:
                         print str(os.path.basename(modPath))  + " | " +str(modProps[self.modDescriptionKey]) + " | "  +str(modProps[self.modAuthorKey]) + " | "+ str(modProps[self.modVersionKey]) + " | "  + str(bool(modProps[self.modReqApache]))+ " | " +str(bool(modProps[self.modRunInChrootKey]))+ "\n"
 						
                        	count +=1
+
+
+# ---------- Parse Modules ---------- #
 			
     def cmdLoadModules(self):
 	print _('Listing choosen modules...\n')
@@ -623,6 +631,7 @@ class Cooperationiws:
 					    os.popen('chmod a+x \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(modPath) + '\"')
 
 
+# ---------- Copy Modules ---------- #
     
     def cmdCopyExecuteModule(self, model):
      
@@ -653,93 +662,18 @@ class Cooperationiws:
 	            print modName + ' - Running in custom directory...'
 	            os.popen('cp -R \"' + modPath + '\" \"' + os.path.join(self.customDir, "scripts/") + '\"')
 	            os.popen('chmod a+x \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(modPath) + '\"')
-	
    
-
-    
-    def checkSetup(self):
-        setup = False
-        if self.createRemasterDir == True:
-            setup = True
-        elif self.createCustomRoot == True:
-            setup = True
-        else:
-            # nothing to be done
-            setup = False
-        return setup
-
-   
-    def checkCustomDir(self):
-        if self.customDir == "":
-            return False
-        else:
-            if os.path.exists(self.customDir) == False:
-                os.makedirs(self.customDir)
-            return True
-
-    
-       
-    def checkUserName(self):
-	if int(commands.getoutput('echo ' + self.user + ' | wc -m')) > 6 :
-		if commands.getoutput('echo '  + self.user + '| grep \'^[a-z0-9_-*.]*$\'') != '':
-	    		return True
-		else:
-	    		return False
-        else:
-            	return False
-
-       
-    def checkWorkingDir(self):
-        # check for existing directories; if not warn...
-        remasterExists = None
-        rootExists = None
-        initrdExists = None
-	workingDirOk = True
-	if os.path.exists(os.path.join(self.customDir, "remaster")) == False:
-            if self.createRemasterDir == False:
-                workingDirOk = False
-        if os.path.exists(os.path.join(self.customDir, "chroot")) == False:
-            if self.createCustomRoot == False:
-                workingDirOk = False
-	
-        if workingDirOk == False:
-		    lblWarningText = _("  <b>Please fix the errors below before continuing.</b>   \n")
-		    lblRemasterText = _("  There is no remaster directory.  Please select create remaster option.  ")
-		    lblRootText = _("  There is no root directory.  Please select create root option.  ")
-		    print lblWarningText
-		    if remasterExists == False:
-		        print lblRemasterText
-		    if rootExists == False:
-		        print lblRootText
-	
-        return workingDirOk
-	
 
 # ---------- Main thread ---------- #
     
     def commandLineGui(self):
 	self.checkDependencies()
-	if self.pfsense == True:
-		if self.checkCustomDir() == True:
- 			if self.checkWorkingDir() == True:
-				self.setupWorkingDirectory()
-				os.popen("cp "+self.moduleFilename + " /tmp/app_params")
-				os.popen("echo \""+self.isoname+"\" > /tmp/output_iso_name")
-				fWorkDir=open('/tmp/working-directory', 'w')
-       				fWorkDir.write(self.customDir)
-       				fWorkDir.close()
-				self.cmdLoadModules()
-				fWorkDir=open('/tmp/iso-filename', 'w')
-		        	fWorkDir.write(self.isoFilename)
-		        	fWorkDir.close()
-				self.customizeNodebuntu()	
-	elif self.checkCustomDir() == True:
-                if self.checkSetup() == True:
-                    if self.checkWorkingDir() == True:
-			if self.debianLive == True:			
-				self.setupDebianLive()           		
-			else:
-				self.setupWorkingDirectory()
+	
+	if self.checkCustomDir() == True:
+		if self.debianLive == True:			
+			self.setupDebianLive()           		
+		else:
+			self.setupWorkingDirectory()
 		self.cmdLoadModules()
 		os.popen("cp "+self.moduleFilename + " " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
 		os.popen("chmod +x " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
@@ -759,8 +693,6 @@ class Cooperationiws:
 		self.buildLiveCdFilename = os.path.join(self.customDir, self.isoname)
 		self.LiveCdDescription = "cooperation-iws-custom"
 		
-		self.hfsMap = os.getcwd() + "/lib/hfs.map"
-		
 		self.build()
 		
 	
@@ -771,6 +703,11 @@ class Cooperationiws:
 
     def setupWorkingDirectory(self):
         print _("INFO: Setting up working directory...")
+
+	if os.path.exists(self.mountDir) == False:
+		    print _('INFO: Creating mount directory...')
+		    os.makedirs(self.mountDir)
+		
 	if not os.path.exists(os.path.join(self.customDir, "scripts")):
 		os.makedirs(os.path.join(self.customDir, "scripts"))        
 	
@@ -850,6 +787,7 @@ class Cooperationiws:
 	print _("Finished setting up working directory...")
         print " "
         return False
+
 
 # ---------- Debian Live option ---------- #
     
@@ -932,8 +870,7 @@ class Cooperationiws:
 	fdebDist.write(self.debDist)
 	fdebDist.close()
 	self.checkLiveCdVersion()
- 
-	
+ 	
 	
 # ---------- Customize Live ---------- #
 
@@ -1192,9 +1129,7 @@ class Cooperationiws:
             modExecLamppChroot += 'bash \"/tmp/end_Lampp.sh\"' + ' ;\n '
 	    modExecLamppChroot += 'sleep 10\n'
 	    
-	    
-        #modExecScrChroot += 'echo \'Press [Enter] to continue...\'\nread \n'
-        #print modExecScr
+
         fModExec=open(os.path.join(self.customDir, "scripts/module-exec.sh"), 'w')
         fModExec.write(modExecScr)
         fModExec.close()
@@ -1210,10 +1145,6 @@ class Cooperationiws:
         os.popen('chmod a+x ' + os.path.join(self.customDir, "chroot/tmp/lampp-exec.sh"))
         os.popen('echo "normal" > '+os.path.join(self.customDir, "chroot/tmp/in_chroot"))
    	
-	#os.popen('xterm -title \'Reconstructor Module Exec\' -e chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/module-exec.sh')
-        # copy dns info
-        print _("Copying DNS info...")
-        os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
         # mount /proc
         print _("Mounting /proc filesystem...")
         os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
@@ -1256,9 +1187,6 @@ class Cooperationiws:
 	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
         os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
 
-       # remove dns info
-        print _("Removing DNS info...")
-        #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
         # umount /proc
         print _("Umounting /proc...")
         os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
@@ -1272,12 +1200,7 @@ class Cooperationiws:
 	if self.casperPath == "casper" :        
 		os.popen('mv \"' + os.path.join(self.customDir, "remaster/"+self.casperPath) + '\" \"' + os.path.join(self.customDir, "remaster/"+self.casperPathUpdated ) + '\"')
 	self.casperPath = self.casperPathUpdated
-        # manual software
-        # check for manual install
-        
-	#END SCRIPTS
-	
-	
+        	
 
 # ---------- Customize a non debian derivative operating system ---------- #
 
@@ -1311,9 +1234,6 @@ class Cooperationiws:
     def launchTerminal(self):
         try:
             # setup environment
-            # copy dns info
-            print _("Copying DNS info...")
-            os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
             # mount /proc
             print _("Mounting /proc filesystem...")
             os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
@@ -1356,9 +1276,6 @@ class Cooperationiws:
             print _("Restoring hostname configuration...")
             os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
             os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-           
-	    print _("Removing DNS info...")
-            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
             # umount /proc
             print _("Umounting /proc...")
             os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
@@ -1373,14 +1290,11 @@ class Cooperationiws:
             #print _("Removing apt.conf configuration...")
             #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf") + '\"')
             # remove dns info
-            print _("Removing DNS info...")
-            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
+            
+            
             # umount /proc
             print _("Umounting /proc...")
             os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
-            
-            
-
             errText = _('Error launching terminal: ')
             print errText, detail
             pass
@@ -1391,65 +1305,66 @@ class Cooperationiws:
 # ---------- End of Install ---------- #
 
     def endInstall(self):
-    	# execute last config 
-		os.system('bash \"'+ os.path.join(self.customDir, "scripts/shutdown_ws.sh") + '\"')
-			
-		print _("Copying DNS info...")
-                os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
-           	# mount /proc
-	    	print _("Mounting /proc filesystem...")
-	    	os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
-	    	# copy apt.conf
-	    	print _("Copying apt.conf configuration...")
-	    	if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d")):
-			os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
-	   	os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
-	   	# copy wgetrc
-	   	print _("Copying wgetrc configuration...")
-	   	# backup
-	   	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
-	   	os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
-	   	print _("Copying hostname configuration...")
-           	# backup
-           	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
-            	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
-            	os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
-            	os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
-           
-           	#execute shutdown web server script
-		print _("Execute shutdown actions...")
-		os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/opt/ciws/share/lampp/config_post_install.sh"))
-	   
-	        os.system('chroot ' + os.path.join(self.customDir, "chroot") + ' /opt/ciws/share/lampp/config_post_install.sh')
-            
-		os.system('chroot \"' + os.path.join(self.customDir,"chroot/") +'\" /tmp/shutdown_ws.sh')
-		# cleanup
-            	os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
-            	os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/tmp/module-exec.sh") + '\" 1>&2 2>/dev/null')
-            	# restore wgetrc
-            	print _("Restoring wgetrc configuration...")
-            	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-            	# remove dns info
-		print _("Restoring hostname configuration...")
-                os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
-                os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-                       	
-		print _("Removing DNS info...")
-            	#os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
-            	# umount /proc
-            	print _("Umounting /proc...")
-            	os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
+	print " "
+	print _("INFO: Finishing customization...")
+	print " "    		
+	#Executing shutdown scripts outside chroot
+	os.system('bash \"'+ os.path.join(self.customDir, "scripts/shutdown_ws.sh") + '\"')
+
+   	# mount /proc
+    	print _("Mounting /proc filesystem...")
+    	os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
+
+    	# copy apt.conf
+    	print _("Copying apt.conf configuration...")
+    	if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d")):
+		os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
+   	os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
+
+   	# copy wgetrc
+   	print _("Copying wgetrc configuration...")
+   	# backup
+   	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
+   	os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
+   	print _("Copying hostname configuration...")
+   	
+	# backup
+   	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
+    	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
+    	os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
+    	os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
+     	
+	#execute shutdown web server script
+	print _("Execute shutdown actions...")
+	os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/opt/ciws/share/lampp/config_post_install.sh"))
+        os.system('chroot ' + os.path.join(self.customDir, "chroot") + ' /opt/ciws/share/lampp/config_post_install.sh')
+  	os.system('chroot \"' + os.path.join(self.customDir,"chroot/") +'\" /tmp/shutdown_ws.sh')
+	
+	# cleanup
+    	os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
+    	os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/tmp/module-exec.sh") + '\" 1>&2 2>/dev/null')
+
+    	# restore wgetrc
+    	print _("Restoring wgetrc configuration...")
+    	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
+
+    	# remove dns info
+	print _("Restoring hostname configuration...")
+        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
+        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
+
+    	# umount /proc
+    	print _("Umounting /proc...")
+    	os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
 
 
 # ---------- Build ---------- #
+
     def build(self):
 
 	print " "
 	print _("INFO: Starting Build...")
 	print " "
-	# build initrd
-	
-
 	# build squash root
 	if self.buildSquashRoot == True:
 	    # create squashfs root
@@ -1486,9 +1401,7 @@ class Cooperationiws:
 	        if os.path.exists(self.buildLiveCdFilename):
 	            print _("Removing existing ISO...")
 	            os.popen('rm -Rf \"' + self.buildLiveCdFilename + '\"')
-	        # build
-	        # check for description - replace if necessary
-	        
+	                        
 	        # build iso according to architecture
 	        if self.LiveCdArch == "686":
 	            print _("Building x86 ISO...")
@@ -1502,9 +1415,10 @@ class Cooperationiws:
         statusMsgISO = _('      Finished. ISO located at: ')
         print "\033[1m "+ statusMsgISO + "\033[0m"+ self.buildLiveCdFilename
 
-        print "Build Complete..."
+        print  _("Build Complete...")
 
-# ---------- MAIN ----------
+
+# ---------- MAIN ----------#
 
 if __name__ == "__main__":
     APPDOMAIN='cooperationiws'

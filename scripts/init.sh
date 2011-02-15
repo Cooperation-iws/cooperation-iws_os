@@ -103,10 +103,10 @@ deb $DEB_MIRROR_PATH/ $DEB_DIST main contrib non-free
 deb-src $DEB_MIRROR_PATH/ $DEB_DIST main contrib 
 #Multimedia
 deb $DEBNONFREE_MIRROR_PATH $DEB_DIST main 
-deb-src http://www.debian-multimedia.org $DEB_DIST main 
+deb-src $DEBNONFREE_MIRROR_PATH $DEB_DIST main 
 #Security
 deb $DEB_MIRROR_SECURITY_PATH $DEB_DIST/updates main contrib non-free
-deb-src http://security.debian.org/ $DEB_DIST/updates main contrib 
+deb-src $DEB_MIRROR_SECURITY_PATH $DEB_DIST/updates main contrib 
 " > /etc/apt/sources.list
 export DEBIAN_FRONTEND="dialog"
 fi
