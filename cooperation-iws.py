@@ -141,13 +141,10 @@ class Cooperationiws:
                     help="Debian packages mirror url")
 	parser.add_option( "--debmirrornonfree", 
                     dest="debmirrorNonfree", default="http://packages.medibuntu.org/" ,
-                    help="Non Free Debian packages mirror url")
+                    help="Non Free Debian packages mirror url, medibuntu, debian-multimedia, ...")
 	parser.add_option( "--debmirrorsecurity", 
                     dest="debmirrorsecurity", default="http://security.debian.org/" ,
                     help="Security packages for Debian OS")
-	parser.add_option( "--custom", action="store_false",
-                    dest="custom", default=False ,
-                    help="Custom install")
 	parser.add_option( "--username", 
                     dest="username", default="" ,
                     help="User Name")
@@ -175,6 +172,7 @@ class Cooperationiws:
 	parser.add_option( "--outputisoname", 
                     dest="outputisoname", default="cooperation-iws-server.iso" ,
                     help="Output iso image name")
+	#Deprecated, only here for compatibility purpose
 	parser.add_option( "--silent", 
                     dest="silent", action="store_true",
                     default=False ,
@@ -248,7 +246,7 @@ class Cooperationiws:
 	self.keyLang = options.keyblang
 	self.ciwsOsType = options.ostype
 	self.isoname = options.outputisoname
-	self.silent = options.silent
+	self.silent = True
 	self.debianLive = options.debianlive
 	self.DebianLiveType =  options.debianLiveFlavor       
 	self.DebianLiveReleaseType =  options.debianLiveOS         
