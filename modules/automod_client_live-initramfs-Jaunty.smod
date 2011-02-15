@@ -181,4 +181,37 @@ sed -i '902s/${snapback}/${mountpoint}/' /usr/share/initramfs-tools/scripts/live
 
 fi
 
+sed -i "135G" /usr/share/initramfs-tools/scripts/live
+sed -i "135G" /usr/share/initramfs-tools/scripts/live
+sed -i '136s/^/KBD="${ARGUMENT#*=}"/' /usr/share/initramfs-tools/scripts/live
+sed -i '137s/^/export KBD/' /usr/share/initramfs-tools/scripts/live
+sed -i -e "961s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "1297s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "1306s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "14s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "16s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+
+sed -i "137G" /usr/share/initramfs-tools/scripts/live
+sed -i "137G" /usr/share/initramfs-tools/scripts/live
+sed -i '138s/^/LOCALE="${KBD}"/' /usr/share/initramfs-tools/scripts/live
+sed -i '139s/^/export LOCALE/' /usr/share/initramfs-tools/scripts/live
+#temporary hack to delete lang2local warning bug
+sed -i '189s/^/#/' /usr/share/initramfs-tools/scripts/live
+sed -i '31s/^/mkdir \/usr\/share ; cp -r \/usr\/share\/keymaps \/usr\/share\/./' /usr/share/initramfs-tools/hooks/keymap
+sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '176s/^/loadkeys $KBD > \/dev\/null 2>\&1/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '177s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '178s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '179s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '180s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
+
+
+echo "I: Delete examples directory on the desktop"
+CHERCHE='chroot \/root install -o $USERNAME -g $USERNAME -d \/home\/$USERNAME\/Desktop\/'
+sed -i "s/^[ \t]*${CHERCHE}/#${CHERCHE}/" \
+	/usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/10adduser
+#Désactiver alias Examples sur bureau
+CHERCHE='mv \/root\/home\/$USERNAME\/Examples \/root\/home\/$USERNAME\/Desktop\/'
+sed -i "s/^[ \t]*${CHERCHE}/#${CHERCHE}/" \
+	/usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/10adduser
 
