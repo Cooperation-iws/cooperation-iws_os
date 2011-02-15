@@ -787,7 +787,7 @@ class Cooperationiws:
 		self.buildUsb = False
 		self.buildLiveCdFilename = os.path.join(self.customDir, self.isoname)
 		self.LiveCdDescription = "cooperation-iws-custom"
-		self.LiveCdRemovePrograms = True
+		
 		self.hfsMap = os.getcwd() + "/lib/hfs.map"
 		
 		self.build()
@@ -957,8 +957,8 @@ class Cooperationiws:
 			self.debDist= 'etch'	
 	if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'lenny\'') != '':	    	
 			self.debDist= 'lenny'			
-	if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'sid\'') != '':	    	
-			self.debDist= 'sid'	
+	if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'squeeze\'') != '':	    	
+			self.debDist= 'squeeze'	
 	fcasper=open(os.path.join(self.customDir, "chroot/tmp/casper_path"), 'w')
 	fcasper.write(self.casperPath)
 	fcasper.close()
@@ -1508,16 +1508,7 @@ class Cooperationiws:
 		fscriptPassphrase.close()
 		os.system('bash \"' + self.scriptDir + '/encrypt.sh\"')
 		os.popen('sed -i \"s/boot=live/boot=live encryption=' + self.encryption + '/g\" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") ) 
-	# remove windows programs
-	if self.LiveCdRemovePrograms == True:
-	    print _('Removing Win32 versions of Firefox, Thunderbird, etc. ...')
-	    os.popen('rm -Rf \"' + os.path.join(self.customDir, "remaster/bin") + '\"')
-	    os.popen('rm -Rf \"' + os.path.join(self.customDir, "remaster/programs") + '\"')
-	    os.popen('rm -Rf \"' + os.path.join(self.customDir, "remaster/autorun.inf") + '\"')
-	    os.popen('rm -Rf \"' + os.path.join(self.customDir, "remaster/start.ini") + '\"')
-	    os.popen('rm -Rf \"' + os.path.join(self.customDir, "remaster/start.exe") + '\"')
-	    os.popen('rm -Rf \"' + os.path.join(self.customDir, "remaster/start.bmp") + '\"')
-
+	
 	# build iso
 	if self.buildIso == True:
 	    # create iso
