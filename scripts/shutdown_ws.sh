@@ -30,71 +30,6 @@ rm /usr/sbin/policy-rc.d
 mv /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
 fi
 
-if [ "$(echo "${OS_TYPE}" | awk  '{print $1}')" == "Server" ]; then
-echo "I: configuring $CASPER_PATH"
-if [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "casper" ]; then
-if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "intrepid" ]; then
-sed -i -e "406s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "413s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "10s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "12s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-
-else
-sed -i -e "405s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "412s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "13s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "15s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-fi
-else
-sed -i "135G" /usr/share/initramfs-tools/scripts/live
-sed -i "135G" /usr/share/initramfs-tools/scripts/live
-sed -i '136s/^/KBD="${ARGUMENT#*=}"/' /usr/share/initramfs-tools/scripts/live
-sed -i '137s/^/export KBD/' /usr/share/initramfs-tools/scripts/live
-
-#sed -i -e "904s/\/home/\/var/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "961s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "1297s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "1306s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "14s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "16s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-
-sed -i "137G" /usr/share/initramfs-tools/scripts/live
-sed -i "137G" /usr/share/initramfs-tools/scripts/live
-sed -i '138s/^/LOCALE="${KBD}"/' /usr/share/initramfs-tools/scripts/live
-sed -i '139s/^/export LOCALE/' /usr/share/initramfs-tools/scripts/live
-#temporary hack to delete lang2local warning bug
-sed -i '189s/^/#/' /usr/share/initramfs-tools/scripts/live
-sed -i '31s/^/mkdir \/usr\/share ; cp -r \/usr\/share\/keymaps \/usr\/share\/./' /usr/share/initramfs-tools/hooks/keymap
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '176s/^/loadkeys $KBD > \/dev\/null 2>\&1/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '177s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '178s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '179s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '180s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
-
-
-				
-fi
-elif [ "$(echo "${CASPER_PATH}" | awk  '{print $1}')" == "live" ]; then
-sed -i "135G" /usr/share/initramfs-tools/scripts/live
-sed -i "135G" /usr/share/initramfs-tools/scripts/live
-sed -i '136s/^/KBD="${ARGUMENT#*=}"/' /usr/share/initramfs-tools/scripts/live
-sed -i '137s/^/export KBD/' /usr/share/initramfs-tools/scripts/live
-sed -i "137G" /usr/share/initramfs-tools/scripts/live
-sed -i "137G" /usr/share/initramfs-tools/scripts/live
-sed -i '138s/^/LOCALE="${KBD}"/' /usr/share/initramfs-tools/scripts/live
-sed -i '139s/^/export LOCALE/' /usr/share/initramfs-tools/scripts/live
-#temporary hack to delete lang2local warning bug
-sed -i '189s/^/#/' /usr/share/initramfs-tools/scripts/live
-sed -i '31s/^/mkdir ${DESTDIR}\/usr\/share ; cp -r \/usr\/share\/keymaps ${DESTDIR}\/usr\/share\/./' /usr/share/initramfs-tools/hooks/keymap
-sed -i '175G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '176s/^/loadkeys $KBD > \/dev\/null 2>\&1/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '177s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '178s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '179s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '180s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
-
-fi
 
 echo "I: Configuring Apache2 for domains"
 
@@ -114,15 +49,6 @@ sed -i "5s/^/ServerAlias wwi.$domain/" /etc/apache2/sites-available/default-ssl
 sed -i "6s/^/ServerAlias $HOSTNAME.$domain/" /etc/apache2/sites-available/default-ssl
 
 fi
-
-echo "I: Delete examples directory on the desktop"
-CHERCHE='chroot \/root install -o $USERNAME -g $USERNAME -d \/home\/$USERNAME\/Desktop\/'
-sed -i "s/^[ \t]*${CHERCHE}/#${CHERCHE}/" \
-	/usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/10adduser
-#Désactiver alias Examples sur bureau
-CHERCHE='mv \/root\/home\/$USERNAME\/Examples \/root\/home\/$USERNAME\/Desktop\/'
-sed -i "s/^[ \t]*${CHERCHE}/#${CHERCHE}/" \
-	/usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/10adduser
 
 
 echo "I: configuring persistence"
@@ -354,8 +280,6 @@ rm /var/cache/apt/archives/partial/* > /dev/null 2>&1
 if [ "$(echo "${OS_TYPE}" | awk  '{print $1}')" == "Server" ]; then
 
 echo "I: displacing directories"
-
-
 mv /etc/cron.d $LAMPP_DIRECTORY/etc
 ln -s $LAMPP_DIRECTORY/etc/cron.d /etc/cron.d
 
@@ -373,15 +297,8 @@ mv /var/log /opt/ciws/var
 ln -s /opt/ciws/var/log /var/log
 
 echo "I: config persistent directory"
-
-
 mkdir /etc/ciws
 cp -a /opt/ciws/* /etc/ciws/.
 fi
 
-if [ "$(echo $SILENT | awk  '{print $1}')" == "" ]; then
 
-echo "----------------Cooperation-iws----------------
-------------Press Enter / Appuyer sur entrée----------"
-read ok < /dev/tty
-fi

@@ -34,10 +34,7 @@ class Cooperationiws:
     
     def __init__(self):
         # vars
-        
-
-	
-	self.appName = "Cooperation-iws"
+ 	self.appName = "Cooperation-iws"
         self.appVersion = "0.9.2"
         self.updateId = "325"
         self.cdUbuntuVersion = ''
@@ -84,8 +81,7 @@ class Cooperationiws:
         self.regexUbuntuAltPackages = '^Package:\s+(\S*)\n'
         self.execModulesEnabled = False
         # time command for timing operations
-        self.timeCmd = commands.getoutput('which time') + ' -f \"\nBuild Time: %E  CPU: %P\n\"'
-	self.reqXnest = False
+        self.reqXnest = False
         self.ReqApache = "B"
 	self.nodebuntu = False
 
@@ -276,7 +272,7 @@ class Cooperationiws:
 	    self.locale = options.locale
 	    self.pfsense = options.pfsense
 	    self.isoType = options.isotype
-	    self.arch=options.arch
+	    self.LiveCdArch=options.arch
 
 	    if self.pfsense == True:
 		self.nodebuntu == True
@@ -351,7 +347,127 @@ class Cooperationiws:
             print _('Ok.')
 
 
-    
+        #detect Live CD version
+    def checkLiveCdVersion(self):
+	    print "\nLive CD type is:"
+            if  self.debianLive == True:
+		self.casperPath = 'live'	
+		self.debDist= self.DebianLiveReleaseType
+		self.distVariant = self.DebianLiveReleaseType		
+		print "\033[1m Edubuntu 8.10 Live CD\033[0m\n"
+	    elif  self.isoType == "edubuntu_8.10":
+		self.casperPath = 'casper'	
+		self.debDist= 'intrepid'
+		self.distVariant = 'edubuntu_8.10'
+	    elif  self.isoType == "edubuntu_9.04":
+		self.casperPath = 'casper'	
+		self.debDist= 'jaunty'
+		self.distVariant = 'edubuntu_9.04'		
+		print "\033[1m Edubuntu 8.10 Live CD\033[0m\n"	
+	    elif  self.isoType == "eeebuntu_8.10":
+		self.casperPath = 'casper'	
+		self.debDist= 'intrepid'
+		self.distVariant = 'eeebuntu_8.10'		
+		print "\033[1m Eeebuntu 8.10 Live CD\033[0m\n" 
+	    elif  self.isoType == "studio_8.10":
+		self.casperPath = 'casper'	
+		self.debDist= 'intrepid'
+		self.distVariant = 'studio_8.10'		
+		print "\033[1m Ubuntu Studio 8.10 Live CD\033[0m\n" 
+	    elif  self.isoType == "studio_9.04":
+		self.casperPath = 'casper'	
+		self.debDist= 'jaunty'
+		self.distVariant = 'studio_9.04'		
+		print "\033[1m Ubuntu Studio 9.04 Live CD\033[0m\n" 
+	    elif  self.isoType == "netbook-remix_8.10":
+		self.casperPath = 'casper'	
+		self.debDist= 'intrepid'
+		self.distVariant = 'netbook-remix_8.10'		
+		print "\033[1m Netbook remix 8.10 Live CD\033[0m\n"
+	    elif  self.isoType == "nubuntu_8.10":
+		self.casperPath = 'casper'	
+		self.debDist= 'intrepid'
+		self.distVariant = 'nubuntu_8.10'		
+		print "\033[1m Nbuntu8.10 Live CD\033[0m\n"
+	    elif  self.isoType == "maryan_8.04.1":
+		self.casperPath = 'casper'	
+		self.debDist= 'hardy'
+		self.distVariant = 'maryan_8.04.1'		
+		print "\033[1m Maryan 8.10 Live CD\033[0m\n"	
+	    elif  self.isoType == "opengeu_8.04.1":
+		self.casperPath = 'casper'	
+		self.debDist= 'hardy'
+		self.distVariant = 'opengeu_8.04.1'		
+		print "\033[1m Opengeu 8.04.1 Live CD\033[0m\n"
+            elif  self.isoType == "ozos-0.9":
+		self.casperPath = 'casper'	
+		self.debDist= 'hardy'
+		self.distVariant = 'ozos-0.9'		
+		print "\033[1m Ozos 0.9 Live CD\033[0m\n"
+            elif  self.isoType == "poseidon-3.1":
+		self.casperPath = 'casper'	
+		self.debDist= 'hardy'
+		self.distVariant = 'poseidon-3.1'		
+		print "\033[1m Poseidon 3.1 Live CD\033[0m\n"		
+	    elif os.path.exists(os.path.join(self.customDir, "remaster/boot/grub")) and commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/boot/grub/menu.lst") + '| grep \'Webconverger\'') != '':
+		self.casperPath = 'live'
+		self.debDist= 'lenny'
+		self.distVariant = 'webconverger'	
+		print "\033[1m Webconverger Live CD\033[0m\n"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' | grep \'Elyssa\'') != '':
+		self.casperPath = 'casper'
+		self.debDist = 'hardy'
+		self.distVariant = 'mint'			
+		print "\033[1m Linux Mint 5 Elyssa\033[0m\n"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' | grep \'nUbuntu\'') != '' and commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '':
+		self.casperPath = 'casper'
+		self.debDist = 'hardy'
+		self.distVariant = 'nUbuntu'			
+		print "\033[1m  nUbuntu 8.04\033[0m\n"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'etch\'') != '':
+		self.casperPath = 'casper'
+		self.debDist= 'etch'
+		self.distVariant = 'etch'			
+		print "\033[1m Debian Etch Live CD\033[0m\n"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'20070727\'') != '':
+		self.casperPath = 'casper'
+		self.debDist= 'studio64'
+		self.distVariant = 'studio64'			
+		print "\033[1m Studio 64 Live CD\033[0m\n"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '' or commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'hardy\'') != '':
+		self.casperPath = 'casper'	
+		self.debDist= 'hardy'
+		self.distVariant = 'hardy'		
+		print "\033[1m Ubuntu 8.04 Live CD\033[0m\n"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'9.04\'') != '':
+		self.casperPath = 'casper'	
+		self.debDist= 'jaunty'
+		self.distVariant = 'jaunty'		
+		print "\033[1m Ubuntu 9.04 Live CD\033[0m\n"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.10\'') != '':
+		self.casperPath = 'casper'	
+		self.debDist= 'intrepid'
+		self.distVariant = 'intrepid'		
+		print "\033[1m Ubuntu 8.10 Live CD\033[0m\n"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'lenny\'') != '':
+		self.casperPath = 'live'
+		self.debDist= 'lenny'
+		self.distVariant = 'lenny'	
+		print "Debian Lenny Live CD\033[0m\n"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + '| grep \'vyatta\'') != '':
+		self.casperPath = 'live'
+		self.debDist= 'lenny'
+		self.distVariant = 'vyatta'	
+		print "\033[1m Vyatta Live CD\033[0m\n"
+	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'sid\'') != '':	    	
+		self.debDist= 'sid'			
+		self.casperPath = 'live'
+		self.distVariant = 'sid'
+		print "\033[1m Debian Sid Live CD\033[0m\n"
+	    	
+	    else:
+		print "Live CD not detected, Aborting"
+
 
     # Handle Module Properties
     def getModuleProperties(self, moduleName):
@@ -592,21 +708,8 @@ class Cooperationiws:
                 os.makedirs(self.customDir)
             return True
 
-    def checkWindowsPrograms(self):
-        apps = False
-        if os.path.exists(os.path.join(self.customDir, "remaster/bin")):
-            apps = True
-        if os.path.exists(os.path.join(self.customDir, "remaster/programs")):
-            apps = True
-        return apps
-
-    # checks if user entered custom password matches
-    def checkUserPassword(self):
-        if self.password == self.passwordCheck:
-            return True
-        else:
-            return False
     
+       
     def checkUserName(self):
 	if int(commands.getoutput('echo ' + self.user + ' | wc -m')) > 6 :
 		if commands.getoutput('echo '  + self.user + '| grep \'^[a-z0-9_-*.]*$\'') != '':
@@ -658,346 +761,8 @@ class Cooperationiws:
             fModExec.close()
 	    
    
-    # launch chroot terminal
-    def launchTerminal(self):
-        try:
-            # setup environment
-            # copy dns info
-            print _("Copying DNS info...")
-            os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
-            # mount /proc
-            print _("Mounting /proc filesystem...")
-            os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
-            # copy apt.conf
-            print _("Copying apt configuration...")
-            if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/")):
-                os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/"))
-            os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/"))
-            # copy wgetrc
-            print _("Copying wgetrc configuration...")
-            # backup
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
-            os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
-            print _("Copying hostname configuration...")
-            # backup
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
-            os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
-            os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
-           
-	    # HACK: create temporary script for chrooting
-            scr = '#!/bin/sh\n#\n#\t(c) cooperation-iws, 2008\n#\nexport HOME=/root\nchroot ' + os.path.join(self.customDir, "chroot/") + '\n'
-            fchroot = open(os.path.join(self.customDir, "scriptChroot.sh"), 'w')
-            fchroot.write(scr)
-            fchroot.close()
-            os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptChroot.sh"))
-            # TODO: replace default terminal title with "Reconstructor Terminal"
-            # use gnome-terminal if available -- more features
-            if commands.getoutput('which gnome-terminal') != '':
-                print _('Launching Gnome-Terminal for advanced customization...')
-                os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws Terminal\" -e \"bash ' + os.path.join(self.customDir, "scriptChroot.sh")+ '\"')
-            else:
-                print _('Launching Xterm for advanced customization...')
-                # use xterm if gnome-terminal isn't available
-                os.popen('export HOME=/root ; xterm -bg black -fg white -rightbar -title \"Cooperation-iws Terminal\" -e \"bash ' + os.path.join(self.customDir, "scriptChroot.sh")+ '\"')
-
-            # restore wgetrc
-            print _("Restoring wgetrc configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-            # remove apt.conf
-            #print _("Removing apt.conf configuration...")
-            #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf") + '\"')
-            # remove dns info
-            print _("Restoring hostname configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-           
-	    print _("Removing DNS info...")
-            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
-            # umount /proc
-            print _("Umounting /proc...")
-            os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
-            # remove temp script
-            os.popen('rm -Rf /tmp/reconstructor-terminal.sh')
-	except Exception, detail:
-            # restore settings
-            # restore wgetrc
-            print _("Restoring wgetrc configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-            # remove apt.conf
-            #print _("Removing apt.conf configuration...")
-            #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf") + '\"')
-            # remove dns info
-            print _("Removing DNS info...")
-            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
-            # umount /proc
-            print _("Umounting /proc...")
-            os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
-            # remove temp script
-            os.popen('rm -Rf /tmp/reconstructor-terminal.sh')
-
-            errText = _('Error launching terminal: ')
-            print errText, detail
-            pass
-
-        return
-
-
-    def endInstall(self):
-    	# execute last config 
-		self.launchPostInstall()
-		os.system('bash \"'+ os.path.join(self.customDir, "scripts/shutdown_ws.sh") + '\"')
-			
-		print _("Copying DNS info...")
-                os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
-           	# mount /proc
-	    	print _("Mounting /proc filesystem...")
-	    	os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
-	    	# copy apt.conf
-	    	print _("Copying apt.conf configuration...")
-	    	if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d")):
-			os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
-	   	os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
-	   	# copy wgetrc
-	   	print _("Copying wgetrc configuration...")
-	   	# backup
-	   	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
-	   	os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
-	   	print _("Copying hostname configuration...")
-           	# backup
-           	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
-            	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
-            	os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
-            	os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
-           
-           	#execute shutdown web server script
-		print _("Execute shutdown actions...")
-		os.system('chroot \"' + os.path.join(self.customDir,"chroot/") +'\" /tmp/shutdown_ws.sh')
-		# cleanup
-            	os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
-            	os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/tmp/module-exec.sh") + '\" 1>&2 2>/dev/null')
-            	# restore wgetrc
-            	print _("Restoring wgetrc configuration...")
-            	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-            	# remove apt.conf
-            	#print _("Removing apt.conf configuration...")
-            	#os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/*") + '\"')
-            	# remove dns info
-		print _("Restoring hostname configuration...")
-                os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
-                os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-                       	
-		print _("Removing DNS info...")
-            	#os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
-            	# umount /proc
-            	print _("Umounting /proc...")
-            	os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
-
-
-    # launch post install script
-
-	
-    def launchPostInstall(self):
-        try:
-            # setup environment
-            # copy dns info
-            print _("Copying DNS info...")
-            os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
-            # mount /proc
-            print _("Mounting /proc filesystem...")
-            os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
-            # copy apt.conf
-            print _("Copying apt configuration...")
-            if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/")):
-                os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/"))
-            os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/"))
-            # copy wgetrc
-            print _("Copying wgetrc configuration...")
-            # backup
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
-            os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
-            print _("Copying hostname configuration...")
-            # backup
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
-            os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
-            os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
-	    # TODO: replace default terminal title with "Reconstructor Terminal"
-            # use gnome-terminal if available -- more features
-            print _('Launching Post install script customizations...')
-            os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/opt/ciws/share/lampp/config_post_install.sh"))
-	   
-	    os.system('chroot ' + os.path.join(self.customDir, "chroot") + ' /opt/ciws/share/lampp/config_post_install.sh')
-            
-            # restore wgetrc
-            print _("Restoring wgetrc configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-            # remove apt.conf
-            #print _("Removing apt.conf configuration...")
-            #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf") + '\"')
-            # remove dns info
-            print _("Restoring hostname configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-           
-	    print _("Removing DNS info...")
-            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
-            # umount /proc
-            print _("Umounting /proc...")
-            os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
-            # remove temp script
-            os.popen('rm -Rf /tmp/reconstructor-terminal.sh')
-
-        except Exception, detail:
-            # restore settings
-            # restore wgetrc
-            print _("Restoring wgetrc configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-            # remove apt.conf
-            #print _("Removing apt.conf configuration...")
-            #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf") + '\"')
-            # remove dns info
-            print _("Restoring hostname configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-           
-	    print _("Removing DNS info...")
-            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
-            # umount /proc
-            print _("Umounting /proc...")
-            os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
-            # remove temp script
-            os.popen('rm -Rf /tmp/reconstructor-terminal.sh')
-
-            errText = _('Error launching terminal: ')
-            print errText, detail
-            pass
-
-        return
-
-    
 
 		
-    #detect Live CD version
-    def checkLiveCdVersion(self):
-	    print "\nLive CD type is:"
-            if  self.debianLive == True:
-		self.casperPath = 'live'	
-		self.debDist= self.DebianLiveReleaseType
-		self.distVariant = self.DebianLiveReleaseType		
-		print "\033[1m Edubuntu 8.10 Live CD\033[0m\n"
-	    elif  self.isoType == "edubuntu_8.10":
-		self.casperPath = 'casper'	
-		self.debDist= 'intrepid'
-		self.distVariant = 'edubuntu_8.10'
-	    elif  self.isoType == "edubuntu_9.04":
-		self.casperPath = 'casper'	
-		self.debDist= 'jaunty'
-		self.distVariant = 'edubuntu_9.04'		
-		print "\033[1m Edubuntu 8.10 Live CD\033[0m\n"	
-	    elif  self.isoType == "eeebuntu_8.10":
-		self.casperPath = 'casper'	
-		self.debDist= 'intrepid'
-		self.distVariant = 'eeebuntu_8.10'		
-		print "\033[1m Eeebuntu 8.10 Live CD\033[0m\n" 
-	    elif  self.isoType == "studio_8.10":
-		self.casperPath = 'casper'	
-		self.debDist= 'intrepid'
-		self.distVariant = 'studio_8.10'		
-		print "\033[1m Ubuntu Studio 8.10 Live CD\033[0m\n" 
-	    elif  self.isoType == "studio_9.04":
-		self.casperPath = 'casper'	
-		self.debDist= 'jaunty'
-		self.distVariant = 'studio_9.04'		
-		print "\033[1m Ubuntu Studio 9.04 Live CD\033[0m\n" 
-	    elif  self.isoType == "netbook-remix_8.10":
-		self.casperPath = 'casper'	
-		self.debDist= 'intrepid'
-		self.distVariant = 'netbook-remix_8.10'		
-		print "\033[1m Netbook remix 8.10 Live CD\033[0m\n"
-	    elif  self.isoType == "nubuntu_8.10":
-		self.casperPath = 'casper'	
-		self.debDist= 'intrepid'
-		self.distVariant = 'nubuntu_8.10'		
-		print "\033[1m Nbuntu8.10 Live CD\033[0m\n"
-	    elif  self.isoType == "maryan_8.04.1":
-		self.casperPath = 'casper'	
-		self.debDist= 'hardy'
-		self.distVariant = 'maryan_8.04.1'		
-		print "\033[1m Maryan 8.10 Live CD\033[0m\n"	
-	    elif  self.isoType == "opengeu_8.04.1":
-		self.casperPath = 'casper'	
-		self.debDist= 'hardy'
-		self.distVariant = 'opengeu_8.04.1'		
-		print "\033[1m Opengeu 8.04.1 Live CD\033[0m\n"
-            elif  self.isoType == "ozos-0.9":
-		self.casperPath = 'casper'	
-		self.debDist= 'hardy'
-		self.distVariant = 'ozos-0.9'		
-		print "\033[1m Ozos 0.9 Live CD\033[0m\n"
-            elif  self.isoType == "poseidon-3.1":
-		self.casperPath = 'casper'	
-		self.debDist= 'hardy'
-		self.distVariant = 'poseidon-3.1'		
-		print "\033[1m Poseidon 3.1 Live CD\033[0m\n"		
-	    elif os.path.exists(os.path.join(self.customDir, "remaster/boot/grub")) and commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/boot/grub/menu.lst") + '| grep \'Webconverger\'') != '':
-		self.casperPath = 'live'
-		self.debDist= 'lenny'
-		self.distVariant = 'webconverger'	
-		print "\033[1m Webconverger Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' | grep \'Elyssa\'') != '':
-		self.casperPath = 'casper'
-		self.debDist = 'hardy'
-		self.distVariant = 'mint'			
-		print "\033[1m Linux Mint 5 Elyssa\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' | grep \'nUbuntu\'') != '' and commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '':
-		self.casperPath = 'casper'
-		self.debDist = 'hardy'
-		self.distVariant = 'nUbuntu'			
-		print "\033[1m  nUbuntu 8.04\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'etch\'') != '':
-		self.casperPath = 'casper'
-		self.debDist= 'etch'
-		self.distVariant = 'etch'			
-		print "\033[1m Debian Etch Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'20070727\'') != '':
-		self.casperPath = 'casper'
-		self.debDist= 'studio64'
-		self.distVariant = 'studio64'			
-		print "\033[1m Studio 64 Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '' or commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'hardy\'') != '':
-		self.casperPath = 'casper'	
-		self.debDist= 'hardy'
-		self.distVariant = 'hardy'		
-		print "\033[1m Ubuntu 8.04 Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'9.04\'') != '':
-		self.casperPath = 'casper'	
-		self.debDist= 'jaunty'
-		self.distVariant = 'jaunty'		
-		print "\033[1m Ubuntu 9.04 Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.10\'') != '':
-		self.casperPath = 'casper'	
-		self.debDist= 'intrepid'
-		self.distVariant = 'intrepid'		
-		print "\033[1m Ubuntu 8.10 Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'lenny\'') != '':
-		self.casperPath = 'live'
-		self.debDist= 'lenny'
-		self.distVariant = 'lenny'	
-		print "Debian Lenny Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + '| grep \'vyatta\'') != '':
-		self.casperPath = 'live'
-		self.debDist= 'lenny'
-		self.distVariant = 'vyatta'	
-		print "\033[1m Vyatta Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'sid\'') != '':	    	
-		self.debDist= 'sid'			
-		self.casperPath = 'live'
-		self.distVariant = 'sid'
-		print "\033[1m Debian Sid Live CD\033[0m\n"
-	    	
-	    else:
-		print "Live CD not detected, Aborting"
 
 # ---------- Main thread ---------- #
     
@@ -1036,7 +801,7 @@ class Cooperationiws:
 		self.endInstall()
 		self.installType = "Cd"
 		self.LiveCdDescription="Cooperation-iws Live CD"
-		self.LiveCdArch = "x86"
+		
 		self.buildIso=True		
 		self.buildSquashRoot = True
 		self.buildUsb = False
@@ -1052,6 +817,7 @@ class Cooperationiws:
 
 
 # ---------- Setup ---------- #
+
     def setupWorkingDirectory(self):
         print _("INFO: Setting up working directory...")
 	if not os.path.exists(os.path.join(self.customDir, "scripts")):
@@ -1093,10 +859,6 @@ class Cooperationiws:
 
         # custom root dir
         if self.createCustomRoot == True:
-            #if os.path.exists(os.path.join(self.customDir, "root")):
-            #    print _("INFO: Removing existing Custom Root directory...")
-
-            #    os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/") + '\"')
             if os.path.exists(os.path.join(self.customDir, "chroot")) == False:
                 print _("INFO: Creating Custom Root directory...")
                 os.makedirs(os.path.join(self.customDir, "chroot"))
@@ -1144,32 +906,16 @@ class Cooperationiws:
         print " "
         return False
 
-    def setupUsbWorkingDirectory(self):
-        print _("INFO: Setting up Usb working directory...")
-        # remaster dir
-        # check for existing directories and remove if necessary
-        #if os.path.exists(os.path.join(self.customDir, "remaster")):
-        #    print _("INFO: Removing existing Remaster directory...")
-        #    os.popen('rm -Rf \"' + os.path.join(self.customDir, "remaster/") + '\"')
-        if os.path.exists(os.path.join(self.customDir, "remaster")) == False:
-            print "INFO: Creating Remaster directory..."
-            os.makedirs(os.path.join(self.customDir, "remaster"))
-           
-        
-        print _("Using ISO for remastering...")
-        os.popen('mount -o loop \"' + self.isoFilename + '\" ' + os.path.join(self.customDir, "remaster"))
-
+# ---------- Debian Live option ---------- #
+    
     def setupDebianLive(self):
 	lhConfig = "lh_config "
 	lhConfig += "-p " + self.DebianLiveType + " "
-	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"' + self.arch + '\" --mirror-bootstrap \"' + self.debMirror + '\" --mirror-chroot \"' + self.debMirror + '\" --mirror-binary \"' + self.debMirror + '\"  --mirror-chroot-security \"' + self.debMirrorSecurity + '\" --mirror-binary-security \"' + self.debMirrorSecurity + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + self.keyLang + ' locale='+self.locale +'\" --hostname ' + self.host + ' --username ' + self.user + ' --encryption '+ self.encryption
+	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"' + self.LiveCdArch + '\" --mirror-bootstrap \"' + self.debMirror + '\" --mirror-chroot \"' + self.debMirror + '\" --mirror-binary \"' + self.debMirror + '\"  --mirror-chroot-security \"' + self.debMirrorSecurity + '\" --mirror-binary-security \"' + self.debMirrorSecurity + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + self.keyLang + ' locale='+self.locale +'\" --hostname ' + self.host + ' --username ' + self.user + ' --encryption '+ self.encryption
 	
 	scriptDebianLive = 'echo "I: Creating Debian Live CD Linux flavour ' + self.DebianLiveType + ' ' + self.DebianLiveReleaseType + ' + " \n'
 	scriptDebianLive += 'echo "' + lhConfig + '"\n'
-	#scriptDebianLive += 'echo "deb http://live.debian.net/debian/ ./" >> /etc/apt/sources.list\n'
-	#scriptDebianLive += 'apt-get update\n'
 	scriptDebianLive += 'apt-get remove -y --force-yes live-helper \n'
-	#scriptDebianLive += 'apt-get install -y --force-yes live-helper cdebootstrap debian-keyring \n'
 	scriptDebianLive += 'cd /tmp && wget '+self.entryLocalMirror+'/live-helper_1.0.4+20090604.135747_all.deb \n'
 	scriptDebianLive += 'apt-get install -y --force-yes debian-keyring \n'
 	scriptDebianLive += 'cd /tmp && dpkg -i live-helper_1.0.4+20090604.135747_all.deb\n'
@@ -1245,6 +991,7 @@ class Cooperationiws:
 	
 	
 # ---------- Customize Live ---------- #
+
     def customize(self):
         print _("INFO: Customizing...")
 	self.casperPathUpdated = self.casperPath
@@ -1602,6 +1349,9 @@ class Cooperationiws:
 		os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptEndExec.sh"))
 		os.popen('bash \"' + os.path.join(self.customDir, "scriptEndExec.sh") + '\"')
 	
+
+# ---------- Customize a non debian derivative operating system ---------- #
+
     def customizeNodebuntu(self):
 
 	if self.execModulesEnabled == True:
@@ -1625,7 +1375,218 @@ class Cooperationiws:
 	    os.popen('chmod a+x ' + os.path.join(self.customDir, "scripts/module-exec.sh"))
     
 	    os.system('bash \"' + os.path.join(self.customDir, "scripts/module-exec.sh")+ '\"')
+
+
+# ---------- Launch chroot terminal if install is not silent ---------- #
+
+    def launchTerminal(self):
+        try:
+            # setup environment
+            # copy dns info
+            print _("Copying DNS info...")
+            os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
+            # mount /proc
+            print _("Mounting /proc filesystem...")
+            os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
+            # copy apt.conf
+            print _("Copying apt configuration...")
+            if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/")):
+                os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/"))
+            os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/"))
+            # copy wgetrc
+            print _("Copying wgetrc configuration...")
+            # backup
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
+            os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
+            print _("Copying hostname configuration...")
+            # backup
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
+            os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
+            os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
+           
+	    # HACK: create temporary script for chrooting
+            scr = '#!/bin/sh\n#\n#\t(c) cooperation-iws, 2008\n#\nexport HOME=/root\nchroot ' + os.path.join(self.customDir, "chroot/") + '\n'
+            fchroot = open(os.path.join(self.customDir, "scriptChroot.sh"), 'w')
+            fchroot.write(scr)
+            fchroot.close()
+            os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptChroot.sh"))
+            # use gnome-terminal if available -- more features
+            if commands.getoutput('which gnome-terminal') != '':
+                print _('Launching Gnome-Terminal for advanced customization...')
+                os.popen('gnome-terminal --hide-menubar -t \"Cooperation-iws Terminal\" -e \"bash ' + os.path.join(self.customDir, "scriptChroot.sh")+ '\"')
+            else:
+                print _('Launching Xterm for advanced customization...')
+                # use xterm if gnome-terminal isn't available
+                os.popen('export HOME=/root ; xterm -bg black -fg white -rightbar -title \"Cooperation-iws Terminal\" -e \"bash ' + os.path.join(self.customDir, "scriptChroot.sh")+ '\"')
+
+            # restore wgetrc
+            print _("Restoring wgetrc configuration...")
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
+            # remove dns info
+            print _("Restoring hostname configuration...")
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
+           
+	    print _("Removing DNS info...")
+            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
+            # umount /proc
+            print _("Umounting /proc...")
+            os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
+            
+            
+	except Exception, detail:
+            # restore settings
+            # restore wgetrc
+            print _("Restoring wgetrc configuration...")
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
+            # remove apt.conf
+            #print _("Removing apt.conf configuration...")
+            #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf") + '\"')
+            # remove dns info
+            print _("Removing DNS info...")
+            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
+            # umount /proc
+            print _("Umounting /proc...")
+            os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
+            
+            
+
+            errText = _('Error launching terminal: ')
+            print errText, detail
+            pass
+
+        return
+
+ 
+
+# ---------- Post install ---------- #	
+
+    def launchPostInstall(self):
+        try:
+            # setup environment
+            # copy dns info
+            print _("Copying DNS info...")
+            os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
+            # mount /proc
+            print _("Mounting /proc filesystem...")
+            os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
+            # copy apt.conf
+            print _("Copying apt configuration...")
+            if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/")):
+                os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/"))
+            os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/"))
+            # copy wgetrc
+            print _("Copying wgetrc configuration...")
+            # backup
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
+            os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
+            print _("Copying hostname configuration...")
+            # backup
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
+            os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
+            os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
+	    # use gnome-terminal if available -- more features
+            print _('Launching Post install script customizations...')
+            os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/opt/ciws/share/lampp/config_post_install.sh"))
+	   
+	    os.system('chroot ' + os.path.join(self.customDir, "chroot") + ' /opt/ciws/share/lampp/config_post_install.sh')
+            
+            # restore wgetrc
+            print _("Restoring wgetrc configuration...")
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
+            
+            # remove dns info
+            print _("Restoring hostname configuration...")
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
+           
+	    print _("Removing DNS info...")
+            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
+            # umount /proc
+            print _("Umounting /proc...")
+            os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
+            
+            
+
+        except Exception, detail:
+            # restore settings
+            # restore wgetrc
+            print _("Restoring wgetrc configuration...")
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
+            # remove apt.conf
+            #print _("Removing apt.conf configuration...")
+            #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf") + '\"')
+            # remove dns info
+            print _("Restoring hostname configuration...")
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
+            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
+           
+	    print _("Removing DNS info...")
+            os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
+            # umount /proc
+            print _("Umounting /proc...")
+            os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
+            
+            
+
+            errText = _('Error launching terminal: ')
+            print errText, detail
+            pass
+
+        return
 	
+
+# ---------- End of Install ---------- #
+
+    def endInstall(self):
+    	# execute last config 
+		self.launchPostInstall()
+		os.system('bash \"'+ os.path.join(self.customDir, "scripts/shutdown_ws.sh") + '\"')
+			
+		print _("Copying DNS info...")
+                os.popen('cp -f /etc/resolv.conf ' + os.path.join(self.customDir, "chroot/etc/resolv.conf"))
+           	# mount /proc
+	    	print _("Mounting /proc filesystem...")
+	    	os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
+	    	# copy apt.conf
+	    	print _("Copying apt.conf configuration...")
+	    	if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d")):
+			os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
+	   	os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
+	   	# copy wgetrc
+	   	print _("Copying wgetrc configuration...")
+	   	# backup
+	   	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
+	   	os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
+	   	print _("Copying hostname configuration...")
+           	# backup
+           	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
+            	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
+            	os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
+            	os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
+           
+           	#execute shutdown web server script
+		print _("Execute shutdown actions...")
+		os.system('chroot \"' + os.path.join(self.customDir,"chroot/") +'\" /tmp/shutdown_ws.sh')
+		# cleanup
+            	os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
+            	os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/tmp/module-exec.sh") + '\" 1>&2 2>/dev/null')
+            	# restore wgetrc
+            	print _("Restoring wgetrc configuration...")
+            	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
+            	# remove dns info
+		print _("Restoring hostname configuration...")
+                os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
+                os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
+                       	
+		print _("Removing DNS info...")
+            	#os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/resolv.conf") + '\"')
+            	# umount /proc
+            	print _("Umounting /proc...")
+            	os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
+
 
 # ---------- Build ---------- #
     def build(self):
@@ -1665,8 +1626,7 @@ class Cooperationiws:
 		os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptMksquashfs.sh"))
 		os.system('bash \"' + os.path.join(self.customDir, "scriptMksquashfs.sh")+ '\"')
 	   	
-	        #else:
-	            #os.popen(self.timeCmd + ' ' + mksquashfs + ' \"' + os.path.join(self.customDir, "chroot/") + '\"' + ' \"' + os.path.join(self.customDir, "remaster/casper/filesystem.squashfs") + '\"')
+	       
 	if self.encryption != "disabled":		
 		fscriptEncryption=open(os.path.join(self.customDir, "/tmp/encryption"), 'w')
 		fscriptEncryption.write(self.encryption)
@@ -1705,20 +1665,17 @@ class Cooperationiws:
 	        # check for description - replace if necessary
 	        
 	        # build iso according to architecture
-	        if self.LiveCdArch == "x86":
+	        if self.LiveCdArch == "686":
 	            print _("Building x86 ISO...")
 	            os.popen('mkisofs -o \"' + self.buildLiveCdFilename + '\" -b \"isolinux/isolinux.bin\" -c \"isolinux/boot.cat\" -no-emul-boot -boot-load-size 4 -boot-info-table -V \"' + self.LiveCdDescription + '\" -cache-inodes -r -J -l \"' + os.path.join(self.customDir, "remaster") + '\"')
-	        elif self.LiveCdArch == "PowerPC":
-	            print _("Building PowerPC ISO...")
-	            os.popen('mkisofs  -r -V \"' + self.LiveCdDescription + '\" --netatalk -hfs -probe -map \"' + self.hfsMap + '\" -chrp-boot -iso-level 2 -part -no-desktop -hfs-bless ' + '\"' + os.path.join(self.customDir, "remaster/install") + '\" -o \"' + self.buildLiveCdFilename + '\" \"' + os.path.join(self.customDir, "remaster") + '\"')
-	        elif self.LiveCdArch == "x86_64":
+	        elif self.LiveCdArch == "amd64":
 	            print _("Building x86_64 ISO...")
 	            os.popen('mkisofs -r -o \"' + self.buildLiveCdFilename + '\" -b \"isolinux/isolinux.bin\" -c \"isolinux/boot.cat\" -no-emul-boot -V \"' + self.LiveCdDescription + '\" -J -l \"' + os.path.join(self.customDir, "remaster") + '\"')
 	
 		
 		
 	# print status message
-        statusMsgFinish = _('     <b>Finished.</b>     ')
+       
         statusMsgISO = _('      Finished. ISO located at: ')
         print "\033[1m "+ statusMsgISO + "\033[0m"+ self.buildLiveCdFilename
 

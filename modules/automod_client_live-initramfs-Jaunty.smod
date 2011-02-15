@@ -43,7 +43,6 @@ mkdir /boot/grub
 
 apt-get install --assume-yes --force-yes loop-aes-utils aufs-tools
 
-#apt-get install --assume-yes --force-yes linux-image-$kernel linux-ubuntu-modules-$kernel linux-restricted-modules-$kernel linux-headers-$kernel
 apt-get install --assume-yes --force-yes linux-image-$kernel linux-restricted-modules-$kernel linux-headers-$kernel 
 
 cd $DL_DIR
@@ -85,7 +84,7 @@ dpkg -i loop-aes-modules-2.6.28-11-generic*
 cp /lib/modules/$kernel/updates/loop.ko /lib/modules/$kernel/kernel/drivers/block/
 #rm /lib/modules/$kernel/updates/loop.ko
 
-echo "loop" >> /etc/modules
+echo "loop max_loop=255" >> /etc/modules
 
 
 echo "aufs" >> /etc/modules
@@ -125,10 +124,6 @@ sed -i "201s/$/ 1>\&2 2>\/dev\/null/" /usr/share/initramfs-tools/init
 
 mv /sbin/lrm-manager.orig /sbin/lrm-manager
 
-#cd /sbin
-#mv losetup losetup.old
-#wget $URL_FREE/losetup
-#chmod +x losetup
 #Jaunty hostname hack
 echo "localhost.localdomain" > /etc/hostname.orig
 
@@ -176,7 +171,7 @@ if [ -e /tmp/encryption ]; then
 
 apt-get install --assume-yes --force-yes aespipe
 sed -i '231s/root/$(basename ${fspath})/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '231s/Enter/\\n Enter/' /usr/share/initramfs-tools/scripts/live-helpers
+#sed -i '231s/Enter/\\n Enter/' /usr/share/initramfs-tools/scripts/live-helpers
 sed -i '236s/\/sbin\/losetup/\/$root\/sbin\/losetup/' /usr/share/initramfs-tools/scripts/live-helpers
 sed -i '230s/^/echo $(basename ${fspath}) | grep -q "home-sn" || echo $(basename ${fspath}) | grep -q "ciws-sn" \&\& root="root"  /' /usr/share/initramfs-tools/scripts/live-helpers
 sed -i '959s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -o rw,noatime "${dev}" "${rootmnt}\/home"/' /usr/share/initramfs-tools/scripts/live

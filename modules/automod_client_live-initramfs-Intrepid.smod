@@ -146,7 +146,7 @@ if [ -e /tmp/encryption ]; then
 
 apt-get install --assume-yes --force-yes aespipe
 sed -i '231s/root/$(basename ${fspath})/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '231s/Enter/\\n Enter/' /usr/share/initramfs-tools/scripts/live-helpers
+#sed -i '231s/Enter/\\n Enter/' /usr/share/initramfs-tools/scripts/live-helpers
 sed -i '236s/\/sbin\/losetup/\/$root\/sbin\/losetup/' /usr/share/initramfs-tools/scripts/live-helpers
 sed -i '230s/^/echo $(basename ${fspath}) | grep -q "home-sn" || echo $(basename ${fspath}) | grep -q "ciws-sn" \&\& root="root"  /' /usr/share/initramfs-tools/scripts/live-helpers
 sed -i '959s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -o rw,noatime "${dev}" "${rootmnt}\/home"/' /usr/share/initramfs-tools/scripts/live
