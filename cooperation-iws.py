@@ -201,7 +201,7 @@ class Cooperationiws:
                     dest="encryption", default="disabled",
                     help="Debian live encryption")
 	parser.add_option( "--encryptionpassphrase", 
-                    dest="encryptionpassphrase", default="",
+                    dest="encryptionpassphrase", default="01234567890123456789",
                     help="Debian live encryption passphrase")
 	parser.add_option( "--isotype", 
                     dest="isotype", default="" ,
@@ -790,70 +790,11 @@ class Cooperationiws:
 # ---------- Debian Live option ---------- #
     
     def setupDebianLive(self):
-	lhConfig = "lh_config "
-	lhConfig += "-p " + self.DebianLiveType + " "
-	lhConfig += '--distribution ' + self.DebianLiveReleaseType + ' --linux-flavours \"' + self.LiveCdArch + '\" --mirror-bootstrap \"' + self.debMirror + '\" --mirror-chroot \"' + self.debMirror + '\" --mirror-binary \"' + self.debMirror + '\"  --mirror-chroot-security \"' + self.debMirrorSecurity + '\" --mirror-binary-security \"' + self.debMirrorSecurity + '\" --apt-options \"--yes  --force-yes\" --bootappend-live \"keyb=' + self.keyLang + ' locale='+self.locale +'\" --hostname ' + self.host + ' --username ' + self.user + ' --encryption '+ self.encryption
-	
-	scriptDebianLive = 'echo "I: Creating Debian Live CD Linux flavour ' + self.DebianLiveType + ' ' + self.DebianLiveReleaseType + ' + " \n'
-	scriptDebianLive += 'echo "' + lhConfig + '"\n'
-	scriptDebianLive += 'apt-get remove -y --force-yes live-helper \n'
-	scriptDebianLive += 'cd /tmp && wget '+self.entryLocalMirror+'/live-helper_1.0.4+20090604.135747_all.deb \n'
-	scriptDebianLive += 'apt-get install -y --force-yes debian-keyring \n'
-	scriptDebianLive += 'cd /tmp && dpkg -i live-helper_1.0.4+20090604.135747_all.deb\n'
-	scriptDebianLive += 'apt-get install -f --assume-yes --force-yes\n'
-	scriptDebianLive += 'cd ' +self.customDir + '\n'
 	
         
-	if self.webconverger == True:
-		scriptDebianLive += "apt-get install -y --force-yes git-core \n"
-		scriptDebianLive += "wget "+self.entryLocalMirror+"/webconverger-081114.tar.gz \n"
-		scriptDebianLive += "tar -xzf webconverger-081114.tar.gz \n"
-		#scriptDebianLive += "git clone git://git.debian.org/git/debian-live/config-webc.git \n"
-		scriptDebianLive += "sed -i \"17s/quiet/quiet keyb="+ self.keyLang +"/\" config-webc/webconverger/config/binary \n"
-		scriptDebianLive += "echo LH_MIRROR_BOOTSTRAP=\"" + self.debMirror + "\" >> config-webc/webconverger/config/bootstrap \n"
-		scriptDebianLive += "echo LH_MIRROR_CHROOT=\"" + self.debMirror + "\" >> config-webc/webconverger/config/bootstrap \n"
-		scriptDebianLive += "echo LH_MIRROR_CHROOT_SECURITY=\"" + self.debMirrorSecurity + "\" >> config-webc/webconverger/config/bootstrap \n"
-		scriptDebianLive += "echo LH_MIRROR_BINARY=\"" + self.debMirror + "\" >> config-webc/webconverger/config/bootstrap \n"
-		scriptDebianLive += "echo LH_MIRROR_BINARY_SECURITY=\"" + self.debMirrorSecurity + "\" >> config-webc/webconverger/config/bootstrap \n"
-		#scriptDebianLive += "sed -i \"25s/LH_BOOTLOADER/#LH_BOOTLOADER/\" config-webc/webconverger/config/binary \n"
-		scriptDebianLive += 'cp ' + self.ciwsRootDir + '/artwork/'+ self.webconvergerLocale +'/menu.lst config-webc/webconverger/config/binary_grub/\n'
-		scriptDebianLive += "cd config-webc/webconverger \n"
-		
-		
-	else:
-		scriptDebianLive += lhConfig + '\n'
-	if self.encryption != "disabled":
-		scriptDebianLive += "sed -i \"105s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
-		scriptDebianLive += "sed -i \"107s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
-		scriptDebianLive += "sed -i \"114s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
-		scriptDebianLive += "sed -i \"116s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
-		scriptDebianLive += "sed -i \"106s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
-		scriptDebianLive += "sed -i \"108s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
-		scriptDebianLive += "sed -i \"115s/-T/-p 3/\" /usr/bin/lh_binary_encryption\n"		
-		scriptDebianLive += "sed -i \"118s/tmp/tmp 3< \/tmp\/squashfspwd/\" /usr/bin/lh_binary_encryption\n"
-		#scriptDebianLive += "sed -i \"73s/losetup/losetup.orig/\" " +self.customDir +"/config/common\n"
-		
-		fscriptPassphrase=open(os.path.join(self.customDir, "/tmp/squashfspwd"), 'w')
-        	fscriptPassphrase.write(self.encryptionpassphrase)
-        	fscriptPassphrase.close()
-	#scriptDebianLive += 'lh_bootstrap && lh_chroot \n'
-	scriptDebianLive += 'lh_build\n'
-	if self.webconverger == True:
-		scriptDebianLive += "mv binary.iso webconverger_bare.iso\n"
-		scriptDebianLive += 'mv binary remaster \n'
-	else:	
-		#scriptDebianLive += 'lh_binary && lh_source\n'	
-		scriptDebianLive += 'mv binary remaster \n'
-		scriptDebianLive += 'mv binary.iso debian_lenny_barebone.iso\n'
-	fscriptCustomExec=open(os.path.join(self.customDir, "scriptDebianLive.sh"), 'w')
-        fscriptCustomExec.write(scriptDebianLive)
-        fscriptCustomExec.close()
-        
-	os.system('bash ' + os.path.join(self.customDir, "scriptDebianLive.sh"))
+	os.system('bash \"' + self.scriptDir + '/debianlive.sh\" \"' + self.DebianLiveType + '\" \"' + self.DebianLiveReleaseType + '\" \"' + self.LiveCdArch + '\" \"' + self.debMirror + '\" \"' + self.debMirrorSecurity + '\" \"' + self.keyLang + '\" \"' + self.locale + '\" \"' + self.host + '\" \"' + self.user + '\" \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\" \"' + self.entryLocalMirror + '\" ')
 
-	if self.webconverger == True:
-		exit(0)
-		self.customDir += "/config-webc/webconverger"
+	
 	self.casperPath = 'live'
 	if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'etch\'') != '':	    	
 			self.debDist= 'etch'	
