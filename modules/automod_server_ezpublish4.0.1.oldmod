@@ -22,7 +22,7 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -40,19 +40,19 @@ done
 
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
 
-wget $URL_FREE/ezpublish4.0.1-081102.tar.gz
+wget $URL_CIWS_DEPOT/ezpublish4.0.1-081102.tar.gz
 tar -xzf ezpublish4.0.1-081102.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 
 #_______________________________________________________________________________________________
@@ -63,7 +63,7 @@ function INSTALL
 {
 
 echo "I: Download Ezpublish"
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 for (( count=1; count<=$NB_EZPUBLISH; count++ ))
 
@@ -92,7 +92,7 @@ rm ezpublish_db.sql
 
 #pear install -a ezc/eZComponents
 cd $DL_DIR
-wget $URL_FREE/ezc_081125.tar.gz
+wget $URL_CIWS_DEPOT/ezc_081125.tar.gz
 tar -xzf ezc_081125.tar.gz -C /usr/share/php/
 
 sed -i "s/admin@ciws.com/$ezpublish_admin_mail/" $WWW_DIRECTORY/${MOD_NAME[$count]}/settings/override/site.ini.append.php

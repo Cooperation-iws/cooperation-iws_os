@@ -29,7 +29,7 @@ SILENT=$(cat /tmp/silent)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 
 HOSTNAME=$(cat /tmp/hostname)
@@ -62,7 +62,7 @@ apt-get install -f --assume-yes --force-yes shorewall-shell dnsmasq dhcp3-server
 
 
 cd $DL_DIR
-wget $URL_FREE/dnscvsutil_0.10.2_all.deb
+wget $URL_CIWS_DEPOT/dnscvsutil_0.10.2_all.deb
 dpkg -i dnscvsutil_0.10.2_all.deb
 apt-get -f install --assume-yes --force-yes
 

@@ -38,7 +38,7 @@ HOSTNAME=$(cat /tmp/hostname)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 
 
@@ -81,7 +81,7 @@ export HOME=/home/liveusb
 echo "liveusb" > /tmp/tmp_user
 
 #Rubygem local mirror
-echo "gem: --source $URL_FREE/gem-mirror/" > $HOME/.gemrc
+echo "gem: --source $URL_CIWS_DEPOT/gem-mirror/" > $HOME/.gemrc
 
 
 mv /etc/apt/sources.list /etc/apt/sources.list.orig
@@ -114,7 +114,7 @@ if [ "$(echo "$DEBNONFREE_MIRROR_PATH" | grep 'medibuntu.org')" ]; then
 wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key add -
 else
 cd $DL_DIR
-wget $URL_FREE/debian-multimedia-keyring_2008.10.16_all.deb
+wget $URL_CIWS_DEPOT/debian-multimedia-keyring_2008.10.16_all.deb
 dpkg -i debian-multimedia-keyring_2008.10.16_all.deb
 fi
 

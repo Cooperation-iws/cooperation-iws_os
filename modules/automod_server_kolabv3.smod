@@ -29,7 +29,7 @@ kolab_domain_ext=$(echo $domain | cut -d'.' -f2)
 kolab_admin_mail=$(echo kolab_admin_mail |  cut -d'@' -f1) 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -44,7 +44,7 @@ killall -9 exim4
 cd $DL_DIR
 mkdir kolabtemp
 cd kolabtemp
-wget -r -l1 -nd --no-parent --retr-symlinks $URL_FREE/kolab/
+wget -r -l1 -nd --no-parent --retr-symlinks $URL_CIWS_DEPOT/kolab/
 
 md5sum -c MD5SUMS
 sh install-kolab.sh 2>&1 | tee /root/kolab-install.log

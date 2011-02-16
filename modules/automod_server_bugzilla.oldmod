@@ -30,29 +30,29 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 
 BUGZILLA_MYSQL_PWD=$bugzilla_mysql_pwd
 MOD_NAME=$bugzilla_name
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/bugzilla-3.0.5.tar.gz
+wget $URL_CIWS_DEPOT/bugzilla-3.0.5.tar.gz
 tar -xzf bugzilla-3.0.5.tar.gz
 mv bugzilla-3.0.5 bugzilla
-wget $URL_FREE/bugzilla-3.0.5.fr.tar.gz
+wget $URL_CIWS_DEPOT/bugzilla-3.0.5.fr.tar.gz
 tar -xzf bugzilla-3.0.5.fr.tar.gz -C bugzilla
-wget $URL_FREE/germzilla-3.0.5-1.utf-8.tar.gz
+wget $URL_CIWS_DEPOT/germzilla-3.0.5-1.utf-8.tar.gz
 tar -xzf germzilla-3.0.5-1.utf-8.tar.gz -C bugzilla/template
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 
 
@@ -64,7 +64,7 @@ tar -xzf germzilla-3.0.5-1.utf-8.tar.gz -C bugzilla/template
 function INSTALL 
 {
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 apt-get install  --assume-yes --force-yes  apache2 libapache2-mod-perl2 libtemplate-perl libmime-perl \
                 libappconfig-perl libdbd-mysql-perl libtimedate-perl \

@@ -12,7 +12,7 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 LIVEUSER=$(cat /tmp/user)
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 DL_DIR=$(cat /tmp/web_install-path)
 
 #quick hack to make Tor button work out of the box
@@ -24,7 +24,7 @@ echo "I: install tor privoxy"
 apt-get install --assume-yes --force-yes privoxy torbutton-extension
 
 cd $DL_DIR
-wget $URL_FREE/tor_0.2.0.31-1_i386.deb
+wget $URL_CIWS_DEPOT/tor_0.2.0.31-1_i386.deb
 dpkg -i tor_0.2.0.31-1_i386.deb
 
 apt-get -f install --assume-yes --force-yes

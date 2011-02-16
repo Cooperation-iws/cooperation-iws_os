@@ -10,7 +10,7 @@ RMOD_DESCRIPTION='Firefox & Firefox addons'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 DL_DIR=$(cat /tmp/web_install-path)
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 TMPUSER=$(cat /tmp/tmp_user)
 export HOME="/home/$TMPUSER"
@@ -18,6 +18,6 @@ echo "I: install firefox"
 
 apt-get install --assume-yes --force-yes firefox prism
 cd $DL_DIR
-wget $URL_FREE/firefox_addons_081124.tar.gz
+wget $URL_CIWS_DEPOT/firefox_addons_081124.tar.gz
 tar -xzf firefox_addons_081124.tar.gz -C /etc/skel
 

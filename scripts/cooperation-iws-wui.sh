@@ -25,7 +25,7 @@ APACHE=$(cat /tmp/apache)
 
 #TEMP
 MIRROIR=$(cat /tmp/mirroir)
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 SILENT=$(cat /tmp/silent)

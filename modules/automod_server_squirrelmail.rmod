@@ -25,7 +25,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -43,7 +43,7 @@ SQUIRRELMAIL_MYSQL_PWD="SQUIRRELMAIL_MYSQL_PWD"
 function INSTALL
 {
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 apt-get install --assume-yes --force-yes squirrelmail squirrelmail-locales php-pear php5-cli
 

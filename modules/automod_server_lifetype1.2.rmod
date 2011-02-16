@@ -27,7 +27,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 
 SILENT=$(cat /tmp/silent)
@@ -43,19 +43,19 @@ done
 
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/lifetype-1.2-081130.tar.gz
+wget $URL_CIWS_DEPOT/lifetype-1.2-081130.tar.gz
 tar -xzf lifetype-1.2-081130.tar.gz
 #rm zenphoto-1.1.5.zip
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -64,7 +64,7 @@ tar -xzf lifetype-1.2-081130.tar.gz
 function INSTALL
 {
 echo "I: Download Lifetype"
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 for (( count=1; count<=$NB_LIFETYPE; count++ ))
 do

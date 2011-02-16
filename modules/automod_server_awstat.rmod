@@ -70,7 +70,7 @@ chmod 755 /var/log/apache2
 chmod 644 /var/log/apache2/access.log
  
 cd $DL_DIR
-wget $URL_FREE/awstats-1.7.wbm
+wget $URL_CIWS_DEPOT/awstats-1.7.wbm
 cd $DL_DIR
 /usr/share/webmin/install-module.pl awstats-1.7.wbm 
 

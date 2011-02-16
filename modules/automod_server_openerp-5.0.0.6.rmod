@@ -27,7 +27,7 @@ SILENT=$(cat /tmp/silent)
 DEB_DIST=$(cat /tmp/deb_dist)
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -42,33 +42,33 @@ mkdir $DL_DIR
 
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/openerp_5.0.0.6_dep.tar.gz
+wget $URL_CIWS_DEPOT/openerp_5.0.0.6_dep.tar.gz
 cd $DL_DIR
-wget $URL_FREE/openerp-web-5.0.6.tar.gz
+wget $URL_CIWS_DEPOT/openerp-web-5.0.6.tar.gz
 tar -xzf openerp-web-5.0.6.tar.gz
 
 cd $DL_DIR
-wget $URL_FREE/openerp_database_dump.sql
+wget $URL_CIWS_DEPOT/openerp_database_dump.sql
 
 cd $DL_DIR
-wget $URL_FREE/openerp-server-5.0.6.tar.gz
+wget $URL_CIWS_DEPOT/openerp-server-5.0.6.tar.gz
 tar -xzf openerp-server-5.0.6.tar.gz
 
 cd $DL_DIR
-wget $URL_FREE/python-numpy_1.1.0-3+lenny1_i386.deb
+wget $URL_CIWS_DEPOT/python-numpy_1.1.0-3+lenny1_i386.deb
 
 cd $DL_DIR
-wget $URL_FREE/open_erp_missing_pagkage.tar.gz
+wget $URL_CIWS_DEPOT/open_erp_missing_pagkage.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -76,7 +76,7 @@ function INSTALL
 {
 echo "I: Download Openerp"
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 cd $DL_DIR
 dpkg -i python-numpy_1.1.0-3+lenny1_i386.deb

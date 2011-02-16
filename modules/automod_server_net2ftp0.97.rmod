@@ -29,7 +29,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 #VARIABLES
 SILENT=$(cat /tmp/silent)
@@ -38,17 +38,17 @@ NET2FTP_MYSQL_PWD=$net2ftp_mysql_pwd
 MOD_NAME=$net2ftp_name
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/net2ftp-0.97-081129.tar.gz
+wget $URL_CIWS_DEPOT/net2ftp-0.97-081129.tar.gz
 tar -xzf net2ftp-0.97-081129.tar.gz
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 
 #_______________________________________________________________________________________________
@@ -58,7 +58,7 @@ tar -xzf net2ftp-0.97-081129.tar.gz
 function INSTALL
 {
 echo "I: Download Net2ftp"
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 ##NET2FTP
 cd $DL_DIR

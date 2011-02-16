@@ -23,7 +23,7 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 HOSTNAME=$(cat /tmp/hostname)
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 LANG_UI=$(cat /tmp/lang-wui)
 SILENT=$(cat /tmp/silent)
@@ -240,7 +240,7 @@ sed -i "s/;date.timezone =/date.timezone =Europe\/Paris/" /etc/php5/apache2/php.
 /etc/init.d/apache2 restart
 
 cd $DL_DIR
-wget $URL_FREE/zabbix_mysql_schema_081101.tar.gz
+wget $URL_CIWS_DEPOT/zabbix_mysql_schema_081101.tar.gz
 tar -xzf zabbix_mysql_schema_081101.tar.gz
 sed -i "15s/zabbix/$MOD_NAME/" database.sql
 sed -i "16s/zabbix/$MOD_NAME/" database.sql

@@ -13,11 +13,11 @@ LIVEUSER=$(cat /tmp/user)
 . /tmp/app_params
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 
 cd /etc/skel
-wget $URL_FREE/Littre-linux-1.0.tar.bz2
+wget $URL_CIWS_DEPOT/Littre-linux-1.0.tar.bz2
 mkdir Littre
 cd Littre
 tar -jxf ../Littre-linux-1.0.tar.bz2

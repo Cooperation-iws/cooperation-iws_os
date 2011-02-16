@@ -8,7 +8,7 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 
 APACHE=$(cat /tmp/apache)
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 CASPER_PATH=$(cat /tmp/casper_path_updated)
 OS_TYPE=$(cat /tmp/os_type)
 TMPUSER=$(cat /tmp/tmp_user)

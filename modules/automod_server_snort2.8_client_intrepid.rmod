@@ -28,7 +28,7 @@ SILENT=$(cat /tmp/silent)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 
 
@@ -156,36 +156,36 @@ mv base-1.3.9 base
 #________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/snort-2.8.0.2.tar.gz
+wget $URL_CIWS_DEPOT/snort-2.8.0.2.tar.gz
 tar -xzf snort-2.8.0.2.tar.gz
 mv snort-2.8.0.2 snort
 #rm snort-2.8.0.2.tar.gz
 
 cd $DL_DIR
-wget $URL_FREE/Community-Rules-CURRENT.tar.gz
+wget $URL_CIWS_DEPOT/Community-Rules-CURRENT.tar.gz
 tar -xzf Community-Rules-CURRENT.tar.gz -C snort/
 #rm snortrules-pr-2.4.tar.gz
 
 cd $DL_DIR
-wget $URL_FREE/pcre-7.6.tar.gz
+wget $URL_CIWS_DEPOT/pcre-7.6.tar.gz
 tar -xzf pcre-7.6.tar.gz
 mv pcre-7.6 pcre
 #rm pcre-7.6.tar.gz
 
 cd $DL_DIR
-wget $URL_FREE/adodb498.zip
+wget $URL_CIWS_DEPOT/adodb498.zip
 unzip -q adodb498.zip
 #rm adodb498.zip
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________DOWNLOAD_______________________________________________
@@ -198,7 +198,7 @@ WGET_MIRROIR_WEB
 fi
 if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 fi
 if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
 

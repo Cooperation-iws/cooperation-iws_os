@@ -28,7 +28,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 . /tmp/app_params
@@ -42,17 +42,17 @@ mkdir $DL_DIR
 
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/nuxeo-515GA-081103.tar.gz
+wget $URL_CIWS_DEPOT/nuxeo-515GA-081103.tar.gz
 tar -xzf nuxeo-515GA-081103.tar.gz
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -61,7 +61,7 @@ tar -xzf nuxeo-515GA-081103.tar.gz
 function INSTALL
 {
 echo "I: Download Nuxeo"
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 apt-get autoremove --assume-yes --force-yes java-gcj-compat
 apt-get autoremove --assume-yes --force-yes gcj
 

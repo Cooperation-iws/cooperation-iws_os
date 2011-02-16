@@ -21,7 +21,7 @@ APACHE=$(cat /tmp/apache)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 #VARIABLES
@@ -178,14 +178,14 @@ wget http://$MIRROIR_URL/mirroir/mwdumper.jar
 #________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
 MESSAGE="Download Mediawiki"
 echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
-wget $URL_FREE/mediawiki-1.12.0.tar.gz
+wget $URL_CIWS_DEPOT/mediawiki-1.12.0.tar.gz
 tar xzvf mediawiki-1.12.0.tar.gz
 #rm mediawiki-1.12.0.tar.gz
 mv mediawiki-1.12.0 mediawiki
@@ -194,15 +194,15 @@ mv mediawiki-1.12.0 mediawiki
 
 
 cd $DL_DIR
-wget $URL_FREE/frwiki-latest-pages-articles.xml.bz2
-wget $URL_FREE/frwiki-latest-categorylinks.sql
-wget $URL_FREE/frwiki-latest-externallinks.sql
-wget $URL_FREE/frwiki-latest-image.sql
-wget $URL_FREE/frwiki-latest-imagelinks.sql
-wget $URL_FREE/frwiki-latest-langlinks.sql
-wget $URL_FREE/frwiki-latest-pagelinks.sql
-wget $URL_FREE/frwiki-latest-templatelinks.sql
-wget $URL_FREE/frwiki-latest-page.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-pages-articles.xml.bz2
+wget $URL_CIWS_DEPOT/frwiki-latest-categorylinks.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-externallinks.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-image.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-imagelinks.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-langlinks.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-pagelinks.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-templatelinks.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-page.sql
 
 #gunzip frwiki-latest-categorylinks.sql.gz
 #gunzip frwiki-latest-externallinks.sql.gz
@@ -213,15 +213,15 @@ wget $URL_FREE/frwiki-latest-page.sql
 #gunzip frwiki-latest-templatelinks.sql.gz
 #gunzip frwiki-latest-page.sql.gz
 
-wget $URL_FREE/xml2sql-0.5.tar.gz
+wget $URL_CIWS_DEPOT/xml2sql-0.5.tar.gz
 tar -xzvf xml2sql-0.5.tar.gz
 mv xml2sql-0.5 xml2sql
 
-wget $URL_FREE/mwdumper.jar
+wget $URL_CIWS_DEPOT/mwdumper.jar
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________DOWNLOAD_______________________________________________
@@ -234,7 +234,7 @@ WGET_MIRROIR_WEB
 fi
 if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 fi
 if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
 
@@ -273,7 +273,7 @@ function INSTALL
 {
 MESSAGE="INSTALL_WIKIPEDIAFR"
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 #WIKIPEDIAFR
 MESSAGE="Mediawiki paramétrage"

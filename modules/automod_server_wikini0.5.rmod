@@ -22,7 +22,7 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -39,19 +39,19 @@ done
 
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/wikini-05-081102.tar.gz
+wget $URL_CIWS_DEPOT/wikini-05-081102.tar.gz
 tar -xzf wikini-05-081102.tar.gz
 
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -61,7 +61,7 @@ function INSTALL
 {
 
 echo "I: Download Wikini"
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 for (( count=1; count<=$NB_WIKINI; count++ ))
 

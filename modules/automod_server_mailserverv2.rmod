@@ -29,7 +29,7 @@ SILENT=$(cat /tmp/silent)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -40,26 +40,26 @@ NOM_MAILSERVER=$postfixadmin_name
 HOSTNAME=$(cat /tmp/hostname)
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/postfixadmin_081101.tar.gz
+wget $URL_CIWS_DEPOT/postfixadmin_081101.tar.gz
 tar -xzf postfixadmin_081101.tar.gz
 
 cd $DL_DIR
-wget $URL_FREE/wbmclamav-0.9.0.wbm.gz
+wget $URL_CIWS_DEPOT/wbmclamav-0.9.0.wbm.gz
 gunzip wbmclamav-0.9.0.wbm.gz
 cd $DL_DIR
-wget $URL_FREE/webmin-module-1.1-4.wbm
+wget $URL_CIWS_DEPOT/webmin-module-1.1-4.wbm
 
 
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________DOWNLOAD_______________________________________________
@@ -72,7 +72,7 @@ WGET_MIRROIR_WEB
 fi
 if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 fi
 
 }

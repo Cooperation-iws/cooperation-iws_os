@@ -28,7 +28,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
@@ -42,17 +42,17 @@ MOD_NAME[$count]=${mantis_name[$count]}
 done
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/mantis-112-081103.tar.gz
+wget $URL_CIWS_DEPOT/mantis-112-081103.tar.gz
 tar -xzf mantis-112-081103.tar.gz
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #
 
@@ -63,7 +63,7 @@ tar -xzf mantis-112-081103.tar.gz
 function INSTALL
 {
 echo "I: Download Mantis"
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 #Mantis
 

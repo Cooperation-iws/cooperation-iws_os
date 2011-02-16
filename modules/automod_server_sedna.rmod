@@ -26,7 +26,7 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 SILENT=$(cat /tmp/silent)
@@ -47,7 +47,7 @@ done
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-wget $URL_FREE/sedna-19-081103.tar.gz
+wget $URL_CIWS_DEPOT/sedna-19-081103.tar.gz
 tar -xzf sedna-19-081103.tar.gz
 }
 

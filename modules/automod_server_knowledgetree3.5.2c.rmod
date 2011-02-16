@@ -28,7 +28,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
@@ -44,18 +44,18 @@ done
 
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/knowledgetree-352c-081201.tar.gz
+wget $URL_CIWS_DEPOT/knowledgetree-352c-081201.tar.gz
 tar -xzf knowledgetree-352c-081201.tar.gz
 #
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -65,7 +65,7 @@ function INSTALL
 {
 echo "I: Install KnowledgeTree"
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 
 

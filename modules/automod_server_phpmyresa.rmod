@@ -27,7 +27,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 SILENT=$(cat /tmp/silent)
@@ -41,18 +41,18 @@ RESA_MYSQL_PWD[$count]=${resa_mysql_pwd[$count]}
 MOD_NAME[$count]=${resa_name[$count]}
 done
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/phpmyresa-4.0-090310.tar.gz
+wget $URL_CIWS_DEPOT/phpmyresa-4.0-090310.tar.gz
 tar -xzf phpmyresa-4.0-090310.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -61,7 +61,7 @@ tar -xzf phpmyresa-4.0-090310.tar.gz
 function INSTALL
 {
 echo "I: Download Resa"
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 for (( count=1; count<=$NB_RESA; count++ ))
 do
@@ -89,7 +89,7 @@ sed -i "s/ciws.com/$domain/" $WWW_DIRECTORY/${MOD_NAME[$count]}/commun/config.ph
 #pear install http://pear.php.net/get/OLE
 #pear install http://pear.php.net/get/Spreadsheet_Excel_Writer
 cd $DL_DIR
-wget $URL_FREE/pear_php_resa.tar.gz
+wget $URL_CIWS_DEPOT/pear_php_resa.tar.gz
 tar -xzf pear_php_resa.tar.gz -C /usr/share/php/.
 
 

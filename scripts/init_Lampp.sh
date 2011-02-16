@@ -21,7 +21,7 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 
 APACHE=$(cat /tmp/apache)
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 CASPER_PATH=$(cat /tmp/casper_path)
 
 

@@ -27,7 +27,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 
 INSTALL=$(cat /tmp/def_install)
@@ -51,18 +51,18 @@ done
 function WGET_MIRROIR
 {
 cd $DL_DIR
-wget $URL_FREE/mediawiki-1.13.0-081128.tar.gz
+wget $URL_CIWS_DEPOT/mediawiki-1.13.0-081128.tar.gz
 tar -xzf mediawiki-1.13.0-081128.tar.gz
 cd $DL_DIR
-wget $URL_FREE/frwiki-latest-pages-articles.xml.bz2
-wget $URL_FREE/frwiki-latest-categorylinks.sql
-wget $URL_FREE/frwiki-latest-externallinks.sql
-wget $URL_FREE/frwiki-latest-image.sql
-wget $URL_FREE/frwiki-latest-imagelinks.sql
-wget $URL_FREE/frwiki-latest-langlinks.sql
-wget $URL_FREE/frwiki-latest-pagelinks.sql
-wget $URL_FREE/frwiki-latest-templatelinks.sql
-wget $URL_FREE/frwiki-latest-page.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-pages-articles.xml.bz2
+wget $URL_CIWS_DEPOT/frwiki-latest-categorylinks.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-externallinks.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-image.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-imagelinks.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-langlinks.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-pagelinks.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-templatelinks.sql
+wget $URL_CIWS_DEPOT/frwiki-latest-page.sql
 
 #gunzip frwiki-latest-categorylinks.sql.gz
 #gunzip frwiki-latest-externallinks.sql.gz
@@ -73,12 +73,12 @@ wget $URL_FREE/frwiki-latest-page.sql
 #gunzip frwiki-latest-templatelinks.sql.gz
 #gunzip frwiki-latest-page.sql.gz
 
-wget $URL_FREE/xml2sql-0.5.tar.gz
+wget $URL_CIWS_DEPOT/xml2sql-0.5.tar.gz
 tar -xzvf xml2sql-0.5.tar.gz
 mv xml2sql-0.5 xml2sql
 
-wget $URL_FREE/mwdumper.jar
-wget $URL_FREE/mediawiki_parser_functions_090527.tar.gz
+wget $URL_CIWS_DEPOT/mwdumper.jar
+wget $URL_CIWS_DEPOT/mediawiki_parser_functions_090527.tar.gz
 
 }
 

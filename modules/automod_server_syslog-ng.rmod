@@ -24,7 +24,7 @@ DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 LANG_UI=$(cat /tmp/lang-wui)
 
@@ -48,7 +48,7 @@ MOD_NAME=$phpsyslogng_name
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-wget $URL_FREE/phpsyslogng_081101.tar.gz
+wget $URL_CIWS_DEPOT/phpsyslogng_081101.tar.gz
 tar -xzf phpsyslogng_081101.tar.gz
 
 }
@@ -57,18 +57,18 @@ tar -xzf phpsyslogng_081101.tar.gz
 #________________________________________FIN_WGET_MIRROIR_WEB___________________________________
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/phpsyslogng_081101.tar.gz
+wget $URL_CIWS_DEPOT/phpsyslogng_081101.tar.gz
 tar -xzf phpsyslogng_081101.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________DOWNLOAD_______________________________________________
@@ -81,7 +81,7 @@ WGET_MIRROIR_WEB
 fi
 if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 fi
 
 }

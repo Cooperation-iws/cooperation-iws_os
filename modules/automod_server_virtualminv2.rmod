@@ -22,7 +22,7 @@ BIN_MYSQL=$(cat /tmp/mysql-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 #TEMP
 MIRROIR="A"
@@ -51,7 +51,7 @@ export $domain
 cd $DL_DIR
 #cancel inhibition for mysql
 
-wget $URL_FREE/install_virtualminv2.sh
+wget $URL_CIWS_DEPOT/install_virtualminv2.sh
 chmod +x install_virtualminv2.sh
 ./install_virtualminv2.sh
 

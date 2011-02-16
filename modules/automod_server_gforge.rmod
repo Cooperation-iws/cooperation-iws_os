@@ -23,7 +23,7 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 SILENT=$(cat /tmp/silent)
@@ -32,18 +32,18 @@ SILENT=$(cat /tmp/silent)
 HOSTNAME=$(cat /tmp/hostname)
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 
 cd $DL_DIR
-wget $URL_FREE/open_erp_missing_pagkage.tar.gz
+wget $URL_CIWS_DEPOT/open_erp_missing_pagkage.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -51,7 +51,7 @@ wget $URL_FREE/open_erp_missing_pagkage.tar.gz
 
 function INSTALL
 {
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 cd $DL_DIR
 tar -xzf open_erp_missing_pagkage.tar.gz
 dpkg -i erp_p/*

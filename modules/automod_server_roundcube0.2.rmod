@@ -26,7 +26,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 . /tmp/app_params
@@ -35,12 +35,12 @@ INSTALL=$(cat /tmp/def_install)
 MOD_NAME=$roundcube_name
 ROUNDCUBE_MYSQL_PWD=$roundcube_mysql_pwd
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/roundcubemail-0.2-beta.tar.gz
+wget $URL_CIWS_DEPOT/roundcubemail-0.2-beta.tar.gz
 tar -xzf roundcubemail-0.2-beta.tar.gz
 mv roundcubemail-0.2-beta roundcubemail
 #rm moodle-latest-19.zip
@@ -56,7 +56,7 @@ mv roundcubemail-0.2-beta roundcubemail
 function INSTALL
 {
 echo "I: Download Roundcube"
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 ##ROUNDCUBE
 cd $DL_DIR

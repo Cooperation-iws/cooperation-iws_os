@@ -13,7 +13,7 @@ LIVEUSER=$(cat /tmp/user)
 . /tmp/app_params
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 
 

@@ -27,7 +27,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 
 INSTALL=$(cat /tmp/def_install)
@@ -51,7 +51,7 @@ done
 function WGET_MIRROIR
 {
 cd $DL_DIR
-wget $URL_FREE/mediawiki-1.13.0-081128.tar.gz
+wget $URL_CIWS_DEPOT/mediawiki-1.13.0-081128.tar.gz
 tar -xzf mediawiki-1.13.0-081128.tar.gz
 
 }

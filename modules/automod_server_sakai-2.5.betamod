@@ -23,7 +23,7 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 SILENT=$(cat /tmp/silent)
@@ -65,7 +65,7 @@ mv /var/lib/tomcat5.5 $LAMPP_DIRECTORY/var/lib
 ln -s $LAMPP_DIRECTORY/var/lib/tomcat5.5 /var/lib/tomcat5.5
 
 cd $DL_DIR
-wget $URL_FREE/mysql-connector-java-5.1.6.tar.gz
+wget $URL_CIWS_DEPOT/mysql-connector-java-5.1.6.tar.gz
 tar -xzf mysql-connector-java-5.1.6.tar.gz
 cp mysql-connector-java-5.1.6/mysql-connector-java-5.1.6-bin.jar /usr/share/tomcat5.5/common/lib
 chmod +x /usr/share/tomcat5.5/common/lib/mysql-connector-java-5.1.6-bin.jar
@@ -82,7 +82,7 @@ $BIN_MYSQL -u root < SAKAI_db.sql mysql
 rm SAKAI_db.sql
 
 cd $DL_DIR
-wget $URL_FREE/sakai-bin-2.5.4.tar.gz
+wget $URL_CIWS_DEPOT/sakai-bin-2.5.4.tar.gz
 tar -xzf sakai-bin-2.5.4.tar.gz
 cd sakai-bin-2.5.4
 sudo cp -r * /var/lib/tomcat5.5/.

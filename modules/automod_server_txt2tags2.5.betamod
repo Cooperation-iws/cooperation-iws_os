@@ -24,7 +24,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 #VARIABLES
 #MYSQL PASSWORD
@@ -86,7 +86,7 @@ function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
 wget http://edermarques.net/pacotes/txt2tags/txt2tags_2.5-1_all.deb
-wget $URL_FREE/txt2tags.txt
+wget $URL_CIWS_DEPOT/txt2tags.txt
 #rm phpBB-3.0.0.zip
 }
 
@@ -108,18 +108,18 @@ unzip phpBB-3.0.0_FR.zip
 #________________________________________FIN_WGET_MIRROIR_LOCAL_________________________________
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/txt2tags_2.5-1_all.deb
-wget $URL_FREE/txt2tags.txt
+wget $URL_CIWS_DEPOT/txt2tags_2.5-1_all.deb
+wget $URL_CIWS_DEPOT/txt2tags.txt
 #rm phpBB-3.0.0.zip
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________DOWNLOAD_______________________________________________
@@ -132,7 +132,7 @@ WGET_MIRROIR_WEB
 fi
 if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 fi
 if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "C" ]; then
 

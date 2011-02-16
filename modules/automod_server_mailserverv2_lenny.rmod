@@ -29,7 +29,7 @@ SILENT=$(cat /tmp/silent)
 DEB_DIST=$(cat /tmp/deb_dist)
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -40,24 +40,24 @@ NOM_MAILSERVER=$postfixadmin_name
 HOSTNAME=$(cat /tmp/hostname)
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/postfixadmin_081101.tar.gz
+wget $URL_CIWS_DEPOT/postfixadmin_081101.tar.gz
 tar -xzf postfixadmin_081101.tar.gz
 
 cd $DL_DIR
-wget $URL_FREE/webmin-module-1.1-4.wbm
+wget $URL_CIWS_DEPOT/webmin-module-1.1-4.wbm
 
 cd $DL_DIR
-wget $URL_FREE/mailscanner_4.71.10-1_all.deb
+wget $URL_CIWS_DEPOT/mailscanner_4.71.10-1_all.deb
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________DOWNLOAD_______________________________________________
@@ -70,7 +70,7 @@ WGET_MIRROIR_WEB
 fi
 if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 fi
 
 }
@@ -377,7 +377,7 @@ EOT
 mkdir $LAMPP_DIRECTORY/var/sieve-scripts
 cd $LAMPP_DIRECTORY/var
 apt-get install -f --assume-yes --force-yes curl python-mysqldb
-wget  $URL_FREE/pysieved-090317.tar.gz
+wget  $URL_CIWS_DEPOT/pysieved-090317.tar.gz
 tar -xzf pysieved-090317.tar.gz
 rm pysieved-090317.tar.gz
 sed -i "s/dbuser = user/dbuser = $NOM_MAILSERVER/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
@@ -2800,7 +2800,7 @@ fi
 
 
 cd $DL_DIR
-wget $URL_FREE/latest_clamav_updates.tar.gz
+wget $URL_CIWS_DEPOT/latest_clamav_updates.tar.gz
 tar -xzf latest_clamav_updates.tar.gz -C /var/lib/clamav/.
 
 freshclam

@@ -9,7 +9,7 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Office tools for client'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 echo "I: updating live-initramfs to live-initramfs from dev"
 
@@ -17,7 +17,7 @@ apt-get remove --assume-yes --force-yes live-initramfs
 
 cd /tmp
 
-wget $URL_FREE/live-initramfs_1.154.8+20090130.001702_all.deb
+wget $URL_CIWS_DEPOT/live-initramfs_1.154.8+20090130.001702_all.deb
 dpkg -i live-initramfs_1.154.8+20090130.001702_all.deb
 apt-get install -f --assume-yes --force-yes 
 

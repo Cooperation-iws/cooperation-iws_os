@@ -28,7 +28,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 MOD_NAME="Dictionnary"
@@ -92,32 +92,32 @@ eng-spa.index=eng-spa.index
 
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/jdictd15.zip
+wget $URL_CIWS_DEPOT/jdictd15.zip
 unzip jdictd15.zip
 
 
 mkdir jdictd15/DOC
 
-wget $URL_FREE/fra-eng.tar.gz
+wget $URL_CIWS_DEPOT/fra-eng.tar.gz
 tar -xzf fra-eng.tar.gz -C jdictd15/DOC
 echo "
 fra-eng.data=fra-eng.dict.dz
 fra-eng.index=fra-eng.index
 " >> jdictd15/DOC/dic.ini
 
-wget $URL_FREE/fra-deu.tar.gz
+wget $URL_CIWS_DEPOT/fra-deu.tar.gz
 tar -xzf fra-deu.tar.gz -C jdictd15/DOC
 echo "
 fra-deu.data=fra-deu.dict.dz
 fra-deu.index=fra-deu.index
 " >> jdictd15/DOC/dic.ini
 
-wget $URL_FREE/eng-fra.tar.gz
+wget $URL_CIWS_DEPOT/eng-fra.tar.gz
 tar -xzf eng-fra.tar.gz -C jdictd15/DOC
 mv jdictd15/DOC/bin/eng-fra* jdictd15/DOC
 echo "
@@ -125,14 +125,14 @@ eng-fra.data=eng-fra.dict.dz
 eng-fra.index=eng-fra.index
 " >> jdictd15/DOC/dic.ini
 
-wget $URL_FREE/deu-fra.tar.gz
+wget $URL_CIWS_DEPOT/deu-fra.tar.gz
 tar -xzf deu-fra.tar.gz -C jdictd15/DOC
 echo "
 deu-fra.data=deu-fra.dict.dz
 deu-fra.index=deu-fra.index
 " >> jdictd15/DOC/dic.ini
 
-wget $URL_FREE/eng-spa.tar.gz
+wget $URL_CIWS_DEPOT/eng-spa.tar.gz
 tar -xzf eng-spa.tar.gz -C jdictd15/DOC
 echo "
 eng-spa.data=eng-spa.dict.dz
@@ -142,7 +142,7 @@ eng-spa.index=eng-spa.index
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________DOWNLOAD_______________________________________________
@@ -155,7 +155,7 @@ WGET_MIRROIR_WEB
 fi
 if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 fi
 
 }

@@ -27,7 +27,7 @@ SILENT=$(cat /tmp/silent)
 DEB_DIST=$(cat /tmp/deb_dist)
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -41,26 +41,26 @@ mkdir $DL_DIR
 
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/Libresource_sql_110206.dump
+wget $URL_CIWS_DEPOT/Libresource_sql_110206.dump
 
 cd $DL_DIR
-wget $URL_FREE/Libresource_110206.tar.gz
+wget $URL_CIWS_DEPOT/Libresource_110206.tar.gz
 tar -xzf  Libresource_110206.tar.gz
 
 cd $DL_DIR
-wget $URL_FREE/psql_missing_package_110206.tar.gz
+wget $URL_CIWS_DEPOT/psql_missing_package_110206.tar.gz
 tar -xzf  psql_missing_package_110206.tar.gz
 
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -69,7 +69,7 @@ tar -xzf  psql_missing_package_110206.tar.gz
 function INSTALL
 {
 echo "I: Download Libresource"
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 #apt-get autoremove --assume-yes --force-yes java-gcj-compat
 #apt-get autoremove --assume-yes --force-yes gcj
 echo "Name: shared/accepted-sun-dlj-v1-1

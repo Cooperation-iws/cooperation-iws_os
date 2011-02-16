@@ -27,7 +27,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 
 SILENT=$(cat /tmp/silent)
@@ -41,18 +41,18 @@ GALLERY2_MYSQL_PWD[$count]=${gallery_mysql_pwd[$count]}
 MOD_NAME[$count]=${gallery_name[$count]}
 done
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/gallery-2.3RC1-081102.tar.gz
+wget $URL_CIWS_DEPOT/gallery-2.3RC1-081102.tar.gz
 tar -xzf gallery-2.3RC1-081102.tar.gz
 #rm gallery-2.2.4-full.zip
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 
 
@@ -64,7 +64,7 @@ tar -xzf gallery-2.3RC1-081102.tar.gz
 function INSTALL
 {
 echo "I: Download Gallery"
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 apt-get install --assume-yes --force-yes imagemagick 
 

@@ -24,7 +24,7 @@ CASPER_PATH=$(cat /tmp/casper_path)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -50,8 +50,8 @@ sed -i "42s/^/192.168.99.254:\/dev  \/dev  nfs rw,hard,nolock 0 0/" /usr/share/i
 
 ln -sf /etc/network/if-up.d/mountnfs /etc/rcS.d/S35mountnfs
 
-wget $URL_FREE/linux_2.6.20-1_i386.deb
-wget $URL_FREE/kerrighed_2.3.0-1_i386.deb
+wget $URL_CIWS_DEPOT/linux_2.6.20-1_i386.deb
+wget $URL_CIWS_DEPOT/kerrighed_2.3.0-1_i386.deb
 
 dpkg -i linux_2.6.20-1_i386.deb
 dpkg -i kerrighed_2.3.0-1_i386.deb

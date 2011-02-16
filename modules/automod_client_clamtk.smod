@@ -9,7 +9,7 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Antivirus tools for client'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 DL_DIR=$(cat /tmp/web_install-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 
@@ -18,14 +18,14 @@ export DEBIAN_FRONTEND=noninteractive
 
 aptitude install -y clamav clamav-daemon clamav-freshclam
 cd $DL_DIR
-wget $URL_FREE/latest_clamav_updates.tar.gz
+wget $URL_CIWS_DEPOT/latest_clamav_updates.tar.gz
 tar -xzf latest_clamav_updates.tar.gz -C /var/lib/clamav/.
 
 freshclam
 
 cd $DL_DIR
 
-wget $URL_FREE/clamtk_4.10-1_all.deb
+wget $URL_CIWS_DEPOT/clamtk_4.10-1_all.deb
 
 dpkg -i clamtk_4.10-1_all.deb
 

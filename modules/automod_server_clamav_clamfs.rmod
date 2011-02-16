@@ -12,7 +12,7 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 DL_DIR=$(cat /tmp/web_install-path)
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 LANG_UI=$(cat /tmp/lang-wui)
 SILENT=$(cat /tmp/silent)
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
@@ -24,24 +24,24 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 MAIL_REPORT=$clam_mail_report
 
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 
 cd $DL_DIR
-wget $URL_FREE/wbmclamav-0.9.0.wbm.gz
+wget $URL_CIWS_DEPOT/wbmclamav-0.9.0.wbm.gz
 gunzip wbmclamav-0.9.0.wbm.gz
 cd $DL_DIR
-wget $URL_FREE/clamfs-modified-081223.tar.gz
+wget $URL_CIWS_DEPOT/clamfs-modified-081223.tar.gz
 tar -xzf clamfs-modified-081223.tar.gz
 cd $DL_DIR
-wget $URL_FREE/clamav-0.94.2.tar.gz
+wget $URL_CIWS_DEPOT/clamav-0.94.2.tar.gz
 tar -xzf clamav-0.94.2.tar.gz
 }
 
 function INSTALL
 {
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 apt-get install -f --assume-yes --force-yes zoo unzip arj bzip2 razor pyzor mailutils unrar clamfs fuse-utils
 

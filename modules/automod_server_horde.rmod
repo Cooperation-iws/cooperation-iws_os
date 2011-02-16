@@ -26,7 +26,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -42,7 +42,7 @@ HORDE_MYSQL_PWD=$horde_mysql_pwd
 function WGET_MIRROIR_WEB
 {
 cd $DL_DIR
-wget $URL_FREE/Horde_ciws.tar.gz
+wget $URL_CIWS_DEPOT/Horde_ciws.tar.gz
 tar -xzf Horde_ciws.tar.gz
 
 #rm moodle-latest-19.zip
@@ -90,10 +90,10 @@ apt-get install --assume-yes --force-yes php-pear php5-dev imagemagick libmagic-
 
 #pear install --onlyreqdeps Log Mail Mail_Mime DB File Date 
 cd $DL_DIR
-wget $URL_FREE/pear_horde.tar.gz
+wget $URL_CIWS_DEPOT/pear_horde.tar.gz
 tar -xzf pear_horde.tar.gz -C /usr/share/php/.
 cd $DL_DIR
-wget $URL_FREE/pecl_fileinfo.tar.gz
+wget $URL_CIWS_DEPOT/pecl_fileinfo.tar.gz
 tar -xzf pecl_fileinfo.tar.gz -C /usr/lib/php5/.
 
 #pecl install -s fileinfo

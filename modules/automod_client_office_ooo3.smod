@@ -9,7 +9,7 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Office tools for client'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 DL_DIR=$(cat /tmp/web_install-path)
 
 echo "I: installing liveusb installer"
@@ -18,7 +18,7 @@ apt-get remove --assume-yes --force-yes openoffice.org*
 
 cd $DL_DIR
 
-wget $URL_FREE/OOo_3.0.0_LinuxIntel_install_en-US_deb.tar.gz
+wget $URL_CIWS_DEPOT/OOo_3.0.0_LinuxIntel_install_en-US_deb.tar.gz
 
 tar -xvf OOo_3.0.0_LinuxIntel_install_en-US_deb.tar.gz
 

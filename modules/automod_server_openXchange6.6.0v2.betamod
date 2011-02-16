@@ -21,7 +21,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -77,7 +77,7 @@ chown -R munin:munin /var/cache/munin
 
 
 cd $DL_DIR
-wget $URL_FREE/hyperion_config.tar.gz
+wget $URL_CIWS_DEPOT/hyperion_config.tar.gz
 mkdir hyperion-install/
 tar -xzf hyperion_config.tar.gz -C $DL_DIR/hyperion-install/
 

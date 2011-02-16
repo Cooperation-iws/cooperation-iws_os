@@ -27,7 +27,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 INSTALL=$(cat /tmp/def_install)
 
 SILENT=$(cat /tmp/silent)
@@ -41,17 +41,17 @@ PIWIGO_MYSQL_PWD[$count]=${piwigo_mysql_pwd[$count]}
 MOD_NAME[$count]=${piwigo_name[$count]}
 done
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/piwigo-2.0.0-090311.tar.gz
+wget $URL_CIWS_DEPOT/piwigo-2.0.0-090311.tar.gz
 tar -xzf piwigo-2.0.0-090311.tar.gz
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 
 #_______________________________________________________________________________________________
@@ -61,7 +61,7 @@ tar -xzf piwigo-2.0.0-090311.tar.gz
 function INSTALL
 {
 echo "I: Download Piwigo"
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 for (( count=1; count<=$NB_PIWIGO; count++ ))
 do

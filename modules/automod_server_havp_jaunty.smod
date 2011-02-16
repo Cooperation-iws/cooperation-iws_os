@@ -13,7 +13,7 @@ LIVEUSER=$(cat /tmp/user)
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 HOSTNAME=$(cat /tmp/hostname)
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 DL_DIR=$(cat /tmp/web_install-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 
@@ -96,7 +96,7 @@ rm /usr/sbin/policy-rc.d
 mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
 
 cd $DL_DIR
-wget $URL_FREE/latest_clamav_updates.tar.gz
+wget $URL_CIWS_DEPOT/latest_clamav_updates.tar.gz
 tar -xzf latest_clamav_updates.tar.gz -C /var/lib/clamav/.
 
 freshclam

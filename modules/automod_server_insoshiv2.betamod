@@ -28,7 +28,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -59,7 +59,7 @@ gem install mongrel mongrel_cluster --include-dependencies
 apt-get install --assume-yes --force-yes imagemagick 
 
 cd $DL_DIR
-wget $URL_FREE/insoshi-insoshi-081103.tar.gz
+wget $URL_CIWS_DEPOT/insoshi-insoshi-081103.tar.gz
 tar -xzf insoshi-insoshi-081103.tar.gz -C $LAMPP_DIRECTORY/server
 cd $LAMPP_DIRECTORY/server
 mv insoshi-insoshi-9fe47efdd5642220d09772c8bd183195a85b2ce1 insoshi

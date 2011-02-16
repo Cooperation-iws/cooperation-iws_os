@@ -9,7 +9,7 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Office tools for client'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 DL_DIR=$(cat /tmp/web_install-path)
 . /tmp/app_params
 
@@ -19,14 +19,14 @@ apt-get remove --assume-yes --force-yes casper
 
 cd $DL_DIR
 
-wget $URL_FREE/live-initramfs_1.154.8+20090130.001702_all.deb
+wget $URL_CIWS_DEPOT/live-initramfs_1.154.8+20090130.001702_all.deb
 dpkg -i live-initramfs_1.154.8+20090130.001702_all.deb
 apt-get install -f --assume-yes --force-yes
 
 echo "live" > /tmp/casper_path_updated
 
 cd $DL_DIR
-wget $URL_FREE/casper-bottom-hardy-090326.tar.gz
+wget $URL_CIWS_DEPOT/casper-bottom-hardy-090326.tar.gz
 tar -xzf casper-bottom-hardy-090326.tar.gz -C /usr/share/initramfs-tools/scripts/live-bottom
 chmod -R +x /usr/share/initramfs-tools/scripts/live-bottom
 
@@ -49,7 +49,7 @@ apt-get build-dep --assume-yes --force-yes linux-source
 m-a -k /usr/src/linux-headers-$kernel fakesource
 
 
-wget $URL_FREE/loop-aes-source_3.2c-2_all.deb.1
+wget $URL_CIWS_DEPOT/loop-aes-source_3.2c-2_all.deb.1
 
 dpkg -i loop-aes-source_3.2c-2_all.deb.1
 
@@ -110,7 +110,7 @@ mv /sbin/lrm-manager.orig /sbin/lrm-manager
 
 #cd /sbin
 #mv losetup losetup.old
-#wget $URL_FREE/losetup
+#wget $URL_CIWS_DEPOT/losetup
 #chmod +x losetup
 apt-get install --assume-yes --force-yes console-data
 

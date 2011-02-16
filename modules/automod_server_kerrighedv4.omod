@@ -24,7 +24,7 @@ CASPER_PATH=$(cat /tmp/casper_path)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
 DEBNONFREE_MIRROR_PATH=$(cat /tmp/deb-nonfree_mirror_path)
 DEB_MIRROR_SECURITY_PATH=$(cat /tmp/deb-security_mirror_path)
@@ -48,7 +48,7 @@ lh_bootstrap
 lh_chroot
 
 mv /tmp/debianlive/chroot /var
-echo $URL_FREE > /var/chroot/tmp/url_free
+echo $URL_CIWS_DEPOT > /var/chroot/tmp/url_free
 chroot /var/chroot << "EOF"
 set passwd/root-password-crypted kj8A7sqYE9dQE
 
@@ -76,10 +76,10 @@ none    /var/run    tmpfs   defaults    0 0
 192.168.99.254:/var/chroot/root    /root   nfs rw,hard,nolock 0 0
 " > /etc/fstab
 
-URL_FREE=$(cat /tmp/url_free)
+URL_CIWS_DEPOT=$(cat /tmp/url_free)
 ln -sf /etc/network/if-up.d/mountnfs /etc/rcS.d/S35mountnfs
-wget -O /usr/src/kerrighed-latest.tar.gz $URL_FREE/kerrighed-latest.tar.gz
-wget -O /usr/src/linux-2.6.20.tar.bz2 $URL_FREE/linux-2.6.20.tar.bz2
+wget -O /usr/src/kerrighed-latest.tar.gz $URL_CIWS_DEPOT/kerrighed-latest.tar.gz
+wget -O /usr/src/linux-2.6.20.tar.bz2 $URL_CIWS_DEPOT/linux-2.6.20.tar.bz2
 
 cd /usr/src
 tar zxf kerrighed-latest.tar.gz

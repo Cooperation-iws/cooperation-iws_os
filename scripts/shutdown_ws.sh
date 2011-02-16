@@ -8,7 +8,7 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 
 APACHE=$(cat /tmp/apache)
 MIRROIR=$(cat /tmp/mirroir)
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 CASPER_PATH=$(cat /tmp/casper_path_updated)
 OS_TYPE=$(cat /tmp/os_type)
 BIN_MYSQL=$(cat /tmp/mysql-path)
@@ -118,7 +118,7 @@ echo "" > /var/log/dpkg.log
 
 echo "I: making initramfs"
 
-if [ "$(cat /tmp/kernel)" ]; then
+if [ -e /tmp/kernel ]; then
 kernel="$(cat /tmp/kernel)"
 fi
 echo "building kernel $kernel"

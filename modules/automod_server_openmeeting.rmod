@@ -29,7 +29,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -44,22 +44,22 @@ MOD_NAME=$openmeeting_name
 OPENMEETING_MYSQL_PWD=$openmeeting_mysql_pwd
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/red5_0.6.3-1_all.deb
-wget $URL_FREE/openmeetings_081101.tar.gz
+wget $URL_CIWS_DEPOT/red5_0.6.3-1_all.deb
+wget $URL_CIWS_DEPOT/openmeetings_081101.tar.gz
 tar -xzf openmeetings_081101.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -67,7 +67,7 @@ WGET_MIRROIR_FREE
 
 function INSTALL
 {
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 ln -s / /cow
 aptitude install -y xvfb openoffice.org imagemagick gs-gpl swftools sun-java5-bin sun-java5-demo openoffice.org-headless libart-2.0-2 libt1-5 libungif4g

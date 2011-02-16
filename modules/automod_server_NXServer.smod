@@ -10,13 +10,13 @@ RMOD_DESCRIPTION='NoMachine NX remote admin management'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 LIVEUSER=$(cat /tmp/user)
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 echo "I: config nx"
 cd /tmp
-wget $URL_FREE/nxclient_3.3.0-3_i386.deb
-wget $URL_FREE/nxnode_3.3.0-3_i386.deb
-wget $URL_FREE/nxserver_3.3.0-8_i386.deb
+wget $URL_CIWS_DEPOT/nxclient_3.3.0-3_i386.deb
+wget $URL_CIWS_DEPOT/nxnode_3.3.0-3_i386.deb
+wget $URL_CIWS_DEPOT/nxserver_3.3.0-8_i386.deb
 dpkg -i nxclient_3.3.0-3_i386.deb
 dpkg -i nxnode_3.3.0-3_i386.deb
 dpkg -i nxserver_3.3.0-8_i386.deb

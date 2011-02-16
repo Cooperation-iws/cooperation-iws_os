@@ -24,7 +24,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 
@@ -40,12 +40,12 @@ AKOIE_MYSQL_PWD="AKOIE_MYSQL_PWD"
 MOD_NAME=$aie_name
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/akoie-customv2-0.5.tar.gz
+wget $URL_CIWS_DEPOT/akoie-customv2-0.5.tar.gz
 tar -xzf akoie-customv2-0.5.tar.gz
 }
 
@@ -58,7 +58,7 @@ tar -xzf akoie-customv2-0.5.tar.gz
 function INSTALL
 {
 echo "I: Download Akoie"
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 
 ##AKOIE
 cd $DL_DIR

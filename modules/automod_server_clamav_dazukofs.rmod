@@ -12,7 +12,7 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 DL_DIR=$(cat /tmp/web_install-path)
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 LANG_UI=$(cat /tmp/lang-wui)
 SILENT=$(cat /tmp/silent)
@@ -33,7 +33,7 @@ apt-get install --assume-yes --force-yes linux-generic linux-image-generic linux
 apt-get install --assume-yes --force-yes build-essential 
 
 cd $DL_DIR
-wget $URL_FREE/dazukofs-3.0.0rc4-modif.tar.gz
+wget $URL_CIWS_DEPOT/dazukofs-3.0.0rc4-modif.tar.gz
 tar -xzf dazukofs-3.0.0rc4-modif.tar.gz
 
 cd dazukofs-3.0.0-rc4

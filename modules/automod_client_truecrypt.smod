@@ -9,7 +9,7 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Cryptography tools for client'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 DL_DIR=$(cat /tmp/web_install-path)
 LIVEUSER=$(cat /tmp/user)
 
@@ -17,7 +17,7 @@ echo "I: installing truecrypt"
 
 cd $DL_DIR
 
-wget $URL_FREE/truecrypt_6.1a-0_i386.deb
+wget $URL_CIWS_DEPOT/truecrypt_6.1a-0_i386.deb
 
 dpkg -i truecrypt_6.1a-0_i386.deb
 
@@ -27,7 +27,7 @@ apt-get install --assume-yes --force-yes sun-java6-bin python-pexpect
 
 cd $DL_DIR
 
-wget $URL_FREE/tcgui.0.4.2.tar.gz
+wget $URL_CIWS_DEPOT/tcgui.0.4.2.tar.gz
 
 tar -xzf tcgui.0.4.2.tar.gz
 

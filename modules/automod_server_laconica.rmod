@@ -27,7 +27,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 INSTALL=$(cat /tmp/def_install)
 SILENT=$(cat /tmp/silent)
@@ -41,21 +41,21 @@ LACONICA_MYSQL_PWD[$count]=${laconica_mysql_pwd[$count]}
 MOD_NAME[$count]=${laconica_name[$count]}
 done
 #_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_FREE______________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
 
-function WGET_MIRROIR_FREE
+function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_FREE/laconica-0.7.1-090311.tar.gz
+wget $URL_CIWS_DEPOT/laconica-0.7.1-090311.tar.gz
 tar -xzf laconica-0.7.1-090311.tar.gz
-#wget $URL_FREE/sphinx-0.9.8.1.tar.gz
+#wget $URL_CIWS_DEPOT/sphinx-0.9.8.1.tar.gz
 #tar -xzf sphinx-0.9.8.1.tar.gz
-#wget $URL_FREE/sphinx_0.9.8.1-1_i386.deb
+#wget $URL_CIWS_DEPOT/sphinx_0.9.8.1-1_i386.deb
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -64,7 +64,7 @@ tar -xzf laconica-0.7.1-090311.tar.gz
 function INSTALL
 {
 echo "I: Download Laconica"
-WGET_MIRROIR_FREE
+WGET_CIWS_DEPOT
 #aptitude install -y libmysql++-dev libmysqlclient15-dev checkinstall
 cd $DL_DIR
 #cd sphinx-0.9.8.1

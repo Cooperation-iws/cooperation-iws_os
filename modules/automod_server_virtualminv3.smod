@@ -22,7 +22,7 @@ BIN_MYSQL=$(cat /tmp/mysql-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
 #TEMP
 MIRROIR="A"
@@ -55,12 +55,12 @@ export virtualmin_repo=$virtualmin_repo
 
 export VIRTUALMIN_NONINTERACTIVE=$VIRTUALMIN_NONINTERACTIVE
 
-export URL_FREE=$URL_FREE
+export URL_CIWS_DEPOT=$URL_CIWS_DEPOT
 
 cd $DL_DIR
 #cancel inhibition for mysql
 
-wget $URL_FREE/virtualmin1.0.3/install_virtualminv3.sh
+wget $URL_CIWS_DEPOT/virtualmin1.0.3/install_virtualminv3.sh
 chmod +x install_virtualminv3.sh
 ./install_virtualminv3.sh
 

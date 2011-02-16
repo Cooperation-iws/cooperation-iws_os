@@ -22,7 +22,7 @@ BIN_MYSQL=$(cat /tmp/mysql-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 #TEMP
 MIRROIR="A"
@@ -49,7 +49,7 @@ LOCAL_IFACE=$gateway_local_iface
 
 cd $DL_DIR
 
-wget $URL_FREE/install_virtualmin.sh
+wget $URL_CIWS_DEPOT/install_virtualmin.sh
 chmod +x install_virtualmin.sh
 ./install_virtualmin.sh
 

@@ -25,7 +25,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 #TEMP
 MIRROIR="A"
 NOM_CACTI="Cacti"
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 
 #VARIABLES
@@ -42,7 +42,7 @@ function INSTALL
 {
 
 cd $DL_DIR
-wget $URL_FREE/splunk-3.4.6-51113-linux-2.6-intel.deb
+wget $URL_CIWS_DEPOT/splunk-3.4.6-51113-linux-2.6-intel.deb
 dpkg -i splunk-3.4.6-51113-linux-2.6-intel.deb
 
 

@@ -10,20 +10,20 @@ RMOD_DESCRIPTION='Update Manager'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 LIVEUSER=$(cat /tmp/user)
-URL_FREE=$(cat /tmp/url_mirroir)
+URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
 
 
 apt-get remove --assume-yes --force-yes mixxx
 
 cd /tmp
 
-wget $URL_FREE/hdjmod-dkms_1.28_all.deb
+wget $URL_CIWS_DEPOT/hdjmod-dkms_1.28_all.deb
 dpkg -i hdjmod-dkms_1.28_all.deb
 
-wget $URL_FREE/mixxx_1.6.1+Herc-0ubuntu1_i386.deb
+wget $URL_CIWS_DEPOT/mixxx_1.6.1+Herc-0ubuntu1_i386.deb
 dpkg -i mixxx_1.6.1+Herc-0ubuntu1_i386.deb
 
-wget $URL_FREE/hdjcpl_1.09-1_i386.deb
+wget $URL_CIWS_DEPOT/hdjcpl_1.09-1_i386.deb
 dpkg -i hdjcpl_1.09-1_i386.deb
 
 apt-get -f install --assume-yes --force-yes
