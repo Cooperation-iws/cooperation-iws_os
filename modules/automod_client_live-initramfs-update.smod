@@ -31,8 +31,6 @@ echo "
 modprobe -q loop max_loop=255" >> /usr/share/initramfs-tools/scripts/live-premount/modules
 
 
-
-
 sed -i "3s/user/$LIVEUSER/" /etc/live.conf
 
 sed -i "s/USERNAME=\"user\"/USERNAME=\"$LIVEUSER\"/"  /usr/share/initramfs-tools/scripts/live

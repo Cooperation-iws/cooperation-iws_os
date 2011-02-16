@@ -39,7 +39,6 @@ class Cooperationiws:
  	self.appName = "Cooperation-iws"
         self.appVersion = "0.9.2"
         self.updateId = "325"
-        self.cdUbuntuVersion = ''
         self.moduleDir = os.getcwd() + '/modules/'
 	self.scriptDir = os.getcwd() + '/scripts/'
 	self.xmlDir = os.getcwd() + '/xml/'
@@ -79,14 +78,9 @@ class Cooperationiws:
 	self.regexModReqApache = '^RMOD_REQ_APACHE=([A-Za-z0-9\w]+)\s'        
 	self.regexModReqXnest = '^RMOD_REQ_XNEST=([A-Za-z0-9\w]+)\s'        
 	self.regexModUpdateUrl = '^RMOD_UPDATE_URL=([A-Za-z0-9:.\-\&\*\_\,\/\\(\)\'\"\s\w]+)\n'
-        self.regexUbuntuAltCdVersion = '^[a-zA-Z0-9-.]*\s+([0-9.]+)\s+'
-        self.regexUbuntuAltCdInfo = '([\w-]+)\s+(\d+.\d+)\s+\D+Release\s(\w+)\s+'
-        self.regexUbuntuAltPackages = '^Package:\s+(\S*)\n'
         self.execModulesEnabled = False
-        # time command for timing operations
-        
+        self.casperPath = ""
         self.ReqApache = "B"
-	self.nodebuntu = False
 	self.scriptParams = '#!/bin/bash\n\n'
 
         APPDOMAIN='cooperationiws'
@@ -191,22 +185,21 @@ class Cooperationiws:
 	parser.add_option( "--arch", 
                     dest="arch", default="686" ,
                     help="Debian architecture (686, amd64)")
-	parser.add_option( "--webconverger", 
-                    dest="webconverger", action="store_true",
-                    default=False ,
-                    help="Create Web converger iso")
-	parser.add_option( "--webconvergerlocale", 
-                    dest="webconvergerlocale", default="webconverger-eu",
-                    help="Webconverger localization")
-        parser.add_option( "--encryption", 
+	parser.add_option( "--encryption", 
                     dest="encryption", default="disabled",
                     help="Debian live encryption")
 	parser.add_option( "--encryptionpassphrase", 
                     dest="encryptionpassphrase", default="01234567890123456789",
                     help="Debian live encryption passphrase")
-	parser.add_option( "--isotype", 
-                    dest="isotype", default="" ,
-                    help="Type of Input Iso image")
+	parser.add_option( "--dist", 
+                    dest="dist", default="debian" ,
+                    help="Linux distribution")
+	parser.add_option( "--distvers", 
+                    dest="distvers", default="lenny" ,
+                    help="Version of the Linux distribution, hardy,intrepid,jaunty,lenny")
+
+
+
         (options, args) = parser.parse_args()
         
         print _('INFO: Text only version...')
@@ -250,15 +243,13 @@ class Cooperationiws:
 	self.debianLive = options.debianlive
 	self.DebianLiveType =  options.debianLiveFlavor       
 	self.DebianLiveReleaseType =  options.debianLiveOS         
-	self.webconverger = options.webconverger
-	self.webconvergerLocale = options.webconvergerlocale
 	self.encryption = options.encryption
 	self.encryptionpassphrase = options.encryptionpassphrase
 	self.locale = options.locale
 	self.locale = options.locale
-	self.isoType = options.isotype
 	self.LiveCdArch=options.arch
-
+	self.distType=options.dist
+	self.distVers=options.distvers
 	#Init the app
         self.commandLineGui()
 
@@ -321,146 +312,16 @@ class Cooperationiws:
 # ---------- Detect Live CD version ---------- #
        
     def checkLiveCdVersion(self):
-	    print "\nLive CD type is:"
-            if  self.debianLive == True:
-		self.casperPath = 'live'	
-		self.distVers = self.DebianLiveReleaseType
-		self.distVariant = self.DebianLiveReleaseType		
-		print "\033[1m Edubuntu 8.10 Live CD\033[0m\n"
-	    elif  self.isoType == "edubuntu_8.10":
-		self.casperPath = 'casper'
-		self.distType = 'debian_derivative'	
-		self.distVers = 'intrepid'
-		self.distVariant = 'edubuntu_8.10'
-	    elif  self.isoType == "edubuntu_9.04":
-		self.casperPath = 'casper'	
-		self.distType = 'debian_derivative'	
-		self.distVers = 'jaunty'
-		self.distVariant = 'edubuntu_9.04'		
-		print "\033[1m Edubuntu 8.10 Live CD\033[0m\n"	
-	    elif  self.isoType == "eeebuntu_8.10":
-		self.casperPath = 'casper'	
-		self.distType = 'debian_derivative'	
-		self.distVers = 'intrepid'
-		self.distVariant = 'eeebuntu_8.10'		
-		print "\033[1m Eeebuntu 8.10 Live CD\033[0m\n" 
-	    elif  self.isoType == "studio_8.10":
-		self.casperPath = 'casper'	
-		self.distType = 'debian_derivative'	
-		self.distVers = 'intrepid'
-		self.distVariant = 'studio_8.10'		
-		print "\033[1m Ubuntu Studio 8.10 Live CD\033[0m\n" 
-	    elif  self.isoType == "studio_9.04":
-		self.casperPath = 'casper'	
-		self.distType = 'debian_derivative'	
-		self.distVers = 'jaunty'
-		self.distVariant = 'studio_9.04'		
-		print "\033[1m Ubuntu Studio 9.04 Live CD\033[0m\n" 
-	    elif  self.isoType == "netbook-remix_8.10":
-		self.casperPath = 'casper'	
-		self.distType = 'debian_derivative'	
-		self.distVers = 'intrepid'
-		self.distVariant = 'netbook-remix_8.10'		
-		print "\033[1m Netbook remix 8.10 Live CD\033[0m\n"
-	    elif  self.isoType == "nubuntu_8.10":
-		self.casperPath = 'casper'	
-		self.distType = 'debian_derivative'	
-		self.distVers = 'intrepid'
-		self.distVariant = 'nubuntu_8.10'		
-		print "\033[1m Nbuntu8.10 Live CD\033[0m\n"
-	    elif  self.isoType == "maryan_8.04.1":
-		self.casperPath = 'casper'	
-		self.distType = 'debian_derivative'	
-		self.distVers = 'hardy'
-		self.distVariant = 'maryan_8.04.1'		
-		print "\033[1m Maryan 8.10 Live CD\033[0m\n"	
-	    elif  self.isoType == "opengeu_8.04.1":
-		self.casperPath = 'casper'	
-		self.distType = 'debian_derivative'	
-		self.distVers = 'hardy'
-		self.distVariant = 'opengeu_8.04.1'		
-		print "\033[1m Opengeu 8.04.1 Live CD\033[0m\n"
-            elif  self.isoType == "ozos-0.9":
-		self.casperPath = 'casper'	
-		self.distType = 'debian_derivative'	
-		self.distVers = 'hardy'
-		self.distVariant = 'ozos-0.9'		
-		print "\033[1m Ozos 0.9 Live CD\033[0m\n"
-            elif  self.isoType == "poseidon-3.1":
-		self.casperPath = 'casper'	
-		self.distType = 'debian_derivative'	
-		self.distVers = 'hardy'
-		self.distVariant = 'poseidon-3.1'		
-		print "\033[1m Poseidon 3.1 Live CD\033[0m\n"		
-	    elif os.path.exists(os.path.join(self.customDir, "remaster/boot/grub")) and commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/boot/grub/menu.lst") + '| grep \'Webconverger\'') != '':
-		self.casperPath = 'live'
-		self.distType = 'debian_derivative'	
-		self.distVers = 'lenny'
-		self.distVariant = 'webconverger'	
-		print "\033[1m Webconverger Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' | grep \'Elyssa\'') != '':
-		self.casperPath = 'casper'
-		self.distType = 'debian_derivative'	
-		self.distVers = 'hardy'
-		self.distVariant = 'mint'			
-		print "\033[1m Linux Mint 5 Elyssa\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + ' | grep \'nUbuntu\'') != '' and commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '':
-		self.casperPath = 'casper'
-		self.distType = 'debian_derivative'	
-		self.distVers = 'hardy'
-		self.distVariant = 'nUbuntu'			
-		print "\033[1m  nUbuntu 8.04\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'etch\'') != '':
-		self.casperPath = 'casper'
-		self.distVers = 'etch'
-		self.distVariant = 'etch'			
-		print "\033[1m Debian Etch Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'20070727\'') != '':
-		self.casperPath = 'casper'
-		self.distType = 'debian_derivative'	
-		self.distVers = 'studio64'
-		self.distVariant = 'studio64'			
-		print "\033[1m Studio 64 Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.04\'') != '' or commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'hardy\'') != '':
-		self.casperPath = 'casper'	
-		self.distType = 'debian_derivative'	
-		self.distVers = 'hardy'
-		self.distVariant = 'hardy'		
-		print "\033[1m Ubuntu 8.04 Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'9.04\'') != '':
-		self.casperPath = 'casper'	
-		self.distType = 'debian_derivative'	
-		self.distVers = 'jaunty'
-		self.distVariant = 'jaunty'		
-		print "\033[1m Ubuntu 9.04 Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + ' | grep \'8.10\'') != '':
-		self.casperPath = 'casper'	
-		self.distType = 'debian_derivative'	
-		self.distVers = 'intrepid'
-		self.distVariant = 'intrepid'		
-		print "\033[1m Ubuntu 8.10 Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'lenny\'') != '':
-		self.casperPath = 'live'
-		self.distType = 'debian_derivative'	
-		self.distVers = 'lenny'
-		self.distVariant = 'lenny'	
-		print "Debian Lenny Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") + '| grep \'vyatta\'') != '':
-		self.casperPath = 'live'
-		self.distType = 'debian_derivative'	
-		self.distVers = 'lenny'
-		self.distVariant = 'vyatta'	
-		print "\033[1m Vyatta Live CD\033[0m\n"
-	    elif commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'sid\'') != '':	    	
-		self.distVers = 'sid'			
-		self.distType = 'debian_derivative'	
-		self.casperPath = 'live'
-		self.distVariant = 'sid'
-		print "\033[1m Debian Sid Live CD\033[0m\n"
-	    	
-	    else:
-		print "Live CD not detected, Aborting"
-
+	if self.distType == "debian":
+		for root, dirs, files in os.walk(os.path.join(self.customDir, "remaster")):
+			for d in dirs:
+				if d == "casper":
+					self.casperPath="casper"
+				if d == "live":
+		    			self.casperPath="live"
+		if self.casperPath =="":
+			print _('Unknown debian Live cd: Aborting')
+            		exit(0)
 
 # ---------- Handle Module Properties ---------- #
      
