@@ -664,18 +664,10 @@ class Cooperationiws:
 # ---------- Debian Live option ---------- #
     
     def setupDebianLive(self):
-	
         
 	os.system('bash \"' + self.scriptDir + '/debianlive.sh\" \"' + self.DebianLiveType + '\" \"' + self.DebianLiveReleaseType + '\" \"' + self.LiveCdArch + '\" \"' + self.debMirror + '\" \"' + self.debMirrorSecurity + '\" \"' + self.keyLang + '\" \"' + self.locale + '\" \"' + self.host + '\" \"' + self.user + '\" \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" ')
-
-	
-	self.casperPath = 'live'
-	if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'etch\'') != '':	    	
-			self.distVers = 'etch'	
-	if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'lenny\'') != '':	    	
-			self.distVers = 'lenny'			
-	if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'squeeze\'') != '':	    	
-			self.distVers = 'squeeze'	
+		
+	self.distVers = self.DebianLiveReleaseType	
 	
 	self.checkLiveCdVersion()
  	
@@ -819,7 +811,7 @@ class Cooperationiws:
 
 	if self.execModulesEnabled == True:
             print _('Running modules...')
-            # find all modules in chroot and chain together and run
+            # find all modules in chroot, chain together and run
             for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "scripts/")):
                 for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
