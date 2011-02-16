@@ -114,23 +114,6 @@ rm /vmlinuz
 cp /boot/vmlinuz-$kernel /vmlinuz
 
 
-echo "I: Removing chroot user"
-function REMOVE_USER()
-{
-
-#faire mirroir dans /etc/skel/.
-cp -r /home/$TMPUSER/* /etc/skel/.
-
-sleep 2
-#virer admin et liveusb de /etc/sudoers
-#cat /etc/sudoers | sed '/%admin/d' | tee /etc/sudoers
-echo -e "root ALL=(ALL) ALL" | tee /etc/sudoers
-#supprimer user 
-userdel -r $TMPUSER
-}
-REMOVE_USER
-
-
 
 if [ "${APACHE}"  == "A" ]; then
 

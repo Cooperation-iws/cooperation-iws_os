@@ -964,7 +964,7 @@ class Cooperationiws:
             os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
            
 	    # HACK: create temporary script for chrooting
-            scr = '#!/bin/sh\n#\n#\t(c) cooperation-iws, 2008\n#\nexport HOME=/root\nchroot ' + os.path.join(self.customDir, "chroot/") + '\n'
+            scr = '#!/bin/bash\n#\n#\t(c) cooperation-iws, 2011\n#\nexport HOME=/root\nchroot ' + os.path.join(self.customDir, "chroot/") + '\n'
             fchroot = open(os.path.join(self.customDir, "scriptChroot.sh"), 'w')
             fchroot.write(scr)
             fchroot.close()
@@ -995,12 +995,6 @@ class Cooperationiws:
             # restore wgetrc
             print _("Restoring wgetrc configuration...")
             os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-            # remove apt.conf
-            #print _("Removing apt.conf configuration...")
-            #os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf") + '\"')
-            # remove dns info
-            
-            
             # umount /proc
             print _("Umounting /proc...")
             os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')

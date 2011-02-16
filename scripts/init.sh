@@ -48,23 +48,6 @@ Flags: seen
 " >> /var/cache/debconf/config.dat
 
 
-function ADD_USER()
-{
-export LC_ALL=C
-mkdir /etc/skel/.gconf
-mkdir /etc/skel/.gconfd
-mkdir -p /etc/skel/Bureau
-sleep 2
-#useradd -d /home/liveusb -m liveusb -s /bin/bash -p U6aMy0wojraho
-useradd -d /home/liveusb -m liveusb -s /bin/bash -p U6aMy0wojraho -g root -u 1000
-echo -e "root ALL=(ALL) ALL" | tee /etc/sudoers
-echo -e "%admin ALL=(ALL) ALL" | tee -a /etc/sudoers
-echo -e "liveusb ALL=(ALL) ALL" | tee -a /etc/sudoers
-sleep 2
-}
-ADD_USER
-export HOME=/home/liveusb
-echo "liveusb" > /tmp/tmp_user
 
 #Rubygem local mirror
 echo "gem: --source $URL_CIWS_DEPOT/gem-mirror/" > $HOME/.gemrc

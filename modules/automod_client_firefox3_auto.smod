@@ -12,8 +12,7 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 . /tmp/scripts_params
 
-TMPUSER=$(cat /tmp/tmp_user)
-export HOME="/home/$TMPUSER"
+
 echo "I: install firefox"
 
 apt-get install --assume-yes --force-yes firefox prism
