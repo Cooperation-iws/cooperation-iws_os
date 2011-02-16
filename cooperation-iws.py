@@ -42,6 +42,8 @@ class Cooperationiws:
         self.cdUbuntuVersion = ''
         self.moduleDir = os.getcwd() + '/modules/'
 	self.scriptDir = os.getcwd() + '/scripts/'
+	self.xmlDir = os.getcwd() + '/xml/'
+	self.phpDir = os.getcwd() + '/lib/php/'
 	self.ciwsRootDir = os.getcwd()
         self.mountDir = '/media/cdrom'
         self.tmpDir = "tmp"
@@ -922,6 +924,7 @@ class Cooperationiws:
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'end_Lampp.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'shutdown_ws.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
+	scriptCustomExec += 'cp -r ' + self.scriptDir + 'shutdown_ws.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
 	scriptCustomExec += 'mkdir ' +  os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + ' ;\n'
  	scriptCustomExec += 'cd ' +  os.path.join(self.customDir, "chroot/tmp")+'\n'
  	scriptCustomExec += 'wget ' + self.entryLocalMirror +"/" + self.cms  + ' \n'
