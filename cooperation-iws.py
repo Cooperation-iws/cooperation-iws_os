@@ -38,7 +38,6 @@ class Cooperationiws:
         # vars
  	self.appName = "Cooperation-iws"
         self.appVersion = "0.9.2"
-        self.updateId = "325"
         self.moduleDir = os.getcwd() + '/modules/'
 	self.scriptDir = os.getcwd() + '/scripts/'
 	self.xmlDir = os.getcwd() + '/xml/'
@@ -66,8 +65,6 @@ class Cooperationiws:
         self.modReqApache='RMOD_REQ_APACHE'
 	self.modReqXnest='RMOD_REQ_XNEST'
 	self.modules =  {}
-        self.regexUbuntuVersion = '^DISTRIB_RELEASE=([0-9.]+)\n'
-        self.regexModEngine = '^RMOD_ENGINE=([A-Za-z0-9.\s\w]+)\n'
         self.regexModCategory = '^RMOD_CATEGORY=([A-Za-z0-9\'\"\w]+)\s'
         self.regexModSubCategory = '^RMOD_SUBCATEGORY=([A-Za-z0-9\'\"\w]+)\s'
         self.regexModName = '^RMOD_NAME=([A-Za-z0-9.\-\&\,\*\/\(\)\'\"\s\w]+)\n'
@@ -553,21 +550,17 @@ class Cooperationiws:
 		self.cmdLoadModules()
 		os.popen("cp "+self.moduleFilename + " " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
 		os.popen("chmod +x " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
-		os.popen("echo \"A\" > "+ os.path.join(self.customDir, "chroot") + "/tmp/silent")
 		print _('Proceeding to customization...')		
 		self.customize()		
-		
 		if self.silent == False:
 			self.launchTerminal()
 		self.endInstall()
 		self.installType = "Cd"
 		self.LiveCdDescription="Cooperation-iws Live CD"
-		
 		self.buildIso=True		
 		self.buildSquashRoot = True
 		self.buildUsb = False
 		self.buildLiveCdFilename = os.path.join(self.customDir, self.isoname)
-		self.LiveCdDescription = "cooperation-iws-custom"
 		
 		self.build()
 		
@@ -923,9 +916,7 @@ class Cooperationiws:
 		os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/lampp-exec.sh')
         os.system('bash \"' + os.path.join(self.customDir, "scripts/module-exec.sh")+ '\"')
 	os.popen ('cp '	 + os.path.join(self.customDir, "chroot/tmp/ls.log") + ' '+self.customDir)        
-	# cleanup
-        #os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
-        # restore wgetrc
+	# restore wgetrc
         print _("Restoring wgetrc configuration...")
         os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
         print _("Restoring hostname configuration...")
