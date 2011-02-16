@@ -10,20 +10,9 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Installs'
 RMOD_RUN_IN_CHROOT=True
 
-
-
-WWW_DIRECTORY=$(cat /tmp/web-path)
-DL_DIR=$(cat /tmp/web_install-path)
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-
 APACHE=$(cat /tmp/apache)
 
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
-CASPER_PATH=$(cat /tmp/casper_path)
-
+. /tmp/scripts_params
 
 export DEBIAN_FRONTEND=noninteractive
 

@@ -17,7 +17,7 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
-DL_DIR=$(cat /tmp/web_install-path)
+
 BIN_MYSQL=$(cat /tmp/mysql-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 DISPLAY=127.0.0.1:5.0
@@ -29,10 +29,10 @@ SILENT=$(cat /tmp/silent)
 
 #TEMP
 
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
-INSTALL=$(cat /tmp/def_install)
+. /tmp/scripts_params
 
-HOSTNAME=$(cat /tmp/hostname)
+
+HOSTNAME=$HOSTNAME
 
 
 

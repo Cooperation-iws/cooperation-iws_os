@@ -9,8 +9,8 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Ubuntu Multimedia Codecs'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-LIVEUSER=$(cat /tmp/user)
-DEB_DIST=$(cat /tmp/deb_dist)
+LIVEUSER=$LIVEUSER
+DEB_DIST=$DEB_DIST
 
 echo "
 Name: msttcorefonts/baddldir

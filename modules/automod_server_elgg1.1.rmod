@@ -15,7 +15,7 @@ RMOD_VERBOSE_FR="Elgg est un système de réseaux sociaux ouvert."
 
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
-DL_DIR=$(cat /tmp/web_install-path)
+
 BIN_MYSQL=$(cat /tmp/mysql-path)
 SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
@@ -23,9 +23,9 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 #TEMP
 
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
+. /tmp/scripts_params
 
-INSTALL=$(cat /tmp/def_install)
+
 
 #VARIABLES
 #MYSQL PASSWORD

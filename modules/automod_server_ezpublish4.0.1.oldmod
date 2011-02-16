@@ -14,7 +14,7 @@ RMOD_VERBOSE="eZ Publish is an Open Source Content Management System chosen by t
 RMOD_VERBOSE_FR="eZ Publish est un système de Gestion de Contenu Open Source choisi par des milliers d'entreprises et organisations dans le monde. Il vous permet de créer des portails d'information, des sites internet institutionnels, des intranets, des boutiques en ligne et des portails média. eZ Publish est 100% Open Source. "
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
-DL_DIR=$(cat /tmp/web_install-path)
+
 BIN_MYSQL=$(cat /tmp/mysql-path)
 SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
@@ -22,9 +22,9 @@ LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 #TEMP
 
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
+. /tmp/scripts_params
 
-INSTALL=$(cat /tmp/def_install)
+
 
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params

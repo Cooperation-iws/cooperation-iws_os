@@ -17,13 +17,13 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
-DL_DIR=$(cat /tmp/web_install-path)
+
 BIN_MYSQL=$(cat /tmp/mysql-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
-DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
+. /tmp/scripts_params
+DEB_MIRROR_PATH=$DEB_MIRROR_PATH
 #TEMP
 MIRROIR="A"
 NOM_CACTI="Cacti"
@@ -32,7 +32,7 @@ SILENT=$(cat /tmp/silent)
 
 
 
-HOSTNAME=$(cat /tmp/hostname)
+HOSTNAME=$HOSTNAME
 
 apt_cacher_root="$(echo $DEB_MIRROR_PATH | cut -d'/' -f3)"
 

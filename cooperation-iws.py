@@ -87,7 +87,7 @@ class Cooperationiws:
         
         self.ReqApache = "B"
 	self.nodebuntu = False
-
+	self.scriptParams = '#!/bin/bash\n\n'
 
         APPDOMAIN='cooperationiws'
         LANGDIR='lang'
@@ -230,9 +230,8 @@ class Cooperationiws:
 	self.ciwsCms = options.cms
 	self.checkbuttonAufs = options.aufs
 	self.checkbuttonLocalMirror = True
-	self.entryLocalMirror = options.webappmirror
+	self.ciwsDepot = options.webappmirror
 	self.comboboxWebAppMirrors = ""
-	self.radiobuttonDefaultInstall = True
 	self.user = options.username
 	if self.user != "" and self.checkUserName() == False:
 		print _("You need to specify a username with at least 6 characters in this field of characters: [a-z0-9_-*.]")
@@ -808,7 +807,7 @@ class Cooperationiws:
     def setupDebianLive(self):
 	
         
-	os.system('bash \"' + self.scriptDir + '/debianlive.sh\" \"' + self.DebianLiveType + '\" \"' + self.DebianLiveReleaseType + '\" \"' + self.LiveCdArch + '\" \"' + self.debMirror + '\" \"' + self.debMirrorSecurity + '\" \"' + self.keyLang + '\" \"' + self.locale + '\" \"' + self.host + '\" \"' + self.user + '\" \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\" \"' + self.entryLocalMirror + '\" ')
+	os.system('bash \"' + self.scriptDir + '/debianlive.sh\" \"' + self.DebianLiveType + '\" \"' + self.DebianLiveReleaseType + '\" \"' + self.LiveCdArch + '\" \"' + self.debMirror + '\" \"' + self.debMirrorSecurity + '\" \"' + self.keyLang + '\" \"' + self.locale + '\" \"' + self.host + '\" \"' + self.user + '\" \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" ')
 
 	
 	self.casperPath = 'live'
@@ -818,12 +817,7 @@ class Cooperationiws:
 			self.distVers = 'lenny'			
 	if commands.getoutput('cat '  + os.path.join(self.customDir, "remaster/isolinux/f1.txt") + '| grep \'squeeze\'') != '':	    	
 			self.distVers = 'squeeze'	
-	fcasper=open(os.path.join(self.customDir, "chroot/tmp/casper_path"), 'w')
-	fcasper.write(self.casperPath)
-	fcasper.close()
-	fdebDist=open(os.path.join(self.customDir, "chroot/tmp/deb_dist"), 'w')
-	fdebDist.write(self.distVers)
-	fdebDist.close()
+	
 	self.checkLiveCdVersion()
  	
 	
@@ -831,79 +825,69 @@ class Cooperationiws:
 
     def customize(self):
         print _("INFO: Customizing...")
-	self.casperPathUpdated = self.casperPath
+	
         #Set Global variable for chroot
-	fWorkDir=open(os.path.join(self.customDir, "chroot/tmp/user"), 'w')
-        fWorkDir.write(self.user)
-       	fWorkDir.close()
 
-        fuserFull=open(os.path.join(self.customDir, "chroot/tmp/user_full_name"), 'w')
-        fuserFull.write(self.userFull)
-       	fuserFull.close()
+	self.scriptParams +='LIVEUSER=\"' + self.user + '\"\n'
 
-        fcasper=open(os.path.join(self.customDir, "chroot/tmp/casper_path"), 'w')
-	fcasper.write(self.casperPath)
-	fcasper.close() 
- 
+	self.scriptParams +='LIVEUSER_FULL=\"' + self.userFull + '\"\n'
+	
+	self.scriptParams +='CASPER_PATH=\"' + self.casperPath + '\"\n'
+	
+	self.scriptParams +='DEB_DIST=\"' + self.distVers + '\"\n'
+
+        self.scriptParams +='DEB_MIRROR_PATH=\"' + self.debMirror + '\"\n'
+
+        self.scriptParams +='DEBNONFREE_MIRROR_PATH=\"' + self.debMirrorNonfree + '\"\n'
+
+        self.scriptParams +='DEB_MIRROR_SECURITY_PATH=\"' + self.debMirrorSecurity + '\"\n'
+
+        self.scriptParams +='OS_TYPE=\"' + self.ciwsOsType + '\"\n'
+
+        self.scriptParams +='HOSTNAME=\"' + self.host + '\"\n'
+
+        self.scriptParams +='CLEAR_HOST_PWD=\"' + self.password + '\"\n'
+
+        crypt_pass = commands.getoutput('mkpasswd -s ' + self.password )			
+	while  commands.getoutput(' echo  ' + crypt_pass + ' | grep "[/.]" ') != '' :
+        	crypt_pass = commands.getoutput('mkpasswd -s ' + self.password )
+	self.scriptParams +='CRYPT_HOST_PWD=\"' + crypt_pass + '\"\n'
+
+	self.scriptParams +='URL_CIWS_DEPOT=\"' + self.ciwsDepot + '\"\n'
+
+	if self.disableAutologin == True:
+		self.scriptParams +='DISABLE_AUTOLOGIN=\"1\"\n'
+
+	if self.encryption != "disabled":
+        	self.scriptParams +='ENCRYPTION=\"1\"\n'
+        
+	fscriptParams=open(os.path.join(self.customDir, "chroot") + '/tmp/scripts_params', 'w')
+	fscriptParams.write(self.scriptParams)
+	fscriptParams.close()
+	
+
+
 	fcasper=open("/tmp/casper_path", 'w')
 	fcasper.write(self.casperPath)
 	fcasper.close()
 
-	fcasperupdated=open(os.path.join(self.customDir, "chroot/tmp/casper_path_updated"), 'w')
-	fcasperupdated.write(self.casperPathUpdated)
-	fcasperupdated.close()
-  
-	fcasperupdated=open("/tmp/casper_path_updated", 'w')
-	fcasperupdated.write(self.casperPathUpdated)
-	fcasperupdated.close()
-
-	fdebDist=open(os.path.join(self.customDir, "chroot/tmp/deb_dist"), 'w')
-	fdebDist.write(self.distVers)
-	fdebDist.close()
-  
-	fDebMirror=open(os.path.join(self.customDir, "chroot/tmp/deb_mirror_path"), 'w')
-	fDebMirror.write(self.debMirror)
-	fDebMirror.close()
-
-	fDebMirrorNonfree=open(os.path.join(self.customDir, "chroot/tmp/deb-nonfree_mirror_path"), 'w')
-	fDebMirrorNonfree.write(self.debMirrorNonfree)
-	fDebMirrorNonfree.close()
-
-	fDebMirrorSecurity=open(os.path.join(self.customDir, "chroot/tmp/deb-security_mirror_path"), 'w')
-	fDebMirrorSecurity.write(self.debMirrorSecurity)
-	fDebMirrorSecurity.close()
-
-	fciwsOsType=open(os.path.join(self.customDir, "chroot/tmp/os_type"), 'w')
-	fciwsOsType.write(self.ciwsOsType)
-	fciwsOsType.close()
-
-	fHostFile=open(os.path.join(self.customDir, "chroot") + '/tmp/hostname', 'w')
-   	fHostFile.write(self.host)
-    	fHostFile.close()
-
-    	fPasswordFile=open(os.path.join(self.customDir, "chroot") + '/tmp/os_password', 'w')
-   	fPasswordFile.write(self.password)
-    	fPasswordFile.close()
-
-    	crypt_pass = commands.getoutput('mkpasswd -s ' + self.password )			
-	while  commands.getoutput(' echo  ' + crypt_pass + ' | grep "[/.]" ') != '' :
-        	crypt_pass = commands.getoutput('mkpasswd -s ' + self.password )
-	fcrypt_pass=open(os.path.join(self.customDir, "chroot/tmp/crypt_user_pass"), 'w')
-        fcrypt_pass.write(crypt_pass)
-       	fcrypt_pass.close()
-
-        if self.disableAutologin == True:
-		fdisableAutologin=open(os.path.join(self.customDir, "chroot/tmp/disable_autologin"), 'w')
-        	fdisableAutologin.write("TRUE")
-       		fdisableAutologin.close()
-
-        if self.encryption != "disabled":
-		fencryption=open(os.path.join(self.customDir, "chroot/tmp/encryption"), 'w')
-        	fencryption.write("TRUE")
-       		fencryption.close()
 	
+	fMirrorUrl=open("/tmp/url_mirroir", 'w')
+        fMirrorUrl.write(self.ciwsDepot)
+        fMirrorUrl.close() 
+
+
+	#Share Working directory
+	fWorkDir=open('/tmp/working-directory', 'w')
+        fWorkDir.write(self.customDir)
+        fWorkDir.close()
+	#Share Script Root dir	
+	fWorkDir=open('/tmp/ciws-root-directory', 'w')
+        fWorkDir.write(self.ciwsRootDir)
+        fWorkDir.close()
+
 	
-		
+
 	if self.ciwsCms == "Wordpress-goo":
 		self.cms = "cooperation-wui-wordpress-def-0.7.0-081130.tar.gz"
 	else:
@@ -912,13 +896,18 @@ class Cooperationiws:
   	if self.checkbuttonAufs == True:
 		os.popen('sed -i "s/splash/splash union=aufs/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
 		
-	if self.casperPath == 'live' or self.casperPathUpdated == "live":
-		os.popen('sed -i "s/vmlinuz1/vmlinuz/g" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg")) 
-		os.popen('sed -i "s/initrd=\/'+self.casperPath+'\/initrd1.img/initrd=\/'+self.casperPathUpdated+'\/initrd.gz keyb='+self.keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg")) 
-		os.popen('sed -i "s/splash//g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
-		os.popen('echo '+self.keyLang+' > ' + os.path.join(self.customDir, "chroot/tmp/keyblang") )
+	#Changing Casper name for ISO
+	if self.casperPath == "casper" :        
+		os.popen('mv \"' + os.path.join(self.customDir, "remaster/"+self.casperPath) + '\" \"' + os.path.join(self.customDir, "remaster/live" ) + '\"')
+	self.casperPath = "live"
+
+	os.popen('sed -i "s/vmlinuz1/vmlinuz/g" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg")) 
+	os.popen('sed -i "s/initrd=\/live\/initrd1.img/initrd=\/live\/initrd.gz keyb='+self.keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg")) 
+	os.popen('sed -i "s/splash//g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
+		
 	
-	scriptCustomExec = '#!/bin/sh\n\n'
+
+	scriptCustomExec = '#!/bin/bash\n\n'
 	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init_Lampp.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "cert/" ) + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
@@ -928,7 +917,7 @@ class Cooperationiws:
 	scriptCustomExec += 'cp -r ' + self.phpDir + '/generate_xml_server_desc.php' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
 	scriptCustomExec += 'mkdir ' +  os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + ' ;\n'
  	scriptCustomExec += 'cd ' +  os.path.join(self.customDir, "chroot/tmp")+'\n'
- 	scriptCustomExec += 'wget ' + self.entryLocalMirror +"/" + self.cms  + ' \n'
+ 	scriptCustomExec += 'wget ' + self.ciwsDepot +"/" + self.cms  + ' \n'
  	scriptCustomExec += 'tar -xzf ' + self.cms + ' -C ' +  os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + ' \n'
  	scriptCustomExec += 'cp -r ' + self.scriptDir + 'cooperation-iws-wui.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
  	scriptCustomExec += 'chmod -R 777 ' + os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + ' ;\n'
@@ -953,44 +942,8 @@ class Cooperationiws:
         os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptExec.sh"))
         os.popen('bash \"' + os.path.join(self.customDir, "scriptExec.sh") + '\" > /dev/null 2>&1')
 	    
-	#Share Working directory
-	fWorkDir=open('/tmp/working-directory', 'w')
-        fWorkDir.write(self.customDir)
-        fWorkDir.close()
-	#Share Script Root dir	
-	fWorkDir=open('/tmp/ciws-root-directory', 'w')
-        fWorkDir.write(self.ciwsRootDir)
-        fWorkDir.close()
-
-	#Mirrors
-
 	
-	mirrorUrl = self.entryLocalMirror
 	
-	fMirrorUrl=open(os.path.join(self.customDir, "chroot/tmp/url_mirroir"), 'w')
-        fMirrorUrl.write(mirrorUrl)
-        fMirrorUrl.close() 
-	
-	fMirrorUrl=open("/tmp/url_mirroir", 'w')
-        fMirrorUrl.write(mirrorUrl)
-        fMirrorUrl.close() 
-
-	#Default Install of Web Apps
-	if self.radiobuttonDefaultInstall == True:
-	    defaultInstall = "A"
-	else:
-	    defaultInstall = "B"
-	fDefaultInstallWebApp=open(os.path.join(self.customDir, "chroot/tmp/def_install"), 'w')
-        fDefaultInstallWebApp.write(defaultInstall)
-        fDefaultInstallWebApp.close() 
-	fDefaultInstallWebApp=open("/tmp/def_install", 'w')
-        fDefaultInstallWebApp.write(defaultInstall)
-        fDefaultInstallWebApp.close() 
-	
-	if self.silent == True:
-		fsilentinstall=open(os.path.join(self.customDir, "chroot/tmp/silent_install"), 'w')
-        	fsilentinstall.write("silent")
-        	fsilentinstall.close() 
 	
 
         # run modules
@@ -1145,10 +1098,9 @@ class Cooperationiws:
 	# umount /dev/pts
 	print _("Umounting /dev/pts...")
         #os.popen('umount \"' + os.path.join(self.customDir, "chroot/dev/pts") + '\"')
-	self.casperPathUpdated = commands.getoutput('cat '  +  os.path.join(self.customDir, "chroot/tmp/casper_path_updated"))
-	if self.casperPath == "casper" :        
-		os.popen('mv \"' + os.path.join(self.customDir, "remaster/"+self.casperPath) + '\" \"' + os.path.join(self.customDir, "remaster/"+self.casperPathUpdated ) + '\"')
-	self.casperPath = self.casperPathUpdated
+	
+
+	
         	
 
 # ---------- Launch chroot terminal if install is not silent ---------- #

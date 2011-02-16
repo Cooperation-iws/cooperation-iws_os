@@ -3,7 +3,7 @@
 
 WORKING_DIRECTORY=$(cat /tmp/working-directory)
 DOSSIER_REMASTER="$WORKING_DIRECTORY/remaster"
-LH_ENCRYPTION=$(cat /tmp/encryption)
+LH_ENCRYPTION=$ENCRYPTION
 PASSPHRASE=$(cat /tmp/squashfspwd)
 LH_CHROOT_FILESYSTEM="squashfs"
 if [ ! -e "$DOSSIER_REMASTER/live" ]; then 

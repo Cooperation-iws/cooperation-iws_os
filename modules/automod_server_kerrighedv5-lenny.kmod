@@ -14,23 +14,23 @@ DISPLAY=127.0.0.1:5.0
 LANG_UI=$(cat /tmp/lang-wui)
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
-DL_DIR=$(cat /tmp/web_install-path)
+
 BIN_MYSQL="mysql"
 SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 DISPLAY=127.0.0.1:5.0
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
-CASPER_PATH=$(cat /tmp/casper_path)
+CASPER_PATH=$CASPER_PATH
 
 #TEMP
 
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
-DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
+. /tmp/scripts_params
+DEB_MIRROR_PATH=$DEB_MIRROR_PATH
 DEBNONFREE_MIRROR_PATH=$(cat /tmp/deb-nonfree_mirror_path)
 DEB_MIRROR_SECURITY_PATH=$(cat /tmp/deb-security_mirror_path)
 KEYBLANG = $(cat /tmp/keyblang)
 
-INSTALL=$(cat /tmp/def_install)
+
 
 . /tmp/app_params
 

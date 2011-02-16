@@ -9,10 +9,10 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION=''
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-LIVEUSER=$(cat /tmp/user)
-DEB_DIST=$(cat /tmp/deb_dist)
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
-DL_DIR=$(cat /tmp/web_install-path)
+
+
+. /tmp/scripts_params
+
 
 cd $DL_DIR
 wget $URL_CIWS_DEPOT/madwifi-modules-2.6.26-1-686-bigmem_0.9.4+r3772.20080716-1+2.6.26-13_i386.deb

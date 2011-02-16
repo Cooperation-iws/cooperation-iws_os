@@ -19,15 +19,15 @@ RMOD_REQ_APACHE=True
 RMOD_REQ_APACHE=True
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
-DL_DIR=$(cat /tmp/web_install-path)
+
 BIN_MYSQL=$(cat /tmp/mysql-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
 
 
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
+. /tmp/scripts_params
 
-INSTALL=$(cat /tmp/def_install)
+
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 

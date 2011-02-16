@@ -10,16 +10,16 @@ RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Clamav antivirus'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-DL_DIR=$(cat /tmp/web_install-path)
 
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
+
+. /tmp/scripts_params
 LANG_UI=$(cat /tmp/lang-wui)
 SILENT=$(cat /tmp/silent)
 if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
 fi
 
-HOSTNAME=$(cat /tmp/hostname)
+HOSTNAME=$HOSTNAME
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 MAIL_REPORT=$clam_mail_report
 

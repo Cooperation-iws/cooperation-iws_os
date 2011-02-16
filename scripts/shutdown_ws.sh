@@ -1,26 +1,13 @@
 #!/bin/bash
-WWW_DIRECTORY=$(cat /tmp/web-path)
-DL_DIR=$(cat /tmp/web_install-path)
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 
 APACHE=$(cat /tmp/apache)
-MIRROIR=$(cat /tmp/mirroir)
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
-CASPER_PATH=$(cat /tmp/casper_path_updated)
-OS_TYPE=$(cat /tmp/os_type)
-BIN_MYSQL=$(cat /tmp/mysql-path)
-APACHE=$(cat /tmp/apache)
-LIVEUSER=$(cat /tmp/user)
 TMPUSER=$(cat /tmp/tmp_user)
-DEB_DIST=$(cat /tmp/deb_dist)
 
+. /tmp/scripts_params
 
 . /tmp/app_params
 
-HOSTNAME=$(cat /tmp/hostname)
+
 
 
 

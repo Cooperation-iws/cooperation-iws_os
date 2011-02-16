@@ -17,7 +17,7 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
-DL_DIR=$(cat /tmp/web_install-path)
+
 BIN_MYSQL=$(cat /tmp/mysql-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 LANG_UI=$(cat /tmp/lang-wui)
@@ -25,7 +25,7 @@ LANG_UI=$(cat /tmp/lang-wui)
 #TEMP
 MIRROIR="A"
 NOM_CACTI="Cacti"
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
+. /tmp/scripts_params
 
 
 #VARIABLES

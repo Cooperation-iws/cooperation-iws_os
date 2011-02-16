@@ -17,7 +17,7 @@ RMOD_VERBOSE_FR="Proftpd est un serveur Ftp. Pour accéder aux dossiers Ftp de c
 
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
-DL_DIR=$(cat /tmp/web_install-path)
+
 BIN_MYSQL=$(cat /tmp/mysql-path)
 SCRIPT_DIRECTORY=$(cat /tmp/script-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)

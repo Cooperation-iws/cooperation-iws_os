@@ -9,11 +9,11 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Anonymous Surfing'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-LIVEUSER=$(cat /tmp/user)
+LIVEUSER=$LIVEUSER
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
-DL_DIR=$(cat /tmp/web_install-path)
+. /tmp/scripts_params
+
 
 #quick hack to make Tor button work out of the box
 fixed_ip="y"

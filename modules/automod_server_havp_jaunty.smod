@@ -9,12 +9,12 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Antivirus proxy'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-LIVEUSER=$(cat /tmp/user)
+LIVEUSER=$LIVEUSER
 SILENT=$(cat /tmp/silent)
 . /tmp/app_params
-HOSTNAME=$(cat /tmp/hostname)
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
-DL_DIR=$(cat /tmp/web_install-path)
+HOSTNAME=$HOSTNAME
+. /tmp/scripts_params
+
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 
 echo "I: install wine"

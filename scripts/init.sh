@@ -12,34 +12,20 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL=''
 
 
+echo 'SCRIPT_DIRECTORY="/tmp"' >> /tmp/scripts_params
 
-SCRIPT_DIRECTORY="/tmp"
-echo $SCRIPT_DIRECTORY > /tmp/script-path
-WWW_DIRECTORY="/var/www"
-echo $WWW_DIRECTORY > /tmp/web-path
-DL_DIR="/tmp/web_install"
+echo 'WWW_DIRECTORY="/var/www"' >> /tmp/scripts_params
+
+echo 'DL_DIR="/tmp/web_install"' >> /tmp/scripts_params
+
+echo 'BIN_MYSQL="/usr/bin/mysql"' >> /tmp/scripts_params
+
+echo 'LAMPP_DIRECTORY="/opt/ciws/"' >> /tmp/scripts_params
+
+. /tmp/scripts_params
+
+
 mkdir $DL_DIR
-echo $DL_DIR > /tmp/web_install-path
-BIN_MYSQL="/usr/bin/mysql"
-echo $BIN_MYSQL > /tmp/mysql-path
-PLUGIN_DIR="${SCRIPTS_DIR}/modules"
-LAMPP_DIRECTORY="/opt/ciws/"
-echo $LAMPP_DIRECTORY > /tmp/lampp-dir
-CHROOT_DIRECTORY="chroot"
-echo $CHROOT_DIRECTORY > /tmp/chroot-dir
-VERSION="0.5.2"
-CASPER_PATH=$(cat /tmp/casper_path)
-DEB_DIST=$(cat /tmp/deb_dist)
-DEB_MIRROR_PATH=$(cat /tmp/deb_mirror_path)
-DEBNONFREE_MIRROR_PATH=$(cat /tmp/deb-nonfree_mirror_path)
-DEB_MIRROR_SECURITY_PATH=$(cat /tmp/deb-security_mirror_path)
-HOSTNAME=$(cat /tmp/hostname)
-
-
-#TEMP
-
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
-INSTALL=$(cat /tmp/def_install)
 
 
 export LANG="en"

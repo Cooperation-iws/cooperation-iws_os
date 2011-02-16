@@ -9,9 +9,10 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Office tools for client'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
-DL_DIR=$(cat /tmp/web_install-path)
+. /tmp/scripts_params
 
+
+. /tmp/scripts_params
 
 . /tmp/app_params
 
@@ -25,7 +26,9 @@ wget $URL_CIWS_DEPOT/live-initramfs_1.154.8+20090130.001702_all.deb
 dpkg -i live-initramfs_1.154.8+20090130.001702_all.deb
 apt-get install -f --assume-yes --force-yes
 
-echo "live" > /tmp/casper_path_updated
+echo 'CASPER_PATH="live"' >> /tmp/scripts_params
+
+
 
 cd $DL_DIR
 wget $URL_CIWS_DEPOT/casper-bottom-hardy-090326.tar.gz
@@ -121,23 +124,23 @@ sed -i "s/respawn//" /etc/event.d/tty6
 
 apt-get install --assume-yes --force-yes console-data
 
-sed -i "3s/user/$(cat /tmp/user)/" /etc/live.conf
+sed -i "3s/user/$LIVEUSER/" /etc/live.conf
 
-sed -i "s/USERNAME=\"user\"/USERNAME=\"$(cat /tmp/user)\"/"  /usr/share/initramfs-tools/scripts/live
+sed -i "s/USERNAME=\"user\"/USERNAME=\"$LIVEUSER\"/"  /usr/share/initramfs-tools/scripts/live
 
-sed -i "s/USERFULLNAME=\"Debian Live user\"/USERFULLNAME=\"$(cat /tmp/user_full_name)\"/" /etc/live.conf
+sed -i "s/USERFULLNAME=\"Debian Live user\"/USERFULLNAME=\"$LIVEUSER_FULL\"/" /etc/live.conf
 
-sed -i "s/USERFULLNAME=\"Live user\"/USERFULLNAME=\"$(cat /tmp/user_full_name)\"/" /usr/share/initramfs-tools/scripts/live
+sed -i "s/USERFULLNAME=\"Live user\"/USERFULLNAME=\"$LIVEUSER_FULL\"/" /usr/share/initramfs-tools/scripts/live
 
-sed -i "s/HOSTNAME=\"debian\"/HOSTNAME=\"$(cat /tmp/hostname)\"/" /etc/live.conf
+sed -i "s/HOSTNAME=\"debian\"/HOSTNAME=\"$HOSTNAME\"/" /etc/live.conf
 
-sed -i "s/HOSTNAME=\"host\"/HOSTNAME=\"$(cat /tmp/hostname)\"/" /usr/share/initramfs-tools/scripts/live
+sed -i "s/HOSTNAME=\"host\"/HOSTNAME=\"$HOSTNAME\"/" /usr/share/initramfs-tools/scripts/live
 
-sed -i "s/8Ab05sVQ4LLps/$(cat /tmp/crypt_user_pass)/" /usr/share/initramfs-tools/scripts/live-bottom/10adduser
+sed -i "s/8Ab05sVQ4LLps/$CRYPT_HOST_PWD/" /usr/share/initramfs-tools/scripts/live-bottom/10adduser
 
 sed -i "s/ NOPASSWD://" /usr/share/initramfs-tools/scripts/live-bottom/10adduser
 
-if [ -e /tmp/disable_autologin ]; then
+if [ "$DISABLE_AUTOLOGIN" ]; then
 
 sed -i "s/true/false/g" /usr/share/initramfs-tools/scripts/live-bottom/15autologin 
 
@@ -152,7 +155,7 @@ sed -i "70s/^/#/" /usr/share/initramfs-tools/scripts/live-bottom/15autologin
 
 fi
 
-if [ -e /tmp/encryption ]; then
+if [ "$ENCRYPTION" ]; then
 
 apt-get install --assume-yes --force-yes aespipe
 sed -i '231s/root/$(basename ${fspath})/' /usr/share/initramfs-tools/scripts/live-helpers

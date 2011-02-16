@@ -23,7 +23,7 @@ fi
 
 
 WWW_DIRECTORY=$(cat /tmp/web-path)
-DL_DIR=$(cat /tmp/web_install-path)
+
 BIN_MYSQL=$(cat /tmp/mysql-path)
 LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
 DISPLAY=127.0.0.1:5.0
@@ -31,8 +31,8 @@ LANG_UI=$(cat /tmp/lang-wui)
 
 #TEMP
 
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
-INSTALL=$(cat /tmp/def_install)
+. /tmp/scripts_params
+
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL_________________________________________________

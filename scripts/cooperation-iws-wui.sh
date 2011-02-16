@@ -14,24 +14,10 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-DL_DIR=$(cat /tmp/web_install-path)
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-APACHE=$(cat /tmp/apache)
+. /tmp/scripts_params
 
-#TEMP
-MIRROIR=$(cat /tmp/mirroir)
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
-
-INSTALL=$(cat /tmp/def_install)
-SILENT=$(cat /tmp/silent)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
-fi
+
 
 
 #VARIABLES

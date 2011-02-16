@@ -9,8 +9,8 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Update Manager'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-LIVEUSER=$(cat /tmp/user)
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
+LIVEUSER=$LIVEUSER
+. /tmp/scripts_params
 
 
 apt-get remove --assume-yes --force-yes mixxx

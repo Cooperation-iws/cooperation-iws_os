@@ -9,9 +9,9 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Cryptography tools for client'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-URL_CIWS_DEPOT=$(cat /tmp/url_mirroir)
-DL_DIR=$(cat /tmp/web_install-path)
-LIVEUSER=$(cat /tmp/user)
+. /tmp/scripts_params
+
+LIVEUSER=$LIVEUSER
 
 echo "I: installing truecrypt"
 
