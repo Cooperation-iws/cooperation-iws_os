@@ -13,16 +13,9 @@ RMOD_VERBOSE="AWStats is a free powerful and featureful tool that generates adva
 RMOD_VERBOSE_FR="AWStats est un outil qui génère des statistiques avancées sur les serveurs webs, mail, ftp, .... "
 
 RMOD_RUN_IN_CHROOT=True
-RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-
-SILENT=$(cat /tmp/silent)
+. /tmp/scripts_params
 . /tmp/app_params
 
 
@@ -89,24 +82,8 @@ echo "awstats " >> /etc/webmin/webmin.acl
 
 function CREATE_WUI
 {
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/cgi-bin/awstats.pl?config=$HOSTNAME</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/cgi-bin/awstats.pl?config=$HOSTNAME</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/cgi-bin/awstats.pl?config=$HOSTNAME</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/cgi-bin/awstats.pl?config=$HOSTNAME</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/cgi-bin/awstats.pl?config=$HOSTNAME" "/cgi-bin/awstats.pl?config=$HOSTNAME" 
 
 
 }

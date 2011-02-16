@@ -13,22 +13,9 @@ RMOD_REQ_APACHE=True
 RMOD_VERBOSE="Ampache is a Web-based Audio file manager. It is implemented with MySQL, and PHP. It allows you to view, edit, and play your audio files via the web. It has support for playlists, artist and album views, album art, random play, playback via Http/On the Fly Transcoding and Downsampling, Vote based playback, Mpd and Icecast, Integrated Flash Player, as well as per user themes and song play tracking. You can also Link multiple Ampache servers togeather using XML-RPC. Ampache supports GETTEXT translations and has a full translation of many languages."
 RMOD_VERBOSE_FR="Ampache est un serveur de collections audio."
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-
-
-#TEMP
 
 . /tmp/scripts_params
 
-
-
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
 NB_AMPACHE=${#ampache_name[*]}
@@ -654,51 +641,15 @@ function CREATE_WUI
 {
 for (( count=1; count<=$NB_AMPACHE; count++ ))
 do
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 done
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________CREATE_INSTALL_SCRIPT__________________________________
-
-
-function CREATE_INSTALL_SCRIPT
-{
-for (( count=1; count<=$NB_AMPACHE; count++ ))
-do
-echo "
-
-#Ampache
-
-" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
-done
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Ampache"
 INSTALL
 CREATE_WUI
-CREATE_INSTALL_SCRIPT
 echo "I: End of install Ampache"

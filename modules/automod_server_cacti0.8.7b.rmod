@@ -14,35 +14,14 @@ RMOD_REQ_APACHE=True
 RMOD_VERBOSE="Cacti is an interface for rrd tools. Cacti allow to have traceability of serveur load."
 RMOD_VERBOSE_FR="Cacti est une interface graphique à l'outil rrd. Cacti permet notament de suivre la charge du serveur Cooperation-iws.  "
 
-
-
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
-DEB_DIST=$DEB_DIST
-#TEMP
-
 . /tmp/scripts_params
-
-
 
 #VARIABLES
 #MYSQL PASSWORD
 CACTI_MYSQL_PWD=$cacti_mysql_pwd
 MOD_NAME=$cacti_name
-
-
-
-
-
-
 
 
 #_______________________________________________________________________________________________
@@ -59,24 +38,6 @@ tar -xzf cacti_081101.tar.gz
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_CIWS_DEPOT
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-
-
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -85,7 +46,7 @@ fi
 function INSTALL
 {
 echo "I: Cacti download"
-DOWNLOAD
+WGET_CIWS_DEPOT
 export DEBIAN_FRONTEND=noninteractive
 apt-get install --assume-yes --force-yes rrdtool snmp snmpd mysql-server 
 apt-get remove --assume-yes --force-yes exim4-base
@@ -127,6 +88,13 @@ chown -R $apache_user $WWW_DIRECTORY/admin/$MOD_NAME/
 
 " >> /etc/rc.local
 
+#rm -r $WWW_DIRECTORY/admin/$MOD_NAME/rra/*
+rm -r $WWW_DIRECTORY/admin/$MOD_NAME/log/*
+sudo chown -R $apache_user $WWW_DIRECTORY/admin/$MOD_NAME/rra
+sudo chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/rra
+sudo chown -R $apache_user $WWW_DIRECTORY/admin/$MOD_NAME/log
+sudo chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/log
+
 
 }
 
@@ -138,55 +106,15 @@ chown -R $apache_user $WWW_DIRECTORY/admin/$MOD_NAME/
 
 function CREATE_WUI
 {
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/admin/$MOD_NAME</item_url>
-	<item_admin_url>/admin/$MOD_NAME</item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/admin/$MOD_NAME</item_url>
-	<item_admin_url>/admin/$MOD_NAME</item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/admin/${MOD_NAME}" "/admin/${MOD_NAME}" 
 
-echo "$RMOD_DESCRIPTION | <a href=\"/admin/$MOD_NAME\" >$MOD_NAME</a><br>
-">> $WWW_DIRECTORY/admin/cooperation-wui.frame.php
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________CREATE_INSTALL_SCRIPT__________________________________
-
-
-function CREATE_INSTALL_SCRIPT
-{
-
-echo "
-#CACTI
-#rm -r $WWW_DIRECTORY/admin/$MOD_NAME/rra/*
-rm -r $WWW_DIRECTORY/admin/$MOD_NAME/log/*
-sudo chown -R $apache_user $WWW_DIRECTORY/admin/$MOD_NAME/rra
-sudo chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/rra
-sudo chown -R $apache_user $WWW_DIRECTORY/admin/$MOD_NAME/log
-sudo chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/log
-" >> $LAMPP_DIRECTORY/config_post_install.sh
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Cacti"
 INSTALL
 CREATE_WUI
-CREATE_INSTALL_SCRIPT
 echo "I: End of Install Cacti"

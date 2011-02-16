@@ -109,7 +109,6 @@ mv /tmp/cooperation-wui-*.xml  $WWW_DIRECTORY/.
 #ADMIN
 
 
-mv /tmp/admin_cooperation-wui-*.xml  $WWW_DIRECTORY/admin/.
 
 /etc/init.d/mysql start
 

@@ -15,20 +15,8 @@ RMOD_REQ_APACHE=True
 RMOD_VERBOSE="Bugzilla is a “Defect Tracking System” or “Bug-Tracking System”. Defect Tracking Systems allow individual or groups of developers to keep track of outstanding bugs in their product effectively. Most commercial defect-tracking software vendors charge enormous licensing fees. Despite being “free”, Bugzilla has many features its expensive counterparts lack. Consequently, Bugzilla has quickly become a favorite of hundreds of organizations across the globe. "
 RMOD_VERBOSE_FR="Bugzilla est un système de suivi des Défauts utilisé par la fondation Mozilla. "
 
-SILENT=$(cat /tmp/silent)
+
 . /tmp/app_params
-
-
-
-
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-DISPLAY=127.0.0.1:5.0
-LANG_UI=$(cat /tmp/lang-wui)
-
-#TEMP
 
 . /tmp/scripts_params
 
@@ -118,24 +106,8 @@ function CREATE_WUI
 {
 for (( count=1; count<=$NB_BUGZILLA; count++ ))
 do
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 done
 
 }

@@ -13,23 +13,15 @@ RMOD_VERBOSE="Subversion is a free/open-source version control system. That is, 
 RMOD_VERBOSE_FR="Subversion (en abrégé svn) est un système de gestion de versions, distribué sous licence Apache et BSD. Il a été conçu pour remplacer CVS. Ses auteurs s'appuient volontairement sur les mêmes concepts (notamment sur le principe du dépôt centralisé et unique) et considèrent que le modèle de CVS est le bon, et que seule son implémentation est en cause. Le projet a été lancé en février 2000 par CollabNet, avec l'embauche par Jim Blandy de Karl Fogel, qui travaillait déjà sur un nouveau gestionnaire de version. Trac est un système Open Source de gestion complète de projet par Internet, développé en Python."
 
 RMOD_RUN_IN_CHROOT=True
-RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
 RMOD_REQ_APACHE=True
-SILENT=$(cat /tmp/silent)
+
 . /tmp/app_params
+. /tmp/scripts_params
 
 export LC_ALL=C
 LC_ALL=C
-WWW_DIRECTORY=$(cat /tmp/web-path)
 
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-DISPLAY=127.0.0.1:5.0
-LANG_UI=$(cat /tmp/lang-wui)
-
-#TEMP
-
-. /tmp/scripts_params
 
 
 NB_SVN=${#svn_name[*]}
@@ -204,42 +196,9 @@ function CREATE_WUI
 {
 for (( count=1; count<=$NB_SVN; count++ ))
 do
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/svn$count/${SVN_NAME[$count]}</item_url>
-	<item_name>Subversion</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/svn$count/${SVN_NAME[$count]}</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/trac_${SVN_NAME[$count]}</item_url>
-	<item_name>Trac</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/trac_${SVN_NAME[$count]}</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/svn$count/${SVN_NAME[$count]}</item_url>
-	<item_name>Subversion</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/svn$count/${SVN_NAME[$count]}</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/trac_${SVN_NAME[$count]}</item_url>
-	<item_name>Trac</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/trac_${SVN_NAME[$count]}</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/svn$count/${SVN_NAME[$count]}" "/svn$count/${SVN_NAME[$count]}" 
+./generate_xml_server_desc.php "$RMOD_NAME" "/trac_${SVN_NAME[$count]}" "/trac_${SVN_NAME[$count]}" 
 done
 
 }
