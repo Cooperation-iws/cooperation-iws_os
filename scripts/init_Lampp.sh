@@ -113,13 +113,14 @@ ln -s $LAMPP_DIRECTORY/server/var/www /var/www
 
 echo "I: config Cooperation-iws wui"
 
-mv /tmp/cooperation-wui.xml $WWW_DIRECTORY/cooperation-wui.xml
-mv /tmp/cooperation-wui-fr.xml  $WWW_DIRECTORY/cooperation-wui-fr.xml
+
+
+mv /tmp/cooperation-wui-*.xml  $WWW_DIRECTORY/.
 
 #ADMIN
 
-mv /tmp/admin_cooperation-wui.xml $WWW_DIRECTORY/admin/cooperation-wui.xml
-mv /tmp/admin_cooperation-wui-fr.xml  $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+
+mv /tmp/admin_cooperation-wui-*.xml  $WWW_DIRECTORY/admin/.
 
 /etc/init.d/mysql start
 

@@ -177,16 +177,6 @@ EOT
 fi
 
 
-
-echo "<?xml version=\"1.0\"?>
-<items>" > /tmp/cooperation-wui.xml
-echo "<?xml version=\"1.0\"?>
-<items>" > /tmp/cooperation-wui-fr.xml
-echo "<?xml version=\"1.0\"?>
-<items>" > /tmp/admin_cooperation-wui.xml
-echo "<?xml version=\"1.0\"?>
-<items>" > /tmp/admin_cooperation-wui-fr.xml
-
 #start-up inhibition
 
 
@@ -201,5 +191,19 @@ echo "Warning: invoke-rc.d policy in action. Skipping daemon starting"
 exit 101
 EOF
 chmod 0755 /usr/sbin/policy-rc.d
+
+cd /tmp/
+for langxml in $(ls ciws-lang-*.xml)
+do
+
+lang_1=$(echo $langxml | cut -d'-' -f3)
+lang=$(echo $lang_1 | cut -d'.' -f1)
+
+echo "<?xml version=\"1.0\"?>
+<items>" > /tmp/cooperation-wui-$lang.xml
+echo "<?xml version=\"1.0\"?>
+<items>" > /tmp/admin_cooperation-wui-$lang.xml
+
+done
 
 

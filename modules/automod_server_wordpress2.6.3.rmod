@@ -112,7 +112,8 @@ function CREATE_WUI
 for (( count=1; count<=$NB_WORDPRESS; count++ ))
 
 do
-. /tmp/generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 done
 }
 #_______________________________________________________________________________________________

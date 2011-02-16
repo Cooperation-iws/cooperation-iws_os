@@ -204,7 +204,7 @@ $array_lang[$count_lang]=$array_file_2[0];
 $count_lang++;
 }
 }
-print_r($array_lang);
+
 for ($count_elt_lang=0; $count_elt_lang < sizeof($array_lang); $count_elt_lang++)
 {
 for ($count_elt=0; $count_elt < sizeof($array_xml_desc); $count_elt++)
