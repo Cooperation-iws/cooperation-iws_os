@@ -1,0 +1,2328 @@
+<language>
+	<language_id>FR_fr</language_id>
+	<params>
+		<param>
+			<param_id><![CDATA[You are now using Cooperation-iws template file named]]></param_id>
+			<param_translation><![CDATA[Vous utilisez maintenant un modèle Cooperation-iws nommé]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[ and based on]]></param_id>
+			<param_translation><![CDATA[ et basé sur]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Create your operating system : ]]></param_id>
+			<param_translation><![CDATA[Créez votre système d'exploitation : ]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Or choose ]]></param_id>
+			<param_translation><![CDATA[Ou choisissez ]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[a preconfigured template]]></param_id>
+			<param_translation><![CDATA[un modèle préconfiguré]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Choose]]></param_id>
+			<param_translation><![CDATA[Choisir]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Quantity]]></param_id>
+			<param_translation><![CDATA[Quantité]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Release:]]></param_id>
+			<param_translation><![CDATA[Version:]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Type:]]></param_id>
+			<param_translation><![CDATA[Type:]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[License:]]></param_id>
+			<param_translation><![CDATA[Licence:]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Proceed to next step]]></param_id>
+			<param_translation><![CDATA[Passez à l'étape suivante]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[<h2>General parameters</h2>]]></param_id>
+			<param_translation><![CDATA[<h2>Paramètres généraux</h2>]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Template]]></param_id>
+			<param_translation><![CDATA[Modèle]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[must only contain alphanumerical characters in lower case (mandatory)]]></param_id>
+			<param_translation><![CDATA[ne doit contenir que des caractères alphanumériques en minuscule (obligatoire)]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[must only contain numerical characters (mandatory)]]></param_id>
+			<param_translation><![CDATA[ne doit contenir que des caractères numériques (obligatoire)]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[must only contain alphanumerical characters (mandatory)]]></param_id>
+			<param_translation><![CDATA[ne doit contenir que des caractères alphanumériques (obligatoire)]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[must only contain alphanumerical characters in lower case or the minus(-), underscore(_) signs (mandatory)]]></param_id>
+			<param_translation><![CDATA[ne doit contenir que des caractères alphanumériques en minuscule ou les signes moins(-), underscore(_) (obligatoire)]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[must only contain alphanumerical characters or the minus(-), underscore(_) signs (mandatory)]]></param_id>
+			<param_translation><![CDATA[ne doit contenir que des caractères alphanumériques ou les signes moins(-), underscore(_) (obligatoire)]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[must only contain alphanumerical characters in lower case or the minus(-) sign (mandatory)]]></param_id>
+			<param_translation><![CDATA[ne doit contenir que des caractères alphanumériques en minuscule ou les signes moins(-) (obligatoire)]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[must only contain alphanumerical characters in lower case or the minus(-), underscore(_), dot(.) signs (mandatory)]]></param_id>
+			<param_translation><![CDATA[ne doit contenir que des caractères alphanumériques en minuscule ou les signes moins(-), underscore(_), point(.) (obligatoire)]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[must only contain alphanumerical characters the minus(-), underscore(_), dot(.), arobase(@), dollar($) signs (mandatory)]]></param_id>
+			<param_translation><![CDATA[ne doit contenir que des caractères alphanumériques ou les signes moins(-), underscore(_), point(.), arobase(@), dollar($) (obligatoire)]]></param_translation>
+		</param>
+	<param>
+			<param_id><![CDATA[must only contain alphanumerical characters the minus(-), underscore(_), dot(.), dollar($) signs (mandatory)]]></param_id>
+			<param_translation><![CDATA[ne doit contenir que des caractères alphanumériques ou les signes moins(-), underscore(_), point(.), dollar($) (obligatoire)]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[mmust  contain at least twenty(20) alphanumerical characters or the minus(-), underscore(_), dot(.), time(*), plus(+), double dot(:), dot comma(;), comma (,) signs or the null(null) text if not used]]></param_id>
+			<param_translation><![CDATA[ne doit contenir que au moin vingt(20) caractères alphanumériques en minuscule ou les signes moins(-), underscore(_), point(.), multiplier(*), deux points(:), virgule(,), point-virgule(;) ou null(null) si la valeur n'est pas utilisée (obligatoire)]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[must only contain numerical characters from 0 to 254(0-254) with three digits (e.g 005 for 5)]]></param_id>
+			<param_translation><![CDATA[ne doit contenir que des caractères numériques de 0 à 254(0-254) sur trois digits (ex 005 pour 5)]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Operating system]]></param_id>
+			<param_translation><![CDATA[Système d'exploitation]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Web server]]></param_id>
+			<param_translation><![CDATA[Serveur Web]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Applications parameters]]></param_id>
+			<param_translation><![CDATA[Paramètres des applications]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Applications]]></param_id>
+			<param_translation><![CDATA[Applications]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Description]]></param_id>
+			<param_translation><![CDATA[Description]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[yes]]></param_id>
+			<param_translation><![CDATA[oui]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[no]]></param_id>
+			<param_translation><![CDATA[non]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Screen view]]></param_id>
+			<param_translation><![CDATA[Vue pour l'écran]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Print view]]></param_id>
+			<param_translation><![CDATA[Vue imprimable]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[eLearning portal]]></param_id>
+			<param_translation><![CDATA[Portail de télé-enseignement]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Productivity]]></param_id>
+			<param_translation><![CDATA[Productivité]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Productivity]]></param_id>
+			<param_translation><![CDATA[Productivité]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Productivity]]></param_id>
+			<param_translation><![CDATA[Productivité]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Claroline is an Open Source eLearning and eWorking platform allowing teachers to build effective online courses and to manage learning and collaborative activities on the web. Translated into 35 languages, Claroline has a large worldwide users’ and developers’ community.]]></param_id>
+			<param_translation><![CDATA[Claroline est une plate-forme Open Source de formation à distance et de travail collaboratif. Elle permet aux formateurs de créer des espaces de cours en ligne et de gérer des activités de formation sur Internet. Traduite en 35 langues, Claroline bénéficie de l'appui d'une communauté mondiale d'utilisateurs et de développeurs.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Application name]]></param_id>
+			<param_translation><![CDATA[Nom de l'application]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Default admin email]]></param_id>
+			<param_translation><![CDATA[email administrateur par défaut]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Default mysql password]]></param_id>
+			<param_translation><![CDATA[Mot de passe mysql par défaut]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Projects management]]></param_id>
+			<param_translation><![CDATA[Gestion de projets]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Achievo is a flexible web-based resource management tool for business environments. Achievo's resource management capabilities will enable organisations to support their business processes in a simple, but effective manner.]]></param_id>
+			<param_translation><![CDATA[Achievo est un système de gestion de projet open source à vocation commerciale.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Content management system]]></param_id>
+			<param_translation><![CDATA[Portail de gestion de contenu]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Dotclear is an open-source web publishing software created in 2002 by Olivier Meunier. A one man's project at first, Dotclear soon gathered a team comprising different personalities with various backgrounds.
+
+The project's purpose is to provide a user-friendly tool allowing anyone to publish on the web, regardless of their technical skills.
+
+Dotclear is a free software primarily designed for its users and regularly improved by their contributions. Everyone may use it and modify it according to the software license. ]]></param_id>
+			<param_translation><![CDATA[Dotclear est un logiciel libre de publication web créé en 2002 par Olivier Meunier. Fruit du travail d'une seule personne à l'origine, le projet s'est rapidement doté d'une équipe constituée de personnalités diverses et d'horizons variés.
+
+L'objectif du projet est de fournir un outil simple d'emploi permettant à tout un chacun de publier sur le web et ce, quel que soit son niveau de connaissances techniques.
+
+Dotclear est un logiciel libre conçu avant tout pour ses utilisateurs et recevant des contributions régulières de ceux-ci. ]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Publishing]]></param_id>
+			<param_translation><![CDATA[Publication]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Domain Name Server]]></param_id>
+			<param_translation><![CDATA[Serveur de nom de domaine]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[BIND (pronounced /bʌɪnd/), for Berkeley Internet Name Domain, or named (pronounced /ˈneɪmˌdiː/), is the most commonly used DNS server on the Internet, especially on Unix-like systems, where it is a de facto standard. Supported by Internet Systems Consortium, BIND was originally created by four graduate students with CSRG at the University of California, Berkeley and first released with 4.3BSD. Paul Vixie started maintaining it in 1988 while working for DEC.The development of BIND 9 was done with a combination of commercial and military contracts. Most of the features of BIND 9 were funded by UNIX vendors who wanted to ensure that BIND stayed competitive with Microsoft's DNS offerings; the DNSSEC features were funded by the US military who felt that DNS security was important.]]></param_id>
+			<param_translation><![CDATA[BIND (Berkeley Internet Name Domain), précédemment appelé: Berkeley Internet Name Daemon est le serveur DNS le plus utilisé sur Internet, spécialement sur les systèmes de type UNIX et est devenu de facto un standard. La première version de BIND a été conçue par quatre étudiants diplômés de l'Université de Californie (Berkeley) sur la base de 4.3BSD. En 1988 c'est Paul Vixie qui entreprend la maintenance du projet. Le logiciel est actuellement maintenu par l'Internet Systems Consortium.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[DNS Server]]></param_id>
+			<param_translation><![CDATA[Serveur DNS]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Networking]]></param_id>
+			<param_translation><![CDATA[Réseaux]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Domain name]]></param_id>
+			<param_translation><![CDATA[Nom de domaine]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[my-domain.my-extension]]></param_id>
+			<param_translation><![CDATA[mon-domaine.mon-extension]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[The Cooperation-iws gateway is specifically design for nomadic purpose. The major components of the Gateway are Routing software, Dhcp server, Firewall and Domain name server. Cooperation-iws gateway might run on all Linux supported platform from tiny netbooks to servers.]]></param_id>
+			<param_translation><![CDATA[La passerelle Cooperation-iws est conçue spécialement pour des besoins nomades. Les principaux composants de la passerelle sont un logiciel de routage, un serveur Dhcp, un pare feu et un serveur de nom de domaine. La passerelle Cooperation-iws peut fonctionner sur toutes les plateformes supportant Linux, du plus petit Netbook au serveur]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Gateway]]></param_id>
+			<param_translation><![CDATA[Passerelle / Routeur]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Quantity of machines for the LAN]]></param_id>
+			<param_translation><![CDATA[Quantité de machines pour le LAN]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[External Network Interface (connected to the net)]]></param_id>
+			<param_translation><![CDATA[Interface réseau externe (connectée au net) ]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Internal Network Interface (connected to the lan)]]></param_id>
+			<param_translation><![CDATA[Interface réseau interne (Connectée au lan)]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Internal Subnet Declaration Range [0-254]]]></param_id>
+			<param_translation><![CDATA[Déclaration de l'adressage du sous réseau interne [0-254]]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[ClamTk is a GUI front-end for ClamAV using gtk2-perl. It is designed to be an easy-to-use frontend for Linux systems. This module install Clamtk and ClamAV.]]></param_id>
+			<param_translation><![CDATA[ClamTk est une interface graphique pour l'antivrus ClamAV. Ce module install ClamtTk et ClamAV.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Web Server Control Panel]]></param_id>
+			<param_translation><![CDATA[Paneau de contrôle d'un serveur web]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Virtualmin is the world's most powerful and flexible web server control panel. Manage your virtual domains, mailboxes, databases, applications, and the entire server, from one comprehensive interface.]]></param_id>
+			<param_translation><![CDATA[Virtualmin est un panneau de contrôle pour serveur très bien conçu. Il permet de gérer des domaines virtuels, des boîtes emails, des bases de données et le serveur complet en une seule interface accessible par un navigateur web]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Hosting Server]]></param_id>
+			<param_translation><![CDATA[Serveur d'hébergement]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Hosting]]></param_id>
+			<param_translation><![CDATA[Hébergement]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[User name]]></param_id>
+			<param_translation><![CDATA[Nom d'utilisateur]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Password]]></param_id>
+			<param_translation><![CDATA[Mot de passe]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Hostname]]></param_id>
+			<param_translation><![CDATA[Nom d'Hôte]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Disable Autologin]]></param_id>
+			<param_translation><![CDATA[Désactiver le login automatique]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Filesystem encryption]]></param_id>
+			<param_translation><![CDATA[Chiffrement du système de fichiers]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Encryption passphrase]]></param_id>
+			<param_translation><![CDATA[Clef de chiffrement]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Secure administration zone]]></param_id>
+			<param_translation><![CDATA[Sécuriser la zone d'administration]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Secure Mysql]]></param_id>
+			<param_translation><![CDATA[Sécuriser Mysql]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Generic login password]]></param_id>
+			<param_translation><![CDATA[Mot de passe générique de login]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Mysql root password]]></param_id>
+			<param_translation><![CDATA[Mot de passe root Mysql]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Generic domain name]]></param_id>
+			<param_translation><![CDATA[Nom de domaine générique]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Template name]]></param_id>
+			<param_translation><![CDATA[Nom du modèle]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Firewall / Gateway]]></param_id>
+			<param_translation><![CDATA[Pare-feu / routeur]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Customized template]]></param_id>
+			<param_translation><![CDATA[Modèle personnalisé]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Your customization has been taken into account. Thanks !]]></param_id>
+			<param_translation><![CDATA[Votre personnalisation a été prise en compte. Merci !]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Date]]></param_id>
+			<param_translation><![CDATA[Date]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[OS type]]></param_id>
+			<param_translation><![CDATA[SE]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Contained Applications]]></param_id>
+			<param_translation><![CDATA[Applications contenues]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Cancel]]></param_id>
+			<param_translation><![CDATA[Annuler]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Xml]]></param_id>
+			<param_translation><![CDATA[Xml]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Create another customization]]></param_id>
+			<param_translation><![CDATA[Créer une autre personnalisation]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Keep all parameters:]]></param_id>
+			<param_translation><![CDATA[Conserver tous les paramètres:]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Status]]></param_id>
+			<param_translation><![CDATA[Statut]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Waiting]]></param_id>
+			<param_translation><![CDATA[En attente]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Cancelled]]></param_id>
+			<param_translation><![CDATA[Annulé]]></param_translation>
+		</param>
+
+		<param>
+			<param_id><![CDATA[Pending]]></param_id>
+			<param_translation><![CDATA[En cours]]></param_translation>
+		</param>
+
+		<param>
+			<param_id><![CDATA[Finished]]></param_id>
+			<param_translation><![CDATA[Terminé]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[User]]></param_id>
+			<param_translation><![CDATA[Utilisateur]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Session]]></param_id>
+			<param_translation><![CDATA[Session]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[This file is not xml file]]></param_id>
+			<param_translation><![CDATA[Ce fichier n'est pas un fichier xml]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[This file is valid xml]]></param_id>
+			<param_translation><![CDATA[Ce fichier est valide xml]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[ERROR:]]></param_id>
+			<param_translation><![CDATA[ERREUR:]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[There was an error uploading the file, please try again!]]></param_id>
+			<param_translation><![CDATA[Il y'a eu une erreur en téléchargeant le fichier, recommencez svp!]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[These modules are conflicting]]></param_id>
+			<param_translation><![CDATA[Ces modules sont en conflit]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[These modules are required for]]></param_id>
+			<param_translation><![CDATA[Ces modules sont requis pour]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[You have some wrong information in some field(s)]]></param_id>
+			<param_translation><![CDATA[Vous avez une mauvaise saisie dans un ou plusieurs champs]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[There is a dependancies conflict in your selection.]]></param_id>
+			<param_translation><![CDATA[Il y a un conflit de dépendances dans votre sélection.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[You have some dependancies required in your selection.]]></param_id>
+			<param_translation><![CDATA[Vous avez des dépendances supplémentaires requises dans votre sélection.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[The customization from ]]></param_id>
+			<param_translation><![CDATA[La personnalisation de l'utilisateur ]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[ at ]]></param_id>
+			<param_translation><![CDATA[ à la date ]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[ from session ]]></param_id>
+			<param_translation><![CDATA[ et de la session ]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[ has been cancelled.]]></param_id>
+			<param_translation><![CDATA[ a été annulée.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[ is pending.]]></param_id>
+			<param_translation><![CDATA[ est en cours.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[ is finished.]]></param_id>
+			<param_translation><![CDATA[ est terminée.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Warning message]]></param_id>
+			<param_translation><![CDATA[Message d'alerte]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[No parameters]]></param_id>
+			<param_translation><![CDATA[Pas de paramètres à renseigner]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Ubuntu Multimedia Codecs make audio and video content browsing and editing in various open source and propriatary formats. They are usually necessary to have a full use of the operating system but it could be illegal in some countries due to patent software restrictions.]]></param_id>
+			<param_translation><![CDATA[Les codecs multimedia Ubuntu permettent de consulter et d'éditer des documents audio et vidéo dans une variété de formats open source ou propriétaires. Ils sont généralement nécessaires pour une utilisation avancée du système d'exploitation, mais leur utilisation peut être illégale dans certains pays à cause des restrictions liées aux brevets logiciels.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Web browser, english version]]></param_id>
+			<param_translation><![CDATA[Navigateur web, version anglaise]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Internet Explorer 6.0, the web browser from Microsoft operating system. This module install the english version of Internet Explorer 6.0.]]></param_id>
+			<param_translation><![CDATA[Internet Explorer 6.0,le navigateur web du système d'exploitation microsoft. Ce module installe la version anglaise d'Internet Explorer 6.0.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Web browser, french version]]></param_id>
+			<param_translation><![CDATA[Navigateur web, version française]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Internet Explorer 6.0, the web browser from Microsoft operating system. This module install the french version of Internet Explorer 6.0.]]></param_id>
+			<param_translation><![CDATA[Internet Explorer 6.0,le navigateur web du système d'exploitation microsoft. Ce module installe la version française d'Internet Explorer 6.0.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Inkscape is a free and open source vector graphics editor application. Its stated goal is to become a powerful graphics tool while being fully compliant with the XML, SVG, and CSS standards.
+
+Inkscape is primarily developed for Linux, but it is cross-platform and runs on Mac OS X (typically under X11, although the underlying GTK+ toolkit can be compiled to run natively under Quartz[1]), other Unix-like operating systems, and Microsoft Windows. Inkscape's implementation of SVG and CSS standards is incomplete. Most notably, it does not yet support animation, or SVG fonts. Inkscape has multi-lingual support, particularly for complex scripts, something currently lacking in most commercial vector graphics applications.]]></param_id>
+			<param_translation><![CDATA[Inkscape est un logiciel libre de dessin vectoriel sous licence GNU/GPL. Il a pour but de devenir un puissant outil d’édition graphique tout en étant entièrement conforme avec les standards XML, SVG et CSS du W3C.
+
+Il s’agit d’un logiciel multiplate-forme, disponible notamment sous Microsoft Windows, Mac OS X (sous X11), Linux et FreeBSD.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Languages]]></param_id>
+			<param_translation><![CDATA[Langues]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Language translation]]></param_id>
+			<param_translation><![CDATA[Traduction linguistique]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[This module install all the Languages pack available on your platform (1G supplementary space is nessary for the iso or the usb).]]></param_id>
+			<param_translation><![CDATA[Ce module installe tous les paquets de localisation linguistique disponibles sur votre plateforme. (Cela nécessite 1G d'espace supplémentaire pour l'image iso ou usb)]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Graphics]]></param_id>
+			<param_translation><![CDATA[Graphisme]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Parameters for]]></param_id>
+			<param_translation><![CDATA[Paramètres pour]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[You have not yet proceed to any operating system creation. Please proceed and come back later.]]></param_id>
+			<param_translation><![CDATA[Vous n'avez encore procéder à aucune création de système d'exploitation. Rendez vous sur la page d'accueil pour y remédier et revenez plus tard.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Look for user]]></param_id>
+			<param_translation><![CDATA[Rechercher un utilisateur]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[All]]></param_id>
+			<param_translation><![CDATA[Tous]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Look for status]]></param_id>
+			<param_translation><![CDATA[Rechercher un statut]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[You have just ordered the creation of a live system from]]></param_id>
+			<param_translation><![CDATA[Vous venez de commander la création d'un système d'exploitation live à partir de]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[You will soon receive receive an email with a link for downloading link to retreive your files.]]></param_id>
+			<param_translation><![CDATA[Vous allez prochainement recevoir un email contenant un lien vers vos fichiers.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Thank You ! and see you soon,]]></param_id>
+			<param_translation><![CDATA[Merci et à bientôt,]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[The Cooperation-iws Team.]]></param_id>
+			<param_translation><![CDATA[L'équipe de Cooperation-iws.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Hello,]]></param_id>
+			<param_translation><![CDATA[Bonjour,]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Caracteristics from your Live system:]]></param_id>
+			<param_translation><![CDATA[Caractéristiques de votre système d'exploitation Live:]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Mixxx is open source digital DJ’ing software that allows an individual to mix music together using a personal computer, as a DJ would with a pair of physical turntables. This module install Hercules Dj Control consoles drivers as well.]]></param_id>
+			<param_translation><![CDATA[Mixxx est un logiciel de mixage numérique qui permet de mixer ses collections personnelles de musique, comme un DJ le ferait avec une paire de platines vinyl. Ce module installe également les pilotes pour les consoles Dj Control de chez Hercules.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Dj'ing]]></param_id>
+			<param_translation><![CDATA[Disc Jockey]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Communications]]></param_id>
+			<param_translation><![CDATA[Communications]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[NoMachine NX is an enterprise-class solution for secure remote access, desktop virtualization, and hosted desktop deployment built around the self-designed and self-developed NX suite of components.]]></param_id>
+			<param_translation><![CDATA[NoMachine NX est une solution professionnelle de prise de contrôle à distance sécurisée pour les hébergement virtualisés ou hébergés.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[OpenOffice.org (OO.o or OOo), commonly known simply as OpenOffice, is an office application suite available for a number of different computer operating systems. It is distributed as free software. It supports the ISO/IEC standard OpenDocument Format (ODF) for data interchange as its default file format, as well as Microsoft Office formats among others. As of March 2009[update], OpenOffice supports over 80 languages.]]></param_id>
+			<param_translation><![CDATA[OpenOffice.org (souvent abrégé en OpenOffice ou OOo) désigne à la fois une suite bureautique libre, une communauté de développeurs, et le site Internet hébergeant l’ensemble du projet. Le but énoncé est « de créer, en tant que communauté, la suite bureautique internationale leader, tournant sur les principales plates-formes, et fournissant l’accès aux fonctionnalités et aux données via des composants et API ouverts et un format de données XML ».]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Secure file wiping utility]]></param_id>
+			<param_translation><![CDATA[Utilitaire d'effacement de données sécurisé]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Wipe is a secure file wiping utility. This module also install secure-delete and a shell script for integration in the Gnome Desktop.]]></param_id>
+			<param_translation><![CDATA[Wipe est un utilitaire d'éffacement de données sécurisé. Ce module installe également secure-delete et un script shell pour l'intégration avec le bureau Gnome.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[CD ripper]]></param_id>
+			<param_translation><![CDATA[Extracteur de CD]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Sound Juicer is a clean, mean, and lean CD ripper for the GNOME desktop.]]></param_id>
+			<param_translation><![CDATA[Sound Juicer est l'application GNOME par défaut permettant d'extraire vos CDs audio. Cette opération s'appelle aussi "ripper un CD audio", c'est-a-dire copier son contenu sous forme de fichiers (OGG, MP3 ou autres) dans votre ordinateur. Si vous possédez une connexion Internet, Sound Juicer va automatiquement récupérer le nom de l'artiste et des plages via une base de données CDDB.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Office]]></param_id>
+			<param_translation><![CDATA[Bureautique]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Antivirus Gui for Clamav]]></param_id>
+			<param_translation><![CDATA[Interface graphique pour l'antivirus Clamav]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[LaTeX (pronounced /ˈleɪtɛk/, /ˈleɪtɛx/, or /ˈlɑːtɛk/) is a document markup language and document preparation system for the TeX typesetting program. Within the typesetting system, its name is styled as \LaTeX.
+
+LaTeX is most widely used by mathematicians, scientists, engineers, philosophers, economists and other scholars in academia and the commercial world, and other professionals.[1] As a primary or intermediate format (e.g. translating DocBook and other XML-based formats to PDF), LaTeX is used because of the high quality of typesetting achievable by TeX. The typesetting system offers programmable desktop publishing features and extensive facilities for automating most aspects of typesetting and desktop publishing, including numbering and cross-referencing, tables and figures, page layout and bibliographies.]]></param_id>
+			<param_translation><![CDATA[LaTeX est un système logiciel de composition de documents créé par Leslie Lamport, ou plus exactement : une collection de macro-commandes destinées à faciliter l'utilisation du « processeur de texte » TeX de Donald Knuth.
+
+Ce logiciel a été créé en 1985. Depuis 1993, il est maintenu par le LATEX3 Project team.
+
+Le nom est l'abréviation de Lamport TeX. On écrit souvent LATEX, le logiciel permettant les mises en forme correspondantes au logo.
+
+Du fait de sa relative simplicité, il est devenu la méthode privilégiée d'écriture de documents scientifiques employant TeX ; la version actuelle est LaTeX2ε (LaTeX 2 epsilon). Il est particulièrement utilisé dans les domaines techniques et scientifiques pour la production de documents de taille moyenne ou importante (thèse ou livre). Néanmoins, il peut aussi être employé pour générer des documents de types variés (par exemple des lettres ou des transparents).]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Encryption tool]]></param_id>
+			<param_translation><![CDATA[Outil de chiffrement]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Free open-source disk encryption software for Linux.]]></param_id>
+			<param_translation><![CDATA[Logiciel de chiffrement de disque open source pour Linux.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Security]]></param_id>
+			<param_translation><![CDATA[Securité]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[VirtualBox is a powerful x86 virtualization product for enterprise as well as home use. Not only is VirtualBox an extremely feature rich, high performance product for enterprise customers, it is also the only professional solution that is freely available as Open Source Software under the terms of the GNU General Public License (GPL). This module install the open source editions of Virtualbox.]]></param_id>
+			<param_translation><![CDATA[VirtualBox est un logiciel permettant de créer des ordinateurs virtuels, tout comme VMPlayer/VMWare ou QEmu pour ensuite installer de nombreux systèmes d'exploitation invités qui fonctionneront dans le système d'exploitation réel de votre ordinateur. Ce module installe la version open source de Virtualbox.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Virtualization software]]></param_id>
+			<param_translation><![CDATA[Logiciel de virtualisation]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Virtualization]]></param_id>
+			<param_translation><![CDATA[Virtualisation]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Open source collaborative system]]></param_id>
+			<param_translation><![CDATA[Agora­Project est un espace de travail collaboratif complet et intuitif. Chaque utilisateur y accède après 
+identification par login et mot de passe, à l'instar d'un extranet. Agora­Project est une application web : par 
+conséquent accessible partout et à tout moment.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Web images editor]]></param_id>
+			<param_translation><![CDATA[Editeur d'image en ligne]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[AIE (Ajax Images Editor) is a rich internet application for manipulating images online. It's works with Mozilla Firefox and Internet Explorer. It uses HTML, JavaScript and Ext JS on client side and ImageMagick and PHP on server side.]]></param_id>
+			<param_translation><![CDATA[AIE (Ajax Images Editor) est un client web riche pour manipuler des images en ligne. Il fonctionne avec Mozilla Firefox et Internet Explorer. Il utilise HTML, JavaScript et Ext JS côté client et ImageMagick et PHP côté serveur.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Share files with Samba]]></param_id>
+			<param_translation><![CDATA[Partager les répertoires avec Samba]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Protect samba share with password]]></param_id>
+			<param_translation><![CDATA[Protéger les répertoires Samba avec un mot de passe]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Order from]]></param_id>
+			<param_translation><![CDATA[Commande de]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[GIMP (GNU Image Manipulation Program) is a free software raster graphics editor. GIMPs developers product vision sees GIMP as a high end program for the editing and creation of Original Images, icons, graphical elements of web pages and art for user interface elements. The developers of Gimp also aim for GIMP to be a platform for the development of cutting edge scientific image processing algorithms.]]></param_id>
+			<param_translation><![CDATA[GIMP [gimp], pour GNU Image Manipulation Program, littéralement « programme GNU de manipulation d'images » est un logiciel libre de traitement d'image bitmap (dessin, retouche, animation, etc.). Il est souvent considéré comme une alternative libre au logiciel Adobe Photoshop.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Nothing match !]]></param_id>
+			<param_translation><![CDATA[Rien ne correspond à votre requête !]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[results]]></param_id>
+			<param_translation><![CDATA[Résultats]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[custom creation from]]></param_id>
+			<param_translation><![CDATA[création du]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Ampache is a Web-based Audio file manager. It is implemented with MySQL, and PHP. It allows you to view, edit, and play your audio files via the web. It has support for playlists, artist and album views, album art, random play, playback via Http/On the Fly Transcoding and Downsampling, Vote based playback, Mpd and Icecast, Integrated Flash Player, as well as per user themes and song play tracking. You can also Link multiple Ampache servers togeather using XML-RPC. Ampache supports GETTEXT translations and has a full translation of many languages.]]></param_id>
+			<param_translation><![CDATA[Ampache est un gestionnaire de fichiers audio en ligne. Il est implémenté avec MySQL et PHP.Il vous permet de visualiser, éditer et jouer vos fichiers audio à partir d'une interface web. Il supporte les playlist, visualisation d'albums, d'artistes, la lecture aléatoire, le playback par Http, le transcoding et le downsampling sur le champs, Mpd et Icecast, un lecteur Flash intégré. Ampache supporte la traduction via GETTEXT et est déjà traduit dans plusieurs langues.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Web logs tracking analysis tool]]></param_id>
+			<param_translation><![CDATA[Outil de surveillance des logs du serveur web]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[AWStats is a free powerful and featureful tool that generates advanced web, streaming, ftp or mail server statistics, graphically. This log analyzer works as a CGI or from command line and shows you all possible information your log contains, in few graphical web pages. It uses a partial information file to be able to process large log files, often and quickly. It can analyze log files from all major server tools like Apache log files (NCSA combined/XLF/ELF log format or common/CLF log format), WebStar, IIS (W3C log format) and a lot of other web, proxy, wap, streaming servers, mail servers and some ftp servers.]]></param_id>
+			<param_translation><![CDATA[AWStats est un analyseur de log et générateur de statistiques pour les serveurs web, ftp, mail, ... ]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Web logs tracking analysis tool]]></param_id>
+			<param_translation><![CDATA[Outil de surveillance des logs du serveur web]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Your files will be available here in a short time: ]]></param_id>
+			<param_translation><![CDATA[Vos fichiers seront disponibles ici dans un instant: ]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Monitoring]]></param_id>
+			<param_translation><![CDATA[Gestion des machines et du réseau]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Defect Tracking System]]></param_id>
+			<param_translation><![CDATA[Système de suivi des bogues]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Bugzilla is a “Defect Tracking System” or “Bug-Tracking System”. Defect Tracking Systems allow individual or groups of developers to keep track of outstanding bugs in their product effectively. Most commercial defect-tracking software vendors charge enormous licensing fees. Despite being “free”, Bugzilla has many features its expensive counterparts lack. Consequently, Bugzilla has quickly become a favorite of hundreds of organizations across the globe.]]></param_id>
+			<param_translation><![CDATA[Bugzilla est un système de gestion des défauts. Utilisé par la fondation Mozilla, Bugzilla permet à des développeurs de collaborer pour la gestion de la qualité et la résolution des défauts de projets complexes.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Learning]]></param_id>
+			<param_translation><![CDATA[Enseignement]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Data management]]></param_id>
+			<param_translation><![CDATA[Gestion des données et du source]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[CGI:IRC is a Perl/CGI program that lets you access IRC from a web browser, it is designed to be flexible and has many uses such as an IRC gateway for an IRC network, a chat-room for a website or to access IRC when stuck behind a restrictive firewall.]]></param_id>
+			<param_translation><![CDATA[CGI:IRC est un script Perl/CGI qui permet d'accéder à un serveur IRC à partir d'un navigateur web.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Ftp server]]></param_id>
+			<param_translation><![CDATA[Serveur Ftp]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Default password]]></param_id>
+			<param_translation><![CDATA[Mot de passe par défaut]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[ProFTPD grew out of the desire to have a secure and configurable FTP server, and out of a significant admiration of the Apache web server.
+
+When the Project began, the most commonly used server was wu-ftpd. While wu-ftpd provides excellent performance and is generally a good product, it lacks numerous features found in newer Win32 FTP servers and has a poor security history. Many people, including the developers who work on ProFTPD, had spent a great deal of time fixing bugs and hacking features into wu-ftpd. Unfortunately, it quickly became clear that a complete redesign was necessary in order to implement the configurability and features desired.
+
+In addition to wu-ftpd, there are a few of other FTP servers available which are designed to be light-weight and secure at the expense of configurability. For example, Troll FTP is an excellent FTP daemon which is considerably more secure and less resource-intensive than wu-ftpd. Unfortunately, while it is quite suitable for basic FTP services, it does not offer the feature set required for more sophisticated FTP sites.
+
+ProFTPD is not a hack based on any other server, it's an independent source tree from the ground up. A number of well known and high traffic sites use ProFTPD.]]></param_id>
+			<param_translation><![CDATA[ProFTPd est un serveur FTP libre. Ses auteurs l'annoncent comme puissant et parfaitement sécurisé sur le site web dédié au logiciel.
+
+Il est distribué selon les termes de la licence GNU GPL.
+
+Ses partisans disent que ProFTPd est bien documenté et que la plupart des configurations seront proches de celles des exemples fournis avec le logiciel. Son unique fichier de configuration, proftpd.conf, utilise une syntaxe similaire à celle d'Apache permettant ainsi d'homogénéiser les fichiers de configuration. La directive include permet cependant de répartir les directives de configuration dans différents fichiers pour les cas plus complexes.
+
+Le logiciel permet de configurer plusieurs serveurs FTP virtuels et a la possibilité d'être utilisé dans un environnement dédié (chroot). Il peut être lancé comme un démon ou comme service inetd. Enfin, ProFTPd est compatible IPv6.
+
+Son architecture est modulaire, ce qui a permis d'écrire des extensions pour le support de la cryptographie SSL/TLS (protocole FTPS) et l'extension de l'authentification via des bases RADIUS, LDAP ou SQL.
+
+Le module SQL permet, en outre, le stockage en base de données des opérations effectuées sur le serveur FTP.
+
+La version 1.3.2 apporte également, via le module mod_sftp, le support des protocoles SFTP et SCP issus de SSH.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[RoundCube Webmail is a browser-based multilingual IMAP client with an application-like user interface. It provides full functionality you expect from an e-mail client, including MIME support, address book, folder manipulation, message searching and spell checking. RoundCube Webmail is written in PHP and requires a MySQL or Postgres database. The user interface is fully skinnable using XHTML and CSS 2.]]></param_id>
+			<param_translation><![CDATA[RoundCube Webmail est un client IMAP multilangues avec une interface riche. RoundCube Webmail est écrit en PHP et demande une base de donnée MySQL ou Postgres]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Gallery2 is a pictures collection management system.]]></param_id>
+			<param_translation><![CDATA[Gallery2 est un logiciel de publication de collections d'images.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[eZ Publish is an Open Source Content Management System chosen by thousands of enterprises and organizations world wide. It helps you build corporate websites, intranets, webshops and media portals. eZ Publish is 100% Open Source.]]></param_id>
+			<param_translation><![CDATA[eZ Publish est un système de publication de contenu. Ezpublish est publié sous licence Open Source mais est édité par une société commerciale.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Drupal is a free software package that allows an individual or a community of users to easily publish, manage and organize a wide variety of content on a website. Tens of thousands of people and organizations are using Drupal to power scores of different web sites.]]></param_id>
+			<param_translation><![CDATA[Drupal est un logiciel libre qui permet aux individus ou aux communautés de publier, gérer, organiser une grande variété de contenu sur un site web. Plusieurs milliers de personnes utilisent Drupal pour propulser des sites webs.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Joomla! is an award-winning Content Management System (CMS) that will help you build websites and other powerful online applications. Best of all, Joomla! is an open source solution that is freely available to everybody.]]></param_id>
+			<param_translation><![CDATA[Joomla! est un système de publication de contenu (CMS) qui va vous aider à batir de puissant site de publication web. Joomla! est une solution Open Source librement téléchargeable. ]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[MoinMoin is an advanced, easy to use and extensible WikiEngine with a large community of users. Said in a few words, it is about collaboration on easily editable web pages. MoinMoin is Free Software licensed under the GPL - living from lots of people contributing (see MoinMoinAcknowledgements).]]></param_id>
+			<param_translation><![CDATA[MoinMoin est un moteur de wiki avancé avec une large communauté d'utilisateurs. En quelques mots Moinmoin est un outil de collaboration pour éditer facilement des pages web. Moinmoin est un logiciel libre publié sous licence GPL. ]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Piwigo is a photo gallery software for the web, built by an active community of users and developers. Extensions make Piwigo easily customizable. Icing on the cake, Piwigo is free and opensource.]]></param_id>
+			<param_translation><![CDATA[Piwigo est un logiciel de galerie photo pour le web, bâti autour d'une communauté active d'utilisateurs et de développeurs. Les extensions rendent Piwigo facilement personnalisable. Cerise sur le gâteau, Piwigo est libre et gratuit.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Wordpress is a Content Management system (Blog).]]></param_id>
+			<param_translation><![CDATA[Wordpress est un gestionnaire de contenu (Blog).]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Pictures galleries management]]></param_id>
+			<param_translation><![CDATA[Portail de gestion de collections d'images]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Sedna is an Rss agregator based on Spip.]]></param_id>
+			<param_translation><![CDATA[Sedna est un agrégateur de flux RSS (et ATOM etc) basé sur les sites syndiqués de SPIP.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Web based IRC client]]></param_id>
+			<param_translation><![CDATA[Interface client IRC en ligne]]></param_translation>
+		</param>
+
+<param>
+			<param_id><![CDATA[IRC server]]></param_id>
+			<param_translation><![CDATA[Serveur IRC]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Multimedia streaming portal]]></param_id>
+			<param_translation><![CDATA[Portail de diffusion audio]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Server Monitoring]]></param_id>
+			<param_translation><![CDATA[Surveillance serveur]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Cacti is a complete network graphing solution designed to harness the power of RRDTool's data storage and graphing functionality. Cacti provides a fast poller, advanced graph templating, multiple data acquisition methods, and user management features out of the box. All of this is wrapped in an intuitive, easy to use interface that makes sense for LAN-sized installations up to complex networks with hundreds of devices.]]></param_id>
+			<param_translation><![CDATA[Cacti est une interface web pour l'acquisition de paramètres sur un réseau local.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[OpenSSH is a FREE version of the SSH connectivity tools that technical users of the Internet rely on. Users of telnet, rlogin, and ftp may not realize that their password is transmitted across the Internet unencrypted, but it is. OpenSSH encrypts all traffic (including passwords) to effectively eliminate eavesdropping, connection hijacking, and other attacks. Additionally, OpenSSH provides secure tunneling capabilities and several authentication methods, and supports all SSH protocol versions.]]></param_id>
+			<param_translation><![CDATA[OpenSSH est une suite d'outils de connectivité SSH, remplaçant avantageusement FTP, telnet, ... car toutes les connections sont chiffrées, y compris le mot de passe.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Deactivate SSH root Login]]></param_id>
+			<param_translation><![CDATA[Désactiver le login SSH root]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[MediaWiki is a free software wiki package originally written for Wikipedia. It is now used by several other projects of the non-profit Wikimedia Foundation and by many other wikis.]]></param_id>
+			<param_translation><![CDATA[MediaWiki est un logiciel libre développé à l'origine pour Wikipédia et utilisé aujourd'hui par de nombreux autres projets de l'association à but non lucratif Wikimedia Foundation ainsi que par d'autres sites reposant sur la technologie wiki, sous license GNU General Public License (GPL). Il est utilisé par Wikipédia et d'autres projets de la fondation Wikimédia, ainsi que par bien d'autres sites et wikis.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[PhpBB is a forum management system.]]></param_id>
+			<param_translation><![CDATA[PhpBB est un système de gestion de forums.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Forums management]]></param_id>
+			<param_translation><![CDATA[Gestion de forums]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[JDictd is a set of Java programs that implement the Dictionary Server Protocol (DICT) as specified in RFC 2229. It is used to access dictionary definitions from a set of natural language dictionary databases. The software (including binaries and source code) is distributed on the terms of the GNU General Public License.]]></param_id>
+			<param_translation><![CDATA[JDictd est un ensemble de programme Java qui implémente le Dictionary Server Protocol (DICT) tel que spécifié dans la RFC 2229.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[DokuWiki is a standards compliant, simple to use Wiki, mainly aimed at creating documentation of any kind. It is targeted at developer teams, workgroups and small companies. It has a simple but powerful syntax which makes sure the datafiles remain readable outside the Wiki and eases the creation of structured texts. All data is stored in plain text files – no database is required.]]></param_id>
+			<param_translation><![CDATA[DokuWiki est un Wiki, conforme aux standards, simple à utiliser, dont le but est de créer des documentations de toute sorte. Il est destiné aux équipes de développement, aux travaux de groupe et aux petites entreprises. Il a une syntaxe simple mais puissante qui assure la lisibilité des fichiers de données en dehors du Wiki, et facilite la création de textes structurés. Toutes les données sont stockées dans des fichiers textes – aucune base de donnée n'est requise.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Host based Intrusion Detection System]]></param_id>
+			<param_translation><![CDATA[Système de détection d'intrusion orienté machine]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Net2ftp is an Ftp client written in php.]]></param_id>
+			<param_translation><![CDATA[Net2ftp est un client ftp écrit en php.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Ossec is an HIDS (Host Based Intrusion Detection System).]]></param_id>
+			<param_translation><![CDATA[Ossec est un HIDS (Système de détection d'intrusion orienté machine).]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[LifeType is an open-source blogging platform with support for multiple blogs and users in a single installation.]]></param_id>
+			<param_translation><![CDATA[LifeType est une plateforme open source de blogs avec le support du multi-blogs et multi-utilisateurs dans une seule installation.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[SPIP is a publishing system for the Internet in which great importance is attached to collaborative working, to multilingual environments, and to simplicity of use for web authors. It is free software, distributed under the GNU/GPL licence. This means that it can be used for any Internet site, whether personal or institutional, non-profit or commercial.
+
+SPIP is developed (programmed, documented, translated, etc.) and used by a community in which there is an open invitation to participate. To do so, make contact through one of the various websites, mailing lists and meetings which exist.
+
+SPIP was born in 2001 at the initiative of “minirézo” a community defending freedom of expression on the Internet (see article on uZine). Nowadays SPIP is used by tens of thousands of widely different sites. This site contains the official documentation. ]]></param_id>
+			<param_translation><![CDATA[SPIP est un système de publication pour l’Internet qui s’attache particulièrement au fonctionnement collectif, au multilinguisme et à la facilité d’emploi. C’est un logiciel libre, distribué sous la licence GNU/GPL. Il peut ainsi être utilisé pour tout site Internet, qu’il soit associatif ou institutionnel, personnel ou marchand.
+
+SPIP est développé (programmé, documenté, traduit, etc.) et utilisé par une communauté de personnes que chacun est invité à rejoindre (ou simplement à contacter) sur différents sites Web, listes de discussion par email et rencontres (les fameux « Apéros-SPIP »). Web indépendant
+
+Le programme est né en 2001 d’une initiative du minirézo, un collectif défendant le Web indépendant et la liberté d’expression sur Internet. Il est actuellement utilisé sur des dizaines de milliers de sites très divers. Ce site est la documentation officielle. ]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Clam AntiVirus is an open source (GPL) anti-virus toolkit for UNIX, designed especially for e-mail scanning on mail gateways. It provides a number of utilities including a flexible and scalable multi-threaded daemon, a command line scanner and advanced tool for automatic database updates. The core of the package is an anti-virus engine available in a form of shared library.]]></param_id>
+			<param_translation><![CDATA[ Clam AntiVirus est une suite d'outils anti virus pour Unix.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Web based remote administration]]></param_id>
+			<param_translation><![CDATA[Administration à distance orienté web]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Network Intrusion Detection System]]></param_id>
+			<param_translation><![CDATA[Système de détection d'intrusion orienté réseau]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Snort is a NIDS, Network Intrusion Detection System. Base is a Snort Front-end, it displays Snort alerts. This module install a standalone release of Snort and Base.]]></param_id>
+			<param_translation><![CDATA[Snort est un NIDS, Système de détection d'intrusion orienté réseau. Base est le front-end Snort, il affiche les alertes Snort. Ce module installe une version Standalone de Snort et Base.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Snort is a NIDS, Network Intrusion Detection System. Base is a Snort Front-end, it displays Snort alerts. This module install a server release of Snort and Base to be connected with clients.]]></param_id>
+			<param_translation><![CDATA[Snort est un NIDS, Système de détection d'intrusion orienté réseau. Base est le front-end Snort, il affiche les alertes Snort. Ce module installe une version serveur de Snort et Base qui peuvent être connecté à des clients.]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Snort is a NIDS, Network Intrusion Detection System. Base is a Snort Front-end, it displays Snort alerts. This install the client module to be connected with the server module.]]></param_id>
+			<param_translation><![CDATA[Snort est un NIDS, Système de détection d'intrusion orienté réseau. Base est le front-end Snort, il affiche les alertes Snort. Ce module installe une version Client de Snort qui doit être connectée à un serveur Snort.]]></param_translation>
+		</param>
+
+
+
+
+		<param>
+			<param_id><![CDATA[Snort registration key]]></param_id>
+			<param_translation><![CDATA[Clef d'enregistrement de Snort]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Listening interface]]></param_id>
+			<param_translation><![CDATA[Interface d'écoute]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Email solution for administration purpose or standalone server.]]></param_id>
+			<param_translation><![CDATA[Solution de serveur d'eMails pour l'administration ou les serveurs "Standalone".]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Smtp Relay]]></param_id>
+			<param_translation><![CDATA[Relais Smtp]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Public email]]></param_id>
+			<param_translation><![CDATA[Rendre le serveur public]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Mailbox quota (Mb, 0 for unlimited)]]></param_id>
+			<param_translation><![CDATA[Quota des boîtes emails (Mb, 0 pour illimité)]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Samba is an Open Source/Free Software suite that has, since 1992, provided file and print services to all manner of SMB/CIFS clients, including the numerous versions of Microsoft Windows operating systems. Samba is freely available under the GNU General Public License.]]></param_id>
+			<param_translation><![CDATA[Samba est une suite d'outils qui fourni des services de partage de fichiers et d'impression entre les machines Linux et Microsoft Windows.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[KnowledgeTree is open source turn-key document management software designed for business people to install, use and purchase. Collaborate with team members, securely store all your documents and ensure regulatory compliance with absolute ease. With no vendor lock-in and with source code readily available, KnowledgeTree provides a more flexible, cost-effective alternative to proprietary applications. KnowledgeTree is developped in php.]]></param_id>
+			<param_translation><![CDATA[KnowledgeTree est un gestionnaire de documents clef en main.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Horde Groupware Webmail Edition is a free, enterprise ready, browser based communication suite. Users can read, send and organize email messages and manage and share calendars, contacts, tasks and notes with the standards compliant components from the Horde Project. Horde Groupware Webmail Edition bundles the separately available applications IMP, Ingo, Kronolith, Turba, Nag and Mnemo.]]></param_id>
+			<param_translation><![CDATA[Horde Groupware Webmail Edition est une suite de communication en ligne. Les utilisateurs peuvent envoyer, recvoir, lire et organiser' leurs emails, gérer et partager des calendriers, contacts et notes.]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Nuxeo EP, which is based on state of the art Java technologies, provides an innovative and flexible ECM approach. It has been designed to offer a wide range of functions, high scalability, standards compliance, a fast learning curve and increased productivity for both the developers and users. It is deployed on a Java EE 5 application server and leverages the full potential of the technological platform, such as clustering, high availability, manageability, ease of integration, and a wealth of development tools. Nuxeo EP is a global solution, which is ready to respond to the challenges of modern information management (Web 2.0, information explosion, off-site and off-line work, etc.). Nuxeo EP has a rich Ajax-based interface and is designed to be accessed using a standard web browser, such as Microsoft IE or Firefox. It can either be used from an office suite, such as Microsoft® Office™, or OpenOffice.org, or from a Nuxeo RCP application.]]></param_id>
+			<param_translation><![CDATA[Basée sur l’état de l’art des technologies Java EE 5, Nuxeo EP propose une approche innovante et flexible de l’ECM. Elle a été conçue pour proposer une grande richesse fonctionnelle, une capacité à monter en charge, un respect des standards, une courbe d’apprentissage rapide et une productivité élevée pour les développeurs comme pour les utilisateurs. Elle est déployée dans un serveur d’application Java EE 5 et permet de tirer parti des bénéfices de la plateforme technologique, comme par exemple le clustering, la haute disponibilité, la facilité de gestion et d’intégration et l’abondance d’outils de développements. Nuxeo EP est une solution globale prête à répondre aux défis de la gestion de l’information moderne (Web 2.0, explosion de la quantité d’information à gérer, travail hors-site et hors-ligne, etc.).]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Install OpenOffice dependancies]]></param_id>
+			<param_translation><![CDATA[Installer les dépendances OpenOffice]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Applications Server]]></param_id>
+			<param_translation><![CDATA[Serveur d'applications]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Data management system]]></param_id>
+			<param_translation><![CDATA[Système de gestion des données]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Antivirus server]]></param_id>
+			<param_translation><![CDATA[Antivirus pour les serveurs]]></param_translation>
+		</param>
+
+
+
+		<param>
+			<param_id><![CDATA[Secured remote shell]]></param_id>
+			<param_translation><![CDATA[Commande à distance sécurisée]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Report email address]]></param_id>
+			<param_translation><![CDATA[Adresse email pour les rapports]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Tiny soft that display a files directory to the web.]]></param_id>
+			<param_translation><![CDATA[Petit logiciel qui permet de visualiser les répertoires de fichiers sur une interface web.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[OpenGoo is an Open Source Web Office. It is a complete solution for every organization to create, collaborate, share and publish all its internal and external documents.]]></param_id>
+			<param_translation><![CDATA[OpenGoo est une suite office en ligne.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Online Office suite]]></param_id>
+			<param_translation><![CDATA[Suite office en ligne]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[TaskFreak! is a simple but efficient web based task manager written in PHP.]]></param_id>
+			<param_translation><![CDATA[TaskFreak! est un gestionnaire de tâches simple.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[eyeOS is an Open Source Platform designed to hold a wide variety of Web Applications over it. eyeOS was thought as a new definition of Operating System, where everything inside can be accessed from everywhere in a Network. All you need to do is to login into your eyeOS server with a normal Internet Browser, and access your personal desktop, with your applications, documents, musics, movies… just like you left them last time.
+
+With the base system you can find a full suite of applications bundled, some for private use, a the file manager, a word processor, a music player, calendar, notepad or contacts manager. There are also some groupware applications, such as a groups manager, a file sharing application, a group board and many more.]]></param_id>
+			<param_translation><![CDATA[eyeOS est un système d'exploitation en ligne accessible à partir d'un navigateur web.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Video conferencing system]]></param_id>
+			<param_translation><![CDATA[Système de vidéo conférence]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Multi-Language Cross-Platform Customizable Web-Conferencing and Collaboration.]]></param_id>
+			<param_translation><![CDATA[Système de Vidéo conférence et de collaboration ]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[InspIRCd is a modular C++ IRCd (IRC daemon) for Linux, BSD, Windows and Apple OS X systems created to provide a stable, modern, and lightweight IRCd written from scratch.]]></param_id>
+			<param_translation><![CDATA[InspIRCd est un serveur IRC modulaire écrit en C++ pour Linux, BSD, Windows et Apple OS X.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Login name]]></param_id>
+			<param_translation><![CDATA[Nom d'utilisateur]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Password]]></param_id>
+			<param_translation><![CDATA[Mot de passe]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[ClickHeat is a visual heatmap of clicks on a HTML page, showing hot and cold click zones.]]></param_id>
+			<param_translation><![CDATA[ClickHeat est un générateur de cartes de température, représentant l'emplacement des clics de vos internautes.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Heatmap of clicks]]></param_id>
+			<param_translation><![CDATA[Cartographie des clicks]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Dokeos is a open source online learning suite. It provides :
+
+1. Learning Management : SCORM import, edit and export,social interaction, sophisticated test and surveys
+
+2. Oogie Rapid Learning : build SCORM courses online from templates, from Powerpoint...
+
+3. Accurate reporting that you can export to Excel, Business Objects...
+
+4. Videoconferencing : virtual meeting and virtual classroom for live training sessions]]></param_id>
+			<param_translation><![CDATA[Dokeos est une suite e-learning en open source. Elle offre :
+
+1. Une plateforme e-learning : import SCORM, édition et export des parcours de formation, gestion de l'interaction sociale, outils de production de tests et d'enquêtes avec suivi personnalisé
+
+2. Oogie Rapid Learning : produisez des cours SCORM par conversion d'une présentation Powerpoint et/ou à l'aide de modèles de pages
+
+3. Reporting circonstancié que vous pouvez exporter vers Excel, Business Objects, SAP...
+
+4. Videoconférence : réunions virtuelles, classe virtuelle, formations en direct]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Lodel is a content publishing system. Lodel is compliant to Dublin Core, RSS and soon OAI. Lodel could also produce XML documents.]]></param_id>
+			<param_translation><![CDATA[Lodel est un logiciel d’édition électronique simple d'utilisation et facile à adapter à des usages particuliers. Installé sur un serveur web, il s'utilise à distance avec un navigateur web. Les documents à publier peuvent être préparés dans un traitement de texte (Word, OpenOffice.org, etc) en local ou édités directement en ligne. Lodel utilise les styles de paragraphe (par exemple : titre, résumé, auteur) pour fabriquer automatiquement les sommaires, les index par auteur, etc. Lodel respecte les normes d'édition sur le web (Dublin Core, RSS, prochainement OAI) et produit des documents XML.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[PHPMyResa is a web-based software, using the PHP/MySQL technology (PostgreSQL and Oracle are also supported), used for management of ressources booking, such as room booking, car booking, ... Requests for booking are validated by an administrator of the type of ressource, warmed by email. A password, associated to each ressource booking, allow the user to modify or cancel it. A calendar integration is possible with the iCal format.]]></param_id>
+			<param_translation><![CDATA[PHPMyResa est un logiciel web, basé sur la technologie PHP/MySQL (PostgreSQL et Oracle sont également supportés), servant à gérer des réservations de ressources. Il permet de gérer des objets aussi variés que des salles de réunion des véhicules, du matériel, etc. Les demandes de réservation sont validées par le gestionnaire du type de ressources qui est prévenu par mail. Un mot de passe associé à la réservation permet au propriétaire d'effectuer des modifications ou d'annuler. Une intégration d'un calendrier au format iCal est proposée.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Operating system user name]]></param_id>
+			<param_translation><![CDATA[Nom d'utilisateur du système d'exploitation]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Operating system user password]]></param_id>
+			<param_translation><![CDATA[Mot de passe du système d'exploitation]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[User email]]></param_id>
+			<param_translation><![CDATA[Email de l'utilisateur]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[User email password]]></param_id>
+			<param_translation><![CDATA[Mot de passe de la messagerie de l'utilisateur]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Administrator application login]]></param_id>
+			<param_translation><![CDATA[Login administrateur de l'application]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Administrator application password]]></param_id>
+			<param_translation><![CDATA[Mot de passe administrateur de l'application]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Online translation]]></param_id>
+			<param_translation><![CDATA[Traduction en ligne]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Online dictionnary]]></param_id>
+			<param_translation><![CDATA[Dictionnaire en ligne]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Samba server]]></param_id>
+			<param_translation><![CDATA[Serveur Samba]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Files display]]></param_id>
+			<param_translation><![CDATA[Présentation de répertoires]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Tasks management]]></param_id>
+			<param_translation><![CDATA[Gestionnaire de tâches]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Social Networks]]></param_id>
+			<param_translation><![CDATA[Réseaux sociaux]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Rss agregator]]></param_id>
+			<param_translation><![CDATA[Agrégateur Rss]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Web-based social bookmarking system. Allows multiple users to store, share and tag their favourite links online.]]></param_id>
+			<param_translation><![CDATA[Système de gestion des marques-pages sociaux.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[But who, or rather what, is Lilina? Lilina is a free, open source aggregator for your server. This allows you to install it once and run it everywhere.]]></param_id>
+			<param_translation><![CDATA[Lilina est un agregateur RSS open source.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Customer relationship management]]></param_id>
+			<param_translation><![CDATA[Gestion de la relation client]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[SugarCRM is rethinking how technology can help companies manage customer relationships. Sugar, the market leading commercial open source CRM application, delivers a feature-rich set of business processes that enhance marketing effectiveness, drive sales performance, improve customer satisfaction and provide executive insight into business performance.]]></param_id>
+			<param_translation><![CDATA[SugarCRM est un logiciel de gestion de la relation client.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[dotProject is a volunteer supported Project Management application. dotProject is a web-based project management application, designed to provide project layout and control functions.]]></param_id>
+			<param_translation><![CDATA[dotProject est un logiciel de gestion de projet en ligne. dotProject est conçue pour fournir la trame du projet ainsi que les fonctions de contrôle.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Redmine is a flexible project management web application. Written using Ruby on Rails framework, it is cross-platform and cross-database.]]></param_id>
+			<param_translation><![CDATA[Redmine est une application web de gestion de projets. Redmine utilise la technologie web Ruby On Rails.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Default postgresql password]]></param_id>
+			<param_translation><![CDATA[Mot de passe par défaut Postgresql]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Mantis is a bug tracking system.]]></param_id>
+			<param_translation><![CDATA[Mantis est un outil de gestion des défauts.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Trac is an enhanced wiki and issue tracking system for software development projects. Trac uses a minimalistic approach to web-based software project management. Our mission is to help developers write great software while staying out of the way. Trac should impose as little as possible on a team's established development process and policies.
+
+It provides an interface to Subversion, an integrated Wiki and convenient reporting facilities.
+
+Trac allows wiki markup in issue descriptions and commit messages, creating links and seamless references between bugs, tasks, changesets, files and wiki pages. A timeline shows all current and past project events in order, making the acquisition of an overview of the project and tracking progress very easy. The roadmap shows the road ahead, listing the upcoming milestones.]]></param_id>
+			<param_translation><![CDATA[Trac est un wiki et un gestionnaires de défauts avancé pour le développement de projets logiciels.
+
+Trac fourni une interface ergonomique à Subversion]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Subversion default admin password]]></param_id>
+			<param_translation><![CDATA[Mot de passe administrateur de Subversion]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Subversion default anonymous password]]></param_id>
+			<param_translation><![CDATA[Mot de passe anonymous de Subversion]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Trac default admin password]]></param_id>
+			<param_translation><![CDATA[Mot de passe administrateur de Trac]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Elgg is an open, flexible social networking engine, designed to run at the heart of any socially-aware application. Building on Elgg is easy, and because the engine handles common web application and social functionality for you, you can concentrate on developing your idea.]]></param_id>
+			<param_translation><![CDATA[Elgg est une plateforme de réseaux sociaux ouverte et libre.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Insoshi social networking platform Insoshi is a product and a project. The product aims to be the best open-source social networking platform. The project is to make the product!]]></param_id>
+			<param_translation><![CDATA[Insoshi est une plateforme de réseaux sociaux]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Server address]]></param_id>
+			<param_translation><![CDATA[Adresse du serveur]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Server application name]]></param_id>
+			<param_translation><![CDATA[Nom de l'application serveur]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Server mysql password]]></param_id>
+			<param_translation><![CDATA[Mot de passe mysql du serveur]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Zenphoto is an answer to lots of calls for an online gallery solution that just makes sense. After years of bloated software that does everything and your dishes, zenphoto just shows your photos, simply. It’s got all the functionality and “features” you need, and nothing you don’t. Where the old guys put in a bunch of modules and junk, we put a lot of thought. We hope you agree with our philosopy: simpler is better. Don’t get us wrong though –zenphoto really does have everything you need for your online gallery, and you’ll even stare in awe at some of the innovative innovations we innovated upon.]]></param_id>
+			<param_translation><![CDATA[Zenphoto est une réponse pour avoir un système de publication de collections d'images simple et fonctionnel.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Php-Syslog-ng is a frontend for viewing syslog-ng messages logged to MySQL in realtime. It features customized searches based on device, priority, date, time, and message. This module install a syslog-ng server and the php frontend.]]></param_id>
+			<param_translation><![CDATA[Php-Syslog-ng est un frontend PHP pour visualiser les logs syslog-ng en temps réel. Ce module installe un serveur syslog-ng ainsi que l'interface utilisateur en php.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Zabbix is an enterprise-class open source distributed monitoring solution. This module install Zabbix server.]]></param_id>
+			<param_translation><![CDATA[ZABBIX est un système de gestion distribué du réseau. Ce module installe Zabbix serveur.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[External smtp server address]]></param_id>
+			<param_translation><![CDATA[Adresse du serveur smtp externe]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Zabbix is an enterprise-class open source distributed monitoring solution. This module install Zabbix client.]]></param_id>
+			<param_translation><![CDATA[ZABBIX est un système de gestion distribué du réseau. Ce module installe Zabbix client.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[This module will make operating system reporting logs to an external syslog-ng server.]]></param_id>
+			<param_translation><![CDATA[Ce module permet au système d'exploitation d'envoyer des rapports de logs à un serveur syslog-ng externe.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[This module will install postfix as a relay to an external smtp server.]]></param_id>
+			<param_translation><![CDATA[Ce module install Postfix et permet de relayer les requêtes vers un serveur smtp externe.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Kolab is a Groupware Solution for Emails, Appointments, Contacts and more. It supports mixed client environments (Outlook/KDE) because of an open storage format. Any email client speaking standard protocols can be served.]]></param_id>
+			<param_translation><![CDATA[Kolab est une solution de Groupware pour les eMails, les rendez vous ou les contacts. Kolab supporte des environnements mixtes (Outlook/KDE). N'importe quel client mail possédant un protocole standard peut être utilisé.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Tor is a software project that helps you defend against traffic analysis, a form of network surveillance that threatens personal freedom and privacy, confidential business activities and relationships, and state security. Tor protects you by bouncing your communications around a distributed network of relays run by volunteers all around the world: it prevents somebody watching your Internet connection from learning what sites you visit, and it prevents the sites you visit from learning your physical location. Tor works with many of your existing applications, including web browsers, instant messaging clients, remote login, and other applications based on the TCP protocol.]]></param_id>
+			<param_translation><![CDATA[Tor est un projet logiciel qui aide à la défense contre l'analyse de trafic, une forme de surveillance de réseau qui menace les libertés individuelles et l'intimité, les activités commerciales et relationnelles, et la sécurité d'état. Tor vous protège en faisant rebondir vos communications à l'intérieur d'un réseau distribué de relais maintenus par des volontaires partout dans le monde : il empêche qu'une tierce personne scrutant votre connexion internet connaisse les sites que vous avez visité, et empêche les sites que vous avez visité de connaître votre position géographique. Tor fonctionne avec beaucoup de nos applications existantes, comme les navigateurs web, les clients de messagerie instantanée, les connexions à distance et tout un nombre d'applications se basant sur le protocole TCP.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Forward request to privoxy]]></param_id>
+			<param_translation><![CDATA[Transmettre les requêtes à Privoxy]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[InDefero is basically a clone of GoogleCode but with git, mercurial and subversion support. The motto of InDefero "beautiful simplicity".]]></param_id>
+			<param_translation><![CDATA[InDefero est un clone GoogleCode mais avec le support de git, mercurial et subversion. Le mot d'ordre d'InDefero est "beautiful simplicity".]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[LibreSource is an Open Source web portal, gathering in one place all the necessary tools to share and communicate within your project team.
+
+Particularly adapted for software development, community management and web publishing, LibreSource aims at facilitating the coordination of collaborative projects and reducing their cost.]]></param_id>
+			<param_translation><![CDATA[Libresource est un système de gestion de données.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Webmin is a web-based interface for system administration for Unix. Using any modern web browser, you can setup user accounts, Apache, DNS, file sharing and much more. Webmin removes the need to manually edit Unix configuration files like /etc/passwd, and lets you manage a system from the console or remotely.]]></param_id>
+			<param_translation><![CDATA[Webmin est une interface d'administration web pour Unix.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Network monitoring]]></param_id>
+			<param_translation><![CDATA[Gestion du réseau]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Open source collaborative system.]]></param_id>
+			<param_translation><![CDATA[Système de collaboration Open source]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Planning management]]></param_id>
+			<param_translation><![CDATA[Gestion des plannings]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Files sharing]]></param_id>
+			<param_translation><![CDATA[Partage de fichiers]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[HAVP (HTTP Antivirus Proxy) is a proxy with a ClamAV anti-virus scanner. The main aims are continuous, non-blocking downloads and smooth scanning of dynamic and password protected HTTP traffic. Havp antivirus proxy has a parent and transparent proxy mode. It can be used with squid or standalone.]]></param_id>
+			<param_translation><![CDATA[HAVP (HTTP Antivirus Proxy) est un proxy avec un antivirus basé sur ClamAV. Les objectifs principaux sont une fonctionnalité continues, des téléchargements non blockés et une détection en douceur du trafic HTTP. Havp antivirus proxy peut fonctionner en mode parent ou transparent. Il peut être utilisé avec Squid ou en mode Standalone.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Anonymous proxy]]></param_id>
+			<param_translation><![CDATA[Proxy d'anonymisation]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Antivirus proxy]]></param_id>
+			<param_translation><![CDATA[Proxy antivirus]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Social network system]]></param_id>
+			<param_translation><![CDATA[Plateforme de réseaux sociaux]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Social bookmarks]]></param_id>
+			<param_translation><![CDATA[Marque-pages sociaux]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Online ftp client]]></param_id>
+			<param_translation><![CDATA[Client ftp en ligne]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Syslog-ng server]]></param_id>
+			<param_translation><![CDATA[Serveur Syslog-ng]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Syslog client]]></param_id>
+			<param_translation><![CDATA[Client Syslog]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Online Desktop]]></param_id>
+			<param_translation><![CDATA[Bureau en ligne]]></param_translation>
+		</param>
+
+		<param>
+			<param_id><![CDATA[Collaborative software]]></param_id>
+			<param_translation><![CDATA[Outil de collaboration]]></param_translation>
+		</param>
+
+		<param>
+			<param_id><![CDATA[Resources management]]></param_id>
+			<param_translation><![CDATA[Gestionnaire de ressources]]></param_translation>
+		</param>
+
+		<param>
+			<param_id><![CDATA[Social networks]]></param_id>
+			<param_translation><![CDATA[Réseaux sociaux]]></param_translation>
+		</param>
+
+		<param>
+			<param_id><![CDATA[Laconica (pronounced "luh-KAWN-ih-kuh") is a Free and Open Source microblogging platform. It helps people in a community, company or group to exchange short (140 character) messages over the Web. Users can choose which people to "follow" and receive only their friends' or colleagues' status messages. It provides a similar service to sites like Twitter, Jaiku, and Plurk.]]></param_id>
+			<param_translation><![CDATA[Laconica est une plateforme de microblogging.]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[NoMachine NX is an enterprise-class solution for secure remote access, desktop virtualization, and hosted desktop deployment built around the self-designed and self-developed NX suite of components. This module install the Nx server.]]></param_id>
+			<param_translation><![CDATA[NoMachine NX est une solution professionnelle de prise de contrôle à distance sécurisée pour les hébergement virtualisés ou hébergés. Ce module installe le serveur NX.]]></param_translation>
+		</param>
+
+		<param>
+			<param_id><![CDATA[VirtualBox is a powerful x86 virtualization product for enterprise as well as home use. Not only is VirtualBox an extremely feature rich, high performance product for enterprise customers, it is also the only professional solution that is freely available as Open Source Software under the terms of the GNU General Public License (GPL). This module install the commercial editions of Virtualbox.]]></param_id>
+			<param_translation><![CDATA[VirtualBox est un logiciel permettant de créer des ordinateurs virtuels, tout comme VMPlayer/VMWare ou QEmu pour ensuite installer de nombreux systèmes d'exploitation invités qui fonctionneront dans le système d'exploitation réel de votre ordinateur. Ce module installe la version commerciale de Virtualbox.]]></param_translation>
+		</param>
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Prométhée is a project placed under GNU/GPL license which aims to provide a "ready to use" pedagogic and administrative intranet-extranet to schools.]]></param_id>
+			<param_translation><![CDATA[Prométhée est un projet placé sous licence GNU/GPL visant à fournir un intranet-extranet pédagogique et administratif "clef en main" aux établissements scolaires.]]></param_translation>
+		</param>
+
+		<param>
+			<param_id><![CDATA[FileZilla is open source software distributed free of charge under the terms of the GNU General Public License.]]></param_id>
+			<param_translation><![CDATA[FileZilla est un logiciel FTP gratuit crée par l'allemand Tim Kosse. Il permet de se connecter à distance sur un serveur pour y télécharger des fichiers.]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[Grsync is a Graphical User Interface (GUI) for rsync, the most used directory synchronization tool under Linux / Unix System.[citation needed] Grsync is released under the GPL license, so it is Free Software, and makes use of the GTK+ UI toolkit. It doesn't support all of rsync features, but can be effectively used to synchronize local directories and supports remote targets in a limited way.]]></param_id>
+			<param_translation><![CDATA[Grsync est une interface graphique simple utilisant GTK2 pour la commande rsync.]]></param_translation>
+		</param>
+	
+		<param>
+			<param_id><![CDATA[Ekiga (formely known as GnomeMeeting) is an open source VoIP and video conferencing application for GNOME. Ekiga uses both the H.323 and SIP protocols. It supports many audio and video codecs, and is interoperable with other SIP compliant software and also with Microsoft NetMeeting.]]></param_id>
+			<param_translation><![CDATA[Ekiga (précédemment GnomeMeeting) est le logiciel libre de téléphonie sur Internet (VoIP) et de conférences vidéos par défaut dans Ubuntu, avec suspension, transfert et redirection d'appels. Il permet d'appeler gratuitement en audio, vidéo et texte de PC à PC (GNU/linux, Mac OS, Windows…) et est compatible avec les logiciels et matériels qui suivent les standards SIP et H323. Il fournit aussi une messagerie instantanée.]]></param_translation>
+		</param>
+		<param>
+			<param_id><![CDATA[VLC media player is a highly portable multimedia player and multimedia framework capable of reading most audio and video formats (MPEG-2, MPEG-4, H.264, DivX, MPEG-1, mp3, ogg, aac ...) as well as DVDs, Audio CDs VCDs, and various streaming protocols. See the full features list. It can also be used as a media converter or a server to stream in unicast or multicast in IPv4 or IPv6 on networks.]]></param_id>
+			<param_translation><![CDATA[Issu du projet Videolan, VLC media player est un logiciel libre doté d'une multitude de fonctions relatives à la lecture de documents audiovisuels. Logiciel gratuit, unique et original, VLC media player est un véritable couteau suisse du multimedia, utilisable par tous grâce à une interface simple et facile.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Multimedia player]]></param_id>
+			<param_translation><![CDATA[Lecteur multimédia]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Videoconferencing client]]></param_id>
+			<param_translation><![CDATA[Client de vidéoconférence]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Rsync client]]></param_id>
+			<param_translation><![CDATA[Client Rsync]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Web server admin password]]></param_id>
+			<param_translation><![CDATA[Mot de passe administrateur du serveur web]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[ is finished.]]></param_id>
+			<param_translation><![CDATA[ est terminée.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Your files are available here:]]></param_id>
+			<param_translation><![CDATA[Vos fichiers sont disponibles ici:]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[The files are available here:]]></param_id>
+			<param_translation><![CDATA[Les fichiers sont disponibles ici:]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[These files have been deleted:]]></param_id>
+			<param_translation><![CDATA[Ces fichiers ont été effacés:]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[With the selection]]></param_id>
+			<param_translation><![CDATA[Avec la sélection]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Delete]]></param_id>
+			<param_translation><![CDATA[Supprimer]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[ can't be cancelled.]]></param_id>
+			<param_translation><![CDATA[ ne peut être annulée.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[These files can't be deleted:]]></param_id>
+			<param_translation><![CDATA[Ces fichiers ne peuvent être effacés:]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[IP range to monitor]]></param_id>
+			<param_translation><![CDATA[Gamme d'adresses IP à gérer]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[You can not continue without accepting this licenses.]]></param_id>
+			<param_translation><![CDATA[Vous ne pouvez pas continuer sans accepter ces licences.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Cooperation-iws End User Agreement<br>
+<center>Definitions</center><br>
+Cooperation-iws Prestation: Cooperation-iws delivers Operating system customization services. This means that Cooperation-iws makes available resources to End User so that he could realize it's own operating system as if it could have done it by himself. Cooperation-iws lend its hardware and software resources and make them publicly usable to the End User.<br>
+
+The End User Product: The End User use Cooperation-iws web services as a it could have done with traditional software on its own machine. The results of the Cooperation-iws services use is the End User Product. This product belong to the End User and The End User is responsible for the nature of the product regarding the applicable laws and juridiction of its country.<br> 
+
+<br><center>Terms and conditions</center><br>
+
+Cooperation-iws prestation is a service so that the products made by the services on the base of the End User Choice isn't initially owned by Cooperation-iws organization. Regarding applicable laws and licenses, Cooperation-iws advices to End User in their web services are to make product Compliant with the GNU GENERAL PUBLIC LICENSE. In the case of the license of some particular components of the End User product were in conflicts with this license, the most restrictive apply. Following are therefore the Licenses, End User Agreements and Terms and Conditions applying to your product.
+<br>]]></param_id>
+			<param_translation><![CDATA[Conditions d'utilisation des services Cooperation-iws<br>
+<center>Definitions</center><br>
+La prestation de Cooperation-iws: Cooperation-iws fournit des services de personnalisation de système d'exploitation. Cela signifie que Cooperation-iws rend disponible des ressources à l'utilisateur final de telle façon qu'il aurait pu personnaliser son système d'exploitation  lui même. Cooperation-iws prête son matériel et ses logiciels et les rend publiquement utilisables par l'utilisateur final.<br>
+
+Le produit de l'utilisateur final: L'utilisateur final utilise les services web de Cooperation-iws tel qu'il pourrait le faire sur sa propre machine avec des logiciels traditionnels. Le résultat de cette utilisation est le produit de l'utilisateur final. Ce produit appartient à l'utilisateur final et il est responsable de la composition de ce dernier au regard des lois et juridictions applicables dans son pays.<br> 
+
+<br><center>Conditions d'utilisation</center><br>
+
+La prestation de Cooperation-iws est un service et de ceci en découle que le produit conçu par les services de Cooperation-iws n'appartient pas initialement à Cooperation-iws mais à l'utilisateur final. Au regard des lois et licences applicables, Cooperation-iws conseille dans ses services web à l'utilisateur final de réaliser un produit conforme à la GNU GENERAL PUBLIC LICENSE. Dans le cas ou la license de quelques composants particuliers serait en conflit avec cette license, la plus restrictive s'applique. Les licenses suivantes sont applicables à votre produit.
+<br>]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Cooperation-iws End User Agreement]]></param_id>
+			<param_translation><![CDATA[Conditions d'utilisation des services Cooperation-iws]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[I disagree]]></param_id>
+			<param_translation><![CDATA[Je n 'accepte pas]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[I agree]]></param_id>
+			<param_translation><![CDATA[J'accepte]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Choose a template to upload:]]></param_id>
+			<param_translation><![CDATA[Choisissez un Modèle à télécharger:]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Upload File]]></param_id>
+			<param_translation><![CDATA[Télécharger le fichier]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[The file ]]></param_id>
+			<param_translation><![CDATA[Le fichier ]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[ has been uploaded.]]></param_id>
+			<param_translation><![CDATA[ a été téléchargé.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[External smtp authentication login]]></param_id>
+			<param_translation><![CDATA[Login d'authentification pour le serveur smtp relais (facultatif)]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[External smtp authentication password]]></param_id>
+			<param_translation><![CDATA[Mot de passe d'authentification pour le serveur smtp relais (facultatif)]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+		<param>
+			<param_id><![CDATA[Ntop is a network sensor.]]></param_id>
+			<param_translation><![CDATA[Ntop est une sonde réseau.]]></param_translation>
+		</param>
+
+
+
+
+
+</params>
+</language>

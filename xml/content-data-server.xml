@@ -1,0 +1,2953 @@
+<?xml version="1.0"?>
+<items>
+<item>
+	<item_name>Claroline</item_name>
+	<item_version>1.8.11</item_version>
+	<item_desc>eLearning portal</item_desc>
+	<item_web>http://www.claroline.net/</item_web>
+	<item_verbose>Claroline is an Open Source eLearning and eWorking platform allowing teachers to build effective online courses and to manage learning and collaborative activities on the web. Translated into 35 languages, Claroline has a large worldwide users’ and developers’ community.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Learning</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>claroline_name</field_1_value>
+		<field_1_def_content>Claroline</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>claroline_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>claroline_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Moodle</item_name>
+	<item_version>1.9</item_version>
+	<item_desc>eLearning portal</item_desc>
+	<item_web>http://www.claroline.net/</item_web>
+	<item_verbose>Moodle is an eLearning portal. Moodle is also a course content management system.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Learning</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>moodle_name</field_1_value>
+		<field_1_def_content>Moodle</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>moodle_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>moodle_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Achievo</item_name>
+	<item_version>1.3.4</item_version>
+	<item_desc>Projects management</item_desc>
+	<item_web>http://www.achievo.org/</item_web>
+	<item_verbose>Achievo is a flexible web-based resource management tool for business environments. Achievo's resource management capabilities will enable organisations to support their business processes in a simple, but effective manner.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Projects management</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>achievo_name</field_1_value>
+		<field_1_def_content>Achievo</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>achievo_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+	
+</item>
+<item>
+	<item_name>Dotclear</item_name>
+	<item_version>2.1.3</item_version>
+	<item_desc>Content management system</item_desc>
+	<item_web>http://dotclear.org/</item_web>
+	<item_verbose>Dotclear is an open-source web publishing software created in 2002 by Olivier Meunier. A one man's project at first, Dotclear soon gathered a team comprising different personalities with various backgrounds.
+
+The project's purpose is to provide a user-friendly tool allowing anyone to publish on the web, regardless of their technical skills.
+
+Dotclear is a free software primarily designed for its users and regularly improved by their contributions. Everyone may use it and modify it according to the software license. </item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>dotclear_name</field_1_value>
+		<field_1_def_content>Dotclear</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>dotclear_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>dotclear_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+
+</item>
+<item>
+	<item_name>DNS server</item_name>
+	<item_version>Lenny</item_version>
+	<item_desc>Domain Name Server</item_desc>
+	<item_web>https://www.isc.org/software/bind</item_web>
+	<item_verbose>BIND (pronounced /bʌɪnd/), for Berkeley Internet Name Domain, or named (pronounced /ˈneɪmˌdiː/), is the most commonly used DNS server on the Internet, especially on Unix-like systems, where it is a de facto standard. Supported by Internet Systems Consortium, BIND was originally created by four graduate students with CSRG at the University of California, Berkeley and first released with 4.3BSD. Paul Vixie started maintaining it in 1988 while working for DEC.The development of BIND 9 was done with a combination of commercial and military contracts. Most of the features of BIND 9 were funded by UNIX vendors who wanted to ensure that BIND stayed competitive with Microsoft's DNS offerings; the DNSSEC features were funded by the US military who felt that DNS security was important.</item_verbose>
+	<item_type>DNS server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Networking</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>Gateway DNS</field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		
+	</param>
+	
+
+	
+</item>
+<item>
+	<item_name>DNS server</item_name>
+	<item_version>Hardy</item_version>
+	<item_desc>Domain Name Server</item_desc>
+	<item_web>https://www.isc.org/software/bind</item_web>
+	<item_verbose>BIND (pronounced /bʌɪnd/), for Berkeley Internet Name Domain, or named (pronounced /ˈneɪmˌdiː/), is the most commonly used DNS server on the Internet, especially on Unix-like systems, where it is a de facto standard. Supported by Internet Systems Consortium, BIND was originally created by four graduate students with CSRG at the University of California, Berkeley and first released with 4.3BSD. Paul Vixie started maintaining it in 1988 while working for DEC.The development of BIND 9 was done with a combination of commercial and military contracts. Most of the features of BIND 9 were funded by UNIX vendors who wanted to ensure that BIND stayed competitive with Microsoft's DNS offerings; the DNSSEC features were funded by the US military who felt that DNS security was important.</item_verbose>
+	<item_type>DNS server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Networking</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>Gateway DNS</field_exclude>
+        <field_include></field_include>
+        <field_OS>Hardy</field_OS>
+	<param>	
+		
+	</param>
+	
+	
+	
+</item>
+<item>
+	<item_name>Gateway DNS</item_name>
+	<item_version>0.5</item_version>
+	<item_desc>Firewall / Gateway</item_desc>
+	<item_web>http://www.cooperation-iws.org/</item_web>
+	<item_verbose>The Cooperation-iws gateway is specifically design for nomadic purpose. The major components of the Gateway are Routing software, Dhcp server, Firewall and Domain name server. Cooperation-iws gateway might run on all Linux supported platform from tiny netbooks to servers.</item_verbose>
+	<item_type>Gateway server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Networking</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>DNS server Lenny</field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>gateway_nb_machine</field_1_id>
+		<field_1_name>Quantity of machines for the LAN</field_1_name>
+		<field_1_value>gateway_nb_machine</field_1_value>
+		<field_1_def_content>10</field_1_def_content>
+		<field_1_content_check>[^0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_net_iface</field_1_id>
+		<field_1_name>External Network Interface (connected to the net)</field_1_name>
+		<field_1_value>gateway_net_iface</field_1_value>
+		<field_1_def_content>eth0</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_local_iface</field_1_id>
+		<field_1_name>Internal Network Interface (connected to the lan)</field_1_name>
+		<field_1_value>gateway_local_iface</field_1_value>
+		<field_1_def_content>eth1</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>range</field_1_id>
+		<field_1_name>Internal Subnet Declaration Range [0-254]</field_1_name>
+		<field_1_value>range</field_1_value>
+		<field_1_def_content>020</field_1_def_content>
+		<field_1_content_check>M((^2[0-4]{1}[0-9]{1})|(^25[0-4]{1})|(^1[0-9]{1}[0-9]{1})|(^0[0-9]{1}[0-9]{1}))</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Virtualmin</item_name>
+	<item_version>Lenny</item_version>
+	<item_desc>Web server Control Panel</item_desc>
+	<item_web>http://www.virtualmin.com/</item_web>
+	<item_verbose>Virtualmin is the world's most powerful and flexible web server control panel. Manage your virtual domains, mailboxes, databases, applications, and the entire server, from one comprehensive interface.</item_verbose>
+	<item_type>Hosting server, Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Hosting</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>Operating system user name</field_default_login>
+	<field_default_pwd>Operating system user password</field_default_pwd>
+	<field_exclude>Web server, Emails server</field_exclude>
+        <field_include>DNS server Lenny</field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Agora</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Collaborative software</item_desc>
+	<item_web>http://www.agora-project.net/</item_web>
+	<item_verbose>Open source collaborative system.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Productivity</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>agora_name</field_1_value>
+		<field_1_def_content>Agora</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>agora_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>agora_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Aie</item_name>
+	<item_version>0.5</item_version>
+	<item_desc>Web images editor</item_desc>
+	<item_web>http://www.ajax-image-editor.com/</item_web>
+	<item_verbose>AIE (Ajax Images Editor) is a rich internet application for manipulating images online. It's works with Mozilla Firefox and Internet Explorer. It uses HTML, JavaScript and Ext JS on client side and ImageMagick and PHP on server side.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Office</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>aie_name</field_1_value>
+		<field_1_def_content>Aie</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>share_akoie_smb</field_1_id>
+		<field_1_name>Share files with Samba</field_1_name>
+		<field_1_value>share_akoie_smb</field_1_value>
+		<field_1_def_content>checked</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>share_akoie_smb_pwd</field_1_id>
+		<field_1_name>Protect samba share with password</field_1_name>
+		<field_1_value>share_akoie_smb_pwd</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Ampache</item_name>
+	<item_version>3.4.3</item_version>
+	<item_desc>Multimedia streaming portal</item_desc>
+	<item_web>http://ampache.org/</item_web>
+	<item_verbose>Ampache is a Web-based Audio file manager. It is implemented with MySQL, and PHP. It allows you to view, edit, and play your audio files via the web. It has support for playlists, artist and album views, album art, random play, playback via Http/On the Fly Transcoding and Downsampling, Vote based playback, Mpd and Icecast, Integrated Flash Player, as well as per user themes and song play tracking. You can also Link multiple Ampache servers togeather using XML-RPC. Ampache supports GETTEXT translations and has a full translation of many languages.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Multimedia</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>ampache_name</field_1_value>
+		<field_1_def_content>Ampache</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>ampache_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Awstats</item_name>
+	<item_version>Lenny</item_version>
+	<item_desc>Web logs tracking analysis tool</item_desc>
+	<item_web>http://awstats.sourceforge.net/</item_web>
+	<item_verbose>AWStats is a free powerful and featureful tool that generates advanced web, streaming, ftp or mail server statistics, graphically. This log analyzer works as a CGI or from command line and shows you all possible information your log contains, in few graphical web pages. It uses a partial information file to be able to process large log files, often and quickly. It can analyze log files from all major server tools like Apache log files (NCSA combined/XLF/ELF log format or common/CLF log format), WebStar, IIS (W3C log format) and a lot of other web, proxy, wap, streaming servers, mail servers and some ftp servers.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Bugzilla</item_name>
+	<item_version>3.0.5b</item_version>
+	<item_desc>Defect Tracking System</item_desc>
+	<item_web>http://www.bugzilla.org/</item_web>
+	<item_verbose>Bugzilla is a “Defect Tracking System” or “Bug-Tracking System”. Defect Tracking Systems allow individual or groups of developers to keep track of outstanding bugs in their product effectively. Most commercial defect-tracking software vendors charge enormous licensing fees. Despite being “free”, Bugzilla has many features its expensive counterparts lack. Consequently, Bugzilla has quickly become a favorite of hundreds of organizations across the globe.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>mozilla_public_license</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>Default admin email</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>bugzilla_name</field_1_value>
+		<field_1_def_content>Bugzilla</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>bugzilla_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>bugzilla_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+
+<item>
+	<item_name>Cacti</item_name>
+	<item_version>0.8.7b</item_version>
+	<item_desc>Server Monitoring</item_desc>
+	<item_web>http://www.cacti.net/</item_web>
+	<item_verbose>Cacti is a complete network graphing solution designed to harness the power of RRDTool's data storage and graphing functionality. Cacti provides a fast poller, advanced graph templating, multiple data acquisition methods, and user management features out of the box. All of this is wrapped in an intuitive, easy to use interface that makes sense for LAN-sized installations up to complex networks with hundreds of devices.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>cacti_name</field_1_value>
+		<field_1_def_content>Cacti</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>cacti_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>CGI-IRC</item_name>
+	<item_version>Lenny</item_version>
+	<item_desc>Web based IRC client</item_desc>
+	<item_web>http://cgiirc.org/</item_web>
+	<item_verbose>CGI:IRC is a Perl/CGI program that lets you access IRC from a web browser, it is designed to be flexible and has many uses such as an IRC gateway for an IRC network, a chat-room for a website or to access IRC when stuck behind a restrictive firewall.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Multimedia</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Server address</field_1_name>
+		<field_1_id>url_default_server</field_1_id>
+		<field_1_value>url_default_server</field_1_value>
+		<field_1_def_content>localhost</field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	
+</item>
+<item>
+	<item_name>Proftpd</item_name>
+	<item_version>Lenny</item_version>
+	<item_desc>Ftp server</item_desc>
+	<item_web>http://www.proftpd.org/</item_web>
+	<item_verbose>ProFTPD grew out of the desire to have a secure and configurable FTP server, and out of a significant admiration of the Apache web server.
+
+When the Project began, the most commonly used server was wu-ftpd. While wu-ftpd provides excellent performance and is generally a good product, it lacks numerous features found in newer Win32 FTP servers and has a poor security history. Many people, including the developers who work on ProFTPD, had spent a great deal of time fixing bugs and hacking features into wu-ftpd. Unfortunately, it quickly became clear that a complete redesign was necessary in order to implement the configurability and features desired.
+
+In addition to wu-ftpd, there are a few of other FTP servers available which are designed to be light-weight and secure at the expense of configurability. For example, Troll FTP is an excellent FTP daemon which is considerably more secure and less resource-intensive than wu-ftpd. Unfortunately, while it is quite suitable for basic FTP services, it does not offer the feature set required for more sophisticated FTP sites.
+
+ProFTPD is not a hack based on any other server, it's an independent source tree from the ground up. A number of well known and high traffic sites use ProFTPD.</item_verbose>
+	<item_type>Ftp server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Files sharing</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>www-data</field_default_login>
+	<field_default_pwd>Default password</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Default password</field_1_name>
+		<field_1_id>proftpd_pwd</field_1_id>
+		<field_1_value>proftpd_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+	
+	
+</item>
+<item>
+	<item_name>Roundcube</item_name>
+	<item_version>0.2</item_version>
+	<item_desc>Webmail</item_desc>
+	<item_web>http://roundcube.net/</item_web>
+	<item_verbose>RoundCube Webmail is a browser-based multilingual IMAP client with an application-like user interface. It provides full functionality you expect from an e-mail client, including MIME support, address book, folder manipulation, message searching and spell checking. RoundCube Webmail is written in PHP and requires a MySQL or Postgres database. The user interface is fully skinnable using XHTML and CSS 2.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Emails</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>Default admin email</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include>Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Lenny</field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>roundcube_name</field_1_value>
+		<field_1_def_content>Roundcube</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>roundcube_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+</item>
+
+<item>
+	<item_name>Gallery</item_name>
+	<item_version>2.3.0</item_version>
+	<item_desc>Pictures galleries management</item_desc>
+	<item_web>http://gallery.menalto.com/</item_web>
+	<item_verbose>Gallery2 is a pictures collection management system.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>gallery_name</field_1_value>
+		<field_1_def_content>Gallery</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>gallery_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>gallery_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Zenphoto</item_name>
+	<item_version>1.2.1</item_version>
+	<item_desc>Pictures galleries management</item_desc>
+	<item_web>http://www.zenphoto.org/</item_web>
+	<item_verbose>Zenphoto is an answer to lots of calls for an online gallery solution that just makes sense. After years of bloated software that does everything and your dishes, zenphoto just shows your photos, simply. It’s got all the functionality and “features” you need, and nothing you don’t. Where the old guys put in a bunch of modules and junk, we put a lot of thought. We hope you agree with our philosopy: simpler is better. Don’t get us wrong though –zenphoto really does have everything you need for your online gallery, and you’ll even stare in awe at some of the innovative innovations we innovated upon.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>zenphoto_name</field_1_value>
+		<field_1_def_content>Zenphoto</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>zenphoto_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>zenphoto_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Drupal</item_name>
+	<item_version>6.6</item_version>
+	<item_desc>Content management system</item_desc>
+	<item_web>http://drupal.org/</item_web>
+	<item_verbose>Drupal is a free software package that allows an individual or a community of users to easily publish, manage and organize a wide variety of content on a website. Tens of thousands of people and organizations are using Drupal to power scores of different web sites.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>drupal_name</field_1_value>
+		<field_1_def_content>Drupal</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>drupal_admin_mail</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>drupal_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Ezpublish</item_name>
+	<item_version>4.0.1b</item_version>
+	<item_desc>Content management system</item_desc>
+	<item_web>http://ez.no/</item_web>
+	<item_verbose>eZ Publish is an Open Source Content Management System chosen by thousands of enterprises and organizations world wide. It helps you build corporate websites, intranets, webshops and media portals. eZ Publish is 100% Open Source.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>ezpublish_name</field_1_value>
+		<field_1_def_content>Ezpublish</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>ezpublish_admin_mail</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>ezpublish_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Joomla</item_name>
+	<item_version>1.5.8</item_version>
+	<item_desc>Content management system</item_desc>
+	<item_web>http://www.joomla.org/</item_web>
+	<item_verbose>Joomla! is an award-winning Content Management System (CMS) that will help you build websites and other powerful online applications. Best of all, Joomla! is an open source solution that is freely available to everybody.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>joomla_name</field_1_value>
+		<field_1_def_content>Joomla</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>joomla_admin_mail</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>joomla_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item><item>
+	<item_name>Moinmoin</item_name>
+	<item_version>1.7.1</item_version>
+	<item_desc>Wiki</item_desc>
+	<item_web>http://moinmo.in/</item_web>
+	<item_verbose>MoinMoin is an advanced, easy to use and extensible WikiEngine with a large community of users. Said in a few words, it is about collaboration on easily editable web pages. MoinMoin is Free Software licensed under the GPL - living from lots of people contributing (see MoinMoinAcknowledgements).</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>moinmoin_name</field_1_value>
+		<field_1_def_content>Moinmoin</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>moimoin_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	
+</item>
+
+<item>
+	<item_name>Piwigo</item_name>
+	<item_version>2.0.0</item_version>
+	<item_desc>Pictures galleries management</item_desc>
+	<item_web>http://piwigo.org/</item_web>
+	<item_verbose>Piwigo is a photo gallery software for the web, built by an active community of users and developers. Extensions make Piwigo easily customizable. Icing on the cake, Piwigo is free and opensource.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>piwigo_name</field_1_value>
+		<field_1_def_content>Piwigo</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>piwigo_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>piwigo_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+
+<item>
+	<item_name>Wordpress</item_name>
+	<item_version>2.6.3</item_version>
+	<item_desc>Content management system</item_desc>
+	<item_web>http://wordpress.org/</item_web>
+	<item_verbose>Wordpress is a Content Management system (Blog).</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>wordpress_name</field_1_value>
+		<field_1_def_content>Wordpress</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>wordpress_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>wordpress_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Openssh server</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Secured remote shell</item_desc>
+	<item_web>http://www.openssh.com/</item_web>
+	<item_verbose>OpenSSH is a FREE version of the SSH connectivity tools that technical users of the Internet rely on. Users of telnet, rlogin, and ftp may not realize that their password is transmitted across the Internet unencrypted, but it is. OpenSSH encrypts all traffic (including passwords) to effectively eliminate eavesdropping, connection hijacking, and other attacks. Additionally, OpenSSH provides secure tunneling capabilities and several authentication methods, and supports all SSH protocol versions.</item_verbose>
+	<item_type>SSH server</item_type>
+	<item_license>BSD</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>Operating system user name</field_default_login>
+	<field_default_pwd>Operating system user password</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny, Hardy, Intrepid, Jaunty</field_OS>
+	<param>	
+		<field_1_name>Deactivate SSH root Login</field_1_name>
+		<field_1_id>deactivate_ssh_root_login</field_1_id>
+		<field_1_value>deactivate_ssh_root_login</field_1_value>
+		<field_1_def_content>checked</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	
+	
+	
+</item>
+
+<item>
+	<item_name>Mediawiki</item_name>
+	<item_version>1.13.0</item_version>
+	<item_desc>Wiki</item_desc>
+	<item_web>http://www.mediawiki.org/wiki/MediaWiki</item_web>
+	<item_verbose>MediaWiki is a free software wiki package originally written for Wikipedia. It is now used by several other projects of the non-profit Wikimedia Foundation and by many other wikis.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>mediawiki_name</field_1_value>
+		<field_1_def_content>Mediawiki</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>mediawiki_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>mediawiki_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+<param>	
+		<field_1_id>site_name</field_1_id>
+		<field_1_name>Site Name</field_1_name>
+		<field_1_value>mediawiki_site_name</field_1_value>
+		<field_1_def_content>Cooperation-iws</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>PhpBB</item_name>
+	<item_version>3.0.3</item_version>
+	<item_desc>Forums management</item_desc>
+	<item_web>http://www.phpbb.com/</item_web>
+	<item_verbose>PhpBB is a forum management system.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Productivity</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>phpbb_name</field_1_value>
+		<field_1_def_content>Phpbb</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>phpbb_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>phpbb_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+
+	
+	
+</item>
+<item>
+	<item_name>Jdicd</item_name>
+	<item_version>1.5b</item_version>
+	<item_desc>Online translation</item_desc>
+	<item_web>http://www.informatik.uni-leipzig.de/~duc/Java/JDictd/</item_web>
+	<item_verbose>JDictd is a set of Java programs that implement the Dictionary Server Protocol (DICT) as specified in RFC 2229. It is used to access dictionary definitions from a set of natural language dictionary databases. The software (including binaries and source code) is distributed on the terms of the GNU General Public License.</item_verbose>
+	<item_type>Online dictionnary</item_type>
+	<item_license>GPLv3, java</item_license>
+	<item_category>Languages</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+	</param>
+	
+</item>
+
+<item>
+	<item_name>Dokuwiki</item_name>
+	<item_version>0.5b</item_version>
+	<item_desc>Wiki</item_desc>
+	<item_web>http://www.dokuwiki.org/</item_web>
+	<item_verbose>DokuWiki is a standards compliant, simple to use Wiki, mainly aimed at creating documentation of any kind. It is targeted at developer teams, workgroups and small companies. It has a simple but powerful syntax which makes sure the datafiles remain readable outside the Wiki and eases the creation of structured texts. All data is stored in plain text files – no database is required.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>dokuwiki_name</field_1_value>
+		<field_1_def_content>Dokuwiki</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>dokuwiki_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	
+	
+	
+</item>
+<item>
+	<item_name>Net2ftp</item_name>
+	<item_version>0.97</item_version>
+	<item_desc>Online ftp client</item_desc>
+	<item_web>http://www.net2ftp.com/</item_web>
+	<item_verbose>Net2ftp is an Ftp client written in php.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Files sharing</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>net2ftp_name</field_1_value>
+		<field_1_def_content>Net2ftp</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>net2ftp_admin_mail</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>net2ftp_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+
+	
+	
+</item>
+
+<item>
+	<item_name>Ossec standalone</item_name>
+	<item_version>1.5.1</item_version>
+	<item_desc>Host based Intrusion Detection System</item_desc>
+	<item_web>http://www.ossec.net/main/</item_web>
+	<item_verbose>Ossec is an HIDS (Host Based Intrusion Detection System).</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Security</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Report email address</field_1_name>
+		<field_1_id>report_address</field_1_id>
+		<field_1_value>ossec_report_address</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	
+	
+	
+</item>
+<item>
+	<item_name>Lifetype</item_name>
+	<item_version>1.2b</item_version>
+	<item_desc>Content management system</item_desc>
+	<item_web>http://lifetype.net/</item_web>
+	<item_verbose>LifeType is an open-source blogging platform with support for multiple blogs and users in a single installation.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>administrator</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>lifetype_name</field_1_value>
+		<field_1_def_content>Lifetype</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>lifetype_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>lifetype_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+
+	
+</item>
+
+<item>
+	<item_name>Spip</item_name>
+	<item_version>1.9.2e</item_version>
+	<item_desc>Content management system</item_desc>
+	<item_web>http://www.spip.net/</item_web>
+	<item_verbose>SPIP is a publishing system for the Internet in which great importance is attached to collaborative working, to multilingual environments, and to simplicity of use for web authors. It is free software, distributed under the GNU/GPL licence. This means that it can be used for any Internet site, whether personal or institutional, non-profit or commercial.
+
+SPIP is developed (programmed, documented, translated, etc.) and used by a community in which there is an open invitation to participate. To do so, make contact through one of the various websites, mailing lists and meetings which exist.
+
+SPIP was born in 2001 at the initiative of “minirézo” a community defending freedom of expression on the Internet (see article on uZine). Nowadays SPIP is used by tens of thousands of widely different sites. This site contains the official documentation. </item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>spip_name</field_1_value>
+		<field_1_def_content>Spip</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>spip_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>spip_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+
+	
+</item>
+<item>
+	<item_name>Clamav server</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Antivirus server</item_desc>
+	<item_web>http://www.clamav.net/</item_web>
+	<item_verbose>Clam AntiVirus is an open source (GPL) anti-virus toolkit for UNIX, designed especially for e-mail scanning on mail gateways. It provides a number of utilities including a flexible and scalable multi-threaded daemon, a command line scanner and advanced tool for automatic database updates. The core of the package is an anti-virus engine available in a form of shared library.</item_verbose>
+	<item_type>Antivirus</item_type>
+	<item_license>GPLv2, LGPL</item_license>
+	<item_category>Security</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Report email address</field_1_name>
+		<field_1_id>report_address</field_1_id>
+		<field_1_value>clam_mail_report</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	
+	
+	
+</item>
+<item>
+	<item_name>Webmin</item_name>
+	<item_version>1.4.20</item_version>
+	<item_desc>Web based remote administration</item_desc>
+	<item_web>http://www.webmin.com/</item_web>
+	<item_verbose>Webmin is a web-based interface for system administration for Unix. Using any modern web browser, you can setup user accounts, Apache, DNS, file sharing and much more. Webmin removes the need to manually edit Unix configuration files like /etc/passwd, and lets you manage a system from the console or remotely.</item_verbose>
+	<item_type>Administration</item_type>
+	<item_license>BSD</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>Operating system user name</field_default_login>
+	<field_default_pwd>Default login password</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>def_login_pwd</field_1_id>
+		<field_1_name>Default login password</field_1_name>
+		<field_1_value>webmin_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+	
+</item>
+
+<item>
+	<item_name>Snort 2.8 Base 1.3.9 standalone</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Network Intrusion Detection System</item_desc>
+	<item_web>http://www.snort.org/</item_web>
+	<item_verbose>Snort is a NIDS, Network Intrusion Detection System. Base is a Snort Front-end, it displays Snort alerts. This module install a standalone release of Snort and Base.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3, GPLv2</item_license>
+	<item_category>Security</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>Snort 2.8 Base 1.3.9 server 0.1, Snort 2.8 client 0.1</field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>base_name</field_1_value>
+		<field_1_def_content>Base</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>listening_interface</field_1_id>
+		<field_1_name>Listening interface</field_1_name>
+		<field_1_value>snort_listening_interface</field_1_value>
+		<field_1_def_content>eth0</field_1_def_content>
+		<field_1_content_check>[^a-z0-9:]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>snort_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>snort_registration_key</field_1_id>
+		<field_1_name>Snort registration key</field_1_name>
+		<field_1_value>snort_registration_key</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Snort 2.8 Base 1.3.9 server</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Network Intrusion Detection System</item_desc>
+	<item_web>http://www.snort.org/</item_web>
+	<item_verbose>Snort is a NIDS, Network Intrusion Detection System. Base is a Snort Front-end, it displays Snort alerts. This module install a server release of Snort and Base to be connected with clients.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3, GPLv2</item_license>
+	<item_category>Security</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>Snort 2.8 Base 1.3.9 standalone, Snort 2.8 client 0.1</field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>base_name</field_1_value>
+		<field_1_def_content>Base</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>listening_interface</field_1_id>
+		<field_1_name>Listening interface</field_1_name>
+		<field_1_value>snort_listening_interface</field_1_value>
+		<field_1_def_content>eth0</field_1_def_content>
+		<field_1_content_check>[^a-z0-9:]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>snort_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>snort_registration_key</field_1_id>
+		<field_1_name>Snort registration key</field_1_name>
+		<field_1_value>snort_registration_key</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Snort 2.8 client</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Network Intrusion Detection System</item_desc>
+	<item_web>http://www.snort.org/</item_web>
+	<item_verbose>Snort is a NIDS, Network Intrusion Detection System. Base is a Snort Front-end, it displays Snort alerts. This install the client module to be connected with the server module.</item_verbose>
+	<item_type>NIDS</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Security</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>Snort 2.8 Base 1.3.9 standalone, Snort 2.8 Base 1.3.9 server 0.1</field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Server address</field_1_name>
+		<field_1_id>snort_server_name</field_1_id>
+		<field_1_value>snort_server_name</field_1_value>
+		<field_1_def_content>wwi.my-admin-server.my-extension</field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_name>Server application name</field_1_name>
+		<field_1_id>snort_remote_name</field_1_id>
+		<field_1_value>snort_remote_name</field_1_value>
+		<field_1_def_content>Base</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>listening_interface</field_1_id>
+		<field_1_name>Listening interface</field_1_name>
+		<field_1_value>snort_listening_interface</field_1_value>
+		<field_1_def_content>eth0</field_1_def_content>
+		<field_1_content_check>[^a-z0-9:]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>snort_server_mysql_pwd</field_1_id>
+		<field_1_name>Server mysql password</field_1_name>
+		<field_1_value>snort_server_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>snort_registration_key</field_1_id>
+		<field_1_name>Snort registration key</field_1_name>
+		<field_1_value>snort_registration_key</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner</item_name>
+	<item_version>Lenny</item_version>
+	<item_desc>Emails server</item_desc>
+	<item_web>http://postfixadmin.sourceforge.net/</item_web>
+	<item_verbose>Email solution for administration purpose or standalone server.</item_verbose>
+	<item_type>Emails server, Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Emails</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>Default admin email</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude>Postfix Relay Client 0.1</field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>postfixadmin_name</field_1_value>
+		<field_1_def_content>Mail</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>mail_domain</field_1_id>
+		<field_1_name>Mail domain</field_1_name>
+		<field_1_value>mail_domain</field_1_value>
+		<field_1_def_content>$domain</field_1_def_content>
+		<field_1_content_check>[^a-z0-9$_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>postfix_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>postfixadmin_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>public_mail</field_1_id>
+		<field_1_name>Public email</field_1_name>
+		<field_1_value>public_mail</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>smtp_relay</field_1_id>
+		<field_1_name>Smtp Relay</field_1_name>
+		<field_1_value>smtp_relay</field_1_value>
+		<field_1_def_content>my.smtp.my-extension</field_1_def_content>
+		<field_1_content_check>[^a-z0-9$_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_name>External smtp authentication login</field_1_name>
+		<field_1_id>postfix_relay_authentication_name</field_1_id>
+		<field_1_value>postfix_relay_authentication_name</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_name>External smtp authentication password</field_1_name>
+		<field_1_id>postfix_relay_authentication_password</field_1_id>
+		<field_1_value>postfix_relay_authentication_password</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>mailbox_quota</field_1_id>
+		<field_1_name>Mailbox quota (Mb, 0 for unlimited)</field_1_name>
+		<field_1_value>mailbox_quota</field_1_value>
+		<field_1_def_content>0</field_1_def_content>
+		<field_1_content_check>[^0-9]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Samba</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Samba server</item_desc>
+	<item_web>http://www.samba.org/</item_web>
+	<item_verbose>Samba is an Open Source/Free Software suite that has, since 1992, provided file and print services to all manner of SMB/CIFS clients, including the numerous versions of Microsoft Windows operating systems. Samba is freely available under the GNU General Public License.</item_verbose>
+	<item_type>Files server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Files sharing</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>www-data</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Default password</field_1_name>
+		<field_1_id>smb_pwd</field_1_id>
+		<field_1_value>smb_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+	
+	
+</item>
+<item>
+	<item_name>KnowledgeTree</item_name>
+	<item_version>3.5.2c</item_version>
+	<item_desc>Data management system</item_desc>
+	<item_web>http://www.knowledgetree.com/</item_web>
+	<item_verbose>KnowledgeTree is open source turn-key document management software designed for business people to install, use and purchase. Collaborate with team members, securely store all your documents and ensure regulatory compliance with absolute ease. With no vendor lock-in and with source code readily available, KnowledgeTree provides a more flexible, cost-effective alternative to proprietary applications. KnowledgeTree is developped in php.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>kt_name</field_1_value>
+		<field_1_def_content>Knowledgetree</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>kt_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>kt_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+
+	
+</item>
+<item>
+	<item_name>Horde</item_name>
+	<item_version>1.2</item_version>
+	<item_desc>Webmail</item_desc>
+	<item_web>http://www.horde.org/webmail/</item_web>
+	<item_verbose>Horde Groupware Webmail Edition is a free, enterprise ready, browser based communication suite. Users can read, send and organize email messages and manage and share calendars, contacts, tasks and notes with the standards compliant components from the Horde Project. Horde Groupware Webmail Edition bundles the separately available applications IMP, Ingo, Kronolith, Turba, Nag and Mnemo.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Emails</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>Default admin email</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include>Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Lenny</field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>horde_name</field_1_value>
+		<field_1_def_content>Horde</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>horde_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+
+	
+</item>
+<item>
+	<item_name>Nuxeo</item_name>
+	<item_version>5.1.5GA</item_version>
+	<item_desc>Data management system</item_desc>
+	<item_web>http://www.nuxeo.com/</item_web>
+	<item_verbose>Nuxeo EP, which is based on state of the art Java technologies, provides an innovative and flexible ECM approach. It has been designed to offer a wide range of functions, high scalability, standards compliance, a fast learning curve and increased productivity for both the developers and users. It is deployed on a Java EE 5 application server and leverages the full potential of the technological platform, such as clustering, high availability, manageability, ease of integration, and a wealth of development tools. Nuxeo EP is a global solution, which is ready to respond to the challenges of modern information management (Web 2.0, information explosion, off-site and off-line work, etc.). Nuxeo EP has a rich Ajax-based interface and is designed to be accessed using a standard web browser, such as Microsoft IE or Firefox. It can either be used from an office suite, such as Microsoft® Office™, or OpenOffice.org, or from a Nuxeo RCP application.</item_verbose>
+	<item_type>Applications server</item_type>
+	<item_license>LGPL,java</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>nuxeo_name</field_1_value>
+		<field_1_def_content>Nuxeo</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>nuxeo_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>nuxeo_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>nuxeo_install_ooo</field_1_id>
+		<field_1_name>Install OpenOffice dependancies</field_1_name>
+		<field_1_value>nuxeo_install_ooo</field_1_value>
+		<field_1_def_content>checked</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+
+	
+</item>
+<item>
+	<item_name>Snif</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Files display</item_desc>
+	<item_web>http://www.bitfolge.de/snif-en.html</item_web>
+	<item_verbose>Tiny soft that display a files directory to the web.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Files sharing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>snif_name</field_1_value>
+		<field_1_def_content>Snif</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>share_snif_smb</field_1_id>
+		<field_1_name>Share files with Samba</field_1_name>
+		<field_1_value>share_snif_smb</field_1_value>
+		<field_1_def_content>checked</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>share_snif_smb_pwd</field_1_id>
+		<field_1_name>Protect samba share with password</field_1_name>
+		<field_1_value>share_snif_smb_pwd</field_1_value>
+		<field_1_def_content>checked</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>OpenGoo</item_name>
+	<item_version>1.0</item_version>
+	<item_desc>Online Office suite</item_desc>
+	<item_web>http://www.opengoo.org/</item_web>
+	<item_verbose>OpenGoo is an Open Source Web Office. It is a complete solution for every organization to create, collaborate, share and publish all its internal and external documents.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>AGPL</item_license>
+	<item_category>Office</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>opengoo_name</field_1_value>
+		<field_1_def_content>Opengoo</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>opengoo_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>opengoo_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Taskfreak</item_name>
+	<item_version>0.6.2</item_version>
+	<item_desc>Tasks management</item_desc>
+	<item_web>http://www.taskfreak.com/</item_web>
+	<item_verbose>TaskFreak! is a simple but efficient web based task manager written in PHP.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Projects management</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>taskfreak_name</field_1_value>
+		<field_1_def_content>Taskfreak</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>taskfreak_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>taskfreak_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>eyeOS</item_name>
+	<item_version>1.6.0.3-1</item_version>
+	<item_desc>Online Desktop</item_desc>
+	<item_web>http://eyeos.org/</item_web>
+	<item_verbose>eyeOS is an Open Source Platform designed to hold a wide variety of Web Applications over it. eyeOS was thought as a new definition of Operating System, where everything inside can be accessed from everywhere in a Network. All you need to do is to login into your eyeOS server with a normal Internet Browser, and access your personal desktop, with your applications, documents, musics, movies… just like you left them last time.
+
+With the base system you can find a full suite of applications bundled, some for private use, a the file manager, a word processor, a music player, calendar, notepad or contacts manager. There are also some groupware applications, such as a groups manager, a file sharing application, a group board and many more.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>AGPL</item_license>
+	<item_category>Office</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>root</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>eyeos_name</field_1_value>
+		<field_1_def_content>Eyeos</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Openmeetings</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Video conferencing system</item_desc>
+	<item_web>http://www.taskfreak.com/</item_web>
+	<item_verbose>Multi-Language Cross-Platform Customizable Web-Conferencing and Collaboration.</item_verbose>
+	<item_type>Applications server</item_type>
+	<item_license>LGPL,java</item_license>
+	<item_category>Multimedia</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>openmeeting_name</field_1_value>
+		<field_1_def_content>Openmeetings</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>openmeeting_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Inspircd</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>IRC server</item_desc>
+	<item_web>http://www.inspircd.org/</item_web>
+	<item_verbose>InspIRCd is a modular C++ IRCd (IRC daemon) for Linux, BSD, Windows and Apple OS X systems created to provide a stable, modern, and lightweight IRCd written from scratch.</item_verbose>
+	<item_type>IRC server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Multimedia</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Login name</field_1_name>
+		<field_1_id>inspircd_login_name</field_1_id>
+		<field_1_value>inspircd_login_name</field_1_value>
+		<field_1_def_content>Admin</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>inspircd_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>inspircd_login_pwd</field_1_id>
+		<field_1_name>Password</field_1_name>
+		<field_1_value>inspircd_login_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Clickheat</item_name>
+	<item_version>1.8</item_version>
+	<item_desc>Heatmap of clicks</item_desc>
+	<item_web>http://www.labsmedia.com/clickheat/index.html</item_web>
+	<item_verbose>ClickHeat is a visual heatmap of clicks on a HTML page, showing hot and cold click zones.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>clickheat_name</field_1_value>
+		<field_1_def_content>Clickheat</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	
+	
+</item>
+<item>
+	<item_name>Dokeos</item_name>
+	<item_version>1.8.5</item_version>
+	<item_desc>eLearning portal</item_desc>
+	<item_web>http://www.dokeos.com/en</item_web>
+	<item_verbose>Dokeos is a open source online learning suite. It provides :
+
+1. Learning Management : SCORM import, edit and export,social interaction, sophisticated test and surveys
+
+2. Oogie Rapid Learning : build SCORM courses online from templates, from Powerpoint...
+
+3. Accurate reporting that you can export to Excel, Business Objects...
+
+4. Videoconferencing : virtual meeting and virtual classroom for live training sessions</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2,java</item_license>
+	<item_category>Learning</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>dokeos_name</field_1_value>
+		<field_1_def_content>Dokeos</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>dokeos_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>dokeos_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Lodel</item_name>
+	<item_version>0.7.5</item_version>
+	<item_desc>Content management system</item_desc>
+	<item_web>http://www.lodel.org/</item_web>
+	<item_verbose>Lodel is a content publishing system. Lodel is compliant to Dublin Core, RSS and soon OAI. Lodel could also produce XML documents.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>lodel_name</field_1_value>
+		<field_1_def_content>Lodel</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>lodel_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>lodel_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>PhpmyResa</item_name>
+	<item_version>0.7.5</item_version>
+	<item_desc>Resources management</item_desc>
+	<item_web>http://phpmyresa.in2p3.fr/</item_web>
+	<item_verbose>PHPMyResa is a web-based software, using the PHP/MySQL technology (PostgreSQL and Oracle are also supported), used for management of ressources booking, such as room booking, car booking, ... Requests for booking are validated by an administrator of the type of ressource, warmed by email. A password, associated to each ressource booking, allow the user to modify or cancel it. A calendar integration is possible with the iCal format.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Productivity</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>resa_name</field_1_value>
+		<field_1_def_content>Resa</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>resa_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>resa_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Sedna</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Rss agregator</item_desc>
+	<item_web>http://www.spip-contrib.net/Sedna</item_web>
+	<item_verbose>Sedna is an Rss agregator based on Spip.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Social networks</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>sedna_name</field_1_value>
+		<field_1_def_content>Sedna</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>sedna_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>sedna_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Scuttle</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Social bookmarks</item_desc>
+	<item_web>http://sourceforge.net/projects/scuttle/</item_web>
+	<item_verbose>Web-based social bookmarking system. Allows multiple users to store, share and tag their favourite links online.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv3</item_license>
+	<item_category>Social networks</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>scuttle_name</field_1_value>
+		<field_1_def_content>Scuttle</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>scuttle_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>scuttle_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Lilina</item_name>
+	<item_version>1.0</item_version>
+	<item_desc>Rss agregator</item_desc>
+	<item_web>http://getlilina.org/</item_web>
+	<item_verbose>But who, or rather what, is Lilina? Lilina is a free, open source aggregator for your server. This allows you to install it once and run it everywhere.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Social networks</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>lilina_name</field_1_value>
+		<field_1_def_content>Lilina</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+		
+	
+</item>
+<item>
+	<item_name>SugarCRM</item_name>
+	<item_version>5.2</item_version>
+	<item_desc>Customer relationship management</item_desc>
+	<item_web>http://www.sugarcrm.com/</item_web>
+	<item_verbose>SugarCRM is rethinking how technology can help companies manage customer relationships. Sugar, the market leading commercial open source CRM application, delivers a feature-rich set of business processes that enhance marketing effectiveness, drive sales performance, improve customer satisfaction and provide executive insight into business performance.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv3</item_license>
+	<item_category>Productivity</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>sugarcrm_name</field_1_value>
+		<field_1_def_content>Sugarcrm</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>sugarcrm_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>sugarcrm_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Dotproject</item_name>
+	<item_version>2.1.2</item_version>
+	<item_desc>Planning management</item_desc>
+	<item_web>http://www.dotproject.net/index.php</item_web>
+	<item_verbose>dotProject is a volunteer supported Project Management application. dotProject is a web-based project management application, designed to provide project layout and control functions.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv3</item_license>
+	<item_category>Projects management</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>Default password</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>dotproject_name</field_1_value>
+		<field_1_def_content>Dotproject</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>admin_pwd</field_1_id>
+		<field_1_name>Default admin password</field_1_name>
+		<field_1_value>dotproject_admin_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>dotproject_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>dotproject_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Redmine</item_name>
+	<item_version>0.8.1</item_version>
+	<item_desc>Data management</item_desc>
+	<item_web>http://www.redmine.org/</item_web>
+	<item_verbose>Redmine is a flexible project management web application. Written using Ruby on Rails framework, it is cross-platform and cross-database.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>redmine_name</field_1_value>
+		<field_1_def_content>Redmine</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>redmine_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Mantis</item_name>
+	<item_version>1.1.2</item_version>
+	<item_desc>Defect Tracking System</item_desc>
+	<item_web>http://www.mantisbt.org/</item_web>
+	<item_verbose>Mantis is a bug tracking system.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>administrator</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>mantis_name</field_1_value>
+		<field_1_def_content>Mantis</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>mantis_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Trac Subversion</item_name>
+	<item_version>0.11.2</item_version>
+	<item_desc>Data management</item_desc>
+	<item_web>http://trac.edgewall.org/</item_web>
+	<item_verbose>Trac is an enhanced wiki and issue tracking system for software development projects. Trac uses a minimalistic approach to web-based software project management. Our mission is to help developers write great software while staying out of the way. Trac should impose as little as possible on a team's established development process and policies.
+
+It provides an interface to Subversion, an integrated Wiki and convenient reporting facilities.
+
+Trac allows wiki markup in issue descriptions and commit messages, creating links and seamless references between bugs, tasks, changesets, files and wiki pages. A timeline shows all current and past project events in order, making the acquisition of an overview of the project and tracking progress very easy. The roadmap shows the road ahead, listing the upcoming milestones.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>BSD</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>Default admin password</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Subversion project name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>svn_name</field_1_value>
+		<field_1_def_content>Project</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>svn_admin_pwd</field_1_id>
+		<field_1_name>Subversion default admin password</field_1_name>
+		<field_1_value>svn_admin_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>admin_pwd</field_1_id>
+		<field_1_name>Subversion default anonymous password</field_1_name>
+		<field_1_value>svn_admin_pwd</field_1_value>
+		<field_1_def_content>anonymous</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>trac_admin_pwd</field_1_id>
+		<field_1_name>Trac default admin password</field_1_name>
+		<field_1_value>trac_admin_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+</item>
+<item>
+	<item_name>Indefero Subversion</item_name>
+	<item_version>0.8.2</item_version>
+	<item_desc>Data management</item_desc>
+	<item_web>http://projects.ceondo.com/p/indefero/</item_web>
+	<item_verbose>InDefero is basically a clone of GoogleCode but with git, mercurial and subversion support. The motto of InDefero "beautiful simplicity".</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>indefero_name</field_1_value>
+		<field_1_def_content>Indefero</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>indefero_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Mercurial</item_name>
+	<item_version>lenny</item_version>
+	<item_desc>Data management</item_desc>
+	<item_web></item_web>
+	<item_verbose>Mercurial is a source code management software.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		
+	</param>
+	
+
+	
+</item>
+
+
+<item>
+	<item_name>Elgg</item_name>
+	<item_version>1.1</item_version>
+	<item_desc>Social network system</item_desc>
+	<item_web>http://elgg.org/</item_web>
+	<item_verbose>Elgg is an open, flexible social networking engine, designed to run at the heart of any socially-aware application. Building on Elgg is easy, and because the engine handles common web application and social functionality for you, you can concentrate on developing your idea.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Social networks</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>elgg_name</field_1_value>
+		<field_1_def_content>Elgg</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>elgg_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>elgg_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Insoshi</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Social network system</item_desc>
+	<item_web>http://portal.insoshi.com/</item_web>
+	<item_verbose>Insoshi social networking platform Insoshi is a product and a project. The product aims to be the best open-source social networking platform. The project is to make the product!</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>AGPL</item_license>
+	<item_category>Social networks</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>insoshi_name</field_1_value>
+		<field_1_def_content>Insoshi</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>insoshi_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Laconica</item_name>
+	<item_version>1.8</item_version>
+	<item_desc>Microblogging</item_desc>
+	<item_web>http://laconi.ca/trac/</item_web>
+	<item_verbose>Laconica (pronounced "luh-KAWN-ih-kuh") is a Free and Open Source microblogging platform. It helps people in a community, company or group to exchange short (140 character) messages over the Web. Users can choose which people to "follow" and receive only their friends' or colleagues' status messages. It provides a similar service to sites like Twitter, Jaiku, and Plurk.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>AGPL</item_license>
+	<item_category>Social networks</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>laconica_name</field_1_value>
+		<field_1_def_content>Laconica</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>laconica_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>laconica_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Syslog-ng server</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Syslog-ng server</item_desc>
+	<item_web>http://code.google.com/p/php-syslog-ng/</item_web>
+	<item_verbose>Php-Syslog-ng is a frontend for viewing syslog-ng messages logged to MySQL in realtime. It features customized searches based on device, priority, date, time, and message. This module install a syslog-ng server and the php frontend.</item_verbose>
+	<item_type>Syslog-ng server, Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>phpsyslogng_name</field_1_value>
+		<field_1_def_content>Phpsyslogng</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>phpsyslogng_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>phpsyslog_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+
+<item>
+	<item_name>Zabbix server</item_name>
+	<item_version>1.6</item_version>
+	<item_desc>Network monitoring</item_desc>
+	<item_web>http://www.zabbix.com/</item_web>
+	<item_verbose>Zabbix is an enterprise-class open source distributed monitoring solution. This module install Zabbix server.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv3</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>zabbix_name</field_1_value>
+		<field_1_def_content>Zabbix</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>zabbix_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>zabbix_ip_range</field_1_id>
+		<field_1_name>IP range to monitor</field_1_name>
+		<field_1_value>zabbix_ip_range</field_1_value>
+		<field_1_def_content>192.168.1.1-255</field_1_def_content>
+		<field_1_content_check>[^0-9.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Zabbix client</item_name>
+	<item_version>1.6</item_version>
+	<item_desc>Network monitoring</item_desc>
+	<item_web>http://www.zabbix.com/</item_web>
+	<item_verbose>Zabbix is an enterprise-class open source distributed monitoring solution. This module install Zabbix client.</item_verbose>
+	<item_type>monitoring client</item_type>
+        <item_license>GPLv3</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Server address</field_1_name>
+		<field_1_id>zabbix_server_name</field_1_id>
+		<field_1_value>zabbix_server_name</field_1_value>
+		<field_1_def_content>wwi.my-admin-server.my-extension</field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Syslog client</item_name>
+	<item_version>Lenny</item_version>
+	<item_desc>Syslog client</item_desc>
+	<item_web>http://www.zabbix.com/</item_web>
+	<item_verbose>This module will make operating system reporting logs to an external syslog-ng server.</item_verbose>
+	<item_type>Syslog client</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>Syslog-ng server 0.1</field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Server address</field_1_name>
+		<field_1_id>syslog_server_name</field_1_id>
+		<field_1_value>syslog_server_name</field_1_value>
+		<field_1_def_content>wwi.my-admin-server.my-extension</field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Syslog client</item_name>
+	<item_version>Ubuntu</item_version>
+	<item_desc>Network monitoring</item_desc>
+	<item_web>http://www.balabit.com/network-security/syslog-ng/opensource-logging-system/</item_web>
+	<item_verbose>This module will make operating system reporting logs to a phpsyslog-ng server.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>Syslog-ng server 0.1</field_exclude>
+	<field_include></field_include>
+	<field_OS>Hardy, Intrepid, Jaunty</field_OS>
+	<param>	
+		<field_1_name>Server address</field_1_name>
+		<field_1_id>syslog_server_name</field_1_id>
+		<field_1_value>syslog_server_name</field_1_value>
+		<field_1_def_content>wwi.my-admin-server.my-extension</field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Postfix Relay Client</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Network monitoring</item_desc>
+	<item_web>http://www.balabit.com/network-security/syslog-ng/opensource-logging-system/</item_web>
+	<item_verbose>This module will install postfix as a relay to an external smtp server.</item_verbose>
+	<item_type>Emails server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Emails</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner 0.1</field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>External smtp server address</field_1_name>
+		<field_1_id>smtp_postfix_client_relay</field_1_id>
+		<field_1_value>smtp_postfix_client_relay</field_1_value>
+		<field_1_def_content>my.server.my-extension</field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_name>External smtp authentication login</field_1_name>
+		<field_1_id>postfix_relay_authentication_name</field_1_id>
+		<field_1_value>postfix_relay_authentication_name</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_name>External smtp authentication password</field_1_name>
+		<field_1_id>postfix_relay_authentication_password</field_1_id>
+		<field_1_value>postfix_relay_authentication_password</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	
+</item>
+<item>
+	<item_name>Kolab</item_name>
+	<item_version>2.2</item_version>
+	<item_desc>Emails server</item_desc>
+	<item_web>http://www.kolab.org/</item_web>
+	<item_verbose>Kolab is a Groupware Solution for Emails, Appointments, Contacts and more. It supports mixed client environments (Outlook/KDE) because of an open storage format. Any email client speaking standard protocols can be served.</item_verbose>
+	<item_type>Emails server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Emails</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>Emails server, Web server</field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_id>kolab_admin_mail</field_1_id>
+		<field_1_value>kolab_admin_mail</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_name>Default password</field_1_name>
+		<field_1_id>kolab_pwd</field_1_id>
+		<field_1_value>kolab_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+</item>
+<item>
+	<item_name>Tor Privoxy</item_name>
+	<item_version>Lenny</item_version>
+	<item_desc>Anonymous proxy</item_desc>
+	<item_web>http://www.torproject.org/</item_web>
+	<item_verbose>Tor is a software project that helps you defend against traffic analysis, a form of network surveillance that threatens personal freedom and privacy, confidential business activities and relationships, and state security. Tor protects you by bouncing your communications around a distributed network of relays run by volunteers all around the world: it prevents somebody watching your Internet connection from learning what sites you visit, and it prevents the sites you visit from learning your physical location. Tor works with many of your existing applications, including web browsers, instant messaging clients, remote login, and other applications based on the TCP protocol.</item_verbose>
+	<item_type>Proxy</item_type>
+        <item_license>BSD, GPLv2</item_license>
+	<item_category>Proxy</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+	</param>
+	
+</item>
+<item>
+	<item_name>Tor Privoxy</item_name>
+	<item_version>Intrepid</item_version>
+	<item_desc>Anonymous proxy</item_desc>
+	<item_web>http://www.torproject.org/</item_web>
+	<item_verbose>Tor is a software project that helps you defend against traffic analysis, a form of network surveillance that threatens personal freedom and privacy, confidential business activities and relationships, and state security. Tor protects you by bouncing your communications around a distributed network of relays run by volunteers all around the world: it prevents somebody watching your Internet connection from learning what sites you visit, and it prevents the sites you visit from learning your physical location. Tor works with many of your existing applications, including web browsers, instant messaging clients, remote login, and other applications based on the TCP protocol.</item_verbose>
+	<item_type>Proxy</item_type>
+        <item_license>BSD, GPLv2</item_license>
+	<item_category>Proxy</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Hardy,Intrepid</field_OS>
+	<param>	
+	</param>
+	
+</item>
+<item>
+	<item_name>Tor Privoxy</item_name>
+	<item_version>Jaunty</item_version>
+	<item_desc>Anonymous proxy</item_desc>
+	<item_web>http://www.torproject.org/</item_web>
+	<item_verbose>Tor is a software project that helps you defend against traffic analysis, a form of network surveillance that threatens personal freedom and privacy, confidential business activities and relationships, and state security. Tor protects you by bouncing your communications around a distributed network of relays run by volunteers all around the world: it prevents somebody watching your Internet connection from learning what sites you visit, and it prevents the sites you visit from learning your physical location. Tor works with many of your existing applications, including web browsers, instant messaging clients, remote login, and other applications based on the TCP protocol.</item_verbose>
+	<item_type>Proxy</item_type>
+        <item_license>BSD, GPLv2</item_license>
+	<item_category>Proxy</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Jaunty</field_OS>
+	<param>	
+	</param>
+	
+</item>
+<item>
+	<item_name>Havp Jaunty</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Antivirus proxy</item_desc>
+	<item_web>http://www.server-side.de/</item_web>
+	<item_verbose>HAVP (HTTP Antivirus Proxy) is a proxy with a ClamAV anti-virus scanner. The main aims are continuous, non-blocking downloads and smooth scanning of dynamic and password protected HTTP traffic. Havp antivirus proxy has a parent and transparent proxy mode. It can be used with squid or standalone.</item_verbose>
+	<item_type>Proxy</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Proxy</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>Clamav server 0.1</field_exclude>
+	<field_include></field_include>
+	<field_OS>Jaunty</field_OS>
+	<param>	
+		<field_1_name>Forward request to privoxy</field_1_name>
+		<field_1_id>havp_privoxy_forward</field_1_id>
+		<field_1_value>havp_privoxy_forward</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	
+</item>
+<item>
+	<item_name>Havp</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Antivirus proxy</item_desc>
+	<item_web>http://www.server-side.de/</item_web>
+	<item_verbose>HAVP (HTTP Antivirus Proxy) is a proxy with a ClamAV anti-virus scanner. The main aims are continuous, non-blocking downloads and smooth scanning of dynamic and password protected HTTP traffic. Havp antivirus proxy has a parent and transparent proxy mode. It can be used with squid or standalone.</item_verbose>
+	<item_type>Proxy</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Proxy</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>Clamav server 0.1</field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny, Hardy, Intrepid</field_OS>
+	<param>	
+		<field_1_name>Forward request to privoxy</field_1_name>
+		<field_1_id>havp_privoxy_forward</field_1_id>
+		<field_1_value>havp_privoxy_forward</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	
+</item>
+<item>
+	<item_name>NX server</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Remote control</item_desc>
+	<item_web>http://www.nomachine.com</item_web>
+	<item_verbose>NoMachine NX is an enterprise-class solution for secure remote access, desktop virtualization, and hosted desktop deployment built around the self-designed and self-developed NX suite of components. This module install the Nx server.</item_verbose>
+	<item_type>admin server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include>Openssh server 0.1</field_include>
+        <field_OS>Hardy, Lenny</field_OS>
+
+	<param>	
+		<field_1_name></field_1_name>
+		<field_1_id></field_1_id>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	
+</item>
+
+<item>
+	<item_name>Ntop</item_name>
+	<item_version>0.1</item_version>
+	<item_desc>Network sensor</item_desc>
+	<item_web>http://www.ntop.org/</item_web>
+	<item_verbose>Ntop is a network sensor.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+
+	<param>	
+		<field_1_name>Default password</field_1_name>
+		<field_1_id>ntop_pwd</field_1_id>
+		<field_1_value>ntop_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	
+</item>
+<item>
+	<item_name>Promethee</item_name>
+	<item_version>7.6</item_version>
+	<item_desc>Virtual Learning Environment</item_desc>
+	<item_web>http://promethee.eu.org/index.php</item_web>
+	<item_verbose>Prométhée is a project placed under GNU/GPL license which aims to provide a "ready to use" pedagogic and administrative intranet-extranet to schools.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Learning</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>promethee_name</field_1_value>
+		<field_1_def_content>Promethee</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>promethee_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>OpenERP</item_name>
+	<item_version>5.0.0.6</item_version>
+	<item_desc>Progiciel de gestion intégré</item_desc>
+	<item_web>http://www.openerp.com/</item_web>
+	<item_verbose>Openerp est un progiciel de gestion intégré</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>ERP</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>openerp_name</field_1_value>
+		<field_1_def_content>Openerp</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>openerp_psgsql_pwd</field_1_id>
+		<field_1_name>OpenERP psgsql password</field_1_name>
+		<field_1_value>openerp_psgsql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	<param>	
+		<field_1_id>root_psgsql_pwd</field_1_id>
+		<field_1_name>Root psgsql password</field_1_name>
+		<field_1_value>root_psgsql_pwd</field_1_value>
+		<field_1_def_content>$mysql_root_password</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Libresource</item_name>
+	<item_version>2.5</item_version>
+	<item_desc>Portail de gestion intégré</item_desc>
+	<item_web>http://www.libresource.com/</item_web>
+	<item_verbose>LibreSource est un portail web open source</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>libresource_name</field_1_value>
+		<field_1_def_content>libresource</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>libresource_psgsql_pwd</field_1_id>
+		<field_1_name>Libresource psgsql password</field_1_name>
+		<field_1_value>libresource_psgsql_pwd</field_1_value>
+		<field_1_def_content>$mysql_root_password</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+		
+	
+</item>
+
+</items>
