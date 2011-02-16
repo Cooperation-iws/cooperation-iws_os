@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APACHE=$(cat /tmp/apache)
+
 TMPUSER=$(cat /tmp/tmp_user)
 
 . /tmp/scripts_params
@@ -132,7 +132,7 @@ REMOVE_USER
 
 
 
-if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
+if [ "${APACHE}"  == "A" ]; then
 
 
 echo "I: Securing Lampp Server"

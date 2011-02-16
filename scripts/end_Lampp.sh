@@ -1,13 +1,13 @@
 #!/bin/bash
 
-APACHE=$(cat /tmp/apache)
+
 
 . /tmp/scripts_params
 
 . /tmp/app_params
 
 
-if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
+if [ "${APACHE}"  == "A" ]; then
 cd /tmp/
 for langxml in $(ls ciws-lang-*.xml)
 do

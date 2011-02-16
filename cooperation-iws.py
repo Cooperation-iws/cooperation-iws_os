@@ -625,12 +625,10 @@ class Cooperationiws:
 					
 				if modProps[self.modReqApache] == "True" and self.otherApacheInstance == False:       
 					self.ReqApache = "A"
-					fReqApache=open(os.path.join(self.customDir, "chroot/tmp/apache"), 'w')
-			    		fReqApache.write(self.ReqApache)
-			    		fReqApache.close()
+					self.scriptParams +='APACHE=\"' + self.ReqApache + '\"\n'
 				elif modProps[self.modReqApache] == "False":
 					self.otherApacheInstance = True
-					os.popen('rm '+os.path.join(self.customDir, "chroot/tmp/apache"))
+					
 			    	
 				
 				if modPath != None:
@@ -942,13 +940,6 @@ class Cooperationiws:
         os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptExec.sh"))
         os.popen('bash \"' + os.path.join(self.customDir, "scriptExec.sh") + '\" > /dev/null 2>&1')
 	    
-	
-	
-	
-
-        # run modules
-        # HACK: check for run on boot scripts and clear previous if new ones selected
-	
        
         modExecScrChroot = '#!/bin/sh\n\ncd /tmp ;\n'
 	modExecScrChroot = 'export DEBIAN_FRONTEND=noninteractive\n'
@@ -1251,13 +1242,8 @@ class Cooperationiws:
 	        os.system('bash \"' + self.scriptDir + '/mksquashfs.sh\" \"' + self.customDir + '\" \"' + self.casperPath + '\"')
 	   	
 	if self.encryption != "disabled":		
-		fscriptEncryption=open(os.path.join(self.customDir, "/tmp/encryption"), 'w')
-		fscriptEncryption.write(self.encryption)
-		fscriptEncryption.close()
-		fscriptPassphrase=open(os.path.join(self.customDir, "/tmp/squashfspwd"), 'w')
-		fscriptPassphrase.write(self.encryptionpassphrase)
-		fscriptPassphrase.close()
-		os.system('bash \"' + self.scriptDir + '/encrypt.sh\"')
+		
+		os.system('bash \"' + self.scriptDir + '/encrypt.sh\"  \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\"')
 		os.popen('sed -i \"s/boot=live/boot=live encryption=' + self.encryption + '/g\" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") ) 
 	
 	# build iso

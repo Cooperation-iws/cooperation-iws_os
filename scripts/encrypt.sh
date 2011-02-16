@@ -1,10 +1,12 @@
 #!/bin/bash
 
+LH_ENCRYPTION=$1
+PASSPHRASE=$2
+WORKING_DIRECTORY=$3
 
-WORKING_DIRECTORY=$(cat /tmp/working-directory)
 DOSSIER_REMASTER="$WORKING_DIRECTORY/remaster"
-LH_ENCRYPTION=$ENCRYPTION
-PASSPHRASE=$(cat /tmp/squashfspwd)
+
+
 LH_CHROOT_FILESYSTEM="squashfs"
 if [ ! -e "$DOSSIER_REMASTER/live" ]; then 
 INITFS="casper"

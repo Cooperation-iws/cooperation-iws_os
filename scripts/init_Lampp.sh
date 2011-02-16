@@ -10,13 +10,13 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Installs'
 RMOD_RUN_IN_CHROOT=True
 
-APACHE=$(cat /tmp/apache)
+
 
 . /tmp/scripts_params
 
 export DEBIAN_FRONTEND=noninteractive
 
-if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ]; then
+if [ "${APACHE}"  == "A" ]; then
 
 
 
