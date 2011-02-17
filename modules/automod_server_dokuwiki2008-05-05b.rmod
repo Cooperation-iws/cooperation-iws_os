@@ -14,20 +14,9 @@ RMOD_VERBOSE="DokuWiki is a standards compliant, simple to use Wiki, mainly aime
 RMOD_VERBOSE_FR="DokuWiki est un Wiki conforme aux standards, simple à utiliser, dont le but est de créer des documentations de toute sorte. Il est destiné aux équipes de développement, aux travaux de groupe et aux petites entreprises. Il a une syntaxe simple mais puissante qui assure la lisibilité des fichiers de données en dehors du Wiki, et facilite la création de textes structurés. Toutes les données sont stockées dans des fichiers textes – aucune base de donnée n'est requise."
 
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-#TEMP
 
 . /tmp/scripts_params
 
-
-
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
 NB_DOKUWIKI=${#dokuwiki_name[*]}
@@ -85,54 +74,17 @@ function CREATE_WUI
 for (( count=1; count<=$NB_DOKUWIKI; count++ ))
 
 do
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_admin_url><![CDATA[/${MOD_NAME[$count]}/doku.php?do=login&id=start]]></item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_admin_url><![CDATA[/${MOD_NAME[$count]}/doku.php?do=login&id=start]]></item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
-
-
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 
 done
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________CREATE_INSTALL_SCRIPT__________________________________
-
-
-function CREATE_INSTALL_SCRIPT
-{
-
-for (( count=1; count<=$NB_DOKUWIKI; count++ ))
-do
-echo "
-#Dokuwiki
-rm $WWW_DIRECTORY/${MOD_NAME[$count]}/install.php
-" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
-done
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Dokuwiki"
 INSTALL
 CREATE_WUI
 
-CREATE_INSTALL_SCRIPT
 echo "I: End of install Dokuwiki"

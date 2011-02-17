@@ -15,21 +15,8 @@ RMOD_VERBOSE="Insoshi is a product and a project. The product aims to be the bes
 RMOD_VERBOSE_FR="Insoshi est un produit et un projet. Le produit est destiné à être la meilleurs application open source de réseaux sociaux. Le projet est destiné à faire le produit! "
 
 RMOD_REQ_APACHE=True
-LANG_UI=$(cat /tmp/lang-wui)
-
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-
-
-#TEMP
 
 . /tmp/scripts_params
-
 
 . /tmp/app_params
 MOD_NAME=$insoshi_name
@@ -39,9 +26,9 @@ INSOSHI_MYSQL_PWD=$insoshi_mysql_pwd
 function INSTALL
 {
 cd $DL_DIR
-wget $URL_CIWS_DEPOT/apache2-prefork-dev_2.2.9-10+lenny3_i386.deb
-dpkg -i apache2-prefork-dev_2.2.9-10+lenny3_i386.deb
-apt-get -f install --assume-yes --force-yes
+#wget $URL_CIWS_DEPOT/apache2-prefork-dev_2.2.9-10+lenny3_i386.deb
+#dpkg -i apache2-prefork-dev_2.2.9-10+lenny3_i386.deb
+#apt-get -f install --assume-yes --force-yes
 
 export HOME=/home/liveusb
 apt-get --assume-yes --force-yes install ruby-full build-essential
@@ -209,30 +196,8 @@ fi
 function CREATE_WUI
 {
 
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>$INSOSHI_URL</item_url>
-	<item_admin_url><![CDATA[http://localhost:3020]]></item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_init_start>/etc/init.d/insoshi start</item_init_start>
-	<item_init_stop>/etc/init.d/insoshi stop</item_init_stop>
-
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>$INSOSHI_URL</item_url>
-	<item_admin_url><![CDATA[http://localhost:3020]]></item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_init_start>/etc/init.d/insoshi start</item_init_start>
-	<item_init_stop>/etc/init.d/insoshi stop</item_init_stop>
-
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME}" "/${MOD_NAME}" 
 
 }
 #_______________________________________________________________________________________________

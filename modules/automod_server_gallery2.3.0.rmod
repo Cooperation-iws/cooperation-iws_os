@@ -17,20 +17,8 @@ RMOD_VERBOSE_FR="Gallery2 est un outil de gestion de collection d'images. "
 RMOD_REQ_APACHE=True
 
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-
-#TEMP
-
 . /tmp/scripts_params
 
-
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
 NB_GALLERY2=${#gallery_name[*]}
@@ -121,54 +109,16 @@ function CREATE_WUI
 for (( count=1; count<=$NB_GALLERY2; count++ ))
 
 do
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url><![CDATA[/${MOD_NAME[$count]}/main.php?g2_view=core.UserAdmin&g2_subView=core.UserLogin&g2_return=%2FGallery2%2Fmain.php%3F]]></item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url><![CDATA[/${MOD_NAME[$count]}/main.php?g2_view=core.UserAdmin&g2_subView=core.UserLogin&g2_return=%2FGallery2%2Fmain.php%3F]]></item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 done
 
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________CREATE_INSTALL_SCRIPT__________________________________
-
-
-function CREATE_INSTALL_SCRIPT
-{
-
-for (( count=1; count<=$NB_GALLERY2; count++ ))
-
-do
-echo "
-#Gallery2
-sed -i \"194s/localhost/'.\\\$HTTP_SERVER_VARS[\\\"""SERVER_NAME\\\"""].'/\" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
-" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
-done
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
-
 
 echo "I: Install Gallery"
 INSTALL
 CREATE_WUI
-CREATE_INSTALL_SCRIPT
 echo "I: End of install Gallery"

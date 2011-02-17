@@ -14,25 +14,12 @@ RMOD_VERBOSE_FR="JDictd est une application Java qui implémente le Dictionary S
 
 
 RMOD_RUN_IN_CHROOT=True
-RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-
-
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-
-
-#TEMP
 
 . /tmp/scripts_params
 
 
 MOD_NAME="Dictionnary"
-SILENT=$(cat /tmp/silent)
+
 
 #VARIABLES
 
@@ -54,21 +41,6 @@ tar -xzf jdictd-all-081128.tar.gz
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_CIWS_DEPOT
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
 
 
 
@@ -78,7 +50,7 @@ fi
 
 function INSTALL
 {
-DOWNLOAD
+WGET_CIWS_DEPOT
 
 
 ln -s / /cow
@@ -157,12 +129,6 @@ chmod 0755 /etc/init.d/jdictd
 
 update-rc.d jdictd defaults
 
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
-
-cd $WWW_DIRECTORY/$MOD_NAME
-nohup java -cp jdictd.jar org.dict.server.JDictd Elements/elements.ini DOC/dic.ini &
-
-fi
 
 echo "
 #Jdict
@@ -181,28 +147,8 @@ echo "
 function CREATE_WUI
 {
 
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url><![CDATA[http://localhost:2626]]></item_url>
-	<item_admin_url><![CDATA[http://localhost:2626]]></item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_init_start>/etc/init.d/jdictd start</item_init_start>
-	<item_init_stop>/etc/init.d/jdictd stop</item_init_stop>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url><![CDATA[http://localhost:2626]]></item_url>
-	<item_admin_url><![CDATA[http://localhost:2626]]></item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_init_start>/etc/init.d/jdictd start</item_init_start>
-	<item_init_stop>/etc/init.d/jdictd stop</item_init_stop>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "<![CDATA[http://localhost:2626]]>" "<![CDATA[http://localhost:2626]]>" 
 }
 
 #_______________________________________________________________________________________________

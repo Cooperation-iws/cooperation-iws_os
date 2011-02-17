@@ -14,19 +14,6 @@ RMOD_REQ_APACHE=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_RUN_IN_CHROOT=True
 
-RMOD_REQ_APACHE=True
-LANG_UI=$(cat /tmp/lang-wui)
-
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-
-
-#TEMP
 
 . /tmp/scripts_params
 
@@ -324,34 +311,9 @@ fi
 function CREATE_WUI
 {
 
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "$NUXEO_URL" "$NUXEO_URL" 
 
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>$NUXEO_URL</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url><![CDATA[http://localhost:8080/nuxeo]]></item_admin_url>
-	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/nuxeo start</item_init_start>
-	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
-</item>
-
-" >> /opt/ciws/server/var/www/cooperation-wui.xml
-
-
-
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>$NUXEO_URL</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url><![CDATA[http://localhost:8080/nuxeo]]></item_admin_url>
-	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/nuxeo start</item_init_start>
-	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
-</item>
-
-" >> /opt/ciws/server/var/www/cooperation-wui-fr.xml
 
 
 

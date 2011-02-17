@@ -14,26 +14,8 @@ RMOD_VERBOSE="Elgg is an open, flexible social networking engine, designed to ru
 RMOD_VERBOSE_FR="Elgg est un système de réseaux sociaux ouvert."
 
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-#TEMP
 
 . /tmp/scripts_params
-
-
-
-#VARIABLES
-#MYSQL PASSWORD
-ELGG_MYSQL_PWD="ELGG_MYSQL_PWD"
-
-
-
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
 NB_ELGG=${#elgg_name[*]}
@@ -62,24 +44,6 @@ tar -xzf elgg-1.1-081130.tar.gz
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_CIWS_DEPOT
-fi
-
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -89,7 +53,7 @@ function INSTALL
 {
 
 echo "I: Download Elgg"
-DOWNLOAD
+WGET_CIWS_DEPOT
 for (( count=1; count<=$NB_ELGG; count++ ))
 do
 ##ELGG
@@ -142,53 +106,15 @@ function CREATE_WUI
 {
 for (( count=1; count<=$NB_ELGG; count++ ))
 do
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 done
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________CREATE_INSTALL_SCRIPT__________________________________
-
-
-function CREATE_INSTALL_SCRIPT
-{
-
-for (( count=1; count<=$NB_ELGG; count++ ))
-do
-echo "
-#Elgg
-
-" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
-done
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Elgg"
 INSTALL
 CREATE_WUI
-
-CREATE_INSTALL_SCRIPT
 echo "I: End of install Elgg"

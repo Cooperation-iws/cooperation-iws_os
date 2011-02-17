@@ -16,17 +16,10 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
 
 
 . /tmp/scripts_params
 
-
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
 
@@ -65,25 +58,8 @@ hg serve -n \"Mercurial repo\" -p 701 &
 
 function CREATE_WUI
 {
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url><![CDATA[http://localhost:701]]></item_url>
-	<item_admin_url>/${MOD_NAME}</item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url><![CDATA[http://localhost:701]]></item_url>
-	<item_admin_url>/${MOD_NAME}</item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
-
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "<![CDATA[http://localhost:701]]>" "<![CDATA[http://localhost:701]]>" 
 
 }
 #_______________________________________________________________________________________________

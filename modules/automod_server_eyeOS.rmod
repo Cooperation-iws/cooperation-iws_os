@@ -13,22 +13,9 @@ RMOD_VERBOSE="eyeOS is an Open Source Platform designed to hold a wide variety o
 RMOD_VERBOSE_FR="eyeOS est une plateforme Open Source élaborée pour intégrer et gérer une grande variété d'applications web. eyeOS a été pensé comme une nouvelle définition du système d'exploitation, dont chacun des éléments peut être accessible depuis n'importe où dans un réseau. Il vous suffit seulement de vous connecter à votre serveur eyeOS depuis votre navigateur internet, et vous pouvez accéder à votre bureau personnel, avec vos applications, vos documents, votre musique, vos films… exactement comme ils étaient lors de votre dernière visite. "
 RMOD_REQ_APACHE=True
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-
-
-#TEMP
 
 . /tmp/scripts_params
 
-
-
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
 NB_EYEOS=${#eyeos_name[*]}
@@ -87,24 +74,8 @@ function CREATE_WUI
 {
 for (( count=1; count<=$NB_EYEOS; count++ ))
 do
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 
 done
 }

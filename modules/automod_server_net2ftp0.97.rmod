@@ -19,20 +19,9 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
 
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-
-#TEMP
 
 . /tmp/scripts_params
 
-#VARIABLES
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 NET2FTP_MYSQL_PWD=$net2ftp_mysql_pwd
 MOD_NAME=$net2ftp_name
@@ -96,24 +85,9 @@ chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/
 
 function CREATE_WUI
 {
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/admin/${MOD_NAME}</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/$MOD_NAME/</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/admin/${MOD_NAME}</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/$MOD_NAME/</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/admin/${MOD_NAME}" "/admin/${MOD_NAME}" 
+
 
 }
 #_______________________________________________________________________________________________

@@ -14,26 +14,14 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_VERBOSE="Kolab is a Groupware Solution for Emails, Appointments, Contacts and more. It supports mixed client environments (Outlook/KDE) because of an open storage format. Any email client speaking standard protocols can be served."
 RMOD_VERBOSE_FR="Kolab est une solution de travail collaboratif pour les eMails, les rendez vous, les contacts, ... Kolab supporte les environnements Outlook et KDE. "
 RMOD_REQ_APACHE=False
-LANG_UI=$(cat /tmp/lang-wui)
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
+. /tmp/scripts_params
 . /tmp/app_params
 kolab_domain_name=$(echo $domain | cut -d'.' -f1)
 kolab_domain_ext=$(echo $domain | cut -d'.' -f2)
 kolab_admin_mail=$(echo kolab_admin_mail |  cut -d'@' -f1) 
-#TEMP
-
-. /tmp/scripts_params
 
 
-
-HOSTNAME=$HOSTNAME
 
 function INSTALL
 {
@@ -406,24 +394,9 @@ modifyTimestamp: 20081122164600Z
 
 function CREATE_WUI
 {
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>https://localhost:444</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>https://localhost:444/admin</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>https://localhost:444</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>https://localhost:444/admin</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "" "" 
+
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________

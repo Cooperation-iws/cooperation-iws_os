@@ -14,18 +14,7 @@ RMOD_VERBOSE_FR="LibreSource est un portail web open source, rassemblant en une 
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_RUN_IN_CHROOT=True
 RMOD_REQ_APACHE=True
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
-
-DEB_DIST=$DEB_DIST
-#TEMP
 
 . /tmp/scripts_params
 
@@ -52,9 +41,9 @@ cd $DL_DIR
 wget $URL_CIWS_DEPOT/Libresource_110206.tar.gz
 tar -xzf  Libresource_110206.tar.gz
 
-cd $DL_DIR
-wget $URL_CIWS_DEPOT/psql_missing_package_110206.tar.gz
-tar -xzf  psql_missing_package_110206.tar.gz
+#cd $DL_DIR
+#wget $URL_CIWS_DEPOT/psql_missing_package_110206.tar.gz
+#tar -xzf  psql_missing_package_110206.tar.gz
 
 
 }
@@ -91,7 +80,7 @@ sudo update-alternatives --set java /usr/lib/jvm/java-1.5.0-sun/jre/bin/java
 
 
 cd $DL_DIR
-dpkg -i psql/*.deb
+#dpkg -i psql/*.deb
 
 apt-get install --assume-yes --force-yes postgresql postgresql-client phppgadmin
 
@@ -325,33 +314,8 @@ sudo a2enmod headers
 
 function CREATE_WUI
 {
-
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>http://libresource.$domain</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url><![CDATA[http://localhost:9000]]></item_admin_url>
-	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/nuxeo start</item_init_start>
-	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
-</item>
-
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-
-
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>http://libresource.$domain</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url><![CDATA[http://localhost:9000]]></item_admin_url>
-	<item_init_start>/etc/init.d/openoffice start\/etc/init.d/nuxeo start</item_init_start>
-	<item_init_stop>/etc/init.d/openoffice stop\/etc/init.d/nuxeo stop</item_init_stop>
-</item>
-
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "http://libresource.$domain" "http://libresource.$domain" 
 
 
 
@@ -368,7 +332,7 @@ echo "
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 
-echo "I: Install Nuxeo"
+echo "I: Install Libresource"
 INSTALL
 CREATE_WUI
-echo "I: End of install Nuxeo"
+echo "I: End of install Libresource"

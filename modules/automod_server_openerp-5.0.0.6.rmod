@@ -14,24 +14,9 @@ RMOD_VERBOSE_FR="Open Erp est une solution complète de gestion intégrée."
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_RUN_IN_CHROOT=True
 RMOD_REQ_APACHE=True
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
-
-DEB_DIST=$DEB_DIST
-#TEMP
-
 . /tmp/scripts_params
 
-
-
-HOSTNAME=$HOSTNAME
 
 
 OPENERP_PSGSQL_PWD=$openerp_psgsql_pwd
@@ -59,11 +44,11 @@ cd $DL_DIR
 wget $URL_CIWS_DEPOT/openerp-server-5.0.6.tar.gz
 tar -xzf openerp-server-5.0.6.tar.gz
 
-cd $DL_DIR
-wget $URL_CIWS_DEPOT/python-numpy_1.1.0-3+lenny1_i386.deb
+#cd $DL_DIR
+#wget $URL_CIWS_DEPOT/python-numpy_1.1.0-3+lenny1_i386.deb
 
-cd $DL_DIR
-wget $URL_CIWS_DEPOT/open_erp_missing_pagkage.tar.gz
+#cd $DL_DIR
+#wget $URL_CIWS_DEPOT/open_erp_missing_pagkage.tar.gz
 
 }
 
@@ -79,36 +64,36 @@ echo "I: Download Openerp"
 WGET_CIWS_DEPOT
 
 cd $DL_DIR
-dpkg -i python-numpy_1.1.0-3+lenny1_i386.deb
-tar -xzf open_erp_missing_pagkage.tar.gz
-dpkg -i erp_p/*
+#dpkg -i python-numpy_1.1.0-3+lenny1_i386.deb
+#tar -xzf open_erp_missing_pagkage.tar.gz
+#dpkg -i erp_p/*
 
 sudo apt-get install --assume-yes --force-yes python2.5 python-xml python-libxml2 python-libxslt1 python-lxml python-psycopg2 python-imaging python-pyparsing python-reportlab python-pychart graphviz python-tz python-pyopenssl python-matplotlib python-numeric python-pydot
 
 
-if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
+
 
 mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.postgresql
 cp /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
-fi
 
-#apt-get install --assume-yes --force-yes postgresql postgresql-client phppgadmin
-apt-get install --assume-yes --force-yes postgresql postgresql-client 
 
-if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
+apt-get install --assume-yes --force-yes postgresql postgresql-client phppgadmin
+#apt-get install --assume-yes --force-yes postgresql postgresql-client 
+
+
 
 mv /usr/sbin/policy-rc.d.postgresql /usr/sbin/policy-rc.d 
-fi
-
-#rm /etc/apache2/conf.d/phppgadmin
-
-#ln -s /etc/phppgadmin/apache.conf /etc/apache2/conf.d/phppgadmin
 
 
-#sed -i '10s/^/#/' /etc/phppgadmin/apache.conf
-#sed -i '11s/^/#/' /etc/phppgadmin/apache.conf
-#sed -i '12s/^/#/' /etc/phppgadmin/apache.conf
-#sed -i '13s/#//' /etc/phppgadmin/apache.conf
+rm /etc/apache2/conf.d/phppgadmin
+
+ln -s /etc/phppgadmin/apache.conf /etc/apache2/conf.d/phppgadmin
+
+
+sed -i '10s/^/#/' /etc/phppgadmin/apache.conf
+sed -i '11s/^/#/' /etc/phppgadmin/apache.conf
+sed -i '12s/^/#/' /etc/phppgadmin/apache.conf
+sed -i '13s/#//' /etc/phppgadmin/apache.conf
 
 sudo -u postgres createuser --createdb --no-createrole -S openuser
 

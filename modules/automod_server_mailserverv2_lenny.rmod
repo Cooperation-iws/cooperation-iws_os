@@ -13,21 +13,8 @@ RMOD_VERBOSE="What is Postfix? It is Wietse Venema's mailer that started life at
 
 
 RMOD_RUN_IN_CHROOT=True
-RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
-
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
-
-DEB_DIST=$DEB_DIST
-#TEMP
 
 . /tmp/scripts_params
 
@@ -59,27 +46,6 @@ wget $URL_CIWS_DEPOT/mailscanner_4.71.10-1_all.deb
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_CIWS_DEPOT
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-
 
 
 
@@ -89,7 +55,7 @@ fi
 
 function INSTALL
 {
-DOWNLOAD
+WGET_CIWS_DEPOT
 echo "
 Name: postfix/main_mailer_type
 Template: postfix/main_mailer_type
@@ -2833,54 +2799,14 @@ update-rc.d -f dovecot start 81 2 3 4 5 .
 
 function CREATE_WUI
 {
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/admin/$MOD_NAME</item_url>
-	<item_admin_url>/admin/$MOD_NAME</item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_init_start>/etc/init.d/clamav-daemon start\/etc/init.d/dovecot start\/etc/init.d/postfix start\/etc/init.d/mailscanner start\</item_init_start>
-	<item_init_stop>/etc/init.d/clamav-daemon stop\/etc/init.d/dovecot stop\/etc/init.d/postfix stop\/etc/init.d/mailscanner stop\</item_init_stop>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/admin/$MOD_NAME</item_url>
-	<item_admin_url>/admin/$MOD_NAME</item_admin_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_init_start>/etc/init.d/clamav-daemon start\/etc/init.d/dovecot start\/etc/init.d/postfix start\/etc/init.d/mailscanner start\</item_init_start>
-	<item_init_stop>/etc/init.d/clamav-daemon stop\/etc/init.d/dovecot stop\/etc/init.d/postfix stop\/etc/init.d/mailscanner stop\</item_init_stop>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
-
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/admin/$MOD_NAME" "/admin/$MOD_NAME" 
 
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
-#_______________________________________________________________________________________________
-#________________________________________CREATE_INSTALL_SCRIPT__________________________________
-
-
-function CREATE_INSTALL_SCRIPT
-{
-
-echo "
-
-#Mailserver
-
-
-" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Mail server"
 INSTALL
 CREATE_WUI
-CREATE_INSTALL_SCRIPT
 echo "I: End of install Mail server"
