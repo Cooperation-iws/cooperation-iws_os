@@ -10,7 +10,7 @@ CHROOT_DIR=$1
 
 #COPYING ARTWORK
 rm -r $CHROOT_DIR/remaster/isolinux
-cp -r $local_path/ciws_gnome/isolinux $CHROOT_DIR/remaster/.
+cp -r $local_path/default/isolinux $CHROOT_DIR/remaster/.
 sed -i "s/casper/live/g" $CHROOT_DIR/remaster/isolinux/isolinux.cfg
 sed -i "s/quiet/quiet vga=791/g" $CHROOT_DIR/remaster/isolinux/isolinux.cfg	
 sed -i "s/splash/selinux=0/g" $CHROOT_DIR/remaster/isolinux/isolinux.cfg	

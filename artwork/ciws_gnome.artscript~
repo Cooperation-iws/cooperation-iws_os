@@ -8,6 +8,7 @@ local_path=$(pwd)
 CHROOT_DIR=$1
 
 
+
 #COPYING ARTWORK
 rm -r $CHROOT_DIR/remaster/isolinux
 cp -r $local_path/ciws_gnome/isolinux $CHROOT_DIR/remaster/.
