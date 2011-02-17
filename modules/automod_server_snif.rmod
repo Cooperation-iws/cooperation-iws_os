@@ -79,8 +79,6 @@ sed -i "498s/false/true/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
 sed -i "512s/30/0/" $WWW_DIRECTORY/${MOD_NAME[$count]}/index.php
 
 
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
-
 
 	if [ "$(echo ${share_snif_smb[$count]} | awk  '{print $1}')" != "n" ]; then
 
@@ -104,40 +102,8 @@ if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 			" >> $LAMPP_DIRECTORY/etc/samba/smb.conf
 
 		fi
-	else
-		echo "Configure Samba Server to share this directory ?"
-		echo "[Y/n]"
-		read r1 < /dev/tty
-
-		if [ "$(echo $r1 | awk  '{print $1}')" != "n" ]; then
-
-
-			echo "Protect this directory with a password ?"
-			echo "[N/y]"
-			read r3 < /dev/tty
-			if [ "$(echo $r3 | awk  '{print $1}')" != "y" ]; then
-				echo "[${MOD_NAME[$count]}]
-					comment = ${MOD_NAME[$count]}
-					writeable = yes
-					public = yes
-					path = /var/www/${MOD_NAME[$count]}
-	
-				" >> $LAMPP_DIRECTORY/etc/samba/smb.conf
-
-			else
-				echo "[${MOD_NAME[$count]}]
-					comment = ${MOD_NAME[$count]}
-					writeable = yes
-					public = yes
-					path = /var/www/${MOD_NAME[$count]}
-					valid users = www-data
-				" >> $LAMPP_DIRECTORY/etc/samba/smb.conf
-
-				fi
-
-		fi
 	fi
-fi
+
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
 

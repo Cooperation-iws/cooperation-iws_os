@@ -415,7 +415,7 @@ EOT
 
 function CREATE_WUI
 {
-./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "" "" 
+./generate_xml_server_desc.php "/tmp/" "$RMOD_NAME" "" "" 
 
 
 }
