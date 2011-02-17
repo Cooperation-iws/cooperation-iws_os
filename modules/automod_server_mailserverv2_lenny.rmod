@@ -2769,7 +2769,7 @@ cd $DL_DIR
 wget $URL_CIWS_DEPOT/latest_clamav_updates.tar.gz
 tar -xzf latest_clamav_updates.tar.gz -C /var/lib/clamav/.
 
-freshclam
+
 
 
 sed -i "s/ENABLED=0/ENABLED=1/" /etc/default/spamassassin

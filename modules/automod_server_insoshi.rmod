@@ -30,7 +30,7 @@ cd $DL_DIR
 #dpkg -i apache2-prefork-dev_2.2.9-10+lenny3_i386.deb
 #apt-get -f install --assume-yes --force-yes
 
-export HOME=/home/liveusb
+export HOME=/root/
 apt-get --assume-yes --force-yes install ruby-full build-essential
 cd $DL_DIR
 wget $URL_CIWS_DEPOT/rubygems-1.3.1.tgz
