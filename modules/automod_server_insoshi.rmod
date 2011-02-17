@@ -160,8 +160,7 @@ echo "<VirtualHost *:80>
         LogLevel warn
         CustomLog /var/log/apache2/access-ssl.log combined
         ServerSignature On
-</VirtualHost>" > /tmp/default
-sudo cp /tmp/default /etc/apache2/sites-available/insoshi
+</VirtualHost>" > /etc/apache2/sites-available/insoshi
 sudo chown root.root /etc/apache2/sites-available/insoshi
 sudo chmod 644 /etc/apache2/sites-available/insoshi
 

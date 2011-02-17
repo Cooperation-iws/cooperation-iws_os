@@ -250,8 +250,7 @@ echo "<VirtualHost *:443>
         LogLevel warn
         CustomLog /var/log/apache2/access-ssl.log combined
         ServerSignature On
-</VirtualHost>" > /tmp/default-ssl 
-sudo cp /tmp/default-ssl /etc/apache2/sites-available/libresource-ssl
+</VirtualHost>" > /etc/apache2/sites-available/libresource-ssl
 sudo chown root.root /etc/apache2/sites-available/libresource-ssl
 sudo chmod 644 /etc/apache2/sites-available/libresource-ssl
 
@@ -279,8 +278,7 @@ echo "<VirtualHost *:80>
         LogLevel warn
         CustomLog /var/log/apache2/access-ssl.log combined
         ServerSignature On
-</VirtualHost>" > /tmp/default
-sudo cp /tmp/default /etc/apache2/sites-available/libresource
+</VirtualHost>" > /etc/apache2/sites-available/libresource
 sudo chown root.root /etc/apache2/sites-available/libresource
 sudo chmod 644 /etc/apache2/sites-available/libresource
 
