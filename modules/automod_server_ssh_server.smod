@@ -11,8 +11,7 @@ RMOD_DESCRIPTION='Secure Shell server'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
-LANG_UI=$(cat /tmp/lang-wui)
-
+. /tmp/scripts_params
 
 . /tmp/app_params
 

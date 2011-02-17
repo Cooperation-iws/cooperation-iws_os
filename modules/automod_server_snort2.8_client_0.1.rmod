@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Snort 2.8 Base 1.3.9 standalone 0.1'
+RMOD_NAME='Snort 2.8 client 0.1'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Network Intrusion Detection System'
@@ -13,64 +13,13 @@ RMOD_VERBOSE="Snort is a NIDS, Network Intrusion Detection System. Base is a Sno
 RMOD_VERBOSE_FR="Snort est un NIDS (Network Intrusion Detection System), un système de détection d'intrusion réseau. Base est le front-end de Snort écrit en php, permettant d'afficher les alertes de Snort. "
 
 RMOD_RUN_IN_CHROOT=True
-RMOD_UPDATE_URL='http://cooperation.gensys-net.eu/update/modules/'
-RMOD_REQ_APACHE=True
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-DISPLAY=127.0.0.1:5.0
-LANG_UI=$(cat /tmp/lang-wui)
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
-
-#TEMP
 
 . /tmp/scripts_params
 
 
-
-#VARIABLES
-SNORT_MYSQL_PWD=$snort_mysql_pwd
-MOD_NAME=$base_name
 NET_IFACE=$snort_listening_interface
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget http://www.snort.org/dl/old/snort-2.8.0.2.tar.gz
-tar -xzf snort-2.8.0.2.tar.gz
-mv snort-2.8.0.2 snort
-#rm snort-2.8.0.2.tar.gz
-
-cd $DL_DIR
-wget http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Community-Rules-CURRENT.tar.gz
-tar -xzf Community-Rules-CURRENT.tar.gz -C snort/
-#rm snortrules-pr-2.4.tar.gz
-
-cd $DL_DIR
-wget http://surfnet.dl.sourceforge.net/sourceforge/pcre/pcre-7.6.tar.gz
-tar -xzf pcre-7.6.tar.gz
-mv pcre-7.6 pcre
-#rm pcre-7.6.tar.gz
-
-cd $DL_DIR
-wget http://mesh.dl.sourceforge.net/sourceforge/adodb/adodb498.zip
-unzip -q adodb498.zip
-#rm adodb498.zip
-cd $DL_DIR
-wget $URL_CIWS_DEPOT/base_081101.tar.gz
-tar -xzf base_081101.tar.gz
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
 
 
 #_______________________________________________________________________________________________
@@ -100,33 +49,10 @@ wget $URL_CIWS_DEPOT/adodb498.zip
 unzip -q adodb498.zip
 #rm adodb498.zip
 
-cd $DL_DIR
-wget $URL_CIWS_DEPOT/base_081101.tar.gz
-tar -xzf base_081101.tar.gz
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_CIWS_DEPOT__________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_CIWS_DEPOT
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
 
 
 
@@ -138,7 +64,7 @@ function INSTALL
 {
 
 echo "I: Download Snort"
-DOWNLOAD
+WGET_CIWS_DEPOT
 
 #Snort config
 
@@ -196,12 +122,13 @@ fi
 
 
 
+
 cd $DL_DIR/snort/etc
 cp * /etc/snort/
 cp /usr/local/lib/libpcre.so.0 /usr/lib
 
 
-cat /etc/snort/snort.conf | sed -i -e "s/user=root password=test dbname=db host=localhost/user=$MOD_NAME password=$SNORT_MYSQL_PWD dbname=$MOD_NAME host=localhost/" /etc/snort/snort.conf
+cat /etc/snort/snort.conf | sed -i -e "s/user=root password=test dbname=db host=localhost/user=$snort_remote_name password=$snort_server_mysql_pwd dbname=$snort_remote_name host=$snort_server_name/" /etc/snort/snort.conf
 cat /etc/snort/snort.conf | sed -i -e "793s/# output/ output/" /etc/snort/snort.conf 
 cat /etc/snort/snort.conf | sed -i -e "110s/..\/rules/\/etc\/snort\/rules/" /etc/snort/snort.conf
 #cat /etc/snort/rules/web-misc.rules | sed -i -e "97s/alert/#alert/" /etc/snort/rules/web-misc.rules
@@ -324,6 +251,9 @@ sed -i "991s/^/include \$RULE_PATH\/community-web-iis.rules /" /etc/snort/snort.
 sed -i "992s/^/include \$RULE_PATH\/community-web-misc.rules /" /etc/snort/snort.conf
 sed -i "993s/^/include \$RULE_PATH\/community-web-php.rules /" /etc/snort/snort.conf
 
+
+
+
 cat << EOT > /etc/init.d/snort
 #!/bin/bash
 
@@ -348,7 +278,7 @@ case "\$1" in
     if [ -f \$PIDFILE ]; then
         log_begin_msg "Stopping Snort server."
 	rm -f \$PIDFILE      
-	killall -9 snort && killall -9 snort 1>&2 2>/dev/null
+	killall -9 snort && killall -9 snort
         log_end_msg 0
       exit
     fi
@@ -368,10 +298,6 @@ chmod 0755 /etc/init.d/snort
 
 update-rc.d snort defaults
 
-
-
-
-
 echo "
 chmod -R +r /etc/snort/rules
 sleep 5
@@ -381,83 +307,17 @@ sleep 10
 " >> /etc/rc.local
 
 
-#Base config for Snort
-cd $DL_DIR
-mkdir $WWW_DIRECTORY/admin/$MOD_NAME
-cp -Rf Base/* $WWW_DIRECTORY/admin/$MOD_NAME/.
-
-sed -i "15s/snort/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
-sed -i "16s/snort/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
-
-$BIN_MYSQL -u root < $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
-
-sed -i "s/\$BASE_urlpath = '\/admin\/Base';/\$BASE_urlpath = '\/admin\/$MOD_NAME';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
-sed -i "s/\$alert_dbname   = 'snort';/\$alert_dbname   = '$MOD_NAME';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
-sed -i "96s/snort/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
-sed -i "s/\$alert_password = 'SNORT_MYSQL_PWD';/\$alert_password = '$SNORT_MYSQL_PWD';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
-
-cd $DL_DIR
-
-echo "
-grant insert,select on root.* to $MOD_NAME@localhost;
-set password for $MOD_NAME@localhost=password('$SNORT_MYSQL_PWD');
-grant create,delete,insert,select,update on $MOD_NAME.* to $MOD_NAME@localhost;
-" > snort_db.sql
-$BIN_MYSQL -u root < snort_db.sql mysql 
-rm snort_db.sql
 
 
-#Graph for base
- 
-#pear install Image_Color Image_Canvas-alpha Image_Graph-alpha
-#pear install Image_Canvas-alpha
-#pear install Image_Graph-alpha 
-cd $DL_DIR
-wget $URL_CIWS_DEPOT/pear_snort.tar.gz
-tar -xzf pear_snort.tar.gz -C /usr/share/php/.
-
-
+##SNORT
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_INSTALL____________________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________CREATE_WUI_____________________________________________
-
-function CREATE_WUI
-{
-
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/admin/$MOD_NAME</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/admin/${MOD_NAME[$count]}</item_admin_url>
-	<item_init_start>/etc/init.d/snort start</item_init_start>
-	<item_init_stop>/etc/init.d/snort stop</item_init_stop>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
-
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/admin/$MOD_NAME</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/admin/${MOD_NAME[$count]}</item_admin_url>
-	<item_init_start>/etc/init.d/snort start</item_init_start>
-	<item_init_stop>/etc/init.d/snort stop</item_init_stop>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
-
-
-}
-#_______________________________________________________________________________________________
-#________________________________________FIN_CREATE_WUI_________________________________________
 
 echo "I: Install Snort"
+
 INSTALL
-CREATE_WUI
+
 echo "I: End of install Snort"

@@ -15,27 +15,11 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_VERBOSE="Proftpd is an Ftp server. To access the Ftp shares of this server, open up an Ftp Client to this server address."
 RMOD_VERBOSE_FR="Proftpd est un serveur Ftp. Pour accéder aux dossiers Ftp de ce serveur, ouvrez un client Ftp à l'adresse de ce serveur."
 
-
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-SILENT=$(cat /tmp/silent)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+. /tmp/scripts_params
 . /tmp/app_params
-fi
 
 
 
-#TEMP
-MIRROIR="A"
-DISPLAY=localhost:5.0
-
-#VARIABLES
-
-NTOP_PWD="cooperation"
 
 
 
@@ -114,7 +98,7 @@ ln -s $LAMPP_DIRECTORY/etc/proftpd /etc/proftpd
 
 apt-get install --assume-yes --force-yes proftpd
 
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+
 	if [ "$(echo $proftpd_pwd | awk  '{print $1}')" != "" ]; then
 		
 		htpasswd -c -b /tmp/ftppass admin $proftpd_pwd 
@@ -126,25 +110,6 @@ if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 
 	fi
 
-else
-echo "
----------------Cooperation-iws----------------------------
--------Do you want to secure your ftp server ?----------
---------Curently there is a default password (cooperation)---------
-[Y/n]:
-"
-read secure_admin < /dev/tty
-	if [ "$(echo $secure_admin | awk  '{print $1}')" != "n" ]; then
-		
-		htpasswd -c /tmp/ftppass admin 
-
-		passwd=$(cat /tmp/ftppass | grep 'admin' | cut -d':' -f2)
-			
-		sed -i "s/9DyPIRj6JheLk/$passwd/" $LAMPP_DIRECTORY/etc/proftpd/proftpd.conf
-		
-		echo "CIWS: Password protection active. Please use 'admin' as user name!"
-
-	fi
 
 fi
 }
@@ -157,28 +122,8 @@ fi
 
 function CREATE_WUI
 {
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url></item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url></item_admin_url>
-	<item_init_start>/etc/init.d/proftpd start</item_init_start>
-	<item_init_stop>/etc/init.d/proftpd stop</item_init_stop>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url></item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url></item_admin_url>
-	<item_init_start>/etc/init.d/proftpd start</item_init_start>
-	<item_init_stop>/etc/init.d/proftpd stop</item_init_stop>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "" "" 
 
 
 }

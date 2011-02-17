@@ -16,19 +16,9 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-#TEMP
 
 . /tmp/scripts_params
 
-LANG_UI=$(cat /tmp/lang-wui)
-
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
 
@@ -41,20 +31,6 @@ MOD_NAME=$phpsyslogng_name
 
 
 
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget $URL_CIWS_DEPOT/phpsyslogng_081101.tar.gz
-tar -xzf phpsyslogng_081101.tar.gz
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_CIWS_DEPOT______________________________________
@@ -70,27 +46,6 @@ tar -xzf phpsyslogng_081101.tar.gz
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_CIWS_DEPOT
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -99,7 +54,7 @@ fi
 function INSTALL
 {
 echo "I: Phpsyslogng download"
-DOWNLOAD
+WGET_CIWS_DEPOT
 echo "
 Name: msttcorefonts/baddldir
 Template: msttcorefonts/baddldir
@@ -247,30 +202,8 @@ sed -i "s/bind-address/#bind-address/" /etc/mysql/my.cnf
 function CREATE_WUI
 {
 
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/admin/$MOD_NAME/html/</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/admin/${MOD_NAME[$count]}/html/</item_admin_url>
-	<item_init_start>/etc/init.d/syslog-ng start</item_init_start>
-	<item_init_stop>/etc/init.d/syslog-ng stop</item_init_stop>
-
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/admin/$MOD_NAME/html/</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/admin/${MOD_NAME[$count]}/html/</item_admin_url>
-	<item_init_start>/etc/init.d/syslog-ng start</item_init_start>
-	<item_init_stop>/etc/init.d/syslog-ng stop</item_init_stop>
-
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME}" "/${MOD_NAME}" 
 
 
 }

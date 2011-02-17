@@ -122,7 +122,7 @@ class Cooperationiws:
                     help="Modules list file")
 	parser.add_option( "--artwork", 
                     dest="artwork", default="default" ,
-                    help="Kind of Artwork")
+                    help="Artwork for system: [ default | ciws_gnome ]")
 	parser.add_option( "--cms", 
                     dest="cms", default="" ,
                     help="Kind of CMS")

@@ -15,51 +15,13 @@ RMOD_VERBOSE_FR="Ossec est un HIDS (Host Based Intrusion Detection System), un s
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
-SILENT=$(cat /tmp/silent)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+
 . /tmp/app_params
-else
-echo "---------Cooperation-iws---------"
-echo " What's the email address for ossec reporting ?-------"
-read ossec_report_address < /dev/tty
-fi
 
-
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-HOSTNAME=$HOSTNAME
-
-#TEMP
 
 . /tmp/scripts_params
 
 MOD_NAME="Ossec"
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget http://www.ossec.net/files/ossec-hids-1.5.1.tar.gz
-tar -zxf ossec-hids-*.tar.gz
-mv ossec-hids-1.5.1 ossec-hids
-
-cd $DL_DIR
-wget http://www.ossec.net/files/ui/ossec-wui-0.3.tar.gz
-tar -zxf ossec-wui-0.3.tar.gz
-#rm ossec-wui-0.3.tar.gz
-mv ossec-wui-0.3 ossec-wui
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_CIWS_DEPOT______________________________________
@@ -82,35 +44,7 @@ mv ossec-wui-0.3 ossec-wui
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
 
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_CIWS_DEPOT
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
-
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_CHOOSE_PARAMETERS_GUI______________________________
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -119,7 +53,7 @@ fi
 function INSTALL
 {
 echo "I: Download Ossec"
-DOWNLOAD
+WGET_CIWS_DEPOT
 apt-get install --assume-yes --force-yes build-essential
 
 #OSSEC config
@@ -235,28 +169,9 @@ echo "
 
 function CREATE_WUI
 {
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/admin/$MOD_NAME</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
-	<item_init_start>/etc/init.d/ossec start</item_init_start>
-	<item_init_stop>/etc/init.d/ossec stop</item_init_stop>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/admin/$MOD_NAME</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
-	<item_init_start>/etc/init.d/ossec start</item_init_start>
-	<item_init_stop>/etc/init.d/ossec stop</item_init_stop>
-</item>
-" >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/admin/$MOD_NAME" "/admin/$MOD_NAME>" 
+
 
 }
 #_______________________________________________________________________________________________

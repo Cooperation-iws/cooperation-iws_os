@@ -17,8 +17,6 @@ RMOD_REQ_APACHE=True
 . /tmp/app_params
 . /tmp/scripts_params
 
-
-
 OPENERP_PSGSQL_PWD=$openerp_psgsql_pwd
 ROOT_PSGSQL_PWD=$root_psgsql_pwd
 MOD_NAME=$openerp_name
@@ -27,33 +25,33 @@ mkdir $DL_DIR
 
 
 #_______________________________________________________________________________________________
-#________________________________________WGET_CIWS_DEPOT______________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
 
-function WGET_CIWS_DEPOT
+function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_CIWS_DEPOT/openerp_5.0.0.6_dep.tar.gz
+wget $URL_FREE/openerp_5.0.0.6_dep.tar.gz
 cd $DL_DIR
-wget $URL_CIWS_DEPOT/openerp-web-5.0.6.tar.gz
+wget $URL_FREE/openerp-web-5.0.6.tar.gz
 tar -xzf openerp-web-5.0.6.tar.gz
 
 cd $DL_DIR
-wget $URL_CIWS_DEPOT/openerp_database_dump.sql
+wget $URL_FREE/openerp_ciws_sa.dump
 
 cd $DL_DIR
-wget $URL_CIWS_DEPOT/openerp-server-5.0.6.tar.gz
+wget $URL_FREE/openerp-server-5.0.6.tar.gz
 tar -xzf openerp-server-5.0.6.tar.gz
 
-#cd $DL_DIR
-#wget $URL_CIWS_DEPOT/python-numpy_1.1.0-3+lenny1_i386.deb
+cd $DL_DIR
+wget $URL_FREE/python-numpy_1.1.0-3+lenny1_i386.deb
 
-#cd $DL_DIR
-#wget $URL_CIWS_DEPOT/open_erp_missing_pagkage.tar.gz
+cd $DL_DIR
+wget $URL_FREE/open_erp_missing_pagkage.tar.gz
 
 }
 
 #_______________________________________________________________________________________________
-#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -61,29 +59,29 @@ function INSTALL
 {
 echo "I: Download Openerp"
 
-WGET_CIWS_DEPOT
+WGET_MIRROIR_FREE
 
 cd $DL_DIR
-#dpkg -i python-numpy_1.1.0-3+lenny1_i386.deb
-#tar -xzf open_erp_missing_pagkage.tar.gz
-#dpkg -i erp_p/*
+dpkg -i python-numpy_1.1.0-3+lenny1_i386.deb
+tar -xzf open_erp_missing_pagkage.tar.gz
+dpkg -i erp_p/*
 
-sudo apt-get install --assume-yes --force-yes python2.5 python-xml python-libxml2 python-libxslt1 python-lxml python-psycopg2 python-imaging python-pyparsing python-reportlab python-pychart graphviz python-tz python-pyopenssl python-matplotlib python-numeric python-pydot
-
-
+sudo apt-get install --assume-yes --force-yes python2.5 python-xml python-libxml2 python-libxslt1 python-lxml python-psycopg2 python-imaging python-pyparsing python-reportlab python-pychart graphviz python-tz python-pyopenssl python-matplotlib python-numeric python-pydot python-setuptools
 
 
-mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.postgresql
-cp /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
+#if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
 
+#mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.postgresql
+#cp /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
+#fi
 
 apt-get install --assume-yes --force-yes postgresql postgresql-client phppgadmin
 #apt-get install --assume-yes --force-yes postgresql postgresql-client 
 
+#if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
 
-
-mv /usr/sbin/policy-rc.d.postgresql /usr/sbin/policy-rc.d 
-
+#mv /usr/sbin/policy-rc.d.postgresql /usr/sbin/policy-rc.d 
+#fi
 
 rm /etc/apache2/conf.d/phppgadmin
 
@@ -94,89 +92,52 @@ sed -i '10s/^/#/' /etc/phppgadmin/apache.conf
 sed -i '11s/^/#/' /etc/phppgadmin/apache.conf
 sed -i '12s/^/#/' /etc/phppgadmin/apache.conf
 sed -i '13s/#//' /etc/phppgadmin/apache.conf
-
-sudo -u postgres createuser --createdb --no-createrole -S openuser
-
-echo "
-ALTER USER openuser WITH ENCRYPTED PASSWORD '$OPENERP_PSGSQL_PWD';
-ALTER USER postgres WITH ENCRYPTED PASSWORD '$ROOT_PSGSQL_PWD';
-
-"  > openerp_db.sql
-
-sudo -u postgres psql postgres < openerp_db.sql
+sudo /etc/init.d/postgresql-8.3 restart
+sudo -u postgres createuser openerp --no-superuser --createdb --no-createrole 
+sudo /usr/sbin/adduser --quiet --system openerp
+usermod -u601 openerp
 
 
 echo "
-CREATE DATABASE cooperation OWNER openuser;
+SET client_encoding = 'UTF8';
+CREATE DATABASE ciws_sa OWNER openerp ENCODING 'UTF8';
 "  > openerp_db.sql
 sudo -u postgres psql postgres < openerp_db.sql
 
 cd $DL_DIR
-sudo -u postgres psql cooperation < openerp_database_dump.sql
+sudo -u openerp pg_restore -d ciws_sa openerp_ciws_sa.dump
+sudo -u postgres psql template1 -U postgres -c "alter user openerp with password '$OPENERP_PSGSQL_PWD'"
+
+echo "
+
+ALTER USER postgres WITH PASSWORD '$ROOT_PSGSQL_PWD';
+
+"  > openerp_db.sql
+
+sudo -u postgres psql postgres < openerp_db.sql
 
 sudo sed -i 's/\(local[[:space:]]*all[[:space:]]*all[[:space:]]*\)\(ident[[:space:]]*sameuser\)/\1md5/g' /etc/postgresql/8.3/main/pg_hba.conf
 
 cd $DL_DIR
 tar -xzf openerp_5.0.0.6_dep.tar.gz -C /usr/lib/python2.5/site-packages/.
-
+echo "#######INSTALLING SERVER###########"
 cd $DL_DIR/openerp-server-5.0.6
-sudo python setup.py install
-
+sudo python setup.py install > /dev/null
+echo "#######INSTALLING WEB###########"
 cd $DL_DIR/openerp-client-web-5.0.6
 sudo python setup.py install
+
+sudo /etc/init.d/postgresql-8.3 stop
+
 
 
 sed -i "48s/False/'localhost'/" /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
 #sed -i '49s/False//' /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
 #sed -i '50s/False//' /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
-sed -i "51s/False/'openuser'/" /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
+sed -i "51s/False/'openerp'/" /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
 sed -i "52s/False/'$OPENERP_PSGSQL_PWD'/" /usr/lib/python2.5/site-packages/openerp-server/tools/config.py
 
-echo "
-[options]
-without_demo = False
-netport = 8070
-secure = False
-demo = {}
-syslog = False
-cache_timeout = 100000
-port = 8069
-reportgz = False
-secure_pkey_file = server.pkey
-netinterface = 
-log_level = info
-admin_passwd = cooperation
-smtp_port = 25
-smtp_server = localhost
-db_user = openuser
-price_accuracy = 2
-login_message = False
-import_partial = 
-soap = False
-pidfile = None
-db_maxconn = 64
-smtp_password = False
-xmlrpc = True
-db_port = False
-debug_mode = False
-netrpc = True
-secure_cert_file = server.cert
-interface = 
-logfile = None
-csv_internal_sep = ,
-pg_path = None
-translate_modules = ['all']
-stop_after_init = False
-root_path = /usr/lib/python2.5/site-packages/openerp-server
-smtp_user = False
-db_password = $OPENERP_PSGSQL_PWD
-db_name = cooperation
-db_host = localhost
-assert_exit_level = warn
-email_from = False
-addons_path = /usr/lib/python2.5/site-packages/openerp-server/addons
 
-" > /root/.openerp_serverrc
 
 sudo chmod 777 /usr/lib/python2.5/site-packages/openerp-server/addons
 
@@ -187,6 +148,7 @@ mv /usr/lib/python2.5/site-packages $LAMPP_DIRECTORY/usr/lib/python2.5/
 
 ln -s $LAMPP_DIRECTORY/usr/lib/python2.5/site-packages /usr/lib/python2.5/site-packages
  
+
 
 if [ ! -d $LAMPP_DIRECTORY/etc/postgresql ]; then
 mv /etc/postgresql $LAMPP_DIRECTORY/etc
@@ -234,9 +196,8 @@ case "${1}" in
 	start)
 		echo -n "Starting ${DESC}: "
 
-		start-stop-daemon --start --quiet --pidfile /var/run/${NAME}.pid \
-			--chuid ${USER} --background --make-pidfile \
-			--exec ${DAEMON} -- --config=/etc/openerp-server.conf
+		sudo -u $USER /usr/bin/openerp-server -c /etc/openerp-server.conf >> /var/log/openerp/openerp.log &
+		echo $! > /var/run/${NAME}.pid
 
 		echo "${NAME}."
 		;;
@@ -244,23 +205,19 @@ case "${1}" in
 	stop)
 		echo -n "Stopping ${DESC}: "
 
-		start-stop-daemon --stop --quiet --pidfile /var/run/${NAME}.pid \
-			--oknodo
-
+		kill -9 $(cat /var/run/${NAME}.pid)
 		echo "${NAME}."
 		;;
 
 	restart|force-reload)
 		echo -n "Restarting ${DESC}: "
 
-		start-stop-daemon --stop --quiet --pidfile /var/run/${NAME}.pid \
-			--oknodo
+		kill -9 $(cat /var/run/${NAME}.pid)
 
 		sleep 1
 
-		start-stop-daemon --start --quiet --pidfile /var/run/${NAME}.pid \
-			--chuid ${USER} --background --make-pidfile \
-			--exec ${DAEMON} -- --config=/etc/openerp-server.conf
+		sudo -u $USER /usr/bin/openerp-server -c /etc/openerp-server.conf >> /var/log/openerp/openerp.log &
+		echo $! > /var/run/${NAME}.pid
 
 		echo "${NAME}."
 		;;
@@ -286,7 +243,7 @@ sudo chown -R openerp.root /var/log/openerp/
 #####################################################################################
 # openerp-server config file
 #####################################################################################
-cat > /tmp/openerp-server.conf <<"EOF2"
+cat > /tmp/openerp-server.conf <<"EOT2"
 # /etc/openerp-server.conf(5) - configuration file for openerp-server(1)
 
 [options]
@@ -295,6 +252,8 @@ cat > /tmp/openerp-server.conf <<"EOF2"
 
 # The file where the server pid will be stored (default False).
 #pidfile = /var/run/openerp.pid
+
+admin_passwd = cooperation
 
 # The file where the server log will be stored (default False).
 logfile = /var/log/openerp/openerp.log
@@ -322,7 +281,7 @@ smtp_user = False
 smtp_password = False
 
 # Specify the database name.
-db_name =
+db_name = 
 
 # Specify the database user name (default None).
 db_user = openerp
@@ -336,7 +295,7 @@ db_host =
 # Specify the database port (default None).
 db_port = 5432
 
-EOF2
+EOT2
 
 sudo cp /tmp/openerp-server.conf /etc/
 sudo chown openerp.root /etc/openerp-server.conf
@@ -348,16 +307,95 @@ sudo sed -i "s/db_password =/db_password = $OPENERP_PSGSQL_PWD/g" /etc/openerp-s
 # openerp-web init script
 #####################################################################################
 
-sudo cp /usr/lib/python2.5/site-packages/openerp_web-5.0.3-py2.5.egg/scripts/openerp-web /etc/init.d/
+sudo cp /usr/lib/python2.5/site-packages/openerp_web-5.0.6-py2.5.egg/scripts/openerp-web /etc/init.d/
 sudo chmod +x /etc/init.d/openerp-web
-sudo cp /usr/lib/python2.5/site-packages/openerp_web-5.0.3-py2.5.egg/config/openerp-web.cfg /etc/
+sudo cp /usr/lib/python2.5/site-packages/openerp_web-5.0.6-py2.5.egg/config/openerp-web.cfg /etc/
 #ln -s /usr/lib/python2.5/site-packages/openerp_web-5.0.3-py2.5.egg/config/openerp-web.cfg /etc/openerp-web.cfg
 sudo chown openerp.root /etc/openerp-web.cfg
 sudo chmod 640 /etc/openerp-web.cfg
-
+if [ "$domain" ] && [ -d /etc/bind ]; then
 #OpenERP Web configuration:
 #    tools.proxy.on = True
 sudo sed -i "s/^#tools\.proxy\.on.*/tools.proxy.on = True/g" /etc/openerp-web.cfg 
+
+echo "<VirtualHost *:443>
+	ServerName openerp.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	SSLEngine on
+	SSLCertificateFile /etc/apache2/ssl/apache.pem
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:8080/
+	ProxyPassReverse /   http://127.0.0.1:8080/
+
+        RequestHeader set \"X-Forwarded-Proto\" \"https\"
+
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /tmp/default-ssl 
+sudo cp /tmp/default-ssl /etc/apache2/sites-available/openerp-ssl
+sudo chown root.root /etc/apache2/sites-available/openerp-ssl
+sudo chmod 644 /etc/apache2/sites-available/openerp-ssl
+
+echo "<VirtualHost *:80>
+	ServerName openerp.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:8080/
+	ProxyPassReverse /   http://127.0.0.1:8080/
+
+        
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /tmp/default
+sudo cp /tmp/default /etc/apache2/sites-available/openerp
+sudo chown root.root /etc/apache2/sites-available/openerp
+sudo chmod 644 /etc/apache2/sites-available/openerp
+
+sed -i "9s/Order deny,allow/Order allow,deny/" /etc/apache2/mods-available/proxy.conf
+sed -i "10s/Deny/Allow/" /etc/apache2/mods-available/proxy.conf
+a2dissite default-ssl
+a2ensite openerp
+a2ensite openerp-ssl
+sudo a2enmod rewrite
+sudo a2enmod suexec
+sudo a2enmod include
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod proxy_connect
+sudo a2enmod proxy_ftp
+sudo a2enmod headers
+
+
+REDMINE_URL="http://openerp.$domain"
+echo "openerp    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+
+else
+REDMINE_URL="<![CDATA[http://localhost:8080]]>"
+fi
 
 #Create /var/log/openerp-web.log with proper ownership:
 sudo mkdir -p /var/log/openerp-web
@@ -382,32 +420,9 @@ sudo update-rc.d openerp-web start 70 2 3 4 5 . stop 20 0 1 6 .
 function CREATE_WUI
 {
 
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url><![CDATA[http://localhost:8080]]></item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url><![CDATA[http://localhost:8080]]></item_admin_url>
-	<item_init_start>/etc/init.d/openerp-server start\/etc/init.d/openerp-web start</item_init_start>
-	<item_init_stop>/etc/init.d/openerp-server stop\/etc/init.d/openerp-web stop</item_init_stop>
-</item>
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "$REDMINE_URL" "$REDMINE_URL" 
 
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-
-
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url><![CDATA[http://localhost:8080]]></item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url><![CDATA[http://localhost:8080]]></item_admin_url>
-	<item_init_start>/etc/init.d/openerp-server start\/etc/init.d/openerp-web start</item_init_start>
-	<item_init_stop>/etc/init.d/openerp-server stop\/etc/init.d/openerp-web stop</item_init_stop>
-</item>
-
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
 
 
 
@@ -424,7 +439,7 @@ echo "
 #________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 
-echo "I: Install Nuxeo"
+echo "I: Install Openerp"
 INSTALL
 CREATE_WUI
-echo "I: End of install Nuxeo"
+echo "I: End of install Openerp"

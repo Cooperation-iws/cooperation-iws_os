@@ -18,19 +18,8 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-SCRIPT_DIRECTORY=$(cat /tmp/script-path)
-DISPLAY=127.0.0.1:5.0
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-
-SILENT=$(cat /tmp/silent)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
-fi
-
+. /tmp/scripts_params
 NB_SNIF=${#snif_name[*]}
 
 for (( count=1; count<=$NB_SNIF; count++ ))
@@ -41,30 +30,6 @@ done
 #TEMP
 
 . /tmp/scripts_params
-
-
-
-#VARIABLES
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-MESSAGE="snif download"
-echo -e '\E[37;44m'"\033[1m $MESSAGE \033[0m"
-wget http://www.bitfolge.de/download/snif_152.zip
-mkdir snif
-cd snif
-unzip ../snif_152.zip
-rm -r subdir
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
-
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_CIWS_DEPOT______________________________________
@@ -84,29 +49,6 @@ rm -r subdir
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_CIWS_DEPOT
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________CHOOSE_PARAMETERS_GUI______________________________________
-
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -116,7 +58,7 @@ function INSTALL
 {
 MESSAGE="I: Download Snif"
 
-DOWNLOAD
+WGET_CIWS_DEPOT
 
 #SNIF
 MESSAGE="Snif paramétrage"
@@ -214,24 +156,8 @@ function CREATE_WUI
 for (( count=1; count<=$NB_SNIF; count++ ))
 
 do
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/${MOD_NAME[$count]}</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/${MOD_NAME[$count]}</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 
 done
 }

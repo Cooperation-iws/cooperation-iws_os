@@ -16,23 +16,13 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
 
 . /tmp/scripts_params
-DEB_MIRROR_PATH=$DEB_MIRROR_PATH
-#TEMP
-MIRROIR="A"
-NOM_CACTI="Cacti"
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
 
 
-HOSTNAME=$HOSTNAME
+
 
 apt_cacher_root="$(echo $DEB_MIRROR_PATH | cut -d'/' -f3)"
 

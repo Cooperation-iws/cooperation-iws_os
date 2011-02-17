@@ -14,21 +14,10 @@ RMOD_VERBOSE_FR="Zabbix est un système de surveillance du réseau open source. 
 
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+. /tmp/scripts_params
 
-
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-SILENT=$(cat /tmp/silent)
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
 . /tmp/app_params
-fi
 
-HOSTNAME=$HOSTNAME
-MOD_NAME="zabbix"
-ZABBIX_MYSQL_PWD="ZABBIX_MYSQL_PWD"
 
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________

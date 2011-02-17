@@ -10,7 +10,7 @@ RMOD_DESCRIPTION='Anonymous Surfing'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 LIVEUSER=$LIVEUSER
-SILENT=$(cat /tmp/silent)
+. /tmp/scripts_params
 . /tmp/app_params
 
 echo "I: install tor privoxy"

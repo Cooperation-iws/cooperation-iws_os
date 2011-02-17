@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Snort2.8 server Base1.3.9'
+RMOD_NAME='Snort2.8 Base1.3.9 standalone Hardy'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Network Intrusion Detection System'
@@ -16,16 +16,7 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation.gensys-net.eu/update/modules/'
 RMOD_REQ_APACHE=True
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-DISPLAY=127.0.0.1:5.0
-LANG_UI=$(cat /tmp/lang-wui)
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
-
-#TEMP
 
 . /tmp/scripts_params
 
@@ -35,44 +26,6 @@ SILENT=$(cat /tmp/silent)
 SNORT_MYSQL_PWD=$snort_mysql_pwd
 MOD_NAME=$base_name
 
-
-
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget http://www.snort.org/dl/old/snort-2.8.0.2.tar.gz
-tar -xzf snort-2.8.0.2.tar.gz
-mv snort-2.8.0.2 snort
-#rm snort-2.8.0.2.tar.gz
-
-cd $DL_DIR
-wget http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Community-Rules-CURRENT.tar.gz
-tar -xzf Community-Rules-CURRENT.tar.gz -C snort/
-#rm snortrules-pr-2.4.tar.gz
-
-cd $DL_DIR
-wget http://surfnet.dl.sourceforge.net/sourceforge/pcre/pcre-7.6.tar.gz
-tar -xzf pcre-7.6.tar.gz
-mv pcre-7.6 pcre
-#rm pcre-7.6.tar.gz
-
-cd $DL_DIR
-wget http://mesh.dl.sourceforge.net/sourceforge/adodb/adodb498.zip
-unzip -q adodb498.zip
-#rm adodb498.zip
-cd $DL_DIR
-wget $URL_CIWS_DEPOT/base_081101.tar.gz
-tar -xzf base_081101.tar.gz
-
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
 
 
 #_______________________________________________________________________________________________
@@ -105,32 +58,10 @@ unzip -q adodb498.zip
 cd $DL_DIR
 wget $URL_CIWS_DEPOT/base_081101.tar.gz
 tar -xzf base_081101.tar.gz
-
 }
 
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_CIWS_DEPOT__________________________________
-
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_CIWS_DEPOT
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
 
 
 
@@ -142,7 +73,7 @@ function INSTALL
 {
 
 echo "I: Download Snort"
-DOWNLOAD
+WGET_CIWS_DEPOT
 
 #Snort config
 
@@ -180,6 +111,7 @@ make install
 cd $DL_DIR/snort
 sed -i "2920G" src/output-plugins/spo_database.c
 sed -i "2921s/^/data->m_sock->reconnect = 1; /" src/output-plugins/spo_database.c
+
 ./configure -enable-dynamicplugin --with-mysql
 make
 make install
@@ -324,9 +256,6 @@ sed -i "991s/^/include \$RULE_PATH\/community-web-iis.rules /" /etc/snort/snort.
 sed -i "992s/^/include \$RULE_PATH\/community-web-misc.rules /" /etc/snort/snort.conf
 sed -i "993s/^/include \$RULE_PATH\/community-web-php.rules /" /etc/snort/snort.conf
 
-
-
-
 cat << EOT > /etc/init.d/snort
 #!/bin/bash
 
@@ -348,8 +277,9 @@ case "\$1" in
     stop)
     if [ -f \$PIDFILE ]; then
       echo "Stopping Snort server."
-      killall -9 snort && killall -9 snort
-      rm -f \$PIDFILE
+	rm -f \$PIDFILE      
+	killall -9 snort && killall -9 snort
+     
       exit
     fi
       echo "Snort server is not running."
@@ -379,9 +309,6 @@ sleep 10
 " >> /etc/rc.local
 
 
-##SNORT
-
-
 #Base config for Snort
 cd $DL_DIR
 mkdir $WWW_DIRECTORY/admin/$MOD_NAME
@@ -398,16 +325,14 @@ sed -i "96s/snort/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
 sed -i "s/\$alert_password = 'SNORT_MYSQL_PWD';/\$alert_password = '$SNORT_MYSQL_PWD';/" $WWW_DIRECTORY/admin/$MOD_NAME/base_conf.php
 
 cd $DL_DIR
+
 echo "
-grant insert,select on root.* to $MOD_NAME;
-set password for $MOD_NAME=password('$SNORT_MYSQL_PWD');
-grant create,delete,insert,select,update on $MOD_NAME.* to $MOD_NAME;
 grant insert,select on root.* to $MOD_NAME@localhost;
 set password for $MOD_NAME@localhost=password('$SNORT_MYSQL_PWD');
-grant create,delete,insert,select,update on $MOD_NAME.* to $MOD_NAME@localhost;" > snort_db.sql
+grant create,delete,insert,select,update on $MOD_NAME.* to $MOD_NAME@localhost;
+grant create,delete,insert,select,update on $MOD_NAME.* to $MOD_NAME;" > snort_db.sql
 $BIN_MYSQL -u root < snort_db.sql mysql 
 rm snort_db.sql
-
 
 
 #Graph for base
@@ -416,9 +341,6 @@ pear install Image_Color
 pear install Image_Canvas-alpha
 pear install Image_Graph-alpha 
 
-sed -i "s/bind-address/#bind-address/" /etc/mysql/my.cnf
-
-/etc/init.d/mysql restart
 }
 
 #_______________________________________________________________________________________________
@@ -429,6 +351,8 @@ sed -i "s/bind-address/#bind-address/" /etc/mysql/my.cnf
 
 function CREATE_WUI
 {
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/admin/$MOD_NAME" "/admin/$MOD_NAME" 
 
 echo "
 <item>
@@ -439,7 +363,6 @@ echo "
 	<item_admin_url>/admin/${MOD_NAME[$count]}</item_admin_url>
 	<item_init_start>/etc/init.d/snort start</item_init_start>
 	<item_init_stop>/etc/init.d/snort stop</item_init_stop>
-
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui.xml
 
@@ -452,7 +375,6 @@ echo "
 	<item_admin_url>/admin/${MOD_NAME[$count]}</item_admin_url>
 	<item_init_start>/etc/init.d/snort start</item_init_start>
 	<item_init_stop>/etc/init.d/snort stop</item_init_stop>
-
 </item>
 " >> $WWW_DIRECTORY/admin/cooperation-wui-fr.xml
 
@@ -462,7 +384,6 @@ echo "
 #________________________________________FIN_CREATE_WUI_________________________________________
 
 echo "I: Install Snort"
-
 INSTALL
 CREATE_WUI
 echo "I: End of install Snort"
