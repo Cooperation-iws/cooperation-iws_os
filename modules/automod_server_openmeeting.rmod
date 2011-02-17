@@ -163,7 +163,7 @@ update-alternatives --set java /usr/lib/jvm/java-1.5.0-sun/jre/bin/java
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$RMOD_NAME" "<![CDATA[http://localhost:5080/openmeetings/]]>" "<![CDATA[http://localhost:5080/openmeetings/]]>" 
+./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "<![CDATA[http://localhost:5080/openmeetings/]]>" "<![CDATA[http://localhost:5080/openmeetings/]]>" 
 
 
 }

@@ -50,8 +50,6 @@ wget $URL_CIWS_DEPOT/latest_clamav_updates.tar.gz
 tar -xzf latest_clamav_updates.tar.gz -C /var/lib/clamav/.
 
 
-freshclam
-
 if [ ! -d $LAMPP_DIRECTORY/var/lib/clamav ]; then
 mv /var/lib/clamav $LAMPP_DIRECTORY/var/lib
 ln -s $LAMPP_DIRECTORY/var/lib/clamav /var/lib/clamav

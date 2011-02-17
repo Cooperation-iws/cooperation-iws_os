@@ -9,9 +9,10 @@
 global $lang;
 $dir=dirname(__FILE__) ;
 $server_content_xml="content-data-server.xml";
-$app_name=$argv[1];
-$main_url=$argv[2];
-$admin_url=$argv[3];
+$dir=$argv[1];
+$app_name=$argv[2];
+$main_url=$argv[3];
+$admin_url=$argv[4];
 
 $lang="en";
 
@@ -231,12 +232,12 @@ for ($count_elt=0; $count_elt < sizeof($array_xml_desc); $count_elt++)
 			}
 
 
-$file_content=file_get_contents('/var/www/cooperation-wui-'.$array_lang[$count_elt_lang].'.xml');
+$file_content=file_get_contents($dir.'/cooperation-wui-'.$array_lang[$count_elt_lang].'.xml');
 
 
 $file_content=$file_content.$return;
 
-write_file('/var/www/cooperation-wui-'.$array_lang[$count_elt_lang].'.xml', $file_content) ;
+write_file($dir.'/cooperation-wui-'.$array_lang[$count_elt_lang].'.xml', $file_content) ;
 //write_file('test2-'.$array_lang[$count_elt_lang].'.xml', $file_content) ;
 
 }

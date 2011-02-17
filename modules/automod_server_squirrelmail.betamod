@@ -78,7 +78,7 @@ function CREATE_WUI
 {
 
 cd /tmp/
-./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 
 }
 #_______________________________________________________________________________________________

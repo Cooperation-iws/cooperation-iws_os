@@ -75,7 +75,7 @@ for (( count=1; count<=$NB_DOKUWIKI; count++ ))
 
 do
 cd /tmp/
-./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 
 done
 }

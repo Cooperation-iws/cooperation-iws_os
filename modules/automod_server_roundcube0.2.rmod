@@ -82,7 +82,7 @@ chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$RMOD_NAME" "$MOD_NAME" "$MOD_NAME" 
+./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "$MOD_NAME" "$MOD_NAME" 
 
 }
 #_______________________________________________________________________________________________

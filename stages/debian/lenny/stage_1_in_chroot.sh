@@ -41,7 +41,7 @@ Flags: seen
 " >> /var/cache/debconf/config.dat
 
 #SETTING RUBY GEM LOCAL MIRROR
-echo "gem: --source $URL_CIWS_DEPOT/gem-mirror/" > $HOME/.gemrc
+echo "gem: --source $URL_CIWS_DEPOT/gem-mirror/" > /root/.gemrc
 
 #UPDATING SOURCES.LIST
 mv /etc/apt/sources.list /etc/apt/sources.list.orig

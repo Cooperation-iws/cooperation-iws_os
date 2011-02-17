@@ -271,7 +271,7 @@ sed _i "s/\/var\/run\/mongrel_cluster/$LAMPP_DIRECTORY_FOR_SED\/var\/$MOD_NAME\/
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$RMOD_NAME" "$REDMINE_URL" "$REDMINE_URL" 
+./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "$REDMINE_URL" "$REDMINE_URL" 
 
 
 }

@@ -642,7 +642,7 @@ function CREATE_WUI
 for (( count=1; count<=$NB_AMPACHE; count++ ))
 do
 cd /tmp/
-./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 done
 }
 #_______________________________________________________________________________________________

@@ -19,7 +19,7 @@ RMOD_VERBOSE_FR="Achievo est un système de gestion de projet à vocation commer
 
 . /tmp/app_params
 
-NB_ACHIEVO=$nb_achievo
+NB_ACHIEVO=${#achievo_name[*]}
 
 for (( count=1; count<=$NB_ACHIEVO; count++ ))
 do
@@ -89,7 +89,7 @@ function CREATE_WUI
 for (( count=1; count<=$NB_ACHIEVO; count++ ))
 do
 cd /tmp/
-./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 done
 }
 #_______________________________________________________________________________________________

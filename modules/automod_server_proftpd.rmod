@@ -123,7 +123,7 @@ fi
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$RMOD_NAME" "" "" 
+./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "" "" 
 
 
 }

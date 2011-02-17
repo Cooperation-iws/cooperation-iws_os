@@ -404,17 +404,7 @@ map to guest = bad user
 
 EOT
 
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
-	(echo $smb_pwd; echo $smb_pwd) | smbpasswd -a -s www-data
-else
-	echo "-----------------Cooperation-iws----------------------------"
-	echo "You will be asked to enter your samba password"
-	echo "-------------------Press enter------------------------------"
-	read r </dev/tty
-
-	smbpasswd -a www-data
-
-fi
+(echo $smb_pwd; echo $smb_pwd) | smbpasswd -a -s www-data
 }
 
 #_______________________________________________________________________________________________
@@ -425,7 +415,7 @@ fi
 
 function CREATE_WUI
 {
-./generate_xml_server_desc.php "$RMOD_NAME" "" "" 
+./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "" "" 
 
 
 }

@@ -197,8 +197,8 @@ function CREATE_WUI
 for (( count=1; count<=$NB_SVN; count++ ))
 do
 cd /tmp/
-./generate_xml_server_desc.php "$RMOD_NAME" "/svn$count/${SVN_NAME[$count]}" "/svn$count/${SVN_NAME[$count]}" 
-./generate_xml_server_desc.php "$RMOD_NAME" "/trac_${SVN_NAME[$count]}" "/trac_${SVN_NAME[$count]}" 
+./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "/svn$count/${SVN_NAME[$count]}" "/svn$count/${SVN_NAME[$count]}" 
+./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "/trac_${SVN_NAME[$count]}" "/trac_${SVN_NAME[$count]}" 
 done
 
 }
