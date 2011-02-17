@@ -120,11 +120,6 @@ echo "I: End of Install SVN"
 echo "I: Install Trac"
 
 
-
-
-
-
-
 cd $LAMPP_DIRECTORY/var/trac
 trac-admin ${SVN_NAME[$count]} initenv  "My Project" "sqlite:db/trac.db" "svn" "$LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}" 
 
