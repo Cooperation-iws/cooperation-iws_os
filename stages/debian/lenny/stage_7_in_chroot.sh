@@ -1,7 +1,6 @@
 #!/bin/bash
 
 
-TMPUSER=$(cat /tmp/tmp_user)
 
 . /tmp/scripts_params
 
@@ -10,32 +9,12 @@ TMPUSER=$(cat /tmp/tmp_user)
 
 
 
-
+#RESTORING START DAEMON PARAMETER
 rm /usr/sbin/policy-rc.d
 mv /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
 
 
-
-echo "I: Configuring Apache2 for domains"
-
-if [ "$domain" ] && [ -d /etc/bind ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ]; then
-sed -i "3G" /etc/apache2/sites-available/default
-sed -i "3G" /etc/apache2/sites-available/default
-sed -i "3G" /etc/apache2/sites-available/default
-sed -i "3s/^/ServerName $domain/" /etc/apache2/sites-available/default
-sed -i "4s/^/ServerAlias wwi.$domain/" /etc/apache2/sites-available/default
-sed -i "5s/^/ServerAlias $HOSTNAME.$domain/" /etc/apache2/sites-available/default
-
-sed -i "4G" /etc/apache2/sites-available/default-ssl
-sed -i "4G" /etc/apache2/sites-available/default-ssl
-sed -i "4G" /etc/apache2/sites-available/default-ssl
-sed -i "4s/^/ServerName $domain/" /etc/apache2/sites-available/default-ssl
-sed -i "5s/^/ServerAlias wwi.$domain/" /etc/apache2/sites-available/default-ssl
-sed -i "6s/^/ServerAlias $HOSTNAME.$domain/" /etc/apache2/sites-available/default-ssl
-
-fi
-
-
+#CONFIGURING PERSISTENCE
 echo "I: configuring persistence"
 
 echo "#!/bin/sh
@@ -71,6 +50,8 @@ fi
 " > /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/001cpvar
 chmod +x /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/001cpvar
 
+
+#CONFIGURING SOURCES.LIST
 echo "I:Configuring sources.list"
 if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "lenny" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
 echo "
@@ -96,14 +77,11 @@ deb-src http://security.debian.org/ $DEB_DIST/updates main contrib
 " > /etc/apt/sources.list
 export DEBIAN_FRONTEND="dialog"
 fi
-if [ "$(echo "$DEBNONFREE_MIRROR_PATH" | grep 'medibuntu.org')" ]; then
-wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key add -
-fi
 rm /etc/apt/sources.list.d/*
 echo "" > /var/log/dpkg.log
 
-
-echo "I: making initramfs"
+#MAKE INITRD
+echo "I: make initramfs"
 
 if [ -e /tmp/kernel ]; then
 kernel="$(cat /tmp/kernel)"
@@ -116,7 +94,6 @@ cp /boot/vmlinuz-$kernel /vmlinuz
 
 
 if [ "${APACHE}"  == "A" ]; then
-
 
 echo "I: Securing Lampp Server"
 
@@ -148,6 +125,8 @@ $BIN_MYSQL -u root < /tmp/mysql_secure.sql
 	fi
 
 fi
+
+
 echo "I: shuting down servers"
 #shutdown script
 killall -9 apache2

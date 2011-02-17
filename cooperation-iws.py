@@ -121,7 +121,7 @@ class Cooperationiws:
                     dest="modulesfile", default="bash/templates/empty" ,
                     help="Modules list file")
 	parser.add_option( "--artwork", 
-                    dest="artwork", default="" ,
+                    dest="artwork", default="default" ,
                     help="Kind of Artwork")
 	parser.add_option( "--cms", 
                     dest="cms", default="" ,

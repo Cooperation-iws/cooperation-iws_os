@@ -19,7 +19,7 @@ cp -r $SCRIPT_DIR/stage_5_lampp_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
 cp -r $SCRIPT_DIR/stage_7_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
 
 #COPYING ARTWORK IF ASKED
-if [ "$(ARTWORK_NAME)" ]; then
+if [ "${ARTWORK_NAME}" ]; then
 cp -r $ARTWORK_DIR/$ARTWORK_NAME.artchroot $CHROOT_DIR/chroot/tmp/.
 cp -r $ARTWORK_DIR/$ARTWORK_NAME $CHROOT_DIR/chroot/tmp/.
 fi
@@ -30,7 +30,6 @@ cp -r $PHP_DIR/*.php $CHROOT_DIR/chroot/tmp/.
 cp -r $ROOT_DIR/cert $CHROOT_DIR/chroot/tmp/.
 
 chmod -R 777 $CHROOT_DIR/chroot/tmp/
-
 
 #UPDATING ISOLINUX
 sed -i "s/vmlinuz1/vmlinuz/g" $CHROOT_DIR/remaster/isolinux/menu.cfg

@@ -24,7 +24,6 @@ echo 'LAMPP_DIRECTORY="/opt/ciws/"' >> /tmp/scripts_params
 
 . /tmp/scripts_params
 
-
 mkdir $DL_DIR
 
 
@@ -32,14 +31,8 @@ export LANG="en"
 export LC_ALL=C
 export DEBIAN_FRONTEND=noninteractive
 
-if [ "$(echo $LANG | grep 'fr')" ]; then
-LANG_UI="FR"
-else
-LANG_UI="EN"
-fi
-echo $LANG_UI > /tmp/lang-wui
 
-##LICENCE JAVA UBUNTU
+##ACCEPTING LICENCE JAVA UBUNTU
 echo "Name: shared/accepted-sun-dlj-v1-1
 Template: shared/accepted-sun-dlj-v1-1
 Value: true
@@ -47,12 +40,10 @@ Owners: sun-java5-bin, sun-java5-jre
 Flags: seen
 " >> /var/cache/debconf/config.dat
 
-
-
-#Rubygem local mirror
+#SETTING RUBY GEM LOCAL MIRROR
 echo "gem: --source $URL_CIWS_DEPOT/gem-mirror/" > $HOME/.gemrc
 
-
+#UPDATING SOURCES.LIST
 mv /etc/apt/sources.list /etc/apt/sources.list.orig
 
 if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "lenny" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
@@ -79,23 +70,16 @@ deb-src $DEB_MIRROR_SECURITY_PATH $DEB_DIST/updates main contrib
 " > /etc/apt/sources.list
 export DEBIAN_FRONTEND="dialog"
 fi
-if [ "$(echo "$DEBNONFREE_MIRROR_PATH" | grep 'medibuntu.org')" ]; then
-wget -q http://fr.packages.medibuntu.org/medibuntu-key.gpg -O- | sudo apt-key add -
-else
-cd $DL_DIR
-wget $URL_CIWS_DEPOT/debian-multimedia-keyring_2008.10.16_all.deb
-dpkg -i debian-multimedia-keyring_2008.10.16_all.deb
-fi
 
 apt-get update --fix-missing
 
-
+#CREATE RC.LOCAL STARTUP FILE
 echo "I: config rc.local"
-echo "#!/bin/sh
+echo "#!/bin/bash
 
 " > /etc/rc.local
 
-
+#FIX DHCLIENT FOR LENNY
 if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ]; then
 
 echo " 
@@ -109,7 +93,7 @@ fi
 
 
 
-
+#CREATING PERSISTENT DIRECTORY
 echo "I: create persistent directory"
 mkdir $LAMPP_DIRECTORY
 mkdir $LAMPP_DIRECTORY/server
@@ -122,34 +106,18 @@ mkdir $LAMPP_DIRECTORY/opt
 mkdir $LAMPP_DIRECTORY/var/
 mkdir  $LAMPP_DIRECTORY/var/lib
 chown -R www-data $LAMPP_DIRECTORY/server
+
+
+
+#POST INSTALL SCRIPT CREATION
 echo "I: post install script creation"
 echo "#!/bin/bash
 WWW_DIRECTORY=\"/var/www\"
 " > $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
 
 
-
-
-if [ "$(echo "${APACHE}" | awk  '{print $1}')" == "A" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "intrepid" ]; then
-cat << EOT > /etc/skel/Desktop/Cooperation-iws.desktop
-[Desktop Entry]
-Version=1.0
-Encoding=UTF-8
-Name=Cooperation-iws
-Type=Application
-Terminal=false
-Icon[fr_BE]=gnome-panel-launcher
-Name[fr_BE]=Cooperation-iws
-Exec=firefox http://localhost
-Icon=/usr/share/pixmaps/firefox-3.0.png
-EOT
-fi
-
-
-#start-up inhibition
-
-
-
+#INIT.D INHIBITION
+echo "I: start inhibition"
 mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.silent_install
 cat > /usr/sbin/policy-rc.d << EOF
 #!/bin/sh
@@ -161,6 +129,8 @@ exit 101
 EOF
 chmod 0755 /usr/sbin/policy-rc.d
 
+
+#INITIATING XML DESC FOR WEBAPP
 cd /tmp/
 for langxml in $(ls ciws-lang-*.xml)
 do
