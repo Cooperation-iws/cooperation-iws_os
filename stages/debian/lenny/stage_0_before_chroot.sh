@@ -13,9 +13,9 @@ KEYBLANG=${9}
 #COPYING STAGE SCRIPTS
 cp -r $SCRIPT_DIR/stage_1_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
 cp -r $SCRIPT_DIR/stage_2_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
-cp -r $SCRIPT_DIR/stage_3_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
+cp -r $SCRIPT_DIR/stage_3_lampp_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
 cp -r $SCRIPT_DIR/stage_4_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
-cp -r $SCRIPT_DIR/stage_5_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
+cp -r $SCRIPT_DIR/stage_5_lampp_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
 cp -r $SCRIPT_DIR/stage_7_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
 cp -r $ARTWORK_DIR/$ARTWORK_NAME.artchroot $CHROOT_DIR/chroot/tmp/.
 #COPYING LIB AND CONF SCRIPTS

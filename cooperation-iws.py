@@ -80,7 +80,9 @@ class Cooperationiws:
         self.casperPath = ""
         self.ReqApache = "B"
 	self.scriptParams = '#!/bin/bash\n\n'
-
+	self.buildIso=True		
+	self.buildSquashRoot = True
+		
         APPDOMAIN='cooperationiws'
         LANGDIR='lang'
         # locale
@@ -552,13 +554,8 @@ class Cooperationiws:
 		os.popen("cp "+self.moduleFilename + " " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
 		os.popen("chmod +x " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
 		print _('Proceeding to customization...')		
-		self.customize()		
-		self.LiveCdDescription="Cooperation-iws Live CD"
-		self.buildIso=True		
-		self.buildSquashRoot = True
-		self.buildUsb = False
-		self.buildLiveCdFilename = os.path.join(self.customDir, self.isoname)
-		
+		self.customize()
+		print _('Proceeding to build...')		
 		self.build()
 		
 	
@@ -968,6 +965,9 @@ class Cooperationiws:
 	        # update md5
 	        print _("Updating md5 sums...")
 	        os.popen('cd \"' + os.path.join(self.customDir, "remaster/") + '\"; ' + 'find . -type f -print0 | xargs -0 md5sum > md5sum.txt')
+		
+		self.buildLiveCdFilename = os.path.join(self.customDir, self.isoname)
+		self.LiveCdDescription="Cooperation-iws Live CD"
 				        
 		# remove existing iso
 	        if os.path.exists(self.buildLiveCdFilename):
