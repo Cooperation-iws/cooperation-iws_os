@@ -16,7 +16,7 @@ RMOD_RUN_IN_CHROOT=True
 
 export DEBIAN_FRONTEND=noninteractive
 
-if [ "${APACHE}"  == "A" ]; then
+
 
 
 
@@ -115,7 +115,7 @@ mv /tmp/cooperation-wui-*.xml  $WWW_DIRECTORY/.
 mv /usr/sbin/policy-rc.d.mysql /usr/sbin/policy-rc.d 
 
 
-fi
+
 
 
 

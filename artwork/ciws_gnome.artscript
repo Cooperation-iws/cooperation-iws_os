@@ -1,14 +1,21 @@
 #!/bin/bash
 
-LAMPP_DIRECTORY=$(cat /tmp/working-directory)
-DOSSIER_CHROOT=$LAMPP_DIRECTORY"/chroot"
-CASPER_PATH=$(cat $DOSSIER_CHROOT/tmp/casper_path_updated)
-CIWS_ROOT_DIR=$(cat /tmp/ciws-root-directory)
+local_path=`dirname $0`
 
-rm -r $LAMPP_DIRECTORY/remaster/isolinux
-cp -r $DOSSIER_CHROOT/tmp/ciws_gnome/isolinux $LAMPP_DIRECTORY/remaster
-sed -i "s/casper/$CASPER_PATH/g" $LAMPP_DIRECTORY/remaster/isolinux/isolinux.cfg
-sed -i "s/quiet/quiet vga=791/g" $LAMPP_DIRECTORY/remaster/isolinux/isolinux.cfg	
-sed -i "s/splash/selinux=0/g" $LAMPP_DIRECTORY/remaster/isolinux/isolinux.cfg	
+cd $local_path
+
+local_path=$(pwd)
+
+
+CHROOT_DIR=$1
+
+
+
+#COPYING ARTWORK
+rm -r $CHROOT_DIR/remaster/isolinux
+cp -r $local_path/ciws_gnome/isolinux $CHROOT_DIR/remaster/.
+sed -i "s/casper/live/g" $CHROOT_DIR/remaster/isolinux/isolinux.cfg
+sed -i "s/quiet/quiet vga=791/g" $CHROOT_DIR/remaster/isolinux/isolinux.cfg	
+sed -i "s/splash/selinux=0/g" $CHROOT_DIR/remaster/isolinux/isolinux.cfg	
 
 	

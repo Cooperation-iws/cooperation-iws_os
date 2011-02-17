@@ -39,9 +39,10 @@ class Cooperationiws:
  	self.appName = "Cooperation-iws"
         self.appVersion = "0.9.2"
         self.moduleDir = os.getcwd() + '/modules/'
-	self.scriptDir = os.getcwd() + '/scripts/'
+	self.scriptDir = os.getcwd() + '/stages/'
 	self.xmlDir = os.getcwd() + '/xml/'
 	self.phpDir = os.getcwd() + '/lib/php/'
+	self.artworkDir= os.getcwd() + '/artwork/'
 	self.ciwsRootDir = os.getcwd()
         self.mountDir = '/media/cdrom'
         self.tmpDir = "tmp"
@@ -123,9 +124,10 @@ class Cooperationiws:
 	parser.add_option( "--cms", 
                     dest="cms", default="" ,
                     help="Kind of CMS")
+	#Deprecated, only here for compatibility purpose
 	parser.add_option( "--aufs", action="store_true",
                     dest="aufs", default=False ,
-                    help="Use aufs")
+                    help="Deprecated")
 	parser.add_option( "--webappmirror", 
                     dest="webappmirror", default="http://localhost:81" ,
                     help="Web applictions mirror url")
@@ -218,7 +220,6 @@ class Cooperationiws:
 	self.moduleFilename = options.modulesfile  
 	self.artwork = options.artwork       
 	self.ciwsCms = options.cms
-	self.checkbuttonAufs = options.aufs
 	self.checkbuttonLocalMirror = True
 	self.ciwsDepot = options.webappmirror
 	self.comboboxWebAppMirrors = ""
@@ -552,8 +553,6 @@ class Cooperationiws:
 		os.popen("chmod +x " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
 		print _('Proceeding to customization...')		
 		self.customize()		
-		if self.silent == False:
-			self.launchTerminal()
 		self.endInstall()
 		self.installType = "Cd"
 		self.LiveCdDescription="Cooperation-iws Live CD"
@@ -580,12 +579,7 @@ class Cooperationiws:
 	if not os.path.exists(os.path.join(self.customDir, "scripts")):
 		os.makedirs(os.path.join(self.customDir, "scripts"))        
 	
-	#create shutdown_ws script
-	modExecShutdownWs = '#!/bin/sh\n'
-	fModExec=open(os.path.join(self.customDir, "scripts/shutdown_ws.sh"), 'w')
-	fModExec.write(modExecShutdownWs)
-	fModExec.close()
-
+	
 	# remaster dir
         if self.createRemasterDir == True:
             if os.path.exists(os.path.join(self.customDir, "remaster")) == False:
@@ -658,7 +652,7 @@ class Cooperationiws:
     
     def setupDebianLive(self):
         
-	os.system('bash \"' + self.scriptDir + '/debianlive.sh\" \"' + self.DebianLiveType + '\" \"' + self.DebianLiveReleaseType + '\" \"' + self.LiveCdArch + '\" \"' + self.debMirror + '\" \"' + self.debMirrorSecurity + '\" \"' + self.keyLang + '\" \"' + self.locale + '\" \"' + self.host + '\" \"' + self.user + '\" \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" ')
+	os.system('bash \"' + self.scriptDir + '/debian/debianlive.sh\" \"' + self.DebianLiveType + '\" \"' + self.DebianLiveReleaseType + '\" \"' + self.LiveCdArch + '\" \"' + self.debMirror + '\" \"' + self.debMirrorSecurity + '\" \"' + self.keyLang + '\" \"' + self.locale + '\" \"' + self.host + '\" \"' + self.user + '\" \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" ')
 		
 	self.distVers = self.DebianLiveReleaseType	
 	
@@ -708,182 +702,138 @@ class Cooperationiws:
 	fscriptParams=open(os.path.join(self.customDir, "chroot") + '/tmp/scripts_params', 'w')
 	fscriptParams.write(self.scriptParams)
 	fscriptParams.close()
-	
-
-
-	fcasper=open("/tmp/casper_path", 'w')
-	fcasper.write(self.casperPath)
-	fcasper.close()
 
 	
-	fMirrorUrl=open("/tmp/url_mirroir", 'w')
-        fMirrorUrl.write(self.ciwsDepot)
-        fMirrorUrl.close() 
+	#### STAGE 0 BEFORE CHROOT
 
-
-	#Share Working directory
-	fWorkDir=open('/tmp/working-directory', 'w')
-        fWorkDir.write(self.customDir)
-        fWorkDir.close()
-	#Share Script Root dir	
-	fWorkDir=open('/tmp/ciws-root-directory', 'w')
-        fWorkDir.write(self.ciwsRootDir)
-        fWorkDir.close()
-
-	
-
-	if self.ciwsCms == "Wordpress-goo":
-		self.cms = "cooperation-wui-wordpress-def-0.7.0-081130.tar.gz"
-	else:
-		self.cms = "cooperation-wui-joomla-def-0.8.0-090306.tar.gz"
-
-  	if self.checkbuttonAufs == True:
-		os.popen('sed -i "s/splash/splash union=aufs/g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
-		
-	#Changing Casper name for ISO
-	if self.casperPath == "casper" :        
-		os.popen('mv \"' + os.path.join(self.customDir, "remaster/"+self.casperPath) + '\" \"' + os.path.join(self.customDir, "remaster/live" ) + '\"')
-	self.casperPath = "live"
-
-	os.popen('sed -i "s/vmlinuz1/vmlinuz/g" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg")) 
-	os.popen('sed -i "s/initrd=\/live\/initrd1.img/initrd=\/live\/initrd.gz keyb='+self.keyLang+'/g" ' + os.path.join(self.customDir, "remaster/isolinux/menu.cfg")) 
-	os.popen('sed -i "s/splash//g" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg")) 
-		
-	
-
-	scriptCustomExec = '#!/bin/bash\n\n'
-	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init_Lampp.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
- 	scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "cert/" ) + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
- 	scriptCustomExec += 'cp -r ' + self.scriptDir + 'init.sh' + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
- 	scriptCustomExec += 'cp -r ' + self.scriptDir + 'end_Lampp.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
- 	scriptCustomExec += 'cp -r ' + self.scriptDir + 'shutdown_ws.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
-	scriptCustomExec += 'cp -r ' + self.xmlDir + '/*.xml' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
-	scriptCustomExec += 'cp -r ' + self.phpDir + '/generate_xml_server_desc.php' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
-	scriptCustomExec += 'mkdir ' +  os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + ' ;\n'
- 	scriptCustomExec += 'cd ' +  os.path.join(self.customDir, "chroot/tmp")+'\n'
- 	scriptCustomExec += 'wget ' + self.ciwsDepot +"/" + self.cms  + ' \n'
- 	scriptCustomExec += 'tar -xzf ' + self.cms + ' -C ' +  os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + ' \n'
- 	scriptCustomExec += 'cp -r ' + self.scriptDir + 'cooperation-iws-wui.sh' + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
- 	scriptCustomExec += 'chmod -R 777 ' + os.path.join(self.customDir, "chroot/tmp/cooperation-wui")   + ' ;\n'
- 	scriptCustomExec += 'chmod +x ' + os.path.join(self.customDir, "chroot/tmp/init.sh")   + ' ;\n'
- 	scriptCustomExec += 'chmod +x ' + os.path.join(self.customDir, "chroot/tmp/init_Lampp.sh")   + ' ;\n'
- 	scriptCustomExec += 'chmod +x ' + os.path.join(self.customDir, "chroot/tmp/end_Lampp.sh")   + ' ;\n'
-	scriptCustomExec += 'chmod +x ' + os.path.join(self.customDir, "chroot/tmp/shutdown_ws.sh")   + ' ;\n'
-	scriptCustomExec += 'chmod +x ' + os.path.join(self.customDir, "chroot/tmp/cooperation-iws-wui.sh")   + ' ;\n'
-	scriptCustomExec += 'chmod +x ' + os.path.join(self.customDir, "chroot/tmp/generate_xml_server_desc.php")   + ' ;\n'
-	scriptCustomExec += 'chmod 755 ' + os.path.join(self.customDir, "chroot/tmp/*.xml")   + ' ;\n'
-	if self.ciwsOsType == "Client":
-		scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "artwork/client/" ) + ' ' + os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
- 	
-	if self.artwork != "":
-			scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "artwork/" + self.artwork+".artchroot") + ' ' +  os.path.join(self.customDir, "chroot/tmp/artwork.amod")   + ' ;\n'
- 			scriptCustomExec += 'chmod 777 ' + os.path.join(self.customDir, "chroot/tmp/artwork.amod")   + ' ;\n'
- 			scriptCustomExec += 'cp -r ' + os.path.join(self.ciwsRootDir, "artwork/" + self.artwork) + ' ' +  os.path.join(self.customDir, "chroot/tmp/")   + ' ;\n'
- 			
-	fscriptCustomExec=open(os.path.join(self.customDir, "scriptExec.sh"), 'w')
-        fscriptCustomExec.write(scriptCustomExec)
-        fscriptCustomExec.close()
-        os.popen('chmod a+x ' + os.path.join(self.customDir, "scriptExec.sh"))
-        os.popen('bash \"' + os.path.join(self.customDir, "scriptExec.sh") + '\" > /dev/null 2>&1')
+        os.popen('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_0_before_chroot.sh") + '\" \"' + self.ciwsRootDir + '\" \"' + self.scriptDir + "/" + self.distType + "/" + self.distVers + '\" \"' + self.xmlDir + '\" \"' + self.phpDir + '\" \"' + self.artworkDir + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" \"' + self.artwork + '\" \"' + self.keyLang + '\"')
 	    
-       
-        modExecScrChroot = '#!/bin/sh\n\ncd /tmp ;\n'
-	modExecScrChroot = 'export DEBIAN_FRONTEND=noninteractive\n'
-	modExecScrChroot += 'export DISPLAY=127.0.0.1:5.0 \n'
- 	modExecScrChroot += 'export LC_ALL=C \n'
- 	modExecScrChroot += 'bash \"/tmp/init.sh\"' + ' ;\n '
- 	modExecScr = '#!/bin/sh\n\n'
-        if self.artwork != "":
-		modExecScr += 'chmod +x \"' + os.path.join(self.ciwsRootDir, "artwork/"+self.artwork+".artscript")+ '\"' + ' ;\n '
-		modExecScr += 'bash \"' + os.path.join(self.ciwsRootDir, "artwork/"+self.artwork+".artscript")+ '\"' + ' ;\n '
-	modExecLamppChroot = '#!/bin/sh\n\ncd /tmp ;\n'
-	modExecLamppChroot = 'export DEBIAN_FRONTEND=noninteractive\n'
-	modExecLamppChroot += 'export DISPLAY=127.0.0.1:5.0 \n'
- 	modExecLamppChroot += 'export LC_ALL=C \n'
- 		
+       	print _('Running modules...')
 
+
+	#### STAGE 1 IN CHROOT : KERNEL LEVEL (.kmod)
+
+	modExecKernelChroot = '#!/bin/bash\n\ncd /tmp ;\n'
+	modExecKernelChroot = 'export DEBIAN_FRONTEND=noninteractive\n'
+	modExecKernelChroot += 'export DISPLAY=127.0.0.1:5.0 \n'
+ 	modExecKernelChroot += 'export LC_ALL=C \n'
+ 	modExecKernelChroot += 'bash \"/tmp/stage_1_in_chroot.sh\"' + ' ;\n '
 	if self.execModulesEnabled == True:
-            print _('Running modules...')
-            # find all modules in chroot, chain together and run
-            for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "scripts/")):
-                for execMod in sorted(execModFiles):
-                    ext = os.path.basename(execMod)
-                    if re.search('.rmod', ext):
-                        modExecScr += 'echo -------------------------------------------------\n'
-                        modExecScr += 'echo ------------Cooperation-iws----------------------\n'
-                        modExecScr += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
-                        modExecScr += 'echo -------------------------------------------------\n'
-                        modExecScr += 'echo -------------------------------------------------\n'
-			modExecScr += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
-                        modExecScr += 'bash \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(execMod) + '\"' + ';\n '
-            modExecScrChroot += 'echo Running OS:  \n'
+            modExecKernelChroot += 'echo Running OS:  \n'
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
                     if re.search('.kmod', ext):
-                        modExecScrChroot += 'echo -------------------------------------------------\n'
-                        modExecScrChroot += 'echo ------------Cooperation-iws----------------------\n'
-                        modExecScrChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
-                        modExecScrChroot += 'echo -------------------------------------------------\n'
-                        modExecScrChroot += 'echo -------------------------------------------------\n'
-                        modExecScrChroot += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
-                        modExecScrChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
-	    modExecScrChroot += 'echo Running Servers:  \n'
+                        modExecKernelChroot += 'echo -------------------------------------------------\n'
+                        modExecKernelChroot += 'echo ------------Cooperation-iws----------------------\n'
+                        modExecKernelChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
+                        modExecKernelChroot += 'echo -------------------------------------------------\n'
+                        modExecKernelChroot += 'echo -------------------------------------------------\n'
+                        modExecKernelChroot += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
+                        modExecKernelChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
+	    
+	
+	
+	fModExecChroot=open(os.path.join(self.customDir, "chroot/tmp/kernel-chroot-exec.sh"), 'w')
+        fModExecChroot.write(modExecKernelChroot)
+        fModExecChroot.close()
+        os.popen('chmod a+x ' + os.path.join(self.customDir, "chroot/tmp/kernel-chroot-exec.sh"))
+ 
+       
+	#### STAGE 2 IN CHROOT : SERVER LEVEL (.smod)
+
+	modExecModulesChroot = '#!/bin/bash\n\ncd /tmp ;\n'
+	modExecModulesChroot = 'export DEBIAN_FRONTEND=noninteractive\n'
+	modExecModulesChroot += 'export DISPLAY=127.0.0.1:5.0 \n'
+ 	modExecModulesChroot += 'export LC_ALL=C \n'
+ 	modExecModulesChroot += 'bash \"/tmp/stage_2_in_chroot.sh\"' + ' ;\n '	
+
+	if self.execModulesEnabled == True:
+            
+            modExecModulesChroot += 'echo Running Servers:  \n'
 	    for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
                     if re.search('.smod', ext):
-                        modExecLamppChroot += 'echo -------------------------------------------------\n'
-                        modExecLamppChroot += 'echo ------------Cooperation-iws----------------------\n'
-                        modExecLamppChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
-                        modExecLamppChroot += 'echo -------------------------------------------------\n'
-                        modExecLamppChroot += 'echo -------------------------------------------------\n'
-                        modExecLamppChroot += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
-                        modExecLamppChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
-	    if self.ReqApache == "A":    
-		modExecLamppChroot += 'bash \"/tmp/init_Lampp.sh\"' + ' ;\n '
-		modExecLamppChroot += 'bash \"/tmp/cooperation-iws-wui.sh\"' + ' ;\n '
+                        modExecModulesChroot += 'echo -------------------------------------------------\n'
+                        modExecModulesChroot += 'echo ------------Cooperation-iws----------------------\n'
+                        modExecModulesChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
+                        modExecModulesChroot += 'echo -------------------------------------------------\n'
+                        modExecModulesChroot += 'echo -------------------------------------------------\n'
+                        modExecModulesChroot += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
+                        modExecModulesChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
+
+
+	#### STAGE 3 IN CHROOT : LAMPP INIT LEVEL 
+	
+	if self.ReqApache == "A":    
+		modExecModulesChroot += 'bash \"/tmp/stage_3_lampp_in_chroot.sh\"' + ' ;\n '
+		
+	
+	#### STAGE 4 IN CHROOT : MODULE LEVEL (.rmod)
+
+	modExecModulesChroot += 'bash \"/tmp/stage_4_in_chroot.sh\"' + ' ;\n '
+	if self.execModulesEnabled == True:	   		
+            modExecModulesChroot += 'echo Running Core:  \n'
 	    if self.artwork != "":  
-		modExecScrChroot += 'bash \"/tmp/artwork.amod\"' + ' ;\n '
-	    
-	   		
-            modExecLamppChroot += 'echo Running Core:  \n'
-	    
+		modExecModulesChroot += 'bash \"/tmp/*.artchroot\"' + ' ;\n '
             for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
                     if re.search('.rmod', ext):
-                        modExecLamppChroot += 'echo -------------------------------------------------\n'
-                        modExecLamppChroot += 'echo ------------Cooperation-iws----------------------\n'
-                        modExecLamppChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
-                        modExecLamppChroot += 'echo -------------------------------------------------\n'
-                        modExecLamppChroot += 'echo -------------------------------------------------\n'
-                        modExecLamppChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
-	   
-            
-            modExecScr += '\necho \'--------------------\'\necho \'Modules Finished...\'\n'
-            #modExecScr += '\n read ok < /dev/tty\n'
-            modExecLamppChroot += '\necho \'--------------------\'\necho \'Modules Finished...\'\n'
-            modExecLamppChroot += 'echo Running Core_end \n'
-            modExecLamppChroot += 'bash \"/tmp/end_Lampp.sh\"' + ' ;\n '
-	    modExecLamppChroot += 'sleep 10\n'
+                        modExecModulesChroot += 'echo -------------------------------------------------\n'
+                        modExecModulesChroot += 'echo ------------Cooperation-iws----------------------\n'
+                        modExecModulesChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
+                        modExecModulesChroot += 'echo -------------------------------------------------\n'
+                        modExecModulesChroot += 'echo -------------------------------------------------\n'
+                        modExecModulesChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
+	
+            modExecModulesChroot += '\necho \'--------------------\'\necho \'Modules Finished...\'\n'
+
+
+	#### STAGE 5 IN CHROOT : LAMPP END LEVEL 
+
+	if self.ReqApache == "A":
+		modExecModulesChroot += 'echo Running Core_end \n'
+		modExecModulesChroot += 'bash \"/tmp/stage_5_lampp_in_chroot.sh\"' + ' ;\n '
+		modExecModulesChroot += 'sleep 10\n'
 	    
 
-        fModExec=open(os.path.join(self.customDir, "scripts/module-exec.sh"), 'w')
-        fModExec.write(modExecScr)
-        fModExec.close()
-	os.popen('chmod a+x ' + os.path.join(self.customDir, "scripts/module-exec.sh"))
-        #print modExecScrChroot
-        fModExecChroot=open(os.path.join(self.customDir, "chroot/tmp/module-exec.sh"), 'w')
-        fModExecChroot.write(modExecScrChroot)
+        
+        fModExecChroot=open(os.path.join(self.customDir, "chroot/tmp/modules-chroot-exec.sh"), 'w')
+        fModExecChroot.write(modExecModulesChroot)
         fModExecChroot.close()
-        os.popen('chmod a+x ' + os.path.join(self.customDir, "chroot/tmp/module-exec.sh"))
-        fModExecChroot=open(os.path.join(self.customDir, "chroot/tmp/lampp-exec.sh"), 'w')
-        fModExecChroot.write(modExecLamppChroot)
-        fModExecChroot.close()
-        os.popen('chmod a+x ' + os.path.join(self.customDir, "chroot/tmp/lampp-exec.sh"))
+        os.popen('chmod a+x ' + os.path.join(self.customDir, "chroot/tmp/modules-chroot-exec.sh"))
         os.popen('echo "normal" > '+os.path.join(self.customDir, "chroot/tmp/in_chroot"))
-   	
+  
+ 	
+	#### STAGE 6 OUT OF CHROOT
+
+	modExecAfterChroot = '#!/bin/bash\n\n'
+        if self.artwork != "":
+		modExecAfterChroot += 'bash \"' + os.path.join(self.ciwsRootDir, self.artworkDir + "/" + self.artwork + ".artscript") + '\" \"' + self.customDir + '\" ' + ' ;\n '
+
+	if self.execModulesEnabled == True:
+		for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "scripts/")):
+		        for execMod in sorted(execModFiles):
+		            ext = os.path.basename(execMod)
+		            if re.search('.rmod', ext):
+		                modExecAfterChroot += 'echo -------------------------------------------------\n'
+		                modExecAfterChroot += 'echo ------------Cooperation-iws----------------------\n'
+		                modExecAfterChroot += 'echo Running Module: ' + os.path.basename(execMod) + '\n'
+		                modExecAfterChroot += 'echo -------------------------------------------------\n'
+		                modExecAfterChroot += 'echo -------------------------------------------------\n'
+				modExecAfterChroot += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
+		                modExecAfterChroot += 'bash \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(execMod) + '\"' + ';\n '
+			modExecAfterChroot += '\necho \'--------------------\'\necho \'Modules Finished...\'\n'		
+	fModExec=open(os.path.join(self.customDir, "scripts/out-of-chroot-exec.sh"), 'w')
+	fModExec.write(modExecAfterChroot)
+	fModExec.close()
+	os.popen('chmod a+x ' + os.path.join(self.customDir, "scripts/out-of-chroot-exec.sh"))
+
+	
+	#### PREPARING CHROOT
+
         # mount /proc
         print _("Mounting /proc filesystem...")
         os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
@@ -909,21 +859,45 @@ class Cooperationiws:
         os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
         os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
         os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
-        # run module script
-           
-	os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/module-exec.sh')
+
+	
+	#### RUN STAGE 1 IN CHROOT
+  
+	os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/kernel-chroot-exec.sh')
+
+	
+	#### RUN STAGE 2,(3),4,(5) IN CHROOT
+
 	if commands.getoutput('cat '  +  os.path.join(self.customDir, "chroot/tmp/in_chroot")  + ' | grep \'normal\'') != '':        
-		os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/lampp-exec.sh')
-        os.system('bash \"' + os.path.join(self.customDir, "scripts/module-exec.sh")+ '\"')
+		os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/modules-chroot-exec.sh')
+ 
+       
+	#### RUN STAGE 6 OUT OF CHROOT
+
+	os.system('bash \"' + os.path.join(self.customDir, "scripts/out-of-chroot-exec.sh")+ '\"')
 	os.popen ('cp '	 + os.path.join(self.customDir, "chroot/tmp/ls.log") + ' '+self.customDir)        
+
+
+	#### RUN MANUAL TERMINAL IF INSTALLATION IS NOT SILENT	
+	if self.silent == False:
+			self.launchTerminal()
+
+		
+	#### RUN STAGE 7 FINISHING AND SHUTING DOWN
+
+	os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/opt/ciws/share/lampp/config_post_install.sh"))
+        os.system('chroot ' + os.path.join(self.customDir, "chroot") + ' /opt/ciws/share/lampp/config_post_install.sh')
+  	os.system('chroot \"' + os.path.join(self.customDir,"chroot/") +'\" /tmp/stage_7_in_chroot.sh')
+	
+
+	#### RESTORING CHROOT
+
 	# restore wgetrc
         print _("Restoring wgetrc configuration...")
         os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
         print _("Restoring hostname configuration...")
-            
-	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
+    	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
         os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-
         # umount /proc
         print _("Umounting /proc...")
         os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
@@ -942,28 +916,7 @@ class Cooperationiws:
 
     def launchTerminal(self):
         try:
-            # setup environment
-            # mount /proc
-            print _("Mounting /proc filesystem...")
-            os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
-            # copy apt.conf
-            print _("Copying apt configuration...")
-            if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/")):
-                os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/"))
-            os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d/"))
-            # copy wgetrc
-            print _("Copying wgetrc configuration...")
-            # backup
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
-            os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
-            print _("Copying hostname configuration...")
-            # backup
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
-            os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
-            os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
-           
-	    # HACK: create temporary script for chrooting
+            # HACK: create temporary script for chrooting
             scr = '#!/bin/bash\n#\n#\t(c) cooperation-iws, 2011\n#\nexport HOME=/root\nchroot ' + os.path.join(self.customDir, "chroot/") + '\n'
             fchroot = open(os.path.join(self.customDir, "scriptChroot.sh"), 'w')
             fchroot.write(scr)
@@ -978,87 +931,12 @@ class Cooperationiws:
                 # use xterm if gnome-terminal isn't available
                 os.popen('export HOME=/root ; xterm -bg black -fg white -rightbar -title \"Cooperation-iws Terminal\" -e \"bash ' + os.path.join(self.customDir, "scriptChroot.sh")+ '\"')
 
-            # restore wgetrc
-            print _("Restoring wgetrc configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-            # remove dns info
-            print _("Restoring hostname configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-            # umount /proc
-            print _("Umounting /proc...")
-            os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
-            
-            
-	except Exception, detail:
-            # restore settings
-            # restore wgetrc
-            print _("Restoring wgetrc configuration...")
-            os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-            # umount /proc
-            print _("Umounting /proc...")
-            os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
+ 	except Exception, detail:
             errText = _('Error launching terminal: ')
             print errText, detail
             pass
 
         return
-
-
-# ---------- End of Install ---------- #
-
-    def endInstall(self):
-	print " "
-	print _("INFO: Finishing customization...")
-	print " "    		
-	#Executing shutdown scripts outside chroot
-	os.system('bash \"'+ os.path.join(self.customDir, "scripts/shutdown_ws.sh") + '\"')
-
-   	# mount /proc
-    	print _("Mounting /proc filesystem...")
-    	os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
-
-    	# copy apt.conf
-    	print _("Copying apt.conf configuration...")
-    	if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d")):
-		os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
-   	os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
-
-   	# copy wgetrc
-   	print _("Copying wgetrc configuration...")
-   	# backup
-   	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
-   	os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
-   	print _("Copying hostname configuration...")
-   	
-	# backup
-   	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
-    	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
-    	os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
-    	os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
-     	
-	#execute shutdown web server script
-	print _("Execute shutdown actions...")
-	os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/opt/ciws/share/lampp/config_post_install.sh"))
-        os.system('chroot ' + os.path.join(self.customDir, "chroot") + ' /opt/ciws/share/lampp/config_post_install.sh')
-  	os.system('chroot \"' + os.path.join(self.customDir,"chroot/") +'\" /tmp/shutdown_ws.sh')
-	
-	# cleanup
-    	os.popen('cd \"' + os.path.join(self.customDir, "chroot/tmp/") + '\" ; ' + 'rm -Rf *.rmod 1>&2 2>/dev/null')
-    	os.popen('rm -Rf \"' + os.path.join(self.customDir, "chroot/tmp/module-exec.sh") + '\" 1>&2 2>/dev/null')
-
-    	# restore wgetrc
-    	print _("Restoring wgetrc configuration...")
-    	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-
-    	# remove dns info
-	print _("Restoring hostname configuration...")
-        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
-        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-
-    	# umount /proc
-    	print _("Umounting /proc...")
-    	os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
 
 
 # ---------- Build ---------- #
@@ -1074,14 +952,12 @@ class Cooperationiws:
 	    if os.path.exists(os.path.join(self.customDir, "chroot")):
 	        print _("Creating SquashFS chroot...")
 	        print _("Updating File lists...")
-	        q = ' dpkg-query -W --showformat=\'${Package} ${Version}\n\' '
-	        os.popen('chroot \"' + os.path.join(self.customDir, "chroot/") + '\"' + q + ' > \"' + os.path.join(self.customDir, "remaster/" + self.casperPath + "/filesystem.manifest") + '\"' )
 	        print _("Building SquashFS root...")
-	        os.system('bash \"' + self.scriptDir + '/mksquashfs.sh\" \"' + self.customDir + '\" \"' + self.casperPath + '\"')
+	        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_8_after_chroot.sh") + '\" \"' + self.customDir + '\" ')
 	   	
 	if self.encryption != "disabled":		
 		
-		os.system('bash \"' + self.scriptDir + '/encrypt.sh\"  \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\"')
+		os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_9_encryption_after_chroot.sh") + '\"  \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\"')
 		os.popen('sed -i \"s/boot=live/boot=live encryption=' + self.encryption + '/g\" ' + os.path.join(self.customDir, "remaster/isolinux/isolinux.cfg") ) 
 	
 	# build iso

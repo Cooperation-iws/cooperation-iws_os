@@ -1,8 +1,6 @@
 #!/bin/bash
 
-CASPER_PATH=$(cat /tmp/casper_path)
-DEB_DIST=$(cat /tmp/deb_dist)
-
+. /tmp/scripts_params
 
 echo "I: preparing for Artwork"
 mkdir /etc/skel/Desktop
