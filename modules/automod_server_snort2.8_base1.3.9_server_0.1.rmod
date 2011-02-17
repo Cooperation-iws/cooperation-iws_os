@@ -37,42 +37,6 @@ MOD_NAME=$base_name
 NET_IFACE=$snort_listening_interface
 
 
-#_______________________________________________________________________________________________
-#________________________________________WGET_MIRROIR_WEB_______________________________________
-
-
-function WGET_MIRROIR_WEB
-{
-cd $DL_DIR
-wget http://www.snort.org/dl/old/snort-2.8.0.2.tar.gz
-tar -xzf snort-2.8.0.2.tar.gz
-mv snort-2.8.0.2 snort
-#rm snort-2.8.0.2.tar.gz
-
-cd $DL_DIR
-wget http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Community-Rules-CURRENT.tar.gz
-tar -xzf Community-Rules-CURRENT.tar.gz -C snort/
-#rm snortrules-pr-2.4.tar.gz
-
-cd $DL_DIR
-wget http://surfnet.dl.sourceforge.net/sourceforge/pcre/pcre-7.6.tar.gz
-tar -xzf pcre-7.6.tar.gz
-mv pcre-7.6 pcre
-#rm pcre-7.6.tar.gz
-
-cd $DL_DIR
-wget http://mesh.dl.sourceforge.net/sourceforge/adodb/adodb498.zip
-unzip -q adodb498.zip
-#rm adodb498.zip
-cd $DL_DIR
-wget $URL_CIWS_DEPOT/base_081101.tar.gz
-tar -xzf base_081101.tar.gz
-
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
 
 
 #_______________________________________________________________________________________________
@@ -111,27 +75,6 @@ tar -xzf base_081101.tar.gz
 #_______________________________________________________________________________________________
 #________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________DOWNLOAD_______________________________________________
-
-function DOWNLOAD
-{
-if [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "A" ]; then 
-
-WGET_MIRROIR_WEB
-fi
-if  [ "$(echo "${MIRROIR}" | awk  '{print $1}')" == "B" ]; then
-
-WGET_CIWS_DEPOT
-fi
-
-}
-
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_DOWNLOAD___________________________________________
-
-
 
 
 #_______________________________________________________________________________________________
@@ -142,19 +85,14 @@ function INSTALL
 {
 
 echo "I: Download Snort"
-DOWNLOAD
+WGET_CIWS_DEPOT
 
 #Snort config
 
 
 apt-get install -f --assume-yes --force-yes oinkmaster libpcap-dev libmysqlclient15-dev bison flex mysql-client build-essential
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+
 REGISTERED_KEY=$snort_registration_key
-else
-echo "$MESS_REGISTER"
-echo "key:"
-read REGISTERED_KEY < /dev/tty
-fi
 if [ "$(echo $REGISTERED_KEY | grep '[0-9a-zA-Z]')" ] ; then
 sed -i "s/url = http:\/\/www.snort.org\/dl\/rules\/snortrules-snapshot-2_2.tar.gz/url = http:\/\/www.snort.org\/pub-bin\/oinkmaster.cgi\/$REGISTERED_KEY\/snortrules-snapshot-2.8.tar.gz/" /etc/oinkmaster.conf
 

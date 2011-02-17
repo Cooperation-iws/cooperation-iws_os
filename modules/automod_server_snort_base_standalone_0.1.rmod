@@ -83,13 +83,8 @@ WGET_CIWS_DEPOT
 
 
 apt-get install -f --assume-yes --force-yes oinkmaster libpcap-dev libmysqlclient15-dev bison flex mysql-client build-essential
-if [ "$(echo $SILENT | awk  '{print $1}')" != "" ]; then
+
 REGISTERED_KEY=$snort_registration_key
-else
-echo "$MESS_REGISTER"
-echo "key:"
-read REGISTERED_KEY < /dev/tty
-fi
 if [ "$(echo $REGISTERED_KEY | grep '[0-9a-zA-Z]')" ] ; then
 sed -i "s/url = http:\/\/www.snort.org\/dl\/rules\/snortrules-snapshot-2_2.tar.gz/url = http:\/\/www.snort.org\/pub-bin\/oinkmaster.cgi\/$REGISTERED_KEY\/snortrules-snapshot-2.8.tar.gz/" /etc/oinkmaster.conf
 

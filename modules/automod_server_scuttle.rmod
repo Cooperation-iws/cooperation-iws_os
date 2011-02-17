@@ -72,7 +72,7 @@ sed -i "s/Scuttle/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf
 sed -i "s/SCUTTLE_MYSQL_PWD/${SCUTTLE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
 sed -i "s/admin@example.org/${scuttle_admin_email[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
 
-chown -R www-data $WWW_DIRECTORY/$MOD_NAME[$count]/
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 
 done
 }
