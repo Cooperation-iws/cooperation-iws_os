@@ -28,6 +28,9 @@ Chroot ()
 	return "${?}"
 }
 
+
+echo $PASSPHRASE > /tmp/squashfspwd
+
 case "${LH_ENCRYPTION}" in
 	aes128|aes192|aes256)
 		;;
@@ -75,6 +78,7 @@ do
 done
 	
 # Cleanup temporary filesystems
+rm /tmp/squashfspwd
 rm -f $DOSSIER_REMASTER/${INITFS}/filesystem.${LH_CHROOT_FILESYSTEM}.tmp
 rm -f $WORKING_DIRECTORY/chroot/filesystem.${LH_CHROOT_FILESYSTEM}
 rm -f $WORKING_DIRECTORY/chroot/filesystem.${LH_CHROOT_FILESYSTEM}.tmp

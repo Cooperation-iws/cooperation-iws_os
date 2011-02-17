@@ -18,17 +18,10 @@ RMOD_REQ_APACHE=True
 
 RMOD_REQ_APACHE=True
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
 
 
 . /tmp/scripts_params
 
-
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
 MOD_NAME=${clickheat_name}
@@ -59,25 +52,8 @@ chown -R www-data $WWW_DIRECTORY/$MOD_NAME
 
 function CREATE_WUI
 {
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION</item_category>
-	<item_url>/$MOD_NAME</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE</item_desc>
-	<item_admin_url>/$MOD_NAME</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui.xml
-echo "
-<item>
-	<item_category>$RMOD_DESCRIPTION_FR</item_category>
-	<item_url>/$MOD_NAME</item_url>
-	<item_name>$RMOD_NAME</item_name>
-	<item_desc>$RMOD_VERBOSE_FR</item_desc>
-	<item_admin_url>/$MOD_NAME</item_admin_url>
-</item>
-" >> $WWW_DIRECTORY/cooperation-wui-fr.xml
-
+cd /tmp/
+./generate_xml_server_desc.php "$RMOD_NAME" "/${MOD_NAME}" "/${MOD_NAME}" 
 
 }
 #_______________________________________________________________________________________________
@@ -86,7 +62,7 @@ echo "
 
 
 
-echo "I: Install Awstats"
+echo "I: Install Clickheat"
 INSTALL
 CREATE_WUI
-echo "I: End of install Awstats"
+echo "I: End of install Clickheat"

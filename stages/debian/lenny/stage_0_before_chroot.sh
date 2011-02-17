@@ -17,7 +17,13 @@ cp -r $SCRIPT_DIR/stage_3_lampp_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
 cp -r $SCRIPT_DIR/stage_4_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
 cp -r $SCRIPT_DIR/stage_5_lampp_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
 cp -r $SCRIPT_DIR/stage_7_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
+
+#COPYING ARTWORK IF ASKED
+if [ "$(ARTWORK_NAME)" ]; then
 cp -r $ARTWORK_DIR/$ARTWORK_NAME.artchroot $CHROOT_DIR/chroot/tmp/.
+cp -r $ARTWORK_DIR/$ARTWORK_NAME $CHROOT_DIR/chroot/tmp/.
+fi
+
 #COPYING LIB AND CONF SCRIPTS
 cp -r $XML_DIR/*.xml $CHROOT_DIR/chroot/tmp/.
 cp -r $PHP_DIR/*.php $CHROOT_DIR/chroot/tmp/.

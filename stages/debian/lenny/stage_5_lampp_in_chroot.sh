@@ -7,7 +7,7 @@
 . /tmp/app_params
 
 
-if [ "${APACHE}"  == "A" ]; then
+#ENDING XML WEB DESC FILES
 cd /tmp/
 for langxml in $(ls ciws-lang-*.xml)
 do
@@ -21,7 +21,7 @@ echo "</items>" >> $WWW_DIRECTORY/cooperation-wui-$lang.xml
 echo "</items>" >> $WWW_DIRECTORY/admin/cooperation-wui-$lang.xml
 
 done
-fi
+
 
 
 echo "I: End of Customization"

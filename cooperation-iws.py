@@ -767,11 +767,11 @@ class Cooperationiws:
 	
 	#### STAGE 4 IN CHROOT : MODULE LEVEL (.rmod)
 
+
 	modExecModulesChroot += 'bash \"/tmp/stage_4_in_chroot.sh\"' + ' ;\n '
 	if self.execModulesEnabled == True:	   		
             modExecModulesChroot += 'echo Running Core:  \n'
-	    if self.artwork != "":  
-		modExecModulesChroot += 'bash \"/tmp/*.artchroot\"' + ' ;\n '
+	    
             for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "chroot/tmp/")):
                 for execMod in sorted(execModFiles):
                     ext = os.path.basename(execMod)
@@ -784,14 +784,15 @@ class Cooperationiws:
                         modExecModulesChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
 	
             modExecModulesChroot += '\necho \'--------------------\'\necho \'Modules Finished...\'\n'
-
+	if self.artwork != "":  
+		modExecModulesChroot += 'bash \"/tmp/' + self.artwork + '.artchroot\"' + ' ;\n '
 
 	#### STAGE 5 IN CHROOT : LAMPP END LEVEL 
 
 	if self.ReqApache == "A":
 		modExecModulesChroot += 'echo Running Core_end \n'
 		modExecModulesChroot += 'bash \"/tmp/stage_5_lampp_in_chroot.sh\"' + ' ;\n '
-		modExecModulesChroot += 'sleep 10\n'
+		modExecModulesChroot += 'sleep 5\n'
 	    
 
         
