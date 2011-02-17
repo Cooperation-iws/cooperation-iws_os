@@ -553,8 +553,6 @@ class Cooperationiws:
 		os.popen("chmod +x " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
 		print _('Proceeding to customization...')		
 		self.customize()		
-		self.endInstall()
-		self.installType = "Cd"
 		self.LiveCdDescription="Cooperation-iws Live CD"
 		self.buildIso=True		
 		self.buildSquashRoot = True
