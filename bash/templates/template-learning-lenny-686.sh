@@ -212,3 +212,4 @@ scuttle_mysql_pwd[1]="$mysql_generic_pwd"
 sedna_name[1]="Sedna_1"
 sedna_admin_email[1]="admin.local@$domain"
 sedna_mysql_pwd[1]="$mysql_generic_pwd"
+#Ciwscms 0.8.0

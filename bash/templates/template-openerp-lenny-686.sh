@@ -28,3 +28,4 @@ postfix_relay_authentication_password=""
 #Openssh server 0.1
 deactivate_ssh_root_login="y"
 #DNS server Lenny
+#Ciwscms 0.8.0
