@@ -201,9 +201,7 @@ class Cooperationiws:
 
         (options, args) = parser.parse_args()
         
-        print _('INFO: Text only version...')
-
-	#Init parameters and variables
+        #Init parameters and variables
 
 	self.commandLine = True
 	self.customDir = options.directory
@@ -908,7 +906,7 @@ class Cooperationiws:
         statusMsgISO = _('      Finished. ISO located at: ')
         print "\033[1m "+ statusMsgISO + "\033[0m"+ self.customDir + '/' + self.isoname 
 
-        print  _("Build Complete...")
+       
 
 
 # ---------- MAIN ----------#

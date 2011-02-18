@@ -22,7 +22,7 @@ lang_1=$(echo $langxml | cut -d'-' -f3)
 lang=$(echo $lang_1 | cut -d'.' -f1)
 
 echo "</items>" >> $LAMPP_DIRECTORY/etc/ciws-content/cooperation-wui-$lang.xml
-
+chmod 755 $LAMPP_DIRECTORY/etc/ciws-content/cooperation-wui-$lang.xml
 done
 
 

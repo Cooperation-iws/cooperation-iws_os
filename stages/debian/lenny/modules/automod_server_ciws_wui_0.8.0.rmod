@@ -1,0 +1,85 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Ciwscms 0.8.0'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/cooperation-wui-joomla-def-0.8.0-090306.tar.gz
+tar -xzf cooperation-wui-joomla-def-0.8.0-090306.tar.gz
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Joomla"
+
+WGET_CIWS_DEPOT
+
+
+cd $DL_DIR
+
+cp -r cooperation-wui-joomla-def-0.8.0-090306/* /var/www/.
+
+
+NOM_SPHIDER="Sphider"
+
+sed -i "15s/Sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
+sed -i "16s/Sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
+sed -i "17s/Sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
+
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
+echo "grant all on ${NOM_SPHIDER}.* to ${NOM_SPHIDER}@localhost identified by '$SPHIDER_MYSQL_PWD'; flush privileges;" > SPHIDER_db.sql
+$BIN_MYSQL -u root --default_character_set utf8 < SPHIDER_db.sql mysql
+rm SPHIDER_db.sql
+
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/Cooperation-iws/cooperation-iws.sql
+
+echo "grant all on ciwscms.* to ciwscms@localhost identified by 'CIWS_MYSQL_PWD'; flush privileges;" > CIWS_db.sql
+$BIN_MYSQL -u root --default_character_set utf8 < CIWS_db.sql mysql
+
+echo "
+cp /opt/ciws/etc/ciws-content/cooperation-wui-fr.xml /var/www/.
+cp /opt/ciws/etc/ciws-content/cooperation-wui-en.xml /var/www/cooperation-wui.xml
+" >> /opt/ciws/share/lampp/config_post_install.sh 
+
+chown -R www-data $WWW_DIRECTORY/Cooperation-iws
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+echo "I: Install Ciws cms"
+INSTALL
+echo "I: End of install Ciws cms"

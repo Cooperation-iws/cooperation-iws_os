@@ -18,7 +18,7 @@ echo "I:FINISH SETUP LAMPP SERVER"
 #CONFIGURING DEFAULT SITE FOR APACHE2
 echo "I: Configuring Apache2 for domains"
 
-if [ "$domain" ] && [ -d /etc/bind ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ]; then
+if [ "$domain" ] && [ -d /etc/bind ] && [ "$DEB_DIST" == "lenny" ]; then
 sed -i "3G" /etc/apache2/sites-available/default
 sed -i "3G" /etc/apache2/sites-available/default
 sed -i "3G" /etc/apache2/sites-available/default

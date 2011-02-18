@@ -147,6 +147,6 @@ lang=$(echo $lang_1 | cut -d'.' -f1)
 
 echo "<?xml version=\"1.0\"?>
 <items>" > $LAMPP_DIRECTORY/etc/ciws-content/cooperation-wui-$lang.xml
-
+chmod 777 $LAMPP_DIRECTORY/etc/ciws-content/cooperation-wui-$lang.xml
 done
 

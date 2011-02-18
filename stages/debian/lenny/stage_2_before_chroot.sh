@@ -59,9 +59,9 @@ cp -f /etc/wgetrc $WORK_DIR/chroot/etc/wgetrc
 
 #PREPARING HOSTNAME
 mv -f $WORK_DIR/chroot/etc/hosts $WORK_DIR/chroot/etc/hosts.orig
-mv -f $WORK_DIRchroot/etc/hostname $WORK_DIR/chroot/etc/hostname.orig
+#mv -f $WORK_DIRchroot/etc/hostname $WORK_DIR/chroot/etc/hostname.orig
 cp -f /etc/hosts $WORK_DIR/chroot/etc/hosts
-cp -f /etc/hostname $WORK_DIR/chroot/etc/hostname
+#cp -f /etc/hostname $WORK_DIR/chroot/etc/hostname
 
 #PREPARING RESOLV.CONF
 cp -f /etc/resolv.conf $WORK_DIR/chroot/etc/resolv.conf
