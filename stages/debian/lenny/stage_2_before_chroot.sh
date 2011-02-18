@@ -11,12 +11,12 @@ ARTWORK_NAME=$8
 KEYBLANG=${9}
 
 #COPYING STAGE SCRIPTS
-cp -r $SCRIPT_DIR/stage_1_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
-cp -r $SCRIPT_DIR/stage_2_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
-cp -r $SCRIPT_DIR/stage_3_lampp_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
+cp -r $SCRIPT_DIR/stage_3_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
 cp -r $SCRIPT_DIR/stage_4_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
 cp -r $SCRIPT_DIR/stage_5_lampp_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
-cp -r $SCRIPT_DIR/stage_7_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
+cp -r $SCRIPT_DIR/stage_6_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
+cp -r $SCRIPT_DIR/stage_7_lampp_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
+cp -r $SCRIPT_DIR/stage_9_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
 
 #COPYING ARTWORK IF ASKED
 if [ "${ARTWORK_NAME}" ]; then

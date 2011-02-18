@@ -13,6 +13,6 @@ fi
 
 mount -o loop "$ISO_NAME" "$MOUNT_DIR"
 
-rsync -at --del "$MOUNT_DIR" "$WORK_DIR/remaster"
+rsync -at --del $MOUNT_DIR/* "$WORK_DIR/remaster/."
 
 umount "$MOUNT_DIR"
