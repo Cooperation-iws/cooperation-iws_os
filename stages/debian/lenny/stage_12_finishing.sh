@@ -10,10 +10,12 @@ ISO_NAME=$2
 ARCH=$3
 LIVE_CD_DESC=""
 
-echo "I:FINISHING - CREATING NEW ISO FILE"
+echo "I:FINISHING - CREATING MD5SUMS"
 
 cd $WORK_DIR/remaster ; find . -type f -print0 | xargs -0 md5sum > $WORK_DIR/remaster/md5sum.txt
 
+
+echo "I:FINISHING - CREATING NEW ISO FILE"
 
 rm -Rf $WORK_DIR/$ISO_NAME
 
@@ -31,4 +33,4 @@ mkisofs -r -o $WORK_DIR/$ISO_NAME -b "isolinux/isolinux.bin" -c "isolinux/boot.c
 fi
 
 
-md5sum $WORK_DIR/$ISO_NAME > $WORK_DIR/$WORK_DIR/$ISO_NAME.md5
+md5sum $WORK_DIR/$ISO_NAME > $WORK_DIR/$ISO_NAME.md5
