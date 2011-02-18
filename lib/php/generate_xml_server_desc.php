@@ -2,7 +2,7 @@
 <?php
 #
 #
-# USAGE: . generate_xml_server_desc.php #Destination folder" "Module name Module Version" "Main url" "Admin url"
+# USAGE: . generate_xml_server_desc.php "Destination folder" "Module name Module Version" "Main url" "Admin url"
 #
 
 
