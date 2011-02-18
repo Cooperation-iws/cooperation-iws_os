@@ -81,6 +81,9 @@ UPDATE ${MOD_NAME[$count]}.og_users SET email = '${opengoo_admin_email[$count]}'
 $BIN_MYSQL -u root < opengoo_credential.sql
 #clear cache
 rm $WWW_DIRECTORY/${MOD_NAME[$count]}/cache/autoloader.php
+
+sed -i "s/http:\/\/localhost/http:\/\/'.\$HTTP_SERVER_VARS[\"SERVER_NAME\"].'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.php
+
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 done
 

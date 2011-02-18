@@ -1,11 +1,20 @@
 #!/bin/bash
 #
-#STAGE 10 BUILDING SQUASHFS FROM CHROOT
+#STAGE 10 CLEANING CHROOT - BUILDING SQUASHFS FROM CHROOT
 #
 #
 #
 
 WORK_DIR=$1
+
+echo "I:CLEANING CHROOT"
+
+#RESTORING WGETRC
+mv -f $WORK_DIR/chroot/etc/wgetrc.orig $WORK_DIR/chroot/etc/wgetrc
+
+#UMOUNTING PROC
+umount $WORK_DIR/chroot/proc/
+
 
 echo "I:BUILDING SQUASHFS FROM CHROOT"
 

@@ -101,7 +101,7 @@ for (( count=1; count<=$NB_SPIP; count++ ))
 
 do
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}/ecrire" 
 
 
 done
@@ -109,27 +109,7 @@ done
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________CREATE_INSTALL_SCRIPT__________________________________
-
-
-function CREATE_INSTALL_SCRIPT
-{
-
-for (( count=1; count<=$NB_SPIP; count++ ))
-do
-echo "
-#Spip
-" >> $LAMPP_DIRECTORY/share/lampp/config_post_install.sh
-done
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
-
 echo "I: Install Spip"
 INSTALL
 CREATE_WUI
-
-CREATE_INSTALL_SCRIPT
 echo "I: End of install Spip"

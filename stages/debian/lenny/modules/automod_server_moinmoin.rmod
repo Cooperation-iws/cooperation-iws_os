@@ -55,11 +55,15 @@ ScriptAlias /$MOD_NAME \"/var/www/moin/mywiki/moin.cgi\"
 
 " >> /etc/apache2/conf.d/moin
 
-mv /etc/moin /var/share/etc/
+mv /etc/moin $LAMPP_DIRECTORY/etc/
 
-ln -s /var/share/etc/moin /etc/moin
+ln -s $LAMPP_DIRECTORY/etc/moin /etc/moin
 
 /etc/init.d/apache2 restart
+
+sudo chown -R www-data /etc/moin
+
+sudo chmod -R 777 /etc/moin
 
 
 }

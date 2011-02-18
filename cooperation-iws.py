@@ -571,7 +571,7 @@ class Cooperationiws:
 	print " "
 	print _("RUN STAGE 0...")
 	print " "
-	os.popen('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_0_start.sh") + '\" \"' + self.isoFilename + '\" \"' + self.mountDir + '\" \"' + self.customDir + '\"')
+	os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_0_start.sh") + '\" \"' + self.isoFilename + '\" \"' + self.mountDir + '\" \"' + self.customDir + '\"')
 	print " "
 	print _("STAGE 0 COMPLETED")	
 	print " "
@@ -584,7 +584,7 @@ class Cooperationiws:
 	print " "
 	print _("RUN STAGE 1...")
 	print " "
-	os.popen('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_1_chroot_creation.sh") + '\" \"' + self.customDir + '\" \"' + self.casperPath + '\"')
+	os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_1_chroot_creation.sh") + '\" \"' + self.customDir + '\" \"' + self.casperPath + '\"')
 	print " "
         print _("STAGE 1 COMPLETED")	
 	print " "
@@ -657,7 +657,7 @@ class Cooperationiws:
 	print " "
 	print _("RUN STAGE 2...")
  	print " "
-        os.popen('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_2_before_chroot.sh") + '\" \"' + self.ciwsRootDir + '\" \"' + self.scriptDir + "/" + self.distType + "/" + self.distVers + '\" \"' + self.xmlDir + '\" \"' + self.phpDir + '\" \"' + self.artworkDir + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" \"' + self.artwork + '\" \"' + self.keyLang + '\"')
+        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_2_before_chroot.sh") + '\" \"' + self.ciwsRootDir + '\" \"' + self.scriptDir + "/" + self.distType + "/" + self.distVers + '\" \"' + self.xmlDir + '\" \"' + self.phpDir + '\" \"' + self.artworkDir + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" \"' + self.artwork + '\" \"' + self.keyLang + '\"')
 	print " "
 	print _("STAGE 2 COMPLETED")	
 	print " "
@@ -665,7 +665,7 @@ class Cooperationiws:
        	print _('Running modules...')
 
 
-	#### STAGE 3 IN CHROOT : KERNEL LEVEL (.kmod)
+	#### PREPARE STAGE 3 IN CHROOT : KERNEL LEVEL (.kmod)
 
 	modExecKernelChroot = '#!/bin/bash\n\ncd /tmp ;\n'
 	modExecKernelChroot = 'export DEBIAN_FRONTEND=noninteractive\n'
@@ -694,7 +694,7 @@ class Cooperationiws:
         os.popen('chmod a+x ' + os.path.join(self.customDir, "chroot/tmp/kernel-chroot-exec.sh"))
  
        
-	#### STAGE 4 IN CHROOT : SERVER LEVEL (.smod)
+	#### PREPARE STAGE 4 IN CHROOT : SERVER LEVEL (.smod)
 
 	modExecModulesChroot = '#!/bin/bash\n\ncd /tmp ;\n'
 	modExecModulesChroot = 'export DEBIAN_FRONTEND=noninteractive\n'
@@ -718,13 +718,13 @@ class Cooperationiws:
                         modExecModulesChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
 
 
-	#### STAGE 5 IN CHROOT : LAMPP INIT LEVEL 
+	#### PREPARE STAGE 5 IN CHROOT : LAMPP INIT LEVEL 
 	
 	if self.ReqApache == "A":    
 		modExecModulesChroot += 'bash \"/tmp/stage_5_lampp_in_chroot.sh\"' + ' ;\n '
 		
 	
-	#### STAGE 6 IN CHROOT : MODULE LEVEL (.rmod)
+	#### PREPARE STAGE 6 IN CHROOT : MODULE LEVEL (.rmod)
 
 
 	modExecModulesChroot += 'bash \"/tmp/stage_6_in_chroot.sh\"' + ' ;\n '
@@ -746,7 +746,7 @@ class Cooperationiws:
 	if self.artwork != "":  
 		modExecModulesChroot += 'bash \"/tmp/' + self.artwork + '.artchroot\"' + ' ;\n '
 
-	#### STAGE 7 IN CHROOT : LAMPP END LEVEL 
+	#### PREPARE STAGE 7 IN CHROOT : LAMPP END LEVEL 
 
 	if self.ReqApache == "A":
 		modExecModulesChroot += 'echo Running Core_end \n'
@@ -762,7 +762,7 @@ class Cooperationiws:
         os.popen('echo "normal" > '+os.path.join(self.customDir, "chroot/tmp/in_chroot"))
   
  	
-	#### STAGE 8 OUT OF CHROOT
+	#### PREPARE STAGE 8 OUT OF CHROOT
 
 	modExecAfterChroot = '#!/bin/bash\n\n'
         if self.artwork != "":
@@ -788,35 +788,6 @@ class Cooperationiws:
 	os.popen('chmod a+x ' + os.path.join(self.customDir, "scripts/out-of-chroot-exec.sh"))
 
 	
-	#### PREPARING CHROOT
-
-        # mount /proc
-        print _("Mounting /proc filesystem...")
-        os.popen('mount --bind /proc \"' + os.path.join(self.customDir, "chroot/proc") + '\"')
-        # mount /sys
-        print _("Mounting /sys filesystem...")
-        #os.popen('mount -t sysfs none \"' + os.path.join(self.customDir, "chroot/sys") + '\"')
-        # mount 
-	print _("Mounting /dev/pts filesystem...")
-        #os.popen('mount -t devpts none \"' + os.path.join(self.customDir, "chroot/dev/pts") + '\"')
-        # copy apt.conf
-        print _("Copying apt.conf configuration...")
-        if not os.path.exists(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d")):
-                os.makedirs(os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
-        os.popen('cp -f /etc/apt/apt.conf.d/* ' + os.path.join(self.customDir, "chroot/etc/apt/apt.conf.d"))
-        # copy wgetrc
-        print _("Copying wgetrc configuration...")
-        # backup
-        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\"')
-        os.popen('cp -f /etc/wgetrc ' + os.path.join(self.customDir, "chroot/etc/wgetrc"))
-        print _("Copying hostname configuration...")
-        # backup
-        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\"')
-        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\"')
-        os.popen('cp -f /etc/hosts ' + os.path.join(self.customDir, "chroot/etc/hosts"))
-        os.popen('cp -f /etc/hostname ' + os.path.join(self.customDir, "chroot/etc/hostname"))
-
-	
 	#### RUN STAGE 3 IN CHROOT
   
 	print " "
@@ -836,7 +807,7 @@ class Cooperationiws:
 	if commands.getoutput('cat '  +  os.path.join(self.customDir, "chroot/tmp/in_chroot")  + ' | grep \'normal\'') != '':        
 		os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/modules-chroot-exec.sh')
 	print " "
- 	print _("STAGE 4 TO 7 COMPLETED")	
+ 	print _("STAGES 4 TO 7 COMPLETED")	
 	print " "
 
        
@@ -868,27 +839,7 @@ class Cooperationiws:
 	print _("STAGE 9 COMPLETED")
 	print " "
 
-	#### RESTORING CHROOT
-
-	# restore wgetrc
-        print _("Restoring wgetrc configuration...")
-        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/wgetrc.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/wgetrc") + '\"')
-        print _("Restoring hostname configuration...")
-    	os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hosts.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hosts") + '\"')
-        os.popen('mv -f \"' + os.path.join(self.customDir, "chroot/etc/hostname.orig") + '\" \"' + os.path.join(self.customDir, "chroot/etc/hostname") + '\"')
-        # umount /proc
-        print _("Umounting /proc...")
-        os.popen('umount \"' + os.path.join(self.customDir, "chroot/proc/") + '\"')
-	# umount /sys
-	print _("Umounting /sys...")
-        #os.popen('umount \"' + os.path.join(self.customDir, "chroot/sys/") + '\"')
-	# umount /dev/pts
-	print _("Umounting /dev/pts...")
-        #os.popen('umount \"' + os.path.join(self.customDir, "chroot/dev/pts") + '\"')
-	
-
-	
-        	
+	        	
 
 # ---------- Launch chroot terminal if install is not silent ---------- #
 
@@ -921,21 +872,15 @@ class Cooperationiws:
 
     def build(self):
 
-	print " "
-	print _("INFO: Starting Build...")
-	print " "
-	# build squash root
-	if self.buildSquashRoot == True:
-	    # create squashfs root
-	    if os.path.exists(os.path.join(self.customDir, "chroot")):
-	        
+	if os.path.exists(os.path.join(self.customDir, "chroot")):
+		
 		#### RUN STAGE 10 AFTER CHROOT		
 		print " "
-	        print _("RUN STAGE 10...")
+		print _("RUN STAGE 10...")
 		print " "
-	        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_10_after_chroot.sh") + '\" \"' + self.customDir + '\" ')
+		os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_10_after_chroot.sh") + '\" \"' + self.customDir + '\" ')
 		print " "
-	        print _("STAGE 10 COMPLETED")
+		print _("STAGE 10 COMPLETED")
 		print " "
 	        
 	if self.encryption != "disabled":		
@@ -951,9 +896,7 @@ class Cooperationiws:
 	
 	# build iso
 	if self.buildIso == True:
-	    # create iso
-	    if os.path.exists(os.path.join(self.customDir, "remaster")):
-		
+	    		
 		#### RUN STAGE 12 FINISHING		
 		
 		print " "

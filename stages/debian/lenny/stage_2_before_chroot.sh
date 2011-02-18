@@ -48,3 +48,11 @@ sed -i "s/splash//g" $CHROOT_DIR/remaster/isolinux/isolinux.cfg
 if [ -d $CHROOT_DIR/remaster/casper ]; then
 mv $CHROOT_DIR/remaster/casper $CHROOT_DIR/remaster/live
 fi
+
+#MOUNTING PROC FOR CHROOT
+mount --bind /proc $CHROOT_DIR/chroot/proc
+
+#PREPARING WGETRC
+mv -f $CHROOT_DIR/chroot/etc/wgetrc $CHROOT_DIR/chroot/etc/wgetrc.orig
+cp -f /etc/wgetrc $CHROOT_DIR/chroot/etc/wgetrc
+

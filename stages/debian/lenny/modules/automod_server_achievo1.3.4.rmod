@@ -71,7 +71,7 @@ rm ACHIEVO_db.sql
 sed -i "26s/Achievo/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
 sed -i "28s/ACHIEVO_MYSQL_PWD/${ACHIEVO_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
 sed -i "27s/Achievo/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
-sed -i "92s/cooperation/${achievo_admin_pwd[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
+sed -i "92s/= \"\";/= \"cooperation\";/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 done
