@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+#STAGE 10 BUILDING SQUASHFS FROM CHROOT
+#
+#
+#
 
 WORK_DIR=$1
 

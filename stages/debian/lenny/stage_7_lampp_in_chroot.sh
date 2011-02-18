@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+#STAGE 7 FINISH SETUP LAMPP SERVER - WORK IF MODULES HAVE REQ_APACHE=true
+#
+#
+#
 
 
 

@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+#STAGE 1 COPYING CHROOT
+#
+#
+#
 
 WORK_DIR=$1
 CASPER_PATH=$2

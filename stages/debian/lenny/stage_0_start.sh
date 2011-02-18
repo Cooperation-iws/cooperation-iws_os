@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+#STAGE 0 COPYING ISO
+#
+#
+#
 
 ISO_NAME=$1
 MOUNT_DIR=$2

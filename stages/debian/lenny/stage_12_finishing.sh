@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+#STAGE 12 FINISHING - CREATING NEW ISO FILE
+#
+#
+#
 
 WORK_DIR=$1
 ISO_NAME=$2

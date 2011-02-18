@@ -1,5 +1,9 @@
 #!/bin/bash
-
+#
+#STAGE 11 WORK IF --encryption HAS BEEN SELECTED
+#
+#
+#
 LH_ENCRYPTION=$1
 PASSPHRASE=$2
 WORKING_DIRECTORY=$3

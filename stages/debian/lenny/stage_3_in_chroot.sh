@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+#STAGE 3 INIT CHROOT FOR MODULES
+#
+#
+#
 
 
 RMOD_ENGINE=1.0

@@ -1,5 +1,9 @@
 #!/bin/bash
-
+#
+#STAGE 9 SHUTTING DOWN ALL SERVER - CLOSING ACTION FROM STAGE 3
+#
+#
+#
 
 
 . /tmp/scripts_params

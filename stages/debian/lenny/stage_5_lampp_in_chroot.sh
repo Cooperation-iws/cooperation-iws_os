@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+#STAGE 5 SETUP LAMPP SERVER - WORK IF MODULES HAVE REQ_APACHE=true
+#
+#
+#
 
 
 RMOD_ENGINE=1.0
