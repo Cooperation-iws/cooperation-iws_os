@@ -903,7 +903,7 @@ class Cooperationiws:
 	        		
 	# print status message
        
-        statusMsgISO = _('      Finished. ISO located at: ')
+        statusMsgISO = _('Finished. ISO located at: ')
         print "\033[1m "+ statusMsgISO + "\033[0m"+ self.customDir + '/' + self.isoname 
 
        

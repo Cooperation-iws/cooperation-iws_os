@@ -66,14 +66,6 @@ DEBIAN_FRONTEND="dialog"
 apt-get install --assume-yes --force-yes libnet-ssleay-perl libauthen-pam-perl libio-pty-perl libmd5-perl openssl
 #WEBMIN CONFIG
 
-
-echo "
-GREP=$(ps aux | grep 'share/webmin')
-PID=$(echo $GREP | cut -d' ' -f2)
-kill $PID
-killall \"/usr/bin/perl /usr/share/webmin/miniserv.pl /etc/webmin/miniserv.conf\"
-" >> /tmp/shutdown_ws.sh
-
 cd $DL_DIR
 
 GREP=$(ps aux | grep 'share/webmin')
@@ -84,6 +76,12 @@ killall "/usr/bin/perl /usr/share/webmin/miniserv.pl /etc/webmin/miniserv.conf"
 dpkg -i webmin_1.420_all.deb
 
 /usr/share/webmin/changepass.pl /etc/webmin root $(cat /tmp/passwd.txt)
+
+GREP=$(ps aux | grep 'share/webmin')
+PID=$(echo $GREP | cut -d' ' -f2)
+kill $PID
+killall "/usr/bin/perl /usr/share/webmin/miniserv.pl /etc/webmin/miniserv.conf"
+
 
 mv /etc/webmin $LAMPP_DIRECTORY/etc/
 mv /usr/share/webmin $LAMPP_DIRECTORY/usr/share
@@ -104,6 +102,9 @@ mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
 
 function CREATE_WUI
 {
+
+apt-get install --assume-yes --force-yes php5-cli
+
 cd /tmp/
 ./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[https://localhost:10000]]>" "<![CDATA[https://localhost:10000]]>" 
 

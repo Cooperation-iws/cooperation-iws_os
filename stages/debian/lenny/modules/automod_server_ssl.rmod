@@ -60,7 +60,7 @@ ln -s $LAMPP_DIRECTORY/etc/ssl /etc/ssl
 
 
 
-echo "I: Install Ntop"
+echo "I: Install SSL"
 INSTALL
 
-echo "I: End of install Ntop"
+echo "I: End of install SSL"

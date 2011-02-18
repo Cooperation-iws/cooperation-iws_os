@@ -51,12 +51,13 @@ cp -r cooperation-wui-joomla-def-0.8.0-090306/* /var/www/.
 
 NOM_SPHIDER="Sphider"
 
+
 sed -i "15s/Sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
 sed -i "16s/Sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
 sed -i "17s/Sphider/${NOM_SPHIDER}/" $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
 
 $BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/${NOM_SPHIDER}/database.sql
-echo "grant all on ${NOM_SPHIDER}.* to ${NOM_SPHIDER}@localhost identified by '$SPHIDER_MYSQL_PWD'; flush privileges;" > SPHIDER_db.sql
+echo "grant all on ${NOM_SPHIDER}.* to ${NOM_SPHIDER}@localhost identified by 'SPHIDER_MYSQL_PWD'; flush privileges;" > SPHIDER_db.sql
 $BIN_MYSQL -u root --default_character_set utf8 < SPHIDER_db.sql mysql
 rm SPHIDER_db.sql
 

@@ -9,7 +9,7 @@
 global $lang;
 $dir=dirname(__FILE__) ;
 $server_content_xml="content-data-server.xml";
-$dir=$argv[1];
+$dir_output=$argv[1];
 $app_name=$argv[2];
 $main_url=$argv[3];
 $admin_url=$argv[4];
@@ -191,7 +191,7 @@ function write_file($file_path, $file_content) {
 
 #-------------Generate the xml file and write it to disk --------------------#
 
-function generate_xml_server_desc($array_xml_desc, $app_name, $main_url, $admin_url, $dir) {
+function generate_xml_server_desc($array_xml_desc, $app_name, $main_url, $admin_url, $dir, $dir_output) {
 $xml_files = scandir($dir);
 
 $count_lang=0;
@@ -232,12 +232,12 @@ for ($count_elt=0; $count_elt < sizeof($array_xml_desc); $count_elt++)
 			}
 
 
-$file_content=file_get_contents($dir.'/cooperation-wui-'.$array_lang[$count_elt_lang].'.xml');
+$file_content=file_get_contents($dir_output.'/cooperation-wui-'.$array_lang[$count_elt_lang].'.xml');
 
 
 $file_content=$file_content.$return;
 
-write_file($dir.'/cooperation-wui-'.$array_lang[$count_elt_lang].'.xml', $file_content) ;
+write_file($dir_output.'/cooperation-wui-'.$array_lang[$count_elt_lang].'.xml', $file_content) ;
 //write_file('test2-'.$array_lang[$count_elt_lang].'.xml', $file_content) ;
 
 }
@@ -251,7 +251,7 @@ if (! is_xml_content($server_content_xml))
 
 $array_xml_desc=parse_xml_app_file($server_content_xml);
 
-$xml_desc=generate_xml_server_desc($array_xml_desc, $app_name, $main_url, $admin_url, $dir);
+$xml_desc=generate_xml_server_desc($array_xml_desc, $app_name, $main_url, $admin_url, $dir,  $dir_output);
 
 }
 
