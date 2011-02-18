@@ -344,8 +344,7 @@ echo "<VirtualHost *:443>
         LogLevel warn
         CustomLog /var/log/apache2/access-ssl.log combined
         ServerSignature On
-</VirtualHost>" > /tmp/default-ssl 
-cp /tmp/default-ssl /etc/apache2/sites-available/openerp-ssl
+</VirtualHost>" > /etc/apache2/sites-available/openerp-ssl
 chown root.root /etc/apache2/sites-available/openerp-ssl
 chmod 644 /etc/apache2/sites-available/openerp-ssl
 
@@ -371,8 +370,7 @@ echo "<VirtualHost *:80>
         LogLevel warn
         CustomLog /var/log/apache2/access-ssl.log combined
         ServerSignature On
-</VirtualHost>" > /tmp/default
-cp /tmp/default /etc/apache2/sites-available/openerp
+</VirtualHost>" > /etc/apache2/sites-available/openerp
 chown root.root /etc/apache2/sites-available/openerp
 chmod 644 /etc/apache2/sites-available/openerp
 

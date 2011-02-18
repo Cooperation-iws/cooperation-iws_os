@@ -41,13 +41,6 @@ Flags: seen
 apt-get remove --assume-yes --force-yes sendmail
 apt-get install --assume-yes --force-yes postfix
 
-if [ "$(echo $SILENT | awk  '{print $1}')" == "" ]; then
-
-echo "---------------Cooperation-iws -------------
------enter the mail server address--------------"
-read smtp_postfix_client_relay < /dev/tty
-
-fi
 
 cat << EOT_PUBLIC > /etc/postfix/main.cf
 smtpd_banner = \$myhostname ESMTP \$mail_name 

@@ -551,11 +551,7 @@ class Cooperationiws:
 		else:
 			self.setupWorkingDirectory()
 		self.cmdLoadModules()
-		os.popen("cp "+self.moduleFilename + " " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
-		os.popen("chmod +x " + os.path.join(self.customDir, "chroot") + "/tmp/app_params")
-		print _('Proceeding to customization...')		
 		self.customize()
-		print _('Proceeding to build...')		
 		self.build()
 		
 	
@@ -657,7 +653,7 @@ class Cooperationiws:
 	print " "
 	print _("RUN STAGE 2...")
  	print " "
-        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_2_before_chroot.sh") + '\" \"' + self.ciwsRootDir + '\" \"' + self.scriptDir + "/" + self.distType + "/" + self.distVers + '\" \"' + self.xmlDir + '\" \"' + self.phpDir + '\" \"' + self.artworkDir + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" \"' + self.artwork + '\" \"' + self.keyLang + '\"')
+        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_2_before_chroot.sh") + '\" \"' + self.ciwsRootDir + '\" \"' + self.scriptDir + "/" + self.distType + "/" + self.distVers + '\" \"' + self.xmlDir + '\" \"' + self.phpDir + '\" \"' + self.artworkDir + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" \"' + self.artwork + '\" \"' + self.keyLang + '\" \"' + self.moduleFilename + '\"' )
 	print " "
 	print _("STAGE 2 COMPLETED")	
 	print " "
