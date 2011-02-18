@@ -569,18 +569,26 @@ class Cooperationiws:
 
 	#### RUN  STAGE 0 START
 
+	print " "
 	print _("RUN STAGE 0...")
+	print " "
 	os.popen('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_0_start.sh") + '\" \"' + self.isoFilename + '\" \"' + self.mountDir + '\" \"' + self.customDir + '\"')
+	print " "
 	print _("STAGE 0 COMPLETED")	
+	print " "
 
 	# check version of the input livecd    
 	self.checkLiveCdVersion()
 	
 	#### RUN  STAGE 1 CHROOT CREATION	
 	
+	print " "
 	print _("RUN STAGE 1...")
+	print " "
 	os.popen('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_1_chroot_creation.sh") + '\" \"' + self.customDir + '\" \"' + self.casperPath + '\"')
+	print " "
         print _("STAGE 1 COMPLETED")	
+	print " "
 
 	      
 	print _("Finished setting up working directory...")
@@ -646,9 +654,13 @@ class Cooperationiws:
 	
 	#### RUN STAGE 2 BEFORE CHROOT
 
+	print " "
 	print _("RUN STAGE 2...")
-        os.popen('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_2_before_chroot.sh") + '\" \"' + self.ciwsRootDir + '\" \"' + self.scriptDir + "/" + self.distType + "/" + self.distVers + '\" \"' + self.xmlDir + '\" \"' + self.phpDir + '\" \"' + self.artworkDir + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" \"' + self.artwork + '\" \"' + self.keyLang + '\"')
+ 	print " "
+       os.popen('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_2_before_chroot.sh") + '\" \"' + self.ciwsRootDir + '\" \"' + self.scriptDir + "/" + self.distType + "/" + self.distVers + '\" \"' + self.xmlDir + '\" \"' + self.phpDir + '\" \"' + self.artworkDir + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" \"' + self.artwork + '\" \"' + self.keyLang + '\"')
+	print " "
 	print _("STAGE 2 COMPLETED")	
+	print " "
     
        	print _('Running modules...')
 
@@ -755,6 +767,7 @@ class Cooperationiws:
 	modExecAfterChroot = '#!/bin/bash\n\n'
         if self.artwork != "":
 		modExecAfterChroot += 'bash \"' + os.path.join(self.ciwsRootDir, self.artworkDir + "/" + self.artwork + ".artscript") + '\" \"' + self.customDir + '\" ' + ' ;\n '
+		modExecAfterChroot += 'bash \"' + os.path.join( self.scriptDir, self.distType + "/" + self.distVers + "/stage_8_out_of_chroot.sh") + '\" \"' + self.customDir + '\" ' + ' ;\n '
 
 	if self.execModulesEnabled == True:
 		for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "scripts/")):
@@ -806,25 +819,37 @@ class Cooperationiws:
 	
 	#### RUN STAGE 3 IN CHROOT
   
+	print " "
 	print _("RUN STAGE 3...")
+	print " "
 	os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/kernel-chroot-exec.sh')
+	print " "
 	print _("STAGE 3 COMPLETED")	
+	print " "
 
 	
 	#### RUN STAGE 4,(5),6,(7) IN CHROOT
 
+	print " "
 	print _("RUN STAGES 4 TO 7...")
+	print " "
 	if commands.getoutput('cat '  +  os.path.join(self.customDir, "chroot/tmp/in_chroot")  + ' | grep \'normal\'') != '':        
 		os.system('chroot \"' + os.path.join(self.customDir, "chroot/") + '\" /tmp/modules-chroot-exec.sh')
+	print " "
  	print _("STAGE 4 TO 7 COMPLETED")	
+	print " "
 
        
 	#### RUN STAGE 8 OUT OF CHROOT
 
+	print " "
 	print _("RUN STAGE 8...")
+	print " "
 	os.system('bash \"' + os.path.join(self.customDir, "scripts/out-of-chroot-exec.sh")+ '\"')
 	os.popen ('cp '	 + os.path.join(self.customDir, "chroot/tmp/ls.log") + ' '+self.customDir)        
+	print " "
 	print _("STAGE 8 COMPLETED")
+	print " "
 
 	#### RUN MANUAL TERMINAL IF INSTALLATION IS NOT SILENT	
 	if self.silent == False:
@@ -833,11 +858,15 @@ class Cooperationiws:
 		
 	#### RUN STAGE 9 FINISHING AND SHUTING DOWN
 	
+	print " "
 	print _("RUN STAGE 9...")
+	print " "
 	os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/opt/ciws/share/lampp/config_post_install.sh"))
         os.system('chroot ' + os.path.join(self.customDir, "chroot") + ' /opt/ciws/share/lampp/config_post_install.sh')
   	os.system('chroot \"' + os.path.join(self.customDir,"chroot/") +'\" /tmp/stage_9_in_chroot.sh')
+	print " "
 	print _("STAGE 9 COMPLETED")
+	print " "
 
 	#### RESTORING CHROOT
 
@@ -899,23 +928,27 @@ class Cooperationiws:
 	if self.buildSquashRoot == True:
 	    # create squashfs root
 	    if os.path.exists(os.path.join(self.customDir, "chroot")):
-	        print _("Creating SquashFS chroot...")
-	        print _("Updating File lists...")
-	        print _("Building SquashFS root...")
-		
+	        
 		#### RUN STAGE 10 AFTER CHROOT		
-
-		print _("RUN STAGE 10...")
+		print " "
+	        print _("RUN STAGE 10...")
+		print " "
 	        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_10_after_chroot.sh") + '\" \"' + self.customDir + '\" ')
-	   	print _("STAGE 10 COMPLETED")
-
+		print " "
+	        print _("STAGE 10 COMPLETED")
+		print " "
+	        
 	if self.encryption != "disabled":		
 		
 		#### RUN STAGE 11 ENCRYPTION
-
-		print _("RUN STAGE 11...")
-		os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_11_encryption_after_chroot.sh") + '\"  \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\"')
-		print _("STAGE 11 COMPLETED")	
+		print " "
+	        print _("RUN STAGE 11...")
+		print " "
+	        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_11_encryption_after_chroot.sh") + '\"  \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\"')
+		print " "
+	        print _("STAGE 11 COMPLETED")	
+		print " "
+	
 	# build iso
 	if self.buildIso == True:
 	    # create iso
@@ -923,10 +956,14 @@ class Cooperationiws:
 		
 		#### RUN STAGE 12 FINISHING		
 		
+		print " "
 		print _("RUN STAGE 12...")
+		print " "
 	        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_12_finishing.sh") + '\" \"' + self.customDir + '\" \"' + self.isoname + '\" \"' + self.LiveCdArch + '\" \"' + self.LiveCdDescription + '\" ')
+		print " "
 	        print _("STAGE 12 COMPLETED")
-		
+		print " "
+	        		
 	# print status message
        
         statusMsgISO = _('      Finished. ISO located at: ')
