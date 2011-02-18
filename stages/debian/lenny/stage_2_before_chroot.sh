@@ -56,3 +56,13 @@ mount --bind /proc $CHROOT_DIR/chroot/proc
 mv -f $CHROOT_DIR/chroot/etc/wgetrc $CHROOT_DIR/chroot/etc/wgetrc.orig
 cp -f /etc/wgetrc $CHROOT_DIR/chroot/etc/wgetrc
 
+#PREPARING HOSTNAME
+mv -f $CHROOT_DIR/chroot/etc/hosts $CHROOT_DIR/chroot/etc/hosts.orig
+mv -f $CHROOT_DIRchroot/etc/hostname $CHROOT_DIR/chroot/etc/hostname.orig
+cp -f /etc/hosts $CHROOT_DIR/chroot/etc/hosts
+cp -f /etc/hostname $CHROOT_DIR/chroot/etc/hostname
+
+#PREPARING RESOLV.CONF
+cp -f /etc/resolv.conf $CHROOT_DIR/chroot/etc/resolv.conf
+
+

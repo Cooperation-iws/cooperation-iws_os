@@ -15,6 +15,9 @@ mv -f $WORK_DIR/chroot/etc/wgetrc.orig $WORK_DIR/chroot/etc/wgetrc
 #UMOUNTING PROC
 umount $WORK_DIR/chroot/proc/
 
+#RESTORING HOSTNAME PARAMETERS
+mv -f $WORK_DIR/chroot/etc/hosts.orig $WORK_DIR/chroot/etc/hosts
+mv -f $WORK_DIR/chroot/etc/hostname.orig $WORK_DIR/chroot/etc/hostname
 
 echo "I:BUILDING SQUASHFS FROM CHROOT"
 

@@ -31,6 +31,7 @@ function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
 wget $URL_CIWS_DEPOT/openerp_5.0.0.6_dep.tar.gz
+
 cd $DL_DIR
 wget $URL_CIWS_DEPOT/openerp-web-5.0.6.tar.gz
 tar -xzf openerp-web-5.0.6.tar.gz
@@ -66,7 +67,7 @@ cd $DL_DIR
 #tar -xzf open_erp_missing_pagkage.tar.gz
 #dpkg -i erp_p/*
 
-sudo apt-get install --assume-yes --force-yes python2.5 python-xml python-libxml2 python-libxslt1 python-lxml python-psycopg2 python-imaging python-pyparsing python-reportlab python-pychart graphviz python-tz python-pyopenssl python-matplotlib python-numeric python-pydot python-setuptools
+ apt-get install --assume-yes --force-yes python2.5 python-xml python-libxml2 python-libxslt1 python-lxml python-psycopg2 python-imaging python-pyparsing python-reportlab python-pychart graphviz python-tz python-pyopenssl python-matplotlib python-numeric python-pydot python-setuptools
 
 
 #if [ "$(echo $SILENT_INSTALL | awk  '{print $1}')" != "" ]; then
@@ -92,9 +93,9 @@ sed -i '10s/^/#/' /etc/phppgadmin/apache.conf
 sed -i '11s/^/#/' /etc/phppgadmin/apache.conf
 sed -i '12s/^/#/' /etc/phppgadmin/apache.conf
 sed -i '13s/#//' /etc/phppgadmin/apache.conf
-sudo /etc/init.d/postgresql-8.3 restart
+/etc/init.d/postgresql-8.3 restart
 sudo -u postgres createuser openerp --no-superuser --createdb --no-createrole 
-sudo /usr/sbin/adduser --quiet --system openerp
+ /usr/sbin/adduser --quiet --system openerp
 usermod -u601 openerp
 
 
@@ -116,18 +117,18 @@ ALTER USER postgres WITH PASSWORD '$ROOT_PSGSQL_PWD';
 
 sudo -u postgres psql postgres < openerp_db.sql
 
-sudo sed -i 's/\(local[[:space:]]*all[[:space:]]*all[[:space:]]*\)\(ident[[:space:]]*sameuser\)/\1md5/g' /etc/postgresql/8.3/main/pg_hba.conf
+ sed -i 's/\(local[[:space:]]*all[[:space:]]*all[[:space:]]*\)\(ident[[:space:]]*sameuser\)/\1md5/g' /etc/postgresql/8.3/main/pg_hba.conf
 
 cd $DL_DIR
 tar -xzf openerp_5.0.0.6_dep.tar.gz -C /usr/lib/python2.5/site-packages/.
 echo "#######INSTALLING SERVER###########"
 cd $DL_DIR/openerp-server-5.0.6
-sudo python setup.py install > /dev/null
+python setup.py install > /dev/null
 echo "#######INSTALLING WEB###########"
 cd $DL_DIR/openerp-client-web-5.0.6
-sudo python setup.py install
+python setup.py install
 
-sudo /etc/init.d/postgresql-8.3 stop
+ /etc/init.d/postgresql-8.3 stop
 
 
 
@@ -139,7 +140,7 @@ sed -i "52s/False/'$OPENERP_PSGSQL_PWD'/" /usr/lib/python2.5/site-packages/opene
 
 
 
-sudo chmod 777 /usr/lib/python2.5/site-packages/openerp-server/addons
+ chmod 777 /usr/lib/python2.5/site-packages/openerp-server/addons
 
 mkdir $LAMPP_DIRECTORY/usr
 mkdir $LAMPP_DIRECTORY/usr/lib
@@ -233,12 +234,12 @@ exit 0
 
 EOF
 
-sudo cp /tmp/openerp-server /etc/init.d/
-sudo chmod +x /etc/init.d/openerp-server
+cp /tmp/openerp-server /etc/init.d/
+chmod +x /etc/init.d/openerp-server
 #Create /var/log/openerp with proper ownership:
-sudo mkdir -p /var/log/openerp
-sudo touch /var/log/openerp/openerp.log
-sudo chown -R openerp.root /var/log/openerp/
+mkdir -p /var/log/openerp
+touch /var/log/openerp/openerp.log
+chown -R openerp.root /var/log/openerp/
 
 #####################################################################################
 # openerp-server config file
@@ -297,26 +298,26 @@ db_port = 5432
 
 EOT2
 
-sudo cp /tmp/openerp-server.conf /etc/
-sudo chown openerp.root /etc/openerp-server.conf
-sudo chmod 640 /etc/openerp-server.conf
+cp /tmp/openerp-server.conf /etc/
+chown openerp.root /etc/openerp-server.conf
+chmod 640 /etc/openerp-server.conf
 
-sudo sed -i "s/db_password =/db_password = $OPENERP_PSGSQL_PWD/g" /etc/openerp-server.conf
+sed -i "s/db_password =/db_password = $OPENERP_PSGSQL_PWD/g" /etc/openerp-server.conf
 
 #####################################################################################
 # openerp-web init script
 #####################################################################################
 
-sudo cp /usr/lib/python2.5/site-packages/openerp_web-5.0.6-py2.5.egg/scripts/openerp-web /etc/init.d/
-sudo chmod +x /etc/init.d/openerp-web
-sudo cp /usr/lib/python2.5/site-packages/openerp_web-5.0.6-py2.5.egg/config/openerp-web.cfg /etc/
+cp /usr/lib/python2.5/site-packages/openerp_web-5.0.6-py2.5.egg/scripts/openerp-web /etc/init.d/
+chmod +x /etc/init.d/openerp-web
+cp /usr/lib/python2.5/site-packages/openerp_web-5.0.6-py2.5.egg/config/openerp-web.cfg /etc/
 #ln -s /usr/lib/python2.5/site-packages/openerp_web-5.0.3-py2.5.egg/config/openerp-web.cfg /etc/openerp-web.cfg
-sudo chown openerp.root /etc/openerp-web.cfg
-sudo chmod 640 /etc/openerp-web.cfg
+chown openerp.root /etc/openerp-web.cfg
+chmod 640 /etc/openerp-web.cfg
 if [ "$domain" ] && [ -d /etc/bind ]; then
 #OpenERP Web configuration:
 #    tools.proxy.on = True
-sudo sed -i "s/^#tools\.proxy\.on.*/tools.proxy.on = True/g" /etc/openerp-web.cfg 
+sed -i "s/^#tools\.proxy\.on.*/tools.proxy.on = True/g" /etc/openerp-web.cfg 
 
 echo "<VirtualHost *:443>
 	ServerName openerp.$domain
@@ -344,9 +345,9 @@ echo "<VirtualHost *:443>
         CustomLog /var/log/apache2/access-ssl.log combined
         ServerSignature On
 </VirtualHost>" > /tmp/default-ssl 
-sudo cp /tmp/default-ssl /etc/apache2/sites-available/openerp-ssl
-sudo chown root.root /etc/apache2/sites-available/openerp-ssl
-sudo chmod 644 /etc/apache2/sites-available/openerp-ssl
+cp /tmp/default-ssl /etc/apache2/sites-available/openerp-ssl
+chown root.root /etc/apache2/sites-available/openerp-ssl
+chmod 644 /etc/apache2/sites-available/openerp-ssl
 
 echo "<VirtualHost *:80>
 	ServerName openerp.$domain
@@ -371,23 +372,23 @@ echo "<VirtualHost *:80>
         CustomLog /var/log/apache2/access-ssl.log combined
         ServerSignature On
 </VirtualHost>" > /tmp/default
-sudo cp /tmp/default /etc/apache2/sites-available/openerp
-sudo chown root.root /etc/apache2/sites-available/openerp
-sudo chmod 644 /etc/apache2/sites-available/openerp
+cp /tmp/default /etc/apache2/sites-available/openerp
+chown root.root /etc/apache2/sites-available/openerp
+chmod 644 /etc/apache2/sites-available/openerp
 
 sed -i "9s/Order deny,allow/Order allow,deny/" /etc/apache2/mods-available/proxy.conf
 sed -i "10s/Deny/Allow/" /etc/apache2/mods-available/proxy.conf
 a2dissite default-ssl
 a2ensite openerp
 a2ensite openerp-ssl
-sudo a2enmod rewrite
-sudo a2enmod suexec
-sudo a2enmod include
-sudo a2enmod proxy
-sudo a2enmod proxy_http
-sudo a2enmod proxy_connect
-sudo a2enmod proxy_ftp
-sudo a2enmod headers
+a2enmod rewrite
+ a2enmod suexec
+ a2enmod include
+ a2enmod proxy
+ a2enmod proxy_http
+ a2enmod proxy_connect
+ a2enmod proxy_ftp
+ a2enmod headers
 
 
 REDMINE_URL="http://openerp.$domain"
@@ -398,14 +399,14 @@ REDMINE_URL="<![CDATA[http://localhost:8080]]>"
 fi
 
 #Create /var/log/openerp-web.log with proper ownership:
-sudo mkdir -p /var/log/openerp-web
-sudo touch /var/log/openerp-web/access.log
-sudo touch /var/log/openerp-web/error.log
-sudo chown -R openerp.root /var/log/openerp-web/
+ mkdir -p /var/log/openerp-web
+ touch /var/log/openerp-web/access.log
+ touch /var/log/openerp-web/error.log
+ chown -R openerp.root /var/log/openerp-web/
 
 #Now run following command to start the OpenERP Web automatically on system startup (Debian/Ubuntu):
-sudo update-rc.d openerp-server start 21 2 3 4 5 . stop 21 0 1 6 .
-sudo update-rc.d openerp-web start 70 2 3 4 5 . stop 20 0 1 6 .
+ update-rc.d openerp-server start 21 2 3 4 5 . stop 21 0 1 6 .
+ update-rc.d openerp-web start 70 2 3 4 5 . stop 20 0 1 6 .
 
 ############################################################################################
 
