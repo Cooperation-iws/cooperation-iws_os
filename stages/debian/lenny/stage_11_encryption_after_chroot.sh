@@ -83,3 +83,10 @@ rm -f $DOSSIER_REMASTER/${INITFS}/filesystem.${LH_CHROOT_FILESYSTEM}.tmp
 rm -f $WORKING_DIRECTORY/chroot/filesystem.${LH_CHROOT_FILESYSTEM}
 rm -f $WORKING_DIRECTORY/chroot/filesystem.${LH_CHROOT_FILESYSTEM}.tmp
 
+
+
+#Setting up isolinux
+
+sed -i "s/boot=live/boot=live encryption=$LH_ENCRYPTION/g" $DOSSIER_REMASTER/isolinux/isolinux.cfg
+
+
