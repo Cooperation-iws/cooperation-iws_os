@@ -30,23 +30,23 @@ mkdir $DL_DIR
 function WGET_MIRROIR_FREE
 {
 cd $DL_DIR
-wget $URL_FREE/openerp_5.0.0.6_dep.tar.gz
+wget $URL_CIWS_DEPOT/openerp_5.0.0.6_dep.tar.gz
 cd $DL_DIR
-wget $URL_FREE/openerp-web-5.0.6.tar.gz
+wget $URL_CIWS_DEPOT/openerp-web-5.0.6.tar.gz
 tar -xzf openerp-web-5.0.6.tar.gz
 
 cd $DL_DIR
-wget $URL_FREE/openerp_ciws_sa.dump
+wget $URL_CIWS_DEPOT/openerp_ciws_sa.dump
 
 cd $DL_DIR
-wget $URL_FREE/openerp-server-5.0.6.tar.gz
+wget $URL_CIWS_DEPOT/openerp-server-5.0.6.tar.gz
 tar -xzf openerp-server-5.0.6.tar.gz
 
-cd $DL_DIR
-wget $URL_FREE/python-numpy_1.1.0-3+lenny1_i386.deb
+#cd $DL_DIR
+#wget $URL_CIWS_DEPOT/python-numpy_1.1.0-3+lenny1_i386.deb
 
-cd $DL_DIR
-wget $URL_FREE/open_erp_missing_pagkage.tar.gz
+#cd $DL_DIR
+#wget $URL_CIWS_DEPOT/open_erp_missing_pagkage.tar.gz
 
 }
 
@@ -62,9 +62,9 @@ echo "I: Download Openerp"
 WGET_MIRROIR_FREE
 
 cd $DL_DIR
-dpkg -i python-numpy_1.1.0-3+lenny1_i386.deb
-tar -xzf open_erp_missing_pagkage.tar.gz
-dpkg -i erp_p/*
+#dpkg -i python-numpy_1.1.0-3+lenny1_i386.deb
+#tar -xzf open_erp_missing_pagkage.tar.gz
+#dpkg -i erp_p/*
 
 sudo apt-get install --assume-yes --force-yes python2.5 python-xml python-libxml2 python-libxslt1 python-lxml python-psycopg2 python-imaging python-pyparsing python-reportlab python-pychart graphviz python-tz python-pyopenssl python-matplotlib python-numeric python-pydot python-setuptools
 

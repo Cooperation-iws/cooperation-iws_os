@@ -19,7 +19,6 @@ umount $WORK_DIR/chroot/proc/
 echo "I:BUILDING SQUASHFS FROM CHROOT"
 
 cd $WORK_DIR
-echo "I: Building squashfs"
 dpkg-query -W --showformat='${Package} ${Version}\n' > remaster/live/filesystem.manifest
 cp chroot/initrd.gz remaster/live/.
 cp chroot/vmlinuz remaster/live/.
@@ -28,7 +27,7 @@ mksquashfs chroot remaster/live/filesystem.squashfs -no-progress
 
 if [ -d remaster/bin ]; then
 
-echo "I: Removing Windows programs if any"
+echo "I: CLEANING ISO DIR"
 rm -Rf remaster/bin
 rm -Rf remaster/programs
 rm -Rf remaster/autorun.inf
