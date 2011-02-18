@@ -92,7 +92,7 @@ function CREATE_WUI
 for (( count=1; count<=$NB_CLAROLINE; count++ ))
 do
 cd /tmp/
-./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 done
 }
 #_______________________________________________________________________________________________

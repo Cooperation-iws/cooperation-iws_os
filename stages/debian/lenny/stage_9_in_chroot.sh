@@ -13,6 +13,19 @@
 
 echo "I:SHUTTING DOWN ALL SERVER"
 
+#ENDING XML WEB DESC FILES
+cd /tmp/
+for langxml in $(ls ciws-lang-*.xml)
+do
+
+lang_1=$(echo $langxml | cut -d'-' -f3)
+lang=$(echo $lang_1 | cut -d'.' -f1)
+
+echo "</items>" >> $LAMPP_DIRECTORY/etc/ciws-content/cooperation-wui-$lang.xml
+
+done
+
+
 #RESTORING START DAEMON PARAMETER
 rm /usr/sbin/policy-rc.d
 mv /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d

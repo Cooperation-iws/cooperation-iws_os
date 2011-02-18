@@ -313,7 +313,7 @@ sudo a2enmod headers
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "http://libresource.$domain" "http://libresource.$domain" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "http://libresource.$domain" "http://libresource.$domain" 
 
 
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#STAGE 5 SETUP LAMPP SERVER - WORK IF MODULES HAVE REQ_APACHE=true
+#STAGE 5 SETUP LAMPP SERVER - WORK IF MODULES HAVE RMOD_REQ_APACHE=true
 #
 #
 #
@@ -105,16 +105,6 @@ mkdir $LAMPP_DIRECTORY/server/var
 mv /var/www $LAMPP_DIRECTORY/server/var
 
 ln -s $LAMPP_DIRECTORY/server/var/www /var/www
-
-
-
-echo "I: config Cooperation-iws wui"
-
-
-
-mv /tmp/cooperation-wui-*.xml  $WWW_DIRECTORY/.
-
-#ADMIN
 
 
 

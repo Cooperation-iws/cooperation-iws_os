@@ -106,6 +106,7 @@ mkdir $LAMPP_DIRECTORY/server
 mkdir $LAMPP_DIRECTORY/share
 mkdir $LAMPP_DIRECTORY/share/lampp
 mkdir $LAMPP_DIRECTORY/etc
+mkdir $LAMPP_DIRECTORY/etc/ciws-content
 mkdir $LAMPP_DIRECTORY/usr
 mkdir $LAMPP_DIRECTORY/usr/share
 mkdir $LAMPP_DIRECTORY/opt
@@ -145,9 +146,7 @@ lang_1=$(echo $langxml | cut -d'-' -f3)
 lang=$(echo $lang_1 | cut -d'.' -f1)
 
 echo "<?xml version=\"1.0\"?>
-<items>" > /tmp/cooperation-wui-$lang.xml
-echo "<?xml version=\"1.0\"?>
-<items>" > /tmp/admin_cooperation-wui-$lang.xml
+<items>" > $LAMPP_DIRECTORY/etc/ciws-content/cooperation-wui-$lang.xml
 
 done
 

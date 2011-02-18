@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#STAGE 7 FINISH SETUP LAMPP SERVER - WORK IF MODULES HAVE REQ_APACHE=true
+#STAGE 7 FINISH SETUP LAMPP SERVER - WORK IF MODULES HAVE RMOD_REQ_APACHE=true
 #
 #
 #
@@ -13,20 +13,6 @@
 
 echo "I:FINISH SETUP LAMPP SERVER"
 
-#ENDING XML WEB DESC FILES
-cd /tmp/
-for langxml in $(ls ciws-lang-*.xml)
-do
-
-lang_1=$(echo $langxml | cut -d'-' -f3)
-lang=$(echo $lang_1 | cut -d'.' -f1)
-
-
-echo "</items>" >> $WWW_DIRECTORY/cooperation-wui-$lang.xml
-
-echo "</items>" >> $WWW_DIRECTORY/admin/cooperation-wui-$lang.xml
-
-done
 
 
 #CONFIGURING DEFAULT SITE FOR APACHE2

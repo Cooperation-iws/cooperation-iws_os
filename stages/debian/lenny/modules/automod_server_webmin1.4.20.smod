@@ -105,7 +105,7 @@ mv /usr/sbin/policy-rc.d.orig /usr/sbin/policy-rc.d
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "/tmp/" "$RMOD_NAME" "<![CDATA[https://localhost:10000]]>" "<![CDATA[https://localhost:10000]]>" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[https://localhost:10000]]>" "<![CDATA[https://localhost:10000]]>" 
 
 
 }

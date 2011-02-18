@@ -83,7 +83,7 @@ echo "awstats " >> /etc/webmin/webmin.acl
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "/cgi-bin/awstats.pl?config=$HOSTNAME" "/cgi-bin/awstats.pl?config=$HOSTNAME" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/cgi-bin/awstats.pl?config=$HOSTNAME" "/cgi-bin/awstats.pl?config=$HOSTNAME" 
 
 
 }

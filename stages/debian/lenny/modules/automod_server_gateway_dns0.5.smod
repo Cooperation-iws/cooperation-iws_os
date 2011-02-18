@@ -375,7 +375,7 @@ ln -s $LAMPP_DIRECTORY/var/lib/dhcp3 /var/lib/dhcp3
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "" "" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "" "" 
 
 }
 #_______________________________________________________________________________________________

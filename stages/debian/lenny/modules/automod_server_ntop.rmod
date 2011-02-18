@@ -57,7 +57,7 @@ echo "
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$WWW_DIRECTORY" "$RMOD_NAME" "<![CDATA[http://localhost:3000]]>" "<![CDATA[http://localhost:3000]]>" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:3000]]>" "<![CDATA[http://localhost:3000]]>" 
 
 
 }
