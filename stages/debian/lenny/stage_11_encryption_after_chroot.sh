@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#STAGE 11 WORK IF --encryption HAS BEEN SELECTED
+#STAGE 11 ENCRYPTION WORK IF --encryption HAS BEEN SELECTED
 #
 #
 #
@@ -12,6 +12,10 @@ DOSSIER_REMASTER="$WORKING_DIRECTORY/remaster"
 
 
 LH_CHROOT_FILESYSTEM="squashfs"
+
+
+echo "I:ENCRYPTION"
+
 if [ ! -e "$DOSSIER_REMASTER/live" ]; then 
 INITFS="casper"
 else

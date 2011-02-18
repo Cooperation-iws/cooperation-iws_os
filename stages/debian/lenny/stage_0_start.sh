@@ -9,6 +9,9 @@ ISO_NAME=$1
 MOUNT_DIR=$2
 WORK_DIR=$3
 
+
+echo "I:COPYING ISO"
+
 mkdir $WORK_DIR/remaster
 mkdir $WORK_DIR/scripts
 

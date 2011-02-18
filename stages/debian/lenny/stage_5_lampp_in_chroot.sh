@@ -19,6 +19,9 @@ RMOD_RUN_IN_CHROOT=True
 
 . /tmp/scripts_params
 
+echo "I:SETUP LAMPP SERVER"
+
+
 export DEBIAN_FRONTEND=noninteractive
 
 

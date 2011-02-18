@@ -11,7 +11,7 @@
 . /tmp/app_params
 
 
-
+echo "I:SHUTTING DOWN ALL SERVER"
 
 #RESTORING START DAEMON PARAMETER
 rm /usr/sbin/policy-rc.d

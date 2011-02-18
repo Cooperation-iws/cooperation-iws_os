@@ -565,7 +565,6 @@ class Cooperationiws:
 # ---------- Setup ---------- #
 
     def setupWorkingDirectory(self):
-        print _("INFO: Setting up working directory...")
 
 	#### RUN  STAGE 0 START
 
@@ -590,9 +589,6 @@ class Cooperationiws:
         print _("STAGE 1 COMPLETED")	
 	print " "
 
-	      
-	print _("Finished setting up working directory...")
-        print " "
         return False
 
 
@@ -600,6 +596,10 @@ class Cooperationiws:
     
     def setupDebianLive(self):
         
+	print " "
+	print _("RUN STAGE 0-1 DEBIAN LIVE...")
+	print " "
+
 	os.system('bash \"' + self.scriptDir + '/debian/debianlive.sh\" \"' + self.DebianLiveType + '\" \"' + self.DebianLiveReleaseType + '\" \"' + self.LiveCdArch + '\" \"' + self.debMirror + '\" \"' + self.debMirrorSecurity + '\" \"' + self.keyLang + '\" \"' + self.locale + '\" \"' + self.host + '\" \"' + self.user + '\" \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" ')
 		
 	self.distVers = self.DebianLiveReleaseType	
@@ -657,7 +657,7 @@ class Cooperationiws:
 	print " "
 	print _("RUN STAGE 2...")
  	print " "
-       os.popen('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_2_before_chroot.sh") + '\" \"' + self.ciwsRootDir + '\" \"' + self.scriptDir + "/" + self.distType + "/" + self.distVers + '\" \"' + self.xmlDir + '\" \"' + self.phpDir + '\" \"' + self.artworkDir + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" \"' + self.artwork + '\" \"' + self.keyLang + '\"')
+        os.popen('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_2_before_chroot.sh") + '\" \"' + self.ciwsRootDir + '\" \"' + self.scriptDir + "/" + self.distType + "/" + self.distVers + '\" \"' + self.xmlDir + '\" \"' + self.phpDir + '\" \"' + self.artworkDir + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" \"' + self.artwork + '\" \"' + self.keyLang + '\"')
 	print " "
 	print _("STAGE 2 COMPLETED")	
 	print " "
@@ -959,7 +959,7 @@ class Cooperationiws:
 		print " "
 		print _("RUN STAGE 12...")
 		print " "
-	        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_12_finishing.sh") + '\" \"' + self.customDir + '\" \"' + self.isoname + '\" \"' + self.LiveCdArch + '\" \"' + self.LiveCdDescription + '\" ')
+	        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_12_finishing.sh") + '\" \"' + self.customDir + '\" \"' + self.isoname + '\" \"' + self.LiveCdArch + '\" ')
 		print " "
 	        print _("STAGE 12 COMPLETED")
 		print " "

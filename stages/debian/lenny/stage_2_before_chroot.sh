@@ -16,6 +16,8 @@ DEPOT_URL=$7
 ARTWORK_NAME=$8
 KEYBLANG=${9}
 
+echo "I:PREPARING CHROOT - COPYING STAGES AND ARTWORK FILES"
+
 #COPYING STAGE SCRIPTS
 cp -r $SCRIPT_DIR/stage_3_in_chroot.sh $CHROOT_DIR/chroot/tmp/.
 cp -r $SCRIPT_DIR/stage_4_in_chroot.sh $CHROOT_DIR/chroot/tmp/.

@@ -11,6 +11,7 @@
 
 . /tmp/app_params
 
+echo "I:FINISH SETUP LAMPP SERVER"
 
 #ENDING XML WEB DESC FILES
 cd /tmp/

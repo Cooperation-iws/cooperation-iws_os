@@ -16,6 +16,7 @@ RMOD_DESCRIPTION='Installs'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL=''
 
+echo "I:INIT CHROOT FOR MODULES"
 
 echo 'SCRIPT_DIRECTORY="/tmp"' >> /tmp/scripts_params
 

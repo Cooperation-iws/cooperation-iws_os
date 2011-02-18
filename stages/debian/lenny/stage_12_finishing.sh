@@ -8,7 +8,9 @@
 WORK_DIR=$1
 ISO_NAME=$2
 ARCH=$3
-LIVE_CD_DESC=$4
+LIVE_CD_DESC=""
+
+echo "I:FINISHING - CREATING NEW ISO FILE"
 
 cd $WORK_DIR ; find . -type f -print0 | xargs -0 md5sum > md5sum.txt
 

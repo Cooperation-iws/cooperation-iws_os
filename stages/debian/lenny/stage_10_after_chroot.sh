@@ -7,6 +7,8 @@
 
 WORK_DIR=$1
 
+echo "I:BUILDING SQUASHFS FROM CHROOT"
+
 cd $WORK_DIR
 echo "I: Building squashfs"
 dpkg-query -W --showformat='${Package} ${Version}\n' > remaster/live/filesystem.manifest

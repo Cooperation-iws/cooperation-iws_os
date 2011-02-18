@@ -8,6 +8,8 @@
 WORK_DIR=$1
 CASPER_PATH=$2
 
+echo "I:COPYING CHROOT"
+
 mkdir $WORK_DIR/tmpsquash
 mkdir  $WORK_DIR/chroot
 
