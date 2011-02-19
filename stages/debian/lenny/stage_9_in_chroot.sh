@@ -150,8 +150,14 @@ $BIN_MYSQL -u root < /tmp/mysql_secure.sql
 fi
 
 
-echo "I: shuting down servers"
+echo "I: proceeding to last customizations"
 #shutdown script
+chmod +x /opt/ciws/share/lampp/config_post_install.sh
+/opt/ciws/share/lampp/config_post_install.sh
+
+
+
+echo "I: shuting down servers"
 killall -9 apache2
 killall -9 mysqld
 killall -9 mysqld_safe

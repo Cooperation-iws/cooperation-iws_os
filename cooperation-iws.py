@@ -179,7 +179,7 @@ class Cooperationiws:
                     dest="debianLiveOS", default="lenny" ,
                     help="Debian OS (etch, lenny, sid)")
 	parser.add_option( "--debianflavor", 
-                    dest="debianLiveFlavor", default="xfce" ,
+                    dest="debianLiveFlavor", default="gnome" ,
                     help="Debian flavor (xfce, gnome, kde)")
 	parser.add_option( "--arch", 
                     dest="arch", default="686" ,
@@ -710,7 +710,8 @@ class Cooperationiws:
                         modExecModulesChroot += 'echo -------------------------------------------------\n'
                         modExecModulesChroot += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
                         modExecModulesChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n'
-
+			
+	modExecModulesChroot += '\necho \'--------------------\'\necho \'Servers Modules Finished...\'\n\n'
 
 	#### PREPARE STAGE 5 IN CHROOT : LAMPP INIT LEVEL 
 	
@@ -736,7 +737,7 @@ class Cooperationiws:
                         modExecModulesChroot += 'echo -------------------------------------------------\n'
                         modExecModulesChroot += 'bash \"/tmp/' + os.path.basename(execMod) + '\"' + ' ;\n '
 	
-            modExecModulesChroot += '\necho \'--------------------\'\necho \'Modules Finished...\'\n'
+            modExecModulesChroot += '\necho \'--------------------\'\necho \'Modules Finished...\'\n\n'
 	if self.artwork != "":  
 		modExecModulesChroot += 'bash \"/tmp/' + self.artwork + '.artchroot\"' + ' ;\n '
 
@@ -775,7 +776,7 @@ class Cooperationiws:
 		                modExecAfterChroot += 'echo -------------------------------------------------\n'
 				modExecAfterChroot += 'echo "'+ os.path.basename(execMod) +'" >> /tmp/ls.log \n'
 		                modExecAfterChroot += 'bash \"' + os.path.join(self.customDir, "scripts/") + os.path.basename(execMod) + '\"' + ';\n '
-			modExecAfterChroot += '\necho \'--------------------\'\necho \'Modules Finished...\'\n'		
+			modExecAfterChroot += '\necho \'--------------------\'\necho \'Modules Finished...\'\n\n'		
 	fModExec=open(os.path.join(self.customDir, "scripts/out-of-chroot-exec.sh"), 'w')
 	fModExec.write(modExecAfterChroot)
 	fModExec.close()
@@ -826,9 +827,7 @@ class Cooperationiws:
 	print " "
 	print _("RUN STAGE 9...")
 	print " "
-	os.popen('chmod +x ' + os.path.join(self.customDir, "chroot/opt/ciws/share/lampp/config_post_install.sh"))
-        os.system('chroot ' + os.path.join(self.customDir, "chroot") + ' /opt/ciws/share/lampp/config_post_install.sh')
-  	os.system('chroot \"' + os.path.join(self.customDir,"chroot/") +'\" /tmp/stage_9_in_chroot.sh')
+	os.system('chroot \"' + os.path.join(self.customDir,"chroot/") +'\" /tmp/stage_9_in_chroot.sh')
 	print " "
 	print _("STAGE 9 COMPLETED")
 	print " "

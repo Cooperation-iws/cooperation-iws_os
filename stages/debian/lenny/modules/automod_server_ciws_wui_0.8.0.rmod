@@ -71,6 +71,11 @@ cp /opt/ciws/etc/ciws-content/cooperation-wui-fr.xml /var/www/.
 cp /opt/ciws/etc/ciws-content/cooperation-wui-en.xml /var/www/cooperation-wui.xml
 " >> /opt/ciws/share/lampp/config_post_install.sh 
 
+echo "<?xml version=\"1.0\"?>
+<items><item></item></items>" >  /var/www/admin/cooperation-wui.xml
+echo "<?xml version=\"1.0\"?>
+<items><item></item></items>" >  /var/www/admin/cooperation-wui-fr.xml
+
 chown -R www-data $WWW_DIRECTORY/Cooperation-iws
 
 

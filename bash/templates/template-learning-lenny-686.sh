@@ -26,7 +26,7 @@ mantis_mysql_pwd[1]="$mysql_generic_pwd"
 #Trac Subversion 0.11.2
 svn_name[1]="Project_1"
 svn_admin_pwd[1]="$gen_login_pwd"
-svn_admin_pwd[1]="anonymous"
+svn_anonymous_pwd[1]="anonymous"
 trac_admin_pwd[1]="$gen_login_pwd"
 #Horde 1.2
 horde_name="Horde_1"
@@ -86,12 +86,6 @@ deactivate_ssh_root_login="y"
 #Ampache 3.4.3
 ampache_name[1]="Ampache_1"
 ampache_mysql_pwd[1]="$mysql_generic_pwd"
-#CGI-IRC Lenny
-url_default_server="localhost"
-#Inspircd 0.1
-inspircd_login_name="Admin"
-inspircd_admin_email="admin.local@$domain"
-inspircd_login_pwd="$gen_login_pwd"
 #DNS server Lenny
 #Aie 0.5
 aie_name="Aie_1"

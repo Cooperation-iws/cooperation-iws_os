@@ -19,7 +19,7 @@ RMOD_REQ_APACHE=True
 
 . /tmp/scripts_params
 
-SILENT=$(cat /tmp/silent)
+
 . /tmp/app_params
 
 
