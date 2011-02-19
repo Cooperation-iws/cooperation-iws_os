@@ -2726,14 +2726,15 @@ chown postfix:postfix /var/spool/MailScanner/incoming
 chown postfix:postfix /var/spool/MailScanner/quarantine
 
 ##Webmin configuration
+
+if [ -e /usr/share/webmin/install-module.pl ]; then
+
 cd $DL_DIR
 /usr/share/webmin/install-module.pl webmin-module-1.1-4.wbm 
-
-
 rm /etc/webmin/module.infos.cache
-
 echo "mailscanner " >> /etc/webmin/webmin.acl
 
+fi
 
 mkdir /etc/webmin/mailscanner
 cat << EOT > /etc/webmin/mailscanner/config
