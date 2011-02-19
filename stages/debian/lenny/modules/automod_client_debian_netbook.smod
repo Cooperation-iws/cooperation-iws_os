@@ -14,7 +14,7 @@ LIVEUSER=$LIVEUSER
 DISPLAY=127.0.0.1:5.0
 export LANG="en"
 export LC_ALL=C
-export HOME=/home/liveusb
+export HOME=/root/
 
 
 

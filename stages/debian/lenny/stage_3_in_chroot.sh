@@ -33,7 +33,7 @@ echo 'LAMPP_DIRECTORY="/opt/ciws/"' >> /tmp/scripts_params
 mkdir $DL_DIR
 
 
-export LANG="fr_FR.UTF-8"
+export LANG="en"
 export LC_ALL=C
 export DEBIAN_FRONTEND=noninteractive
 

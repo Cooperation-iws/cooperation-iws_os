@@ -26,7 +26,7 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 apt_cacher_root="$(echo $DEB_MIRROR_PATH | cut -d'/' -f3)"
 
-virtualmin_repo="http://$apt_cacher_root/software.virtualmin.com/gpl/debian/"
+virtualmin_repo="http://$apt_cacher_root/wwi.lokaleskif-b.intra/debian_mirror/virtualmin/software.virtualmin.com/gpl/debian/"
 
 VIRTUALMIN_NONINTERACTIVE=1
 #_______________________________________________________________________________________________
@@ -47,8 +47,6 @@ export VIRTUALMIN_NONINTERACTIVE=$VIRTUALMIN_NONINTERACTIVE
 
 export URL_CIWS_DEPOT=$URL_CIWS_DEPOT
 
-cd $DL_DIR
-#cancel inhibition for mysql
 
 wget $URL_CIWS_DEPOT/virtualmin1.0.3/install_virtualminv3.sh
 chmod +x install_virtualminv3.sh
@@ -146,7 +144,7 @@ ln -s /opt/ciws/etc/warnquota.conf /etc/warnquota.conf
 mv /etc/webalizer /opt/ciws/etc
 ln -s /opt/ciws/etc/webalizer /etc/webalizer
 
-mkdir /opt/ciws/usr/share
+
 
 mv /etc/webmin /opt/ciws/etc
 ln -s /opt/ciws/etc/webmin /etc/webmin
@@ -166,10 +164,44 @@ ln -s /opt/ciws/etc/PolicyKit /etc/PolicyKit
 mv /etc/default /opt/ciws/etc
 ln -s /opt/ciws/etc/default /etc/default
 
+mv /etc/logrotate.d /opt/ciws/etc
+ln -s /opt/ciws/etc/logrotate.d /etc/logrotate.d
 
+mv /etc/logcheck /opt/ciws/etc
+ln -s /opt/ciws/etc/logcheck /etc/logcheck
+
+mv /etc/ppp /opt/ciws/etc
+ln -s /opt/ciws/etc/ppp /etc/ppp
+
+mv /etc/network /opt/ciws/etc
+ln -s /opt/ciws/etc/network /etc/network
+
+mv /etc/php5 /opt/ciws/etc
+ln -s /opt/ciws/etc/php5 /etc/php5
+
+mv /etc/cron.daily /opt/ciws/etc
+ln -s /opt/ciws/etc/cron.daily /etc/cron.daily
+
+mv /etc/scponly /opt/ciws/etc
+ln -s /opt/ciws/etc/scponly /etc/scponly
+
+mv /etc/subversion /opt/ciws/etc
+ln -s /opt/ciws/etc/subversion /etc/subversion
+
+mv /etc/emacs /opt/ciws/etc
+ln -s /opt/ciws/etc/emacs /etc/emacs
+
+mv /etc/bash_completion.d /opt/ciws/etc
+ln -s /opt/ciws/etc/bash_completion.d /etc/bash_completion.d
+
+mkdir /opt/ciws/usr/share
 
 mv /usr/share/usermin /opt/ciws/usr/share
 ln -s /opt/ciws/usr/share/usermin /usr/share/usermin
+
+
+mv /etc/mysql $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/mysql /etc/mysql
 
 
 echo "

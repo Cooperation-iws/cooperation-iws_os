@@ -11,7 +11,7 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 . /tmp/scripts_params
 
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
+
 
 echo "I: installing clamav clamtk"
 export DEBIAN_FRONTEND=noninteractive
@@ -21,7 +21,7 @@ cd $DL_DIR
 wget $URL_CIWS_DEPOT/latest_clamav_updates.tar.gz
 tar -xzf latest_clamav_updates.tar.gz -C /var/lib/clamav/.
 
-freshclam
+
 
 cd $DL_DIR
 

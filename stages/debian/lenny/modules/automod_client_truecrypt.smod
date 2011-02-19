@@ -11,7 +11,7 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 . /tmp/scripts_params
 
-LIVEUSER=$LIVEUSER
+. /tmp/app_params
 
 echo "I: installing truecrypt"
 

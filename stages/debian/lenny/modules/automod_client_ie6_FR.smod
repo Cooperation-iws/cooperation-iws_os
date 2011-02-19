@@ -9,8 +9,7 @@ RMOD_VERSION=0.2
 RMOD_DESCRIPTION=''
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-LIVEUSER=$LIVEUSER
-DEB_DIST=$DEB_DIST
+. /tmp/app_params
 . /tmp/scripts_params
 
 
