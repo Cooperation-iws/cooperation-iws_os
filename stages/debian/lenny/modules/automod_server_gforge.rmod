@@ -16,17 +16,10 @@ RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 
-WWW_DIRECTORY=$(cat /tmp/web-path)
-
-BIN_MYSQL=$(cat /tmp/mysql-path)
-LAMPP_DIRECTORY=$(cat /tmp/lampp-dir)
-LANG_UI=$(cat /tmp/lang-wui)
-
 
 . /tmp/scripts_params
 
 
-SILENT=$(cat /tmp/silent)
 . /tmp/app_params
 
 HOSTNAME=$HOSTNAME
@@ -51,10 +44,10 @@ wget $URL_CIWS_DEPOT/open_erp_missing_pagkage.tar.gz
 
 function INSTALL
 {
-WGET_CIWS_DEPOT
+#WGET_CIWS_DEPOT
 cd $DL_DIR
-tar -xzf open_erp_missing_pagkage.tar.gz
-dpkg -i erp_p/*
+#tar -xzf open_erp_missing_pagkage.tar.gz
+#dpkg -i erp_p/*
 
 
 

@@ -610,6 +610,8 @@ class Cooperationiws:
 
 	self.scriptParams +='LIVEUSER=\"' + self.user + '\"\n'
 
+	self.scriptParams +='ARCH=\"' + self.LiveCdArch + '\"\n'
+
 	self.scriptParams +='LIVEUSER_FULL=\"' + self.userFull + '\"\n'
 	
 	self.scriptParams +='CASPER_PATH=\"' + self.casperPath + '\"\n'

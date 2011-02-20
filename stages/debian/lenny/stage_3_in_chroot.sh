@@ -38,7 +38,7 @@ export LC_ALL=C
 export DEBIAN_FRONTEND=noninteractive
 
 
-##ACCEPTING LICENCE JAVA UBUNTU
+#ACCEPTING LICENCE JAVA UBUNTU
 echo "Name: shared/accepted-sun-dlj-v1-1
 Template: shared/accepted-sun-dlj-v1-1
 Value: true
