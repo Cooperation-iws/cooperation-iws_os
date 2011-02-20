@@ -24,9 +24,6 @@ tar -xzf ie6-FR-090423.tar.gz -C /etc/skel
 rm /etc/skel/bin/ie6
 cd /etc/skel/.ies4linux/bin
 sed -i "s/esmalif/$LIVEUSER/g" /etc/skel/.ies4linux/bin/ie6
-ln -s  /home/$LIVEUSER/.ies4linux/bin/ie6 ../../bin
-ln -s  /home/$LIVEUSER/.ies4linux/bin/ie6 ../../Desktop
-
 
 apt-get install --assume-yes --force-yes wine cabextract
 

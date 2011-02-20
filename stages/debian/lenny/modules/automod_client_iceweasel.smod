@@ -12,5 +12,5 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 echo "I: install Multimedia software"
 
-apt-get install --assume-yes --force-yes iceweasel iceweasel-l10n*
+apt-get install --assume-yes --force-yes iceweasel iceweasel-l10n-fr icedove icedove-l10n-fr
 

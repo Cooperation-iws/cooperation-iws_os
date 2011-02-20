@@ -189,8 +189,8 @@ killall -9 mongrel_rails 1>&2 2>/dev/null
 /etc/init.d/tigase stop 1>&2 2>/dev/null
 /etc/init.d/libresource stop 1>&2 2>/dev/null
 /etc/init.d/tomcat5.5 stop 1>&2 2>/dev/null
-
-
+/etc/init.d/dbus stop 1>&2 2>/dev/null
+/etc/init.d/binfmt-support stop 1>&2 2>/dev/null
 
 echo "I: config rc.local"
 
