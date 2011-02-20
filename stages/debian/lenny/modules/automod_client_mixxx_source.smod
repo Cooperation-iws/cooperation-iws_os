@@ -1,0 +1,26 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Mixxx_source 0.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Update Manager'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$LIVEUSER
+. /tmp/scripts_params
+
+
+sudo apt-get install portaudio19-dev debhelper docbook-to-man imagemagick libaudiofile-dev libexpat-dev libgl1-mesa-dev libglu1-mesa-dev libid3tag0-dev libjack-dev libmad0-dev libogg-dev libqt4-opengl-dev libsndfile1-dev libsoundtouch-dev libvorbis-dev pkg-config quilt scons bzr libfftw3-dev libtaglib-ocaml-dev libportmidi-dev libshout3-dev
+
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/mixxx-1.9.0-src.tar.gz
+sudo tar xzf mixxx-1.9.0-src.tar.gz 
+
+cd mixxx*
+scons prefix=/usr
+scons prefix=/usr install
+

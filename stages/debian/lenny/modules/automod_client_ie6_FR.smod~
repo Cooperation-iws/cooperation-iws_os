@@ -1,0 +1,37 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Internet Explorer 6.0 FR'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION=''
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+. /tmp/app_params
+. /tmp/scripts_params
+
+
+
+
+cd $DL_DIR
+
+wget $URL_CIWS_DEPOT/ie6-FR-090423.tar.gz
+
+tar -xzf ie6-FR-090423.tar.gz -C /etc/skel
+
+rm /etc/skel/bin/ie6
+cd /etc/skel/.ies4linux/bin
+sed -i "s/esmalif/$LIVEUSER/g" /etc/skel/.ies4linux/bin/ie6
+ln -s  /home/$LIVEUSER/.ies4linux/bin/ie6 ../../bin
+ln -s  /home/$LIVEUSER/.ies4linux/bin/ie6 ../../Desktop
+
+
+apt-get install --assume-yes --force-yes wine cabextract
+
+/etc/init.d/binfmt-support stop
+
+/etc/init.d/winbind stop
+
+
