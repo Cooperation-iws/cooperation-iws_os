@@ -2,4 +2,12 @@
 
 . /tmp/scripts_params
 
+mkdir /etc/skel/Desktop
+
+if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
+sed -i "503s/debian-moreblue-orbit/happygnome/" /etc/gdm.conf
+
+fi
+
+
 
