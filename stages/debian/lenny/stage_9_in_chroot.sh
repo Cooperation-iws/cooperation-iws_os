@@ -32,7 +32,7 @@ mv /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
 
 
 #FIXING RESOLV.CONF FOR LENNY
-if [ "$DEB_DIST" == "lenny" ] && [ -d /etc/resolvconf/run/ ]; then
+if [ "$DEB_DIST" == "lenny" ] && [ -e /etc/resolvconf/run/resolv.conf ]; then
 rm /etc/resolv.conf
 ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
 fi
