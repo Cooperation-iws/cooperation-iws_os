@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='Debian Multimedia Codecs'
+RMOD_NAME='Debian Multimedia Codecs Lenny'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Ubuntu Multimedia Codecs'
@@ -21,22 +21,6 @@ apt-get install --assume-yes --force-yes debian-multimedia-keyring gstreamer0.10
 
 if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
 apt-get install --assume-yes --force-yes gnome-icon-theme* human-icon-theme* hplip gdm-themes 
-
-
-
-#Nautilus hack to have a user friendly file explorator
-mkdir /etc/skel/.gconf/
-mkdir /etc/skel/.gconf/apps/
-mkdir /etc/skel/.gconf/apps/nautilus/
-mkdir /etc/skel/.gconf/apps/nautilus/preferences
-
-
-cd $DL_DIR
-wget $URL_CIWS_DEPOT/gconf_debian_lenny_client.tar.gz
-
-tar -xzf gconf_debian_lenny_client.tar.gz -C /etc/skel/.
-
-chmod -R 777 /etc/skel/.gconf/
 fi
 
 if [ $(cat /etc/X11/default-display-manager | grep kdm) ]; then 

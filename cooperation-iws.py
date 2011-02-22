@@ -27,7 +27,19 @@ import gettext
 import re
 import commands
 import urllib
-
+try:
+     import pygtk
+     pygtk.require("2.0")
+except Exception, detail:
+    print detail
+    pass
+try:
+    import gtk
+    import gtk.glade
+    import gobject
+    import pango
+except Exception, detail:
+    print detail
 
 class Cooperationiws:
 
