@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='Virtualisation 0.1lenny'
+RMOD_NAME='Kvm Lenny'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='NoMachine NX remote admin management client'
