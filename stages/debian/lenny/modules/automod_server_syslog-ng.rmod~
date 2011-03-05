@@ -1,0 +1,241 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Syslog-ng server 0.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Logs administration'
+RMOD_DESCRIPTION_FR='Administration des logs système'
+RMOD_VERBOSE="Php-Syslog-ng is a frontend for viewing syslog-ng messages logged to MySQL in realtime. It features customized searches based on device, priority, date, time, and message.  "
+RMOD_VERBOSE_FR="Php-Syslog-ng est un client web pour visualiser les logs systèmes en temps réel.  "
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+
+#VARIABLES
+#MYSQL PASSWORD
+SYSLOGNG_MYSQL_PWD=$phpsyslog_mysql_pwd
+MOD_NAME=$phpsyslogng_name
+
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/phpsyslogng_081101.tar.gz
+tar -xzf phpsyslogng_081101.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Phpsyslogng download"
+WGET_CIWS_DEPOT
+echo "
+Name: msttcorefonts/baddldir
+Template: msttcorefonts/baddldir
+Owners: msttcorefonts
+
+Name: msttcorefonts/defoma
+Template: msttcorefonts/defoma
+Value: 
+Owners: msttcorefonts
+Flags: seen
+
+Name: msttcorefonts/dldir
+Template: msttcorefonts/dldir
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/dlurl
+Template: msttcorefonts/dlurl
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/http_proxy
+Template: msttcorefonts/http_proxy
+Value: 
+Owners: msttcorefonts
+
+Name: msttcorefonts/savedir
+Template: msttcorefonts/savedir
+Value: 
+Owners: msttcorefonts
+" >> /var/cache/debconf/config.dat
+apt-get install --assume-yes --force-yes syslog-ng
+aptitude install -y msttcorefonts
+/etc/init.d/syslog-ng stop
+
+
+echo "
+@daily www-data /usr/bin/php $WWW_DIRECTORY/admin/$MOD_NAME/scripts/logrotate.php >> /var/log/php-syslog-ng/logrotate.log 
+@daily find $WWW_DIRECTORY/admin/$MOD_NAME/html/jpcache/ -atime 1 -exec rm -f '{}' ';' 
+*/5 * * * * www-data /usr/bin/php $WWW_DIRECTORY/admin/$MOD_NAME/scripts/reloadcache.php >> /var/log/php-syslog-ng/reloadcache.log
+*/5 * * * * www-data /usr/bin/php $WWW_DIRECTORY/admin/$MOD_NAME/scripts/SqueezeDB-v2.0.php >> /var/log/php-syslog-ng/squeezedb.log
+" >> /etc/cron.d/syslog-ng
+sudo chmod +x /etc/cron.d/syslog-ng
+
+
+
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/admin/$MOD_NAME
+cp -Rf Syslogng/* $WWW_DIRECTORY/admin/$MOD_NAME/.
+sed -i "15s/Syslogng/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+sed -i "16s/Syslogng/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+
+
+$BIN_MYSQL -u root < $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+
+mkdir -p /var/log/php-syslog-ng
+
+echo "
+grant all on $MOD_NAME.* to $MOD_NAME identified by '$SYSLOGNG_MYSQL_PWD';
+grant all on $MOD_NAME.* to $MOD_NAME@localhost identified by '$SYSLOGNG_MYSQL_PWD';
+flush privileges;
+" > /tmp/syslogng_db.sql
+$BIN_MYSQL -u root < /tmp/syslogng_db.sql mysql
+
+
+chmod -R 777 $WWW_DIRECTORY/admin/$MOD_NAME/
+chown -R www-data $WWW_DIRECTORY/admin/$MOD_NAME/
+
+cd $WWW_DIRECTORY/admin/$MOD_NAME/scripts/
+perl -i -pe "s/\/var\/www\/admin\/Syslogng/\/var\/www\/admin\/$MOD_NAME/g" *
+
+sed -i "9s/Syslogng/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+sed -i "11s/Syslogng/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+sed -i "13s/Syslogng/$MOD_NAME/" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+sed -i "10s/SYSLOGNG_MYSQL_PWD/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+sed -i "12s/SYSLOGNG_MYSQL_PWD/$SYSLOGNG_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+sed -i "23s/admin@ciws.com/$syslog_admin_email/" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+sed -i "32s/\/admin\/Syslogng\/html\//\/admin\/$MOD_NAME\/html\//" $WWW_DIRECTORY/admin/$MOD_NAME/html/config/config.php
+
+cp $WWW_DIRECTORY/admin/$MOD_NAME/scripts/logrotate.d /etc/logrotate.d
+
+
+cat << EOT >> /etc/syslog-ng/syslog-ng.conf
+###########################################################################################
+# Added by cdukes for php-syslog-ng // ref: http://gentoo-wiki.com/HOWTO_setup_PHP-Syslog-NG
+###########################################################################################
+options { 
+long_hostnames(off);
+# doesn't actually help on Solaris, log(3) truncates at 1024 chars
+log_msg_size(8192);
+# buffer just a little for performance
+sync(1);
+# memory is cheap, buffer messages unable to write (like to loghost)
+log_fifo_size(16384);
+# Hosts we don't want syslog from
+#bad_hostname("^(ctld.|cmd|tmd|last)$");
+# The time to wait before a dead connection is reestablished (seconds)
+time_reopen(10);
+#Use DNS so that our good names are used, not hostnames
+use_dns(yes);
+dns_cache(yes);
+#Use the whole DNS name
+use_fqdn(yes);
+keep_hostname(yes);
+chain_hostnames(no);
+#Read permission for everyone
+perm(0644);
+# The default action of syslog-ng 1.6.0 is to log a STATS line
+# to the file every 10 minutes.  That's pretty ugly after a while.
+# Change it to every 12 hours so you get a nice daily update of
+# how many messages syslog-ng missed (0).
+stats(43200); 
+};
+source s_everything { internal(); pipe("/proc/kmsg"); unix-stream("/dev/log"); udp(); };
+destination d_mysql {
+program("/usr/bin/mysql -u$MOD_NAME -p$SYSLOGNG_MYSQL_PWD $MOD_NAME"
+template("INSERT INTO logs (host, facility, priority, level, tag, datetime, program, msg)
+VALUES ( '\$HOST', '\$FACILITY', '\$PRIORITY', '\$LEVEL', '\$TAG', '\$YEAR-\$MONTH-\$DAY \$HOUR:\$MIN:\$SEC', '\$PROGRAM', '\$MSG' );\n")
+template-escape(yes));
+};
+log {
+source(s_everything);
+destination(d_mysql);
+};
+# Added above by cdukes for php-syslog-ng enhancements
+EOT
+
+mv /etc/syslog-ng $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/syslog-ng /etc/syslog-ng
+
+sed -i "s/bind-address/#bind-address/" /etc/mysql/my.cnf
+
+/etc/init.d/mysql restart
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME}" "/${MOD_NAME}" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+function CREATE_INSTALL_SCRIPT
+{
+
+echo "
+#SYSLOGNG
+echo \"
+ALTER TABLE logs ADD counter INT NOT NULL DEFAULT 1;
+ALTER TABLE logs ADD fo datetime default NULL;
+ALTER TABLE logs ADD lo datetime default NULL;
+\" > /tmp/dbsqueeze-syslog
+$BIN_MYSQL -u root < /tmp/dbsqueeze-syslog $MOD_NAME
+" >> $LAMPP_DIRECTORY/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Cacti"
+CHOICE_LANG
+CHOOSE_PARAMETERS_GUI
+INSTALL
+CREATE_WUI
+CREATE_INSTALL_SCRIPT
+echo "I: End of Install Cacti"
