@@ -326,7 +326,6 @@ echo "
 #Gateway
 dhclient $NET_IFACE
 ip_gateway=\$(route -n | grep UG | sed 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/&*/g'| sed 's/ //g' | cut -d'*'  -f2)
-dns=\$(cat /etc/resolv.conf | grep -m 1 nameserver | cut -d' ' -f2)
 cp /etc/bind/named.conf.options.tpl /etc/bind/named.conf.options 
 sed -i \"s/DNS_1/\$ip_gateway/\" /etc/bind/named.conf.options 
 cp /etc/bind/named.conf.local.tpl /etc/bind/named.conf.local
