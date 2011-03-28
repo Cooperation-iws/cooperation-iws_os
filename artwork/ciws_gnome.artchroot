@@ -6,16 +6,8 @@ echo "I: preparing for Artwork"
 mkdir /etc/skel/Desktop
 
 
-apt-get install --assume-yes --force-yes usplash
+apt-get remove --assume-yes --force-yes usplash
 cd /tmp/ciws_gnome
-if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "intrepid" ] ; then
-dpkg -i usplash-theme-wideubuntu_1.0-1_i386.deb
-update-alternatives --install /usr/lib/usplash/usplash-artwork.so usplash-artwork.so /usr/lib/usplash/usplash-theme-wideubuntu.so 10
-update-alternatives --set usplash-artwork.so /usr/lib/usplash/usplash-theme-wideubuntu.so
-elif [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ]; then
-dpkg -i usplash_1-1_i386.deb
-update-alternatives --install /usr/lib/usplash/usplash-artwork.so usplash-artwork.so /usr/lib/usplash/usplash-theme-wideubuntu.so 10
-update-alternatives --set usplash-artwork.so /usr/lib/usplash/usplash-theme-wideubuntu.so
 if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
 
 
@@ -36,11 +28,7 @@ chmod -R 777 /etc/skel/.gconf/
 fi
 
 
-else
-dpkg -i usplash-theme-ciws_0.1-1_i386.deb 
-update-alternatives --install /usr/lib/usplash/usplash-artwork.so usplash-artwork.so /usr/lib/usplash/usplash-theme-ciws.so 10
-update-alternatives --set usplash-artwork.so /usr/lib/usplash/usplash-theme-ciws.so
-fi
+
 if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ]; then
 cd /tmp/ciws_gnome
 cp background.png /usr/share/gdm/themes/xubuntu
