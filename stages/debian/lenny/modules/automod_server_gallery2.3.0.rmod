@@ -94,6 +94,8 @@ $BIN_MYSQL -u root < gallery2_credential.sql
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
 
+sed -i "194s/localhost/'.\$HTTP_SERVER_VARS[\"SERVER_NAME\"].'/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.php
+
 done
 
 }
