@@ -123,7 +123,7 @@ cd $DL_DIR
 tar -xzf openerp_5.0.0.6_dep.tar.gz -C /usr/lib/python2.5/site-packages/.
 echo "#######INSTALLING SERVER###########"
 cd $DL_DIR/openerp-server-5.0.6
-python setup.py install > /dev/null
+python setup.py install 
 echo "#######INSTALLING WEB###########"
 cd $DL_DIR/openerp-client-web-5.0.6
 python setup.py install
