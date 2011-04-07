@@ -76,7 +76,7 @@ chmod +x /usr/share/initramfs-tools/scripts/$CASPER_PATH-bottom/001cpvar
 
 #CONFIGURING SOURCES.LIST
 echo "I:Configuring sources.list"
-if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "lenny" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "lenny" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "squeeze" ]; then
 echo "
 deb http://archive.ubuntu.com/ubuntu/ $DEB_DIST restricted main universe multiverse
 deb http://archive.ubuntu.com/ubuntu/ $DEB_DIST-updates restricted main universe multiverse
@@ -213,20 +213,17 @@ rm -r /tmp/*
 rm /var/cache/apt/archives/* > /dev/null 2>&1 
 rm /var/cache/apt/archives/partial/* > /dev/null 2>&1 
 
-if [ "$(echo "${OS_TYPE}" | awk  '{print $1}')" == "Server" ]; then
 
 echo "I: displacing directories"
 mv /etc/cron.d $LAMPP_DIRECTORY/etc
 ln -s $LAMPP_DIRECTORY/etc/cron.d /etc/cron.d
 
 
-if [ "$(echo "${OS_TYPE}" | awk  '{print $1}')" == "Server" ]; then
 echo "I: configuring home persistence"
 mv /home /opt/ciws
 ln -s /opt/ciws/home /home
 mv /root /opt/ciws
 ln -s /opt/ciws/root /root
-fi
 
 echo "I: configuring log persistence"
 mv /var/log /opt/ciws/var
@@ -235,6 +232,5 @@ ln -s /opt/ciws/var/log /var/log
 echo "I: config persistent directory"
 mkdir /etc/ciws
 cp -a /opt/ciws/* /etc/ciws/.
-fi
 
 

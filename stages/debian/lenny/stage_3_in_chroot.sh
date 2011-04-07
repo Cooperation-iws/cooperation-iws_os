@@ -52,7 +52,7 @@ echo "gem: --source $URL_CIWS_DEPOT/gem-mirror/" > /root/.gemrc
 #UPDATING SOURCES.LIST
 mv /etc/apt/sources.list /etc/apt/sources.list.orig
 
-if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "lenny" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ]; then
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "lenny" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "squeeze" ]; then
 echo "
 deb $DEB_MIRROR_PATH/ $DEB_DIST restricted main universe multiverse
 deb $DEB_MIRROR_SECURITY_PATH/ $DEB_DIST-updates restricted main universe multiverse
