@@ -115,6 +115,7 @@ cp /var/cache/bind/db.$domain.tpl /var/cache/bind/db.$domain
 sed -i \"s/ip_gateway/\$ip_gateway/g\" /etc/bind/named.conf.rev
 sed -i \"s/ip_address/\$ip_address/g\" /var/cache/bind/db.$domain
 sed -i \"s/100.168.192/\$ip_address_3.\$ip_address_2.\$ip_address_1/g\" /etc/bind/named.conf.rev
+sed -i \"s/nameserver 127.0.0.1/nameserver \$ip_gateway/g\" /etc/resolvconf/run/resolv.conf
 cp /etc/bind/named.conf.options.tpl /etc/bind/named.conf.options 
 sed -i \"s/DNS_1/\$ip_gateway/\" /etc/bind/named.conf.options
 sleep 2
