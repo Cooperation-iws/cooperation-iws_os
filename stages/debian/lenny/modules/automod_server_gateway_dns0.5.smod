@@ -120,7 +120,7 @@ sed -i "15s/\/\///" /etc/bind/named.conf.options
 sed -i "18s/^/\/\//" /etc/bind/named.conf.options 
 sed -i "3s/^/dnssec-enable yes;/" /etc/bind/named.conf.options 
 
-if [ "$gateway_recursion" == "on" ]; then
+if [ "$gateway_recursion" == "y" ]; then
 sed -i "16s/^/recursion no;/" /etc/bind/named.conf.options 
 fi
 
