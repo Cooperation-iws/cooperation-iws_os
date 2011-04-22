@@ -117,7 +117,13 @@ sed -i "13s/\/\///" /etc/bind/named.conf.options
 sed -i "14s/\/\///" /etc/bind/named.conf.options 
 sed -i "14s/0.0.0.0/DNS_1/" /etc/bind/named.conf.options 
 sed -i "15s/\/\///" /etc/bind/named.conf.options 
+sed -i "18s/^/\/\//" /etc/bind/named.conf.options 
 sed -i "3s/^/dnssec-enable yes;/" /etc/bind/named.conf.options 
+
+if [ "$gateway_recursion" == "on" ]; then
+sed -i "16s/^/recursion no;/" /etc/bind/named.conf.options 
+fi
+
 cp /etc/bind/named.conf.options  /etc/bind/named.conf.options.tpl
 mv /etc/bind $LAMPP_DIRECTORY/etc/
 ln -s $LAMPP_DIRECTORY/etc/bind /etc/bind
