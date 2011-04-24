@@ -100,7 +100,7 @@ return $xml_error;
 
 function parse_xml_app_file($xml_file) {
 		$tree = simplexml_load_file($xml_file);
-                
+                $count_xml_elt=0;
 		foreach($tree->item as $item) {   
 			$array_xml[$count_xml_elt][0] = $item->item_category;
 			$array_xml[$count_xml_elt][1] = $item->item_name;
