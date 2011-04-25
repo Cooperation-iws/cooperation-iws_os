@@ -31,7 +31,7 @@ function INSTALL
 apt-get install --assume-yes --force-yes zabbix-agent
 
 sed -i "s/Server=localhost/Server=$zabbix_server_name/"  /etc/zabbix/zabbix_agentd.conf
-sed -i "s/Hostname=localhost/Hostname=$HOSTNAME/"  /etc/zabbix/zabbix_agentd.conf
+sed -i "s/Hostname=localhost/Hostname=$HOSTNAME.$domain/"  /etc/zabbix/zabbix_agentd.conf
 
 echo "zabbix_agent 10050/tcp # Zabbix ports
 zabbix_trap 10051/tcp
