@@ -1,0 +1,59 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='update live-initramfs'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Office tools for client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+. /tmp/scripts_params
+
+echo "I: updating live-boot-initramfs"
+
+echo "
+modprobe -q loop max_loop=255" >> /usr/share/initramfs-tools/scripts/live-premount/modules
+
+
+
+
+sed -i "s/USERNAME=\"user\"/USERNAME=\"$LIVEUSER\"/"  /usr/share/initramfs-tools/scripts/live
+
+sed -i "s/USERFULLNAME=\"Live user\"/USERFULLNAME=\"$LIVEUSER_FULL\"/" /usr/share/initramfs-tools/scripts/live
+
+
+sed -i "s/HOSTNAME=\"host\"/HOSTNAME=\"$HOSTNAME\"/" /usr/share/initramfs-tools/scripts/live
+
+sed -i "s/8Ab05sVQ4LLps/$CRYPT_HOST_PWD/" /lib/live/config/002-user-setup
+
+sed -i "s/NOPASSWD: //" /lib/live/config/003-sudo
+
+
+if [ "$DISABLE_AUTOLOGIN" ]; then
+#Gdm3
+sed -i "36s/true/false/g" /lib/live/config/007-gdm3
+sed -i "41s/true/false/g" /lib/live/config/007-gdm3
+sed -i "43s/true/false/g" /lib/live/config/007-gdm3
+
+fi
+
+if [ "$ENCRYPTION" ]; then
+
+apt-get install --assume-yes --force-yes aespipe
+
+fi
+
+
+
+
+sed -i -e "1513s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "1522s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "15s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/live
+sed -i -e "17s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/live
+
+
+
+
+

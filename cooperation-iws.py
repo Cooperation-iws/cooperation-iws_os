@@ -132,7 +132,7 @@ class Cooperationiws:
                     help="Modules list file")
 	parser.add_option( "--artwork", 
                     dest="artwork", default="default" ,
-                    help="Artwork for system: [ default | ciws_gnome ]")
+                    help="Artwork for system: [ wheezy | default | ciws_gnome ]")
 	parser.add_option( "--cms", 
                     dest="cms", default="" ,
                     help="Kind of CMS")
@@ -170,6 +170,9 @@ class Cooperationiws:
 	parser.add_option( "--locale", 
                     dest="locale", default="" ,
                     help="OS localization")
+	parser.add_option( "--timezone", 
+                    dest="timezone", default="Europe/Paris" ,
+                    help="Time zone as in /usr/share/localtime/*/*")
 	parser.add_option( "--ostype", 
                     dest="ostype", default="Server" ,
                     help="Os Type (Server or Client)")
@@ -207,7 +210,7 @@ class Cooperationiws:
                     help="Linux distribution")
 	parser.add_option( "--distvers", 
                     dest="distvers", default="lenny" ,
-                    help="Version of the Linux distribution, hardy,intrepid,jaunty,lenny")
+                    help="Version of the Linux distribution, hardy,intrepid,jaunty,lenny,wheezy")
 
 
 
@@ -235,6 +238,7 @@ class Cooperationiws:
 		exit(0)
 	self.password = options.password
 	self.userFull = options.userfullname
+	self.timezone = options.timezone
 	self.host = options.host
 	self.disableAutologin = options.disautologin
 	self.debMirror = options.debmirror
@@ -249,7 +253,6 @@ class Cooperationiws:
 	self.DebianLiveReleaseType =  options.debianLiveOS         
 	self.encryption = options.encryption
 	self.encryptionpassphrase = options.encryptionpassphrase
-	self.locale = options.locale
 	self.locale = options.locale
 	self.LiveCdArch=options.arch
 	self.distType=options.dist
@@ -300,8 +303,8 @@ class Cooperationiws:
         if commands.getoutput('which chroot') == '':
             print _('chroot NOT FOUND (needed for Root FS customization)')
             dependList += 'chroot\n'
-        if commands.getoutput('which mkisofs') == '':
-            print _('mkisofs NOT FOUND (needed for ISO generation)')
+        if commands.getoutput('which genisoimage') == '':
+            print _('genisoimage NOT FOUND (needed for ISO generation)')
             dependList += 'mkisofs\n'
         if commands.getoutput('which rsync') == '':
             print _('rsync NOT FOUND (needed for Remastering ISO)')
@@ -622,6 +625,12 @@ class Cooperationiws:
 
 	self.scriptParams +='LIVEUSER=\"' + self.user + '\"\n'
 
+	self.scriptParams +='LANG=\"' + self.locale + '\"\n'
+
+	self.scriptParams +='KEYB=\"' + self.keyLang + '\"\n'
+
+	self.scriptParams +='TZ=\"' + self.timezone + '\"\n'
+
 	self.scriptParams +='ARCH=\"' + self.LiveCdArch + '\"\n'
 
 	self.scriptParams +='LIVEUSER_FULL=\"' + self.userFull + '\"\n'
@@ -658,6 +667,10 @@ class Cooperationiws:
 	fscriptParams=open(os.path.join(self.customDir, "chroot") + '/tmp/scripts_params', 'w')
 	fscriptParams.write(self.scriptParams)
 	fscriptParams.close()
+	
+	fscriptParamsOut=open(self.customDir + '/scripts_params', 'w')
+	fscriptParamsOut.write(self.scriptParams)
+	fscriptParamsOut.close()
 
 	
 	#### RUN STAGE 2 BEFORE CHROOT
@@ -753,7 +766,7 @@ class Cooperationiws:
 	
             modExecModulesChroot += '\necho \'--------------------\'\necho \'Modules Finished...\'\n\n'
 	if self.artwork != "":  
-		modExecModulesChroot += 'bash \"/tmp/' + self.artwork + '.artchroot\"' + ' ;\n '
+		modExecModulesChroot += 'bash \"/tmp/' + self.artwork + '.artchroot\"' + '   ;\n '
 
 	#### PREPARE STAGE 7 IN CHROOT : LAMPP END LEVEL 
 

@@ -1,0 +1,31 @@
+#!/bin/bash
+
+. /tmp/scripts_params
+
+mkdir /etc/skel/Desktop
+
+#if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
+#sed -i "503s/debian-moreblue-orbit/happygnome/" /etc/gdm/gdm.conf
+
+#fi
+
+#if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
+
+
+
+#Nautilus hack to have a user friendly file explorator
+#mkdir /etc/skel/.gconf/
+#mkdir /etc/skel/.gconf/apps/
+#mkdir /etc/skel/.gconf/apps/nautilus/
+#mkdir /etc/skel/.gconf/apps/nautilus/preferences
+
+
+#cd $DL_DIR
+#wget $URL_CIWS_DEPOT/gconf_debian_lenny_client.tar.gz
+
+#tar -xzf gconf_debian_lenny_client.tar.gz -C /etc/skel/.
+
+#chmod -R 777 /etc/skel/.gconf/
+#fi
+
+

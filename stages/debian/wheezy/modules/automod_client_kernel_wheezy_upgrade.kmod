@@ -1,0 +1,46 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='kernel wheezy upgrade'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Update Manager'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$LIVEUSER
+
+DISPLAY=127.0.0.1:5.0
+export LANG="en"
+export LC_ALL=C
+export HOME=/home/liveusb
+
+. /tmp/app_params
+
+echo "do_initrd = Yes" >  /etc/kernel-img.conf
+
+#apt-get install --assume-yes --force-yes linux-image-$kernel loop-aes-modules-$kernel squashfs-modules-$kernel aufs-modules-$kernel
+apt-get install --assume-yes --force-yes linux-image-$kernel linux-headers-$kernel
+
+
+sleep 2
+
+
+
+echo "
+Name: linux-image-$kernel/preinst/abort-install-$kernel
+Template: linux-image-$kernel/preinst/abort-install-$kernel
+Value: 
+Owners: linux-image-$kernel
+
+Name: linux-image-$kernel/preinst/bootloader-initrd-$kernel
+Template: linux-image-$kernel/preinst/bootloader-initrd-$kernel
+Value: false
+Owners: linux-image-$kernel
+Flags: seen
+" >> /var/cache/debconf/config.dat
+
+apt-get -f install --assume-yes --force-yes
+
+
