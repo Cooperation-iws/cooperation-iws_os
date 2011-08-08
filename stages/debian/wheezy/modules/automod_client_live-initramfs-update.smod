@@ -18,7 +18,6 @@ modprobe -q loop max_loop=255" >> /usr/share/initramfs-tools/scripts/live-premou
 
 
 
-
 sed -i "s/USERNAME=\"user\"/USERNAME=\"$LIVEUSER\"/"  /usr/share/initramfs-tools/scripts/live
 
 sed -i "s/USERFULLNAME=\"Live user\"/USERFULLNAME=\"$LIVEUSER_FULL\"/" /usr/share/initramfs-tools/scripts/live
@@ -48,12 +47,14 @@ fi
 
 
 
-sed -i -e "1513s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
-sed -i -e "1522s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/$CASPER_PATH
+sed -i -e "1513s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/live
+sed -i -e "1522s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/live
 sed -i -e "15s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/live
 sed -i -e "17s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/live
+sed -i '1088s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -o rw,noatime "${dev}" "${rootmnt}\/opt\/ciws"/' /usr/share/initramfs-tools/scripts/live
 
 
 
-
+#Debug
+sed -i '1087s/^/log_warning_msg "${dev} _ ${snap_mount} _ ${snap_type}"/' /usr/share/initramfs-tools/scripts/live
 

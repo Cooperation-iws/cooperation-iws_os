@@ -42,7 +42,7 @@ echo "I: configuring persistence"
 
 echo "#!/bin/sh
 
-if [ ! -d /root/$LAMPP_DIRECTORY/var/lib ] ; then
+if [ ! -d /$LAMPP_DIRECTORY/var/lib ] ; then
 echo \"\$DESCRIPTION\"
 echo \"
 rm /etc/rc0.d/*$CASPER_PATH* 
