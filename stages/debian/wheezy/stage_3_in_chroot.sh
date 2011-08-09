@@ -85,17 +85,6 @@ echo "#!/bin/bash
 
 " > /etc/rc.local
 
-#FIX DHCLIENT FOR LENNY
-if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ]; then
-
-echo " 
-send host-name \"$HOSTNAME\";
-request subnet-mask, broadcast-address, time-offset, routers,
-	domain-name, domain-name-servers, domain-search, host-name,
-	netbios-name-servers, netbios-scope;
-retry 5;
-" > /etc/dhcp3/dhclient.conf
-fi
 
 
 

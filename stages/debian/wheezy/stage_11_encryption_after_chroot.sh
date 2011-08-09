@@ -16,6 +16,8 @@ LH_CHROOT_FILESYSTEM="squashfs"
 
 echo "I:ENCRYPTION"
 
+apt-get install --assume-yes --force-yes aespipe
+
 if [ ! -e "$DOSSIER_REMASTER/live" ]; then 
 INITFS="casper"
 else
@@ -93,8 +95,5 @@ rm -f $WORKING_DIRECTORY/chroot/filesystem.${LH_CHROOT_FILESYSTEM}.tmp
 
 
 
-#Setting up isolinux
-
-sed -i "s/boot=live/boot=live encryption=$LH_ENCRYPTION/g" $DOSSIER_REMASTER/isolinux/isolinux.cfg
 
 

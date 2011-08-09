@@ -662,7 +662,7 @@ class Cooperationiws:
 		self.scriptParams +='DISABLE_AUTOLOGIN=\"1\"\n'
 
 	if self.encryption != "disabled":
-        	self.scriptParams +='ENCRYPTION=\"1\"\n'
+        	self.scriptParams +='ENCRYPTION=\"' + self.encryption + '\"\n'
         
 	fscriptParams=open(os.path.join(self.customDir, "chroot") + '/tmp/scripts_params', 'w')
 	fscriptParams.write(self.scriptParams)

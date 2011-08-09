@@ -152,7 +152,7 @@ echo "#!/bin/bash
 /opt/ciws/etc/dhclient-exit-hooks.d_ifconfig_local &
 "  > /etc/dhcp/dhclient-exit-hooks.d/ifconfig_local
 
-chmod +x /etc/dhcp3/dhclient-exit-hooks.d/ifconfig_local
+chmod +x /etc/dhcp/dhclient-exit-hooks.d/ifconfig_local
 
 
 }

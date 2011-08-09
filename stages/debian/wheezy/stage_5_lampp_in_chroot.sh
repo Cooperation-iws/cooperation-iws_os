@@ -61,15 +61,12 @@ sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/sites-available/d
 
 
 echo "I: config phpmyadmin"
-rm /etc/apache2/conf.d/phpmyadmin.conf
-ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf.d/phpmyadmin.conf 
 
 echo "I: config php"
-sed -i "270s/16/128/" /etc/php5/apache2/php.ini
-sed -i "565s/2/512/" /etc/php5/apache2/php.ini
+
 sed -i -e  "s/post_max_size = 8M/post_max_size = 32M/" /etc/php5/apache2/php.ini
 
-sed -i "51s/#/default-character-set=utf8/" /etc/mysql/my.cnf
+sed -i "61s/#/default-character-set=utf8/" /etc/mysql/my.cnf
 
 
 mkdir $WWW_DIRECTORY/admin/
@@ -80,8 +77,6 @@ rm $WWW_DIRECTORY/index.html
 mv /var/lib/mysql $LAMPP_DIRECTORY/var/lib
 ln -s $LAMPP_DIRECTORY/var/lib/mysql /var/lib/mysql
 
-mv /var/lib/mysql-cluster $LAMPP_DIRECTORY/var/lib
-ln -s $LAMPP_DIRECTORY/var/lib/mysql-cluster /var/lib/mysql-cluster
 
 mv /var/lib/phpmyadmin $LAMPP_DIRECTORY/var/lib
 ln -s $LAMPP_DIRECTORY/var/lib/phpmyadmin /var/lib/phpmyadmin

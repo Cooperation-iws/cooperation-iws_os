@@ -25,3 +25,9 @@ sed -i "s/locales=fr/locales=$LANG/g" $CHROOT_DIR/remaster/isolinux/live.cfg
 sed -i "s/keyboard-layouts=fr/keyboard-layouts=$KEYB/g" $CHROOT_DIR/remaster/isolinux/live.cfg
 TZ=$(echo $TZ | sed 's/\//\\\//')
 sed -i "s/timezone=Europe\/Paris/timezone=$TZ/g" $CHROOT_DIR/remaster/isolinux/live.cfg
+
+
+#Setting up isolinux
+if [ "$ENCRYPTION" ]; then
+sed -i "s/boot=live/boot=live encryption=$ENCRYPTION/g" $CHROOT_DIR/remaster/isolinux/live.cfg
+fi
