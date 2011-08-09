@@ -1,0 +1,110 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Postgresql 9.0'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='database'
+RMOD_DESCRIPTION_FR='database'
+RMOD_VERBOSE="Postgresql is a database software server"
+RMOD_VERBOSE_FR="Postgresql est un serveur de base de données"
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_REQ_APACHE=True
+. /tmp/app_params
+. /tmp/scripts_params
+
+ROOT_PSGSQL_PWD=$root_psgsql_pwd
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes postgresql postgresql-client phppgadmin
+
+
+rm /etc/apache2/conf.d/phppgadmin
+
+ln -s /etc/phppgadmin/apache.conf /etc/apache2/conf.d/phppgadmin
+
+
+sed -i '10s/^/#/' /etc/phppgadmin/apache.conf
+sed -i '11s/#//' /etc/phppgadmin/apache.conf
+
+
+/etc/init.d/postgresql stop
+
+
+if [ ! -d $LAMPP_DIRECTORY/etc/postgresql ]; then
+mv /etc/postgresql $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/postgresql /etc/postgresql
+
+mv /etc/postgresql-common $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/postgresql-common /etc/postgresql-common
+
+mv /var/lib/postgresql $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/postgresql /var/lib/postgresql
+
+mv /etc/phppgadmin $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/phppgadmin /etc/phppgadmin
+
+
+fi
+
+/etc/init.d/postgresql start
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/phppgadmin" "/phppgadmin" 
+
+
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+function INSTALL_SCRIPT
+{
+
+echo "
+echo \"I: Securing Postgresql Server\"
+echo \"
+
+ALTER USER postgres WITH PASSWORD '$ROOT_PSGSQL_PWD';
+
+\"  > openerp_db.sql
+
+sudo -u postgres psql postgres < openerp_db.sql
+echo \"I: Stopping Postgresql Server\"
+/etc/init.d/postgresql stop
+" >> /opt/ciws/share/lampp/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+
+echo "I: Install Postgresql Server"
+INSTALL
+CREATE_WUI
+INSTALL_SCRIPT
+echo "I: End of install Postgresql Server"

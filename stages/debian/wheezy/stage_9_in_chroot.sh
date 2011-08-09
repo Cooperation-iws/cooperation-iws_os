@@ -104,16 +104,7 @@ if [ "${APACHE}"  == "A" ]; then
 
 echo "I: Securing Lampp Server"
 
-	if [ "$(echo $secure_mysql | awk  '{print $1}')" != "n" ]; then
-		echo "UPDATE mysql.user SET Password=PASSWORD('$mysql_root_password') WHERE User='root';
-DELETE FROM mysql.user WHERE User='';
-DELETE FROM mysql.user WHERE User='root' AND Host!='localhost';
-FLUSH PRIVILEGES;
-" > /tmp/mysql_secure.sql
-$BIN_MYSQL -u root < /tmp/mysql_secure.sql
-
-
-	fi
+	
 	if [ "$(echo $secure_admin | awk  '{print $1}')" != "n" ]; then
 
 		mkdir /var/private

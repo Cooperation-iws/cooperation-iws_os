@@ -114,7 +114,7 @@ WWW_DIRECTORY=\"/var/www\"
 
 #INIT.D INHIBITION
 echo "I: start inhibition"
-mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.silent_install
+
 cat > /usr/sbin/policy-rc.d << EOF
 #!/bin/sh
 
