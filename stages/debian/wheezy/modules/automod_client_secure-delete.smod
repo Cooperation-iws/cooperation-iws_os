@@ -1,0 +1,29 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Secure delete 0.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION=''
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+LIVEUSER=$LIVEUSER
+DEB_DIST=$DEB_DIST
+. /tmp/scripts_params
+
+apt-get install --assume-yes --force-yes wipe 
+apt-get install --assume-yes --force-yes secure-delete
+apt-get install --assume-yes --force-yes nautilus-actions
+
+
+if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
+echo -e '\E[37;44m'"\033[1m display manager gdm \033[0m"
+DESK_ENV="gdm"
+mkdir /etc/skel/.gnome2/
+mkdir /etc/skel/.gnome2/nautilus-scripts
+cd /etc/skel/.gnome2/nautilus-scripts
+wget $URL_CIWS_DEPOT/secure-delete
+chmod 755 /etc/skel/.gnome2/nautilus-scripts/secure-delete
+fi

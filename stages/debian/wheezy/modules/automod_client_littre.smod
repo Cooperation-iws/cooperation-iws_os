@@ -1,0 +1,27 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Le Littre'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Update Manager'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+. /tmp/app_params
+
+
+. /tmp/scripts_params
+
+
+cd /etc/skel
+wget $URL_CIWS_DEPOT/Littre-linux-1.0.tar.bz2
+mkdir Littre
+cd Littre
+tar -jxf ../Littre-linux-1.0.tar.bz2
+
+apt-get install --assume-yes --force-yes sun-java5-bin sun-java5-demo sun-java5-jre
+update-alternatives --set java /usr/lib/jvm/java-1.5.0-sun/jre/bin/java
+

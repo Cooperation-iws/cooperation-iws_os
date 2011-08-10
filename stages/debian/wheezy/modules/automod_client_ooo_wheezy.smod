@@ -1,0 +1,26 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Libre Office Wheezy'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Office tools for client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+. /tmp/scripts_params
+
+echo "I: installing liveusb installer"
+
+apt-get install --assume-yes --force-yes libreoffice libreoffice-l10n-fr libreoffice-filter-binfilter libreoffice-filter-mobiledev libreoffice-help-fr libreoffice-help-en-gb pstoedit imagemagick libpaper-utils flpsed zip unzip libreoffice-dev libreoffice-dev-doc libreoffice-dmaths openclipart-libreoffice libreoffice-report-builder libreoffice-style-hicontrast libreoffice-style-tango libreoffice-style-crystal libreoffice-style-oxygen libreoffice-style-andromeda libreoffice-style-galaxy
+
+if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
+#apt-get install --assume-yes --force-yes gnome-icon-theme* human-icon-theme* hplip gdm-themes brasero
+apt-get install --assume-yes --force-yes libreoffice-gnome
+elif [ $(cat /etc/X11/default-display-manager | grep kdm) ]; then 
+apt-get install --assume-yes --force-yes libreoffice-kde
+else
+apt-get install --assume-yes --force-yes libreoffice-gtk
+fi
+

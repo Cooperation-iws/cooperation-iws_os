@@ -11,7 +11,7 @@ domain="my-erp2.intra"
 kernel="2.6.39-2-amd64"
 #update live-initramfs
 #DNS server Wheezy
-#Ciwscms 0.9.2
+#C#iwscms 0.9.2
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
@@ -20,8 +20,23 @@ root_psgsql_pwd="$mysql_root_password"
 #O#penERP 6.0.2
 openerp_name="Openerp_1"
 openerp_psgsql_pwd="$mysql_generic_pwd"
-#Wordpress 3.2fr-book
+#W#ordpress 3.2fr-book
 wordpress_name[1]="Wordpress_1"
 wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"
-#Mysql 5.1
+#M#ysql 5.1
+#Clamtk 4.10
+#Codecs Wheezy
+#Filezilla 0.1
+#Flashplayer Wheezy
+#Gimp 2.6
+#Iceweasel 0.1
+#Libre Office Wheezy
+#Mixxx 1.9
+#Secure delete 0.1
+#Sound juicer 0.1
+#Truecrypt 7.0a
+#Vlc 0.1
+#Kvm Wheezy
+#Xsane 0.1
+
