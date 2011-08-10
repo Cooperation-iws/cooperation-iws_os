@@ -1,0 +1,117 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Wordpress 3.2fr-book'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Content Management System portal'
+RMOD_DESCRIPTION_FR='Portail de gestion de contenu'
+RMOD_VERBOSE_FR="Wordpress est un CMS (Content Management System) de type Blog.   "
+RMOD_VERBOSE="Wordpress is a Content Management system (Blog). "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+NB_WORDPRESS=${#wordpress_name[*]}
+
+for (( count=1; count<=$NB_WORDPRESS; count++ ))
+do
+WORDPRESS_MYSQL_PWD[$count]=${wordpress_mysql_pwd[$count]}
+MOD_NAME[$count]=${wordpress_name[$count]}
+done
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+
+wget $URL_CIWS_DEPOT/Wordpress_3.2_110810.tar.gz
+tar -xzf Wordpress_3.2_110810.tar.gz
+
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo "I: Download Wordpress"
+WGET_CIWS_DEPOT
+
+for (( count=1; count<=$NB_WORDPRESS; count++ ))
+
+do
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cd $DL_DIR
+cp -Rf Wordpress/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+echo "CREATE DATABASE ${MOD_NAME[$count]};" > /tmp/wordpress_crdb.sql
+$BIN_MYSQL -u root < /tmp/wordpress_crdb.sql
+
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/database.sql
+
+
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${WORDPRESS_MYSQL_PWD[$count]}';
+flush privileges;" > wordpress_db.sql
+
+$BIN_MYSQL -u root < wordpress_db.sql mysql
+rm wordpress_db.sql
+
+sed -i "22s/Wordpress/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-config.php
+sed -i "25s/root/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-config.php
+sed -i "s/mysql_root/${WORDPRESS_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-config.php
+
+
+echo "
+UPDATE ${MOD_NAME[$count]}.wp_users SET user_email = '${wordpress_admin_email[$count]}' WHERE wp_users.ID =1 LIMIT 1 ;
+" > wordpress_credentials.sql
+$BIN_MYSQL -u root < wordpress_credentials.sql
+
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
+  
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_WORDPRESS; count++ ))
+
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}/wp-admin" 
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Wordpress"
+INSTALL
+CREATE_WUI
+echo "I: End of install Wordpress"

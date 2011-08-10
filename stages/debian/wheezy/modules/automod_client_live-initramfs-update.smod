@@ -39,6 +39,15 @@ sed -i "36s/true/false/g" /lib/live/config/007-gdm3
 sed -i "41s/true/false/g" /lib/live/config/007-gdm3
 sed -i "43s/true/false/g" /lib/live/config/007-gdm3
 
+#Gdm
+sed -i "41s/true/false/g" /lib/live/config/006-gdm
+sed -i "43s/true/false/g" /lib/live/config/006-gdm
+
+#kdm
+sed -i "41s/true/false/g" /lib/live/config/008-kdm
+sed -i "42s/true/false/g" /lib/live/config/008-kdm
+
+
 fi
 
 if [ "$ENCRYPTION" ]; then
