@@ -40,6 +40,7 @@ wget $URL_CIWS_DEPOT/Wordpress_3.2_110810.tar.gz
 tar -xzf Wordpress_3.2_110810.tar.gz
 
 
+wget $URL_CIWS_DEPOT/mathtex.zip
 
 
 }
@@ -56,6 +57,17 @@ function INSTALL
 
 echo "I: Download Wordpress"
 WGET_CIWS_DEPOT
+
+apt-get install --yes --force-yes imagemagick texinfo cjk-latex latex-cjk-all binutils tidy ocaml dvipng
+cd $DL_DIR
+
+unzip mathtex.zip
+
+cc mathtex.c -DLATEX=\"$(which latex)\" -DDVIPNG=\"$(which dvipng)\" -o mathtex.cgi
+cp mathtex.cgi /usr/lib/cgi-bin/.
+
+chmod -R 777 /usr/lib/cgi-bin/
+
 
 for (( count=1; count<=$NB_WORDPRESS; count++ ))
 
@@ -79,6 +91,7 @@ rm wordpress_db.sql
 sed -i "22s/Wordpress/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-config.php
 sed -i "25s/root/${MOD_NAME[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-config.php
 sed -i "s/mysql_root/${WORDPRESS_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-config.php
+sed -i "80s/^/define('WP_SITEURL', 'http:\/\/'.\$_SERVER[\"SERVER_NAME\"].'\/${MOD_NAME[$count]}\/'); define('WP_HOME', 'http:\/\/'.\$_SERVER[\"SERVER_NAME\"].'\/${MOD_NAME[$count]}\/');/" $WWW_DIRECTORY/${MOD_NAME[$count]}/wp-config.php
 
 
 echo "

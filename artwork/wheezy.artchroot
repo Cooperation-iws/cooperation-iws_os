@@ -2,12 +2,11 @@
 
 . /tmp/scripts_params
 
-mkdir /etc/skel/Desktop
 
-#if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
-#sed -i "503s/debian-moreblue-orbit/happygnome/" /etc/gdm/gdm.conf
 
-#fi
+if [ $(cat /etc/X11/default-display-manager | grep kdm) ]; then 
+apt-get install --assume-yes --force-yes kde-i18n-$KEYB
+fi
 
 #if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
 

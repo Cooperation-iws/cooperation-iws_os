@@ -37,6 +37,7 @@ cd $DL_DIR
 wget $URL_CIWS_DEPOT/mediawiki-1.13.0-081128.tar.gz
 tar -xzf mediawiki-1.13.0-081128.tar.gz
 
+
 }
 
 #_______________________________________________________________________________________________
@@ -53,8 +54,9 @@ echo "I: Download Mediawiki"
 WGET_MIRROIR
 
 
-apt-get install --yes --force-yes imagemagick tetex-bin gs-esp cjk-latex latex-cjk-all binutils tidy ocaml
-#MEDIAWIKI
+apt-get install --yes --force-yes imagemagick tetex-bin gs-esp cjk-latex latex-cjk-all binutils tidy ocaml 
+
+
 
 for (( count=1; count<=$NB_MEDIAWIKI; count++ ))
 
