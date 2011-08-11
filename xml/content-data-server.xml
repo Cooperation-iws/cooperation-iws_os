@@ -2332,6 +2332,55 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 	
 </item>
 <item>
+	<item_name>Trac Subversion</item_name>
+	<item_version>0.11.7</item_version>
+	<item_desc>Data management</item_desc>
+	<item_web>http://trac.edgewall.org/</item_web>
+	<item_verbose>Trac is an enhanced wiki and issue tracking system for software development projects. Trac uses a minimalistic approach to web-based software project management. Our mission is to help developers write great software while staying out of the way. Trac should impose as little as possible on a team's established development process and policies.
+
+It provides an interface to Subversion, an integrated Wiki and convenient reporting facilities.
+
+Trac allows wiki markup in issue descriptions and commit messages, creating links and seamless references between bugs, tasks, changesets, files and wiki pages. A timeline shows all current and past project events in order, making the acquisition of an overview of the project and tracking progress very easy. The roadmap shows the road ahead, listing the upcoming milestones.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>BSD</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>Default admin password</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_name>Subversion project name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>svn_name</field_1_value>
+		<field_1_def_content>Project</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>svn_admin_pwd</field_1_id>
+		<field_1_name>Subversion default admin password</field_1_name>
+		<field_1_value>svn_admin_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>admin_pwd</field_1_id>
+		<field_1_name>Subversion default anonymous password</field_1_name>
+		<field_1_value>svn_admin_pwd</field_1_value>
+		<field_1_def_content>anonymous</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>trac_admin_pwd</field_1_id>
+		<field_1_name>Trac default admin password</field_1_name>
+		<field_1_value>trac_admin_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+</item>
+<item>
 	<item_name>Indefero Subversion</item_name>
 	<item_version>0.8.2</item_version>
 	<item_desc>Data management</item_desc>
@@ -3047,6 +3096,49 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 	</param>
 	
 		
+	
+</item>
+
+<item>
+	<item_name>Phpmyadmin</item_name>
+	<item_version>4.3.4.3</item_version>
+	<item_desc>Interface Web d'administration de Mysql</item_desc>
+	<item_web>http://phpmyadmin.org/</item_web>
+	<item_verbose>Interface Web d'administration de Mysql</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Wheezy</field_OS>
+	<param>	
+		
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Phppgadmin</item_name>
+	<item_version>5.0.2</item_version>
+	<item_desc>Interface Web d'administration de Postgresql</item_desc>
+	<item_web>http://phpmyadmin.org/</item_web>
+	<item_verbose>Interface Web d'administration de Postgresql</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Wheezy</field_OS>
+	<param>	
+		
+	</param>
+	
 	
 </item>
 

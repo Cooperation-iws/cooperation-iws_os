@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Mysql 5.1'
+RMOD_NAME='Phpmyadmin 4.3.4.3'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='database'
@@ -24,32 +24,26 @@ RMOD_REQ_APACHE=True
 function INSTALL
 {
 
-mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.mysql
 
 
-apt-get install --yes --force-yes mysql-server 
-/etc/init.d/mysql stop
+apt-get install --yes --force-yes phpmyadmin
+
 
 
 echo "I: config phpmyadmin"
-
-sed -i "61s/#/default-character-set=utf8/" /etc/mysql/my.cnf
-
-
-mv /var/lib/mysql $LAMPP_DIRECTORY/var/lib
-ln -s $LAMPP_DIRECTORY/var/lib/mysql /var/lib/mysql
+rm /etc/apache2/conf.d/phpmyadmin
+ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf.d/phpmyadmin
 
 
 
-mv /etc/mysql $LAMPP_DIRECTORY/etc
-
-ln -s $LAMPP_DIRECTORY/etc/mysql /etc/mysql
-
-
-/etc/init.d/mysql start
+mv /var/lib/phpmyadmin $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/phpmyadmin /var/lib/phpmyadmin
 
 
-mv /usr/sbin/policy-rc.d.mysql /usr/sbin/policy-rc.d 
+mv /etc/phpmyadmin $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/phpmyadmin /etc/phpmyadmin
+
+
 
 
 }
@@ -64,7 +58,7 @@ function CREATE_WUI
 {
 
 cd /tmp/
-#./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/phppgadmin" "/phppgadmin" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/phppgadmin" "/phppgadmin" 
 
 
 

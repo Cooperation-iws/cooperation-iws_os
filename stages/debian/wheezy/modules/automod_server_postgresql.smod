@@ -24,16 +24,8 @@ ROOT_PSGSQL_PWD=$root_psgsql_pwd
 function INSTALL
 {
 
-apt-get install --assume-yes --force-yes postgresql postgresql-client phppgadmin
+apt-get install --assume-yes --force-yes postgresql postgresql-client 
 
-
-rm /etc/apache2/conf.d/phppgadmin
-
-ln -s /etc/phppgadmin/apache.conf /etc/apache2/conf.d/phppgadmin
-
-
-sed -i '10s/^/#/' /etc/phppgadmin/apache.conf
-sed -i '11s/#//' /etc/phppgadmin/apache.conf
 
 
 /etc/init.d/postgresql stop
@@ -49,8 +41,6 @@ ln -s $LAMPP_DIRECTORY/etc/postgresql-common /etc/postgresql-common
 mv /var/lib/postgresql $LAMPP_DIRECTORY/var/lib
 ln -s $LAMPP_DIRECTORY/var/lib/postgresql /var/lib/postgresql
 
-mv /etc/phppgadmin $LAMPP_DIRECTORY/etc
-ln -s $LAMPP_DIRECTORY/etc/phppgadmin /etc/phppgadmin
 
 
 fi
@@ -69,7 +59,7 @@ function CREATE_WUI
 {
 
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/phppgadmin" "/phppgadmin" 
+#./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/phppgadmin" "/phppgadmin" 
 
 
 
