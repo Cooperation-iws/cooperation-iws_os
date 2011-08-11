@@ -82,6 +82,8 @@ apt-get update --fix-missing
 #CREATE RC.LOCAL STARTUP FILE
 echo "I: config rc.local"
 echo "#!/bin/bash
+#Wheezy hack to bring up dns
+dhclient
 
 " > /etc/rc.local
 

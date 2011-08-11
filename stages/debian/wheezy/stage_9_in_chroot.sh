@@ -176,6 +176,7 @@ echo "#!/bin/bash
 chmod +x $LAMPP_DIRECTORY/etc/rc.ciws > /dev/null 2>&1 
 
 echo "
+
 $LAMPP_DIRECTORY/etc/rc.ciws
 exit 0
 
