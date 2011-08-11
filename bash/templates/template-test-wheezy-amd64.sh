@@ -46,4 +46,14 @@ svn_name[1]="Project_1"
 svn_admin_pwd[1]="$gen_login_pwd"
 svn_anonymous_pwd[1]="anonymous"
 trac_admin_pwd[1]="$gen_login_pwd"
-
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Wheezy
+postfixadmin_name="Mail_1"
+mail_domain="$domain"
+postfix_admin_email="admin.local@$domain"
+postfixadmin_mysql_pwd="$mysql_generic_pwd"
+public_mail="n"
+smtp_relay="my.smtp.my-extension"
+postfix_relay_authentication_name=""
+postfix_relay_authentication_password=""
+mailbox_quota="0"
+#Roundcube 0.5.6

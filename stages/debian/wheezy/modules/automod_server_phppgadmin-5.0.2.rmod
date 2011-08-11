@@ -65,33 +65,9 @@ cd /tmp/
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
-#_______________________________________________________________________________________________
-#________________________________________CREATE_INSTALL_SCRIPT__________________________________
-
-function INSTALL_SCRIPT
-{
-
-echo "
-echo \"I: Securing Postgresql Server\"
-echo \"
-
-ALTER USER postgres WITH PASSWORD '$ROOT_PSGSQL_PWD';
-
-\"  > openerp_db.sql
-
-sudo -u postgres psql postgres < openerp_db.sql
-echo \"I: Stopping Postgresql Server\"
-/etc/init.d/postgresql stop
-" >> /opt/ciws/share/lampp/config_post_install.sh
-
-}
-
-#_______________________________________________________________________________________________
-#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 
 echo "I: Install Postgresql Server"
 INSTALL
 CREATE_WUI
-INSTALL_SCRIPT
 echo "I: End of install Postgresql Server"

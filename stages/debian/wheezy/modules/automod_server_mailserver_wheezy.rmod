@@ -2,7 +2,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Lenny'
+RMOD_NAME='Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Wheezy'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='eMails administration'
@@ -101,11 +101,11 @@ UPDATE $NOM_MAILSERVER.domain_admins SET username = '$postfix_admin_email' WHERE
 " > /tmp/update_mail_domain
 $BIN_MYSQL -u root < /tmp/update_mail_domain $NOM_MAILSERVER
 
-apt-get install -f --assume-yes --force-yes postfix postfix-mysql libdate-manip-perl tnef unrar unzip pyzor razor mailutils 
+apt-get install -f --assume-yes --force-yes postfix postfix-mysql libdate-manip-perl tnef unrar unzip pyzor razor mailutils clamav clamav-daemon clamav-freshclam 
 
 apt-get install --assume-yes --force-yes mailscanner 
 
-if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lenny" ]; then
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "wheezy" ]; then
 cd $DL_DIR
 dpkg -i mailscanner_4.71.10-1_all.deb
 apt-get -f install --assume-yes --force-yes
@@ -247,7 +247,7 @@ EOT
 
 apt-get install --assume-yes --force-yes dovecot-imapd dovecot-pop3d
 
-cat << EOT > /etc/dovecot/dovecot.conf
+cat << EOT > /etc/dovecot/dovecot-old.conf
 ## Dovecot configuration file
 #
 base_dir = /var/run/dovecot/
@@ -256,15 +256,51 @@ base_dir = /var/run/dovecot/
 protocols = imap pop3
 #
 # Uncomment the ssl_listen statements and comment out listen if using SSL
-protocol imap {
-listen = *:143
-# ssl_listen = *:993
+service imap-login {
+  inet_listener imap {
+    port = 143
+  }
+  inet_listener imaps {
+    port = 993
+    ssl = yes
+  }
+
+  # Number of connections to handle before starting a new process. Typically
+  # the only useful values are 0 (unlimited) or 1. 1 is more secure, but 0
+  # is faster. <doc/wiki/LoginProcess.txt>
+  #service_count = 1
+
+  # Number of processes to always keep waiting for more connections.
+  #process_min_avail = 0
+
+  # If you set service_count=0, you probably need to grow this.
+  #vsz_limit = 64M
 }
-protocol pop3 {
-listen = *:110
-# ssl_listen = *:995
+
+service pop3-login {
+  inet_listener pop3 {
+    port = 110
+  }
+  inet_listener pop3s {
+    port = 995
+    ssl = yes
+  }
+}
+
+service lmtp {
+  unix_listener lmtp {
+    mode = 0666
+  }
+
+  # Create inet listener only if you can't use the above UNIX socket
+  #inet_listener lmtp {
+    # Avoid making LMTP visible for the entire internet
+    #address =
+    #port = 
+  #}
 }
 #
+log_path = syslog
 log_timestamp = "%Y-%m-%d %H:%M:%S "
 syslog_facility = mail
 #
@@ -279,7 +315,7 @@ syslog_facility = mail
 # Where the mailboxes are located
 mail_location = maildir:$LAMPP_DIRECTORY/var/vmail/%d/%u
 #
-mail_extra_groups = mail
+mail_access_groups = mail
 mail_debug = no
 first_valid_uid = 150
 last_valid_uid = 150
@@ -404,14 +440,43 @@ esac
 ' > /etc/init.d/pysieved
 chmod +x /etc/init.d/pysieved
 
-sed -i "28s/#driver =/driver = mysql/" /etc/dovecot/dovecot-sql.conf
-sed -i "57s/#connect = dbname=virtual user=virtual/connect = host=localhost dbname=$NOM_MAILSERVER user=$NOM_MAILSERVER password=$MAILSERVER_MYSQL_PWD/" /etc/dovecot/dovecot-sql.conf
-sed -i "64s/#default_pass_scheme = PLAIN-MD5/default_pass_scheme = MD5-CRYPT/" /etc/dovecot/dovecot-sql.conf
+cat << EOT > /etc/dovecot/conf.d/auth-sql.conf.ext
+passdb sql {
+args = /etc/dovecot/dovecot-sql.conf.ext
+}
+userdb sql {
+args = /etc/dovecot/dovecot-sql.conf.ext
+}
+EOT
+
+sed -i "121s/!/#/" /etc/dovecot/conf.d/10-auth.conf
+sed -i "122s/#//" /etc/dovecot/conf.d/10-auth.conf
+sed -i "7s/#//" /etc/dovecot/conf.d/10-logging.conf
+sed -i "17s/#//" /etc/dovecot/conf.d/10-logging.conf
+sed -i "61s/#//" /etc/dovecot/conf.d/10-logging.conf
+sed -i "30s/#mail_location =/mail_location = maildir:$LAMPP_DIRECTORY/var/vmail/%d/%u/" /etc/dovecot/conf.d/10-mail.conf
+sed -i "30s/#first_valid_uid = 500/first_valid_uid = 150/" /etc/dovecot/conf.d/10-mail.conf
+sed -i "30s/#last_valid_uid = 0/last_valid_uid = 150/" /etc/dovecot/conf.d/10-mail.conf
+sed -i "244s/#//" /etc/dovecot/conf.d/10-mail.conf
+sed -i "30s/#mail_access_groups =/mail_access_groups = mail/" /etc/dovecot/conf.d/10-mail.conf
+sed -i "30s/#mail_plugins = \$mail_plugins/mail_plugins = \$mail_plugins cmusieve/" /etc/dovecot/conf.d/10-lda.conf
+
+cat << EOT > /etc/dovecot/conf.d/90-plugin.conf
+plugin {
+ # NOTE: %variable expansion works only with Dovecot v1.0.2+
+ sieve = /opt/ciws//var/sieve-scripts/%u.sieve
+}
+EOT
+
+
+sed -i "29s/#driver =/driver = mysql/" /etc/dovecot/dovecot-sql.conf.ext
+sed -i "66s/#connect =/connect = host=localhost dbname=$NOM_MAILSERVER user=$NOM_MAILSERVER password=$MAILSERVER_MYSQL_PWD/" /etc/dovecot/dovecot-sql.conf.ext
+sed -i "73s/#default_pass_scheme = MD5/default_pass_scheme = MD5-CRYPT/" /etc/dovecot/dovecot-sql.conf.ext
 LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
-sed -i "112s/^/user_query = SELECT '$LAMPP_DIRECTORY_FOR_SED\/var\/vmail\/%d\/%n' as home, 'maildir:$LAMPP_DIRECTORY_FOR_SED\/var\/vmail\/%d\/%n' as mail, 150 AS uid, 8 AS gid, concat('dirsize:storage=', quota) AS quota FROM mailbox WHERE username = '%u' AND active = '1'/" /etc/dovecot/dovecot-sql.conf
-sed -i "92s/^/password_query = SELECT username as user, password FROM mailbox WHERE username = '%u' AND active = '1'/" /etc/dovecot/dovecot-sql.conf
-chmod 600 /etc/dovecot/*.conf
-chown vmail /etc/dovecot/*.conf
+sed -i "125s/^/user_query = SELECT '$LAMPP_DIRECTORY_FOR_SED\/var\/vmail\/%d\/%n' as home, 'maildir:$LAMPP_DIRECTORY_FOR_SED\/var\/vmail\/%d\/%n' as mail, 150 AS uid, 8 AS gid, concat('dirsize:storage=', quota) AS quota FROM mailbox WHERE username = '%u' AND active = '1'/" /etc/dovecot/dovecot-sql.conf.ext
+sed -i "105s/^/password_query = SELECT username as user, password FROM mailbox WHERE username = '%u' AND active = '1'/" /etc/dovecot/dovecot-sql.conf.ext
+chmod -R 600 /etc/dovecot/
+chown -R vmail /etc/dovecot/
 
 
 
@@ -2734,7 +2799,7 @@ cd $DL_DIR
 rm /etc/webmin/module.infos.cache
 echo "mailscanner " >> /etc/webmin/webmin.acl
 
-fi
+
 
 mkdir /etc/webmin/mailscanner
 cat << EOT > /etc/webmin/mailscanner/config
@@ -2745,8 +2810,12 @@ mailscanner_config=/etc/MailScanner/MailScanner.conf
 mailscanner_path=/usr/sbin/MailScanner
 stop_cmd=/etc/init.d/mailscanner stop
 EOT
+fi
 
-
+/etc/init.d/clamav-daemon stop
+/etc/init.d/dovecot stop
+/etc/init.d/postfix stop
+/etc/init.d/mailscanner stop
 
 mv /etc/MailScanner $LAMPP_DIRECTORY/etc/
 
@@ -2780,14 +2849,7 @@ apt-get remove --assume-yes --force-yes ntpdate
 apt-get install --assume-yes --force-yes ntp
 
 
-/etc/init.d/apache2 restart
-/etc/init.d/clamav-daemon restart
-/etc/init.d/dovecot restart
-/etc/init.d/postfix restart
-/etc/init.d/mailscanner restart
 
-update-rc.d -f dovecot remove
-update-rc.d -f dovecot start 81 2 3 4 5 .
 
 
 
@@ -2806,6 +2868,25 @@ cd /tmp/
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+function INSTALL_SCRIPT
+{
+
+echo "
+echo \"I: Stopping Mail Server\"
+/etc/init.d/clamav-daemon stop
+/etc/init.d/dovecot stop
+/etc/init.d/postfix stop
+/etc/init.d/mailscanner stop
+" >> /opt/ciws/share/lampp/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
 
 echo "I: Install Mail server"
 INSTALL
