@@ -1,0 +1,504 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Redmine 1.1.3'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='SCM'
+RMOD_DESCRIPTION_FR='SCM'
+RMOD_VERBOSE="Redmine is a source code management software. "
+RMOD_VERBOSE_FR="Redmine est un logiciel de gestion du code source. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+REDMINE_MYSQL_PWD=${redmine_mysql_pwd}
+MOD_NAME=${redmine_name}
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+
+wget $URL_CIWS_DEPOT/redmine-themes-110812.tar.gz 
+
+
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+export HOME=/root/
+
+echo "
+Name: redmine/current-instances
+Template: redmine/current-instances
+Value: default
+Owners: redmine
+
+Name: redmine/default-language
+Template: redmine/default-language
+Owners: redmine
+
+Name: redmine/instances/default/database-type
+Template: dbconfig-common/database-type
+Value: mysql
+Owners: redmine
+Variables:
+ database_types = sqlite3, pgsql, mysql
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/db/app-user
+Template: dbconfig-common/db/app-user
+Value: redmine
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/db/basepath
+Template: dbconfig-common/db/basepath
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/db/dbname
+Template: dbconfig-common/db/dbname
+Value: $MOD_NAME
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/dbconfig-install
+Template: dbconfig-common/dbconfig-install
+Value: true
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/dbconfig-reinstall
+Template: dbconfig-common/dbconfig-reinstall
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/dbconfig-remove
+Template: dbconfig-common/dbconfig-remove
+Value: 
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/dbconfig-upgrade
+Template: dbconfig-common/dbconfig-upgrade
+Value: true
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/default-language
+Template: redmine/default-language
+Value: $redmine_language
+Owners: redmine
+Variables:
+ availableLocales = bg, bs, ca, cs, da, de, el, en-gb, en, es, eu, fi, fr, gl, he, hr, hu, id, it, ja, ko, lt, lv, mk, mn, nl, no, pl, pt-br, pt, ro, ru, sk, sl, sr-yu, sr, sv, th, tr, uk, vi, zh-tw, zh
+ defaultLocale = fr
+
+Name: redmine/instances/default/install-error
+Template: dbconfig-common/install-error
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/internal/reconfiguring
+Template: dbconfig-common/internal/reconfiguring
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/internal/skip-preseed
+Template: dbconfig-common/internal/skip-preseed
+Value: false
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/missing-db-package-error
+Template: dbconfig-common/missing-db-package-error
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/mysql/admin-user
+Template: dbconfig-common/mysql/admin-user
+Value: root
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/mysql/method
+Template: dbconfig-common/mysql/method
+Value: unix socket
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/passwords-do-not-match
+Template: dbconfig-common/passwords-do-not-match
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/pgsql/admin-user
+Template: dbconfig-common/pgsql/admin-user
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/pgsql/authmethod-admin
+Template: dbconfig-common/pgsql/authmethod-admin
+Value: ident
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/pgsql/authmethod-user
+Template: dbconfig-common/pgsql/authmethod-user
+Value: password
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/pgsql/changeconf
+Template: dbconfig-common/pgsql/changeconf
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/pgsql/manualconf
+Template: dbconfig-common/pgsql/manualconf
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/pgsql/method
+Template: dbconfig-common/pgsql/method
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/pgsql/no-empty-passwords
+Template: dbconfig-common/pgsql/no-empty-passwords
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/purge
+Template: dbconfig-common/purge
+Value: false
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/remote/host
+Template: dbconfig-common/remote/host
+Value: 
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/remote/newhost
+Template: dbconfig-common/remote/newhost
+Value: 
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/remote/port
+Template: dbconfig-common/remote/port
+Value: 
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/remove-error
+Template: dbconfig-common/remove-error
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/upgrade-backup
+Template: dbconfig-common/upgrade-backup
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/upgrade-error
+Template: dbconfig-common/upgrade-error
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/missing-redmine-package
+Template: redmine/missing-redmine-package
+Owners: redmine
+
+Name: redmine/notify-migration
+Template: redmine/notify-migration
+Owners: redmine
+
+Name: redmine/old-instances
+Template: redmine/old-instances
+Value: 
+Owners: redmine
+" >> /var/cache/debconf/config.dat
+
+echo "
+Name: redmine/instances/default/app-password-confirm
+Template: dbconfig-common/app-password-confirm
+Value: $redmine_admin_pwd
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/mysql/admin-pass
+Template: dbconfig-common/mysql/admin-pass
+Value: 
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/mysql/app-pass
+Template: dbconfig-common/mysql/app-pass
+Value: $REDMINE_MYSQL_PWD
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+Name: redmine/instances/default/password-confirm
+Template: dbconfig-common/password-confirm
+Value: $redmine_admin_pwd
+Owners: redmine
+Variables:
+ pkg = redmine/instances/default
+
+" >> /var/cache/debconf/passwords.dat
+
+
+apt-get install --assume-yes --force-yes redmine-mysql redmine-plugin-botsfilter subversion libapache2-svn bzr darcs mercurial cvs git libapache-dbi-perl libapache2-mod-perl2 libdigest-sha1-perl libmysqlclient15-dev
+
+
+WGET_CIWS_DEPOT
+cd $DL_DIR
+tar -xzf redmine-themes-110812.tar.gz -C /usr/share/redmine/public/themes/.
+
+mkdir /usr/share/redmine/log
+touch  /usr/share/redmine/log/production.log
+
+
+cat > /tmp/redmine <<"EOF"
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:		redmine
+# Required-Start:	$syslog
+# Required-Stop:	$syslog
+# Should-Start:		$network
+# Should-Stop:		$network
+# Default-Start:	2 3 4 5
+# Default-Stop:		0 1 6
+# Short-Description:	Redmine SCM Management software
+# Description:		Redmine is a complete SCM software.
+### END INIT INFO
+
+NAME=redmine
+
+
+set -e
+
+case "${1}" in
+	start)
+		echo -n "Starting ${DESC}: "
+
+		sudo ruby /usr/share/redmine/script/server -e production &
+		echo $! > /var/run/${NAME}.pid
+
+		echo "${NAME}."
+		;;
+
+	stop)
+		echo -n "Stopping ${DESC}: "
+
+		kill -9 $(cat /var/run/${NAME}.pid)
+		echo "${NAME}."
+		;;
+
+	restart|force-reload)
+		echo -n "Restarting ${DESC}: "
+
+		kill -9 $(cat /var/run/${NAME}.pid)
+
+		sleep 1
+
+		sudo ruby /usr/share/redmine/script/server -e production &
+		echo $! > /var/run/${NAME}.pid
+
+		echo "${NAME}."
+		;;
+
+	*)
+		N=/etc/init.d/${NAME}
+		echo "Usage: ${NAME} {start|stop|restart|force-reload}" >&2
+		exit 1
+		;;
+esac
+
+exit 0
+
+EOF
+
+cp /tmp/redmine /etc/init.d/
+chmod +x /etc/init.d/redmine
+update-rc.d redmine start 70 2 3 4 5 . stop 20 0 1 6 .
+
+if [ "$domain" ] && [ -d /etc/bind ]; then
+
+echo "<VirtualHost *:80>
+	ServerName redmine.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:3000/
+	ProxyPassReverse /   http://127.0.0.1:3000/
+
+        
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /etc/apache2/sites-available/redmine
+
+sed -i "9s/Order deny,allow/Order allow,deny/" /etc/apache2/mods-available/proxy.conf
+sed -i "10s/Deny/Allow/" /etc/apache2/mods-available/proxy.conf
+
+
+a2ensite redmine
+
+a2enmod rewrite
+a2enmod suexec
+a2enmod include
+a2enmod proxy
+a2enmod proxy_http
+a2enmod proxy_connect
+a2enmod proxy_ftp
+a2enmod headers
+REDMINE_URL="redmine.$domain"
+
+echo "*/10 * * * * root ruby /usr/share/redmine/extra/svn/reposman.rb --redmine redmine.$domain --svn-dir $LAMPP_DIRECTORY/var/svn_redmine --owner www-data --url http://localhost/svn_redmine/" > /etc/cron.d/redmine
+chmod +x /etc/cron.d/redmine
+REDMINE_URL="<![CDATA[http://redmine.$domain]]>"
+echo "redmine    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+else
+echo "*/10 * * * * root ruby /usr/share/redmine/extra/svn/reposman.rb --redmine http://localhost:19000 --svn-dir $LAMPP_DIRECTORY/var/svn_redmine --owner www-data --url http://localhost/svn_redmine/" > /etc/cron.d/redmine
+chmod +x /etc/cron.d/redmine
+REDMINE_URL="<![CDATA[http://localhost:3000]]>"
+fi
+
+
+mkdir $LAMPP_DIRECTORY/var/svn_redmine
+chmod 0750 $LAMPP_DIRECTORY/var/svn_redmine
+
+a2enmod dav
+a2enmod dav_svn
+a2enmod perl
+
+mkdir /usr/lib/perl5/Apache/Authn
+cp /$LAMPP_DIRECTORY/var/$MOD_NAME/extra/svn/Redmine.pm /usr/lib/perl5/Apache/Authn
+
+echo "
+
+<Location /svn_redmine>
+    DAV svn
+    SVNParentPath \"$LAMPP_DIRECTORY/var/svn_redmine\"
+
+    AuthType Basic
+    Authname \"Redmine Project Tracking\"
+    AuthUserFile \"$LAMPP_DIRECTORY/var/svn_redmine/.htpasswd\"
+    Require valid-user
+
+    
+    
+     </Location>
+" > /etc/apache2/conf.d/svn_redmine
+chown -R www-data $LAMPP_DIRECTORY/var/svn_redmine
+
+a2enmod dav
+a2enmod dav_svn
+a2enmod perl
+
+
+mv /etc/redmine $LAMPP_DIRECTORY/etc/.
+ln -s $LAMPP_DIRECTORY/etc/redmine /etc/redmine
+
+mv /var/lib/redmine $LAMPP_DIRECTORY/var/lib/.
+ln -s $LAMPP_DIRECTORY/var/lib/redmine /var/lib/redmine
+
+mv /usr/share/redmine $LAMPP_DIRECTORY/usr/share/.
+ln -s $LAMPP_DIRECTORY/usr/share/redmine /usr/share/redmine
+
+
+chown -R www-data /usr/share/redmine/public
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$REDMINE_URL" "$REDMINE_URL" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Redmine"
+INSTALL
+CREATE_WUI
+echo "I: End of install Redmine"
