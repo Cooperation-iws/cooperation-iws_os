@@ -61,7 +61,7 @@ mailbox_quota="0"
 fusionforge_db_pwd=$gen_login_pwd
 fusionforge_admin_pwd=$gen_login_pwd
 fusionforge_lang="French"
-#Redmine 1.1.3
+#Redmine 1.1.3passenger
 redmine_name="Redmine"
 redmine_mysql_pwd="$mysql_generic_pwd"
 redmine_language="fr"
