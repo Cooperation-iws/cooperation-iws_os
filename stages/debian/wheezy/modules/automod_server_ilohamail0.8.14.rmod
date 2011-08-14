@@ -2,7 +2,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Roundcube 0.5.6'
+RMOD_NAME='Ilohamail 0.8.14'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Webmail'
@@ -21,8 +21,6 @@ RMOD_REQ_APACHE=True
 . /tmp/app_params
 #VARIABLES
 #MYSQL PASSWORD
-MOD_NAME=$roundcube_name
-ROUNDCUBE_MYSQL_PWD=$roundcube_mysql_pwd
 #_______________________________________________________________________________________________
 #________________________________________WGET_CIWS_DEPOT______________________________________
 
@@ -42,16 +40,39 @@ cd $DL_DIR
 function INSTALL
 {
 
-apt-get install --assume-yes --force-yes roundcube-mysql roundcube-plugins roundcube-plugins-extra
+apt-get install --assume-yes --force-yes ilohamail
 
-sed -i "3s/#//" /etc/apache2/conf.d/roundcube
-sed -i "4s/#//" /etc/apache2/conf.d/roundcube
-
-
-mv /etc/roundcube $LAMPP_DIRECTORY/etc
-ln -s $LAMPP_DIRECTORY/etc/roundcube /etc/roundcube
+ln -s /etc/Ilohamail/apache2.conf /etc/apache2/conf.d/Ilohamail
 
 
+
+sed -i '13s/""/"localhost"/' /etc/Ilohamail/db_conf.php
+sed -i "14s/\"\"/\"$ilohamail_dbuser\"/" /etc/Ilohamail/db_conf.php
+sed -i "15s/\"\"/\"$ilohamail_dbpwd\"/" /etc/Ilohamail/db_conf.php
+sed -i "19s/webmail/$ilohamail_dbuser/" /etc/Ilohamail/db_conf.php
+
+echo "CREATE DATABASE $ilohamail_dbuser;" > /tmp/wordpress_crdb.sql
+$BIN_MYSQL -u root < /tmp/ilohamail_crdb.sql
+
+$BIN_MYSQL -u root $ilohamail_dbuser < /usr/share/doc/ilohamail/sql
+
+
+echo "
+grant all on $ilohamail_dbuser.* to $ilohamail_dbuser@localhost identified by '$ilohamail_dbpwd';
+flush privileges;" > ilohamail_db.sql
+
+$BIN_MYSQL -u root < ilohamail_db.sql mysql
+rm wordpress_db.sql
+
+
+mv /etc/Ilohamail $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/Ilohamail /etc/Ilohamail
+mkdir $LAMPP_DIRECTORY/var/cache
+mv /var/cache/IlohaMail $LAMPP_DIRECTORY/var/cache
+ln -s $LAMPP_DIRECTORY/var/cache/IlohaMail /var/cache/IlohaMail
+
+chown -R www-data /var/cache/Ilohamail
+chown -R www-data /usr/share/Ilohamail
 
 }
 
@@ -64,14 +85,14 @@ ln -s $LAMPP_DIRECTORY/etc/roundcube /etc/roundcube
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/$MOD_NAME" "/$MOD_NAME" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/IlohaMail" "/$MOD_NAME" 
 
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
 
-echo "I: Install Roundcube"
+echo "I: Install IlohaMail"
 INSTALL
 CREATE_WUI
-echo "I: End of install Roundcube"
+echo "I: End of install IlohaMail"

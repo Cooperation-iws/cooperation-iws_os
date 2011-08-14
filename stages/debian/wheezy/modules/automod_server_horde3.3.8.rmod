@@ -2,7 +2,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Roundcube 0.5.6'
+RMOD_NAME='Horde 3.3.8'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Webmail'
@@ -42,14 +42,29 @@ cd $DL_DIR
 function INSTALL
 {
 
-apt-get install --assume-yes --force-yes roundcube-mysql roundcube-plugins roundcube-plugins-extra
-
-sed -i "3s/#//" /etc/apache2/conf.d/roundcube
-sed -i "4s/#//" /etc/apache2/conf.d/roundcube
+apt-get install --assume-yes --force-yes horde3 imp4 ingo1 turba2 kronolith2 gollem nag2 mnemo2 sork-forwards-h3 sork-vacation-h3 sork-passwd-h3 horde-sam 
 
 
-mv /etc/roundcube $LAMPP_DIRECTORY/etc
-ln -s $LAMPP_DIRECTORY/etc/roundcube /etc/roundcube
+echo "
+Alias /horde3 /usr/share/horde3
+<Directory /usr/share/horde3>
+  Options FollowSymLinks
+  AllowOverride Limit
+  order allow,deny
+  allow from all
+</Directory>
+" /etc/apache2/conf.d/horde3
+
+sed -i "2s/^/#/" /etc/horde/horde3/conf.php
+sed -i "3s/^/#/" /etc/horde/horde3/conf.php
+
+
+#sed -i "3s/#//" /etc/apache2/conf.d/roundcube
+#sed -i "4s/#//" /etc/apache2/conf.d/roundcube
+
+
+mv /etc/horde $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/horde /etc/horde
 
 
 

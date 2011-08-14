@@ -27,14 +27,14 @@ wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"
 #Mysql 5.1
 #Phpmyadmin 4.3.4.3
-#C#lamtk 4.10
-#Codecs Wheezy
+#Cl#amtk 4.10
+#C#odecs Wheezy
 #F#ilezilla 0.1
 #F#lashplayer Wheezy
 #G#imp 2.6
 #I#ceweasel 0.1
 #L#ibre Office Wheezy
-#M#ixxx 1.9
+#M##ixxx 1.9
 #S#ecure delete 0.1
 #S#ound juicer 0.1
 #T#ruecrypt 7.0a
@@ -46,7 +46,7 @@ svn_name[1]="Project_1"
 svn_admin_pwd[1]="$gen_login_pwd"
 svn_anonymous_pwd[1]="anonymous"
 trac_admin_pwd[1]="$gen_login_pwd"
-#P#ostfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Wheezy
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Wheezy
 postfixadmin_name="Mail_1"
 mail_domain="$domain"
 postfix_admin_email="admin.local@$domain"
@@ -56,12 +56,16 @@ smtp_relay="my.smtp.my-extension"
 postfix_relay_authentication_name=""
 postfix_relay_authentication_password=""
 mailbox_quota="0"
-#R#oundcube 0.5.6
+#Roundcube 0.5.6
+#I#lohamail 0.8.14
+ilohamail_dbuser="Ilohamail"
+ilohamail_dbpwd="$mysql_generic_pwd"
+#Horde 3.3.8
 #F#usionforge 5.0.3
 fusionforge_db_pwd=$gen_login_pwd
 fusionforge_admin_pwd=$gen_login_pwd
 fusionforge_lang="French"
-#Redmine 1.1.3passenger
+#R#edmine 1.2.1passenger
 redmine_name="Redmine"
 redmine_mysql_pwd="$mysql_generic_pwd"
 redmine_language="fr"

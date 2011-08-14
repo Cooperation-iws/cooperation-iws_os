@@ -37,6 +37,19 @@ rm /etc/resolv.conf
 ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
 fi
 
+#FIX WHEEZY BASH FOR SUDO AND X
+if [ "$DEB_DIST" == "wheezy" ] ; then
+
+echo "
+if [ ! \"\$(cat /home/$LIVEUSER/.bashrc | grep 'xhost +local:root')\" ] ; then
+echo \"
+xhost +local:root > /dev/null
+\" >> /home/$LIVEUSER/.bashrc
+fi
+" >> /etc/rc.local
+fi
+
+
 #CONFIGURING PERSISTENCE
 echo "I: configuring persistence"
 
