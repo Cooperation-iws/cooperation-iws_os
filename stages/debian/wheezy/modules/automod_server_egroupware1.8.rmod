@@ -38,8 +38,8 @@ cd $DL_DIR
 wget $URL_CIWS_DEPOT/egroupware-1.8-110815.tar.gz 
 tar -xzf egroupware-1.8-110815.tar.gz 
 
-wget $URL_CIWS_DEPOT/egroupware-1.8-var-110815.tar.gz
-tar -xzf egroupware-1.8-110815.tar.gz -C /var/lib/.
+#wget $URL_CIWS_DEPOT/egroupware-1.8-var-110815.tar.gz
+#tar -xzf egroupware-1.8-110815.tar.gz -C /var/lib/.
 
 wget $URL_CIWS_DEPOT/jpgraph_3.0.7-1_all.deb
 
@@ -57,7 +57,7 @@ function INSTALL
 {
 echo "I: Download Egroupware"
 WGET_CIWS_DEPOT
-apt-get install --assume-yes --force-yes php-http-webdav-server php-net-imap php-net-sieve libphp-jpgraph php-xml-parser
+apt-get install --assume-yes --force-yes php-http-webdav-server php-net-imap php-net-sieve php-xml-parser
 cd $DL_DIR
 dpkg -i jpgraph_3.0.7-1_all.deb
 
@@ -73,23 +73,24 @@ Create Database ${MOD_NAME[$count]};
 grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${EGROUPWARE_MYSQL_PWD[$count]}';
 flush privileges;" > EGROUPWARE_db.sql
 
-$BIN_MYSQL -u root < EGROUPWARE_db.sql mysql
+$BIN_MYSQL -u root < EGROUPWARE_db.sql 
 rm EGROUPWARE_db.sql
 
 sed -i "s/admin.local@my-erp2.intra/${egroupware_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 sed -i "788s/\/egroupware/\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 sed -i "2475s/\/egroupware/\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "2638s/\/egroupware/\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 sed -i "s/wwi.my-erp2.intra/$domain/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 sed -i "196s/istrator/local/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 
 
-$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 
 
 sed -i "30s/egroupware/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/header.inc.php
 sed -i "47s/egroupware/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/header.inc.php
 sed -i "48s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/header.inc.php
-sed -i "5s/mysql_root/${EGROUPWARE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.php
+sed -i "49s/mysql_root/${EGROUPWARE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/header.inc.php
 
 
 
@@ -99,8 +100,12 @@ TZ_FOR_SED=$(echo $TZ | sed 's/\//\\\//g')
 sed -i "s/;date.timezone =/date.timezone = $TZ_FOR_SED/" /etc/php5/apache2/php.ini
 sed -i "s/;mbstring.func_overload = 0/mbstring.func_overload = 7/" /etc/php5/apache2/php.ini
 
+mkdir $WWW_DIRECTORY/var/lib/egroupware/
+mkdir $WWW_DIRECTORY/var/lib/egroupware/default
+mkdir $WWW_DIRECTORY/var/lib/egroupware//backup
+ln -s $WWW_DIRECTORY/var/lib/egroupware /var/lib/egroupware
 
-chown -R www-data /var/lib/egroupware/default/
+chown -R www-data /var/lib/egroupware/
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 done
 

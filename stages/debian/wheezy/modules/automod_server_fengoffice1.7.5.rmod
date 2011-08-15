@@ -63,21 +63,24 @@ Create database ${MOD_NAME[$count]} ;
 grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${FENGOFFICE_MYSQL_PWD[$count]}';
 flush privileges;" > FENGOFFICE_db.sql
 
-$BIN_MYSQL -u root < FENGOFFICE_db.sql mysql
+$BIN_MYSQL -u root < FENGOFFICE_db.sql 
 rm FENGOFFICE_db.sql
 
 sed -i "s/admin.local@my-erp2.intra/${fengoffice_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
-$BIN_MYSQL -u root < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 
 
 sed -i "4s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.php
 sed -i "6s/fengoffice/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.php
-sed -i "5s/FENGOFFICE_MYSQL_PWD/${FENGOFFICE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.php
+sed -i "5s/mysql_root/${FENGOFFICE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.php
+
+#Hack to remove stupid comments
+sed -i "16s/\/\///" $WWW_DIRECTORY/${MOD_NAME[$count]}/application/layout/website.php
 
 #clear cache
 rm $WWW_DIRECTORY/${MOD_NAME[$count]}/cache/autoloader.php
 
-sed -i "s/http:\/\/wwi.my-erp2.intra\/fengoffice/http:\/\/'.\$HTTP_SERVER_VARS[\"SERVER_NAME\"].'\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.php
+sed -i "s/http:\/\/wwi.my-erp2.intra\/fengoffice/http:\/\/'.\$_SERVER[\"SERVER_NAME\"].'\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.php
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 done
