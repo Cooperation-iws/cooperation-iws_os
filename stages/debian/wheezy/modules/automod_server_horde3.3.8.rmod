@@ -2,7 +2,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Horde 3.3.8'
+RMOD_NAME='Horde 3.3.8deb'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Webmail'
@@ -53,7 +53,7 @@ Alias /horde3 /usr/share/horde3
   order allow,deny
   allow from all
 </Directory>
-" /etc/apache2/conf.d/horde3
+" > /etc/apache2/conf.d/horde3
 
 sed -i "2s/^/#/" /etc/horde/horde3/conf.php
 sed -i "3s/^/#/" /etc/horde/horde3/conf.php

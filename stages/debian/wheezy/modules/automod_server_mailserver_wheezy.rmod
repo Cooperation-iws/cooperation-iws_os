@@ -101,7 +101,10 @@ UPDATE $NOM_MAILSERVER.domain_admins SET username = '$postfix_admin_email' WHERE
 " > /tmp/update_mail_domain
 $BIN_MYSQL -u root < /tmp/update_mail_domain $NOM_MAILSERVER
 
-apt-get install -f --assume-yes --force-yes postfix postfix-mysql libdate-manip-perl tnef unrar unzip pyzor razor mailutils clamav clamav-daemon clamav-freshclam 
+apt-get install -f --assume-yes --force-yes postfix postfix-mysql libdate-manip-perl tnef unrar unzip pyzor razor mailutils clamav clamav-daemon clamav-freshclam libsasl2-2 sasl2-bin libsasl2-modules libsasl2-modules-sql 
+
+sed -i "7s/no/yes/" /etc/default/saslauthd
+
 
 apt-get install --assume-yes --force-yes mailscanner 
 
@@ -185,6 +188,14 @@ alias_maps = hash:/etc/aliases
 EOT_PRIVATE
 fi
 
+
+#echo "
+#header_checks = regexp:/etc/postfix/header_checks" >> /etc/postfix/main.cf
+
+#echo "/^Received:/ HOLD " > /etc/postfix/header_checks
+
+
+
 useradd -r -u 150 -g mail -d $LAMPP_DIRECTORY/var/vmail -s /sbin/nologin -c "Virtual mailbox" vmail
 mkdir $LAMPP_DIRECTORY/var/vmail
 chmod 770 $LAMPP_DIRECTORY/var/vmail/
@@ -241,11 +252,11 @@ EOT
 
 cat << EOT >> /etc/postfix/master.cf
 dovecot unix - n n - - pipe
- flags=DRhu user=vmail:mail argv=/usr/lib/dovecot/deliver -d \$(recipient)
+ flags=DRhu user=vmail:mail argv=/usr/lib/dovecot/deliver -d \${recipient}
 
 EOT
 
-apt-get install --assume-yes --force-yes dovecot-imapd dovecot-pop3d dovecot-mysql
+apt-get install --assume-yes --force-yes dovecot-imapd dovecot-pop3d dovecot-mysql dovecot-sieve dovecot-managesieved
 
 
 
@@ -323,14 +334,14 @@ first_valid_uid = 150
 last_valid_uid = 150
 log_timestamp = "%Y-%m-%d %H:%M:%S "
 mail_access_groups = mail
-mail_location = maildir:/opt/ciws/var/vmail/%d/%u
+mail_location = maildir:$LAMPP_DIRECTORY/var/vmail/%d/%u
 passdb {
   args = /etc/dovecot/dovecot-sql.conf.ext
   driver = sql
 }
-plugin {
-  sieve = /opt/ciws/var/sieve-scripts/%u.sieve
-}
+#plugin {
+#  sieve = $LAMPP_DIRECTORY/var/sieve-scripts/%u.sieve
+#}
 protocols = imap pop3
 service auth {
   unix_listener /var/spool/postfix/private/auth {
@@ -378,7 +389,7 @@ protocol pop3 {
 }
 protocol lda {
   auth_socket_path = /var/run/dovecot/auth-master
-  mail_plugins = cmusieve
+#  mail_plugins = cmusieve
   postmaster_address = postmaster@mydomain.com
   sendmail_path = /usr/lib/sendmail
 }
@@ -420,10 +431,6 @@ rm /var/vmail/*/*/.INBOX.Drafts/dovecot.index.log 1>&2 2>/dev/null
 
 
 
-echo "
-header_checks = regexp:/etc/postfix/header_checks" >> /etc/postfix/main.cf
-
-echo "/^Received:/ HOLD " > /etc/postfix/header_checks
 
 sed -i "133s/#//" /etc/MailScanner/MailScanner.conf
 sed -i "134s/^/#/" /etc/MailScanner/MailScanner.conf

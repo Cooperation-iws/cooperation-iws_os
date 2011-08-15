@@ -41,6 +41,7 @@ wordpress_mysql_pwd[1]="$mysql_generic_pwd"
 #V#lc 0.1
 #K#vm Wheezy
 #X#sane 0.1
+#Grsync 0.1
 #T#rac Subversion 0.11.7
 svn_name[1]="Project_1"
 svn_admin_pwd[1]="$gen_login_pwd"
@@ -57,10 +58,20 @@ postfix_relay_authentication_name=""
 postfix_relay_authentication_password=""
 mailbox_quota="0"
 #Roundcube 0.5.6
+#Fengoffice 1.7.5
+fengoffice_name[1]="Fengoffice_1"
+fengoffice_admin_email[1]="admin.local@$domain"
+fengoffice_mysql_pwd[1]="$mysql_generic_pwd"
+#Egroupware 1.7.5
+egroupware_name[1]="Egroupware_1"
+egroupware_admin_email[1]="admin.local@$domain"
+egroupware_mysql_pwd[1]="$mysql_generic_pwd"
 #I#lohamail 0.8.14
 ilohamail_dbuser="Ilohamail"
 ilohamail_dbpwd="$mysql_generic_pwd"
-#Horde 3.3.8
+#Horde 3.3source
+horde_name="Horde_1"
+horde_mysql_pwd="$mysql_generic_pwd"
 #F#usionforge 5.0.3
 fusionforge_db_pwd=$gen_login_pwd
 fusionforge_admin_pwd=$gen_login_pwd
