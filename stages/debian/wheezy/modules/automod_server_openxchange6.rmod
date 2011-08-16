@@ -1,0 +1,239 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Openxchange 6.20'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Webmail'
+RMOD_DESCRIPTION_FR='eMails en ligne'
+
+RMOD_VERBOSE="RoundCube Webmail is a browser-based multilingual IMAP client with an application-like user interface. It provides full functionality you expect from an e-mail client, including MIME support, address book, folder manipulation, message searching and spell checking. RoundCube Webmail is written in PHP and requires a MySQL or Postgres database. The user interface is fully skinnable using XHTML and CSS 2."
+RMOD_VERBOSE_FR="RoundCube est client mail en ligne."
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+#VARIABLES
+#MYSQL PASSWORD
+
+echo "DEB_MIRROR_PATH"$DEB_MIRROR_PATH
+apt_cacher_root=$(echo $DEB_MIRROR_PATH | sed 's/debian\///')
+echo "apt_cacher_root:"$apt_cacher_root
+ox6_repo="$apt_cacher_root/ox6/ binary/"
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+#rm moodle-latest-19.zip
+
+}
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "deb $ox6_repo " >> /etc/apt/sources.list
+apt-get update
+
+apt-get install --assume-yes --force-yes open-xchange-meta-databaseonly open-xchange-spamhandler-default open-xchange open-xchange-meta-singleserver
+
+/opt/open-xchange/sbin/initconfigdb --configdb-pass=db_password -a
+/opt/open-xchange/sbin/oxinstaller --no-license --servername=oxserver --configdb-pass=db_password --master-pass=admin_master_password --ajp-bind-port=localhost
+
+/etc/init.d/open-xchange-admin start
+/opt/open-xchange/sbin/registerserver -n oxserver -A oxadminmaster -P admin_master_password
+
+mkdir /var/opt/filestore
+chown -R open-xchange:open-xchange /var/opt/filestore
+/opt/open-xchange/sbin/registerfilestore -A oxadminmaster -P admin_master_password -t file:/var/opt/filestore
+/opt/open-xchange/sbin/registerdatabase -A oxadminmaster -P admin_master_password -n oxdatabase -p db_password -m true
+
+
+a2enmod proxy proxy_ajp proxy_balancer expires deflate headers rewrite
+
+echo '<Location /axis2>
+    # restrict access to the soap provisioning API
+    Order Deny,Allow
+    Deny from all
+    Allow from 127.0.0.1
+    # you might add more ip addresses / networks here
+    # Allow from 192.168 10 172.16
+</Location>
+
+
+
+<IfModule mod_proxy_ajp.c>
+   ProxyRequests Off
+   <Proxy balancer://oxcluster>
+       Order deny,allow
+       Allow from all
+       # multiple server setups need to have the hostname inserted instead localhost
+       BalancerMember ajp://localhost:8009 timeout=100 smax=0 ttl=60 retry=60 loadfactor=50 route=OX1
+       # Enable and maybe add additional hosts running OX here
+       # BalancerMember ajp://oxhost2:8009 timeout=100  smax=0 ttl=60 retry=60 loadfactor=50 route=OX2
+       ProxySet stickysession=JSESSIONID
+   </Proxy>
+   <Proxy /ajax>
+       ProxyPass balancer://oxcluster/ajax
+   </Proxy>
+   <Proxy /servlet>
+       ProxyPass balancer://oxcluster/servlet
+   </Proxy>
+   <Proxy /infostore>
+       ProxyPass balancer://oxcluster/infostore
+   </Proxy>
+   <Proxy /publications>
+       ProxyPass balancer://oxcluster/publications
+   </Proxy>
+   <Proxy /Microsoft-Server-ActiveSync>
+       ProxyPass balancer://oxcluster/Microsoft-Server-ActiveSync
+   </Proxy>
+   <Proxy /usm-json>
+       ProxyPass balancer://oxcluster/usm-json
+   </Proxy>
+</IfModule>' > /etc/apache2/conf.d/proxy_ajp.conf
+
+echo '<VirtualHost *:80>
+	ServerAdmin webmaster@localhost
+
+	DocumentRoot /var/www/
+
+	<Directory /var/www/>
+		AllowOverride None
+		Order allow,deny
+		allow from all
+		RedirectMatch ^/$ /ox6/
+               Options +FollowSymLinks +SymLinksIfOwnerMatch
+	</Directory>
+       # deflate
+      AddOutputFilterByType DEFLATE text/html text/plain text/javascript application/javascript text/css text/xml application/xml text/x-js application/x-javascript
+
+	# pre-compressed files
+	AddType text/javascript .jsz
+	AddType text/css .cssz
+	AddType text/xml .xmlz
+        AddType text/plain .po
+	
+	AddEncoding gzip .jsz .cssz .xmlz
+	SetEnvIf Request_URI "\.(jsz|cssz|xmlz)$" no-gzip
+	
+	ExpiresActive On
+	
+	<Location /ox6>
+	        # Expires (via ExpiresByType to override global settings)
+	        ExpiresByType image/gif "access plus 6 months"
+	        ExpiresByType image/png "access plus 6 months"
+	        ExpiresByType image/jpg "access plus 6 months"
+	        ExpiresByType image/jpeg "access plus 6 months"
+	        ExpiresByType text/css "access plus 6 months"
+	        ExpiresByType text/html "access plus 6 months"
+	        ExpiresByType text/xml "access plus 6 months"
+	        ExpiresByType text/javascript "access plus 6 months"
+	        ExpiresByType text/x-js "access plus 6 months"
+	        ExpiresByType application/x-javascript "access plus 6 months"
+	        ExpiresDefault "access plus 6 months"
+	        Header append Cache-Control "private"
+	        Header unset Last-Modified
+	        Header unset Vary
+	        # Strip version
+	        RewriteEngine On
+	        RewriteRule v=\w+/(.+) $1 [L]
+	        # Turn off ETag
+	        Header unset ETag
+	        FileETag None
+	</Location>
+	
+	<Location /ox6/ox.html>
+	        ExpiresByType text/html "now"
+	        ExpiresDefault "now"
+	        Header unset Last-Modified
+	        Header set Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0"
+	        # Turn off ETag
+	        Header unset ETag
+	        FileETag None
+	</Location>
+	
+	<Location /ox6/index.html>
+	        ExpiresByType text/html "now"
+	        ExpiresDefault "now"
+	        Header unset Last-Modified
+	        Header set Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0"
+	        # Turn off ETag
+	        Header unset ETag
+	        FileETag None
+	</Location>
+</VirtualHost>
+'> /etc/apache2/sites-available/ox6
+
+
+sed -i "3s/^/ServerName open-xchange.$domain/"  /etc/apache2/sites-available/ox6
+
+echo "open-xchange    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+
+a2ensite ox6
+
+
+OX6_URL="<![CDATA[http://open-xchange.$domain]]>"
+
+
+/opt/open-xchange/sbin/createcontext -A oxadminmaster -P admin_master_password -c 1 -u oxadmin -d "Context admin" -g admin -s User -p admin_password -L defaultcontext -e oxadmin@$domain -q 1024 --access-combination-name=all
+
+/opt/open-xchange/sbin/createuser -c 1 -A oxadmin -P admin_password -u test_user -d "Test user" -g Test -s User -p secret -e testuser@$domain --imaplogin testuser --imapserver 127.0.0.1 --smtpserver 127.0.0.1
+
+/etc/init.d/open-xchange-admin stop
+mkdir $LAMPP_DIRECTORY/opt/
+mv /opt/open-xchange $LAMPP_DIRECTORY/opt/
+ln -s $LAMPP_DIRECTORY/opt/open-xchange /opt/open-xchange
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$OX6_URL" "$OX6_URL" 
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+function INSTALL_SCRIPT
+{
+
+echo "
+echo \"I: Stopping ox6 Server\"
+/etc/init.d/open-xchange-admin stop
+" >> /opt/ciws/share/lampp/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+
+echo "I: Install Roundcube"
+INSTALL
+CREATE_WUI
+INSTALL_SCRIPT
+echo "I: End of install Roundcube"

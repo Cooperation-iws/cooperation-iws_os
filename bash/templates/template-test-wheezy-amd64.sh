@@ -1,7 +1,7 @@
 #!/bin/bash
 apache_user="www-data"
 secure_admin="y"
-secure_mysql="y"
+secure_mysql="n"
 gen_login_pwd="cooperation"
 apache_admin_pwd="$gen_login_pwd"
 mysql_root_password="mysql_root"
@@ -41,13 +41,13 @@ wordpress_mysql_pwd[1]="$mysql_generic_pwd"
 #V#lc 0.1
 #K#vm Wheezy
 #X#sane 0.1
-#Grsync 0.1
+#G#rsync 0.1
 #T#rac Subversion 0.11.7
 svn_name[1]="Project_1"
 svn_admin_pwd[1]="$gen_login_pwd"
 svn_anonymous_pwd[1]="anonymous"
 trac_admin_pwd[1]="$gen_login_pwd"
-#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Wheezy
+#P#ostfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Wheezy
 postfixadmin_name="Mail_1"
 mail_domain="$domain"
 postfix_admin_email="admin.local@$domain"
@@ -57,19 +57,19 @@ smtp_relay="my.smtp.my-extension"
 postfix_relay_authentication_name=""
 postfix_relay_authentication_password=""
 mailbox_quota="0"
-#Roundcube 0.5.6
-#Fengoffice 1.7.5
+#R#oundcube 0.5.6
+#F#engoffice 1.7.5
 fengoffice_name[1]="Fengoffice_1"
 fengoffice_admin_email[1]="admin.local@$domain"
 fengoffice_mysql_pwd[1]="$mysql_generic_pwd"
-#Egroupware 1.7.5
+#E#groupware 1.7.5
 egroupware_name[1]="Egroupware_1"
 egroupware_admin_email[1]="admin.local@$domain"
 egroupware_mysql_pwd[1]="$mysql_generic_pwd"
 #I#lohamail 0.8.14
 ilohamail_dbuser="Ilohamail"
 ilohamail_dbpwd="$mysql_generic_pwd"
-#Horde 3.3source
+#H#orde 3.3source
 horde_name="Horde_1"
 horde_mysql_pwd="$mysql_generic_pwd"
 #F#usionforge 5.0.3
@@ -81,3 +81,5 @@ redmine_name="Redmine"
 redmine_mysql_pwd="$mysql_generic_pwd"
 redmine_language="fr"
 redmine_admin_pwd=$gen_login_pwd
+#O#penxchange 6.20
+

@@ -24,9 +24,10 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 
 
-apt_cacher_root="$(echo $DEB_MIRROR_PATH | cut -d'/' -f3)"
+apt_cacher_root="$(echo $DEB_MIRROR_PATH | sed \"s/debian\///\")"
 
-virtualmin_repo="http://$apt_cacher_root/wwi.lokaleskif-b.intra/debian_mirror/virtualmin/software.virtualmin.com/gpl/debian/"
+
+virtualmin_repo="http://$apt_cacher_root/virtualmin/software.virtualmin.com/gpl/debian/"
 
 VIRTUALMIN_NONINTERACTIVE=1
 #_______________________________________________________________________________________________
