@@ -1,0 +1,78 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Ampache 3.5.4'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Webmail'
+RMOD_DESCRIPTION_FR='eMails en ligne'
+
+RMOD_VERBOSE="RoundCube Webmail is a browser-based multilingual IMAP client with an application-like user interface. It provides full functionality you expect from an e-mail client, including MIME support, address book, folder manipulation, message searching and spell checking. RoundCube Webmail is written in PHP and requires a MySQL or Postgres database. The user interface is fully skinnable using XHTML and CSS 2."
+RMOD_VERBOSE_FR="RoundCube est client mail en ligne."
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+#VARIABLES
+#MYSQL PASSWORD
+MOD_NAME=$roundcube_name
+ROUNDCUBE_MYSQL_PWD=$roundcube_mysql_pwd
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+#rm moodle-latest-19.zip
+
+}
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes ampache ampache-themes eyed3
+
+
+
+mv /usr/share/ampache $LAMPP_DIRECTORY/usr/share
+ln -s $LAMPP_DIRECTORY/usr/share/ampache /usr/share/ampache
+
+mv /etc/ampache $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/ampache /etc/ampache
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/$MOD_NAME" "/$MOD_NAME" 
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Roundcube"
+INSTALL
+CREATE_WUI
+echo "I: End of install Roundcube"

@@ -34,7 +34,7 @@ wordpress_mysql_pwd[1]="$mysql_generic_pwd"
 #G#imp 2.6
 #I#ceweasel 0.1
 #L#ibre Office Wheezy
-#M##ixxx 1.9
+#M#ixxx 1.9
 #S#ecure delete 0.1
 #S#ound juicer 0.1
 #T#ruecrypt 7.0a
@@ -82,4 +82,6 @@ redmine_mysql_pwd="$mysql_generic_pwd"
 redmine_language="fr"
 redmine_admin_pwd=$gen_login_pwd
 #O#penxchange 6.20
-
+#Ampache 3.5.4
+#Frontaccounting 2.2
+#Bugzilla 3.6.2
