@@ -40,6 +40,11 @@ cp -r $ROOT_DIR/cert $WORK_DIR/chroot/tmp/.
 
 chmod -R 777 $WORK_DIR/chroot/tmp/
 
+#MOVE OLD CASPER TO NEW LIVE DIRECTORY
+if [ -d $WORK_DIR/remaster/casper ]; then
+mv $WORK_DIR/remaster/casper $WORK_DIR/remaster/live
+fi
+
 #MOUNTING PROC FOR CHROOT
 mount --bind /proc $WORK_DIR/chroot/proc
 
