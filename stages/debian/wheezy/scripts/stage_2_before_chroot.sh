@@ -40,16 +40,6 @@ cp -r $ROOT_DIR/cert $WORK_DIR/chroot/tmp/.
 
 chmod -R 777 $WORK_DIR/chroot/tmp/
 
-#UPDATING ISOLINUX
-sed -i "s/vmlinuz1/vmlinuz/g" $WORK_DIR/remaster/isolinux/menu.cfg
-sed -i "s/initrd=\/live\/initrd1.img/initrd=\/live\/initrd.gz keyb=$KEYBLANG/g" $WORK_DIR/remaster/isolinux/menu.cfg
-sed -i "s/splash//g" $WORK_DIR/remaster/isolinux/isolinux.cfg
-
-#MOVE OLD CASPER TO NEW LIVE DIRECTORY
-if [ -d $WORK_DIR/remaster/casper ]; then
-mv $WORK_DIR/remaster/casper $WORK_DIR/remaster/live
-fi
-
 #MOUNTING PROC FOR CHROOT
 mount --bind /proc $WORK_DIR/chroot/proc
 

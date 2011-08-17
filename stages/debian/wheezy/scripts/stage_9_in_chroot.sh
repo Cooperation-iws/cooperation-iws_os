@@ -31,12 +31,6 @@ rm /usr/sbin/policy-rc.d
 mv /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
 
 
-#FIXING RESOLV.CONF FOR LENNY
-if [ "$DEB_DIST" == "lenny" ] && [ -e /etc/resolvconf/run/resolv.conf ]; then
-rm /etc/resolv.conf
-ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
-fi
-
 #FIX WHEEZY BASH FOR SUDO AND X
 if [ "$DEB_DIST" == "wheezy" ] ; then
 
@@ -72,7 +66,7 @@ chmod +x /lib/live/config/001-cpvar
 
 #CONFIGURING SOURCES.LIST
 echo "I:Configuring sources.list"
-if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "lenny" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "squeeze" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "wheezy" ];then
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lucid" ] ;then
 echo "
 deb http://archive.ubuntu.com/ubuntu/ $DEB_DIST restricted main universe multiverse
 deb http://archive.ubuntu.com/ubuntu/ $DEB_DIST-updates restricted main universe multiverse

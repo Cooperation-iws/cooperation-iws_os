@@ -38,13 +38,6 @@ export LC_ALL=C
 export DEBIAN_FRONTEND=noninteractive
 
 
-#ACCEPTING LICENCE JAVA UBUNTU
-echo "Name: shared/accepted-sun-dlj-v1-1
-Template: shared/accepted-sun-dlj-v1-1
-Value: true
-Owners: sun-java5-bin, sun-java5-jre
-Flags: seen
-" >> /var/cache/debconf/config.dat
 
 #SETTING RUBY GEM LOCAL MIRROR
 echo "gem: --source $URL_CIWS_DEPOT/gem-mirror/" > /etc/gemrc
@@ -53,7 +46,7 @@ chmod +x /etc/gemrc
 #UPDATING SOURCES.LIST
 mv /etc/apt/sources.list /etc/apt/sources.list.orig
 
-if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "lenny" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "etch" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "squeeze" ] && [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "wheezy" ]; then
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "lucid" ] then
 echo "
 deb $DEB_MIRROR_PATH/ $DEB_DIST restricted main universe multiverse
 deb $DEB_MIRROR_SECURITY_PATH/ $DEB_DIST-updates restricted main universe multiverse

@@ -31,12 +31,7 @@ mksquashfs chroot remaster/live/filesystem.squashfs -no-progress
 if [ -d remaster/bin ]; then
 
 echo "I: CLEANING ISO DIR"
-rm -Rf remaster/bin
-rm -Rf remaster/programs
-rm -Rf remaster/autorun.inf
-rm -Rf remaster/start.ini
-rm -Rf remaster/start.exe
-rm -Rf remaster/start.bmp
+rm -Rf remaster/doc
 
 fi
 
