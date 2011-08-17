@@ -92,7 +92,13 @@ class Cooperationiws:
 	self.scriptParams = '#!/bin/bash\n\n'
 	self.buildIso=True		
 	self.buildSquashRoot = True
-		
+	self.hardyStagesScriptsDir="lenny"	
+	self.intrepidStagesScriptsDir="lenny"	
+	self.jauntyStagesScriptsDir="lenny"	
+	self.lennyStagesScriptsDir="lenny"	
+	self.squeezeStagesScriptsDir="Wheezy"	
+	self.wheezyStagesScriptsDir="Wheezy"	
+	
         APPDOMAIN='cooperationiws'
         LANGDIR='lang'
         # locale
@@ -289,6 +295,24 @@ class Cooperationiws:
         else:
             	return False
 
+# ---------- Set proper scripts variables ---------- #
+    
+    def setScriptVariable(self):
+	if self.distVers == "hardy"
+		self.stagesScriptsDir=self.hardyStagesScriptsDir
+   	if self.distVers == "intrepid"
+		self.stagesScriptsDir=self.intrepidStagesScriptsDir
+   	if self.distVers == "jaunty"
+		self.stagesScriptsDir=self.jauntyStagesScriptsDir
+   	if self.distVers == "lenny"
+		self.stagesScriptsDir=self.lennyStagesScriptsDir
+   	if self.distVers == "squeeze"
+		self.stagesScriptsDir=self.squeezeStagesScriptsDir
+  	if self.distVers == "wheezy"
+		self.stagesScriptsDir=self.wheezyStagesScriptsDir
+
+
+
 
 # ---------- Check dependencies ---------- #
 
@@ -335,6 +359,7 @@ class Cooperationiws:
 		if self.casperPath =="":
 			print _('Unknown debian Live cd: Aborting')
             		exit(0)
+
 
 # ---------- Handle Module Properties ---------- #
      
@@ -557,7 +582,7 @@ class Cooperationiws:
     
     def commandLineGui(self):
 	self.checkDependencies()
-	
+	self.setScriptVariable()
 	if self.checkCustomDir() == True:
 		if self.debianLive == True:			
 			self.setupDebianLive()           		
@@ -580,7 +605,7 @@ class Cooperationiws:
 	print " "
 	print _("RUN STAGE 0...")
 	print " "
-	os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/scripts/stage_0_start.sh") + '\" \"' + self.isoFilename + '\" \"' + self.mountDir + '\" \"' + self.customDir + '\"')
+	os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.stagesScriptsDir + "/scripts/stage_0_start.sh") + '\" \"' + self.isoFilename + '\" \"' + self.mountDir + '\" \"' + self.customDir + '\"')
 	print " "
 	print _("STAGE 0 COMPLETED")	
 	print " "
@@ -593,7 +618,7 @@ class Cooperationiws:
 	print " "
 	print _("RUN STAGE 1...")
 	print " "
-	os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/scripts/stage_1_chroot_creation.sh") + '\" \"' + self.customDir + '\" \"' + self.casperPath + '\"')
+	os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.stagesScriptsDir + "/scripts/stage_1_chroot_creation.sh") + '\" \"' + self.customDir + '\" \"' + self.casperPath + '\"')
 	print " "
         print _("STAGE 1 COMPLETED")	
 	print " "
@@ -678,7 +703,7 @@ class Cooperationiws:
 	print " "
 	print _("RUN STAGE 2...")
  	print " "
-        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/scripts/stage_2_before_chroot.sh") + '\" \"' + self.ciwsRootDir + '\" \"' + self.scriptDir + "/" + self.distType + "/" + self.distVers + '/scripts/\" \"' + self.xmlDir + '\" \"' + self.phpDir + '\" \"' + self.artworkDir + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" \"' + self.artwork + '\" \"' + self.keyLang + '\" \"' + self.moduleFilename + '\"' )
+        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.stagesScriptsDir + "/scripts/stage_2_before_chroot.sh") + '\" \"' + self.ciwsRootDir + '\" \"' + self.scriptDir + "/" + self.distType + "/" + self.stagesScriptsDir + '/scripts/\" \"' + self.xmlDir + '\" \"' + self.phpDir + '\" \"' + self.artworkDir + '\" \"' + self.customDir + '\" \"' + self.ciwsDepot + '\" \"' + self.artwork + '\" \"' + self.keyLang + '\" \"' + self.moduleFilename + '\"' )
 	print " "
 	print _("STAGE 2 COMPLETED")	
 	print " "
@@ -789,7 +814,7 @@ class Cooperationiws:
 	modExecAfterChroot = '#!/bin/bash\n\n'
         if self.artwork != "":
 		modExecAfterChroot += 'bash \"' + os.path.join(self.ciwsRootDir, self.artworkDir + "/" + self.artwork + ".artscript") + '\" \"' + self.customDir + '\" ' + ' ;\n '
-		modExecAfterChroot += 'bash \"' + os.path.join( self.scriptDir, self.distType + "/" + self.distVers + "/scripts/stage_8_out_of_chroot.sh") + '\" \"' + self.customDir + '\" ' + ' ;\n '
+		modExecAfterChroot += 'bash \"' + os.path.join( self.scriptDir, self.distType + "/" + self.stagesScriptsDir + "/scripts/stage_8_out_of_chroot.sh") + '\" \"' + self.customDir + '\" ' + ' ;\n '
 
 	if self.execModulesEnabled == True:
 		for execModRoot, execModexecModDirs, execModFiles in os.walk(os.path.join(self.customDir, "scripts/")):
@@ -898,7 +923,7 @@ class Cooperationiws:
 		print " "
 		print _("RUN STAGE 10...")
 		print " "
-		os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/scripts/stage_10_after_chroot.sh") + '\" \"' + self.customDir + '\" ')
+		os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.stagesScriptsDir + "/scripts/stage_10_after_chroot.sh") + '\" \"' + self.customDir + '\" ')
 		print " "
 		print _("STAGE 10 COMPLETED")
 		print " "
@@ -909,7 +934,7 @@ class Cooperationiws:
 		print " "
 	        print _("RUN STAGE 11...")
 		print " "
-	        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/scripts/stage_11_encryption_after_chroot.sh") + '\"  \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\"')
+	        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.stagesScriptsDir + "/scripts/stage_11_encryption_after_chroot.sh") + '\"  \"' + self.encryption + '\" \"' + self.encryptionpassphrase + '\" \"' + self.customDir + '\"')
 		print " "
 	        print _("STAGE 11 COMPLETED")	
 		print " "
@@ -922,7 +947,7 @@ class Cooperationiws:
 		print " "
 		print _("RUN STAGE 12...")
 		print " "
-	        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.distVers + "/stage_12_finishing.sh") + '\" \"' + self.customDir + '\" \"' + self.isoname + '\" \"' + self.LiveCdArch + '\" ')
+	        os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.stagesScriptsDir + "/scripts/stage_12_finishing.sh") + '\" \"' + self.customDir + '\" \"' + self.isoname + '\" \"' + self.LiveCdArch + '\" ')
 		print " "
 	        print _("STAGE 12 COMPLETED")
 		print " "
