@@ -1,0 +1,63 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Truecrypt 7.0a'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Cryptography tools for client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+echo "I: installing truecrypt"
+
+cd $DL_DIR
+
+if [ "$ARCH" == "686" ] ; then
+
+wget $URL_CIWS_DEPOT/truecrypt_6.1a-0_i386.deb
+
+dpkg -i truecrypt_6.1a-0_i386.deb
+
+apt-get -f install --assume-yes --force-yes
+
+apt-get install --assume-yes --force-yes sun-java6-bin python-pexpect
+
+cd $DL_DIR
+
+wget $URL_CIWS_DEPOT/tcgui.0.4.2.tar.gz
+
+tar -xzf tcgui.0.4.2.tar.gz
+
+cd tcgui-0.4.2
+
+sed -i "s/read selection/selection=1/" install.sh
+sed -i "46s/exit//" install.sh
+sed -i '76s/read antwort/antwort="y"/' install.sh
+sed -i '92s/read antwort/antwort="y"/' install.sh
+
+chmod +x install.sh
+./install.sh $LIVEUSER
+
+groupmod -g 411 truecrypt
+echo "
+#TrueCrypt
+adduser $LIVEUSER truecrypt
+adduser root truecrypt " >> /etc/rc.local
+
+else
+
+
+apt-get install --assume-yes --force-yes mount libfuse2 fuse-utils dmsetup libsm6 libgtk2.0-0
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/truecrypt_7.0a.tar.gz
+
+tar -xzf truecrypt_7.0a.tar.gz -C /
+
+
+fi

@@ -3,23 +3,15 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='NX Client Squeeze'
+RMOD_NAME='Kvm Squeeze'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='NoMachine NX remote admin management client'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-
+LIVEUSER=$LIVEUSER
 . /tmp/scripts_params
 
-echo "I: config nx"
-if [ $ARCH == "686" ]; then
-wget $URL_CIWS_DEPOT/nxclient_3.3.0-3_i386.deb
-dpkg -i nxclient_3.3.0-3_i386.deb
-else
-wget $URL_CIWS_DEPOT/nxclient_3.4.0-7_x86_64.deb
-dpkg -i nxclient_3.4.0-7_x86_64.deb
+echo "I: install virtualbox"
 
-
-fi 
-
+apt-get install --assume-yes --force-yes bridge-utils uml-utilities kvm qemu expect

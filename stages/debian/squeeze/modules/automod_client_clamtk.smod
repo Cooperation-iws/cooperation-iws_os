@@ -1,0 +1,30 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Clamtk 4.27'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Antivirus tools for client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+. /tmp/scripts_params
+
+
+
+echo "I: installing clamav clamtk"
+export DEBIAN_FRONTEND=noninteractive
+
+apt-get -f install --assume-yes --force-yes clamav clamav-daemon clamav-freshclam clamtk
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/latest_clamav_updates.tar.gz
+tar -xzf latest_clamav_updates.tar.gz -C /var/lib/clamav/.
+
+
+
+
+if [ ! -d $LAMPP_DIRECTORY/var/lib/clamav ]; then
+mv /var/lib/clamav $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/clamav /var/lib/clamav
+fi
