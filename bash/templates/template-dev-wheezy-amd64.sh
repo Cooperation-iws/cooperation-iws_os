@@ -31,7 +31,7 @@ wordpress_mysql_pwd[1]="$mysql_generic_pwd"
 #Gimp 2.6
 #Iceweasel 0.1
 #Libre Office Wheezy
-#Mixxx 1.9
+#M#ixxx 1.9
 #Secure delete 0.1
 #Sound juicer 0.1
 #Truecrypt 7.0a

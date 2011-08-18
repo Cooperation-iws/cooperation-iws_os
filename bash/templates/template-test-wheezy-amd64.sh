@@ -11,7 +11,7 @@ domain="my-erp2.intra"
 kernel="2.6.39-2-amd64"
 #update live-initramfs
 #DNS server Wheezy
-#Ciwscms 0.9.2
+#C#iwscms 0.9.2
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
@@ -25,8 +25,8 @@ openerp_psgsql_pwd="$mysql_generic_pwd"
 wordpress_name[1]="Wordpress_1"
 wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"
-#Mysql 5.1
-#Phpmyadmin 4.3.4.3
+#M#ysql 5.1
+#P#hpmyadmin 4.3.4.3
 #Cl#amtk 4.10
 #C#odecs Wheezy
 #F#ilezilla 0.1
@@ -82,6 +82,6 @@ redmine_mysql_pwd="$mysql_generic_pwd"
 redmine_language="fr"
 redmine_admin_pwd=$gen_login_pwd
 #O#penxchange 6.20
-#Ampache 3.5.4
-#Frontaccounting 2.2
-#Bugzilla 3.6.2
+#A#mpache 3.5.4
+#F#rontaccounting 2.2
+#B#ugzilla 3.6.2

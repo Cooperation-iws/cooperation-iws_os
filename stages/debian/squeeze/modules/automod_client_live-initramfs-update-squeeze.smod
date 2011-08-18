@@ -16,7 +16,6 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 echo "I: updating live-boot-initramfs"
 
-apt-get remove --assume-yes --force-yes live-boot live-boot-initramfs
 cd $DL_DIR
 wget $URL_CIWS_DEPOT/live-initramfs-3.0-a18.tar.gz
 tar -xzf live-initramfs-3.0-a18.tar.gz
@@ -65,9 +64,34 @@ apt-get install --assume-yes --force-yes aespipe
 apt-get install --assume-yes --force-yes loop-aes-utils aufs-tools
 
 cd $DL_DIR
-wget $URL_CIWS_DEPOT/loop-$kernel.ko
-mv /lib/modules/$kernel/kernel/drivers/block/loop.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko-old
-cp loop-$kernel.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko
+#building from source
+apt-get install --assume-yes --force-yes linux-image-$kernel linux-headers-$kernel
+
+
+apt-get install --assume-yes --force-yes build-essential debhelper module-assistant
+
+
+apt-get install --assume-yes --force-yes linux-source-2.6 loop-aes-source
+
+apt-get build-dep --assume-yes --force-yes linux-source-2.6 loop-aes
+
+
+
+m-a -k /usr/src/linux-headers-$kernel fakesource
+
+
+m-a -k /usr/src/linux-headers-$kernel build loop-aes
+
+
+cd /usr/src
+
+
+dpkg -i loop-aes-modules-*.deb
+
+#building from already compiled
+#wget $URL_CIWS_DEPOT/loop-$kernel.ko
+#mv /lib/modules/$kernel/kernel/drivers/block/loop.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko-old
+#cp loop-$kernel.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko
 
 
 

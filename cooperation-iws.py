@@ -96,8 +96,8 @@ class Cooperationiws:
 	self.intrepidStagesScriptsDir="lenny"	
 	self.jauntyStagesScriptsDir="lenny"	
 	self.lennyStagesScriptsDir="lenny"	
-	self.squeezeStagesScriptsDir="Wheezy"	
-	self.wheezyStagesScriptsDir="Wheezy"	
+	self.squeezeStagesScriptsDir="wheezy"	
+	self.wheezyStagesScriptsDir="wheezy"	
 	
         APPDOMAIN='cooperationiws'
         LANGDIR='lang'
@@ -298,17 +298,17 @@ class Cooperationiws:
 # ---------- Set proper scripts variables ---------- #
     
     def setScriptVariable(self):
-	if self.distVers == "hardy"
+	if self.distVers == "hardy":
 		self.stagesScriptsDir=self.hardyStagesScriptsDir
-   	if self.distVers == "intrepid"
+   	if self.distVers == "intrepid":
 		self.stagesScriptsDir=self.intrepidStagesScriptsDir
-   	if self.distVers == "jaunty"
+   	if self.distVers == "jaunty":
 		self.stagesScriptsDir=self.jauntyStagesScriptsDir
-   	if self.distVers == "lenny"
+   	if self.distVers == "lenny":
 		self.stagesScriptsDir=self.lennyStagesScriptsDir
-   	if self.distVers == "squeeze"
+   	if self.distVers == "squeeze":
 		self.stagesScriptsDir=self.squeezeStagesScriptsDir
-  	if self.distVers == "wheezy"
+  	if self.distVers == "wheezy":
 		self.stagesScriptsDir=self.wheezyStagesScriptsDir
 
 

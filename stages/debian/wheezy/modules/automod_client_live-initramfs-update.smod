@@ -55,10 +55,44 @@ if [ "$ENCRYPTION" ]; then
 apt-get install --assume-yes --force-yes aespipe
 apt-get install --assume-yes --force-yes loop-aes-utils aufs-tools
 
+#building from source
+apt-get install --assume-yes --force-yes linux-image-$kernel linux-headers-$kernel
+
+
+apt-get install --assume-yes --force-yes build-essential debhelper module-assistant
+
+
+apt-get install --assume-yes --force-yes loop-aes-source
+
+apt-get build-dep --assume-yes --force-yes loop-aes
+
+
+
+m-a -k /usr/src/linux-headers-$kernel fakesource
+
+
+m-a -k /usr/src/linux-headers-$kernel prepare loop-aes
+
+
 cd $DL_DIR
-wget $URL_CIWS_DEPOT/loop-$kernel.ko
+wget $URL_CIWS_DEPOT/loop-AES-v3.6d.tar.bz2
+
+tar -xjf loop-AES-v3.6d.tar.bz2
+
+cd loop-AES-v3.6d
+
+make clean 
+
+make LINUX_SOURCE=/usr/src/linux-headers-$kernel
+
 mv /lib/modules/$kernel/kernel/drivers/block/loop.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko-old
-cp loop-$kernel.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko
+cp loop.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko
+
+#building from already compiled
+#cd $DL_DIR
+#wget $URL_CIWS_DEPOT/loop-$kernel.ko
+#mv /lib/modules/$kernel/kernel/drivers/block/loop.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko-old
+#cp loop-$kernel.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko
 
 
 

@@ -1,0 +1,51 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Server'
+RMOD_NAME='NX server 0.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='NoMachine NX remote admin management'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+. /tmp/scripts_params
+
+echo "I: config nx"
+cd /tmp
+if [ $ARCH == "686" ]; then
+wget $URL_CIWS_DEPOT/nxclient_3.3.0-3_i386.deb
+wget $URL_CIWS_DEPOT/nxnode_3.3.0-3_i386.deb
+wget $URL_CIWS_DEPOT/nxserver_3.3.0-8_i386.deb
+dpkg -i nxclient_3.3.0-3_i386.deb
+dpkg -i nxnode_3.3.0-3_i386.deb
+dpkg -i nxserver_3.3.0-8_i386.deb
+else
+wget $URL_CIWS_DEPOT/nxclient_3.4.0-7_x86_64.deb
+wget $URL_CIWS_DEPOT/nxnode_3.4.0-16_x86_64.deb
+wget $URL_CIWS_DEPOT/nxserver_3.4.0-17_x86_64.deb
+dpkg -i nxclient_3.4.0-7_x86_64.deb
+dpkg -i nxnode_3.4.0-16_x86_64.deb
+dpkg -i nxserver_3.4.0-17_x86_64.deb
+
+
+fi 
+
+apt-get -f install --assume-yes --force-yes
+
+(echo $CLEAR_HOST_PWD; echo $CLEAR_HOST_PWD) | /usr/NX/bin/nxserver --useradd $LIVEUSER --system --administrator
+userdel -r $LIVEUSER
+
+
+
+echo "I: config rc.local"
+echo "
+/usr/NX/bin/nxserver --start
+" >> /etc/rc.local
+chmod +x /etc/rc.local
+
+/usr/NX/bin/nxserver --stop
+
+mv /usr/NX /opt/ciws/usr/.
+ln -s /opt/ciws/usr/NX /usr/NX

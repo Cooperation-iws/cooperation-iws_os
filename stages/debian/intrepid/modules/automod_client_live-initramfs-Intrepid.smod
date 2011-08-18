@@ -42,7 +42,7 @@ apt-get install --assume-yes --force-yes linux-image-$kernel linux-restricted-mo
 
 apt-get install --assume-yes --force-yes build-essential debhelper module-assistant
 
-apt-get build-dep --assume-yes --force-yes linux-source
+apt-get build-dep --assume-yes --force-yes linux-source 
 
 
 

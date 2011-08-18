@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='kernel wheezy upgrade'
+RMOD_NAME='kernel squeeze upgrade'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Update Manager'
@@ -21,7 +21,7 @@ export HOME=/home/liveusb
 echo "do_initrd = Yes" >  /etc/kernel-img.conf
 
 #apt-get install --assume-yes --force-yes linux-image-$kernel loop-aes-modules-$kernel squashfs-modules-$kernel aufs-modules-$kernel
-apt-get install --assume-yes --force-yes linux-image-$kernel linux-headers-$kernel linux-source-2.6
+apt-get install --assume-yes --force-yes linux-image-$kernel linux-headers-$kernel
 
 
 sleep 2

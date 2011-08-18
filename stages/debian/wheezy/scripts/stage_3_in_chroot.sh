@@ -46,7 +46,7 @@ chmod +x /etc/gemrc
 #UPDATING SOURCES.LIST
 mv /etc/apt/sources.list /etc/apt/sources.list.orig
 
-if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" != "lucid" ] then
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "lucid" ]; then
 echo "
 deb $DEB_MIRROR_PATH/ $DEB_DIST restricted main universe multiverse
 deb $DEB_MIRROR_SECURITY_PATH/ $DEB_DIST-updates restricted main universe multiverse

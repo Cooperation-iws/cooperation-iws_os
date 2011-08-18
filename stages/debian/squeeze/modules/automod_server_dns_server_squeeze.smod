@@ -1,0 +1,180 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Server'
+RMOD_NAME='DNS server Squeeze'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='DNS server'
+RMOD_DESCRIPTION_FR='Serveur DNS'
+RMOD_VERBOSE=""
+RMOD_VERBOSE_FR=""
+
+
+RMOD_RUN_IN_CHROOT=True
+
+. /tmp/app_params
+
+. /tmp/scripts_params
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL()
+{
+
+apt-get install --assume-yes --force-yes thttpd
+/etc/init.d/thttpd stop
+
+killall thttpd
+
+
+
+sed -i "11s/\/var\/www/\/opt\/ciws\/var\/identity\//" /etc/thttpd/thttpd.conf
+mkdir /opt/ciws/var/identity
+sed -i "7s/80/886/" /etc/thttpd/thttpd.conf
+sed -i "10s/no/yes/" /etc/default/thttpd
+echo "" > /opt/ciws/var/identity/index.html
+echo "$HOSTNAME" > /opt/ciws/var/identity/hostname.txt
+echo "$domain" > /opt/ciws/var/identity/domain.txt
+
+
+apt-get install --assume-yes --force-yes bind9 dnsutils
+#bind9 config
+
+
+cat << EOT_LOCAL > /etc/bind/named.conf.local
+
+zone "$domain" {
+        type master;
+        file "/var/cache/bind/db.$domain";
+	
+};
+include "/etc/bind/named.conf.rev";
+EOT_LOCAL
+
+cat << EOT_REV > /etc/bind/named.conf.rev.tpl
+zone "100.168.192.in-addr.arpa" {
+        type slave;
+        file "/var/cache/bind/db.slave_rev";
+	masters {ip_gateway;};
+	allow-notify {ip_gateway;};
+};
+EOT_REV
+chmod +r-w /etc/bind/named.conf.rev.tpl
+
+cat << EOT_VAR > /var/cache/bind/db.$domain.tpl
+\$TTL 604800
+@ IN SOA $domain. $HOSTNAME.$domain. (
+                2008080101      ;serial
+                04800           ;refresh
+                86400           ;retry        
+                2419200         ;expire
+                604800          ;negative cache TTL
+                )
+@      IN      NS      $HOSTNAME.$domain.
+@      IN      A       ip_address
+$HOSTNAME    IN      A       ip_address
+wwi CNAME $HOSTNAME
+EOT_VAR
+
+chmod +r-w /var/cache/bind/db.$domain.tpl
+
+
+sed -i "13s/\/\///" /etc/bind/named.conf.options 
+sed -i "14s/\/\///" /etc/bind/named.conf.options 
+sed -i "14s/0.0.0.0/DNS_1/" /etc/bind/named.conf.options 
+sed -i "15s/\/\///" /etc/bind/named.conf.options 
+sed -i "3s/^/dnssec-enable yes;/" /etc/bind/named.conf.options 
+
+cp /etc/bind/named.conf.options /etc/bind/named.conf.options.tpl
+chmod +r-w /etc/bind/named.conf.options.tpl
+
+mv /etc/bind $LAMPP_DIRECTORY/etc/
+ln -s $LAMPP_DIRECTORY/etc/bind /etc/bind
+
+
+
+
+echo "
+#!/bin/bash
+sleep 8
+#Bind
+hostname="$HOSTNAME"
+ip_address=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr'| cut -d':' -f2 | cut -d' ' -f1)
+ip_address_1=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1 | cut -d'.' -f1)
+ip_address_2=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1 | cut -d'.' -f2)
+ip_address_3=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f3)
+ip_address_4=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f4)
+ip_gateway=\$(route -n | grep UG | sed 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/&*/g'| sed 's/ //g' | cut -d'*'  -f2)
+cp /etc/bind/named.conf.rev.tpl /etc/bind/named.conf.rev
+cp /var/cache/bind/db.$domain.tpl /var/cache/bind/db.$domain
+sed -i \"s/ip_gateway/\$ip_gateway/g\" /etc/bind/named.conf.rev
+sed -i \"s/ip_address/\$ip_address/g\" /var/cache/bind/db.$domain
+sed -i \"s/100.168.192/\$ip_address_3.\$ip_address_2.\$ip_address_1/g\" /etc/bind/named.conf.rev
+#sed -i \"s/nameserver 127.0.0.1/nameserver \$ip_gateway/g\" /etc/resolvconf/run/resolv.conf
+cp /etc/bind/named.conf.options.tpl /etc/bind/named.conf.options 
+sed -i \"s/DNS_1/\$ip_gateway/\" /etc/bind/named.conf.options
+sleep 2
+sudo /etc/init.d/bind9 restart
+" > /opt/ciws/etc/dhclient-exit-hook.sh 
+chmod +x /opt/ciws/etc/dhclient-exit-hook.sh 
+echo "#!/bin/bash
+sudo  /opt/ciws/etc/dhclient-exit-hook.sh &
+" > /etc/dhcp/dhclient-exit-hooks.d/dns_local
+
+chmod +x /etc/dhcp/dhclient-exit-hooks.d/dns_local
+
+
+echo "#!/bin/bash
+sleep 15
+ip_address=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep 'inet addr' | cut -d':' -f2 | cut -d' ' -f1)
+for ip in \$ip_address
+do
+network_card=\$(ifconfig | grep -m 1 \$ip --before-context=1 | cut -d' ' -f1)
+if [ ! -e /tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card ] && [[ \"\$ip\" ]]; then
+echo \"
+ifconfig \$network_card \$ip
+\" > /tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card
+chmod +x /tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card
+fi
+bash \"/tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card\"
+done
+" > /opt/ciws/etc/dhclient-exit-hooks.d_ifconfig_local
+
+chmod +x /opt/ciws/etc/dhclient-exit-hooks.d_ifconfig_local
+
+echo "#!/bin/bash
+/opt/ciws/etc/dhclient-exit-hooks.d_ifconfig_local &
+"  > /etc/dhcp/dhclient-exit-hooks.d/ifconfig_local
+
+chmod +x /etc/dhcp/dhclient-exit-hooks.d/ifconfig_local
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+apt-get install --assume-yes --force-yes php5-cli
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME}" "/${MOD_NAME}" 
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+INSTALL
+CREATE_WUI
+
