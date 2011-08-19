@@ -96,6 +96,7 @@ class Cooperationiws:
 	self.intrepidStagesScriptsDir="lenny"	
 	self.jauntyStagesScriptsDir="lenny"	
 	self.lennyStagesScriptsDir="lenny"	
+	self.lucidStagesScriptsDir="wheezy"	
 	self.squeezeStagesScriptsDir="wheezy"	
 	self.wheezyStagesScriptsDir="wheezy"	
 	
@@ -310,8 +311,8 @@ class Cooperationiws:
 		self.stagesScriptsDir=self.squeezeStagesScriptsDir
   	if self.distVers == "wheezy":
 		self.stagesScriptsDir=self.wheezyStagesScriptsDir
-
-
+	if self.distVers == "lucid":
+		self.stagesScriptsDir=self.lucidStagesScriptsDir
 
 
 # ---------- Check dependencies ---------- #

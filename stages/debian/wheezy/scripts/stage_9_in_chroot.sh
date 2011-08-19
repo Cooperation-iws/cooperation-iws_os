@@ -32,7 +32,7 @@ mv /usr/sbin/policy-rc.d.silent_install /usr/sbin/policy-rc.d
 
 
 #FIX WHEEZY BASH FOR SUDO AND X
-if [ "$DEB_DIST" == "wheezy" ] ; then
+if [ "$DEB_DIST" == "wheezy" ] || [ "$DEB_DIST" == "squeeze" ] ; then
 
 echo "
 if [ ! \"\$(cat /home/$LIVEUSER/.bashrc | grep 'xhost +local:root')\" ] ; then

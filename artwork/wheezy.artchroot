@@ -27,4 +27,4 @@ fi
 #chmod -R 777 /etc/skel/.gconf/
 #fi
 
-
+apt-get remove --assume-yes --force-yes usplash
