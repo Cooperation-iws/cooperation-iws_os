@@ -24,18 +24,18 @@ wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"
 #M#ysql 5.1
 #P#hpmyadmin 4.3.4.3
-#Clamtk 4.27
-#Codecs Squeeze
-#Filezilla 0.1
-#Flashplayer Squeeze
-#Gimp 2.6
-#Iceweasel 0.1
-#Openoffice Squeeze
+#C#lamtk 4.27
+#C#odecs Squeeze
+#F#ilezilla 0.1
+#F#lashplayer Squeeze
+#G#imp 2.6
+#I#ceweasel 0.1
+#O#penoffice Squeeze
 #M#ixxx 1.9source
-#Secure delete 0.1
-#Sound juicer 0.1
-#Truecrypt 7.0a
-#Vlc 0.1
-#Kvm Squeeze
-#Xsane 0.1
-#Grsync 0.1
+#S#ecure delete 0.1
+#S#ound juicer 0.1
+#T#ruecrypt 7.0a
+#V#lc 0.1
+#K#vm Squeeze
+#X#sane 0.1
+#G#rsync 0.1
