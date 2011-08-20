@@ -1,0 +1,75 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Lilina 1.0'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Rss agregator'
+RMOD_DESCRIPTION_FR='Agrégateur Rss'
+RMOD_VERBOSE="Lilina is a free, open source aggregator for your server."
+RMOD_VERBOSE_FR="Lilina est un aggrégateur open source."
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+NB_LILINA=${#lilina_name[*]}
+
+for (( count=1; count<=$NB_LILINA; count++ ))
+do
+LILINA_MYSQL_PWD[$count]=${lilina_mysql_pwd[$count]}
+MOD_NAME[$count]=${lilina_name[$count]}
+done
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/lilina-1.0-090311.tar.gz
+tar -xzf lilina-1.0-090311.tar.gz
+for (( count=1; count<=$NB_LILINA; count++ ))
+do
+mv Lilina $WWW_DIRECTORY/${MOD_NAME[$count]}
+sed -i "s/Lilina/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/content/system/config/settings.php
+#sed -i "s/lilina/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/config/config.php
+chmod -R 755  $WWW_DIRECTORY/${MOD_NAME[$count]}/cache
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_LILINA; count++ ))
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+done
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Lilina"
+INSTALL
+CREATE_WUI
+echo "I: End of install Lilina"

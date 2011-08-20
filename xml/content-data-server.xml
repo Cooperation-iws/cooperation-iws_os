@@ -398,6 +398,39 @@ Dotclear is a free software primarily designed for its users and regularly impro
 	
 </item>
 <item>
+	<item_name>Ampache</item_name>
+	<item_version>3.5.4</item_version>
+	<item_desc>Multimedia streaming portal</item_desc>
+	<item_web>http://ampache.org/</item_web>
+	<item_verbose>Ampache is a Web-based Audio file manager. It is implemented with MySQL, and PHP. It allows you to view, edit, and play your audio files via the web. It has support for playlists, artist and album views, album art, random play, playback via Http/On the Fly Transcoding and Downsampling, Vote based playback, Mpd and Icecast, Integrated Flash Player, as well as per user themes and song play tracking. You can also Link multiple Ampache servers togeather using XML-RPC. Ampache supports GETTEXT translations and has a full translation of many languages.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Multimedia</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>ampache_name</field_1_value>
+		<field_1_def_content>Ampache</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>ampache_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
 	<item_name>Awstats</item_name>
 	<item_version>Lenny</item_version>
 	<item_desc>Web logs tracking analysis tool</item_desc>
@@ -2253,11 +2286,36 @@ With the base system you can find a full suite of applications bundled, some for
 	<field_default_pwd>cooperation</field_default_pwd>
 	<field_exclude></field_exclude>
 	<field_include></field_include>
-	<field_OS>Lenny</field_OS>
+	<field_OS>Lenny,wheezy</field_OS>
 	<param>	
 		<field_1_id>app_name</field_1_id>
 		<field_1_name>Application name</field_1_name>
 		<field_1_value>lilina_name</field_1_value>
+		<field_1_def_content>Lilina</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+		
+	
+</item>
+<item>
+	<item_name>Lilina</item_name>
+	<item_version>2.0</item_version>
+	<item_desc>Rss agregator</item_desc>
+	<item_web>http://getlilina.org/</item_web>
+	<item_verbose>But who, or rather what, is Lilina? Lilina is a free, open source aggregator for your server. This allows you to install it once and run it everywhere.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Social networks</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny,wheezy</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>lilina2_name</field_1_value>
 		<field_1_def_content>Lilina</field_1_def_content>
 		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
 	</param>
