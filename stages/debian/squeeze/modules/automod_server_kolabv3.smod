@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Kolab 2.3'
+RMOD_NAME='Kolab 2.3source'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Groupware'
@@ -28,6 +28,8 @@ function INSTALL
 
 apt-get remove --assume-yes --force-yes exim4 exim4-base exim4-daemon-light exim4-config
 killall -9 exim4
+
+apt-get install --assume-yes --force-yes build-essential bison flex
 
 cd $DL_DIR
 mkdir kolabtemp

@@ -82,12 +82,11 @@ redmine_mysql_pwd="$mysql_generic_pwd"
 redmine_language="fr"
 redmine_admin_pwd=$gen_login_pwd
 #O#penxchange 6.20
-#Ampache 3.5.4
+#A#mpache 3.5.4
 ampache_name[1]="Ampache_1"
 ampache_mysql_pwd[1]="$mysql_generic_pwd"
-#Lilina 2.0
+#L#ilina 2.0
 lilina2_name[1]="Lilina2.0"
-#Lilina 1.0
-lilina_name[1]="Lilina1.0"
 #F#rontaccounting 2.2
 #B#ugzilla 3.6.2
+#Mnogosearch 3.3.11

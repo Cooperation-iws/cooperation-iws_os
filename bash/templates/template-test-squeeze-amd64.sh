@@ -39,3 +39,4 @@ wordpress_mysql_pwd[1]="$mysql_generic_pwd"
 #K#vm Squeeze
 #X#sane 0.1
 #G#rsync 0.1
+#Kolab 2.3source

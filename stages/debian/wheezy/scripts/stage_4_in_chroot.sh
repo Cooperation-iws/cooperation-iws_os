@@ -33,6 +33,35 @@ if [ "$DEB_DIST" == "squeeze" ] ; then
 
 
 
-apt-get install --assume-yes --force-yes hal halevt gnome-device-manager
+	
+
+
+	if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
+
+		apt-get install --assume-yes --force-yes gnome-device-manager
+
+	fi
+
 
 fi
+
+
+
+if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
+
+	apt-get install --assume-yes --force-yes hal halevt 
+
+	sed -i "s/<\/config>//" /etc/PolicyKit/PolicyKit.conf
+	
+	echo "
+<match action=\"org.freedesktop.hal.storage.ount-removable\">
+<match user=\"halevt\">
+<return result=\"yes\">
+</match>
+</match>
+
+</config>
+" >> /etc/PolicyKit/PolicyKit.conf
+
+fi
+
