@@ -7,6 +7,7 @@ apache_admin_pwd="$gen_login_pwd"
 mysql_root_password="mysql_root"
 mysql_generic_pwd="mysql_pwd"
 domain="my-erp2.intra"
+keep_local_apt_parameters="y"
 #kernel wheezy upgrade
 kernel="2.6.39-2-amd64"
 #update live-initramfs
@@ -89,4 +90,13 @@ ampache_mysql_pwd[1]="$mysql_generic_pwd"
 lilina2_name[1]="Lilina2.0"
 #F#rontaccounting 2.2
 #B#ugzilla 3.6.2
-#Mnogosearch 3.3.11
+#M#nogosearch 3.3.11
+#Apt-cacher-ng 0.6
+#Ntop 3.4
+ntop_pwd=$gen_login_pwd
+#Man2html 1.6
+#LetoDMS 3.0.1
+letodms_name[1]="Letodms_1"
+letodms_admin_email[1]="admin.local@$domain"
+letodms_mysql_pwd[1]="$mysql_generic_pwd"
+

@@ -2,10 +2,10 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Roundcube 0.5.6'
+RMOD_NAME='Apt-cacher-ng 0.6'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
-RMOD_DESCRIPTION='Webmail'
+RMOD_DESCRIPTION='Caching proxy'
 RMOD_DESCRIPTION_FR='eMails en ligne'
 
 RMOD_VERBOSE="RoundCube Webmail is a browser-based multilingual IMAP client with an application-like user interface. It provides full functionality you expect from an e-mail client, including MIME support, address book, folder manipulation, message searching and spell checking. RoundCube Webmail is written in PHP and requires a MySQL or Postgres database. The user interface is fully skinnable using XHTML and CSS 2."
@@ -42,14 +42,13 @@ cd $DL_DIR
 function INSTALL
 {
 
-apt-get install --assume-yes --force-yes roundcube-mysql roundcube-plugins roundcube-plugins-extra
-
-sed -i "3s/#//" /etc/apache2/conf.d/roundcube
-sed -i "4s/#//" /etc/apache2/conf.d/roundcube
+apt-get install --assume-yes --force-yes apt-cacher-ng
 
 
-mv /etc/roundcube $LAMPP_DIRECTORY/etc
-ln -s $LAMPP_DIRECTORY/etc/roundcube /etc/roundcube
+
+
+mv /etc/apt-cacher-ng $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/apt-cacher-ng /etc/apt-cacher-ng
 
 
 
@@ -64,14 +63,14 @@ ln -s $LAMPP_DIRECTORY/etc/roundcube /etc/roundcube
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/rouncube" "/roundcube" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:3142]]>" "<![CDATA[http://localhost:3142]]>" 
 
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
 
-echo "I: Install Roundcube"
+echo "I: Install Apt-cacher-ng"
 INSTALL
 CREATE_WUI
-echo "I: End of install Roundcube"
+echo "I: End of install Apt-cacher-ng"
