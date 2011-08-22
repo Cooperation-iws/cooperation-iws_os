@@ -69,13 +69,13 @@ rm LETODMS_db.sql
 sed -i "s/admin.local@my-erp2.intra/${letodms_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 $BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 
-a2enmod rewrite
+
 
 sed -i "166s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
 sed -i "163s/letodms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
 sed -i "169s/mysql_root/${LETODMS_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
 sed -i "154s/letodms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
-sed -i "71s/\/var\/www\/letodms\/data/\/opt\/ciws\/server\/var\/letodms_data/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
+sed -i "71s/\/var\/www\/letodms\/data/\/opt\/ciws\/server\/var\/${MOD_NAME[$count]}_data/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
 sed -i "67s/letodms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
 sed -i "61s/letodms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
 sed -i "57s/letodms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
@@ -85,6 +85,9 @@ chown -R www-data /opt/ciws/server/var/letodms_data
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 done
+
+sed -i -e  "s/upload_max_filesize = 2M/upload_max_filesize = 200M/" /etc/php5/apache2/php.ini
+a2enmod rewrite
 
 }
 
