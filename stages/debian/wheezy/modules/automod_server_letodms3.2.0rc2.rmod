@@ -79,6 +79,7 @@ sed -i "71s/\/var\/www\/letodms\/data/\/opt\/ciws\/server\/var\/${MOD_NAME[$coun
 sed -i "67s/letodms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
 sed -i "61s/letodms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
 sed -i "57s/letodms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
+sed -i "84s/English/$letodms_lang/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
 
 mkdir /opt/ciws/server/var/letodms_data
 chown -R www-data /opt/ciws/server/var/letodms_data
