@@ -1,0 +1,66 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='ssl'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Socket secured layer'
+RMOD_DESCRIPTION_FR='Protocole de chiffrement'
+RMOD_VERBOSE=""
+RMOD_VERBOSE_FR=""
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+. /tmp/scripts_params
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+a2enmod ssl
+a2ensite default-ssl
+echo "
+Name: make-ssl-cert/hostname
+Template: make-ssl-cert/hostname
+Value: $HOSTNAME
+Owners: ssl-cert
+
+Name: make-ssl-cert/title
+Template: make-ssl-cert/title
+Owners: ssl-cert
+
+Name: make-ssl-cert/vulnerable_prng
+Template: make-ssl-cert/vulnerable_prng
+Owners: ssl-cert
+" >> /var/cache/debconf/config.dat
+mkdir /etc/apache2/ssl
+/usr/sbin/make-ssl-cert /usr/share/ssl-cert/ssleay.cnf /etc/apache2/ssl/apache.pem
+
+mv /etc/ssl $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/ssl /etc/ssl
+
+/etc/init.d/apache2 restart
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+
+
+echo "I: Install SSL"
+INSTALL
+
+echo "I: End of install SSL"

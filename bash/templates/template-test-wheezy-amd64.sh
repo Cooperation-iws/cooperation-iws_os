@@ -101,25 +101,27 @@ letodms_admin_email[1]="admin.local@$domain"
 letodms_mysql_pwd[1]="$mysql_generic_pwd"
 letodms_lang[1]="Francais"
 #Dpkg-www 2.54
-#Ojs 2.3.6
+#O#js 2.3.6
 ojs_name[1]="ojs_1"
 ojs_admin_email[1]="admin.local@$domain"
 ojs_mysql_pwd[1]="$mysql_generic_pwd"
 ojs_lang[1]="fr_CA"
-#Ocs 2.3.3
+#O#cs 2.3.3
 ocs_name[1]="ocs_1"
 ocs_admin_email[1]="admin.local@$domain"
 ocs_mysql_pwd[1]="$mysql_generic_pwd"
 ocs_lang[1]="fr_CA"
-#Ohs 2.3.1
+#O#hs 2.3.1
 ohs_name[1]="ohs_1"
 ohs_admin_email[1]="admin.local@$domain"
 ohs_mysql_pwd[1]="$mysql_generic_pwd"
 ohs_lang[1]="en_US"
-#Lodel 0.9
+#L#odel 0.9
 lodel_name[1]="Lodel_1"
 lodel_admin_email[1]="admin.local@$domain"
 lodel_mysql_pwd[1]="$mysql_generic_pwd"
 lodel_lang[1]="fr_FR.UTF8"
-#Docbookwiki 0.9.2
-
+#D#ocbookwiki 0.9.2
+docbookwiki_pwd=$gen_login_pwd
+#P#hpsysinfo 3.0
+#ssl

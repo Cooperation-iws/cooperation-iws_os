@@ -3463,7 +3463,27 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 	
 	
 </item>
-
+<item>
+	<item_name>Phpsysinfo</item_name>
+	<item_version>3.0</item_version>
+	<item_desc>Monitoring</item_desc>
+	<item_web>phpsysinfo.sourceforge.net</item_web>
+	<item_verbose>Display System Info online</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Documentation</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Wheezy</field_OS>
+	<param>	
+		
+	</param>
+	
+	
+</item>
 <item>
 	<item_name>LetoDMS</item_name>
 	<item_version>3.0.1</item_version>

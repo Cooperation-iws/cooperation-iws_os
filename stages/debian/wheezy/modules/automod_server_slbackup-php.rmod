@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Docbookwiki 0.9.2'
+RMOD_NAME='Slbackup-php 0.3'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Network management'
@@ -33,45 +33,24 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 function INSTALL
 {
 echo "
-Name: docbookwiki/generate_downloads
-Template: docbookwiki/generate_downloads
-Value: false
-Owners: docbookwiki
-
-Name: docbookwiki/purge_books
-Template: docbookwiki/purge_books
-Value: false
-Owners: docbookwiki
-Flags: seen
-
-Name: docbookwiki/reconfigure_webserver
-Template: docbookwiki/reconfigure_webserver
-Value: 
-Owners: docbookwiki
-
-Name: docbookwiki/restart_webserver
-Template: docbookwiki/restart_webserver
+Name: slbackup-php/use-ssl
+Template: slbackup-php/use-ssl
 Value: true
-Owners: docbookwiki
+Owners: slbackup-php
 Flags: seen
-
-Name: docbookwiki/sudo_warning
-Template: docbookwiki/sudo_warning
-Owners: docbookwiki
 
 " >> /var/cache/debconf/config.dat
 
-echo "
-Name: docbookwiki/setup_password
-Template: docbookwiki/setup_password
-Value: $docbookwiki_pwd
-Owners: docbookwiki
-Flags: seen
-" >> /var/cache/debconf/passwords.dat
 
-apt-get install --assume-yes --force-yes docbookwiki
+apt-get install --assume-yes --force-yes slbackup-php slbackup
 
+rm /etc/apache2/conf.d/slbackup
+ln -s /etc/slbackup/apache.conf /etc/apache2/conf.d/slbackup
 
+mv /usr/share/slbackup $LAMPP_DIRECTORY/usr/share
+
+ln -s $LAMPP_DIRECTORY/usr/share/slbackup /usr/share/slbackup
+a2enmod rewrite
 
 }
 
@@ -84,7 +63,7 @@ apt-get install --assume-yes --force-yes docbookwiki
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/books/" "/books/" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/slbackup-php/" "/slbackup-php/" 
 
 
 }
