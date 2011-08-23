@@ -3442,6 +3442,27 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 	
 	
 </item>
+<item>
+	<item_name>Docbookwiki</item_name>
+	<item_version>0.9.2</item_version>
+	<item_desc>Documentation</item_desc>
+	<item_web>debian.org</item_web>
+	<item_verbose>Edit DocbookFormat online</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Documentation</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Wheezy</field_OS>
+	<param>	
+		
+	</param>
+	
+	
+</item>
 
 <item>
 	<item_name>LetoDMS</item_name>
@@ -3479,8 +3500,200 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
 		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
 	</param>
+	<param>	
+		<field_1_id>def_lang</field_1_id>
+		<field_1_name>Default language</field_1_name>
+		<field_1_value>letodms_lang</field_1_value>
+		<field_1_def_content>Francais</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
 	
 	
 </item>
 
+<item>
+	<item_name>Ojs</item_name>
+	<item_version>2.3.6</item_version>
+	<item_desc>Documentation management system</item_desc>
+	<item_web>http://pkp.sfu.ca/</item_web>
+	<item_verbose>Open Journal system is a public knowledge project.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Documentation</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>ojs_name</field_1_value>
+		<field_1_def_content>Fengoffice</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>ojs_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>ojs_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_lang</field_1_id>
+		<field_1_name>Default language</field_1_name>
+		<field_1_value>ojs_lang</field_1_value>
+		<field_1_def_content>fr_CA</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Ohs</item_name>
+	<item_version>2.3.1</item_version>
+	<item_desc>Documentation management system</item_desc>
+	<item_web>http://pkp.sfu.ca/</item_web>
+	<item_verbose>Open Harvester system is a public knowledge project.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Documentation</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>ohs_name</field_1_value>
+		<field_1_def_content>Fengoffice</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>ohs_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>ohs_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_lang</field_1_id>
+		<field_1_name>Default language</field_1_name>
+		<field_1_value>ohs_lang</field_1_value>
+		<field_1_def_content>fr_CA</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Ocs</item_name>
+	<item_version>2.3.3</item_version>
+	<item_desc>Documentation management system</item_desc>
+	<item_web>http://pkp.sfu.ca/</item_web>
+	<item_verbose>Open Conferences system is a public knowledge project.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Documentation</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>ocs_name</field_1_value>
+		<field_1_def_content>Fengoffice</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>ocs_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>ocs_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_lang</field_1_id>
+		<field_1_name>Default language</field_1_name>
+		<field_1_value>ocs_lang</field_1_value>
+		<field_1_def_content>fr_CA</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Lodel</item_name>
+	<item_version>0.9</item_version>
+	<item_desc>Content management system</item_desc>
+	<item_web>http://www.lodel.org/</item_web>
+	<item_verbose>Lodel is a content publishing system. Lodel is compliant to Dublin Core, RSS and soon OAI. Lodel could also produce XML documents.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>lodel_name</field_1_value>
+		<field_1_def_content>Lodel</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>lodel_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>lodel_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	<param>	
+		<field_1_id>def_lang</field_1_id>
+		<field_1_name>Default language</field_1_name>
+		<field_1_value>lodel_lang</field_1_value>
+		<field_1_def_content>fr_FR.UTF8</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
 </items>

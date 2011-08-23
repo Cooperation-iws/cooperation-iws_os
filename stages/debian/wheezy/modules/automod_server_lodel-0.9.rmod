@@ -1,0 +1,113 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Lodel 0.9'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Online Office suite'
+RMOD_DESCRIPTION_FR='Suite Office en ligne'
+RMOD_VERBOSE="OpenGoo is an Open Source Web Office. It is a complete solution for every organization to create, collaborate, share and publish all its internal and external documents."
+RMOD_VERBOSE_FR="OpenGoo est une suite office open source en ligne.  "
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+NB_LODEL=${#lodel_name[*]}
+
+for (( count=1; count<=$NB_LODEL; count++ ))
+do
+LODEL_MYSQL_PWD[$count]=${lodel_mysql_pwd[$count]}
+MOD_NAME[$count]=${lodel_name[$count]}
+done
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/lodel-0.9-110823.tar.gz
+tar -xzf lodel-0.9-110823.tar.gz 
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Lodel"
+WGET_CIWS_DEPOT
+for (( count=1; count<=$NB_LODEL; count++ ))
+do
+##LODEL
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf lodel/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+
+echo "
+Create database ${MOD_NAME[$count]} ;
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${LODEL_MYSQL_PWD[$count]}';
+flush privileges;" > LODEL_db.sql
+
+$BIN_MYSQL -u root < LODEL_db.sql 
+rm LODEL_db.sql
+
+sed -i "s/admin.local@my-erp2.intra/${lodel_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws-1.sql
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws-1.sql
+
+sed -i "89s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
+sed -i "86s/lodel/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
+sed -i "91s/mysql_root/${LODEL_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
+
+
+sed -i "178s/fr_FR.UTF8/$lodel_lang/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
+
+
+sed -i "74s/\/opt\/ciws/server\/var\/lodel_import/\/opt\/ciws\/server\/var\/${MOD_NAME[$count]}_import/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lodelconfig.php
+sed -i "51s/lodel/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/lodelconfig.php
+
+mkdir /opt/ciws/server/var/${MOD_NAME[$count]}_import
+chown -R www-data  /opt/ciws/server/var/${MOD_NAME[$count]}_import
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
+done
+
+apt-get install --assume-yes --force-yes pdftotext pstotext catdoc
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_LODEL; count++ ))
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Lodel"
+INSTALL
+CREATE_WUI
+echo "I: End of install Lodel"

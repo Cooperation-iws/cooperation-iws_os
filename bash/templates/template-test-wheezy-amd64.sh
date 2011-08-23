@@ -91,14 +91,35 @@ lilina2_name[1]="Lilina2.0"
 #F#rontaccounting 2.2
 #B#ugzilla 3.6.2
 #M#nogosearch 3.3.11
-#Apt-cacher-ng 0.6
-#Ntop 3.4
+#A#pt-cacher-ng 0.6
+#N#top 3.4
 ntop_pwd=$gen_login_pwd
-#Man2html 1.6
-#LetoDMS 3.0.1
+#M#an2html 1.6
+#L#etoDMS 3.0.1
 letodms_name[1]="Letodms_1"
 letodms_admin_email[1]="admin.local@$domain"
 letodms_mysql_pwd[1]="$mysql_generic_pwd"
-letodms_lang[1]="Français"
+letodms_lang[1]="Francais"
 #Dpkg-www 2.54
+#Ojs 2.3.6
+ojs_name[1]="ojs_1"
+ojs_admin_email[1]="admin.local@$domain"
+ojs_mysql_pwd[1]="$mysql_generic_pwd"
+ojs_lang[1]="fr_CA"
+#Ocs 2.3.3
+ocs_name[1]="ocs_1"
+ocs_admin_email[1]="admin.local@$domain"
+ocs_mysql_pwd[1]="$mysql_generic_pwd"
+ocs_lang[1]="fr_CA"
+#Ohs 2.3.1
+ohs_name[1]="ohs_1"
+ohs_admin_email[1]="admin.local@$domain"
+ohs_mysql_pwd[1]="$mysql_generic_pwd"
+ohs_lang[1]="en_US"
+#Lodel 0.9
+lodel_name[1]="Lodel_1"
+lodel_admin_email[1]="admin.local@$domain"
+lodel_mysql_pwd[1]="$mysql_generic_pwd"
+lodel_lang[1]="fr_FR.UTF8"
+#Docbookwiki 0.9.2
 
