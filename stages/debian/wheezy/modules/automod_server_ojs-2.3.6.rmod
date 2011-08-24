@@ -75,7 +75,7 @@ sed -i "106s/mysql_root/${OJS_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$co
 
 sed -i "184s/\/opt\/ciws\/server\/var\/ojs_files/\/opt\/ciws\/server\/var\/${MOD_NAME[$count]}_files/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
 
-sed -i "154s/en_US/$ojs_lang/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
+sed -i "154s/en_US/${ojs_lang[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
 
 sed -i "329s/;//" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php
 sed -i "332s/;//" $WWW_DIRECTORY/${MOD_NAME[$count]}/config.inc.php

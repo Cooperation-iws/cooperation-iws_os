@@ -13,6 +13,7 @@ kernel="2.6.39-2-amd64"
 #update live-initramfs
 #DNS server Wheezy
 #Ciwscms 0.9.2
+#ssl
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
@@ -95,13 +96,13 @@ lilina2_name[1]="Lilina2.0"
 #N#top 3.4
 ntop_pwd=$gen_login_pwd
 #M#an2html 1.6
-#L#etoDMS 3.0.1
+#LetoDMS 3.0.1
 letodms_name[1]="Letodms_1"
 letodms_admin_email[1]="admin.local@$domain"
 letodms_mysql_pwd[1]="$mysql_generic_pwd"
 letodms_lang[1]="Francais"
 #Dpkg-www 2.54
-#O#js 2.3.6
+#Ojs 2.3.6
 ojs_name[1]="ojs_1"
 ojs_admin_email[1]="admin.local@$domain"
 ojs_mysql_pwd[1]="$mysql_generic_pwd"
@@ -123,5 +124,13 @@ lodel_mysql_pwd[1]="$mysql_generic_pwd"
 lodel_lang[1]="fr_FR.UTF8"
 #D#ocbookwiki 0.9.2
 docbookwiki_pwd=$gen_login_pwd
-#P#hpsysinfo 3.0
-#ssl
+#Phpsysinfo 3.0
+#Dotproject 2.1.5
+dotproject_name[1]="Dotproject_1"
+dotproject_admin_email[1]="admin.local@$domain"
+dotproject_mysql_pwd[1]="$mysql_generic_pwd"
+#Piwigo 2.2.4
+piwigo_name[1]="Piwigo_1"
+piwigo_admin_email[1]="admin.local@$domain"
+piwigo_mysql_pwd[1]="$mysql_generic_pwd"
+

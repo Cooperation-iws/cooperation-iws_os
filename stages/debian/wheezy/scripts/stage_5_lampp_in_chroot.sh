@@ -45,7 +45,8 @@ sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/sites-available/d
 
 echo "I: config php"
 
-sed -i -e  "s/post_max_size = 8M/post_max_size = 32M/" /etc/php5/apache2/php.ini
+sed -i -e  "s/post_max_size = 8M/post_max_size = 200M/" /etc/php5/apache2/php.ini
+sed -i -e  "s/upload_max_filesize = 2M/upload_max_filesize = 200M/" /etc/php5/apache2/php.ini
 
 
 

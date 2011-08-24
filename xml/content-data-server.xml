@@ -3716,4 +3716,89 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 	
 	
 </item>
+<item>
+	<item_name>Dotproject</item_name>
+	<item_version>2.1.5</item_version>
+	<item_desc>Planning management</item_desc>
+	<item_web>http://www.dotproject.net/index.php</item_web>
+	<item_verbose>dotProject is a volunteer supported Project Management application. dotProject is a web-based project management application, designed to provide project layout and control functions.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv3</item_license>
+	<item_category>Projects management</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>Default password</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>dotproject_name</field_1_value>
+		<field_1_def_content>Dotproject</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>admin_pwd</field_1_id>
+		<field_1_name>Default admin password</field_1_name>
+		<field_1_value>dotproject_admin_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>dotproject_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>dotproject_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Piwigo</item_name>
+	<item_version>2.2.4</item_version>
+	<item_desc>Pictures galleries management</item_desc>
+	<item_web>http://piwigo.org/</item_web>
+	<item_verbose>Piwigo is a photo gallery software for the web, built by an active community of users and developers. Extensions make Piwigo easily customizable. Icing on the cake, Piwigo is free and opensource.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>piwigo_name</field_1_value>
+		<field_1_def_content>Piwigo</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>piwigo_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>piwigo_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
 </items>
