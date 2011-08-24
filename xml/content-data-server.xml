@@ -3801,4 +3801,43 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 	
 	
 </item>
+<item>
+	<item_name>Redmine</item_name>
+	<item_version>1.2.1passenger</item_version>
+	<item_desc>Data management</item_desc>
+	<item_web>http://www.redmine.org/</item_web>
+	<item_verbose>Redmine is a flexible project management web application. Written using Ruby on Rails framework, it is cross-platform and cross-database.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>redmine_name</field_1_value>
+		<field_1_def_content>Redmine</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>redmine_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_lang</field_1_id>
+		<field_1_name>Default language</field_1_name>
+		<field_1_value>redmine_language</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
 </items>

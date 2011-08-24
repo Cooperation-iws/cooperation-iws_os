@@ -21,11 +21,13 @@ mkdir /etc/skel/.gconf/apps/nautilus/preferences
 
 
 cd $DL_DIR
-wget $URL_CIWS_DEPOT/gconf_debian_lenny_client.tar.gz
+#IS NOT PORTABLE
 
-tar -xzf gconf_debian_lenny_client.tar.gz -C /etc/skel/.
+#wget $URL_CIWS_DEPOT/gconf_debian_lenny_client.tar.gz
 
-chmod -R 777 /etc/skel/.gconf/
+#tar -xzf gconf_debian_lenny_client.tar.gz -C /etc/skel/.
+
+#chmod -R 777 /etc/skel/.gconf/
 fi
 
 

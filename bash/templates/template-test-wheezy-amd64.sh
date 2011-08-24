@@ -78,11 +78,10 @@ horde_mysql_pwd="$mysql_generic_pwd"
 fusionforge_db_pwd=$gen_login_pwd
 fusionforge_admin_pwd=$gen_login_pwd
 fusionforge_lang="French"
-#R#edmine 1.2.1passenger
+#Redmine 1.2.1passenger
 redmine_name="Redmine"
 redmine_mysql_pwd="$mysql_generic_pwd"
 redmine_language="fr"
-redmine_admin_pwd=$gen_login_pwd
 #O#penxchange 6.20
 #A#mpache 3.5.4
 ampache_name[1]="Ampache_1"
