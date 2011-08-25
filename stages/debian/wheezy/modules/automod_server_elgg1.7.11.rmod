@@ -1,0 +1,115 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Elgg 1.7.11'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Social Networking'
+RMOD_DESCRIPTION_FR='Réseaux sociaux'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+RMOD_VERBOSE="Elgg is an open, flexible social networking engine, designed to run at the heart of any socially-aware application. Building on Elgg is easy, and because the engine handles common web application and social functionality for you, you can concentrate on developing your idea. "
+RMOD_VERBOSE_FR="Elgg est un système de réseaux sociaux ouvert."
+
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+NB_ELGG=${#elgg_name[*]}
+
+for (( count=1; count<=$NB_ELGG; count++ ))
+do
+ELGG_MYSQL_PWD[$count]=${elgg_mysql_pwd[$count]}
+MOD_NAME[$count]=${elgg_name[$count]}
+done
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/elgg-1.7.11-110825.tar.gz
+tar -xzf elgg-1.7.11-110825.tar.gz
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo "I: Download Elgg"
+WGET_CIWS_DEPOT
+for (( count=1; count<=$NB_ELGG; count++ ))
+do
+##ELGG
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf elgg/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+echo "
+Create database ${MOD_NAME[$count]} ;
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${ELGG_MYSQL_PWD[$count]}';
+flush privileges;" > statusnet_db.sql 
+
+$BIN_MYSQL -u root < statusnet_db.sql mysql 
+rm statusnet_db.sql 
+
+sed -i "s/admin.local@my-erp2.intra/${elgg_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "s/\/var\/www\/elgg\//\/var\/www\/${MOD_NAME[$count]}\//g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "s/\/opt\/ciws\/server\/var\/elgg_data\//\/opt\/ciws\/server\/var\/${MOD_NAME[$count]}_data\//g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "s/http:\/\/wwi.my-erp2.intra\/elgg\//http:\/\/$domain\/${MOD_NAME[$count]}\//g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+
+sed -i "33s/elgg/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/engine/settings.php
+sed -i "27s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/engine/settings.php
+sed -i "30s/mysql_root/${ELGG_MYSQL_PWD[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/engine/settings.php
+
+
+mkdir /opt/ciws/server/var/${MOD_NAME[$count]}_data/
+chown -R www-data /opt/ciws/server/var/${MOD_NAME[$count]}_data/
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
+
+done
+a2enmod rewrite
+
+/etc/init.d/apache2 restart 
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_ELGG; count++ ))
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Elgg"
+INSTALL
+CREATE_WUI
+echo "I: End of install Elgg"

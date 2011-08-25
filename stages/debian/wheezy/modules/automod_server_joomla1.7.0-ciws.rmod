@@ -1,0 +1,113 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Joomla 1.7.0ciws'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Content Management System portal'
+RMOD_DESCRIPTION_FR='Portail de gestion de contenu'
+RMOD_VERBOSE="Joomla! is an award-winning Content Management System (CMS) that will help you build websites and other powerful online applications. Best of all, Joomla! is an open source solution that is freely available to everybody.  "
+RMOD_VERBOSE_FR="http://www.joomla_ciws.org/ est un système de gestion de contenu (en anglais, CMS, pour Content Management system) créé par une équipe internationale de développeurs récompensée à maintes reprises, celle-là même qui a hissé Mambo vers les sommets. Et un CMS, c'est quoi?? Pour faire simple, un CMS est un logiciel web qui vous permettra de créer un site internet dynamique en toute simplicité. Joomla! est un CMS Open Source distribué sous license GNU/GPL (gratuit) avec lequel vous pourrez mettre en ligne du contenu et mettre à disposition de vos visiteurs des services (forum, boutique en ligne, galerie photos,…), le tout sans connaissance technique particulière. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+NB_JOOMLA=${#joomla_ciws_name[*]}
+
+for (( count=1; count<=$NB_JOOMLA; count++ ))
+do
+JOOMLA_MYSQL_PWD[$count]=${joomla_ciws_mysql_pwd[$count]}
+MOD_NAME[$count]=${joomla_ciws_name[$count]}
+done
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/joomla-1.7.0ciws-110825.tar.gz
+tar -xzf joomla-1.7.0ciws-110825.tar.gz
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Joomla"
+
+WGET_CIWS_DEPOT
+
+#Joomla
+
+for (( count=1; count<=$NB_JOOMLA; count++ ))
+do
+cd $DL_DIR
+
+cp -Rf joomla_bare $WWW_DIRECTORY/${MOD_NAME[$count]}
+echo "
+Create database ${MOD_NAME[$count]} ;
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${JOOMLA_MYSQL_PWD[$count]}';
+flush privileges;" > statusnet_db.sql 
+
+$BIN_MYSQL -u root < statusnet_db.sql mysql 
+rm statusnet_db.sql 
+
+sed -i "s/admin.local@my-erp2.intra/${joomla_ciws_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+
+sed -i "13s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
+sed -i "14s/mysql_root/${JOOMLA_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
+sed -i "15s/joomla_bare/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
+sed -i "31s/admin.local@my-erp2.com/$joomla_ciws_admin_mail/" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
+sed -i "51s/joomla_bare/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
+sed -i "52s/joomla_bare/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php
+
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
+
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_JOOMLA; count++ ))
+
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}/administrator" 
+
+done
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Joomla"
+INSTALL
+CREATE_WUI
+echo "I: End of install Joomla"

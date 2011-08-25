@@ -51,6 +51,8 @@ if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then
 
 	apt-get install --assume-yes --force-yes hal halevt 
 
+
+echo '
 	sed -i "s/<\/config>//" /etc/PolicyKit/PolicyKit.conf
 	
 	echo "
@@ -62,6 +64,7 @@ if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then
 
 </config>
 " >> /etc/PolicyKit/PolicyKit.conf
+' >> /lib/live/config/110-policykit
 
 fi
 

@@ -123,7 +123,7 @@ lodel_mysql_pwd[1]="$mysql_generic_pwd"
 lodel_lang[1]="fr_FR.UTF8"
 #D#ocbookwiki 0.9.2
 docbookwiki_pwd=$gen_login_pwd
-#Phpsysinfo 3.0
+#P#hpsysinfo 3.0
 #D#otproject 2.1.5
 dotproject_name[1]="Dotproject_1"
 dotproject_admin_email[1]="admin.local@$domain"
@@ -132,7 +132,22 @@ dotproject_mysql_pwd[1]="$mysql_generic_pwd"
 piwigo_name[1]="Piwigo_1"
 piwigo_admin_email[1]="admin.local@$domain"
 piwigo_mysql_pwd[1]="$mysql_generic_pwd"
-#Squid 2.7
+#S#quid 2.7
 #ntp 4.2.6
 ntpd_server_address="192.168.30.254"
-
+#Status.net 0.9.9
+statusnet_name[1]="Statusnet_1"
+statusnet_admin_email[1]="admin.local@$domain"
+statusnet_mysql_pwd[1]="$mysql_generic_pwd"
+#Elgg 1.7.11
+elgg_name[1]="Elgg_1"
+elgg_admin_email[1]="admin.local@$domain"
+elgg_mysql_pwd[1]="$mysql_generic_pwd"
+#Joomla 1.7.0demo
+joomla_demo_name[1]="Joomla_demo_1"
+joomla_demo_admin_email[1]="admin.local@$domain"
+joomla_demo_mysql_pwd[1]="$mysql_generic_pwd"
+#Joomla 1.7.0ciws
+joomla_ciws_name[1]="Joomla_ciws_1"
+joomla_ciws_admin_email[1]="admin.local@$domain"
+joomla_ciws_mysql_pwd[1]="$mysql_generic_pwd"

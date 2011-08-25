@@ -37,13 +37,12 @@ apt-get install --assume-yes --force-yes ntp
 
 #sed -i "21s/^/server $ntpd_server_address iburst dynamic/" /etc/ntp.conf
 
-sed "54s/#//" /etc/ntp.conf
-sed "55s/#//" /etc/ntp.conf
+sed -i "54s/#//" /etc/ntp.conf
+sed -i "55s/#//" /etc/ntp.conf
 
 
 /etc/init.d/ntp restart
 
-ln -sf /usr/share/zoneinfo/$TZ /etc/localtime 
 
 mv /etc/ntp.conf $LAMPP_DIRECTORY/etc
 
