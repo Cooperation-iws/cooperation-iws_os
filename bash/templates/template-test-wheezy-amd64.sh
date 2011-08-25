@@ -78,7 +78,7 @@ horde_mysql_pwd="$mysql_generic_pwd"
 fusionforge_db_pwd=$gen_login_pwd
 fusionforge_admin_pwd=$gen_login_pwd
 fusionforge_lang="French"
-#Redmine 1.2.1passenger
+#R#edmine 1.2.1passenger
 redmine_name="Redmine"
 redmine_mysql_pwd="$mysql_generic_pwd"
 redmine_language="fr"
@@ -95,13 +95,13 @@ lilina2_name[1]="Lilina2.0"
 #N#top 3.4
 ntop_pwd=$gen_login_pwd
 #M#an2html 1.6
-#LetoDMS 3.0.1
+#L#etoDMS 3.0.1
 letodms_name[1]="Letodms_1"
 letodms_admin_email[1]="admin.local@$domain"
 letodms_mysql_pwd[1]="$mysql_generic_pwd"
 letodms_lang[1]="Francais"
-#Dpkg-www 2.54
-#Ojs 2.3.6
+#D#pkg-www 2.54
+#O#js 2.3.6
 ojs_name[1]="ojs_1"
 ojs_admin_email[1]="admin.local@$domain"
 ojs_mysql_pwd[1]="$mysql_generic_pwd"
@@ -124,12 +124,15 @@ lodel_lang[1]="fr_FR.UTF8"
 #D#ocbookwiki 0.9.2
 docbookwiki_pwd=$gen_login_pwd
 #Phpsysinfo 3.0
-#Dotproject 2.1.5
+#D#otproject 2.1.5
 dotproject_name[1]="Dotproject_1"
 dotproject_admin_email[1]="admin.local@$domain"
 dotproject_mysql_pwd[1]="$mysql_generic_pwd"
-#Piwigo 2.2.4
+#P#iwigo 2.2.4
 piwigo_name[1]="Piwigo_1"
 piwigo_admin_email[1]="admin.local@$domain"
 piwigo_mysql_pwd[1]="$mysql_generic_pwd"
+#Squid 2.7
+#ntp 4.2.6
+ntpd_server_address="192.168.30.254"
 

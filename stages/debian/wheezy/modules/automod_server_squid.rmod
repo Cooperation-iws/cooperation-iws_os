@@ -1,0 +1,106 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Squid 2.7'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Documentation'
+RMOD_DESCRIPTION_FR='Documentation'
+RMOD_VERBOSE="Browse and search manpages "
+RMOD_VERBOSE_FR="Rechercher et naviguer dans les pages de manuels"
+
+RMOD_RUN_IN_CHROOT=True
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+NTOP_PWD=$ntop_pwd
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes squid sarg
+
+
+mv /etc/squid $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/squid  /etc/squid 
+
+mv /etc/sarg $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/sarg /etc/sarg 
+
+echo '
+TODAY=$(date + %d/%m/%Y)
+YESTERDAY=$(date - date "1 day ago" + %d/%m/%Y)
+sarg /var/log/squid/access.log -o /var/www/squid-reports/daily -z -d $YESTERDAY-$TODAY
+/usr/sbin/squid -k rotate
+exit 0' > /usr/sbin/sarg-daily-report
+
+echo "00 00 * * * /usr/sbin/sarg-daily-report" > /etc/cron.d/sarg_daily
+
+echo '
+TODAY=$(date + %d/%m/%Y)
+YESTERDAY=$(date - date "1 day ago" + %d/%m/%Y)
+sarg /var/log/squid/access.log -o /var/www/squid-reports/weekly -z -d $YESTERDAY-$TODAY
+/usr/sbin/squid -k rotate
+exit 0' > /usr/sbin/sarg-weekly-report
+
+echo "00 01 * * 1 /usr/sbin/sarg-weekly-report" > /etc/cron.d/sarg_weekly
+
+echo '
+TODAY=$(date + %d/%m/%Y)
+YESTERDAY=$(date - date "1 day ago" + %d/%m/%Y)
+sarg /var/log/squid/access.log -o /var/www/squid-reports/monthly -z -d $YESTERDAY-$TODAY
+/usr/sbin/squid -k rotate
+exit 0' > /usr/sbin/sarg-monthly-report
+
+echo "03 02 1 * * /usr/sbin/sarg-monthly-report" > /etc/cron.d/sarg_monthly
+
+
+chmod 755 /usr/sbin/sarg-daily-report
+chmod 755 /etc/cron.d/sarg_daily
+chmod 755 /usr/sbin/sarg-weekly-report
+chmod 755 /etc/cron.d/sarg_weekly
+chmod 755 /usr/sbin/sarg-monthly-report
+chmod 755 /etc/cron.d/sarg_monthly
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/squid-reports" "/squid-reports" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Man2html"
+INSTALL
+CREATE_WUI
+echo "I: End of install Man2html"

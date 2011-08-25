@@ -1,0 +1,78 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='ntp 4.2.6'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Documentation'
+RMOD_DESCRIPTION_FR='Documentation'
+RMOD_VERBOSE="Browse and search manpages "
+RMOD_VERBOSE_FR="Rechercher et naviguer dans les pages de manuels"
+
+RMOD_RUN_IN_CHROOT=True
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes ntp
+
+#sed -i "21s/^/server $ntpd_server_address iburst dynamic/" /etc/ntp.conf
+
+sed "54s/#//" /etc/ntp.conf
+sed "55s/#//" /etc/ntp.conf
+
+
+/etc/init.d/ntp restart
+
+ln -sf /usr/share/zoneinfo/$TZ /etc/localtime 
+
+mv /etc/ntp.conf $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/ntp.conf  /etc/ntp.conf
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/squid-reports" "/squid-reports" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Man2html"
+INSTALL
+CREATE_WUI
+echo "I: End of install Man2html"
