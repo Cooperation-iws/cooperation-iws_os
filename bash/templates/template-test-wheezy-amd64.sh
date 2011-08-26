@@ -19,7 +19,7 @@ kernel="2.6.39-2-amd64"
 deactivate_ssh_root_login="y"
 #P#ostgresql 9.0
 root_psgsql_pwd="$mysql_root_password"
-#P#hppgadmin 5.0.2
+#Ph#ppgadmin 5.0.2
 #O#penERP 6.0.2
 openerp_name="Openerp_1"
 openerp_psgsql_pwd="$mysql_generic_pwd"
@@ -95,12 +95,12 @@ lilina2_name[1]="Lilina2.0"
 #N#top 3.4
 ntop_pwd=$gen_login_pwd
 #M#an2html 1.6
-#L#etoDMS 3.0.1
+#Le#toDMS 3.0.1
 letodms_name[1]="Letodms_1"
 letodms_admin_email[1]="admin.local@$domain"
 letodms_mysql_pwd[1]="$mysql_generic_pwd"
 letodms_lang[1]="Francais"
-#D#pkg-www 2.54
+#Dpkg-www 2.54
 #O#js 2.3.6
 ojs_name[1]="ojs_1"
 ojs_admin_email[1]="admin.local@$domain"
@@ -121,9 +121,9 @@ lodel_name[1]="Lodel_1"
 lodel_admin_email[1]="admin.local@$domain"
 lodel_mysql_pwd[1]="$mysql_generic_pwd"
 lodel_lang[1]="fr_FR.UTF8"
-#D#ocbookwiki 0.9.2
+#Do#cbookwiki 0.9.2
 docbookwiki_pwd=$gen_login_pwd
-#P#hpsysinfo 3.0
+#Php#sysinfo 3.0
 #D#otproject 2.1.5
 dotproject_name[1]="Dotproject_1"
 dotproject_admin_email[1]="admin.local@$domain"
@@ -133,21 +133,31 @@ piwigo_name[1]="Piwigo_1"
 piwigo_admin_email[1]="admin.local@$domain"
 piwigo_mysql_pwd[1]="$mysql_generic_pwd"
 #S#quid 2.7
-#ntp 4.2.6
+#n#tp 4.2.6
 ntpd_server_address="192.168.30.254"
-#Status.net 0.9.9
+#S#tatus.net 0.9.9
 statusnet_name[1]="Statusnet_1"
 statusnet_admin_email[1]="admin.local@$domain"
 statusnet_mysql_pwd[1]="$mysql_generic_pwd"
-#Elgg 1.7.11
+#El#gg 1.7.11
 elgg_name[1]="Elgg_1"
 elgg_admin_email[1]="admin.local@$domain"
 elgg_mysql_pwd[1]="$mysql_generic_pwd"
-#Joomla 1.7.0demo
+#Jo#omla 1.7.0demo
 joomla_demo_name[1]="Joomla_demo_1"
 joomla_demo_admin_email[1]="admin.local@$domain"
 joomla_demo_mysql_pwd[1]="$mysql_generic_pwd"
-#Joomla 1.7.0ciws
+#J#oomla 1.7.0ciws
 joomla_ciws_name[1]="Joomla_ciws_1"
 joomla_ciws_admin_email[1]="admin.local@$domain"
 joomla_ciws_mysql_pwd[1]="$mysql_generic_pwd"
+#Drupal 7.7
+drupal_name[1]="Drupal_1"
+drupal_admin_email[1]="admin.local@$domain"
+drupal_mysql_pwd[1]="$mysql_generic_pwd"
+#Mediawiki 1.17.0
+mediawiki_name[1]="Mediawiki_1"
+mediawiki_admin_email[1]="admin.local@$domain"
+mediawiki_mysql_pwd[1]="$mysql_generic_pwd"
+mediawiki_lang[1]="fr"
+

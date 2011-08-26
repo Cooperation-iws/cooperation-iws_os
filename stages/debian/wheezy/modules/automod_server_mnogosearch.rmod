@@ -50,19 +50,19 @@ cd $DL_DIR
 
 #build from source
 
-apt-get install --assume-yes --force-yes build-essential bison flex checkinstall zlib1g-dev libmysqld-dev libsqlite0-dev libpq-dev postgresql-server-dev-9.0 jade
+#apt-get install --assume-yes --force-yes build-essential bison flex checkinstall zlib1g-dev libmysqld-dev libsqlite0-dev libpq-dev postgresql-server-dev-9.0 jade
 
-cd mnogosearch-3.3.11
+#cd mnogosearch-3.3.11
 
-./configure --with-mysql --with-pgsql --with-sqlite --with-extra-charsets=all
+#./configure --with-mysql --with-pgsql --with-sqlite --with-extra-charsets=all
 
-mkdir /usr/local/mnogosearch/
-mkdir /usr/local/mnogosearch/lib/
+#mkdir /usr/local/mnogosearch/
+#mkdir /usr/local/mnogosearch/lib/
 
-checkinstall -D -y
+#checkinstall -D -y
 
 #from deb
-#dpkg -i mnogosearch_3.3.11-1_amd64.deb
+dpkg -i mnogosearch_3.3.11-1_amd64.deb
 
 mkdir /opt/ciws/usr/local
 

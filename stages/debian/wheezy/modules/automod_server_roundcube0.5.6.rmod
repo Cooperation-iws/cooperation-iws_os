@@ -64,7 +64,7 @@ ln -s $LAMPP_DIRECTORY/etc/roundcube /etc/roundcube
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/rouncube" "/roundcube" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/roundcube" "/roundcube" 
 
 }
 #_______________________________________________________________________________________________
