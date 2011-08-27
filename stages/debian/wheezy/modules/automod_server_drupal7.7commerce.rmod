@@ -1,0 +1,111 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Drupal-commerce 7.7'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Content Management System portal'
+RMOD_DESCRIPTION_FR='Portail de gestion de contenu'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Drupal is a free software package that allows an individual or a community of users to easily publish, manage and organize a wide variety of content on a website. Tens of thousands of people and organizations are using Drupal to power scores of different web sites. "
+RMOD_VERBOSE_FR="Drupal est un CMS (gestionnaire de contenu) qui permet de créer une grande variété de sites internet : ça va du blog personnel au site internet d'une société, en passant par les sites communautaires, les sites d'informations, les boutiques en ligne… "
+
+
+
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+NB_DRUPAL=${#drupal_commerce_name[*]}
+
+for (( count=1; count<=$NB_DRUPAL; count++ ))
+do
+DRUPAL_MYSQL_PWD[$count]=${drupal_commerce_mysql_pwd[$count]}
+MOD_NAME[$count]=${drupal_commerce_name[$count]}
+done
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+
+wget $URL_CIWS_DEPOT/drupal-commerce-1.0rc1.tar.gz
+tar -xzf drupal-commerce-1.0rc1.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo "I: Download Drupal-commerce"
+WGET_CIWS_DEPOT
+
+for (( count=1; count<=$NB_DRUPAL; count++ ))
+
+do
+
+cd $DL_DIR
+cp -r drupal-commerce $WWW_DIRECTORY/${MOD_NAME[$count]}
+echo "
+Create database ${MOD_NAME[$count]} ;
+grant all on ${MOD_NAME[$count]}.* to drupal_com@localhost identified by '${DRUPAL_MYSQL_PWD[$count]}';
+flush privileges;" > DRUPAL_db.sql
+
+$BIN_MYSQL -u root < DRUPAL_db.sql 
+rm DRUPAL_db.sql
+
+sed -i "s/admin.local@my-erp2.intra/${drupal_commerce_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+
+sed -i "185s/drupal_commerce/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/sites/default/settings.php
+sed -i "186s/root/drupal_com/" $WWW_DIRECTORY/${MOD_NAME[$count]}/sites/default/settings.php
+sed -i "187s/mysql_root/${DRUPAL_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/sites/default/settings.php
+
+a2enmod rewrite
+sed -i "11s/AllowOverride None/AllowOverride All/" /etc/apache2/sites-available/default
+sed -i "s/mbstring.func_overload = 7/mbstring.func_overload = 0/" /etc/php5/apache2/php.ini
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
+  
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_DRUPAL; count++ ))
+
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Drupal-commerce"
+INSTALL
+CREATE_WUI
+echo "I: End of install Drupal-commerce"

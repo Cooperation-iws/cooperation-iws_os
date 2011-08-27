@@ -17,9 +17,9 @@ kernel="2.6.39-2-amd64"
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
-#P#ostgresql 9.0
+#Postgresql 9.0
 root_psgsql_pwd="$mysql_root_password"
-#Ph#ppgadmin 5.0.2
+#Phppgadmin 5.0.2
 #O#penERP 6.0.2
 openerp_name="Openerp_1"
 openerp_psgsql_pwd="$mysql_generic_pwd"
@@ -155,9 +155,17 @@ joomla_ciws_mysql_pwd[1]="$mysql_generic_pwd"
 drupal_name[1]="Drupal_1"
 drupal_admin_email[1]="admin.local@$domain"
 drupal_mysql_pwd[1]="$mysql_generic_pwd"
-#Mediawiki 1.17.0
+#M#ediawiki 1.17.0
 mediawiki_name[1]="Mediawiki_1"
 mediawiki_admin_email[1]="admin.local@$domain"
 mediawiki_mysql_pwd[1]="$mysql_generic_pwd"
 mediawiki_lang[1]="fr"
+#Drupal-commerce 7.7
+drupal_commerce_name[1]="Drupal_commerce_1"
+drupal_commerce_admin_email[1]="admin.local@$domain"
+drupal_commerce_mysql_pwd[1]="$mysql_generic_pwd"
+#Drupal-innovationnews 6.15
+drupal_innovationnews_name[1]="Drupal_innovationnews_1"
+drupal_innovationnews_admin_email[1]="admin.local@$domain"
+drupal_innovationnews_mysql_pwd[1]="$mysql_generic_pwd"
 

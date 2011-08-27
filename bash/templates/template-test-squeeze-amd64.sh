@@ -16,15 +16,15 @@ kernel="2.6.32-5-amd64"
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
-#P#ostgresql 9.0
+#Postgresql 9.0
 root_psgsql_pwd="$mysql_root_password"
-#P#hppgadmin 5.0.2
+#Phppgadmin 5.0.2
 #W#ordpress 3.2fr-book
 wordpress_name[1]="Wordpress_1"
 wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"
-#M#ysql 5.1
-#P#hpmyadmin 4.3.4.3
+#Mysql 5.1
+#Phpmyadmin 4.3.4.3
 #C#lamtk 4.27
 #C#odecs Squeeze
 #F#ilezilla 0.1
@@ -40,4 +40,4 @@ wordpress_mysql_pwd[1]="$mysql_generic_pwd"
 #K#vm Squeeze
 #X#sane 0.1
 #G#rsync 0.1
-#Kolab 2.3source
+#K#olab 2.3source

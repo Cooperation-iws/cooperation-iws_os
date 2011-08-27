@@ -1,0 +1,173 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Ntop 3.4'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+NTOP_PWD=$ntop_pwd
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/nuxeo-dm_5.4.2-01_all.deb
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "
+Name: shared/accepted-sun-dlj-v1-1
+Template: shared/accepted-sun-dlj-v1-1
+Value: true
+Owners: sun-java6-bin, sun-java6-jdk, sun-java6-jre
+Flags: seen
+
+Name: shared/error-sun-dlj-v1-1
+Template: shared/error-sun-dlj-v1-1
+Owners: sun-java6-bin, sun-java6-jdk, sun-java6-jre
+
+Name: shared/present-sun-dlj-v1-1
+Template: shared/present-sun-dlj-v1-1
+Value: 
+Owners: sun-java6-bin, sun-java6-jdk, sun-java6-jre
+Flags: seen
+
+Name: sun-java6-jre/jcepolicy
+Template: sun-java6-jre/jcepolicy
+Owners: sun-java6-jre
+
+Name: sun-java6-jre/stopthread
+Template: sun-java6-jre/stopthread
+Owners: sun-java6-jre
+
+Name: nuxeo-dm/ajp-port
+Template: nuxeo-dm/ajp-port
+Owners: nuxeo-dm
+
+Name: nuxeo-dm/bind-address
+Template: nuxeo-dm/bind-address
+Value: 0.0.0.0
+Owners: nuxeo-dm
+Flags: seen
+
+Name: nuxeo-dm/customdb
+Template: nuxeo-dm/customdb
+Value: MySQL
+Owners: nuxeo-dm
+Flags: seen
+Variables:
+ customdbchoices = PostgreSQL, Oracle, MSSQL, MySQL
+
+Name: nuxeo-dm/database
+Template: nuxeo-dm/database
+Value: User-configured database
+Owners: nuxeo-dm
+Flags: seen
+Variables:
+ dbchoices = Autoconfigure PostgreSQL, User-configured database
+
+Name: nuxeo-dm/dbhost
+Template: nuxeo-dm/dbhost
+Value: localhost
+Owners: nuxeo-dm
+Flags: seen
+
+Name: nuxeo-dm/dbname
+Template: nuxeo-dm/dbname
+Value: nuxeo-dm
+Owners: nuxeo-dm
+Flags: seen
+
+Name: nuxeo-dm/dbport
+Template: nuxeo-dm/dbport
+Value: 3306
+Owners: nuxeo-dm
+Flags: seen
+
+Name: nuxeo-dm/dbuser
+Template: nuxeo-dm/dbuser
+Value: root
+Owners: nuxeo-dm
+Flags: seen
+
+Name: nuxeo-dm/error
+Template: nuxeo-dm/error
+Owners: nuxeo-dm
+
+Name: nuxeo-dm/http-port
+Template: nuxeo-dm/http-port
+Value: 8080
+Owners: nuxeo-dm
+Flags: seen
+
+Name: nuxeo-dm/running
+Template: nuxeo-dm/running
+Owners: nuxeo-dm
+
+" >> /var/cache/debconf/config.dat
+
+
+WGET_CIWS_DEPOT
+cd $DL_DIR
+dpkg -i nuxeo-dm_5.4.2-01_all.deb
+
+apt-get -f install --assume-yes --force-yes 
+
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:3000]]>" "<![CDATA[http://localhost:3000]]>" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ntop"
