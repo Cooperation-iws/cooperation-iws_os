@@ -40,7 +40,7 @@ tar -xzf lilina-classic-2.0-110828.tar.gz
 for (( count=1; count<=$NB_LILINA; count++ ))
 do
 mv Lilina2.0 $WWW_DIRECTORY/${MOD_NAME[$count]}
-sed -i "s/http:\/\/'.\$_SERVER[\"SERVER_NAME\"].'\/Lilina2.0\//http:\/\/'.\$_SERVER[\"SERVER_NAME\"].'\/${MOD_NAME[$count]}\//" $WWW_DIRECTORY/${MOD_NAME[$count]}/content/system/config/settings.php
+sed -i "s/Lilina2.0/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/content/system/config/settings.php
 #sed -i "s/lilina/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/config/config.php
 chmod -R 755  $WWW_DIRECTORY/${MOD_NAME[$count]}/cache
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}

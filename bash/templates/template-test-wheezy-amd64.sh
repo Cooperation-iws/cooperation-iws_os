@@ -86,8 +86,8 @@ redmine_language="fr"
 #A#mpache 3.5.4
 ampache_name[1]="Ampache_1"
 ampache_mysql_pwd[1]="$mysql_generic_pwd"
-#Lilina 2.0
-lilina2_name[1]="Lilina2.0"
+#Lilina 2.0razor
+lilina2_name[1]="Lilina2.0razor"
 #Lilina 2.0classic
 lilina2_classic_name[1]="Lilina2.0classic"
 #F#rontaccounting 2.2
@@ -170,7 +170,8 @@ drupal_commerce_mysql_pwd[1]="$mysql_generic_pwd"
 drupal_innovationnews_name[1]="Drupal_innovationnews_1"
 drupal_innovationnews_admin_email[1]="admin.local@$domain"
 drupal_innovationnews_mysql_pwd[1]="$mysql_generic_pwd"
-#Zabbix server 1.8.5
+#Z#abbix server 1.8.5
 zabbix_name="Zabbix_1"
 zabbix_mysql_pwd="$mysql_generic_pwd"
 zabbix_ip_range="192.168.30.1-255"
+#Jffnms 0.9.1

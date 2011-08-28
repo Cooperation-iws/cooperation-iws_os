@@ -4175,7 +4175,7 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 </item>
 <item>
 	<item_name>Lilina</item_name>
-	<item_version>2.0</item_version>
+	<item_version>2.0razor</item_version>
 	<item_desc>Rss agregator</item_desc>
 	<item_web>http://getlilina.org/</item_web>
 	<item_verbose>But who, or rather what, is Lilina? Lilina is a free, open source aggregator for your server. This allows you to install it once and run it everywhere.</item_verbose>
@@ -4199,7 +4199,7 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 	
 </item>
 <item>
-	<item_name>Lilina </item_name>
+	<item_name>Lilina</item_name>
 	<item_version>2.0classic</item_version>
 	<item_desc>Rss agregator</item_desc>
 	<item_web>http://getlilina.org/</item_web>
