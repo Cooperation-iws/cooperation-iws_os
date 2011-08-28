@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Lilina 2.0razor'
+RMOD_NAME='Lilina 2.0classic'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Rss agregator'
@@ -22,11 +22,11 @@ RMOD_REQ_APACHE=True
 . /tmp/scripts_params
 . /tmp/app_params
 
-NB_LILINA=${#lilina2_name[*]}
+NB_LILINA=${#lilina2_classic_name[*]}
 
 for (( count=1; count<=$NB_LILINA; count++ ))
 do
-MOD_NAME[$count]=${lilina2_name[$count]}
+MOD_NAME[$count]=${lilina2_classic_name[$count]}
 done
 #_______________________________________________________________________________________________
 #________________________________________INSTALL________________________________________________
@@ -35,12 +35,12 @@ done
 function INSTALL
 {
 cd $DL_DIR
-wget $URL_CIWS_DEPOT/Lilina-2.0-110820.tar.gz
-tar -xzf Lilina-2.0-110820.tar.gz
+wget $URL_CIWS_DEPOT/lilina-classic-2.0-110828.tar.gz 
+tar -xzf lilina-classic-2.0-110828.tar.gz 
 for (( count=1; count<=$NB_LILINA; count++ ))
 do
-mv Lilina $WWW_DIRECTORY/${MOD_NAME[$count]}
-sed -i "s/http:\/\/wwi.my-erp2.intra\/Lilina\//http:\/\/'.\$_SERVER[\"SERVER_NAME\"].'\/${MOD_NAME[$count]}\//" $WWW_DIRECTORY/${MOD_NAME[$count]}/content/system/config/settings.php
+mv Lilina2.0 $WWW_DIRECTORY/${MOD_NAME[$count]}
+sed -i "s/http:\/\/'.\$_SERVER[\"SERVER_NAME\"].'\/Lilina2.0\//http:\/\/'.\$_SERVER[\"SERVER_NAME\"].'\/${MOD_NAME[$count]}\//" $WWW_DIRECTORY/${MOD_NAME[$count]}/content/system/config/settings.php
 #sed -i "s/lilina/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/config/config.php
 chmod -R 755  $WWW_DIRECTORY/${MOD_NAME[$count]}/cache
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}

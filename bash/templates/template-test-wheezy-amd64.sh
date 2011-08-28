@@ -86,8 +86,10 @@ redmine_language="fr"
 #A#mpache 3.5.4
 ampache_name[1]="Ampache_1"
 ampache_mysql_pwd[1]="$mysql_generic_pwd"
-#L#ilina 2.0
+#Lilina 2.0
 lilina2_name[1]="Lilina2.0"
+#Lilina 2.0classic
+lilina2_classic_name[1]="Lilina2.0classic"
 #F#rontaccounting 2.2
 #B#ugzilla 3.6.2
 #M#nogosearch 3.3.11
@@ -95,7 +97,7 @@ lilina2_name[1]="Lilina2.0"
 #N#top 3.4
 ntop_pwd=$gen_login_pwd
 #M#an2html 1.6
-#Le#toDMS 3.0.1
+#L#etoDMS 3.0.1
 letodms_name[1]="Letodms_1"
 letodms_admin_email[1]="admin.local@$domain"
 letodms_mysql_pwd[1]="$mysql_generic_pwd"
@@ -123,7 +125,7 @@ lodel_mysql_pwd[1]="$mysql_generic_pwd"
 lodel_lang[1]="fr_FR.UTF8"
 #Do#cbookwiki 0.9.2
 docbookwiki_pwd=$gen_login_pwd
-#Php#sysinfo 3.0
+#Phpsysinfo 3.0
 #D#otproject 2.1.5
 dotproject_name[1]="Dotproject_1"
 dotproject_admin_email[1]="admin.local@$domain"
@@ -139,11 +141,11 @@ ntpd_server_address="192.168.30.254"
 statusnet_name[1]="Statusnet_1"
 statusnet_admin_email[1]="admin.local@$domain"
 statusnet_mysql_pwd[1]="$mysql_generic_pwd"
-#El#gg 1.7.11
+#E#lgg 1.7.11
 elgg_name[1]="Elgg_1"
 elgg_admin_email[1]="admin.local@$domain"
 elgg_mysql_pwd[1]="$mysql_generic_pwd"
-#Jo#omla 1.7.0demo
+#J#oomla 1.7.0demo
 joomla_demo_name[1]="Joomla_demo_1"
 joomla_demo_admin_email[1]="admin.local@$domain"
 joomla_demo_mysql_pwd[1]="$mysql_generic_pwd"
@@ -151,7 +153,7 @@ joomla_demo_mysql_pwd[1]="$mysql_generic_pwd"
 joomla_ciws_name[1]="Joomla_ciws_1"
 joomla_ciws_admin_email[1]="admin.local@$domain"
 joomla_ciws_mysql_pwd[1]="$mysql_generic_pwd"
-#Drupal 7.7
+#D#rupal 7.7
 drupal_name[1]="Drupal_1"
 drupal_admin_email[1]="admin.local@$domain"
 drupal_mysql_pwd[1]="$mysql_generic_pwd"
@@ -160,12 +162,15 @@ mediawiki_name[1]="Mediawiki_1"
 mediawiki_admin_email[1]="admin.local@$domain"
 mediawiki_mysql_pwd[1]="$mysql_generic_pwd"
 mediawiki_lang[1]="fr"
-#Drupal-commerce 7.7
+#D#rupal-commerce 7.7
 drupal_commerce_name[1]="Drupal_commerce_1"
 drupal_commerce_admin_email[1]="admin.local@$domain"
 drupal_commerce_mysql_pwd[1]="$mysql_generic_pwd"
-#Drupal-innovationnews 6.15
+#D#rupal-innovationnews 6.15
 drupal_innovationnews_name[1]="Drupal_innovationnews_1"
 drupal_innovationnews_admin_email[1]="admin.local@$domain"
 drupal_innovationnews_mysql_pwd[1]="$mysql_generic_pwd"
-
+#Zabbix server 1.8.5
+zabbix_name="Zabbix_1"
+zabbix_mysql_pwd="$mysql_generic_pwd"
+zabbix_ip_range="192.168.30.1-255"
