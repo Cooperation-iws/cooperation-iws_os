@@ -179,5 +179,7 @@ zabbix_ip_range="192.168.30.1-255"
 ocs_inventory_ng_name="Ocsinventory_ng"
 ocs_inventory_ng_mysql_pwd="$mysql_generic_pwd"
 ocs_inventory_ng_admin_email="admin.local@$domain"
-#Ocsinventory-ng agent 2.0
+#O#csinventory-ng agent 2.0
 ocs_server_address="my-adminserver.intra"
+#Hyperic-server 4.5
+hyperic_mail_server="localhost"
