@@ -86,9 +86,9 @@ redmine_language="fr"
 #A#mpache 3.5.4
 ampache_name[1]="Ampache_1"
 ampache_mysql_pwd[1]="$mysql_generic_pwd"
-#Lilina 2.0razor
+#L#ilina 2.0razor
 lilina2_name[1]="Lilina2.0razor"
-#Lilina 2.0classic
+#L#ilina 2.0classic
 lilina2_classic_name[1]="Lilina2.0classic"
 #F#rontaccounting 2.2
 #B#ugzilla 3.6.2
@@ -174,4 +174,10 @@ drupal_innovationnews_mysql_pwd[1]="$mysql_generic_pwd"
 zabbix_name="Zabbix_1"
 zabbix_mysql_pwd="$mysql_generic_pwd"
 zabbix_ip_range="192.168.30.1-255"
-#Jffnms 0.9.1
+#J#ffnms 0.9.1
+#O#csinventory-ng 2.0
+ocs_inventory_ng_name="Ocsinventory_ng"
+ocs_inventory_ng_mysql_pwd="$mysql_generic_pwd"
+ocs_inventory_ng_admin_email="admin.local@$domain"
+#Ocsinventory-ng agent 2.0
+ocs_server_address="my-adminserver.intra"

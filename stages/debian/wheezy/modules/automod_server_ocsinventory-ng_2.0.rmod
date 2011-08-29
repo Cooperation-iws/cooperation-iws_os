@@ -1,0 +1,117 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Ocsinventory-ng 2.0'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Distributed monitoring solution'
+RMOD_DESCRIPTION_FR='solution de surveillance réseau'
+RMOD_VERBOSE="ZABBIX is an enterprise-class open source distributed monitoring solution. "
+RMOD_VERBOSE_FR="Zabbix est un système de surveillance du réseau open source. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+MOD_NAME=$ocs_inventory_ng_name
+OCS_MYSQL_PWD=$ocs_inventory_ng_mysql_pwd
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+
+
+
+apt-get install --assume-yes --force-yes libxml-simple-perl libcompress-zlib-perl libdbi-perl libdbd-mysql-perl libapache-dbi-perl libnet-ip-perl libsoap-lite-perl libphp-pclzip 
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/OCSNG_UNIX_SERVER-2.0.tar.gz
+tar -xzf OCSNG_UNIX_SERVER-2.0.tar.gz
+cd OCS*
+sed -i "35s/\"\"/\"2\"/g" setup.sh
+sed -i "104s/read ligne/ligne=\"y\"/g" setup.sh
+sed -i "163s/read ligne/ligne=\"y\"/g" setup.sh
+sed -i "183s/read ligne/ligne=\"\"/g" setup.sh
+sed -i "201s/read ligne/ligne=\"\"/g" setup.sh
+sed -i "239s/read ligne/ligne=\"\"/g" setup.sh
+sed -i "291s/read ligne/ligne=\"\"/g" setup.sh
+sed -i "340s/read ligne/ligne=\"\"/g" setup.sh
+sed -i "389s/read ligne/ligne=\"\"/g" setup.sh
+sed -i "451s/read ligne/ligne=\"\"/g" setup.sh
+sed -i "504s/read ligne/ligne=\"\"/g" setup.sh
+sed -i "531s/read ligne/ligne=\"y\"/g" setup.sh
+sed -i "589s/read ligne/ligne=2/g" setup.sh
+sed -i "629s/read ligne/ligne=\"\"/g" setup.sh
+sed -i "862s/read ligne/ligne=\"\"/g" setup.sh
+sed -i "883s/read ligne/ligne=\"y\"/g" setup.sh
+sed -i "1045s/read ligne/ligne=\"y\"/g" setup.sh
+sed -i "1104s/read ligne/ligne=\"y\"/g" setup.sh
+sed -i "1129s/read ligne/ligne=\"y\"/g" setup.sh
+sed -i "1144s/read ligne/ligne=\"\"/g" setup.sh
+sed -i "1156s/read ligne/ligne=\"\"/g" setup.sh
+
+./setup.sh
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/ocsinventory-ng-2.0-110828.sql 
+
+echo "
+Create database \`${MOD_NAME}\` ;
+grant all on \`${MOD_NAME}\`.* to \`${MOD_NAME}\`@localhost identified by '${OCS_MYSQL_PWD}';
+flush privileges;" > OCS_db.sql
+
+$BIN_MYSQL -u root < OCS_db.sql 
+rm OCS_db.sql
+
+sed -i "s/admin.local@my-erp2.intra/${ocs_inventory_ng_admin_email}/g" ocsinventory-ng-2.0-110828.sql 
+
+
+$BIN_MYSQL -u root  ${MOD_NAME} < ocsinventory-ng-2.0-110828.sql 
+echo "
+<?php
+define(\"DB_NAME\", \"${MOD_NAME}\");
+define(\"SERVER_READ\",\"localhost\");
+define(\"SERVER_WRITE\",\"localhost\");
+define(\"COMPTE_BASE\",\"${MOD_NAME}\");
+define(\"PSWD_BASE\",\"${OCS_MYSQL_PWD}\");
+?>
+" > /usr/share/ocsinventory-reports/ocsreports/dbconfig.inc.php
+
+mv /usr/share/ocsinventory-reports $LAMPP_DIRECTORY/usr/share/
+ln -s $LAMPP_DIRECTORY/usr/share/ocsinventory-reports /usr/share/ocsinventory-reports
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/ocsreports" "/ocsreports" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ocsreports client"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ocsreports client"
