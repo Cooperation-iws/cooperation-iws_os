@@ -6,7 +6,7 @@ gen_login_pwd="cooperation"
 apache_admin_pwd="$gen_login_pwd"
 mysql_root_password="mysql_root"
 mysql_generic_pwd="mysql_pwd"
-domain="my-erp2.intra"
+domain="my-erp4.intra"
 keep_local_apt_parameters="y"
 #kernel wheezy upgrade
 kernel="2.6.39-2-amd64"
@@ -17,9 +17,9 @@ kernel="2.6.39-2-amd64"
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
-#Postgresql 9.0
+#P#ostgresql 9.0
 root_psgsql_pwd="$mysql_root_password"
-#Phppgadmin 5.0.2
+#P#hppgadmin 5.0.2
 #O#penERP 6.0.2
 openerp_name="Openerp_1"
 openerp_psgsql_pwd="$mysql_generic_pwd"
@@ -181,5 +181,7 @@ ocs_inventory_ng_mysql_pwd="$mysql_generic_pwd"
 ocs_inventory_ng_admin_email="admin.local@$domain"
 #O#csinventory-ng agent 2.0
 ocs_server_address="my-adminserver.intra"
-#Hyperic-server 4.5
+#H#yperic-server 4.5
 hyperic_mail_server="localhost"
+#Hyperic-hq agent 4.5
+hyperic_agent_server="my-erp2.intra"
