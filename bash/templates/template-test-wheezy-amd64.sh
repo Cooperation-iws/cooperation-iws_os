@@ -6,7 +6,7 @@ gen_login_pwd="cooperation"
 apache_admin_pwd="$gen_login_pwd"
 mysql_root_password="mysql_root"
 mysql_generic_pwd="mysql_pwd"
-domain="my-erp4.intra"
+domain="my-erp2.intra"
 keep_local_apt_parameters="y"
 #kernel wheezy upgrade
 kernel="2.6.39-2-amd64"
@@ -162,7 +162,7 @@ mediawiki_name[1]="Mediawiki_1"
 mediawiki_admin_email[1]="admin.local@$domain"
 mediawiki_mysql_pwd[1]="$mysql_generic_pwd"
 mediawiki_lang[1]="fr"
-#D#rupal-commerce 7.7
+#Drupal-commerce 7.7
 drupal_commerce_name[1]="Drupal_commerce_1"
 drupal_commerce_admin_email[1]="admin.local@$domain"
 drupal_commerce_mysql_pwd[1]="$mysql_generic_pwd"
@@ -183,5 +183,10 @@ ocs_inventory_ng_admin_email="admin.local@$domain"
 ocs_server_address="my-adminserver.intra"
 #H#yperic-server 4.5
 hyperic_mail_server="localhost"
-#Hyperic-hq agent 4.5
+#H#yperic-hq agent 4.5
 hyperic_agent_server="my-erp2.intra"
+#Openmeetings 1.7
+openmeetings_name="Openmeetings_1"
+openmeetings_mysql_pwd="$mysql_generic_pwd"
+openmeetings_admin_email="admin.local@$domain"
+
