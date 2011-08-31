@@ -91,7 +91,11 @@ lilina2_name[1]="Lilina2.0razor"
 #L#ilina 2.0classic
 lilina2_classic_name[1]="Lilina2.0classic"
 #F#rontaccounting 2.2
-#Bugzilla 3.6.2
+#Bugzilla 4.0.2
+bugzilla_name[1]="Bugzilla_1"
+bugzilla_admin_email[1]="admin.local@$domain"
+bugzilla_mysql_pwd[1]="$mysql_generic_pwd"
+
 #M#nogosearch 3.3.11
 #A#pt-cacher-ng 0.6
 #N#top 3.4
@@ -189,4 +193,4 @@ hyperic_agent_server="my-erp2.intra"
 openmeetings_name="Openmeetings_1"
 openmeetings_mysql_pwd="$mysql_generic_pwd"
 openmeetings_admin_email="admin.local@$domain"
-
+#Remastersys 2.0
