@@ -91,7 +91,7 @@ lilina2_name[1]="Lilina2.0razor"
 #L#ilina 2.0classic
 lilina2_classic_name[1]="Lilina2.0classic"
 #F#rontaccounting 2.2
-#Bugzilla 4.0.2
+#B#ugzilla 4.0.2
 bugzilla_name[1]="Bugzilla_1"
 bugzilla_admin_email[1]="admin.local@$domain"
 bugzilla_mysql_pwd[1]="$mysql_generic_pwd"
@@ -193,4 +193,17 @@ hyperic_agent_server="my-erp2.intra"
 openmeetings_name="Openmeetings_1"
 openmeetings_mysql_pwd="$mysql_generic_pwd"
 openmeetings_admin_email="admin.local@$domain"
-#Remastersys 2.0
+#R#emastersys 2.0
+#Prestashop 1.4
+prestashop_name[1]="Prestashop_1"
+prestashop_mysql_pwd[1]="$mysql_generic_pwd"
+prestashop_admin_email[1]="admin.local@$domain"
+#Oscommerce 3.0
+oscommerce_name[1]="Oscommerce3_0_1"
+oscommerce_mysql_pwd[1]="$mysql_generic_pwd"
+oscommerce_admin_email[1]="admin.local@$domain"
+#Oscommerce 2.3.1
+oscommerce_2_name[1]="Oscommerce2_3_1"
+oscommerce_2_mysql_pwd[1]="$mysql_generic_pwd"
+oscommerce_2_admin_email[1]="admin.local@$domain"
+
