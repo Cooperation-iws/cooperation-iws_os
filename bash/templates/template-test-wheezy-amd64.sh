@@ -91,7 +91,7 @@ lilina2_name[1]="Lilina2.0razor"
 #L#ilina 2.0classic
 lilina2_classic_name[1]="Lilina2.0classic"
 #F#rontaccounting 2.2
-#B#ugzilla 3.6.2
+#Bugzilla 3.6.2
 #M#nogosearch 3.3.11
 #A#pt-cacher-ng 0.6
 #N#top 3.4
@@ -185,7 +185,7 @@ ocs_server_address="my-adminserver.intra"
 hyperic_mail_server="localhost"
 #H#yperic-hq agent 4.5
 hyperic_agent_server="my-erp2.intra"
-#Openmeetings 1.7
+#O#penmeetings 1.7
 openmeetings_name="Openmeetings_1"
 openmeetings_mysql_pwd="$mysql_generic_pwd"
 openmeetings_admin_email="admin.local@$domain"
