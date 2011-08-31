@@ -91,7 +91,7 @@ lilina2_name[1]="Lilina2.0razor"
 #L#ilina 2.0classic
 lilina2_classic_name[1]="Lilina2.0classic"
 #F#rontaccounting 2.2
-#B#ugzilla 4.0.2
+#Bugzilla 4.0.2
 bugzilla_name[1]="Bugzilla_1"
 bugzilla_admin_email[1]="admin.local@$domain"
 bugzilla_mysql_pwd[1]="$mysql_generic_pwd"
@@ -166,7 +166,7 @@ mediawiki_name[1]="Mediawiki_1"
 mediawiki_admin_email[1]="admin.local@$domain"
 mediawiki_mysql_pwd[1]="$mysql_generic_pwd"
 mediawiki_lang[1]="fr"
-#Drupal-commerce 7.7
+#D#rupal-commerce 7.7
 drupal_commerce_name[1]="Drupal_commerce_1"
 drupal_commerce_admin_email[1]="admin.local@$domain"
 drupal_commerce_mysql_pwd[1]="$mysql_generic_pwd"
@@ -189,7 +189,7 @@ ocs_server_address="my-adminserver.intra"
 hyperic_mail_server="localhost"
 #H#yperic-hq agent 4.5
 hyperic_agent_server="my-erp2.intra"
-#O#penmeetings 1.7
+#Openmeetings 1.7
 openmeetings_name="Openmeetings_1"
 openmeetings_mysql_pwd="$mysql_generic_pwd"
 openmeetings_admin_email="admin.local@$domain"

@@ -52,8 +52,6 @@ function INSTALL
 
 apt-get install --assume-yes --force-yes libcgi-pm-perl libdatetime-perl libdatetime-timezone-perl libdbd-mysql-perl libemail-mime-perl libemail-send-perl libjs-yui libmail-sendmail-perl libtemplate-perl libtimedate-perl liburi-perl patch libchart-perl imagemagick libtemplate-plugin-gd-perl libxml-parser-perl perlmagick graphviz libgd-gd2-perl libgd-graph-perl libgd-text-perl libhtml-parser-perl libhtml-scrubber-perl libmailtools-perl libmime-tools-perl libwww-perl libxml-twig-perl patchutils
 
-a2enmod headers
-a2enmod expires
 
 WGET_CIWS_DEPOT
 
