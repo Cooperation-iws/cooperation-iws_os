@@ -4512,8 +4512,8 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 	<item_name>Magento</item_name>
 	<item_version>1.6</item_version>
 	<item_desc>Ecommerce solution</item_desc>
-	<item_web>http://www.prestashop.com/</item_web>
-	<item_verbose>Prestashop is an Ecommerce shop.</item_verbose>
+	<item_web>http://www.magento.com/</item_web>
+	<item_verbose>Magento is an Ecommerce shop.</item_verbose>
 	<item_type>Web server</item_type>
 	<item_license>GPLv2</item_license>
 	<item_category>Ecommerce</item_category>
@@ -4551,8 +4551,8 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 	<item_name>Thelia</item_name>
 	<item_version>1.5</item_version>
 	<item_desc>Ecommerce solution</item_desc>
-	<item_web>http://www.prestashop.com/</item_web>
-	<item_verbose>Prestashop is an Ecommerce shop.</item_verbose>
+	<item_web>http://www.thelia.com/</item_web>
+	<item_verbose>Thelia is an Ecommerce shop.</item_verbose>
 	<item_type>Web server</item_type>
 	<item_license>GPLv2</item_license>
 	<item_category>Ecommerce</item_category>
