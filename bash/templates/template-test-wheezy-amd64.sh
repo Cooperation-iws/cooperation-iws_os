@@ -189,21 +189,33 @@ ocs_server_address="my-adminserver.intra"
 hyperic_mail_server="localhost"
 #H#yperic-hq agent 4.5
 hyperic_agent_server="my-erp2.intra"
-#Openmeetings 1.7
+#O#penmeetings 1.7
 openmeetings_name="Openmeetings_1"
 openmeetings_mysql_pwd="$mysql_generic_pwd"
 openmeetings_admin_email="admin.local@$domain"
 #R#emastersys 2.0
-#Prestashop 1.4
+#P#restashop 1.4
 prestashop_name[1]="Prestashop_1"
 prestashop_mysql_pwd[1]="$mysql_generic_pwd"
 prestashop_admin_email[1]="admin.local@$domain"
-#Oscommerce 3.0
+#O#scommerce 3.0
 oscommerce_name[1]="Oscommerce3_0_1"
 oscommerce_mysql_pwd[1]="$mysql_generic_pwd"
 oscommerce_admin_email[1]="admin.local@$domain"
-#Oscommerce 2.3.1
+#O#scommerce 2.3.1
 oscommerce_2_name[1]="Oscommerce2_3_1"
 oscommerce_2_mysql_pwd[1]="$mysql_generic_pwd"
 oscommerce_2_admin_email[1]="admin.local@$domain"
+#Thelia 1.5
+thelia_name[1]="Thelia_1"
+thelia_mysql_pwd[1]="$mysql_generic_pwd"
+thelia_admin_email[1]="admin.local@$domain"
+#Magento 1.6
+magento_name[1]="Magento_1"
+magento_mysql_pwd[1]="$mysql_generic_pwd"
+magento_admin_email[1]="admin.local@$domain"
+#Moodle 2.1
+moodle_name[1]="Moodle_1"
+moodle_mysql_pwd[1]="$mysql_generic_pwd"
+moodle_admin_email[1]="admin.local@$domain"
 

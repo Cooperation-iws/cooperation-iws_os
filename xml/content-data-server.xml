@@ -4508,4 +4508,122 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 	
 	
 </item>
+<item>
+	<item_name>Magento</item_name>
+	<item_version>1.6</item_version>
+	<item_desc>Ecommerce solution</item_desc>
+	<item_web>http://www.prestashop.com/</item_web>
+	<item_verbose>Prestashop is an Ecommerce shop.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Ecommerce</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation76</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>magento_name</field_1_value>
+		<field_1_def_content>Prestashop</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>magento_admin_mail</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>magento_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Thelia</item_name>
+	<item_version>1.5</item_version>
+	<item_desc>Ecommerce solution</item_desc>
+	<item_web>http://www.prestashop.com/</item_web>
+	<item_verbose>Prestashop is an Ecommerce shop.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Ecommerce</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>thelia_name</field_1_value>
+		<field_1_def_content>Prestashop</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>thelia_admin_mail</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>thelia_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Moodle</item_name>
+	<item_version>2.1</item_version>
+	<item_desc>eLearning portal</item_desc>
+	<item_web>http://www.claroline.net/</item_web>
+	<item_verbose>Moodle is an eLearning portal. Moodle is also a course content management system.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Learning</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>Cooperation76:</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>moodle_name</field_1_value>
+		<field_1_def_content>Moodle</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>moodle_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>moodle_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
 </items>
