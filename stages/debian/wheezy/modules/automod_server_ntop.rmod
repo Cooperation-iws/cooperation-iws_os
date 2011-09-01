@@ -33,18 +33,48 @@ NTOP_PWD=$ntop_pwd
 
 function INSTALL
 {
+echo "
+Name: ntop/interfaces
+Template: ntop/interfaces
+Value: eth0
+Owners: ntop
+Flags: seen
+
+Name: ntop/password_empty
+Template: ntop/password_empty
+Owners: ntop
+
+Name: ntop/password_mismatch
+Template: ntop/password_mismatch
+Owners: ntop
+
+Name: ntop/password_reset
+Template: ntop/password_reset
+Value: false
+Owners: ntop
+
+Name: ntop/user
+Template: ntop/user
+Value: ntop
+Owners: ntop
+Flags: seen
+" >> /var/cache/debconf/config.dat
+
+echo "
+Name: ntop/admin_password
+Template: ntop/admin_password
+Value: $ntop_pwd
+Owners: ntop
+
+Name: ntop/admin_password_again
+Template: ntop/admin_password_again
+Value: $ntop_pwd
+Owners: ntop
+" >> /var/cache/debconf/passwords.dat
 
 apt-get install --assume-yes --force-yes ntop ntop-data
 
-#Ntop config
 
-ntop --set-admin-password=$NTOP_PWD
-
-echo "
-#Ntop
-
-/etc/init.d/ntop start
-" >> /etc/rc.local
 
 }
 
