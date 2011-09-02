@@ -1,0 +1,111 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Alfresco 3.4'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+ALFRESCO_MYSQL_PWD=${alfresco_mysql_pwd}
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/alfresco-3.4.d-110901.tar.gz
+tar -xzf alfresco-3.4.d-110901.tar.gz -C $LAMPP_DIRECTORY/opt/
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+WGET_CIWS_DEPOT
+
+cd $DL_DIR
+
+
+ln -s $LAMPP_DIRECTORY/opt/alfresco-3.4.d /opt/alfresco-3.4.d 
+
+echo "
+Create database alfresco ;
+grant all on alfresco.* to alfresco@localhost identified by '${ALFRESCO_MYSQL_PWD}';
+flush privileges;" > ALFRESCO_db.sql
+
+$BIN_MYSQL -u root < ALFRESCO_db.sql 
+rm ALFRESCO_db.sql
+
+$BIN_MYSQL -u root ${MOD_NAME[$count]} alfresco < /opt/alfresco-3.4.d/cooperation-iws.sql
+
+sed -i "s/mysqlroot/${ALFRESCO_MYSQL_PWD}/" /opt/alfresco-3.4.d/tomcat/shared/classes/alfresco-global.properties
+sed -i "15s/localhost/127.0.0.1/" /opt/alfresco-3.4.d/tomcat/shared/classes/alfresco-global.properties
+sed -i "9s/^/db.schema.update=false/" /opt/alfresco-3.4.d/tomcat/shared/classes/alfresco-global.properties
+
+cd /opt/alfresco-3.4.d/mysql/
+chown -R root .
+chown -R mysql data
+chgrp -R root .
+chmod 777 tmp
+#/opt/alfresco-3.4.d/mysql/scripts/myscript_upgrade.sh  "/opt/alfresco-3.4.d/mysql/"
+#echo "
+#db.schema.update=false" >> /opt/alfresco-3.4.d/tomcat/shared/classes/alfresco-global.properties
+
+rm -r /opt/alfresco-3.4.d/tomcat/temp/*
+
+cp /opt/alfresco*/alfresco_init_d /etc/init.d/alfresco
+chmod +x /etc/init.d/alfresco
+update-rc.d alfresco start 70 2 3 4 5 . stop 20 0 1 6 .
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:8080/alfresco]]>" "<![CDATA[http://localhost:8080]]>" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:8080/share]]>" "<![CDATA[http://localhost:8080]]>" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ntop"
