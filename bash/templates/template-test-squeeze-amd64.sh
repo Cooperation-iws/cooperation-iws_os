@@ -12,7 +12,7 @@ keep_local_apt_parameters="y"
 kernel="2.6.32-5-amd64"
 #update live-initramfs-squeeze
 #DNS server Squeeze
-#C#iwscms 0.9.2
+#Ciwscms 0.9.2
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
@@ -41,3 +41,5 @@ wordpress_mysql_pwd[1]="$mysql_generic_pwd"
 #X#sane 0.1
 #G#rsync 0.1
 #K#olab 2.3source
+#ISPconfig 3.0
+

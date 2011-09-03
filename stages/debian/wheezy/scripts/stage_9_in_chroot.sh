@@ -183,6 +183,9 @@ echo "I: displacing directories"
 mv /etc/cron.d $LAMPP_DIRECTORY/etc
 ln -s $LAMPP_DIRECTORY/etc/cron.d /etc/cron.d
 
+echo "I: configuring apt persistence"
+mv /etc/apt $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/apt /etc/apt
 
 echo "I: configuring home persistence"
 mv /home /opt/ciws
