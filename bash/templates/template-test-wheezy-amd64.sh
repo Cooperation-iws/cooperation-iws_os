@@ -218,5 +218,5 @@ magento_admin_email[1]="admin.local@$domain"
 moodle_name[1]="Moodle_1"
 moodle_mysql_pwd[1]="$mysql_generic_pwd"
 moodle_admin_email[1]="admin.local@$domain"
-#Alfresco 3.4
+#A#lfresco 3.4
 alfresco_mysql_pwd="$mysql_generic_pwd"
