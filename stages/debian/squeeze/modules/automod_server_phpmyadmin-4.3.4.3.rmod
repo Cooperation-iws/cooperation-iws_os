@@ -1,0 +1,76 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Phpmyadmin 4.3.4.3'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='database'
+RMOD_DESCRIPTION_FR='database'
+RMOD_VERBOSE="Postgresql is a database software server"
+RMOD_VERBOSE_FR="Postgresql est un serveur de base de données"
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_REQ_APACHE=True
+. /tmp/app_params
+. /tmp/scripts_params
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+function INSTALL
+{
+
+
+
+apt-get install --yes --force-yes phpmyadmin
+
+
+
+echo "I: config phpmyadmin"
+rm /etc/apache2/conf.d/phpmyadmin
+ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf.d/phpmyadmin
+
+
+
+mv /var/lib/phpmyadmin $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/phpmyadmin /var/lib/phpmyadmin
+
+
+mv /etc/phpmyadmin $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/phpmyadmin /etc/phpmyadmin
+
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/phpmyadmin" "/phpmyadmin" 
+
+
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+echo "I: Install Mysql Server"
+INSTALL
+CREATE_WUI
+
+echo "I: End of install Mysql Server"
