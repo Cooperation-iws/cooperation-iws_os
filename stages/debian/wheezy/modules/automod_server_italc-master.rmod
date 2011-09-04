@@ -38,7 +38,7 @@ function INSTALL
 
 apt-get install --assume-yes --force-yes italc-master
 
-
+ica -createkeypair
 
 }
 

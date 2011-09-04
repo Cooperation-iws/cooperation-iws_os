@@ -6,7 +6,7 @@ gen_login_pwd="cooperation"
 apache_admin_pwd="$gen_login_pwd"
 mysql_root_password="mysql_root"
 mysql_generic_pwd="mysql_pwd"
-domain="my-erp2.intra"
+domain="my-erp3.intra"
 keep_local_apt_parameters="y"
 #kernel wheezy upgrade
 kernel="2.6.39-2-amd64"
@@ -28,6 +28,13 @@ wordpress_name[1]="Wordpress_1"
 wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"
 #Mysql 5.1
+mysql_replication_master="n"
+mysql_replication_slave="y"
+mysql_master_domain="my-erp2.intra"
+mysql_slave_user="mysql_slave_user"
+mysql_slave_password="$mysql_generic_pwd"
+replication_db[1]="Ampache_1"
+replication_db[2]="Letodms_1"
 #Phpmyadmin 4.3.4.3
 #Cl#amtk 4.10
 #C#odecs Wheezy
@@ -83,7 +90,7 @@ redmine_name="Redmine"
 redmine_mysql_pwd="$mysql_generic_pwd"
 redmine_language="fr"
 #O#penxchange 6.20
-#A#mpache 3.5.4
+#Ampache 3.5.4
 ampache_name[1]="Ampache_1"
 ampache_mysql_pwd[1]="$mysql_generic_pwd"
 #L#ilina 2.0razor
@@ -101,7 +108,7 @@ bugzilla_mysql_pwd[1]="$mysql_generic_pwd"
 #Ntop 3.4
 ntop_pwd=$gen_login_pwd
 #M#an2html 1.6
-#L#etoDMS 3.0.1
+#LetoDMS 3.0.1
 letodms_name[1]="Letodms_1"
 letodms_admin_email[1]="admin.local@$domain"
 letodms_mysql_pwd[1]="$mysql_generic_pwd"
