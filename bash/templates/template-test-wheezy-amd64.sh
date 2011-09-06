@@ -7,13 +7,14 @@ apache_admin_pwd="$gen_login_pwd"
 mysql_root_password="mysql_root"
 mysql_generic_pwd="mysql_pwd"
 domain="my-erp2.intra"
+#domain="lokalrepo-1.intra"
 keep_local_apt_parameters="y"
 #kernel wheezy upgrade
 kernel="2.6.39-2-amd64"
 #update live-initramfs
 #DNS server Wheezy
-#Ciwscms 0.9.2
-#ssl
+#C#iwscms 0.9.2
+#s#sl
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
@@ -27,7 +28,7 @@ openerp_psgsql_pwd="$mysql_generic_pwd"
 wordpress_name[1]="Wordpress_1"
 wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"
-#Mysql 5.1
+#My#sql 5.1
 mysql_replication_master="n"
 mysql_replication_slave="n"
 mysql_master_domain="my-erp2.intra"
@@ -35,9 +36,9 @@ mysql_slave_user="mysql_slave_user"
 mysql_slave_password="$mysql_generic_pwd"
 replication_db[1]="Ampache_1"
 replication_db[2]="Letodms_1"
-#Phpmyadmin 4.3.4.3
-#Cl#amtk 4.10
-#C#odecs Wheezy
+#P#hpmyadmin 4.3.4.3
+#C#lamtk 4.10
+#Codecs Wheezy
 #F#ilezilla 0.1
 #F#lashplayer Wheezy
 #G#imp 2.6
@@ -105,7 +106,7 @@ bugzilla_mysql_pwd[1]="$mysql_generic_pwd"
 
 #M#nogosearch 3.3.11
 #A#pt-cacher-ng 0.6
-#Ntop 3.4
+#N#top 3.4
 ntop_pwd=$gen_login_pwd
 #M#an2html 1.6
 #L#etoDMS 3.0.1
@@ -113,7 +114,7 @@ letodms_name[1]="Letodms_1"
 letodms_admin_email[1]="admin.local@$domain"
 letodms_mysql_pwd[1]="$mysql_generic_pwd"
 letodms_lang[1]="Francais"
-#Dpkg-www 2.54
+#D#pkg-www 2.54
 #O#js 2.3.6
 ojs_name[1]="ojs_1"
 ojs_admin_email[1]="admin.local@$domain"
@@ -136,7 +137,7 @@ lodel_mysql_pwd[1]="$mysql_generic_pwd"
 lodel_lang[1]="fr_FR.UTF8"
 #Do#cbookwiki 0.9.2
 docbookwiki_pwd=$gen_login_pwd
-#Phpsysinfo 3.0
+#P#hpsysinfo 3.0
 #D#otproject 2.1.5
 dotproject_name[1]="Dotproject_1"
 dotproject_admin_email[1]="admin.local@$domain"
@@ -227,7 +228,9 @@ moodle_mysql_pwd[1]="$mysql_generic_pwd"
 moodle_admin_email[1]="admin.local@$domain"
 #A#lfresco 3.4
 alfresco_mysql_pwd="$mysql_generic_pwd"
-#Dotclear 2.3.1
+#D#otclear 2.3.1
 dotclear_name[1]="Dotclear_1"
 dotclear_mysql_pwd[1]="$mysql_generic_pwd"
 dotclear_admin_email[1]="admin.local@$domain"
+#Jitsi 1.0beta
+#Jabber 1.4

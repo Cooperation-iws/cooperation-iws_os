@@ -1,0 +1,27 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Jitsi 1.0beta'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Multimedia softs for client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+. /tmp/scripts_params
+
+echo "I: install Jitsi"
+echo "
+Name: shared/accepted-sun-dlj-v1-1
+Template: shared/accepted-sun-dlj-v1-1
+Value: true
+Owners: sun-java6-bin, sun-java6-jdk, sun-java6-jre
+Flags: seen
+" >> /var/cache/debconf/config.dat
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/jitsi_1.0-beta1-nightly.build.3651_amd64.deb
+dpkg -i jitsi_1.0-beta1-nightly.build.3651_amd64.deb
+
+apt-get -f install --assume-yes --force-yes
