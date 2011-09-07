@@ -10,9 +10,14 @@ RMOD_DESCRIPTION='Multimedia softs for client'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 . /tmp/scripts_params
+. /tmp/app_params
+
 
 echo "I: install Jabber14"
 
 mkdir /var/run/jabber/
 
 apt-get install --assume-yes --force-yes jabberd14 jabber-muc jabber-irc 
+
+mv /etc/jabber $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/jabber /etc/jabber

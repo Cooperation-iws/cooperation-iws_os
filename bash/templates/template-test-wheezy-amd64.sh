@@ -13,14 +13,14 @@ keep_local_apt_parameters="y"
 kernel="2.6.39-2-amd64"
 #update live-initramfs
 #DNS server Wheezy
-#C#iwscms 0.9.2
-#s#sl
+#Ciwscms 0.9.2
+#ssl
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
-#P#ostgresql 9.0
+#Postgresql 9.0
 root_psgsql_pwd="$mysql_root_password"
-#P#hppgadmin 5.0.2
+#Phppgadmin 5.0.2
 #O#penERP 6.0.2
 openerp_name="Openerp_1"
 openerp_psgsql_pwd="$mysql_generic_pwd"
@@ -28,7 +28,7 @@ openerp_psgsql_pwd="$mysql_generic_pwd"
 wordpress_name[1]="Wordpress_1"
 wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"
-#My#sql 5.1
+#Mysql 5.1
 mysql_replication_master="n"
 mysql_replication_slave="n"
 mysql_master_domain="my-erp2.intra"
@@ -36,7 +36,7 @@ mysql_slave_user="mysql_slave_user"
 mysql_slave_password="$mysql_generic_pwd"
 replication_db[1]="Ampache_1"
 replication_db[2]="Letodms_1"
-#P#hpmyadmin 4.3.4.3
+#Phpmyadmin 4.3.4.3
 #C#lamtk 4.10
 #Codecs Wheezy
 #F#ilezilla 0.1
@@ -114,7 +114,7 @@ letodms_name[1]="Letodms_1"
 letodms_admin_email[1]="admin.local@$domain"
 letodms_mysql_pwd[1]="$mysql_generic_pwd"
 letodms_lang[1]="Francais"
-#D#pkg-www 2.54
+#Dpkg-www 2.54
 #O#js 2.3.6
 ojs_name[1]="ojs_1"
 ojs_admin_email[1]="admin.local@$domain"
@@ -232,5 +232,7 @@ alfresco_mysql_pwd="$mysql_generic_pwd"
 dotclear_name[1]="Dotclear_1"
 dotclear_mysql_pwd[1]="$mysql_generic_pwd"
 dotclear_admin_email[1]="admin.local@$domain"
-#Jitsi 1.0beta
-#Jabber 1.4
+#J#itsi 1.0beta
+#J#abber 1.4
+#M#apnik 0.7.1
+#Mapserver 5.6.6

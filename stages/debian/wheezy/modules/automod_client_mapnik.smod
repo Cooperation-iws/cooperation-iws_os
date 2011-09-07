@@ -1,0 +1,54 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Mapnik 0.7.1source'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Antivirus tools for client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+. /tmp/scripts_params
+
+
+
+echo "I: installing mapnik"
+sudo apt-get install --assume-yes --force-yes \
+g++-4.4 cpp \
+libicu-dev libicu44 \
+python2.6-dev \
+libboost-system1.42-dev \
+libboost-filesystem1.42-dev \
+libboost-iostreams1.42-dev \
+libboost-thread1.42-dev \
+libboost-python1.42-dev \
+libboost-program-options1.42-dev \
+libboost-regex1.42-dev \
+libxml2 libxml2-dev \
+libfreetype6 libfreetype6-dev \
+libjpeg62 libjpeg62-dev \
+libpng12-0 libpng12-dev \
+libtiff4 libtiff4-dev \
+libltdl7 libltdl-dev \
+libproj0 libproj-dev \
+libcairo2 libcairo2-dev python-cairo python-cairo-dev \
+libcairomm-1.0-1 libcairomm-1.0-dev \
+ttf-dejavu ttf-dejavu-core ttf-dejavu-extra ttf-unifont \
+postgresql-9.0 postgresql-server-dev-9.0 postgresql-contrib-9.0 \
+libgdal1-dev python-gdal \
+postgresql-9.0-postgis libsqlite3-dev  \
+subversion build-essential python-nose
+
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/mapnik-0.7.1.tar.bz2
+tar -xjf mapnik-0.7.1.tar.bz2
+cd mapnik-0.7.1
+python scons/scons.py configure INPUT_PLUGINS=all \
+OPTIMIZATION=3 \
+SYSTEM_FONTS=/usr/share/fonts/truetype/
+python scons/scons.py
+sudo python scons/scons.py install
+sudo ldconfig
+
