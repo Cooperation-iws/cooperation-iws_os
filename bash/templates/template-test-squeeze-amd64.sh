@@ -41,5 +41,8 @@ wordpress_mysql_pwd[1]="$mysql_generic_pwd"
 #X#sane 0.1
 #G#rsync 0.1
 #K#olab 2.3source
-#ISPconfig 3.0
+#I#SPconfig 3.0
+#Sogo 1.3.8
+sogo_mysql_pwd="$mysql_generic_pwd"
+sogo_admin_email="admin.local@$domain"
 

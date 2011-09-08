@@ -1,0 +1,221 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Sogo 1.3.8'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Webmail'
+RMOD_DESCRIPTION_FR='eMails en ligne'
+
+RMOD_VERBOSE="RoundCube Webmail is a browser-based multilingual IMAP client with an application-like user interface. It provides full functionality you expect from an e-mail client, including MIME support, address book, folder manipulation, message searching and spell checking. RoundCube Webmail is written in PHP and requires a MySQL or Postgres database. The user interface is fully skinnable using XHTML and CSS 2."
+RMOD_VERBOSE_FR="RoundCube est client mail en ligne."
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+#VARIABLES
+#MYSQL PASSWORD
+
+echo "DEB_MIRROR_PATH"$DEB_MIRROR_PATH
+apt_cacher_root=$(echo $DEB_MIRROR_PATH | sed 's/debian\///')
+echo "apt_cacher_root:"$apt_cacher_root
+sogo_repo="$apt_cacher_root/sogo squeeze squeeze"
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+#rm moodle-latest-19.zip
+
+}
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "deb $sogo_repo " >> /etc/apt/sources.list
+apt-get update
+
+echo "
+Name: tmpreaper/TMPREAPER_TIME
+Template: tmpreaper/TMPREAPER_TIME
+Value: 
+Owners: tmpreaper
+Flags: seen
+
+Name: tmpreaper/confignowexists
+Template: tmpreaper/confignowexists
+Owners: tmpreaper
+Flags: seen
+
+Name: tmpreaper/readsecurity
+Template: tmpreaper/readsecurity
+Value: 
+Owners: tmpreaper
+Flags: seen
+
+Name: tmpreaper/readsecurity_upgrading
+Template: tmpreaper/readsecurity_upgrading
+Owners: tmpreaper
+Flags: seen
+" >> /var/cache/debconf/config.dat
+
+apt-get install --assume-yes --force-yes sogo sope4.9-gdl1-mysql memcached rpl
+
+
+rpl 'SHOWWARNING=true' 'SHOWWARNING=false' /etc/tmpreaper.conf
+
+rpl '127.0.0.1' localhost /etc/memcached.conf
+
+echo "
+CREATE DATABASE sogo CHARSET='UTF8';
+CREATE USER 'sogo'@'localhost' IDENTIFIED BY '$sogo_mysql_pwd';
+GRANT ALL PRIVILEGES ON sogo.* TO 'sogo'@'localhost';
+USE sogo;
+CREATE TABLE sogo_users (c_uid VARCHAR(10) PRIMARY KEY, c_name VARCHAR(10), c_password VARCHAR(32), c_cn VARCHAR(128), mail VARCHAR(128));
+INSERT INTO sogo_users VALUES ('admin', 'admin', MD5('cooperation'), 'Administrator', '$sogo_admin_email');
+
+flush privileges;
+" >> /tmp/db.sogo.sql
+
+$BIN_MYSQL -u root < /tmp/db.sogo.sql
+rm /tmp/db.sogo.sql
+
+a2enmod proxy
+a2enmod proxy_http
+a2enmod headers
+a2enmod rewrite
+
+echo "
+defaults write sogod SOGoTimeZone \"Europe/Paris\"
+defaults write sogod SOGoMailDomain \"$domain\"
+defaults write sogod SOGoLanguage \"French\"
+# say "isAddressBook = NO" for a shared hosting situation
+# this is a very long line:
+defaults write sogod SOGoUserSources '({canAuthenticate = YES; displayName = \"SOGo Users\"; id = users; isAddressBook = YES; type = sql; userPasswordAlgorithm = md5; viewURL =\"mysql://sogo:$sogo_mysql_pwd@127.0.0.1:3306/sogo/sogo_users\";})'
+defaults write sogod SOGoProfileURL 'mysql://sogo:$sogo_mysql_pwd@127.0.0.1:3306/sogo/sogo_user_profile'
+defaults write sogod OCSFolderInfoURL 'mysql://sogo:$sogo_mysql_pwd@127.0.0.1:3306/sogo/sogo_folder_info'
+defaults write sogod OCSSessionsFolderURL 'mysql://sogo:$sogo_mysql_pwd@127.0.0.1:3306/sogo/sogo_sessions_folder'
+defaults write sogod SOGoAppointmentSendEMailNotifications YES
+defaults write sogod SOGoLoginModule Calendar
+defaults write sogod SOGoSieveScriptsEnabled YES
+# sometimes Sieve is running on port 2000, port 4190 is relative new:
+defaults write sogod SOGoSieveServer sieve://localhost:4190
+defaults write sogod SOGoVacationEnabled YES
+defaults write sogod SOGoMailMessageCheck every_5_minutes
+defaults write sogod SOGoFirstDayOfWeek 1
+defaults write sogod SOGoSuperUsernames '( \"admin\" )'
+# I am using Cyrus IMAP 2.2 in the default settings, I needed this 4 lines 
+# for mailbox setting. I don't think you need them with other IMAP servers:
+defaults write sogod SOGoDraftsFolderName \"INBOX.Drafts\"
+defaults write sogod SOGoSentFolderName \"INBOX.Sent\"
+defaults write sogod SOGoTrashFolderName \"INBOX.Trash\"
+defaults write sogod NGImap4ConnectionStringSeparator \".\"
+" > /tmp/sogo.conf.sh
+
+chmod +x /tmp/sogo.conf.sh
+sudo -u sogo /tmp/sogo.conf.sh
+
+mv /etc/apache2/conf.d/SOGo.conf /root/SOGo.conf-backup
+echo "# disabled" >> /etc/apache2/conf.d/SOGo.conf
+
+echo " <VirtualHost *:80>
+   Servername sogo.$domain
+   DocumentRoot /usr/lib/GNUstep/SOGo/WebServerResources/
+   ErrorLog /var/log/apache2/error.log
+   Customlog /var/log/apache2/access.log combined
+   ServerSignature Off
+
+   Alias /SOGo.woa/WebServerResources/ /usr/lib/GNUstep/SOGo/WebServerResources/
+   Alias /SOGo/WebServerResources/ /usr/lib/GNUstep/SOGo/WebServerResources/
+   AliasMatch /SOGo/so/ControlPanel/Products/(.*)/Resources/(.*) /usr/lib/GNUstep/SOGo/\$1.SOGo/Resources/\$2
+
+   <Directory /usr/lib/GNUstep/SOGo/>
+      AllowOverride None
+      Order deny,allow
+      Allow from all
+   </Directory>
+
+   <LocationMatch \"^/SOGo/so/ControlPanel/Products/.*UI/Resources/.*\.(jpg|png|gif|css|js)\">
+     SetHandler default-handler
+   </LocationMatch>
+
+   ProxyRequests Off
+   SetEnv proxy-nokeepalive 1
+   ProxyPreserveHost On
+   ProxyPass /SOGo http://127.0.0.1:20000/SOGo retry=0
+
+   <Proxy http://127.0.0.1:20000/SOGo>
+     RequestHeader set \"x-webobjects-server-port\" \"80\"
+     RequestHeader set \"x-webobjects-server-name\" \"sogo.$domain\"
+     RequestHeader set \"x-webobjects-server-url\" \"http://sogo.$domain\"
+     RequestHeader set \"x-webobjects-server-protocol\" \"HTTP/1.0\"
+     RequestHeader set \"x-webobjects-remote-host\" %{REMOTE_HOST}e env=REMOTE_HOST
+     AddDefaultCharset UTF-8
+     Order allow,deny
+     Allow from all
+   </Proxy>
+   ## We use mod_rewrite to pass remote address to the SOGo proxy.
+   # The remote address will appear in SOGo's log files and in the X-Forward
+   # header of emails.
+   RewriteEngine On
+   RewriteRule ^/SOGo/(.*)$ /SOGo/\$1 [env=REMOTE_HOST:%{REMOTE_ADDR},PT]
+
+   Redirect permanent /index.html http://sogo.$domain/SOGo
+
+</virtualhost>" > /etc/apache2/sites-available/sogo
+
+chmod +x /etc/apache2/sites-available/sogo
+a2ensite sogo
+echo "sogo    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$OX6_URL" "$OX6_URL" 
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+function INSTALL_SCRIPT
+{
+
+echo "
+echo \"I: Stopping ox6 Server\"
+#/etc/init.d/
+" >> /opt/ciws/share/lampp/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+
+echo "I: Install Roundcube"
+INSTALL
+CREATE_WUI
+INSTALL_SCRIPT
+echo "I: End of install Roundcube"

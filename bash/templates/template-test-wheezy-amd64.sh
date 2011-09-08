@@ -18,9 +18,9 @@ kernel="2.6.39-2-amd64"
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
-#Postgresql 9.0
+#P#ostgresql 9.0
 root_psgsql_pwd="$mysql_root_password"
-#Phppgadmin 5.0.2
+#P#hppgadmin 5.0.2
 #O#penERP 6.0.2
 openerp_name="Openerp_1"
 openerp_psgsql_pwd="$mysql_generic_pwd"
@@ -57,7 +57,7 @@ svn_name[1]="Project_1"
 svn_admin_pwd[1]="$gen_login_pwd"
 svn_anonymous_pwd[1]="anonymous"
 trac_admin_pwd[1]="$gen_login_pwd"
-#P#ostfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Wheezy
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Wheezy
 postfixadmin_name="Mail_1"
 mail_domain="$domain"
 postfix_admin_email="admin.local@$domain"
@@ -239,3 +239,7 @@ dotclear_admin_email[1]="admin.local@$domain"
 #P#hpldapadmin 1.2.0
 #S#lapd 2.4.25
 slapd_root_pwd="$mysql_generic_pwd"
+#Sogo 1.3.8
+sogo_mysql_pwd="$mysql_generic_pwd"
+sogo_admin_email="admin.local@$domain"
+
