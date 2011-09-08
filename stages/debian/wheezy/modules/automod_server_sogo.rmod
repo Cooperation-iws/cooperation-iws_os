@@ -88,8 +88,8 @@ CREATE DATABASE sogo CHARSET='UTF8';
 CREATE USER 'sogo'@'localhost' IDENTIFIED BY '$sogo_mysql_pwd';
 GRANT ALL PRIVILEGES ON sogo.* TO 'sogo'@'localhost';
 USE sogo;
-CREATE TABLE sogo_users (c_uid VARCHAR(10) PRIMARY KEY, c_name VARCHAR(10), c_password VARCHAR(32), c_cn VARCHAR(128), mail VARCHAR(128));
-INSERT INTO sogo_users VALUES ('admin', 'admin', MD5('cooperation'), 'Administrator', '$sogo_admin_email');
+CREATE TABLE sogo_users (c_uid VARCHAR(128) PRIMARY KEY, c_name VARCHAR(128), c_password VARCHAR(32), c_cn VARCHAR(128), mail VARCHAR(128));
+INSERT INTO sogo_users VALUES ('$sogo_admin_email', '$sogo_admin_email', MD5('cooperation'), 'Administrator', '$sogo_admin_email');
 
 flush privileges;
 " >> /tmp/db.sogo.sql
@@ -120,7 +120,7 @@ defaults write sogod SOGoSieveServer sieve://localhost:4190
 defaults write sogod SOGoVacationEnabled YES
 defaults write sogod SOGoMailMessageCheck every_5_minutes
 defaults write sogod SOGoFirstDayOfWeek 1
-defaults write sogod SOGoSuperUsernames '( \"admin\" )'
+defaults write sogod SOGoSuperUsernames '( \"$sogo_admin_email\" )'
 # I am using Cyrus IMAP 2.2 in the default settings, I needed this 4 lines 
 # for mailbox setting. I don't think you need them with other IMAP servers:
 defaults write sogod SOGoDraftsFolderName \"INBOX.Drafts\"
