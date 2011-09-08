@@ -1,0 +1,65 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Slapd 2.4.25'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Open ldap server'
+RMOD_DESCRIPTION_FR='Serveur Openldap'
+RMOD_VERBOSE=""
+RMOD_VERBOSE_FR=""
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "
+Name: slapd/password1
+Template: slapd/password1
+Value: $slapd_root_pwd
+Owners: slapd
+Flags: seen
+
+Name: slapd/password2
+Template: slapd/password2
+Value: $slapd_root_pwd
+Owners: slapd
+Flags: seen
+" > /var/cache/debconf/passwords.dat
+
+apt-get install --assume-yes --force-yes slapd ldap-utils
+
+mv /etc/ldap $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/ldap /etc/ldap
+
+mv /var/lib/slapd $LAMPP_DIRECTORY/var/lib
+
+ln -s $LAMPP_DIRECTORY/var/lib/slapd /var/lib/slapd
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+
+
+echo "I: Install SSL"
+INSTALL
+
+echo "I: End of install SSL"

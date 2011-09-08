@@ -235,4 +235,7 @@ dotclear_admin_email[1]="admin.local@$domain"
 #J#itsi 1.0beta
 #J#abber 1.4
 #M#apnik 0.7.1
-#Mapserver 5.6.6
+#M#apserver 5.6.6
+#P#hpldapadmin 1.2.0
+#S#lapd 2.4.25
+slapd_root_pwd="$mysql_generic_pwd"
