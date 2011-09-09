@@ -57,7 +57,7 @@ svn_name[1]="Project_1"
 svn_admin_pwd[1]="$gen_login_pwd"
 svn_anonymous_pwd[1]="anonymous"
 trac_admin_pwd[1]="$gen_login_pwd"
-#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Wheezy
+#P#ostfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Wheezy
 postfixadmin_name="Mail_1"
 mail_domain="$domain"
 postfix_admin_email="admin.local@$domain"
@@ -239,7 +239,7 @@ dotclear_admin_email[1]="admin.local@$domain"
 #P#hpldapadmin 1.2.0
 #S#lapd 2.4.25
 slapd_root_pwd="$mysql_generic_pwd"
-#Sogo 1.3.8
+#S#ogo 1.3.8
 sogo_mysql_pwd="$mysql_generic_pwd"
 sogo_admin_email="admin.local@$domain"
-
+#Openvpn 2.2

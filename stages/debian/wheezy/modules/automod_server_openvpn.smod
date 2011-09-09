@@ -1,0 +1,88 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Openvpn 2.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Documentation'
+RMOD_DESCRIPTION_FR='Documentation'
+RMOD_VERBOSE="Browse and search manpages "
+RMOD_VERBOSE_FR="Rechercher et naviguer dans les pages de manuels"
+
+RMOD_RUN_IN_CHROOT=True
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes openvpn fail2ban
+
+mkdir /etc/openvpn
+cp -r /usr/share/doc/openvpn/examples/easy-rsa /etc/openvpn/.
+
+cd /usr/share/doc/openvpn/examples/sample-config-files
+gunzip server.conf.gz
+
+cp /usr/share/doc/openvpn/examples/sample-config-files/server.conf /etc/openvpn
+
+echo "
+
+[openvpn]
+
+enabled  = true
+port     = 1194
+filter   = openvpn
+logpath  = /var/log/syslog
+maxretry = 3
+
+" > /etc/fail2ban/jail.local.sample
+
+mv /etc/openvpn $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/openvpn  /etc/openvpn
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/squid-reports" "/squid-reports" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Man2html"
+INSTALL
+CREATE_WUI
+echo "I: End of install Man2html"
