@@ -242,4 +242,6 @@ slapd_root_pwd="$mysql_generic_pwd"
 #S#ogo 1.3.8
 sogo_mysql_pwd="$mysql_generic_pwd"
 sogo_admin_email="admin.local@$domain"
-#Openvpn 2.2
+#O#penvpn 2.2
+#Freeradius 2.1.10
+#Freeradius-dialupadmin 2.1.10

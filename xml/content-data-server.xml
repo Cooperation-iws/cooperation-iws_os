@@ -4769,4 +4769,25 @@ Dotclear is a free software primarily designed for its users and regularly impro
 	</param>
 	
 </item>
+<item>
+	<item_name>Freeradius-dialupadmin</item_name>
+	<item_version>2.1.10</item_version>
+	<item_desc>Interface Web d'administration de Freeradius</item_desc>
+	<item_web>http://phpldapadmin.org/</item_web>
+	<item_verbose>Interface Web d'administration de Freeradius</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Wheezy</field_OS>
+	<param>	
+		
+	</param>
+	
+	
+</item>
 </items>
