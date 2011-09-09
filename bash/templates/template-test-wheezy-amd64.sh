@@ -243,5 +243,7 @@ slapd_root_pwd="$mysql_generic_pwd"
 sogo_mysql_pwd="$mysql_generic_pwd"
 sogo_admin_email="admin.local@$domain"
 #O#penvpn 2.2
-#Freeradius 2.1.10
-#Freeradius-dialupadmin 2.1.10
+#F#reeradius 2.1.10
+#F#reeradius-dialupadmin 2.1.10
+#Munin 1.4.5
+munin_password=$gen_login_pwd

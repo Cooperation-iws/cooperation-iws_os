@@ -1,0 +1,88 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Munin 1.4.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Documentation'
+RMOD_DESCRIPTION_FR='Documentation'
+RMOD_VERBOSE="Browse and search manpages "
+RMOD_VERBOSE_FR="Rechercher et naviguer dans les pages de manuels"
+
+RMOD_RUN_IN_CHROOT=True
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes munin munin-node
+
+sed -e's/host \*/host 127.0.0.1/' -i /etc/munin/munin-node.conf
+
+
+rm /etc/apache2/conf.d/munin
+
+ln -s /etc/munin/apache.conf /etc/apache2/conf.d/munin
+
+sed -i "s/Allow from localhost 127.0.0.0\/8 ::1/Allow from all/" /etc/apache2/conf.d/munin
+
+echo "AuthType Basic
+AuthName \"Munin Graphs\"
+AuthUserFile /var/lib/munin/.htpasswd
+require user admin" > /var/cache/munin/www/.htaccess
+
+htpasswd -m -b -c /var/lib/munin/.htpasswd admin $munin_password
+
+
+mv /etc/munin $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/munin  /etc/munin
+
+mv /var/lib/munin $LAMPP_DIRECTORY/var/lib
+
+ln -s $LAMPP_DIRECTORY/var/lib/munin  /var/lib/munin
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/munin/" "/munin/" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Munin"
+INSTALL
+CREATE_WUI
+echo "I: End of install Munin"
