@@ -62,6 +62,37 @@ flush privileges;" > ALFRESCO_db.sql
 $BIN_MYSQL -u root < ALFRESCO_db.sql 
 rm ALFRESCO_db.sql
 
+sed -i "s/jbpm_action/JBPM_ACTION/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_job/JBPM_JOB/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_processdefinition/JBPM_PROCESSDEFINITION/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_bytearray/JBPM_BYTEARRAY/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_byteblock/JBPM_BYTEBLOCK/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_comment/JBPM_COMMENT/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_decisionconditions/JBPM_DECISIONCONDITIONS/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_event/JBPM_EVENT/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_exceptionhandler/JBPM_EXCEPTIONHANDLER/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_log/JBPM_LOG/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_moduledefinition/JBPM_MODULEDEFINTION/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_moduleinstance/JBPM_MODULEINSTANCE/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_node/JBPM_NODE/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_pooledactor/JBPM_POOLEDACTOR/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_processinstance/JBPM_PROCESSINSTANCE/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_runtimeaction/JBPM_RUNTIMEACTION/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_swimlane/JBPM_SWIMLANE/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/JBPM_SWIMLANEinstance/JBPM_SWIMLANEINSTANCE/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_task/JBPM_TASK/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/JBPM_TASKactorpool/JBPM_TASKACTORPOOL/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/JBPM_TASKcontroller/JBPM_TASKCONTROLLER/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/JBPM_TASKinstance/JBPM_TASKINSTANCE/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_token/JBPM_TOKEN/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/JBPM_TOKENvariablemap/JBPM_TOKENVARIABLEMAP/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_transition/JBPM_TRANSITION/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_variableaccess/JBPM_VARIABLEACCESS/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_variableinstance/JBPM_VARIABLEINSTANCE/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+sed -i "s/jbpm_delegation/JBPM_DELEGATION/g" /opt/alfresco-3.4.d/cooperation-iws.sql 
+
+
+
 $BIN_MYSQL -u root ${MOD_NAME[$count]} alfresco < /opt/alfresco-3.4.d/cooperation-iws.sql
 
 sed -i "s/mysqlroot/${ALFRESCO_MYSQL_PWD}/" /opt/alfresco-3.4.d/tomcat/shared/classes/alfresco-global.properties
@@ -73,15 +104,63 @@ chown -R root .
 chown -R mysql data
 chgrp -R root .
 chmod 777 tmp
-#/opt/alfresco-3.4.d/mysql/scripts/myscript_upgrade.sh  "/opt/alfresco-3.4.d/mysql/"
-#echo "
-#db.schema.update=false" >> /opt/alfresco-3.4.d/tomcat/shared/classes/alfresco-global.properties
 
 rm -r /opt/alfresco-3.4.d/tomcat/temp/*
 
 cp /opt/alfresco*/alfresco_init_d /etc/init.d/alfresco
 chmod +x /etc/init.d/alfresco
 update-rc.d alfresco start 70 2 3 4 5 . stop 20 0 1 6 .
+
+if [ "$domain" ] && [ -d /etc/bind ]; then
+
+echo "<VirtualHost *:80>
+	ServerName alfresco.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://localhost:8080/
+	ProxyPassReverse /   http://localhost:8080/
+
+        
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /etc/apache2/sites-available/alfresco
+#sudo cp $DOSSIER_CHROOT//tmp/default $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
+sudo chown root.root /etc/apache2/sites-available/alfresco
+sudo chmod 644 /etc/apache2/sites-available/alfresco
+
+sed -i "9s/Order deny,allow/Order allow,deny/" /etc/apache2/mods-available/proxy.conf
+sed -i "10s/Deny/Allow/" /etc/apache2/mods-available/proxy.conf
+
+
+a2ensite alfresco
+sudo a2enmod rewrite
+
+sudo a2enmod include
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod proxy_connect
+
+
+
+SPAGO_URL_1="http://alfresco.$domain/alfresco"
+SPAGO_URL_2="http://alfresco.$domain/share"
+echo "alfresco    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+else
+SPAGO_URL_1="<![CDATA[http://localhost:8080/alfresco]]>"
+SPAGO_URL_2="<![CDATA[http://localhost:8080/share]]>"
+fi
 
 }
 
@@ -94,8 +173,8 @@ update-rc.d alfresco start 70 2 3 4 5 . stop 20 0 1 6 .
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:8080/alfresco]]>" "<![CDATA[http://localhost:8080]]>" 
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:8080/share]]>" "<![CDATA[http://localhost:8080]]>" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$SPAGO_URL_1" "$SPAGO_URL_1" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$SPAGO_URL_2" "$SPAGO_URL_2" 
 
 
 }
