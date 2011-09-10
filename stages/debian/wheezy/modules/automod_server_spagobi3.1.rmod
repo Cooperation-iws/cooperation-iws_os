@@ -78,6 +78,9 @@ sed -i "50s/^/<Resource auth=\"Container\" driverClassName=\"com.mysql.jdbc.Driv
 fi
 
 
+sed -i "s/localhost:8080/$domain:8080/g" $LAMPP_DIRECTORY/opt/SpagoBI/database/*
+
+
 echo "
 Create database spagobi ;
 grant all on spagobi.* to spagobi@localhost identified by '${spago_mysql_pwd}';
