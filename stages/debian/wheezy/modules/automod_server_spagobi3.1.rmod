@@ -108,18 +108,20 @@ case "\$1" in
       exit
     fi
       log_begin_msg "Starting SpagoBI server"
-      nohup \$spago_HOME/startup.sh & > /dev/null 2>&1
+       cd \$spago_HOME
+      ./startup.sh 
       touch \$PIDFILE
       log_end_msg 0
     ;;
     stop)
-    if [ -f \$PIDFILE ]; then
+    
       log_begin_msg "Stopping SpagoBI server."
        rm -f \$PIDFILE
-       nohup \$spago_HOME/shutdown.sh -S & > /dev/null 2>&1
+       cd \$spago_HOME
+       ./shutdown.sh  
        log_end_msg 0
        exit
-    fi
+    
       log_begin_msg "SpagoBI server is not running."
       exit
     ;;

@@ -226,7 +226,7 @@ magento_admin_email[1]="admin.local@$domain"
 moodle_name[1]="Moodle_1"
 moodle_mysql_pwd[1]="$mysql_generic_pwd"
 moodle_admin_email[1]="admin.local@$domain"
-#Alfresco 3.4
+#A#lfresco 3.4
 alfresco_mysql_pwd="$mysql_generic_pwd"
 #D#otclear 2.3.1
 dotclear_name[1]="Dotclear_1"
@@ -247,6 +247,6 @@ sogo_admin_email="admin.local@$domain"
 #F#reeradius-dialupadmin 2.1.10
 #M#unin 1.4.5
 munin_password=$gen_login_pwd
-#S#pagobi 3.1
+#Spagobi 3.1
 spago_demo="y"
 spago_mysql_pwd="$mysql_generic_pwd"
