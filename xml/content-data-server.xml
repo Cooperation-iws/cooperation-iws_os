@@ -4847,5 +4847,124 @@ Dotclear is a free software primarily designed for its users and regularly impro
 	</param>
 	
 </item>
+<item>
+	<item_name>Piwik</item_name>
+	<item_version>1.5</item_version>
+	<item_desc>Web analysis</item_desc>
+	<item_web>http://piwik.org/</item_web>
+	<item_verbose>Piwik is a web analysis solution.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Learning</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>piwik_name</field_1_value>
+		<field_1_def_content>Piwik</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>piwik_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
 
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>piwik_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Owa</item_name>
+	<item_version>1.5</item_version>
+	<item_desc>Web analysis</item_desc>
+	<item_web>http://openwebanalysis.com/</item_web>
+	<item_verbose>Owa is a web analysis solution.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Learning</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>owa_name</field_1_value>
+		<field_1_def_content>Piwik</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>owa_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>owa_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Rsslounge</item_name>
+	<item_version>1.7</item_version>
+	<item_desc>Rss agregator</item_desc>
+	<item_web>http://rsslounge.aditu.de/</item_web>
+	<item_verbose>Rsslounge is an rss agregator.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Learning</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Wheezy</field_OS>
+	<param>	
+		<field_1_id>app_name</field_1_id>
+		<field_1_name>Application name</field_1_name>
+		<field_1_value>rsslounge_name</field_1_value>
+		<field_1_def_content>Piwik</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>rsslounge_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>rsslounge_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
 </items>

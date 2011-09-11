@@ -247,6 +247,20 @@ sogo_admin_email="admin.local@$domain"
 #F#reeradius-dialupadmin 2.1.10
 #M#unin 1.4.5
 munin_password=$gen_login_pwd
-#Spagobi 3.1
+#S#pagobi 3.1
 spago_demo="y"
 spago_mysql_pwd="$mysql_generic_pwd"
+#Rsslounge 1.7
+rsslounge_name[1]="Rss_1"
+rsslounge_mysql_pwd[1]="$mysql_generic_pwd"
+rsslounge_admin_email[1]="admin.local@$domain"
+#Piwik 1.5
+piwik_name[1]="Piwik_1"
+piwik_mysql_pwd[1]="$mysql_generic_pwd"
+piwik_admin_email[1]="admin.local@$domain"
+#Owa 1.5
+owa_name[1]="Owa_1"
+owa_mysql_pwd[1]="$mysql_generic_pwd"
+owa_admin_email[1]="admin.local@$domain"
+
+

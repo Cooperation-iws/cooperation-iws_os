@@ -2,17 +2,17 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Rsslounge 1.7'
+RMOD_NAME='Piwik 1.5'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Content Management System portal'
 RMOD_DESCRIPTION_FR='Portail de gestion de contenu'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-RMOD_VERBOSE="Rsslounge is a Blog Content Management System."
-RMOD_VERBOSE_FR="Rsslounge est un logiciel libre de publication web créé en 2002 par Olivier Meunier. Fruit du travail d'une seule personne à l'origine, le projet s'est rapidement doté d'une équipe constituée de personnalités diverses et d'horizons variés.
+RMOD_VERBOSE="Piwik is a Blog Content Management System."
+RMOD_VERBOSE_FR="Piwik est un logiciel libre de publication web créé en 2002 par Olivier Meunier. Fruit du travail d'une seule personne à l'origine, le projet s'est rapidement doté d'une équipe constituée de personnalités diverses et d'horizons variés.
 L'objectif du projet est de fournir un outil simple d'emploi permettant à tout un chacun de publier sur le web et ce, quel que soit son niveau de connaissances techniques.
-Rsslounge est un logiciel libre conçu avant tout pour ses utilisateurs et recevant des contributions régulières de ceux-ci. N'importe qui peut l'utiliser et le modifier selon les termes de la licence d'utilisation."
+Piwik est un logiciel libre conçu avant tout pour ses utilisateurs et recevant des contributions régulières de ceux-ci. N'importe qui peut l'utiliser et le modifier selon les termes de la licence d'utilisation."
 
 RMOD_REQ_APACHE=True
 
@@ -20,12 +20,12 @@ RMOD_REQ_APACHE=True
 . /tmp/scripts_params
 . /tmp/app_params
 
-NB_RSSLOUNGE=${#rsslounge_name[*]}
+NB_PIWIK=${#piwik_name[*]}
 
-for (( count=1; count<=$NB_RSSLOUNGE; count++ ))
+for (( count=1; count<=$NB_PIWIK; count++ ))
 do
-RSSLOUNGE_MYSQL_PWD[$count]=${rsslounge_mysql_pwd[$count]}
-MOD_NAME[$count]=${rsslounge_name[$count]}
+PIWIK_MYSQL_PWD[$count]=${piwik_mysql_pwd[$count]}
+MOD_NAME[$count]=${piwik_name[$count]}
 done
 
 
@@ -38,8 +38,8 @@ function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
 
-wget $URL_CIWS_DEPOT/rsslounge-1.7-110911.tar.gz  
-tar -xzf rsslounge-1.7-110911.tar.gz  
+wget $URL_CIWS_DEPOT/piwik-1.5-110911.tar.gz
+tar -xzf piwik-1.5-110911.tar.gz 
 
 }
 
@@ -56,34 +56,33 @@ tar -xzf rsslounge-1.7-110911.tar.gz
 function INSTALL
 {
 
-echo "I: Download Rsslounge"
+echo "I: Download Piwik"
 WGET_CIWS_DEPOT
 
-a2enmod rewrite
-
-for (( count=1; count<=$NB_RSSLOUNGE; count++ ))
+for (( count=1; count<=$NB_PIWIK; count++ ))
 
 do
 
 cd $DL_DIR
-cp -Rf rsslounge $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf piwik $WWW_DIRECTORY/${MOD_NAME[$count]}
 echo "
 Create database ${MOD_NAME[$count]} ;
-grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${RSSLOUNGE_MYSQL_PWD[$count]}';
-flush privileges;" > RSSLOUNGE_db.sql
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${PIWIK_MYSQL_PWD[$count]}';
+flush privileges;" > PIWIK_db.sql
 
-$BIN_MYSQL -u root < RSSLOUNGE_db.sql 
-rm RSSLOUNGE_db.sql
+$BIN_MYSQL -u root < PIWIK_db.sql 
+rm PIWIK_db.sql
 
-sed -i "s/http:\/\/wwi.my-erp2.intra\/rsslounge\//http:\/\/$domain\/${MOD_NAME[$count]}\//g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
-sed -i "s/\/rsslounge\//\/${MOD_NAME[$count]}\//g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
-sed -i "s/admin.local@my-erp2.intra/${rsslounge_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "s/http:\/\/wwi.my-erp2.intra\/piwik\//http:\/\/$domain\/${MOD_NAME[$count]}\//g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "s/\/piwik\//\/${MOD_NAME[$count]}\//g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "s/admin.local@my-erp2.com/${drupal_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 
 $BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 
-sed -i "9s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
-sed -i "11s/rsslounge/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
-sed -i "10s/mysql_root/${RSSLOUNGE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini
+sed -i "11s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini.php
+sed -i "13s/piwik/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini.php
+sed -i "12s/mysql_root/${PIWIK_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini.php
+sed -i "s/admin.local@my-erp2.com/${piwik_admin_email[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/config/config.ini.php
 
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
@@ -99,7 +98,7 @@ done
 
 function CREATE_WUI
 {
-for (( count=1; count<=$NB_RSSLOUNGE; count++ ))
+for (( count=1; count<=$NB_PIWIK; count++ ))
 
 do
 cd /tmp/
@@ -112,7 +111,7 @@ done
 #________________________________________FIN_CREATE_WUI_________________________________________
 
 
-echo "I: Install Rsslounge"
+echo "I: Install Piwik"
 INSTALL
 CREATE_WUI
-echo "I: End of install Rsslounge"
+echo "I: End of install Piwik"
