@@ -18,9 +18,9 @@ rm -r $CHROOT_DIR/remaster/isolinux
 cp -r $local_path/wheezy/isolinux $CHROOT_DIR/remaster/.
 
 echo "I: Configuring host"
-sed -i "s/username=ciwsadmin/username=$LIVEUSER/g" $CHROOT_DIR/remaster/isolinux/live.cfg
-sed -i "s/user-fullname=ciwsuser/user-fullname=$LIVEUSER_FULL/g" $CHROOT_DIR/remaster/isolinux/live.cfg
-sed -i "s/hostname=ciws-server/hostname=$HOSTNAME/g" $CHROOT_DIR/remaster/isolinux/live.cfg
+#sed -i "s/username=ciwsadmin/username=$LIVEUSER/g" $CHROOT_DIR/remaster/isolinux/live.cfg
+#sed -i "s/user-fullname=ciwsuser/user-fullname=$LIVEUSER_FULL/g" $CHROOT_DIR/remaster/isolinux/live.cfg
+#sed -i "s/hostname=ciws-server/hostname=$HOSTNAME/g" $CHROOT_DIR/remaster/isolinux/live.cfg
 sed -i "s/locales=fr/locales=$LANG/g" $CHROOT_DIR/remaster/isolinux/live.cfg
 sed -i "s/keyboard-layouts=fr/keyboard-layouts=$KEYB/g" $CHROOT_DIR/remaster/isolinux/live.cfg
 TZ=$(echo $TZ | sed 's/\//\\\//')

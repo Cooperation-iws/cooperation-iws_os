@@ -15,12 +15,12 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 echo "I: config nx"
 cd /tmp
 if [ $ARCH == "686" ]; then
-wget $URL_CIWS_DEPOT/nxclient_3.3.0-3_i386.deb
-wget $URL_CIWS_DEPOT/nxnode_3.3.0-3_i386.deb
-wget $URL_CIWS_DEPOT/nxserver_3.3.0-8_i386.deb
-dpkg -i nxclient_3.3.0-3_i386.deb
-dpkg -i nxnode_3.3.0-3_i386.deb
-dpkg -i nxserver_3.3.0-8_i386.deb
+wget $URL_CIWS_DEPOT/nxclient_3.5.0-7_i386.deb
+wget $URL_CIWS_DEPOT/nxnode_3.5.0-6_i386.deb
+wget $URL_CIWS_DEPOT/nxserver_3.5.0-8_i386.deb
+dpkg -i nxclient_3.5.0-7_i386.deb
+dpkg -i nxnode_3.5.0-6_i386.deb
+dpkg -i nxserver_3.5.0-8_i386.deb
 else
 wget $URL_CIWS_DEPOT/nxclient_3.4.0-7_x86_64.deb
 wget $URL_CIWS_DEPOT/nxnode_3.4.0-16_x86_64.deb
