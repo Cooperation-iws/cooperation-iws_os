@@ -18,10 +18,15 @@ cd $DL_DIR
 
 if [ "$ARCH" == "686" ] ; then
 
-wget $URL_CIWS_DEPOT/install_flash_player_10_linux.deb
+wget $URL_CIWS_DEPOT/install_flash_player_10_linux.tar.gz
 
-dpkg -i install_flash_player_10_linux.deb
-apt-get -f install --assume-yes --force-yes
+tar -xzf install_flash_player_10_linux.tar.gz 
+mkdir /usr/lib/flashplugin-nonfree
+
+cp libflashplayer.so /usr/lib/flashplugin-nonfree
+chown root:root /usr/lib/flashplugin-nonfree/libflashplayer.so
+chmod 644 /usr/lib/flashplugin-nonfree/libflashplayer.so
+update-alternatives --quiet --install /usr/lib/mozilla/plugins/flash-mozilla.so flash-mozilla.so /usr/lib/flashplugin-nonfree/libflashplayer.so 50 
 
 else
 wget $URL_CIWS_DEPOT/flashplayer10_2_p3_64bit_linux_111710.tar.gz

@@ -83,7 +83,7 @@ sed -i "41s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/owa-co
 sed -i "39s/owa/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/owa-config.php
 sed -i "42s/mysql_root/${OWA_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/owa-config.php
 sed -i "s/admin.local@my-erp2.intra/${owa_admin_email[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/owa-config.php
-sed -i "s/http:\/\/wwi.my-erp2.intra\/owa/http:\/\/'.\$_SERVER[\"SERVER_NAME\"].'\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/owa-config.php
+sed -i "s/http:\/\/my-erp2.intra\/owa/http:\/\/'.\$_SERVER[\"SERVER_NAME\"].'\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/owa-config.php
 
 
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}

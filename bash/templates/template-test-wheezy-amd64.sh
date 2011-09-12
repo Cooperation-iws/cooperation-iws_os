@@ -52,6 +52,7 @@ replication_db[2]="Letodms_1"
 #K#vm Wheezy
 #X#sane 0.1
 #G#rsync 0.1
+#D#evclient 0.1
 #T#rac Subversion 0.11.7
 svn_name[1]="Project_1"
 svn_admin_pwd[1]="$gen_login_pwd"
