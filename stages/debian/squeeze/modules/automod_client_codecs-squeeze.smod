@@ -21,7 +21,9 @@ apt-get install --assume-yes --force-yes gstreamer0.10-ffmpeg gstreamer0.10-plug
 
 apt-get install --assume-yes --force-yes nvidia-kernel-dkms nvidia-settings nvidia-xconfig
 
-apt-get install --assume-yes --force-yes fglrx-modules-dkms fglrx-control fglrx-glx fglrx-driver fglrx-glx-ia32 fglrx-atieventsd
+apt-get install --assume-yes --force-yes fglrx-modules-dkms fglrx-control fglrx-glx fglrx-driver fglrx-atieventsd
+
+apt-get install --assume-yes --force-yes fglrx-glx-ia32
 
 
 if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 

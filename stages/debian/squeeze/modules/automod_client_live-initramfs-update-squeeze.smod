@@ -33,8 +33,13 @@ sed -i "s/USERNAME=\"user\"/USERNAME=\"$LIVEUSER\"/"  /usr/share/initramfs-tools
 
 sed -i "s/USERFULLNAME=\"Live user\"/USERFULLNAME=\"$LIVEUSER_FULL\"/" /usr/share/initramfs-tools/scripts/live
 
-
 sed -i "s/HOSTNAME=\"host\"/HOSTNAME=\"$HOSTNAME\"/" /usr/share/initramfs-tools/scripts/live
+
+sed -i "s/LIVE_USERNAME=\"user\"/LIVE_USERNAME=\"$LIVEUSER\"/"  /lib/live/config.sh
+
+#sed -i "s/LIVE_USER_FULLNAME=\"Debian Live user\"/LIVE_USER_FULLNAME==\"$LIVEUSER_FULL\"/" /lib/live/config.sh
+
+sed -i "s/LIVE_HOSTNAME=\"debian\"/LIVE_HOSTNAME=\"$HOSTNAME\"/" /lib/live/config.sh
 
 sed -i "s/8Ab05sVQ4LLps/$CRYPT_HOST_PWD/" /lib/live/config/002-user-setup
 
