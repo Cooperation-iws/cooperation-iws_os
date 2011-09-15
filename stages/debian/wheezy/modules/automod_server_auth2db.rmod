@@ -1,0 +1,274 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Auth2db 0.2.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+NTOP_PWD=$auth2db_mysql_pwd
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "
+Name: auth2db/activate_alerts
+Template: auth2db/activate_alerts
+Value: true
+Owners: auth2db
+Flags: seen
+
+Name: auth2db/database-type
+Template: dbconfig-common/database-type
+Value: mysql
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/db/app-user
+Template: dbconfig-common/db/app-user
+Value: auth2db
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/db/dbname
+Template: dbconfig-common/db/dbname
+Value: auth2db
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/dbconfig-install
+Template: dbconfig-common/dbconfig-install
+Value: true
+Owners: auth2db-common
+Flags: seen
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/dbconfig-reinstall
+Template: dbconfig-common/dbconfig-reinstall
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/dbconfig-remove
+Template: dbconfig-common/dbconfig-remove
+Value: 
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/dbconfig-upgrade
+Template: dbconfig-common/dbconfig-upgrade
+Value: true
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/install-error
+Template: dbconfig-common/install-error
+Value: retry
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ error = ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+ pkg = auth2db
+
+Name: auth2db/internal/reconfiguring
+Template: dbconfig-common/internal/reconfiguring
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/internal/skip-preseed
+Template: dbconfig-common/internal/skip-preseed
+Value: false
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/missing-db-package-error
+Template: dbconfig-common/missing-db-package-error
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/mysql/admin-user
+Template: dbconfig-common/mysql/admin-user
+Value: root
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/mysql/method
+Template: dbconfig-common/mysql/method
+Value: unix socket
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/passwords-do-not-match
+Template: dbconfig-common/passwords-do-not-match
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/purge
+Template: dbconfig-common/purge
+Value: false
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/remote/host
+Template: dbconfig-common/remote/host
+Value: 
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/remote/newhost
+Template: dbconfig-common/remote/newhost
+Value: 
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/remote/port
+Template: dbconfig-common/remote/port
+Value: 
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/remove-error
+Template: dbconfig-common/remove-error
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/upgrade-backup
+Template: dbconfig-common/upgrade-backup
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/upgrade-error
+Template: dbconfig-common/upgrade-error
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+" >> /var/cache/debconf/config.dat
+
+echo "
+Name: auth2db/app-password-confirm
+Template: dbconfig-common/app-password-confirm
+Value: $auth2db_mysql_pwd
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/mysql/admin-pass
+Template: dbconfig-common/mysql/admin-pass
+Value: 
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/mysql/app-pass
+Template: dbconfig-common/mysql/app-pass
+Value: $auth2db_mysql_pwd
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+
+Name: auth2db/password-confirm
+Template: dbconfig-common/password-confirm
+Value: 
+Owners: auth2db-common
+Variables:
+ dbvendor = MySQL
+ pkg = auth2db
+" >> /var/cache/debconf/passwords.dat
+
+
+apt-get install --assume-yes --force-yes auth2db auth2db-filters auth2db-frontend
+
+
+sed -i "7s/^/#/" /etc/apache2/sites-available/auth2db
+sed -i "13s/^/#/" /etc/apache2/sites-available/auth2db
+
+a2ensite auth2db
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/auth2db" "/auth2db" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Auth2db"
+INSTALL
+CREATE_WUI
+echo "I: End of install Auth2db"

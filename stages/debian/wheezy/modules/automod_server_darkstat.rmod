@@ -1,0 +1,70 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Darkstat 3.0.714'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+NTOP_PWD=$auth2db_mysql_pwd
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+
+
+apt-get install --assume-yes --force-yes darkstat
+
+
+sed -i "s/START_DARKSTAT=no/START_DARKSTAT=yes/" /etc/darkstat/init.cfg
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:667]]>" "<![CDATA[http://localhost:667]]>" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Auth2db"
+INSTALL
+CREATE_WUI
+echo "I: End of install Auth2db"
