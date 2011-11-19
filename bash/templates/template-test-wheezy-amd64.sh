@@ -18,9 +18,9 @@ kernel="2.6.39-2-amd64"
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
-#P#ostgresql 9.0
+#Postgresql 9.0
 root_psgsql_pwd="$mysql_root_password"
-#P#hppgadmin 5.0.2
+#Phppgadmin 5.0.2
 #O#penERP 6.0.2
 openerp_name="Openerp_1"
 openerp_psgsql_pwd="$mysql_generic_pwd"
@@ -110,23 +110,23 @@ bugzilla_mysql_pwd[1]="$mysql_generic_pwd"
 #N#top 3.4
 ntop_pwd=$gen_login_pwd
 #M#an2html 1.6
-#L#etoDMS 3.0.1
+#LetoDMS 3.0.1
 letodms_name[1]="Letodms_1"
 letodms_admin_email[1]="admin.local@$domain"
 letodms_mysql_pwd[1]="$mysql_generic_pwd"
 letodms_lang[1]="Francais"
 #Dpkg-www 2.54
-#O#js 2.3.6
+#Ojs 2.3.6
 ojs_name[1]="ojs_1"
 ojs_admin_email[1]="admin.local@$domain"
 ojs_mysql_pwd[1]="$mysql_generic_pwd"
 ojs_lang[1]="fr_CA"
-#O#cs 2.3.3
+#Ocs 2.3.3
 ocs_name[1]="ocs_1"
 ocs_admin_email[1]="admin.local@$domain"
 ocs_mysql_pwd[1]="$mysql_generic_pwd"
 ocs_lang[1]="fr_CA"
-#O#hs 2.3.1
+#Ohs 2.3.1
 ohs_name[1]="ohs_1"
 ohs_admin_email[1]="admin.local@$domain"
 ohs_mysql_pwd[1]="$mysql_generic_pwd"
@@ -136,7 +136,7 @@ lodel_name[1]="Lodel_1"
 lodel_admin_email[1]="admin.local@$domain"
 lodel_mysql_pwd[1]="$mysql_generic_pwd"
 lodel_lang[1]="fr_FR.UTF8"
-#Do#cbookwiki 0.9.2
+#D#ocbookwiki 0.9.2
 docbookwiki_pwd=$gen_login_pwd
 #P#hpsysinfo 3.0
 #D#otproject 2.1.5
@@ -150,7 +150,7 @@ piwigo_mysql_pwd[1]="$mysql_generic_pwd"
 #S#quid 2.7
 #n#tp 4.2.6
 ntpd_server_address="192.168.30.254"
-#S#tatus.net 0.9.9
+#Status.net 0.9.9
 statusnet_name[1]="Statusnet_1"
 statusnet_admin_email[1]="admin.local@$domain"
 statusnet_mysql_pwd[1]="$mysql_generic_pwd"
@@ -223,7 +223,7 @@ thelia_admin_email[1]="admin.local@$domain"
 magento_name[1]="Magento_1"
 magento_mysql_pwd[1]="$mysql_generic_pwd"
 magento_admin_email[1]="admin.local@$domain"
-#M#oodle 2.1
+#Moodle 2.1
 moodle_name[1]="Moodle_1"
 moodle_mysql_pwd[1]="$mysql_generic_pwd"
 moodle_admin_email[1]="admin.local@$domain"
@@ -248,7 +248,7 @@ sogo_admin_email="admin.local@$domain"
 #F#reeradius-dialupadmin 2.1.10
 #M#unin 1.4.5
 munin_password=$gen_login_pwd
-#S#pagobi 3.1
+#Spagobi 3.1
 spago_demo="y"
 spago_mysql_pwd="$mysql_generic_pwd"
 #R#sslounge 1.7
@@ -263,7 +263,7 @@ piwik_admin_email[1]="admin.local@$domain"
 owa_name[1]="Owa_1"
 owa_mysql_pwd[1]="$mysql_generic_pwd"
 owa_admin_email[1]="admin.local@$domain"
-#Darkstat 3.0.714
-#Auth2db 0.2.5
+#D#arkstat 3.0.714
+#A#uth2db 0.2.5
 auth2db_mysql_pwd="$mysql_generic_pwd"
 
