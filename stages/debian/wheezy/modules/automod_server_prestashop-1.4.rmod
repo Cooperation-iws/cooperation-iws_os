@@ -67,6 +67,7 @@ $BIN_MYSQL -u root < PRESTASHOP_db.sql
 rm PRESTASHOP_db.sql
 
 sed -i "s/admin.local@my-erp2.intra/${prestashop_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "s/my-erp2.intra/$domain/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 $BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 
 
