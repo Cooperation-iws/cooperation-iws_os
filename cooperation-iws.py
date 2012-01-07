@@ -262,7 +262,7 @@ class Cooperationiws:
 	self.encryptionpassphrase = options.encryptionpassphrase
 	self.locale = options.locale
 	self.ServerArch=options.arch
-	self.LiveCdArch=commands.getoutput('echo ' + self.ServerArch + ' | cut -d'-' -f1')
+	self.LiveCdArch=commands.getoutput('echo ' + self.ServerArch + ' | cut -d\'-\' -f1')
 	self.distType=options.dist
 	self.distVers=options.distvers
 	
