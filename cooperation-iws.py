@@ -49,7 +49,7 @@ class Cooperationiws:
     def __init__(self):
         # vars
  	self.appName = "Cooperation-iws"
-        self.appVersion = "1.0.0beta"
+        self.appVersion = "1.1.1"
         self.scriptDir = os.getcwd() + '/stages/'
 	self.xmlDir = os.getcwd() + '/xml/'
 	self.phpDir = os.getcwd() + '/lib/php/'
