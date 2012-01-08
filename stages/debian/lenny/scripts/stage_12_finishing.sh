@@ -20,7 +20,7 @@ echo "I:FINISHING - CREATING NEW ISO FILE"
 rm -Rf $WORK_DIR/$ISO_NAME
 
 
-genisoimage -o $WORK_DIR/$ISO_NAME -b "isolinux/isolinux.bin" -c "isolinux/boot.cat" -no-emul-boot -boot-load-size 4 -boot-info-table -V "$LIVE_CD_DESC" -cache-inodes -r -J -l $WORK_DIR/remaster
+mkisofs -o $WORK_DIR/$ISO_NAME -b "isolinux/isolinux.bin" -c "isolinux/boot.cat" -no-emul-boot -boot-load-size 4 -boot-info-table -V "$LIVE_CD_DESC" -cache-inodes -r -J -l $WORK_DIR/remaster
 
 
 
