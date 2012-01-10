@@ -40,18 +40,33 @@ sed -i "s/NOPASSWD: //" /lib/live/config/003-sudo
 
 if [ "$DISABLE_AUTOLOGIN" ]; then
 #Gdm3
-sed -i "36s/true/false/g" /lib/live/config/007-gdm3
-sed -i "41s/true/false/g" /lib/live/config/007-gdm3
-sed -i "43s/true/false/g" /lib/live/config/007-gdm3
+sed -i "36s/true/false/g" /lib/live/config/008-gdm3
+sed -i "41s/true/false/g" /lib/live/config/008-gdm3
+sed -i "43s/true/false/g" /lib/live/config/008-gdm3
 
 #Gdm
-sed -i "41s/true/false/g" /lib/live/config/006-gdm
-sed -i "43s/true/false/g" /lib/live/config/006-gdm
+sed -i "41s/true/false/g" /lib/live/config/007-gdm
+sed -i "43s/true/false/g" /lib/live/config/007-gdm
 
 #kdm
-sed -i "41s/true/false/g" /lib/live/config/008-kdm
-sed -i "42s/true/false/g" /lib/live/config/008-kdm
+sed -i "41s/true/false/g" /lib/live/config/009-kdm
+sed -i "42s/true/false/g" /lib/live/config/009-kdm
 
+#lightdm
+sed -i "45s/^/#/g" /lib/live/config/010-lightdm
+sed -i "46s/^/#/g" /lib/live/config/010-lightdm
+sed -i "47s/^/#/g" /lib/live/config/010-lightdm
+sed -i "48s/^/#/g" /lib/live/config/010-lightdm
+sed -i "49s/^/#/g" /lib/live/config/010-lightdm
+sed -i "50s/^/#/g" /lib/live/config/010-lightdm
+
+#lxdm
+sed -i "46s/^/#/g" /lib/live/config/011-lxdm
+sed -i "47s/^/#/g" /lib/live/config/011-lxdm
+sed -i "48s/^/#/g" /lib/live/config/011-lxdm
+sed -i "49s/^/#/g" /lib/live/config/011-lxdm
+sed -i "50s/^/#/g" /lib/live/config/011-lxdm
+sed -i "51s/^/#/g" /lib/live/config/011-lxdm
 
 fi
 
@@ -106,21 +121,21 @@ fi
 
 
 
-sed -i -e "1513s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/live
-sed -i -e "1522s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/live
+sed -i -e "1606s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/live
+sed -i -e "1623s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/live
 sed -i -e "15s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/live
 sed -i -e "17s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/live
-sed -i '1088s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -o rw,noatime "${dev}" "${rootmnt}\/opt\/ciws"/' /usr/share/initramfs-tools/scripts/live
-sed -i '219s/root/$(basename ${fspath})/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '1125s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -o rw,noatime "${dev}" "${rootmnt}\/opt\/ciws"/' /usr/share/initramfs-tools/scripts/live
+sed -i '251s/root/$(basename ${fspath})/' /usr/share/initramfs-tools/scripts/live-helpers
 
 #keyboard
 sed -i '32s/^/mkdir ${DESTDIR}\/usr ; mkdir ${DESTDIR}\/usr\/share ; cp -r  \/usr\/share\/keymaps ${DESTDIR}\/usr\/share\/./' /usr/share/initramfs-tools/hooks/keymap
-sed -i '166G' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '167s/^/loadkeys $(cat \/proc\/cmdline | grep -o keyboard-layouts=[[:alpha:]][[:alpha:]] | cut -d"=" -f2) > \/dev\/null 2>\&1/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '168s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '169s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '170s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
-sed -i '171s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '198G' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '199s/^/loadkeys $(cat \/proc\/cmdline | grep -o keyboard-layouts=[[:alpha:]][[:alpha:]] | cut -d"=" -f2) > \/dev\/null 2>\&1/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '200s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '201s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '202s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '203s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
 
 
 

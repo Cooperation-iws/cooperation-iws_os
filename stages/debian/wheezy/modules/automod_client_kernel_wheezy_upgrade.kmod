@@ -21,7 +21,7 @@ export HOME=/home/liveusb
 echo "do_initrd = Yes" >  /etc/kernel-img.conf
 
 #apt-get install --assume-yes --force-yes linux-image-$kernel loop-aes-modules-$kernel squashfs-modules-$kernel aufs-modules-$kernel
-apt-get install --assume-yes --force-yes linux-image-$kernel linux-headers-$kernel linux-source-2.6
+apt-get install --assume-yes --force-yes linux-image-$kernel linux-headers-$kernel linux-source-3.1
 
 
 sleep 2
