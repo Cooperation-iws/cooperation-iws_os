@@ -42,7 +42,8 @@ echo "$HOSTNAME" > /opt/ciws/var/identity/hostname.txt
 echo "$domain" > /opt/ciws/var/identity/domain.txt
 
 echo "#lighttpd 
-/etc/init.d/lighttpd restart 
+/etc/init.d/lighttpd restart
+/etc/init.d/apache2 restart
 " >> /etc/rc.local
 
 apt-get install --assume-yes --force-yes bind9 dnsutils

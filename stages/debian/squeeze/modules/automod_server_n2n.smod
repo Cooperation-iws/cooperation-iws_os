@@ -1,0 +1,52 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='N2n 1.3.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Documentation'
+RMOD_DESCRIPTION_FR='Documentation'
+RMOD_VERBOSE="Browse and search manpages "
+RMOD_VERBOSE_FR="Rechercher et naviguer dans les pages de manuels"
+
+RMOD_RUN_IN_CHROOT=True
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes n2n
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+
+
+echo "I: Install n2n"
+INSTALL
+
+echo "I: End of install n2n"

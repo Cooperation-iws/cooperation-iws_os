@@ -1,0 +1,390 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Fusionforge 5.0.3'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Collaborative development tool'
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+#VARIABLES
+fusionforge_domain_name=$(echo $domain | cut -d'.' -f1)
+fusionforge_ext=$(echo $domain | cut -d'.' -f2)
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+#rm moodle-latest-19.zip
+
+}
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+sed -i "59s/localhost/*/" /etc/postgresql/9.0/main/postgresql.conf
+sed -i "59s/#//" /etc/postgresql/9.0/main/postgresql.conf
+sed -i "88s/ident/trust/" /etc/postgresql/9.0/main/pg_hba.conf
+/etc/init.d/postgresql restart
+
+sudo apt-get install --assume-yes --force-yes libgcc1
+
+ln -s /lib/x86_64-linux-gnu/libgcc_s.so.1 /lib/libgcc_s.so.1 
+ln -s /lib/x86_64-linux-gnu/libpam.so.0 /lib/libpam.so.0 
+ln -s /lib/x86_64-linux-gnu/libpam.so.0.83.0 /lib/libpam.so.0.83.0 
+ln -s /lib/x86_64-linux-gnu/libpam_misc.so.0 /lib/libpam_misc.so.0
+ln -s /lib/x86_64-linux-gnu/libpam_misc.so.0.82.0 /lib/libpam_misc.so.0.82.0
+ln -s /lib/x86_64-linux-gnu/libpamc.so.0 /lib/libpamc.so.0
+ln -s /lib/x86_64-linux-gnu/libpamc.so.0.82.1 /lib/libpamc.so.0.82.1
+ln -s /lib/x86_64-linux-gnu/libnss_files.so.2 /lib/libnss_files.so.2
+ln -s /lib/x86_64-linux-gnu/libnss_files-2.13.so /lib/libnss_files-2.13.so
+
+echo "
+Name: fusionforge/shared/admin_login
+Template: fusionforge/shared/admin_login
+Value: admin
+Owners: gforge-db-postgresql
+
+Name: fusionforge/shared/db_host
+Template: fusionforge/shared/db_host
+Value: 127.0.0.1
+Owners: gforge-db-postgresql
+
+Name: fusionforge/shared/db_name
+Template: fusionforge/shared/db_name
+Value: fusionforge
+Owners: gforge-db-postgresql
+
+Name: fusionforge/shared/db_user
+Template: fusionforge/shared/db_user
+Value: fusionforge
+Owners: gforge-db-postgresql
+
+Name: fusionforge/shared/domain_name
+Template: fusionforge/shared/domain_name
+Value: $domain
+Owners: gforge-common, gforge-db-postgresql, gforge-dns-bind9, gforge-mta-exim4, gforge-mta-postfix
+
+Name: fusionforge/shared/download_host
+Template: fusionforge/shared/download_host
+Value: download.$domain
+Owners: gforge-db-postgresql, gforge-dns-bind9, gforge-web-apache2
+
+Name: fusionforge/shared/ftpuploadhost
+Template: fusionforge/shared/ftpuploadhost
+Value: upload.$domain
+Owners: gforge-web-apache2
+
+Name: fusionforge/shared/ip_address
+Template: fusionforge/shared/ip_address
+Value: 127.0.1.1
+Owners: gforge-db-postgresql, gforge-dns-bind9, gforge-web-apache2
+
+Name: fusionforge/shared/jabber_host
+Template: fusionforge/shared/jabber_host
+Value: jabber.$domain
+Owners: gforge-web-apache2
+
+Name: fusionforge/shared/lists_host
+Template: fusionforge/shared/lists_host
+Value: lists.$domain
+Owners: gforge-db-postgresql, gforge-dns-bind9, gforge-mta-exim4, gforge-mta-postfix, gforge-web-apache2
+
+Name: fusionforge/shared/newsadmin_groupid
+Template: fusionforge/shared/newsadmin_groupid
+Value: 2
+Owners: gforge-db-postgresql, gforge-web-apache2
+
+Name: fusionforge/shared/noreply_to_bitbucket
+Template: fusionforge/shared/noreply_to_bitbucket
+Value: true
+Owners: gforge-mta-exim4, gforge-mta-postfix
+
+Name: fusionforge/shared/peerrating_groupid
+Template: fusionforge/shared/peerrating_groupid
+Value: 4
+Owners: gforge-db-postgresql, gforge-web-apache2
+
+Name: fusionforge/shared/server_admin
+Template: fusionforge/shared/server_admin
+Value: webmaster@$domain
+Owners: gforge-common, gforge-db-postgresql, gforge-dns-bind9, gforge-mta-exim4, gforge-mta-postfix
+
+Name: fusionforge/shared/shell_host
+Template: fusionforge/shared/shell_host
+Value: shell.$domain
+Owners: gforge-db-postgresql, gforge-dns-bind9, gforge-web-apache2
+
+Name: fusionforge/shared/simple_dns
+Template: fusionforge/shared/simple_dns
+Owners: gforge-dns-bind9
+
+Name: fusionforge/shared/skill_list
+Template: fusionforge/shared/skill_list
+Value: Ada;C;C++;HTML;LISP;Perl;PHP;Python;SQL
+Owners: gforge-db-postgresql
+
+Name: fusionforge/shared/statsadmin_groupid
+Template: fusionforge/shared/statsadmin_groupid
+Value: 3
+Owners: gforge-db-postgresql, gforge-web-apache2
+
+Name: fusionforge/shared/sys_lang
+Template: fusionforge/shared/sys_lang
+Value: $fusionforge_lang
+Owners: gforge-db-postgresql, gforge-dns-bind9, gforge-web-apache2
+
+Name: fusionforge/shared/sys_theme
+Template: fusionforge/shared/sys_theme
+Value: gforge
+Owners: gforge-db-postgresql, gforge-dns-bind9, gforge-web-apache2
+
+Name: fusionforge/shared/system_name
+Template: fusionforge/shared/system_name
+Value: FusionForge
+Owners: gforge-common, gforge-db-postgresql, gforge-dns-bind9, gforge-mta-exim4, gforge-mta-postfix
+
+Name: fusionforge/shared/upload_host
+Template: fusionforge/shared/upload_host
+Value: upload.$domain
+Owners: gforge-web-apache2
+
+Name: fusionforge/shared/users_host
+Template: fusionforge/shared/users_host
+Value: users.$domain
+Owners: gforge-db-postgresql, gforge-dns-bind9, gforge-mta-exim4, gforge-mta-postfix, gforge-web-apache2
+
+
+Name: exim4/dc_other_hostnames
+Template: exim4/dc_other_hostnames
+Value: $domain
+Owners: exim4-config
+Flags: mailname
+Variables:
+ fqdn = $domain
+
+Name: exim4/mailname
+Template: exim4/mailname
+Value: $domain
+Owners: exim4-config
+
+Name: postfix/destinations
+Template: postfix/destinations
+Value: $domain, localhost.private.intra, , localhost
+Owners: postfix
+Flags: set
+
+Name: postfix/kernel_version_warning
+Template: postfix/kernel_version_warning
+Owners: postfix
+
+Name: postfix/mailbox_limit
+Template: postfix/mailbox_limit
+Owners: postfix
+
+Name: postfix/mailname
+Template: postfix/mailname
+Value: $domain
+Owners: postfix
+" >> /var/cache/debconf/config.dat
+
+
+echo "
+Name: fusionforge/shared/admin_password
+Template: fusionforge/shared/admin_password
+Value: $fusionforge_admin_pwd
+Owners: gforge-db-postgresql
+
+Name: fusionforge/shared/admin_password_confirm
+Template: fusionforge/shared/admin_password_confirm
+Owners: gforge-db-postgresql
+
+Name: fusionforge/shared/db_password
+Template: fusionforge/shared/db_password
+Value: $fusionforge_db_pwd
+Owners: gforge-db-postgresql, gforge-web-apache2
+Flags: seen
+
+Name: fusionforge/shared/db_password_confirm
+Template: fusionforge/shared/db_password_confirm
+Owners: gforge-db-postgresql, gforge-web-apache2
+
+" >> /var/cache/debconf/passwords.dat
+
+
+apt-get install --assume-yes --force-yes fusionforge-full gforge-dns-bind9 gforge-ftp-proftpd gforge-mta-postfix gforge-plugin-*
+
+
+echo "
+#!/bin/bash
+sleep 8
+#Fusionforge
+hostname="$HOSTNAME"
+ip_address=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr'| cut -d':' -f2 | cut -d' ' -f1)
+ip_address_1=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1 | cut -d'.' -f1)
+ip_address_2=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1 | cut -d'.' -f2)
+ip_address_3=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f3)
+ip_address_4=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f4)
+sed -i \"s/ip_address=[0-9\.]+/ip_address=\$ip_address/g\" /etc/fusionforge/fusionforge.conf
+sed -i \"s/sys_ip_address = '[0-9\.]+';/sys_ip_address = '\$ip_address';/g\" /etc/gforge/local.pl
+" > /opt/ciws/etc/dhclient-fusion-hook.sh 
+chmod +x /opt/ciws/etc/dhclient-fusion-hook.sh 
+echo "#!/bin/bash
+sudo  /opt/ciws/etc/dhclient-fusion-hook.sh &
+" > /etc/dhcp/dhclient-exit-hooks.d/fusion_local
+
+chmod +x /etc/dhcp/dhclient-exit-hooks.d/fusion_local
+sed -i "s/scm_host=[0-9A-Za-z\-_\.]+/scm_host=scm.$domain/g" /etc/fusionforge/fusionforge.conf
+sed -i "s/sys_ldap_auth_dn=[0-9A-Za-z=]+/sys_ldap_auth_dn=dc=$fusionforge_domain_name,dc=$fusionforge_ext/g" /etc/fusionforge/fusionforge.conf
+sed -i "s/ldap_base_dn=[0-9A-Za-z=]+/ldap_base_dn=dc=$fusionforge_domain_name,dc=$fusionforge_ext/g" /etc/fusionforge/fusionforge.conf
+sed -i "s/sys_forum_return_domain=[0-9A-Za-z\-_\.]+/sys_forum_return_domain=$domain/g" /etc/fusionforge/fusionforge.conf
+
+sed -i "s/sys_forum_return_domain = \"[0-9A-Za-z\-_\.]+\";/sys_forum_return_domain = \"$domain\";/g" /etc/gforge/local.inc
+sed -i "s/sys_scm_host = '[0-9A-Za-z\-_\.]+'/sys_scm_host = 'scm.$domain'/g" /etc/gforge/local.inc
+sed -i "s/sys_cvs_host = '[0-9A-Za-z\-_\.]+'/sys_scm_host = 'scm.$domain'/g" /etc/gforge/local.inc
+sed -i "s/sys_ldap_base_dn='[0-9A-Za-z=]+'/sys_ldap_base_dn='dc=$fusionforge_domain_name,dc=$fusionforge_ext'/g" /etc/gforge/local.inc
+sed -i "s/sys_ldap_bind_dn='cn=SF_robot,[0-9A-Za-z=]+'/sys_ldap_bind_dn='cn=SF_robot,dc=$fusionforge_domain_name,dc=$fusionforge_ext'/g" /etc/gforge/local.inc
+sed -i "s/sys_ldap_admin_dn='cn=admin,[0-9A-Za-z=]+'/sys_ldap_admin_dn='cn=admin,dc=$fusionforge_domain_name,dc=$fusionforge_ext'/g" /etc/gforge/local.inc
+sed -i "s/sys_scm_host = '[0-9A-Za-z\-_\.]+'/sys_scm_host = 'scm.$domain'/" /etc/gforge/local.pl
+sed -i "s/sys_ldap_base_dn = '[0-9A-Za-z=]+'/sys_ldap_base_dn = 'dc=$fusionforge_domain_name,dc=$fusionforge_ext'/g" /etc/gforge/local.pl
+
+
+cp /etc/fusionforge/fusionforge.conf /etc/fusionforge/fusionforge.conf-back
+
+cp /etc/gforge/local.pl /etc/gforge/local.pl-back
+
+cp /etc/gforge/local.inc /etc/gforge/local.inc-back
+
+mv /etc/darcsweb $LAMPP_DIRECTORY/etc/
+
+ln -s $LAMPP_DIRECTORY/etc/darcsweb /etc/darcsweb
+
+mv /etc/fusionforge  $LAMPP_DIRECTORY/etc/
+
+ln -s $LAMPP_DIRECTORY/etc/fusionforge  /etc/fusionforge 
+
+mv /etc/gforge  $LAMPP_DIRECTORY/etc/
+
+ln -s $LAMPP_DIRECTORY/etc/gforge  /etc/gforge 
+
+mv /etc/gitweb.conf  $LAMPP_DIRECTORY/etc/
+
+ln -s $LAMPP_DIRECTORY/etc/gitweb.conf  /etc/gitweb.conf
+
+mv /etc/ldap  $LAMPP_DIRECTORY/etc/
+
+ln -s $LAMPP_DIRECTORY/etc/ldap  /etc/ldap
+
+mv /etc/mailman $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/mailman /etc/mailman
+
+mv /etc/mediawiki $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/mediawiki /etc/mediawiki
+
+mv /etc/mediawiki-extensions $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/mediawiki-extensions /etc/mediawiki-extensions
+
+mv /etc/mercurial $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/mercurial /etc/mercurial
+
+mv /etc/samba $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/samba /etc/samba
+
+mv /etc/subversion $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/subversion /etc/subversion
+
+mv /var/lib/gforge $LAMPP_DIRECTORY/var/lib/
+ln -s $LAMPP_DIRECTORY/var/lib/gforge /var/lib/gforge
+
+mv /var/lib/mailman $LAMPP_DIRECTORY/var/lib/
+ln -s $LAMPP_DIRECTORY/var/lib/mailman /var/lib/mailman
+
+mv /var/lib/mediawiki $LAMPP_DIRECTORY/var/lib/
+ln -s $LAMPP_DIRECTORY/var/lib/mediawiki /var/lib/mediawiki
+
+mv /var/lib/samba $LAMPP_DIRECTORY/var/lib/
+ln -s $LAMPP_DIRECTORY/var/lib/samba /var/lib/samba
+
+mv /usr/share/gforge $LAMPP_DIRECTORY/usr/share/
+ln -s $LAMPP_DIRECTORY/usr/share/gforge /usr/share/gforge
+
+mv /usr/share/samba $LAMPP_DIRECTORY/usr/share/
+ln -s $LAMPP_DIRECTORY/usr/share/samba /usr/share/samba
+
+mv /usr/share/mailman $LAMPP_DIRECTORY/usr/share/
+ln -s $LAMPP_DIRECTORY/usr/share/mailman /usr/share/mailman
+
+mv /usr/share/mediawiki $LAMPP_DIRECTORY/usr/share/
+ln -s $LAMPP_DIRECTORY/usr/share/mediawiki /usr/share/mediawiki
+
+mv /usr/share/darcsweb $LAMPP_DIRECTORY/usr/share/
+ln -s $LAMPP_DIRECTORY/usr/share/darcsweb /usr/share/darcsweb
+
+mv /usr/share/mercurial $LAMPP_DIRECTORY/usr/share/
+ln -s $LAMPP_DIRECTORY/usr/share/mercurial /usr/share/mercurial
+
+mv /usr/share/gitweb $LAMPP_DIRECTORY/usr/share/
+ln -s $LAMPP_DIRECTORY/usr/share/gitweb /usr/share/gitweb
+
+mv /usr/share/subversion $LAMPP_DIRECTORY/usr/share/
+ln -s $LAMPP_DIRECTORY/usr/share/subversion /usr/share/subversion
+
+a2dissite default
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/$MOD_NAME" "/$MOD_NAME" 
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+function INSTALL_SCRIPT
+{
+
+echo "
+echo \"I: Stopping Fusionforge Server\"
+/etc/init.d/mailman stop
+/etc/init.d/exim4 stop
+/etc/init.d/binfmt-support stop
+" >> /opt/ciws/share/lampp/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+
+echo "I: Install Fusionforge"
+INSTALL
+CREATE_WUI
+INSTALL_SCRIPT
+echo "I: End of install Fusionforge"

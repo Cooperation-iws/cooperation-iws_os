@@ -1,0 +1,201 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Openmeetings 1.7'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+OPENMEETINGS_MYSQL_PWD=${openmeetings_mysql_pwd}
+MOD_NAME=${openmeetings_name}
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "
+Name: shared/accepted-sun-dlj-v1-1
+Template: shared/accepted-sun-dlj-v1-1
+Value: true
+Owners: sun-java6-bin, sun-java6-jdk, sun-java6-jre
+Flags: seen
+" >> /var/cache/debconf/config.dat
+
+sudo apt-get install --assume-yes --force-yes sun-java6-bin sun-java6-jdk sun-java6-jre sun-java6-fonts mysql-server imagemagick gs-gpl libt1-5 zip unzip subversion git-core checkinstall yasm texi2html libfaac-dev libfaad-dev libmp3lame-dev libsdl1.2-dev libx11-dev libxfixes-dev libxvidcore-dev zlib1g-dev libogg-dev sox libvorbis-dev libgsm1 libgsm1-dev libfaad2 flvtool2 lame gcc-multilib autoconf automake1.9 libtool ffmpeg automake
+
+sudo apt-get install --assume-yes --force-yes openoffice.org-writer openoffice.org-calc openoffice.org-impress openoffice.org-draw openoffice.org-math openoffice.org-gcj openoffice.org-filter-binfilter openoffice.org-java-common
+
+sudo apt-get install --assume-yes --force-yes libjpeg-progs libjpeg62 libjpeg62-dev  
+
+sudo apt-get install --assume-yes --force-yes libgif-dev libgif4 
+
+
+sudo update-alternatives --set java /usr/lib/jvm/java-6-sun/jre/bin/java
+
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/freetype-2.4.5.tar.gz
+tar -xzf freetype-2.4.5.tar.gz
+
+cd freetype*
+./configure
+make
+make install
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/swftools-2011-01-23-1815.tar.gz
+tar -xzf swftools-2011-01-23-1815.tar.gz
+
+cd swftools*
+cd lib/pdf
+wget $URL_CIWS_DEPOT/xpdf-3.03.tar.gz
+cd ../..
+./configure
+make
+make install
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/openmeetings-1.7.0-110831.tar.gz
+tar -xzf openmeetings-1.7.0-110831.tar.gz -C $LAMPP_DIRECTORY/usr/share/
+
+
+chmod +x $LAMPP_DIRECTORY/usr/share/openmeetings/*.sh
+chmod +x $LAMPP_DIRECTORY/usr/share/openmeetings/webapps/openmeetings/jod/*.sh
+
+
+echo "
+Create database ${MOD_NAME} ;
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '${OPENMEETINGS_MYSQL_PWD}';
+flush privileges;" > OPENMEETINGS_db.sql
+
+$BIN_MYSQL -u root < OPENMEETINGS_db.sql 
+rm OPENMEETINGS_db.sql
+
+sed -i "s/admin.local@my-erp2.intra/${openmeetings_admin_email[$count]}/g"  $LAMPP_DIRECTORY/usr/share/openmeetings/cooperation-iws.sql
+$BIN_MYSQL -u root ${MOD_NAME[$count]} <  $LAMPP_DIRECTORY/usr/share/openmeetings/cooperation-iws.sql
+
+sed -i "12s/root/${MOD_NAME}/" $LAMPP_DIRECTORY/usr/share/openmeetings/webapps/openmeetings/conf/hibernate.cfg.xml
+sed -i "13s/mysql_root/${OPENMEETINGS_MYSQL_PWD}/" $LAMPP_DIRECTORY/usr/share/openmeetings/webapps/openmeetings/conf/hibernate.cfg.xml
+sed -i "19s/openmeetings/${MOD_NAME}/" $LAMPP_DIRECTORY/usr/share/openmeetings/webapps/openmeetings/conf/hibernate.cfg.xml
+
+
+
+
+cat > /tmp/openmeetings <<"EOF"
+#! /bin/sh
+#
+# red5 red5 initscript
+#
+# Author: Simon Eisenmann .
+#
+set -e
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DESC="Red5 flash streaming server"
+NAME=red5
+RED5_HOME=/opt/ciws/usr/share/openmeetings
+DAEMON=$RED5_HOME/$NAME.sh
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+# Gracefully exit if the package has been removed.
+test -x $DAEMON || exit 0
+# Read config file if it is present.
+if [ -r /etc/default/$NAME ]
+then
+            . /etc/default/$NAME
+fi
+#
+# Function that starts the daemon/service.
+#
+d_start() {
+            start-stop-daemon --start -c nobody --pidfile $PIDFILE --chdir $RED5_HOME --background --make-pidfile --exec $DAEMON
+}
+#
+# Function that stops the daemon/service.
+#
+d_stop() {
+            start-stop-daemon --stop --quiet --pidfile $PIDFILE --name java
+            rm -f $PIDFILE
+}
+case "$1" in
+            start)
+   echo -n "Starting $DESC: $NAME"
+   d_start
+   echo "."
+            ;;
+            stop)
+   echo -n "Stopping $DESC: $NAME"
+            d_stop
+   echo "."
+            ;;
+
+            restart|force-reload)
+   echo -n "Restarting $DESC: $NAME"
+   d_stop
+   sleep 1
+   d_start
+   echo "."
+            ;;
+
+            *)
+   echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
+   exit 1
+            ;;
+
+esac
+exit 0
+
+
+EOF
+
+cp /tmp/openmeetings /etc/init.d/
+chmod +x /etc/init.d/openmeetings
+update-rc.d openmeetings start 70 2 3 4 5 . stop 20 0 1 6 .
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:5080/openmeetings]]>" "<![CDATA[http://localhost:5080/openmeetings]]>" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Openmeetings"
+INSTALL
+CREATE_WUI
+echo "I: End of install Openmeetings"

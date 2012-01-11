@@ -1,0 +1,768 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Zabbix server 1.8.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Distributed monitoring solution'
+RMOD_DESCRIPTION_FR='Système de surveillance réseau'
+RMOD_VERBOSE="ZABBIX is an enterprise-class open source distributed monitoring solution. "
+RMOD_VERBOSE_FR="Zabbix est un système de surveillance du réseau open source. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+
+MOD_NAME=$zabbix_name
+ZABBIX_MYSQL_PWD=$zabbix_mysql_pwd
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo "
+Name: zabbix-agent/server
+Template: zabbix-agent/server
+Value: 
+Owners: zabbix-agent
+
+Name: zabbix-frontend-php/database-type
+Template: dbconfig-common/database-type
+Value: mysql
+Owners: zabbix-frontend-php
+Flags: seen
+Variables:
+ database_types = mysql, pgsql
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/db/app-user
+Template: dbconfig-common/db/app-user
+Value: zabbix
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/db/basepath
+Template: dbconfig-common/db/basepath
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/db/dbname
+Template: dbconfig-common/db/dbname
+Value: zabbix
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/dbconfig-install
+Template: dbconfig-common/dbconfig-install
+Value: true
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/dbconfig-reinstall
+Template: dbconfig-common/dbconfig-reinstall
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/dbconfig-remove
+Template: dbconfig-common/dbconfig-remove
+Value: 
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/dbconfig-upgrade
+Template: dbconfig-common/dbconfig-upgrade
+Value: true
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/install-error
+Template: dbconfig-common/install-error
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/internal/reconfiguring
+Template: dbconfig-common/internal/reconfiguring
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/internal/skip-preseed
+Template: dbconfig-common/internal/skip-preseed
+Value: false
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/missing-db-package-error
+Template: dbconfig-common/missing-db-package-error
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/mysql/admin-user
+Template: dbconfig-common/mysql/admin-user
+Value: root
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/mysql/method
+Template: dbconfig-common/mysql/method
+Value: unix socket
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/passwords-do-not-match
+Template: dbconfig-common/passwords-do-not-match
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/pgsql/admin-user
+Template: dbconfig-common/pgsql/admin-user
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/pgsql/authmethod-admin
+Template: dbconfig-common/pgsql/authmethod-admin
+Value: ident
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/pgsql/authmethod-user
+Template: dbconfig-common/pgsql/authmethod-user
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/pgsql/changeconf
+Template: dbconfig-common/pgsql/changeconf
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/pgsql/manualconf
+Template: dbconfig-common/pgsql/manualconf
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/pgsql/method
+Template: dbconfig-common/pgsql/method
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/pgsql/no-empty-passwords
+Template: dbconfig-common/pgsql/no-empty-passwords
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/purge
+Template: dbconfig-common/purge
+Value: false
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/reconfigure-webserver
+Template: zabbix-frontend-php/reconfigure-webserver
+Value: apache, apache-ssl, apache-perl, apache2
+Owners: zabbix-frontend-php
+
+Name: zabbix-frontend-php/remote/host
+Template: dbconfig-common/remote/host
+Value: 
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/remote/newhost
+Template: dbconfig-common/remote/newhost
+Value: 
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/remote/port
+Template: dbconfig-common/remote/port
+Value: 
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/remove-error
+Template: dbconfig-common/remove-error
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/restart-webserver
+Template: zabbix-frontend-php/restart-webserver
+Value: true
+Owners: zabbix-frontend-php
+
+Name: zabbix-frontend-php/upgrade-backup
+Template: dbconfig-common/upgrade-backup
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/upgrade-error
+Template: dbconfig-common/upgrade-error
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/zabbix-server
+Template: zabbix-frontend-php/zabbix-server
+Value: 127.0.0.1
+Owners: zabbix-frontend-php
+
+Name: zabbix-frontend-php/zabbix-server-port
+Template: zabbix-frontend-php/zabbix-server-port
+Value: 10051
+Owners: zabbix-frontend-php
+
+Name: zabbix-server-mysql/database-type
+Template: dbconfig-common/database-type
+Value: mysql
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/db/app-user
+Template: dbconfig-common/db/app-user
+Value: zabbix
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/db/dbname
+Template: dbconfig-common/db/dbname
+Value: zabbix
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/dbconfig-install
+Template: dbconfig-common/dbconfig-install
+Value: true
+Owners: zabbix-server-mysql
+Flags: seen
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/dbconfig-reinstall
+Template: dbconfig-common/dbconfig-reinstall
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/dbconfig-remove
+Template: dbconfig-common/dbconfig-remove
+Value: 
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/dbconfig-upgrade
+Template: dbconfig-common/dbconfig-upgrade
+Value: true
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/install-error
+Template: dbconfig-common/install-error
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/internal/reconfiguring
+Template: dbconfig-common/internal/reconfiguring
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/internal/skip-preseed
+Template: dbconfig-common/internal/skip-preseed
+Value: false
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/missing-db-package-error
+Template: dbconfig-common/missing-db-package-error
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/mysql/admin-user
+Template: dbconfig-common/mysql/admin-user
+Value: root
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/mysql/method
+Template: dbconfig-common/mysql/method
+Value: unix socket
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/passwords-do-not-match
+Template: dbconfig-common/passwords-do-not-match
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/purge
+Template: dbconfig-common/purge
+Value: false
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/remote/host
+Template: dbconfig-common/remote/host
+Value: 
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/remote/newhost
+Template: dbconfig-common/remote/newhost
+Value: 
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/remote/port
+Template: dbconfig-common/remote/port
+Value: 
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/remove-error
+Template: dbconfig-common/remove-error
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/server
+Template: zabbix-server-mysql/server
+Owners: zabbix-server-mysql
+
+Name: zabbix-server-mysql/upgrade-backup
+Template: dbconfig-common/upgrade-backup
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/upgrade-error
+Template: dbconfig-common/upgrade-error
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+" >> /var/cache/debconf/config.dat
+
+echo "
+
+Name: zabbix-frontend-php/app-password-confirm
+Template: dbconfig-common/app-password-confirm
+Value: 
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/mysql/admin-pass
+Template: dbconfig-common/mysql/admin-pass
+Value: 
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/mysql/app-pass
+Template: dbconfig-common/mysql/app-pass
+Value: 
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/password-confirm
+Template: dbconfig-common/password-confirm
+Value: 
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/pgsql/admin-pass
+Template: dbconfig-common/pgsql/admin-pass
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-frontend-php/pgsql/app-pass
+Template: dbconfig-common/pgsql/app-pass
+Owners: zabbix-frontend-php
+Variables:
+ pkg = zabbix-frontend-php
+
+Name: zabbix-server-mysql/app-password-confirm
+Template: dbconfig-common/app-password-confirm
+Value: 
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/mysql/admin-pass
+Template: dbconfig-common/mysql/admin-pass
+Value: 
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/mysql/app-pass
+Template: dbconfig-common/mysql/app-pass
+Value: 
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+Name: zabbix-server-mysql/password-confirm
+Template: dbconfig-common/password-confirm
+Value: 
+Owners: zabbix-server-mysql
+Variables:
+ dbvendor = MySQL
+ pkg = zabbix-server-mysql
+
+" >> /var/cache/debconf/passwords.dat
+
+
+echo "
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$ZABBIX_MYSQL_PWD';
+flush privileges;" > ZABBIX_db.sql
+
+$BIN_MYSQL -u root < ZABBIX_db.sql mysql
+rm ZABBIX_db.sql
+
+export DEBIAN_FRONTEND=noninteractive
+apt-get install --assume-yes --force-yes snmp zabbix-frontend-php zabbix-server-mysql zabbix-agent
+
+echo "zabbix_agent 10050/tcp # Zabbix ports
+zabbix_trap 10051/tcp
+" >> /etc/services
+
+sed -i "s/-uroot/-uroot -p$mysql_root_password/g"  /etc/zabbix/zabbix_agentd.conf
+sed -i "83s/#//" /etc/zabbix/zabbix_agentd.conf
+sed -i "84s/#//" /etc/zabbix/zabbix_agentd.conf
+sed -i "85s/#//" /etc/zabbix/zabbix_agentd.conf
+sed -i "86s/#//" /etc/zabbix/zabbix_agentd.conf
+sed -i "87s/#//" /etc/zabbix/zabbix_agentd.conf
+sed -i "88s/#//" /etc/zabbix/zabbix_agentd.conf
+sed -i "89s/#//" /etc/zabbix/zabbix_agentd.conf
+
+
+cat << EOT_ZABBIX_DB > /etc/zabbix/dbconfig.php
+<?php
+\$DB_TYPE='mysql';
+\$DB_SERVER='localhost';
+\$DB_DATABASE="${MOD_NAME}";
+\$DB_USER="${MOD_NAME}";
+\$DB_PASSWORD="$ZABBIX_MYSQL_PWD";
+\$ZBX_SERVER      = "127.0.0.1";
+\$ZBX_SERVER_PORT = "10051";
+
+\$IMAGE_FORMAT_DEFAULT    = IMAGE_FORMAT_PNG;
+
+## dont remove this!
+## This is a work-around for dbconfig-common
+if(\$DB_TYPE == "mysql") 
+	\$DB_TYPE = "MYSQL";
+
+if(\$DB_TYPE == "pgsql")
+	\$DB_TYPE = "POSTGRESQL";
+##
+?>
+EOT_ZABBIX_DB
+
+cat << EOT_ZABBIX_CONF > /etc/zabbix/zabbix_server.conf
+
+# This is config file for ZABBIX server process
+# To get more information about ZABBIX, 
+# go http://www.zabbix.com
+
+############ GENERAL PARAMETERS #################
+
+# This defines unique NodeID in distributed setup,
+# Default value 0 (standalone server)
+# This parameter must be between 0 and 999
+#NodeID=0
+
+# Number of pre-forked instances of pollers
+# Default value is 5
+# This parameter must be between 0 and 255
+#StartPollers=5
+
+# Number of pre-forked instances of IPMI pollers
+# Default value is 0
+# This parameter must be between 0 and 255
+#StartIPMIPollers=0
+
+# Number of pre-forked instances of pollers for unreachable hosts
+# Default value is 1
+# This parameter must be between 0 and 255
+#StartPollersUnreachable=1
+
+# Number of pre-forked instances of trappers
+# Default value is 5
+# This parameter must be between 0 and 255
+#StartTrappers=5
+
+# Number of pre-forked instances of ICMP pingers
+# Default value is 1
+# This parameter must be between 0 and 255
+#StartPingers=1
+
+# Number of pre-forked instances of discoverers
+# Default value is 1
+# This parameter must be between 0 and 255
+#StartDiscoverers=1
+
+# Number of pre-forked instances of HTTP pollers
+# Default value is 1
+# This parameter must be between 0 and 255
+#StartHTTPPollers=1
+
+# Listen port for trapper. Default port number is 10051. This parameter 
+# must be between 1024 and 32767
+
+#ListenPort=10051
+
+# Source IP address for outgoing connections
+#SourceIP=
+
+# Listen interface for trapper. Trapper will listen on all network interfaces
+# if this parameter is missing.
+
+#ListenIP=127.0.0.1
+
+# How often ZABBIX will perform housekeeping procedure
+# (in hours)
+# Default value is 1 hour
+# Housekeeping is removing unnecessary information from
+# tables history, alert, and alarms
+# This parameter must be between 1 and 24
+
+#HousekeepingFrequency=1
+
+# How often ZABBIX will try to send unsent alerts
+# (in seconds)
+# Default value is 30 seconds
+SenderFrequency=30
+
+# Uncomment this line to disable housekeeping procedure
+#DisableHousekeeping=1
+
+# Specifies debug level
+# 0 - debug is not created
+# 1 - critical information
+# 2 - error information
+# 3 - warnings (default)
+# 4 - for debugging (produces lots of information)
+
+DebugLevel=3
+
+# Specifies how long we wait for agent response (in sec)
+# Must be between 1 and 30 
+Timeout=5
+
+# Specifies how many seconds trapper may spend processing new data
+# Must be between 1 and 300 
+#TrapperTimeout=5
+
+# After how many seconds of unreachability treat a host as unavailable
+#UnreachablePeriod=45
+
+# How often check host for availability during the unavailability period
+#UnavailableDelay=60
+
+# Name of PID file
+
+PidFile=/var/run/zabbix-server/zabbix_server.pid
+
+# Name of log file
+# If not set, syslog is used
+
+LogFile=/var/log/zabbix-server/zabbix_server.log
+
+# Maximum size of log file in MB. Set to 0 to disable automatic log rotation.
+#LogFileSize=1
+
+# Location for custom alert scripts
+AlertScriptsPath=/etc/zabbix/alert.d/
+
+# Location of external scripts
+#ExternalScripts=/etc/zabbix/externalscripts
+
+# Location of fping. Default is /usr/sbin/fping
+# Make sure that fping binary has root permissions and SUID flag set
+#FpingLocation=/usr/sbin/fping
+
+# Location of fping6. Default is /usr/sbin/fping6
+# Make sure that fping binary has root permissions and SUID flag set
+#Fping6Location=/usr/sbin/fping6
+
+# Temporary directory. Default is /tmp
+#TmpDir=/tmp
+
+# Frequency of ICMP pings (item keys 'icmpping' and 'icmppingsec'). Default is 60 seconds.
+#PingerFrequency=60
+
+# Database host name
+# Default is localhost
+
+DBHost=localhost
+
+# Database name
+# SQLite3 note: path to database file must be provided. DBUser and DBPassword are ignored.
+DBName=${MOD_NAME}
+
+# Database user
+
+DBUser=${MOD_NAME}
+
+# Database password
+# Comment this line if no password used
+
+DBPassword=$ZABBIX_MYSQL_PWD
+
+# Connect to MySQL using Unix socket?
+
+#DBSocket=/tmp/mysql.sock
+EOT_ZABBIX_CONF
+
+
+cat << EOT_APACHE_ZABBIX > /etc/zabbix/apache.conf
+# Define /zabbix alias, this is the default
+<IfModule mod_alias.c>
+    Alias /${MOD_NAME} /usr/share/zabbix
+</IfModule>
+EOT_APACHE_ZABBIX
+
+echo "
+#Zabbix
+mkdir /var/run/zabbix-server
+chmod -R 777 /var/run/zabbix-server
+/etc/init.d/zabbix-server restart
+" >> /etc/rc.local
+
+
+sed -i "s/max_execution_time = 30/max_execution_time = 300/" /etc/php5/apache2/php.ini
+sed -i "s/max_input_time = 60/max_input_time = 300/" /etc/php5/apache2/php.ini
+
+TZ_FOR_SED=$(echo $TZ | sed 's/\//\\\//g')
+sed -i "s/;date.timezone =/date.timezone =$TZ_FOR_SED/" /etc/php5/apache2/php.ini
+
+/etc/init.d/apache2 restart
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/zabbix-schema-110826.sql
+
+echo "
+Create database ${MOD_NAME[$count]} ;
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${ZABBIX_MYSQL_PWD[$count]}';
+flush privileges;" > ZABBIX_db.sql
+
+$BIN_MYSQL -u root < ZABBIX_db.sql 
+rm DRUPAL_db.sql
+
+
+echo "DROP DATABASE zabbix; " > drop_zabbix.sql
+$BIN_MYSQL -u root < drop_zabbix.sql
+$BIN_MYSQL -u root  ${MOD_NAME[$count]} < zabbix-schema-110826.sql
+
+
+echo "UPDATE $MOD_NAME.drules SET iprange = '$zabbix_ip_range' WHERE drules.druleid =2 LIMIT 1 ;" > zabbix_credentials.sql
+$BIN_MYSQL -u root $MOD_NAME < zabbix_credentials.sql
+mv /etc/zabbix $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/zabbix /etc/zabbix
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME}" "/${MOD_NAME}" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ntop"

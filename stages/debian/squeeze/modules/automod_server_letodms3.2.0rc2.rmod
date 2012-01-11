@@ -1,0 +1,115 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='LetoDMS 3.0.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Document Management System'
+RMOD_DESCRIPTION_FR='Système de gestion de la documentation'
+RMOD_VERBOSE="LetoDMS is an Open Source Web Document Management System."
+RMOD_VERBOSE_FR="LetoDMS est un logiciel de gestion de la documention open source en ligne.  "
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+NB_LETODMS=${#letodms_name[*]}
+
+for (( count=1; count<=$NB_LETODMS; count++ ))
+do
+LETODMS_MYSQL_PWD[$count]=${letodms_mysql_pwd[$count]}
+MOD_NAME[$count]=${letodms_name[$count]}
+done
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/letodms-3.0.1-110822.tar.gz
+tar -xzf letodms-3.0.1-110822.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download LetoDMS"
+WGET_CIWS_DEPOT
+for (( count=1; count<=$NB_LETODMS; count++ ))
+do
+##LETODMS
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf letodms/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+
+echo "
+Create database ${MOD_NAME[$count]} ;
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${LETODMS_MYSQL_PWD[$count]}';
+flush privileges;" > LETODMS_db.sql
+
+$BIN_MYSQL -u root < LETODMS_db.sql 
+rm LETODMS_db.sql
+
+sed -i "s/admin.local@my-erp2.intra/${letodms_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+
+
+
+sed -i "166s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
+sed -i "163s/letodms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
+sed -i "169s/mysql_root/${LETODMS_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
+sed -i "154s/letodms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
+sed -i "71s/\/var\/www\/letodms\/data/\/opt\/ciws\/server\/var\/${MOD_NAME[$count]}_data/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
+sed -i "67s/letodms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
+sed -i "61s/letodms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
+sed -i "57s/letodms/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
+sed -i "84s/English/${letodms_lang[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/conf/conf.Settings.php
+
+mkdir /opt/ciws/server/var/letodms_data
+chown -R www-data /opt/ciws/server/var/letodms_data
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
+done
+
+a2enmod rewrite
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_LETODMS; count++ ))
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install LetoDMS"
+INSTALL
+CREATE_WUI
+echo "I: End of install LetoDMS"

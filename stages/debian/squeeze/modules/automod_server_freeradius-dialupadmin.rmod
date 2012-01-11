@@ -1,0 +1,72 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Freeradius-dialupadmin 2.1.10'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Documentation'
+RMOD_DESCRIPTION_FR='Documentation'
+RMOD_VERBOSE="Browse and search manpages "
+RMOD_VERBOSE_FR="Rechercher et naviguer dans les pages de manuels"
+
+RMOD_RUN_IN_CHROOT=True
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes freeradius-dialupadmin
+
+ln -s /etc/freeradius-dialupadmin/apache2.conf /etc/apache2/conf.d/freeradius
+
+mv /etc/freeradius-dialupadmin $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/freeradius-dialupadmin  /etc/freeradius-dialupadmin
+
+
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/freeradius-dialupadmin/" "/freeradius-dialupadmin/" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Man2html"
+INSTALL
+CREATE_WUI
+echo "I: End of install Man2html"

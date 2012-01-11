@@ -1,0 +1,115 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Bugzilla 4.0.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Webmail'
+RMOD_DESCRIPTION_FR='eMails en ligne'
+
+RMOD_VERBOSE="RoundCube Webmail is a browser-based multilingual IMAP client with an application-like user interface. It provides full functionality you expect from an e-mail client, including MIME support, address book, folder manipulation, message searching and spell checking. RoundCube Webmail is written in PHP and requires a MySQL or Postgres database. The user interface is fully skinnable using XHTML and CSS 2."
+RMOD_VERBOSE_FR="RoundCube est client mail en ligne."
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+NB_BUGZILLA=${#bugzilla_name[*]}
+
+for (( count=1; count<=$NB_BUGZILLA; count++ ))
+do
+BUGZILLA_MYSQL_PWD[$count]=${bugzilla_mysql_pwd[$count]}
+MOD_NAME[$count]=${bugzilla_name[$count]}
+
+done
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/bugzilla-4.0.2-110831.tar.gz 
+tar -xzf bugzilla-4.0.2-110831.tar.gz 
+
+
+}
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes libcgi-pm-perl libdatetime-perl libdatetime-timezone-perl libdbd-mysql-perl libemail-mime-perl libemail-send-perl libjs-yui libmail-sendmail-perl libtemplate-perl libtimedate-perl liburi-perl patch libchart-perl imagemagick libtemplate-plugin-gd-perl libxml-parser-perl perlmagick graphviz libgd-gd2-perl libgd-graph-perl libgd-text-perl libhtml-parser-perl libhtml-scrubber-perl libmailtools-perl libmime-tools-perl libwww-perl libxml-twig-perl patchutils
+
+
+WGET_CIWS_DEPOT
+
+for (( count=1; count<=$NB_BUGZILLA; count++ ))
+do
+cp -Rf bugzilla $WWW_DIRECTORY/${MOD_NAME[$count]}
+
+echo "
+Create database ${MOD_NAME[$count]} ;
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${BUGZILLA_MYSQL_PWD[$count]}';
+flush privileges;" > BUGZILLA_db.sql
+
+$BIN_MYSQL -u root < BUGZILLA_db.sql 
+rm BUGZILLA_db.sql
+
+sed -i "s/admin.local@my-erp2.intra/${bugzilla_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+
+sed -i -e "s/^\$db_name = 'bugzilla';/\$db_name = '${MOD_NAME[$count]}';/" \
+       -e "s/^\$db_user = 'root';/\$db_user = '${MOD_NAME[$count]}';/" \
+       -e "s/^\$db_pass = 'mysql_root';/\$db_pass = '${BUGZILLA_MYSQL_PWD[$count]}';/" $WWW_DIRECTORY/${MOD_NAME[$count]}/localconfig
+cd $WWW_DIRECTORY/${MOD_NAME[$count]}
+./checksetup.pl
+
+cat << EOT_BUGZILLA > /etc/apache2/conf.d/bugzilla_$count
+  <Directory "/var/www/${MOD_NAME[$count]}">
+    Options +ExecCGI
+    AllowOverride Limit
+    DirectoryIndex index.cgi
+    AddHandler cgi-script .cgi
+  </Directory>
+EOT_BUGZILLA
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
+done
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_BUGZILLA; count++ ))
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+done
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Roundcube"
+INSTALL
+CREATE_WUI
+echo "I: End of install Roundcube"

@@ -1,0 +1,109 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Oscommerce 3.0'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Online Office suite'
+RMOD_DESCRIPTION_FR='Suite Office en ligne'
+RMOD_VERBOSE="OpenGoo is an Open Source Web Office. It is a complete solution for every organization to create, collaborate, share and publish all its internal and external documents."
+RMOD_VERBOSE_FR="OpenGoo est une suite office open source en ligne.  "
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+NB_OSCOMMERCE=${#oscommerce_name[*]}
+
+for (( count=1; count<=$NB_OSCOMMERCE; count++ ))
+do
+OSCOMMERCE_MYSQL_PWD[$count]=${oscommerce_mysql_pwd[$count]}
+MOD_NAME[$count]=${oscommerce_name[$count]}
+done
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/oscommerce-3.0-110831.tar.gz
+tar -xzf oscommerce-3.0-110831.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Oscommerce"
+WGET_CIWS_DEPOT
+for (( count=1; count<=$NB_OSCOMMERCE; count++ ))
+do
+##OSCOMMERCE
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf oscommerce/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+
+echo "
+Create database ${MOD_NAME[$count]} ;
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${OSCOMMERCE_MYSQL_PWD[$count]}';
+flush privileges;" > OSCOMMERCE_db.sql
+
+$BIN_MYSQL -u root < OSCOMMERCE_db.sql 
+rm OSCOMMERCE_db.sql
+
+sed -i "s/admin.local@my-erp2.intra/${oscommerce_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+
+
+sed -i "18s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/osCommerce/OM/Config/settings.ini
+sed -i "21s/oscommerce/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/osCommerce/OM/Config/settings.ini
+sed -i "19s/mysql_root/${OSCOMMERCE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/osCommerce/OM/Config/settings.ini
+sed -i "42s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/osCommerce/OM/Config/settings.ini
+sed -i "45s/oscommerce/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/osCommerce/OM/Config/settings.ini
+sed -i "43s/mysql_root/${OSCOMMERCE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/osCommerce/OM/Config/settings.ini
+sed -i "s/\/oscommerce\//\/${MOD_NAME[$count]}\//g" $WWW_DIRECTORY/${MOD_NAME[$count]}/osCommerce/OM/Config/settings.ini
+sed -i "s/my-erp2.intra/${domain}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/osCommerce/OM/Config/settings.ini
+
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
+done
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_OSCOMMERCE; count++ ))
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "<![CDATA[/${MOD_NAME[$count]}/index.php?Admin&Login]]>" 
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Oscommerce"
+INSTALL
+CREATE_WUI
+echo "I: End of install Oscommerce"

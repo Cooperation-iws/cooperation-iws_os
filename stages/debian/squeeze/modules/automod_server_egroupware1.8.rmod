@@ -1,0 +1,136 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Egroupware 1.7.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Online Office suite'
+RMOD_DESCRIPTION_FR='Suite Office en ligne'
+RMOD_VERBOSE="OpenGoo is an Open Source Web Office. It is a complete solution for every organization to create, collaborate, share and publish all its internal and external documents."
+RMOD_VERBOSE_FR="OpenGoo est une suite office open source en ligne.  "
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+NB_EGROUPWARE=${#egroupware_name[*]}
+
+for (( count=1; count<=$NB_EGROUPWARE; count++ ))
+do
+EGROUPWARE_MYSQL_PWD[$count]=${egroupware_mysql_pwd[$count]}
+MOD_NAME[$count]=${egroupware_name[$count]}
+done
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/egroupware-1.8-110815.tar.gz 
+tar -xzf egroupware-1.8-110815.tar.gz 
+
+#wget $URL_CIWS_DEPOT/egroupware-1.8-var-110815.tar.gz
+#tar -xzf egroupware-1.8-110815.tar.gz -C /var/lib/.
+
+wget $URL_CIWS_DEPOT/jpgraph_3.0.7-1_all.deb
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Egroupware"
+WGET_CIWS_DEPOT
+apt-get install --assume-yes --force-yes php-http-webdav-server php-net-imap php-net-sieve php-xml-parser
+cd $DL_DIR
+dpkg -i jpgraph_3.0.7-1_all.deb
+
+for (( count=1; count<=$NB_EGROUPWARE; count++ ))
+do
+##EGROUPWARE
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf egroupware/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+
+echo "
+Create Database ${MOD_NAME[$count]};
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${EGROUPWARE_MYSQL_PWD[$count]}';
+flush privileges;" > EGROUPWARE_db.sql
+
+$BIN_MYSQL -u root < EGROUPWARE_db.sql 
+rm EGROUPWARE_db.sql
+
+sed -i "s/admin.local@my-erp2.intra/${egroupware_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "788s/\/egroupware/\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "2475s/\/egroupware/\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "2638s/\/egroupware/\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "s/wwi.my-erp2.intra/$domain/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "196s/istrator/local/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+
+
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+
+
+sed -i "30s/egroupware/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/header.inc.php
+sed -i "47s/egroupware/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/header.inc.php
+sed -i "48s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/header.inc.php
+sed -i "49s/mysql_root/${EGROUPWARE_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/header.inc.php
+
+
+
+
+
+TZ_FOR_SED=$(echo $TZ | sed 's/\//\\\//g')
+sed -i "s/;date.timezone =/date.timezone = $TZ_FOR_SED/" /etc/php5/apache2/php.ini
+sed -i "s/;mbstring.func_overload = 0/mbstring.func_overload = 7/" /etc/php5/apache2/php.ini
+
+mkdir $LAMPP_DIRECTORY/var/lib/egroupware/
+mkdir $LAMPP_DIRECTORY/var/lib/egroupware/default
+mkdir $LAMPP_DIRECTORY/var/lib/egroupware/default/backup
+mkdir $LAMPP_DIRECTORY/var/lib/egroupware/default/files
+ln -s $LAMPP_DIRECTORY/var/lib/egroupware /var/lib/egroupware
+
+chown -R www-data /var/lib/egroupware/
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
+done
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_EGROUPWARE; count++ ))
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Egroupware"
+INSTALL
+CREATE_WUI
+echo "I: End of install Egroupware"

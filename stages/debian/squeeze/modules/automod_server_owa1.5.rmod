@@ -1,0 +1,118 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Owa 1.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Content Management System portal'
+RMOD_DESCRIPTION_FR='Portail de gestion de contenu'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Owa is a Blog Content Management System."
+RMOD_VERBOSE_FR="Owa est un logiciel libre de publication web créé en 2002 par Olivier Meunier. Fruit du travail d'une seule personne à l'origine, le projet s'est rapidement doté d'une équipe constituée de personnalités diverses et d'horizons variés.
+L'objectif du projet est de fournir un outil simple d'emploi permettant à tout un chacun de publier sur le web et ce, quel que soit son niveau de connaissances techniques.
+Owa est un logiciel libre conçu avant tout pour ses utilisateurs et recevant des contributions régulières de ceux-ci. N'importe qui peut l'utiliser et le modifier selon les termes de la licence d'utilisation."
+
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+NB_OWA=${#owa_name[*]}
+
+for (( count=1; count<=$NB_OWA; count++ ))
+do
+OWA_MYSQL_PWD[$count]=${owa_mysql_pwd[$count]}
+MOD_NAME[$count]=${owa_name[$count]}
+done
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+
+wget $URL_CIWS_DEPOT/owa-1.5-110911.tar.gz 
+tar -xzf owa-1.5-110911.tar.gz 
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo "I: Download Owa"
+WGET_CIWS_DEPOT
+
+for (( count=1; count<=$NB_OWA; count++ ))
+
+do
+
+cd $DL_DIR
+cp -Rf owa $WWW_DIRECTORY/${MOD_NAME[$count]}
+echo "
+Create database ${MOD_NAME[$count]} ;
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${OWA_MYSQL_PWD[$count]}';
+flush privileges;" > OWA_db.sql
+
+$BIN_MYSQL -u root < OWA_db.sql 
+rm OWA_db.sql
+
+sed -i "s/http:\/\/wwi.my-erp2.intra\/owa\//http:\/\/$domain\/${MOD_NAME[$count]}\//g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "s/\/owa\//\/${MOD_NAME[$count]}\//g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "s/admin.local@my-erp2.intra/${drupal_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+
+sed -i "41s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/owa-config.php
+sed -i "39s/owa/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/owa-config.php
+sed -i "42s/mysql_root/${OWA_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/owa-config.php
+sed -i "s/admin.local@my-erp2.intra/${owa_admin_email[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/owa-config.php
+sed -i "s/http:\/\/my-erp2.intra\/owa/http:\/\/'.\$_SERVER[\"SERVER_NAME\"].'\/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/owa-config.php
+
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
+  
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_OWA; count++ ))
+
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}/admin" 
+
+
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Owa"
+INSTALL
+CREATE_WUI
+echo "I: End of install Owa"

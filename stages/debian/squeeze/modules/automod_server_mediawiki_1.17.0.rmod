@@ -1,0 +1,119 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Mediawiki 1.17.0'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Wiki portal'
+RMOD_DESCRIPTION_FR='Portail de wiki'
+RMOD_VERBOSE="Mediawiki is a content management system software from the wiki type. This is the software used by Wikipedia.  "
+RMOD_VERBOSE_FR="Mediawiki est un logiciel de gestion de contenu de type Wiki. C'est le logiciel qui est utilisé par Wikipedia.  "
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+NB_MEDIAWIKI=${#mediawiki_name[*]}
+
+for (( count=1; count<=$NB_MEDIAWIKI; count++ ))
+do
+MEDIAWIKI_MYSQL_PWD[$count]=${mediawiki_mysql_pwd[$count]}
+MOD_NAME[$count]=${mediawiki_name[$count]}
+done
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR______________________________________
+
+function WGET_MIRROIR
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/mediawiki-1.17.0-110826.tar.gz 
+tar -xzf mediawiki-1.17.0-110826.tar.gz 
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo "I: Download Mediawiki"
+WGET_MIRROIR
+
+
+apt-get install --yes --force-yes imagemagick texlive ghostscript-x cjk-latex latex-cjk-all binutils tidy ocaml 
+
+
+
+for (( count=1; count<=$NB_MEDIAWIKI; count++ ))
+
+do
+cd $DL_DIR
+
+cp -Rf mediawiki $WWW_DIRECTORY/${MOD_NAME[$count]}
+echo "
+Create database ${MOD_NAME[$count]} ;
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${MEDIAWIKI_MYSQL_PWD[$count]}';
+flush privileges;" > MEDIAWIKI_db.sql
+
+$BIN_MYSQL -u root < MEDIAWIKI_db.sql 
+rm MEDIAWIKI_db.sql
+
+sed -i "s/admin.local@my-erp2.intra/${mediawiki_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+
+cd $WWW_DIRECTORY/${MOD_NAME[$count]}/math
+make
+
+sed -i "27s/mediawiki/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php
+sed -i "52s/mediawiki/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php
+sed -i "53s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php
+sed -i "54s/mysql_root/${MEDIAWIKI_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php
+sed -i "99s/fr/${mediawiki_lang[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php
+sed -i "91s/false/true/" $WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php
+sed -i "s/admin.local@my-erp2.intra/${mediawiki_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/LocalSettings.php
+
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}
+
+done
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_MEDIAWIKI; count++ ))
+
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Mediawiki"
+INSTALL
+CREATE_WUI
+echo "I: End of install Mediawiki"

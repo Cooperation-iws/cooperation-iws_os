@@ -1,0 +1,70 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Zabbix client 1.8.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Distributed monitoring solution'
+RMOD_DESCRIPTION_FR='solution de surveillance réseau'
+RMOD_VERBOSE="ZABBIX is an enterprise-class open source distributed monitoring solution. "
+RMOD_VERBOSE_FR="Zabbix est un système de surveillance du réseau open source. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+
+
+apt-get install --assume-yes --force-yes zabbix-agent
+
+sed -i "s/Server=127.0.0.1/Server=$zabbix_server_name/"  /etc/zabbix/zabbix_agentd.conf
+sed -i "s/Hostname=127.0.0.1/Hostname=$HOSTNAME.$domain/"  /etc/zabbix/zabbix_agentd.conf
+sed -i "s/-uroot/-uroot -p$mysql_root_password/g"  /etc/zabbix/zabbix_agentd.conf
+sed -i "83s/#//" /etc/zabbix/zabbix_agentd.conf
+sed -i "84s/#//" /etc/zabbix/zabbix_agentd.conf
+sed -i "85s/#//" /etc/zabbix/zabbix_agentd.conf
+sed -i "86s/#//" /etc/zabbix/zabbix_agentd.conf
+sed -i "87s/#//" /etc/zabbix/zabbix_agentd.conf
+sed -i "88s/#//" /etc/zabbix/zabbix_agentd.conf
+sed -i "89s/#//" /etc/zabbix/zabbix_agentd.conf
+
+
+
+
+echo "zabbix_agent 10050/tcp # Zabbix ports
+zabbix_trap 10051/tcp
+" >> /etc/services
+
+echo "
+#zabbix agent
+mkdir /var/run/zabbix-agent
+chmod -R 777 /var/run/zabbix-agent
+/etc/init.d/zabbix-agent restart
+" >> /etc/rc.local
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+
+
+echo "I: Install Zabbix client"
+INSTALL
+
+echo "I: End of install Zabbix client"

@@ -1,0 +1,103 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Dotproject 2.1.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Projects management'
+RMOD_DESCRIPTION_FR='Management de projets'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="dotProject is a web-based project management application, designed to provide project layout and control functions.To understand dotProject, you need to understand what project management is all about. Project Management is about the structuring of a series of tasks and the schedule associated with those tasks, to achieve an outcome. The nature of those tasks and the schedules and any associated functions (such as project planning, contract negotiation, risk management, cost management and so on) will depend greatly on the nature of the projects that you can management.dotProject aims to provide the project manager with a tool to manage tasks, schedules, communication and sharing. But beware, dotProject will not be all things to all project managers - you may find that other FOSS tools are more appropriate to your particular requirements. You will need to do some investigation and testing to find the product that best suits your requirements. dotProject assumes that you understand the basic concepts of project management and what it is that you are trying to achieve in looking for a project management tool.  "
+RMOD_VERBOSE_FR=" dotProject est un logiciel de gestion de projet destiné à un usage professionnel."
+
+
+
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+NB_DOTPROJECT=${#dotproject_name[*]}
+
+for (( count=1; count<=$NB_DOTPROJECT; count++ ))
+do
+DOTPROJECT_MYSQL_PWD[$count]=${dotproject_mysql_pwd[$count]}
+MOD_NAME[$count]=${dotproject_name[$count]}
+done
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/dotproject-2.1.5-110824.tar.gz 
+tar -xzf dotproject-2.1.5-110824.tar.gz 
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Dotproject"
+WGET_CIWS_DEPOT
+for (( count=1; count<=$NB_DOTPROJECT; count++ ))
+do
+##DOTPROJECT
+cd $DL_DIR
+
+cp -Rf dotproject $WWW_DIRECTORY/${MOD_NAME[$count]}
+echo "
+Create database ${MOD_NAME[$count]} ;
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${DOTPROJECT_MYSQL_PWD[$count]}';
+flush privileges;" > DOTPROJECT_db.sql
+
+$BIN_MYSQL -u root < DOTPROJECT_db.sql 
+rm DOTPROJECT_db.sql
+sed -i "s/admin.local@my-erp2.intra/${dotproject_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+
+$BIN_MYSQL -u root --default_character_set utf8 ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+
+
+
+sed -i "13s/dotproject/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/includes/config.php
+sed -i "15s/root/${MOD_NAME[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/includes/config.php
+sed -i "s/mysql_root/${DOTPROJECT_MYSQL_PWD[$count]}/" $WWW_DIRECTORY/${MOD_NAME[$count]}/includes/config.php
+
+
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
+
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_DOTPROJECT; count++ ))
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Dotproject"
+INSTALL
+CREATE_WUI
+echo "I: End of install Dotproject"

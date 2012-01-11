@@ -1,0 +1,138 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Hyperic-hq agent 4.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+NTOP_PWD=$ntop_pwd
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/hyperic-hq-agent-4.5-x86-64-linux.tar.gz
+tar -xzf hyperic-hq-agent-4.5-x86-64-linux.tar.gz -C $LAMPP_DIRECTORY/usr/share
+
+
+chmod -R 755 /opt/ciws/usr/share/hyperic-hq-agent-4.5/
+
+echo "
+chown -R $LIVEUSER /opt/ciws/usr/share/hyperic-hq-agent-4.5
+" >> /etc/rc.local
+
+cat > /tmp/hyperic-agent <<"EOF"
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:		hyperic-agent
+# Required-Start:	$syslog
+# Required-Stop:	$syslog
+# Should-Start:		$network
+# Should-Stop:		$network
+# Default-Start:	2 3 4 5
+# Default-Stop:		0 1 6
+# Short-Description:	hyperic-agent Monitoring Management software
+# Description:		hyperic-agent Monitoring Management software
+### END INIT INFO
+
+NAME=hyperic-agent
+USER=
+
+test -d /opt/ciws/usr/share/hyperic-hq-agent-4.5/data || exit 0
+
+set -e
+
+case "${1}" in
+	start)
+		echo -n "Starting ${DESC}: "
+
+		sudo -u $USER /opt/ciws/usr/share/hyperic-hq-agent-4.5/bin/hq-agent.sh start
+		
+		;;
+
+	stop)
+		echo -n "Stopping ${DESC}: "
+
+		sudo -u $USER /opt/ciws/usr/share/hyperic-hq-agent-4.5/bin/hq-agent.sh stop
+		;;
+
+	restart|force-reload)
+		echo -n "Restarting ${DESC}: "
+
+		sudo -u $USER /opt/ciws/usr/share/hyperic-hq-agent-4.5/bin/hq-agent.sh stop
+
+		sleep 1
+
+		sudo -u $USER /opt/ciws/usr/share/hyperic-hq-agent-4.5/bin/hq-agent.sh start
+		;;
+
+	*)
+		N=/etc/init.d/${NAME}
+		echo "Usage: ${NAME} {start|stop|restart|force-reload}" >&2
+		exit 1
+		;;
+esac
+
+exit 0
+
+EOF
+
+cp /tmp/hyperic-agent /etc/init.d/
+chmod +x /etc/init.d/hyperic-agent
+update-rc.d hyperic-agent start 70 2 3 4 5 . stop 20 0 1 6 .
+
+sed -i "s/USER=/USER=$LIVEUSER/" /etc/init.d/hyperic-agent
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "" "" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Hyperic-hq agent"
+INSTALL
+CREATE_WUI
+echo "I: End of install Hyperic-hq agent"

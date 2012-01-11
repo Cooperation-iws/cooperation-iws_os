@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='update live-initramfs'
+RMOD_NAME='update live-initramfs-1.3.x'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Office tools for client'
@@ -40,13 +40,13 @@ sed -i "s/NOPASSWD: //" /lib/live/config/003-sudo
 
 if [ "$DISABLE_AUTOLOGIN" ]; then
 #Gdm3
-sed -i "36s/true/false/g" /lib/live/config/008-gdm3
-sed -i "41s/true/false/g" /lib/live/config/008-gdm3
-sed -i "43s/true/false/g" /lib/live/config/008-gdm3
+sed -i "46s/true/false/g" /lib/live/config/008-gdm3
+sed -i "51s/true/false/g" /lib/live/config/008-gdm3
+sed -i "53s/true/false/g" /lib/live/config/008-gdm3
 
 #Gdm
-sed -i "41s/true/false/g" /lib/live/config/007-gdm
-sed -i "43s/true/false/g" /lib/live/config/007-gdm
+sed -i "51s/true/false/g" /lib/live/config/007-gdm
+sed -i "53s/true/false/g" /lib/live/config/007-gdm
 
 #kdm
 sed -i "41s/true/false/g" /lib/live/config/009-kdm

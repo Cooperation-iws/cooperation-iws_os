@@ -1,0 +1,119 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Ocsinventory-ng agent 2.0'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+NTOP_PWD=$ntop_pwd
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes dmidecode libxml-simple-perl libcompress-zlib-perl libnet-ip-perl libwww-perl libdigest-md5-perl libnet-ssleay-perl libcrypt-ssleay-perl libnet-snmp-perl libproc-pid-file-perl libproc-daemon-perl net-tools libsys-syslog-perl pciutils smartmontools read-edid nmap
+
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/Ocsinventory-Agent-2.0.tar.gz
+tar -xzf Ocsinventory-Agent-2.0.tar.gz
+
+cd Ocsinventory-Agent-*
+
+
+PERL_AUTOINSTALL=1 perl Makefile.PL
+make
+rm run-postinst
+make install
+mkdir /etc/ocsinventory
+
+echo "
+# this list of module will be load by the at run time
+# to check its syntax do:
+# #perl modules.conf
+# You must have NO error. Else the content will be ignored
+# This mechanism goal is to launch agent extension modules
+
+use Ocsinventory::Agent::Modules::Download;
+use Ocsinventory::Agent::Modules::Snmp;
+
+# DO NOT REMOVE THE 1;
+1;
+" > /etc/ocsinventory/modules.conf
+
+echo "
+basevardir=/var/lib/ocsinventory-agent
+tag=ocsclient_1
+server=http://$ocs_server_address/ocsinventory
+" > /etc/ocsinventory/ocsinventory-agent.cfg
+
+mkdir /var/lib/ocsinventory-agent
+mkdir /var/lib/ocsinventory-agent/http:_${ocs_server_address}_ocsinventory
+
+echo "<?xml version="1.0" encoding="UTF-8"?>
+<ADM>
+</ADM>" > /var/lib/ocsinventory-agent/http:_${ocs_server_address}_ocsinventory/ocsinv.adm
+
+echo "<CONF>
+  <DEVICEID>ciws-server-2011-08-29-14-15-16</DEVICEID>
+</CONF>" > /var/lib/ocsinventory-agent/http:_${ocs_server_address}_ocsinventory/ocsinv.conf
+
+echo "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/X11R6/bin
+31 23 * * * root /usr/local/bin/ocsinventory-agent --lazy > /dev/null 2>&1" > /etc/cron.d/ocsinventory-agent
+chmod +x /etc/cron.d/ocsinventory-agent
+
+mv /var/lib/ocsinventory-agent $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/ocsinventory-agent /var/lib/ocsinventory-agent
+
+mv /etc/ocsinventory $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/ocsinventory /etc/ocsinventory
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "" "" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ocsinventory-ng agent"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ocsinventory-ng agent"

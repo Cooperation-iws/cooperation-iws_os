@@ -4988,4 +4988,85 @@ Dotclear is a free software primarily designed for its users and regularly impro
 	</param>
 	
 </item>
+<item>
+	<item_name>Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner</item_name>
+	<item_version>Squeeze</item_version>
+	<item_desc>Emails server</item_desc>
+	<item_web>http://postfixadmin.sourceforge.net/</item_web>
+	<item_verbose>Email solution for administration purpose or standalone server.</item_verbose>
+	<item_type>Emails server, Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Emails</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>Default admin email</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude>Postfix Relay Client 0.1</field_exclude>
+        <field_include></field_include>
+        <field_OS>Lenny</field_OS>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>postfixadmin_name</field_1_value>
+		<field_1_def_content>Mail</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>mail_domain</field_1_id>
+		<field_1_name>Mail domain</field_1_name>
+		<field_1_value>mail_domain</field_1_value>
+		<field_1_def_content>$domain</field_1_def_content>
+		<field_1_content_check>[^a-z0-9$_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>postfix_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>postfixadmin_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>public_mail</field_1_id>
+		<field_1_name>Public email</field_1_name>
+		<field_1_value>public_mail</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>smtp_relay</field_1_id>
+		<field_1_name>Smtp Relay</field_1_name>
+		<field_1_value>smtp_relay</field_1_value>
+		<field_1_def_content>my.smtp.my-extension</field_1_def_content>
+		<field_1_content_check>[^a-z0-9$_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_name>External smtp authentication login</field_1_name>
+		<field_1_id>postfix_relay_authentication_name</field_1_id>
+		<field_1_value>postfix_relay_authentication_name</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_name>External smtp authentication password</field_1_name>
+		<field_1_id>postfix_relay_authentication_password</field_1_id>
+		<field_1_value>postfix_relay_authentication_password</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>mailbox_quota</field_1_id>
+		<field_1_name>Mailbox quota (Mb, 0 for unlimited)</field_1_name>
+		<field_1_value>mailbox_quota</field_1_value>
+		<field_1_def_content>0</field_1_def_content>
+		<field_1_content_check>[^0-9]+</field_1_content_check>
+	</param>
+	
+	
+</item>
 </items>

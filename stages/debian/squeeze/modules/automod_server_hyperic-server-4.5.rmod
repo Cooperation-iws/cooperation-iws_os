@@ -1,0 +1,132 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Hyperic-server 4.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Distributed monitoring solution'
+RMOD_DESCRIPTION_FR='solution de surveillance réseau'
+RMOD_VERBOSE="Hyperic is an enterprise-class open source distributed monitoring solution. "
+RMOD_VERBOSE_FR="Hyperic est un système de surveillance du réseau open source. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+
+
+
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/hyperichq-4.5-server-110829.tar.gz 
+tar -xzf hyperichq-4.5-server-110829.tar.gz -C /home
+
+chmod -R 755 /home/hyperic
+chmod -R 0700 /home/hyperic/server-4.5/hqdb/data
+
+sed -i "s/server.mail.host=192.168.30.9/server.mail.host=$hyperic_mail_server/" /home/hyperic/server-4.5/conf/hq-server.conf
+
+/home/hyperic/server-4.5/tune-os.sh
+
+echo "
+chown -R $LIVEUSER /home/hyperic
+" >> /etc/rc.local
+
+cat > /tmp/hyperic <<"EOF"
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:		redmine
+# Required-Start:	$syslog
+# Required-Stop:	$syslog
+# Should-Start:		$network
+# Should-Stop:		$network
+# Default-Start:	2 3 4 5
+# Default-Stop:		0 1 6
+# Short-Description:	Redmine SCM Management software
+# Description:		Redmine is a complete SCM software.
+### END INIT INFO
+
+NAME=hyperic
+USER=
+
+set -e
+
+case "${1}" in
+	start)
+		echo -n "Starting ${DESC}: "
+
+		sudo -u $USER /home/hyperic/server-4.5/bin/hq-server.sh start
+		
+		;;
+
+	stop)
+		echo -n "Stopping ${DESC}: "
+
+		sudo -u $USER /home/hyperic/server-4.5/bin/hq-server.sh stop
+		;;
+
+	restart|force-reload)
+		echo -n "Restarting ${DESC}: "
+
+		sudo -u $USER /home/hyperic/server-4.5/bin/hq-server.sh stop
+
+		sleep 1
+
+		sudo -u $USER /home/hyperic/server-4.5/bin/hq-server.sh start
+		;;
+
+	*)
+		N=/etc/init.d/${NAME}
+		echo "Usage: ${NAME} {start|stop|restart|force-reload}" >&2
+		exit 1
+		;;
+esac
+
+exit 0
+
+EOF
+
+cp /tmp/hyperic /etc/init.d/
+chmod +x /etc/init.d/hyperic
+update-rc.d hyperic start 70 2 3 4 5 . stop 20 0 1 6 .
+sed -i "s/USER=/USER=$LIVEUSER/" /etc/init.d/hyperic
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:7080]]>" "<![CDATA[http://localhost:7080]]>" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Hyperic Hq"
+INSTALL
+CREATE_WUI
+echo "I: End of install Hyperic Hq"

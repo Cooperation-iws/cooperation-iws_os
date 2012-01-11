@@ -1,0 +1,98 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Ilohamail 0.8.14'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Webmail'
+RMOD_DESCRIPTION_FR='eMails en ligne'
+
+RMOD_VERBOSE="RoundCube Webmail is a browser-based multilingual IMAP client with an application-like user interface. It provides full functionality you expect from an e-mail client, including MIME support, address book, folder manipulation, message searching and spell checking. RoundCube Webmail is written in PHP and requires a MySQL or Postgres database. The user interface is fully skinnable using XHTML and CSS 2."
+RMOD_VERBOSE_FR="RoundCube est client mail en ligne."
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+#VARIABLES
+#MYSQL PASSWORD
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+#rm moodle-latest-19.zip
+
+}
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes ilohamail
+
+ln -s /etc/Ilohamail/apache2.conf /etc/apache2/conf.d/Ilohamail
+
+
+
+sed -i '13s/""/"localhost"/' /etc/Ilohamail/db_conf.php
+sed -i "14s/\"\"/\"$ilohamail_dbuser\"/" /etc/Ilohamail/db_conf.php
+sed -i "15s/\"\"/\"$ilohamail_dbpwd\"/" /etc/Ilohamail/db_conf.php
+sed -i "19s/webmail/$ilohamail_dbuser/" /etc/Ilohamail/db_conf.php
+
+echo "CREATE DATABASE $ilohamail_dbuser;" > /tmp/wordpress_crdb.sql
+$BIN_MYSQL -u root < /tmp/ilohamail_crdb.sql
+
+$BIN_MYSQL -u root $ilohamail_dbuser < /usr/share/doc/ilohamail/sql
+
+
+echo "
+grant all on $ilohamail_dbuser.* to $ilohamail_dbuser@localhost identified by '$ilohamail_dbpwd';
+flush privileges;" > ilohamail_db.sql
+
+$BIN_MYSQL -u root < ilohamail_db.sql mysql
+rm wordpress_db.sql
+
+
+mv /etc/Ilohamail $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/Ilohamail /etc/Ilohamail
+mkdir $LAMPP_DIRECTORY/var/cache
+mv /var/cache/IlohaMail $LAMPP_DIRECTORY/var/cache
+ln -s $LAMPP_DIRECTORY/var/cache/IlohaMail /var/cache/IlohaMail
+
+chown -R www-data /var/cache/Ilohamail
+chown -R www-data /usr/share/Ilohamail
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/IlohaMail" "/$MOD_NAME" 
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install IlohaMail"
+INSTALL
+CREATE_WUI
+echo "I: End of install IlohaMail"

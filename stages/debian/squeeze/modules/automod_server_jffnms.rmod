@@ -1,0 +1,320 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Jffnms 0.9.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+NTOP_PWD=$ntop_pwd
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "
+Name: jffnms/compresslogs
+Template: jffnms/compresslogs
+Value: 2
+Owners: jffnms
+
+Name: jffnms/database-type
+Template: dbconfig-common/database-type
+Value: mysql
+Owners: jffnms
+Flags: seen
+Variables:
+ database_types = mysql, pgsql
+ pkg = jffnms
+
+Name: jffnms/db/app-user
+Template: dbconfig-common/db/app-user
+Value: jffnms
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/db/basepath
+Template: dbconfig-common/db/basepath
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/db/dbname
+Template: dbconfig-common/db/dbname
+Value: jffnms
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/dbconfig-install
+Template: dbconfig-common/dbconfig-install
+Value: true
+Owners: jffnms
+Flags: seen
+Variables:
+ pkg = jffnms
+
+Name: jffnms/dbconfig-reinstall
+Template: dbconfig-common/dbconfig-reinstall
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/dbconfig-remove
+Template: dbconfig-common/dbconfig-remove
+Value: 
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/dbconfig-upgrade
+Template: dbconfig-common/dbconfig-upgrade
+Value: true
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/deletelogs
+Template: jffnms/deletelogs
+Value: 7
+Owners: jffnms
+
+Name: jffnms/errorgid
+Template: jffnms/errorgid
+Owners: jffnms
+
+Name: jffnms/erroruid
+Template: jffnms/erroruid
+Owners: jffnms
+
+Name: jffnms/install-error
+Template: dbconfig-common/install-error
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/internal/reconfiguring
+Template: dbconfig-common/internal/reconfiguring
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/internal/skip-preseed
+Template: dbconfig-common/internal/skip-preseed
+Value: false
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/missing-db-package-error
+Template: dbconfig-common/missing-db-package-error
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/mysql/admin-user
+Template: dbconfig-common/mysql/admin-user
+Value: root
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/mysql/method
+Template: dbconfig-common/mysql/method
+Value: unix socket
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/passwords-do-not-match
+Template: dbconfig-common/passwords-do-not-match
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/pgsql/admin-user
+Template: dbconfig-common/pgsql/admin-user
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/pgsql/authmethod-admin
+Template: dbconfig-common/pgsql/authmethod-admin
+Value: ident
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/pgsql/authmethod-user
+Template: dbconfig-common/pgsql/authmethod-user
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/pgsql/changeconf
+Template: dbconfig-common/pgsql/changeconf
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/pgsql/manualconf
+Template: dbconfig-common/pgsql/manualconf
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/pgsql/method
+Template: dbconfig-common/pgsql/method
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/pgsql/no-empty-passwords
+Template: dbconfig-common/pgsql/no-empty-passwords
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/purge
+Template: dbconfig-common/purge
+Value: false
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/remote/host
+Template: dbconfig-common/remote/host
+Value: 
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/remote/newhost
+Template: dbconfig-common/remote/newhost
+Value: 
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/remote/port
+Template: dbconfig-common/remote/port
+Value: 
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/remove-error
+Template: dbconfig-common/remove-error
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/upgrade-backup
+Template: dbconfig-common/upgrade-backup
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/upgrade-error
+Template: dbconfig-common/upgrade-error
+Owners: jffnms
+Variables:
+ pkg = jffnms
+" >> /var/cache/debconf/config.dat
+
+echo "
+Name: jffnms/app-password-confirm
+Template: dbconfig-common/app-password-confirm
+Value: 
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/mysql/admin-pass
+Template: dbconfig-common/mysql/admin-pass
+Value: 
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/mysql/app-pass
+Template: dbconfig-common/mysql/app-pass
+Value: 
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/password-confirm
+Template: dbconfig-common/password-confirm
+Value: 
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/pgsql/admin-pass
+Template: dbconfig-common/pgsql/admin-pass
+Owners: jffnms
+Variables:
+ pkg = jffnms
+
+Name: jffnms/pgsql/app-pass
+Template: dbconfig-common/pgsql/app-pass
+Owners: jffnms
+Variables:
+ pkg = jffnms
+" >> /var/cache/debconf/passwords.dat
+
+apt-get install --assume-yes --force-yes jffnms
+
+ln -s /etc/jffnms/apache.conf /etc/apache2/conf.d/jffnms
+
+mv /usr/share/jffnms $LAMPP_DIRECTORY/usr/share
+ln -s $LAMPP_DIRECTORY/usr/share/jffnms /usr/share/jffnms
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/jffnms" "/jffnms" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Jffnms"
+INSTALL
+CREATE_WUI
+echo "I: End of install Jffnms"

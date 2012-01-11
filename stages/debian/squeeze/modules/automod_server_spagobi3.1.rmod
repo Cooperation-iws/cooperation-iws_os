@@ -1,0 +1,218 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Spagobi 3.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/All-In-One-SpagoBI-3.1-apache-tomcat-6.0.18-07212011.zip
+unzip -q All-In-One-SpagoBI-3.1-apache-tomcat-6.0.18-07212011.zip
+
+
+wget $URL_CIWS_DEPOT/Spago_mysql-dbscript-3.1.0_07212011.zip
+unzip -q Spago_mysql-dbscript-3.1.0_07212011.zip
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+WGET_CIWS_DEPOT
+
+cd $DL_DIR
+
+echo "
+Name: shared/accepted-sun-dlj-v1-1
+Template: shared/accepted-sun-dlj-v1-1
+Value: true
+Owners: sun-java6-bin, sun-java6-jdk, sun-java6-jre
+Flags: seen
+" >> /var/cache/debconf/config.dat
+
+sudo apt-get install --assume-yes --force-yes sun-java6-bin sun-java6-jdk sun-java6-jre sun-java6-fonts 
+
+cd $DL_DIR
+mv apache-tomcat-6.0.18 $LAMPP_DIRECTORY/opt/SpagoBI
+
+chmod +x $LAMPP_DIRECTORY/opt/SpagoBI/bin/*
+
+if [ $spago_demo == "y" ]; then
+sed -i "49s/^/<!--<Resource auth=\"Container\" driverClassName=\"com.mysql.jdbc.Driver\" maxActive=\"20\" maxIdle=\"10\" maxWait=\"-1\" name=\"jdbc\/spagobi\" password=\"$spago_mysql_pwd\" type=\"javax.sql.DataSource\" url=\"jdbc:mysql:\/\/localhost\/spagobi\" username=\"spagobi\"\/>-->/"  $LAMPP_DIRECTORY/opt/SpagoBI/conf/server.xml
+else
+sed -i "44s/^/<!--/" $LAMPP_DIRECTORY/opt/SpagoBI/conf/server.xml
+sed -i "48s/$/-->/" $LAMPP_DIRECTORY/opt/SpagoBI/conf/server.xml
+sed -i "50s/^/<Resource auth=\"Container\" driverClassName=\"com.mysql.jdbc.Driver\" maxActive=\"20\" maxIdle=\"10\" maxWait=\"-1\" name=\"jdbc\/spagobi\" password=\"$spago_mysql_pwd\" type=\"javax.sql.DataSource\" url=\"jdbc:mysql:\/\/localhost\/spagobi\" username=\"spagobi\"\/>/"  $LAMPP_DIRECTORY/opt/SpagoBI/conf/server.xml
+fi
+
+
+sed -i "s/localhost:8080/$domain:8080/g" $LAMPP_DIRECTORY/opt/SpagoBI/database/*
+
+
+echo "
+Create database spagobi ;
+grant all on spagobi.* to spagobi@localhost identified by '${spago_mysql_pwd}';
+flush privileges;" > SPAGO_db.sql
+
+$BIN_MYSQL -u root < SPAGO_db.sql 
+rm SPAGO_db.sql
+
+cd $DL_DIR
+$BIN_MYSQL -u root spagobi <  MySQL_create.sql
+$BIN_MYSQL -u root spagobi <  MySQL_create_quartz_schema.sql
+
+
+cat << EOF > /tmp/spagobi
+#!/bin/bash
+spago_HOME=/opt/ciws/opt/SpagoBI/bin/
+PIDFILE=/var/run/spagobi-server.pid
+. /lib/lsb/init-functions
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      log_begin_msg "SpagoBI server has already started."
+      sleep 5
+      log_end_msg 0
+      exit
+    fi
+      log_begin_msg "Starting SpagoBI server"
+       cd \$spago_HOME
+      ./startup.sh 
+      touch \$PIDFILE
+      log_end_msg 0
+    ;;
+    stop)
+    
+      log_begin_msg "Stopping SpagoBI server."
+       rm -f \$PIDFILE
+       cd \$spago_HOME
+       ./shutdown.sh  
+       log_end_msg 0
+       exit
+    
+      log_begin_msg "SpagoBI server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+
+
+EOF
+
+cp /tmp/spagobi /etc/init.d/
+chmod +x /etc/init.d/spagobi
+update-rc.d spagobi start 70 2 3 4 5 . stop 20 0 1 6 .
+
+if [ "$domain" ] && [ -d /etc/bind ]; then
+
+echo "<VirtualHost *:80>
+	ServerName spago.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://localhost:8080/
+	ProxyPassReverse /   http://localhost:8080/
+
+        
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /etc/apache2/sites-available/spago
+#sudo cp $DOSSIER_CHROOT//tmp/default $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
+sudo chown root.root /etc/apache2/sites-available/spago
+sudo chmod 644 /etc/apache2/sites-available/spago
+
+sed -i "9s/Order deny,allow/Order allow,deny/" /etc/apache2/mods-available/proxy.conf
+sed -i "10s/Deny/Allow/" /etc/apache2/mods-available/proxy.conf
+
+
+a2ensite spago
+sudo a2enmod rewrite
+
+sudo a2enmod include
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod proxy_connect
+
+
+
+SPAGO_URL="http://spago.$domain/SpagoBI"
+echo "spago    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+else
+SPAGO_URL="<![CDATA[http://localhost:8080/SpagoBI]]>"
+fi
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$SPAGO_URL" "$SPAGO_URL" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install SpagoBI"
+INSTALL
+CREATE_WUI
+echo "I: End of install SpagoBI"

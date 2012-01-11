@@ -28,11 +28,11 @@ replication_db[1]="Ampache_1"
 replication_db[2]="Letodms_1"
 #Postgresql 9.0
 root_psgsql_pwd="$mysql_root_password"
-#Phppgadmin 5.0.2
+#P#hppgadmin 5.0.2
 #OpenERP 6.0.2
 openerp_name="Openerp_1"
 openerp_psgsql_pwd="$mysql_generic_pwd"
-#Wordpress 3.2fr-book
+#W#ordpress 3.2fr-book
 wordpress_name[1]="Wordpress_1"
 wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"

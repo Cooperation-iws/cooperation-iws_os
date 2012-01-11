@@ -1,0 +1,252 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Redmine 1.2.1passenger'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='SCM'
+RMOD_DESCRIPTION_FR='SCM'
+RMOD_VERBOSE="Redmine is a source code management software. "
+RMOD_VERBOSE_FR="Redmine est un logiciel de gestion du code source. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+REDMINE_MYSQL_PWD=${redmine_mysql_pwd}
+MOD_NAME=${redmine_name}
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+
+wget $URL_CIWS_DEPOT/redmine-themes-110812.tar.gz 
+
+wget $URL_CIWS_DEPOT/i18n-0.4.2.gem 
+
+wget $URL_CIWS_DEPOT/rack-1.1.0.gem 
+
+wget $URL_CIWS_DEPOT/redmine-1.2.1.tar.gz 
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+
+apt-get install --assume-yes --force-yes ruby rake librmagick-ruby libmysql-ruby rubygems libfcgi-ruby1.8 libopenssl-ruby1.8 ruby-pkg-tools build-essential libdbd-pg-perl libapache-dbi-perl libapache2-mod-perl2 libdigest-sha1-perl libmysqlclient15-dev ruby1.8-dev subversion libapache2-svn
+
+apt-get install --assume-yes --force-yes redmine redmine-mysql subversion libapache2-svn bzr darcs mercurial cvs git libapache2-mod-passenger
+
+
+WGET_CIWS_DEPOT
+cd $DL_DIR
+tar -xzf redmine-1.2.1.tar.gz 
+rm -r /usr/share/redmine/*
+cp -r redmine-1.2.1/* /usr/share/redmine/.
+gem install i18n-0.4.2.gem 
+gem install rack-1.1.0.gem
+tar -xzf redmine-themes-110812.tar.gz -C /usr/share/redmine/public/themes/.
+
+mkdir /usr/share/redmine/log
+touch  /usr/share/redmine/log/production.log
+
+
+echo "
+drop database redmine_default;
+create database ${MOD_NAME} character set utf8;
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '${REDMINE_MYSQL_PWD}';
+flush privileges;" > REDMINE_db.sql
+
+$BIN_MYSQL -u root < REDMINE_db.sql mysql
+rm REDMINE_db.sql.
+
+echo " 
+# MySQL (default setup).  Versions 4.1 and 5.0 are recommended.
+#
+# Get the fast C bindings:
+#   gem install mysql
+#   (on OS X: gem install mysql -- --include=/usr/local/lib)
+# And be sure to use new-style password hashing:
+#   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
+
+production:
+  adapter: mysql
+  database: ${MOD_NAME}
+  host: localhost
+  username: ${MOD_NAME}
+  password: ${REDMINE_MYSQL_PWD}
+  encoding: utf8
+ 
+development:
+  adapter: mysql
+  database: redmine_development
+  host: localhost
+  username: root
+  password:
+  encoding: utf8
+
+test:
+  adapter: mysql
+  database: redmine_test
+  host: localhost
+  username: root
+  password:
+  encoding: utf8
+
+test_pgsql:
+  adapter: postgresql
+  database: redmine_test
+  host: localhost
+  username: postgres
+  password: \"postgres\"
+
+test_sqlite3:
+  adapter: sqlite3
+  dbfile: db/test.db
+  
+demo:
+  adapter: sqlite3
+  dbfile: db/demo.db
+" > /usr/share/redmine/config/database.yml
+
+
+
+
+cd /usr/share/redmine
+rake generate_session_store
+
+RAILS_ENV=production rake db:migrate
+RAILS_ENV=production REDMINE_LANG="$redmine_language" rake redmine:load_default_data
+
+
+echo "PassengerDefaultUser www-data" >> /etc/apache2/mods-available/passenger.conf
+a2dismod passenger
+a2enmod passenger
+a2enmod rewrite
+
+if [ "$domain" ] && [ -d /etc/bind ]; then
+
+echo "<VirtualHost *:80>
+
+  ServerAdmin support@$domain
+  DocumentRoot /usr/share/redmine/public
+  ServerName redmine.$domain
+  ErrorLog /usr/share/redmine/log/error-access.log
+<Directory /usr/share/redmine/public>
+	RailsEnv production
+	RailsBaseURI / 
+	PassengerResolveSymlinksInDocumentRoot on
+	Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+</Directory>
+
+</VirtualHost>
+" > /etc/apache2/sites-available/redmine
+
+
+a2ensite redmine
+REDMINE_URL="redmine.$domain"
+
+echo "*/10 * * * * root ruby /usr/share/redmine/extra/svn/reposman.rb --redmine redmine.$domain --svn-dir $LAMPP_DIRECTORY/var/svn_redmine --owner www-data --url http://localhost/svn_redmine/" > /etc/cron.d/redmine
+chmod +x /etc/cron.d/redmine
+REDMINE_URL="<![CDATA[http://redmine.$domain]]>"
+echo "redmine    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+else
+echo "*/10 * * * * root ruby /usr/share/redmine/extra/svn/reposman.rb --redmine http://localhost:19000 --svn-dir $LAMPP_DIRECTORY/var/svn_redmine --owner www-data --url http://localhost/svn_redmine/" > /etc/cron.d/redmine
+chmod +x /etc/cron.d/redmine
+REDMINE_URL="<![CDATA[http://localhost:19000]]>"
+fi
+
+
+mkdir $LAMPP_DIRECTORY/var/svn_redmine
+chmod 0750 $LAMPP_DIRECTORY/var/svn_redmine
+
+a2enmod dav
+a2enmod dav_svn
+a2enmod perl
+
+mkdir /usr/lib/perl5/Apache/Authn
+cp /usr/share/redmine/extra/svn/Redmine.pm /usr/lib/perl5/Apache/Authn
+echo "
+PerlLoadModule Apache::Authn::Redmine
+
+<Location /svn_redmine>
+    DAV svn
+    SVNParentPath \"$LAMPP_DIRECTORY/var/svn_redmine\"
+
+    AuthType Basic
+    Authname \"Redmine Project Tracking\"
+    Require valid-user
+
+     PerlAccessHandler Apache::Authn::Redmine::access_handler
+     PerlAuthenHandler Apache::Authn::Redmine::authen_handler
+
+     ## for mysql
+     RedmineDSN \"DBI:mysql:database=$MOD_NAME;host=localhost\"
+     RedmineDbUser \"$MOD_NAME\"
+     RedmineDbPass \"${REDMINE_MYSQL_PWD}\"
+     </Location>
+" > /etc/apache2/conf.d/svn_redmine
+chown -R www-data $LAMPP_DIRECTORY/var/svn_redmine
+
+
+mv /etc/redmine $LAMPP_DIRECTORY/etc/.
+ln -s $LAMPP_DIRECTORY/etc/redmine /etc/redmine
+
+mv /var/lib/redmine $LAMPP_DIRECTORY/var/lib/.
+ln -s $LAMPP_DIRECTORY/var/lib/redmine /var/lib/redmine
+
+mv /usr/share/redmine $LAMPP_DIRECTORY/usr/share/.
+ln -s $LAMPP_DIRECTORY/usr/share/redmine /usr/share/redmine
+
+cd /usr/share/redmine/
+chown -R www-data public files log tmp
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$REDMINE_URL" "$REDMINE_URL" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Redmine"
+INSTALL
+CREATE_WUI
+echo "I: End of install Redmine"
