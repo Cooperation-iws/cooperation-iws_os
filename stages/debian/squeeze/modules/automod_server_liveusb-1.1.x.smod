@@ -34,6 +34,7 @@ tar -xzf make_live_usb_1.1.x-120112.tar.gz -C /usr/sbin
 
 chmod +x /usr/sbin/make_live_usb 
 
+apt-get install --assume-yes --force-yes lilo extlinux
 }
 
 #_______________________________________________________________________________________________
