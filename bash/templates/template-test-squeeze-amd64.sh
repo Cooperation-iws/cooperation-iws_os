@@ -13,20 +13,20 @@ keep_local_apt_parameters="y"
 #kernel="2.6.32-5-amd64"
 kernel="2.6.32-5-amd64"
 #update live-initramfs Squeeze
-#DNS server Squeeze
-#Ciwscms 0.9.2
+#D#NS server Squeeze
+#C#iwscms 0.9.2
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
-#Postgresql 9.0
+#P#ostgresql 9.0
 root_psgsql_pwd="$mysql_root_password"
-#Phppgadmin 5.0.2
+#P#hppgadmin 5.0.2
 #W#ordpress 3.2fr-book
 wordpress_name[1]="Wordpress_1"
 wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"
-#Mysql 5.1
-#Phpmyadmin 4.3.4.3
+#M#ysql 5.1
+#P#hpmyadmin 4.3.4.3
 #C#lamtk 4.27
 #C#odecs Squeeze
 #F#ilezilla 0.1
@@ -95,7 +95,7 @@ egroupware_mysql_pwd[1]="$mysql_generic_pwd"
 #I#lohamail 0.8.14
 ilohamail_dbuser="Ilohamail"
 ilohamail_dbpwd="$mysql_generic_pwd"
-#Horde 3.3source
+#H#orde 3.3source
 horde_name="Horde_1"
 horde_mysql_pwd="$mysql_generic_pwd"
 #R#edmine 1.2.1passenger
@@ -128,7 +128,7 @@ lodel_name[1]="Lodel_1"
 lodel_admin_email[1]="admin.local@$domain"
 lodel_mysql_pwd[1]="$mysql_generic_pwd"
 lodel_lang[1]="fr_FR.UTF8"
-#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Squeeze
+#P#ostfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Squeeze
 postfixadmin_name="Mail_1"
 mail_domain="$domain"
 postfix_admin_email="admin.local@$domain"
@@ -246,7 +246,7 @@ spago_mysql_pwd="$mysql_generic_pwd"
 rsslounge_name[1]="Rss_1"
 rsslounge_mysql_pwd[1]="$mysql_generic_pwd"
 rsslounge_admin_email[1]="admin.local@$domain"
-#Piwik 1.5
+#P#iwik 1.5
 piwik_name[1]="Piwik_1"
 piwik_mysql_pwd[1]="$mysql_generic_pwd"
 piwik_admin_email[1]="admin.local@$domain"
@@ -265,7 +265,25 @@ svn_name[1]="Project_1"
 svn_admin_pwd[1]="$gen_login_pwd"
 svn_anonymous_pwd[1]="anonymous"
 trac_admin_pwd[1]="$gen_login_pwd"
-#OpenERP 6.0.2
+#O#penERP 6.0.2
 openerp_name="Openerp_1"
 openerp_psgsql_pwd="$mysql_generic_pwd"
-
+#P#hpldapadmin 1.2.0
+#S#lapd 2.4.25
+slapd_root_pwd="$mysql_generic_pwd"
+#J#itsi 1.0beta
+#J#abber 1.4
+#M#apnik 0.7.1
+#M#apserver 5.6.6
+#N#top 3.4
+ntop_pwd=$gen_login_pwd
+#O#penvpn 2.2
+#F#reeradius 2.1.10
+#F#reeradius-dialupadmin 2.1.10
+#Liveusb 1.1.x
+#Gateway DNS 1.1.x
+gateway_nb_machine=20
+gateway_net_iface="eth0"
+gateway_local_iface="eth1"
+range=019
+gateway_recursion="n"

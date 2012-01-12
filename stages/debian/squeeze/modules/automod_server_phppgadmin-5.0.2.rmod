@@ -32,8 +32,8 @@ rm /etc/apache2/conf.d/phppgadmin
 ln -s /etc/phppgadmin/apache.conf /etc/apache2/conf.d/phppgadmin
 
 
-sed -i '10s/^/#/' /etc/phppgadmin/apache.conf
-sed -i '11s/#//' /etc/phppgadmin/apache.conf
+sed -i '11s/^/#/' /etc/phppgadmin/apache.conf
+sed -i '13s/#//' /etc/phppgadmin/apache.conf
 
 
 

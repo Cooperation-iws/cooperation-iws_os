@@ -1,0 +1,49 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Liveusb 1.1.x'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Open ldap server'
+RMOD_DESCRIPTION_FR='Serveur Openldap'
+RMOD_VERBOSE=""
+RMOD_VERBOSE_FR=""
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/make_live_usb_1.1.x-120112.tar.gz
+
+tar -xzf make_live_usb_1.1.x-120112.tar.gz -C /usr/sbin
+
+chmod +x /usr/sbin/make_live_usb 
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+
+
+echo "I: Install SSL"
+INSTALL
+
+echo "I: End of install SSL"

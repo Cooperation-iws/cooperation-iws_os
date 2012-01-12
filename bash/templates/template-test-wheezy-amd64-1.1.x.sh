@@ -266,4 +266,4 @@ owa_admin_email[1]="admin.local@$domain"
 #D#arkstat 3.0.714
 #A#uth2db 0.2.5
 auth2db_mysql_pwd="$mysql_generic_pwd"
-
+#Liveusb 1.1.x
