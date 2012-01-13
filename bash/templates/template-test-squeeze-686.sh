@@ -52,6 +52,15 @@ sogo_admin_email="admin.local@$domain"
 #Gateway DNS 1.1.x
 gateway_nb_machine=20
 gateway_net_iface="eth0"
-gateway_local_iface="eth1"
+gateway_local_iface="wlan0"
 range=19
 gateway_recursion="n"
+gateway_local_bridge="n"
+gateway_local_iface_2="eth2"
+gateway_multiple_isp="n"
+gateway_net_iface_2="eth2"
+hostapd="y"
+AP_interface="wlan0"
+AP_ssid="test76"
+AP_wpa_passphrase="0123456789"
+#Liveusb 1.1.x

@@ -31,8 +31,50 @@ NB_MACHINE=$gateway_nb_machine
 
 NET_IFACE=$gateway_net_iface
 
-
 LOCAL_IFACE=$gateway_local_iface
+
+if [ "$gateway_local_bridge" = "y" ]; then
+
+LOCAL_IFACE="br0"
+
+sudo apt-get install --assume-yes --force-yes bridge-utils uml-utilities
+
+fi
+
+if [ "$gateway_multiple_isp" = "y" ]; then
+
+NET_IFACE_2=$gateway_net_iface_2
+
+
+fi
+
+if [ "$hostapd" = "y" ]; then
+
+sudo apt-get install --assume-yes --force-yes hostapd wireless-tools
+
+gzip -c /usr/share/doc/hostapd/examples/hostapd.conf.gz > /etc/hostapd/hostapd.conf
+
+sed -i "6s/wlan0/$AP_interface/" /etc/hostapd/hostapd.conf
+sed -i "17s/# driver=hostap/driver=nl80211/" /etc/hostapd/hostapd.conf
+sed -i "78s/test/$AP_ssid/" /etc/hostapd/hostapd.conf
+sed -i "94s/hw_mode=a/hw_mode=g/" /etc/hostapd/hostapd.conf
+sed -i "s/channel=60/channel=6/" /etc/hostapd/hostapd.conf
+sed -i "678s/#wpa=1/wpa=1/" /etc/hostapd/hostapd.conf
+sed -i "687s/#wpa_passphrase=secret passphrase/wpa_passphrase=$AP_wpa_passphrase/" /etc/hostapd/hostapd.conf
+sed -i "699s/#wpa_key_mgmt=WPA-PSK WPA-EAP/wpa_key_mgmt=WPA-PSK/" /etc/hostapd/hostapd.conf
+
+if [ "$gateway_local_bridge" = "y" ]; then
+sed -i "11s/#//" /etc/hostapd/hostapd.conf
+fi
+
+mv /etc/hostapd $LAMPP_DIRECTORY/etc/hostapd
+ln -s $LAMPP_DIRECTORY/etc/hostapd /etc/hostapd
+
+
+fi
+
+
+
 
 
 
@@ -181,13 +223,16 @@ cp /usr/share/doc/shorewall/examples/two-interfaces/* /etc/shorewall
 
 sed -i "s/eth0/NET_IFACE/" /etc/shorewall/interfaces
 sed -i "s/eth1/LOCAL_IFACE/" /etc/shorewall/interfaces
+sed -i "16s/detect/192.168.$range.255/" /etc/shorewall/interfaces
+sed -i "s/eth1/LOCAL_IFACE/" /etc/shorewall/routestopped
 sed -i "s/eth0/NET_IFACE/" /etc/shorewall/masq
-sed -i "s/10.0.0.0\/8,\\\/LOCAL_IFACE/" /etc/shorewall/masq
+sed -i "s/10.0.0.0\/8,\\\/192.168.$range.0\/24/" /etc/shorewall/masq
 sed -i "s/169.254.0.0\/16,\\\//" /etc/shorewall/masq
 sed -i "s/172.16.0.0\/12,\\\//" /etc/shorewall/masq
 sed -i "s/192.168.0.0\/16//" /etc/shorewall/masq
 sed -i "s/NET_IFACE/$NET_IFACE/" /etc/shorewall/interfaces
 sed -i "s/LOCAL_IFACE/$LOCAL_IFACE/" /etc/shorewall/interfaces
+sed -i "s/LOCAL_IFACE/$LOCAL_IFACE/" /etc/shorewall/routestopped
 sed -i "s/NET_IFACE/$NET_IFACE/" /etc/shorewall/masq
 sed -i "s/LOCAL_IFACE/$LOCAL_IFACE/" /etc/shorewall/masq
 sed -i "s/STARTUP_ENABLED=No/STARTUP_ENABLED=Yes/" /etc/shorewall/shorewall.conf
@@ -197,6 +242,31 @@ sed -i "20G" /etc/shorewall/rules
 sed -i "20G" /etc/shorewall/rules
 sed -i "21s/^/DNS(ACCEPT)  loc   \$FW/" /etc/shorewall/rules
 sed -i "22s/^/DNS(ACCEPT)  \$FW   loc/" /etc/shorewall/rules
+
+
+if [ "$gateway_local_bridge" = "y" ]; then
+
+sed -i "16s/tcpflags/routeback,bridge,tcpflags/" /etc/shorewall/interfaces
+
+fi
+
+if [ "$gateway_multiple_isp" = "y" ]; then
+
+echo "#NAME	NUMBER	MARK	DUPLICATE	INTERFACE	GATEWAY	OPTIONS	COPY
+ISP1	1	1	main	$NET_IFACE	detect	track,balance	$LOCAL_IFACE
+ISP2	2	2	main	$NET_IFACE_2	detect	track,balance	$LOCAL_IFACE
+" > /etc/shorewall/providers
+
+sed -i "15G" /etc/shorewall/interfaces
+sed -i "16s/^/net     $NET_IFACE_2            detect          dhcp,tcpflags,nosmurfs,routefilter,logmartians/" /etc/shorewall/interfaces
+
+sed -i "16G" /etc/shorewall/policy
+sed -i "17s/^/net     net	DROP/" /etc/shorewall/policy
+
+sed -i "16s/^/$NET_IFACE_2     192.168.$range.0\/24/" /etc/shorewall/masq
+
+
+fi
 
 
 chmod -R +r /etc/shorewall
@@ -319,6 +389,24 @@ chmod +x /opt/ciws/etc/bind.cron.sh
 echo "*/4 * * * * root /opt/ciws/etc/bind.cron.sh > /dev/null 2>&1" >> /etc/cron.d/bind_auto
 chmod +x /etc/cron.d/bind_auto
 
+if [ "$gateway_local_bridge" = "y" ]; then
+
+echo "#!/bin/bash
+ifconfig $gateway_local_iface 0.0.0.0 promisc up
+ifconfig $gateway_local_iface_2 0.0.0.0 promisc up
+brctl addbr $LOCAL_IFACE
+brctl addif $LOCAL_IFACE $gateway_local_iface
+brctl addif $LOCAL_IFACE $gateway_local_iface_2
+" > $LAMPP_DIRECTORY/etc/rc.local_local_bridge
+chmod +x $LAMPP_DIRECTORY/etc/rc.local_local_bridge
+echo "#!/bin/bash
+ifconfig $gateway_local_iface 0.0.0.0 promisc up" > /etc/dhcp3/dhclient-exit-hooks.d/zzzz_virt_local_interface_1
+chmod +x  /etc/dhcp3/dhclient-exit-hooks.d/zzzz_virt_local_interface_1
+echo "#!/bin/bash
+ifconfig $gateway_local_iface_2 0.0.0.0 promisc up" > /etc/dhcp3/dhclient-exit-hooks.d/zzzz_virt_local_interface_2
+chmod +x  /etc/dhcp3/dhclient-exit-hooks.d/zzzz_virt_local_interface_2
+
+fi
 
 
 
@@ -345,6 +433,7 @@ sudo /etc/init.d/isc-dhcp-server restart
 chmod +x $LAMPP_DIRECTORY/etc/rc.local_gateway
 
 echo "
+/opt/ciws/etc/rc.local_local_bridge
 /opt/ciws/etc/rc.local_gateway
 " >> /etc/rc.local
 echo "
