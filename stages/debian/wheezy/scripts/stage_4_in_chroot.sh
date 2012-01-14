@@ -45,9 +45,9 @@ if [ "$DEB_DIST" == "squeeze" ] ; then
 
 fi
 
+#disable by gdm12
 
-
-if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
+if [ $(cat /etc/X11/default-display-manager | grep gdm12) ]; then 
 
 	apt-get install --assume-yes --force-yes hal halevt 
 
