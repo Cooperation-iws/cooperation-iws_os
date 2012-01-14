@@ -52,7 +52,7 @@ if [ "$hostapd" = "y" ]; then
 
 sudo apt-get install --assume-yes --force-yes hostapd wireless-tools
 
-gzip -c /usr/share/doc/hostapd/examples/hostapd.conf.gz > /etc/hostapd/hostapd.conf
+gunzip -c /usr/share/doc/hostapd/examples/hostapd.conf.gz > /etc/hostapd/hostapd.conf
 
 sed -i "6s/wlan0/$AP_interface/" /etc/hostapd/hostapd.conf
 sed -i "17s/# driver=hostap/driver=nl80211/" /etc/hostapd/hostapd.conf
@@ -62,7 +62,7 @@ sed -i "s/channel=60/channel=6/" /etc/hostapd/hostapd.conf
 sed -i "678s/#wpa=1/wpa=1/" /etc/hostapd/hostapd.conf
 sed -i "687s/#wpa_passphrase=secret passphrase/wpa_passphrase=$AP_wpa_passphrase/" /etc/hostapd/hostapd.conf
 sed -i "699s/#wpa_key_mgmt=WPA-PSK WPA-EAP/wpa_key_mgmt=WPA-PSK/" /etc/hostapd/hostapd.conf
-
+sed -i 's/#DAEMON_CONF=""/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/' /etc/default/hostapd
 if [ "$gateway_local_bridge" = "y" ]; then
 sed -i "11s/#//" /etc/hostapd/hostapd.conf
 fi

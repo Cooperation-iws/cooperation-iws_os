@@ -60,7 +60,7 @@ gateway_local_iface_2="eth2"
 gateway_multiple_isp="n"
 gateway_net_iface_2="eth2"
 hostapd="y"
-AP_interface="wlan0"
-AP_ssid="test76"
+AP_interface=$gateway_local_iface
+AP_ssid="test77"
 AP_wpa_passphrase="0123456789"
 #Liveusb 1.1.x
