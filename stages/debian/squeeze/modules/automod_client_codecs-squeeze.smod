@@ -25,6 +25,10 @@ apt-get install --assume-yes --force-yes fglrx-modules-dkms fglrx-control fglrx-
 
 apt-get install --assume-yes --force-yes fglrx-glx-ia32
 
+apt-get install --assume-yes --force-yes wireless-tools
+
+apt-get install --assume-yes --force-yes sshfs
+
 
 if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
 #apt-get install --assume-yes --force-yes gnome-icon-theme* human-icon-theme* hplip gdm-themes brasero

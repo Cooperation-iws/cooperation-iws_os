@@ -40,7 +40,7 @@ Owners: slapd
 Flags: seen
 " > /var/cache/debconf/passwords.dat
 
-apt-get install --assume-yes --force-yes slapd ldap-utils
+apt-get install --assume-yes --force-yes slapd ldap-utils libnss-ldapd libpam-ldapd
 
 mv /etc/ldap $LAMPP_DIRECTORY/etc
 

@@ -49,7 +49,7 @@ wordpress_mysql_pwd[1]="$mysql_generic_pwd"
 sogo_mysql_pwd="$mysql_generic_pwd"
 sogo_admin_email="admin.local@$domain"
 #D#evclient 0.1
-#Gateway DNS 1.1.x
+#G#ateway DNS 1.1.x
 gateway_nb_machine=20
 gateway_net_iface="eth0"
 gateway_local_iface="wlan0"

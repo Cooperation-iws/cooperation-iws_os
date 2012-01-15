@@ -13,6 +13,9 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 . /tmp/scripts_params
 
 echo "I: config nx"
+apt-get install --assume-yes --force-yes openssh-server
+/etc/init.d/ssh stop
+
 cd /tmp
 if [ $ARCH == "686" ]; then
 wget $URL_CIWS_DEPOT/nxclient_3.5.0-7_i386.deb

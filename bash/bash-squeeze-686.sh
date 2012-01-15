@@ -1,7 +1,7 @@
 #!/bin/bash
 ciws_path="/home/esmalif/live-scripts/livescripts-trunk/"
 working_path="/home/esmalif/livescript/dev/"
-iso_path="/home/esmalif/livescript/ISO-squeeze-trunk/"
+iso_path="/home/esmalif/livescript/ISO-trunk/"
 template="/home/esmalif/livescript/livescripts-trunk/bash/templates/template-test-squeeze-686.sh"
 webappmirror="http://wwi.lokaleskif-b.intra/depot/ciws-depot-wheezy/"
 debian_deb_mirror="http://wwi.lokaleskif-b.intra/depot/squeeze_mirror/debian/"
@@ -29,5 +29,10 @@ cd /home/esmalif/livescript/livescripts-trunk
 #sudo ./cooperation-iws.py -c --createdirectories --dist debian --directory $working_path/test369 --outputisoname cooperation-iws-1c42e1d9b8024c0552ffd8c8ca2ab760-2011-02-22-10-24-20.iso --username ciwsadmin --userfullname ciws-user --password cooperation --host ciws-server --isofile $iso_path/gnome-squeeze-amd64-110818.iso --distvers squeeze --modulesfile $template --webappmirror $webappmirror --debmirror $debian_deb_mirror --debmirrornonfree $debian_deb_mirror_nonfree --arch amd64 --debmirrorsecurity $debian_deb_mirror_security --artwork wheezy --locale fr --keyblang fr --disautologin --silent
 
 
-sudo ./cooperation-iws.py -c --createdirectories --dist debian --directory $working_path/test424 --outputisoname cooperation-iws-1c42e1d9b8024c0552ffd8c8ca2ab760-2011-02-22-10-24-20.iso --username ciwsadmin --userfullname ciwsuser --password cooperation --host desk-server-3 --isofile $iso_path/gnome-full-squeeze-686-110912.iso --distvers squeeze --modulesfile $template --webappmirror $webappmirror --debmirror $debian_deb_mirror --debmirrornonfree $debian_deb_mirror_nonfree --arch 686 --debmirrorsecurity $debian_deb_mirror_security --artwork wheezy --locale fr --keyblang fr --disautologin --silent
+sudo ./cooperation-iws.py -c --createdirectories --dist debian --directory $working_path/test432 --outputisoname cooperation-iws-1c42e1d9b8024c0552ffd8c8ca2ab760-2011-02-22-10-24-20.iso --username ciwsadmin --userfullname ciwsuser --password cooperation --host desk-server-3 --isofile $iso_path/gnome-full-squeeze-686-110912.iso --distvers squeeze --modulesfile $template --webappmirror $webappmirror --debmirror $debian_deb_mirror --debmirrornonfree $debian_deb_mirror_nonfree --arch 686 --debmirrorsecurity $debian_deb_mirror_security --artwork wheezy --locale fr --keyblang fr --disautologin --silent
+
+
+#sudo ./cooperation-iws.py -c --createdirectories --dist debian --directory $working_path/test428 --outputisoname cooperation-iws-1c42e1d9b8024c0552ffd8c8ca2ab760-2011-02-22-10-24-20.iso --username ciwsadmin --userfullname ciwsuser --password cooperation --host desk-server-3 --isofile $iso_path/lxde-squeeze-686-120115.iso --distvers squeeze --modulesfile $template --webappmirror $webappmirror --debmirror $debian_deb_mirror --debmirrornonfree $debian_deb_mirror_nonfree --arch 686 --debmirrorsecurity $debian_deb_mirror_security --artwork wheezy --locale fr --keyblang fr --disautologin --silent
+
+#sudo ./cooperation-iws.py -c --createdirectories --dist debian --directory $working_path/test430 --outputisoname cooperation-iws-1c42e1d9b8024c0552ffd8c8ca2ab760-2011-02-22-10-24-20.iso --username ciwsadmin --userfullname ciwsuser --password cooperation --host desk-server-3 --isofile $iso_path/xfce-squeeze-686-120115.iso --distvers squeeze --modulesfile $template --webappmirror $webappmirror --debmirror $debian_deb_mirror --debmirrornonfree $debian_deb_mirror_nonfree --arch 686 --debmirrorsecurity $debian_deb_mirror_security --artwork wheezy --locale fr --keyblang fr --disautologin --silent
 
