@@ -229,8 +229,6 @@ moodle_admin_email[1]="admin.local@$domain"
 #M#apnik 0.7.1
 #M#apserver 5.6.6
 #P#hpldapadmin 1.2.0
-#S#lapd 2.4.25
-slapd_root_pwd="$mysql_generic_pwd"
 #S#ogo 1.3.8
 sogo_mysql_pwd="$mysql_generic_pwd"
 sogo_admin_email="admin.local@$domain"
@@ -268,8 +266,8 @@ trac_admin_pwd[1]="$gen_login_pwd"
 #O#penERP 6.0.2
 openerp_name="Openerp_1"
 openerp_psgsql_pwd="$mysql_generic_pwd"
-#P#hpldapadmin 1.2.0
-#S#lapd 2.4.25
+#Phpldapadmin 1.2.0
+#Slapd 2.4.25
 slapd_root_pwd="$mysql_generic_pwd"
 #J#itsi 1.0beta
 #J#abber 1.4
@@ -281,9 +279,17 @@ ntop_pwd=$gen_login_pwd
 #F#reeradius 2.1.10
 #F#reeradius-dialupadmin 2.1.10
 #Liveusb 1.1.x
-#Gateway DNS 1.1.x
+#G#ateway DNS 1.1.x
 gateway_nb_machine=20
 gateway_net_iface="eth0"
-gateway_local_iface="eth1"
-range=019
+gateway_local_iface="wlan0"
+range=19
 gateway_recursion="n"
+gateway_local_bridge="n"
+gateway_local_iface_2="eth2"
+gateway_multiple_isp="n"
+gateway_net_iface_2="eth2"
+hostapd="y"
+AP_interface=$gateway_local_iface
+AP_ssid="test77"
+AP_wpa_passphrase="0123456789"

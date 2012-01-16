@@ -26,6 +26,8 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 function INSTALL
 {
+
+
 echo "
 Name: slapd/password1
 Template: slapd/password1
@@ -40,11 +42,11 @@ Owners: slapd
 Flags: seen
 " > /var/cache/debconf/passwords.dat
 
-apt-get install --assume-yes --force-yes slapd ldap-utils libnss-ldapd libpam-ldapd
+apt-get install --assume-yes --force-yes slapd ldap-utils 
 
-mv /etc/ldap $LAMPP_DIRECTORY/etc
+#mv /etc/ldap $LAMPP_DIRECTORY/etc
 
-ln -s $LAMPP_DIRECTORY/etc/ldap /etc/ldap
+#ln -s $LAMPP_DIRECTORY/etc/ldap /etc/ldap
 
 mv /var/lib/slapd $LAMPP_DIRECTORY/var/lib
 
