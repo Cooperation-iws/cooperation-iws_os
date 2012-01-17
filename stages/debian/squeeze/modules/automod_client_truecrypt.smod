@@ -25,29 +25,16 @@ dpkg -i truecrypt_6.1a-0_i386.deb
 
 apt-get -f install --assume-yes --force-yes
 
+echo "
+Name: shared/accepted-sun-dlj-v1-1
+Template: shared/accepted-sun-dlj-v1-1
+Value: true
+Owners: sun-java6-bin, sun-java6-jdk, sun-java6-jre
+Flags: seen
+" >> /var/cache/debconf/config.dat
+
 apt-get install --assume-yes --force-yes sun-java6-bin python-pexpect
 
-cd $DL_DIR
-
-wget $URL_CIWS_DEPOT/tcgui.0.4.2.tar.gz
-
-tar -xzf tcgui.0.4.2.tar.gz
-
-cd tcgui-0.4.2
-
-sed -i "s/read selection/selection=1/" install.sh
-sed -i "46s/exit//" install.sh
-sed -i '76s/read antwort/antwort="y"/' install.sh
-sed -i '92s/read antwort/antwort="y"/' install.sh
-
-chmod +x install.sh
-./install.sh $LIVEUSER
-
-groupmod -g 411 truecrypt
-echo "
-#TrueCrypt
-adduser $LIVEUSER truecrypt
-adduser root truecrypt " >> /etc/rc.local
 
 else
 
