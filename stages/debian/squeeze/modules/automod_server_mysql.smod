@@ -51,6 +51,60 @@ ln -s $LAMPP_DIRECTORY/etc/mysql /etc/mysql
 
 mv /usr/sbin/policy-rc.d.mysql /usr/sbin/policy-rc.d 
 
+if [ "$mysql_replication_master" == "y" ]; then
+
+
+sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf
+sed -i "s/#server-id/server-id/" /etc/mysql/my.cnf
+sed -i "s/#log_bin/log_bin/" /etc/mysql/my.cnf
+
+NB_DB=${#replication_db[*]}
+for (( count=1; count<=$NB_DB; count++ ))
+do
+sed -i "91G" /etc/mysql/my.cnf
+sed -i "92s/^/binlog_do_db=${replication_db[$count]}/" /etc/mysql/my.cnf
+done
+
+
+cd $DL_DIR
+echo "GRANT REPLICATION SLAVE ON *.* TO '$mysql_slave_user'@'%' IDENTIFIED BY '$mysql_slave_password';
+FLUSH PRIVILEGES;
+" > DB_mysql_replication.sql
+
+$BIN_MYSQL -u root <  DB_mysql_replication.sql
+
+fi
+
+if [ "$mysql_replication_slave" == "y" ]; then
+sed -i "s/#server-id		= 1/server-id		= 2/" /etc/mysql/my.cnf
+sed -i "91G" /etc/mysql/my.cnf
+sed -i "92s/^/master-connect-retry=60/" /etc/mysql/my.cnf
+
+NB_DB=${#replication_db[*]}
+for (( count=1; count<=$NB_DB; count++ ))
+do
+sed -i "91G" /etc/mysql/my.cnf
+sed -i "92s/^/replicate-wild-do-table=${replication_db[$count]}.%/" /etc/mysql/my.cnf
+sed -i "91G" /etc/mysql/my.cnf
+sed -i "92s/^/replicate-do-db=${replication_db[$count]}/" /etc/mysql/my.cnf
+
+#echo "Create database ${replication_db[$count]};" >> mysql_slave_db.sql
+done
+
+#$BIN_MYSQL -u root <  mysql_slave_db.sql
+echo "
+echo \"CHANGE MASTER TO MASTER_HOST='$mysql_master_domain', MASTER_USER='$mysql_slave_user' , MASTER_PASSWORD='$mysql_slave_password', MASTER_LOG_FILE='mysql-bin.000001', MASTER_LOG_POS=106;
+start slave;
+\" > /tmp/mysql_slave_init_master.sql
+
+$BIN_MYSQL -u root -p$mysql_root_password <  /tmp/mysql_slave_init_master.sql
+" > /opt/ciws/etc/mysql/mysql_slave_init_master.sh
+chmod 700 /opt/ciws/etc/mysql/mysql_slave_init_master.sh
+echo "
+/opt/ciws/etc/mysql/mysql_slave_init_master.sh
+" >> /etc/rc.local
+
+fi
 
 }
 
