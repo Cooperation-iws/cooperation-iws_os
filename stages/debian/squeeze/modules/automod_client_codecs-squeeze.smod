@@ -36,7 +36,7 @@ apt-get install --assume-yes --force-yes gnome-icon-theme* human-icon-theme* hpl
 fi
 
 if [ $(cat /etc/X11/default-display-manager | grep kdm) ]; then 
-apt-get install --assume-yes --force-yes kdeartwork-theme-icon kdeartwork-theme-window kde-kdm-themes kdmtheme hplip
+apt-get install --assume-yes --force-yes kdeartwork-theme-icon kdeartwork-theme-window hplip brasero
 fi
 
 
