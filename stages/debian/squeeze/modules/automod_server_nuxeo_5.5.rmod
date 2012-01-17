@@ -1,0 +1,209 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Nuxeo 5.5'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+NTOP_PWD=$ntop_pwd
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/nuxeo-5.5-120117.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+WGET_CIWS_DEPOT
+
+echo "
+Name: shared/accepted-sun-dlj-v1-1
+Template: shared/accepted-sun-dlj-v1-1
+Value: true
+Owners: sun-java6-bin, sun-java6-jdk, sun-java6-jre
+Flags: seen
+" >> /var/cache/debconf/config.dat
+
+sudo apt-get install --assume-yes --force-yes sun-java6-bin sun-java6-jdk sun-java6-jre sun-java6-fonts
+
+cd $DL_DIR
+tar -xzf nuxeo-5.5-120117.tar.gz -C /opt/ciws/server/.
+
+echo "
+Create database nuxeo ;
+grant all on nuxeo.* to nuxeo@localhost identified by '${nuxeo_mysql_pwd}';
+flush privileges;" > NUXEO_db.sql
+
+$BIN_MYSQL -u root < NUXEO_db.sql 
+
+$BIN_MYSQL -u root nuxeo < /opt/ciws/server/nuxeo-cap-5.5-tomcat/cooperation-iws.sql
+
+sed -i "s/nuxeo.db.user=root/nuxeo.db.user=nuxeo/" /opt/ciws/server/nuxeo-cap-5.5-tomcat/bin/nuxeo.conf
+sed -i "s/nuxeo.db.password=mysql_root/nuxeo.db.password=${nuxeo_mysql_pwd}/" /opt/ciws/server/nuxeo-cap-5.5-tomcat/bin/nuxeo.conf
+sed -i "29s/root/nuxeo/" /opt/ciws/server/nuxeo-cap-5.5-tomcat/nxserver/repos/default/default.xml
+sed -i "30s/mysql_root/${nuxeo_mysql_pwd}/" /opt/ciws/server/nuxeo-cap-5.5-tomcat/nxserver/repos/default/default.xml
+sed -i "13s/root/nuxeo/" /opt/ciws/server/nuxeo-cap-5.5-tomcat/nxserver/config/activity-datasource-config.xml
+sed -i "14s/mysql_root/${nuxeo_mysql_pwd}/" /opt/ciws/server/nuxeo-cap-5.5-tomcat/nxserver/config/activity-datasource-config.xml
+sed -i "11s/root/nuxeo/" /opt/ciws/server/nuxeo-cap-5.5-tomcat/nxserver/config/configuration.properties
+sed -i "40s/mysql_root/${nuxeo_mysql_pwd}/" /opt/ciws/server/nuxeo-cap-5.5-tomcat/nxserver/config/configuration.properties
+sed -i "36s/root/nuxeo/" /opt/ciws/server/nuxeo-cap-5.5-tomcat/nxserver/config/default-repository-config.xml
+sed -i "37s/mysql_root/${nuxeo_mysql_pwd}/" /opt/ciws/server/nuxeo-cap-5.5-tomcat/nxserver/config/default-repository-config.xml
+
+sed -i "s/\/opt\/ciws\/home\/esmalif\//\/opt\/ciws\/server/" /opt/ciws/server/nuxeo-cap-5.5-tomcat/*
+sed -i "s/\/opt\/ciws\/home\/esmalif\//\/opt\/ciws\/server/" /opt/ciws/server/nuxeo-cap-5.5-tomcat/*/*
+sed -i "s/\/opt\/ciws\/home\/esmalif\//\/opt\/ciws\/server/" /opt/ciws/server/nuxeo-cap-5.5-tomcat/*/*/*
+
+sed -i "s/gui //" /opt/ciws/server/nuxeo-cap-5.5-tomcat/bin/Start\ Nuxeo.command
+sed -i "s/gui //" /opt/ciws/server/nuxeo-cap-5.5-tomcat/bin/Stop\ Nuxeo.command
+
+cat << EOF_NUXEO > /etc/init.d/nuxeo
+#!/bin/bash
+nuxeo_HOME=/opt/ciws/server/nuxeo-cap-5.5-tomcat
+PIDFILE=/var/run/nuxeo-server.pid
+. /lib/lsb/init-functions
+
+set -e
+
+case "\$1" in
+    start)
+    if [ -f \$PIDFILE ]; then
+      log_begin_msg "Nuxeo server has already started."
+      sleep 5
+      log_end_msg 0
+      exit
+    fi
+      log_begin_msg "Starting Nuxeo server"
+      nohup \$nuxeo_HOME/bin/Start\ Nuxeo.command & > /dev/null 2>&1
+      touch \$PIDFILE
+      log_end_msg 0
+    ;;
+    stop)
+    if [ -f \$PIDFILE ]; then
+      log_begin_msg "Stopping Nuxeo server."
+       rm -f \$PIDFILE
+       nohup \$nuxeo_HOME/bin/Stop\ Nuxeo.command & > /dev/null 2>&1
+       log_end_msg 0
+       exit
+    fi
+      log_begin_msg "Nuxeo server is not running."
+      exit
+    ;;
+    *)
+    echo "Usage: \$0 {start|stop}"
+    exit 1
+esac
+exit 0
+EOF_NUXEO
+
+chmod 0755 /etc/init.d/nuxeo
+
+
+update-rc.d nuxeo defaults
+
+if [ "$domain" ] && [ -d /etc/bind ]; then
+
+echo "<VirtualHost *:80>
+	ServerName nuxeo.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://localhost:8080/
+	ProxyPassReverse /   http://localhost:8080/
+
+        
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /etc/apache2/sites-available/nuxeo
+#sudo cp $DOSSIER_CHROOT//tmp/default $DOSSIER_CHROOT//etc/apache2/sites-available/nuxeo
+sudo chown root.root /etc/apache2/sites-available/nuxeo
+sudo chmod 644 /etc/apache2/sites-available/nuxeo
+
+sed -i "9s/Order deny,allow/Order allow,deny/" /etc/apache2/mods-available/proxy.conf
+sed -i "10s/Deny/Allow/" /etc/apache2/mods-available/proxy.conf
+
+
+a2ensite nuxeo
+sudo a2enmod rewrite
+
+sudo a2enmod include
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod proxy_connect
+
+
+
+NUXEO_URL="http://nuxeo.$domain/"
+echo "nuxeo    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+else
+NUXEO_URL="<![CDATA[http://localhost:8080/]]>"
+fi
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$NUXEO_URL" "" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Nuxeo"
+INSTALL
+CREATE_WUI
+echo "I: End of install Nuxeo"

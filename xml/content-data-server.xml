@@ -5069,4 +5069,32 @@ Dotclear is a free software primarily designed for its users and regularly impro
 	
 	
 </item>
+<item>
+	<item_name>Nuxeo</item_name>
+	<item_version>5.5</item_version>
+	<item_desc>Data management system</item_desc>
+	<item_web>http://www.nuxeo.com/</item_web>
+	<item_verbose>Nuxeo EP, which is based on state of the art Java technologies, provides an innovative and flexible ECM approach. It has been designed to offer a wide range of functions, high scalability, standards compliance, a fast learning curve and increased productivity for both the developers and users. It is deployed on a Java EE 5 application server and leverages the full potential of the technological platform, such as clustering, high availability, manageability, ease of integration, and a wealth of development tools. Nuxeo EP is a global solution, which is ready to respond to the challenges of modern information management (Web 2.0, information explosion, off-site and off-line work, etc.). Nuxeo EP has a rich Ajax-based interface and is designed to be accessed using a standard web browser, such as Microsoft IE or Firefox. It can either be used from an office suite, such as Microsoft® Office™, or OpenOffice.org, or from a Nuxeo RCP application.</item_verbose>
+	<item_type>Applications server</item_type>
+	<item_license>LGPL,java</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Squeeze</field_OS>
+	
+	
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>nuxeo_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+
+	
+</item>
 </items>

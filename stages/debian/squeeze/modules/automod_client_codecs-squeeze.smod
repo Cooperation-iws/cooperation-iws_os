@@ -42,4 +42,8 @@ apt-get install --assume-yes --force-yes kdeartwork-theme-icon kdeartwork-theme-
 fi
 
 
+#if [ -d /usr/share/xfce4 ]; then 
 
+#apt-get install --assume-yes --force-yes xfce4-artwork xfce4-goodies
+
+#fi

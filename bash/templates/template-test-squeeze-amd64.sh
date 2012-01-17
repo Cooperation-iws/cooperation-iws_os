@@ -13,8 +13,8 @@ keep_local_apt_parameters="y"
 #kernel="2.6.32-5-amd64"
 kernel="2.6.32-5-amd64"
 #update live-initramfs Squeeze
-#D#NS server Squeeze
-#C#iwscms 0.9.2
+#DNS server Squeeze
+#Ciwscms 0.9.2
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
@@ -25,8 +25,8 @@ root_psgsql_pwd="$mysql_root_password"
 wordpress_name[1]="Wordpress_1"
 wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"
-#M#ysql 5.1
-#P#hpmyadmin 4.3.4.3
+#Mysql 5.1
+#Phpmyadmin 4.3.4.3
 #C#lamtk 4.27
 #C#odecs Squeeze
 #F#ilezilla 0.1
@@ -163,23 +163,11 @@ joomla_demo_mysql_pwd[1]="$mysql_generic_pwd"
 joomla_ciws_name[1]="Joomla_ciws_1"
 joomla_ciws_admin_email[1]="admin.local@$domain"
 joomla_ciws_mysql_pwd[1]="$mysql_generic_pwd"
-#D#rupal 7.7
-drupal_name[1]="Drupal_1"
-drupal_admin_email[1]="admin.local@$domain"
-drupal_mysql_pwd[1]="$mysql_generic_pwd"
 #M#ediawiki 1.17.0
 mediawiki_name[1]="Mediawiki_1"
 mediawiki_admin_email[1]="admin.local@$domain"
 mediawiki_mysql_pwd[1]="$mysql_generic_pwd"
 mediawiki_lang[1]="fr"
-#D#rupal-commerce 7.7
-drupal_commerce_name[1]="Drupal_commerce_1"
-drupal_commerce_admin_email[1]="admin.local@$domain"
-drupal_commerce_mysql_pwd[1]="$mysql_generic_pwd"
-#D#rupal-innovationnews 6.15
-drupal_innovationnews_name[1]="Drupal_innovationnews_1"
-drupal_innovationnews_admin_email[1]="admin.local@$domain"
-drupal_innovationnews_mysql_pwd[1]="$mysql_generic_pwd"
 #Z#abbix server 1.8.5
 zabbix_name="Zabbix_1"
 zabbix_mysql_pwd="$mysql_generic_pwd"
@@ -266,8 +254,8 @@ trac_admin_pwd[1]="$gen_login_pwd"
 #O#penERP 6.0.2
 openerp_name="Openerp_1"
 openerp_psgsql_pwd="$mysql_generic_pwd"
-#Phpldapadmin 1.2.0
-#Slapd 2.4.25
+#P#hpldapadmin 1.2.0
+#S#lapd 2.4.25
 slapd_root_pwd="$mysql_generic_pwd"
 #J#itsi 1.0beta
 #J#abber 1.4
@@ -293,3 +281,5 @@ hostapd="y"
 AP_interface=$gateway_local_iface
 AP_ssid="test77"
 AP_wpa_passphrase="0123456789"
+#Nuxeo 5.5
+nuxeo_mysql_pwd="$mysql_generic_pwd"
