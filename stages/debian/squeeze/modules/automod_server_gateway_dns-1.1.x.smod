@@ -52,6 +52,8 @@ if [ "$hostapd" = "y" ]; then
 
 sudo apt-get install --assume-yes --force-yes hostapd wireless-tools
 
+apt-get install --assume-yes --force-yes firmware-ralink
+
 gunzip -c /usr/share/doc/hostapd/examples/hostapd.conf.gz > /etc/hostapd/hostapd.conf
 
 sed -i "6s/wlan0/$AP_interface/" /etc/hostapd/hostapd.conf
