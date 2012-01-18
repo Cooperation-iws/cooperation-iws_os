@@ -35,8 +35,8 @@ done
 function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
-wget $URL_CIWS_DEPOT/dolibarr-3.1.0-011218.tar.gz
-tar -xzf dolibarr-3.1.0-011218.tar.gz
+wget $URL_CIWS_DEPOT/dolibarr-3.1.0-120118.tar.gz
+tar -xzf dolibarr-3.1.0-120118.tar.gz
 
 }
 

@@ -71,7 +71,7 @@ rm GROUPOFFICE_db.sql
 
 sed -i "s/admin.local@testsqueeze.intra/${groupoffice_admin_email[$count]}/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 sed -i "s/testsqueeze.intra/$domain/g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
-sed -i "s/\/opt\/ciws\/server\/var\/www\/groupoffice\//\/opt\/ciws\/server\/var\/www\/${MOD_NAME[$count]}\//g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
+sed -i "s/\/opt\/ciws\/server\/var\/www\/Groupoffice_1\//\/opt\/ciws\/server\/var\/www\/${MOD_NAME[$count]}\//g" $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 
 $BIN_MYSQL -u root ${MOD_NAME[$count]} < $WWW_DIRECTORY/${MOD_NAME[$count]}/cooperation-iws.sql
 

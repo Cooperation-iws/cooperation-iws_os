@@ -286,7 +286,8 @@ nuxeo_mysql_pwd="$mysql_generic_pwd"
 #Groupoffice 3.7.41
 groupoffice_name[1]="Groupoffice_1"
 groupoffice_mysql_pwd[1]="$mysql_generic_pwd"
+groupoffice_admin_email[1]="admin.local@$domain"
 #Dolibarr 3.1.0
 dolibarr_name[1]="Dolibarr_1"
 dolibarr_mysql_pwd[1]="$mysql_generic_pwd"
-
+dolibarr_admin_email[1]="admin.local@$domain"
