@@ -24,9 +24,7 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 
 
-apt_cacher_root="$(echo $DEB_MIRROR_PATH | sed \"s/debian\///\")"
-
-
+apt_cacher_root="$(echo $DEB_MIRROR_PATH | sed 's/debian\///' | sed 's/http:\/\///')"
 virtualmin_repo="$apt_cacher_root/virtualmin/"
 
 VIRTUALMIN_NONINTERACTIVE=1
@@ -58,8 +56,6 @@ chmod +x install_virtualmin.sh
 ./install_virtualmin.sh
 
 /etc/init.d/dovecot stop
-
-groupmod -g621 deniedssh
 
 
 mv /var/lib/ /opt/ciws/var/
@@ -122,8 +118,8 @@ ln -s /opt/ciws/etc/postgresql-common /etc/postgresql-common
 mv /etc/proftpd /opt/ciws/etc
 ln -s /opt/ciws/etc/proftpd /etc/proftpd
 
-mv /etc/samba /opt/ciws/etc
-ln -s /opt/ciws/etc/samba /etc/samba
+#mv /etc/samba /opt/ciws/etc
+#ln -s /opt/ciws/etc/samba /etc/samba
 
 mv /etc/spamassassin /opt/ciws/etc
 ln -s /opt/ciws/etc/spamassassin /etc/spamassassin
@@ -140,8 +136,8 @@ ln -s /opt/ciws/etc/thttpd /etc/thttpd
 mv /etc/usermin /opt/ciws/etc
 ln -s /opt/ciws/etc/usermin /etc/usermin
 
-mv /etc/virtualmin-licence /opt/ciws/etc
-ln -s /opt/ciws/etc/virtualmin-licence /etc/virtualmin-licence
+#mv /etc/virtualmin-licence /opt/ciws/etc
+#ln -s /opt/ciws/etc/virtualmin-licence /etc/virtualmin-licence
 
 mv /etc/warnquota.conf /opt/ciws/etc
 ln -s /opt/ciws/etc/warnquota.conf /etc/warnquota.conf
@@ -157,14 +153,14 @@ ln -s /opt/ciws/etc/webmin /etc/webmin
 mv /usr/share/webmin /opt/ciws/usr/share
 ln -s /opt/ciws/usr/share/webmin /usr/share/webmin
 
-mv /etc/exim4 /opt/ciws/etc
-ln -s /opt/ciws/etc/exim4 /etc/exim4
+#mv /etc/exim4 /opt/ciws/etc
+#ln -s /opt/ciws/etc/exim4 /etc/exim4
 
 mv /etc/pam.d /opt/ciws/etc
 ln -s /opt/ciws/etc/pam.d /etc/pam.d
 
-mv /etc/PolicyKit /opt/ciws/etc
-ln -s /opt/ciws/etc/PolicyKit /etc/PolicyKit
+#mv /etc/PolicyKit /opt/ciws/etc
+#ln -s /opt/ciws/etc/PolicyKit /etc/PolicyKit
 
 mv /etc/logrotate.d /opt/ciws/etc
 ln -s /opt/ciws/etc/logrotate.d /etc/logrotate.d
@@ -181,6 +177,15 @@ ln -s /opt/ciws/etc/php5 /etc/php5
 
 mv /etc/cron.daily /opt/ciws/etc
 ln -s /opt/ciws/etc/cron.daily /etc/cron.daily
+
+mv /etc/cron.hourly /opt/ciws/etc
+ln -s /opt/ciws/etc/cron.hourly /etc/cron.hourly
+
+mv /etc/cron.monthly /opt/ciws/etc
+ln -s /opt/ciws/etc/cron.monthly /etc/cron.monthly
+
+mv /etc/cron.weekly /opt/ciws/etc
+ln -s /opt/ciws/etc/cron.weekly /etc/cron.weekly
 
 mv /etc/scponly /opt/ciws/etc
 ln -s /opt/ciws/etc/scponly /etc/scponly
