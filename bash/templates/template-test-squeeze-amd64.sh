@@ -14,7 +14,7 @@ keep_local_apt_parameters="y"
 kernel="2.6.32-5-amd64"
 #update live-initramfs Squeeze
 #DNS server Squeeze
-#Ciwscms 0.9.2
+#C#iwscms 0.9.2
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
@@ -25,8 +25,8 @@ root_psgsql_pwd="$mysql_root_password"
 wordpress_name[1]="Wordpress_1"
 wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"
-#Mysql 5.1
-#Phpmyadmin 4.3.4.3
+#M#ysql 5.1
+#P#hpmyadmin 4.3.4.3
 #C#lamtk 4.27
 #C#odecs Squeeze
 #F#ilezilla 0.1
@@ -128,7 +128,7 @@ lodel_name[1]="Lodel_1"
 lodel_admin_email[1]="admin.local@$domain"
 lodel_mysql_pwd[1]="$mysql_generic_pwd"
 lodel_lang[1]="fr_FR.UTF8"
-#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Squeeze
+#P#ostfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Squeeze
 postfixadmin_name="Mail_1"
 mail_domain="$domain"
 postfix_admin_email="admin.local@$domain"
@@ -139,7 +139,6 @@ postfix_relay_authentication_name=""
 postfix_relay_authentication_password=""
 mailbox_quota="0"
 #P#hpsysinfo 3.0
-
 #P#iwigo 2.2.4
 piwigo_name[1]="Piwigo_1"
 piwigo_admin_email[1]="admin.local@$domain"
@@ -283,11 +282,13 @@ AP_ssid="test77"
 AP_wpa_passphrase="0123456789"
 #N#uxeo 5.5
 nuxeo_mysql_pwd="$mysql_generic_pwd"
-#Groupoffice 3.7.41
+#G#roupoffice 3.7.41
 groupoffice_name[1]="Groupoffice_1"
 groupoffice_mysql_pwd[1]="$mysql_generic_pwd"
 groupoffice_admin_email[1]="admin.local@$domain"
-#Dolibarr 3.1.0
+#D#olibarr 3.1.0
 dolibarr_name[1]="Dolibarr_1"
 dolibarr_mysql_pwd[1]="$mysql_generic_pwd"
 dolibarr_admin_email[1]="admin.local@$domain"
+#Virtualmin Squeeze
+
