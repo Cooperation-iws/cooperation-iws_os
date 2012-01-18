@@ -128,7 +128,7 @@ lodel_name[1]="Lodel_1"
 lodel_admin_email[1]="admin.local@$domain"
 lodel_mysql_pwd[1]="$mysql_generic_pwd"
 lodel_lang[1]="fr_FR.UTF8"
-#P#ostfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Squeeze
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Squeeze
 postfixadmin_name="Mail_1"
 mail_domain="$domain"
 postfix_admin_email="admin.local@$domain"
@@ -281,5 +281,12 @@ hostapd="y"
 AP_interface=$gateway_local_iface
 AP_ssid="test77"
 AP_wpa_passphrase="0123456789"
-#Nuxeo 5.5
+#N#uxeo 5.5
 nuxeo_mysql_pwd="$mysql_generic_pwd"
+#Groupoffice 3.7.41
+groupoffice_name[1]="Groupoffice_1"
+groupoffice_mysql_pwd[1]="$mysql_generic_pwd"
+#Dolibarr 3.1.0
+dolibarr_name[1]="Dolibarr_1"
+dolibarr_mysql_pwd[1]="$mysql_generic_pwd"
+
