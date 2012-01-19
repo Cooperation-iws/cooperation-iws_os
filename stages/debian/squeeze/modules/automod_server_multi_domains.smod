@@ -1,0 +1,157 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Multi-domains 0.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Documentation'
+RMOD_DESCRIPTION_FR='Documentation'
+RMOD_VERBOSE="Browse and search manpages "
+RMOD_VERBOSE_FR="Rechercher et naviguer dans les pages de manuels"
+
+RMOD_RUN_IN_CHROOT=True
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo "
+#!/bin/bash
+
+#cleaning domains list
+UPDT_DOMAIN_LIST=\"\$( cat /opt/ciws/var/identity/domain.txt )\"
+
+for UPDT_DOMAIN in \$UPDT_DOMAIN_LIST
+do
+if [ -z \"$(cat /etc/bind/named.conf.local | grep \$UPDT_DOMAIN)\" ]; then
+sed -i \"/$UPDT_DOMAIN/d\" /opt/ciws/var/identity/domain.txt
+fi
+done
+
+#adding new domains
+DOMAIN_LIST=\$(cat /etc/bind/named.conf.local* | grep \"zone\" | cut -d'\"' -f2)
+
+for DOMAIN in \$DOMAIN_LIST
+do
+if [ -z \"\$(cat /opt/ciws/var/identity/domain.txt | grep \$DOMAIN)\" ]; then
+echo \"\$DOMAIN\" >> /opt/ciws/var/identity/domain.txt
+sed -i \"s/www/wwi/\" /etc/bind/\$DOMAIN.hosts
+sed -i \"s/www/wwi/g\" /etc/apache2/sites-available/*.conf
+ip_address=\$(sudo ifconfig | grep \"RX\" --before-context=4 | grep \"UP BROADCAST RUNNING MULTICAST\" --before-context=2 | grep -m 1 \"inet adr\"| cut -d\":\" -f2 | cut -d\" \" -f1)
+sed -i \"s/\$ip_address/*/g\" /etc/apache2/sites-available/*.conf
+sed -i 's/_default_/\*/' /etc/apache2/sites-available/*.conf
+cp /etc/bind/\$DOMAIN.hosts /etc/bind/\$DOMAIN.hosts.tpl
+sed -i \"s/\$ip_address/ip_address/g\" /etc/bind/\$DOMAIN.hosts.tpl
+sed -i \"s/\$ip_address/*/g\" /etc/apache2/apache2.conf
+sudo /etc/init.d/apache2 reload
+fi
+done
+" > /opt/ciws/etc/domain-watch.cron.sh
+
+chmod +x /opt/ciws/etc/domain-watch.cron.sh
+
+echo "*/3 * * * * root /opt/ciws/etc/domain-watch.cron.sh > /dev/null 2>&1" > /etc/cron.d/domain_detection
+chmod +x /etc/cron.d/domain_detection
+
+echo "#!/bin/bash
+
+if [ \"\$1\" = \"\" ]; then
+
+echo \"Usage: sudo ./opt/ciws/usr/share/add_domain.sh \\\"Your_domain\\\" \"
+
+fi
+
+domain=\$1
+
+
+cat << EOT_LOCAL >> /etc/bind/named.conf.local-\$domain
+
+zone \"\$domain\" {
+        type master;
+        file \"/var/cache/bind/db.\$domain\";
+	
+};
+
+EOT_LOCAL
+
+echo \"include \\\"/etc/bind/named.conf.local-\$domain\\\";\" >> /etc/bind/named.conf.local
+
+cat << EOT_VAR >> /var/cache/bind/db.\$domain.tpl
+\\\$TTL 604800
+@ IN SOA \$domain. $HOSTNAME.\$domain. (
+                2008080101      ;serial
+                04800           ;refresh
+                86400           ;retry        
+                2419200         ;expire
+                604800          ;negative cache TTL
+                )
+@      IN      NS      $HOSTNAME.\$domain.
+@      IN      A       ip_address
+$HOSTNAME    IN      A       ip_address
+wwi CNAME $HOSTNAME
+EOT_VAR
+
+chmod +r-w /var/cache/bind/db.\$domain.tpl
+
+
+ip_address=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr'| cut -d':' -f2 | cut -d' ' -f1)
+cp /var/cache/bind/db.\$domain.tpl /var/cache/bind/db.\$domain
+sed -i \"s/ip_address/\$ip_address/g\" /var/cache/bind/db.\$domain
+
+/etc/init.d/bind9 restart
+
+" > /opt/ciws/usr/share/add_domain.sh
+
+chmod +x /opt/ciws/usr/share/add_domain.sh
+
+echo "#!/bin/bash
+
+if [ \"\$1\" = \"\" ]; then
+
+echo \"Usage: sudo ./opt/ciws/usr/share/remove_domain.sh \\\"Your_domain\\\" \"
+
+fi
+
+domain=\$1
+
+sed -i \"s/include \\\"\/etc\/bind\/named.conf.local-\$domain\\\";//\" /etc/bind/named.conf.local
+
+/etc/init.d/bind9 restart
+
+
+" > /opt/ciws/usr/share/remove_domain.sh
+
+chmod +x /opt/ciws/usr/share/remove_domain.sh
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+
+
+echo "I: Install n2n"
+INSTALL
+
+echo "I: End of install n2n"

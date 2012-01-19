@@ -1,0 +1,217 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Multi-users 0.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Documentation'
+RMOD_DESCRIPTION_FR='Documentation'
+RMOD_VERBOSE="Browse and search manpages "
+RMOD_VERBOSE_FR="Rechercher et naviguer dans les pages de manuels"
+
+RMOD_RUN_IN_CHROOT=True
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo '#!/bin/bash
+##UPDATING USER
+mkdir /opt/ciws/etc/passwd.back
+mkdir  /opt/ciws/etc/passwd.back/$(date --rfc-3339 date)
+cp /opt/ciws/etc/passwd.tpl /opt/ciws/etc/passwd.back/$(date --rfc-3339 date)/passwd.$(date --rfc-3339 seconds | sed "s/ /_/")
+cp /opt/ciws/etc/shadow.tpl /opt/ciws/etc/passwd.back/$(date --rfc-3339 date)/shadow.$(date --rfc-3339 seconds | sed "s/ /_/")
+cp /opt/ciws/etc/group.tpl /opt/ciws/etc/passwd.back/$(date --rfc-3339 date)/group.$(date --rfc-3339 seconds | sed "s/ /_/")
+cp /opt/ciws/etc/gshadow.tpl /opt/ciws/etc/passwd.back/$(date --rfc-3339 date)/gshadow.$(date --rfc-3339 seconds | sed "s/ /_/")
+chmod -R 700 /opt/ciws/etc/passwd.back
+
+
+cp /opt/ciws/etc/passwd.tpl /opt/ciws/etc/passwd
+cp /opt/ciws/etc/shadow.tpl /opt/ciws/etc/shadow
+cp /opt/ciws/etc/group.tpl /opt/ciws/etc/group
+cp /opt/ciws/etc/gshadow.tpl /opt/ciws/etc/gshadow
+chmod 700 /opt/ciws/etc/passwd
+chmod 700 /opt/ciws/etc/shadow
+chmod 700 /opt/ciws/etc/group
+chmod 700 /opt/ciws/etc/gshadow
+
+
+
+#Adduser
+for row in $(sed "s/ //g" /opt/ciws/etc/passwd)
+do
+
+row_name=$(echo $row | cut -d":" -f1)
+row_path=$(echo $row | cut -d":" -f6)
+row_shell=$(echo $row | cut -d":" -f7)
+row_passwd=$(cat /opt/ciws/etc/shadow | grep "$row_name:" | cut -d":" -f2)
+
+if [[ ! $(cat /etc/passwd | grep "$row_name:") ]]; then
+echo $row_name
+echo $row_path
+echo $row_shell
+echo $row_passwd
+adduser --home $row_path --shell $row_shell --no-create-home --force-badname --quiet --gecos " " --disabled-password $row_name
+echo "$row_name:$row_passwd" | chpasswd -e
+
+for row_g in $(cat /opt/ciws/etc/group | grep $row_name)
+do
+group_name=$(echo $row_g | cut -d":" -f1)
+
+addgroup $group_name $row_name
+done
+
+
+fi
+
+
+done
+
+#Addgroup
+
+for row in $(sed "s/ //g" /opt/ciws/etc/group)
+do
+
+row_name=$(echo $row | cut -d":" -f1)
+row_x=$(echo $row | cut -d":" -f2)
+row_gid=$(echo $row | cut -d":" -f3)
+row_passwd=$(cat /opt/ciws/etc/gshadow | grep "$row_name:" | cut -d":" -f2)
+
+if [[ ! $(cat /etc/group | grep "$row_name:") ]]; then
+echo $row_name
+echo $row_x
+echo $row_gid
+echo $row_passwd
+addgroup -gid $row_gid $row_name
+fi
+
+
+done
+
+
+#Add user to group
+
+for row in $(sed "s/ //g" /opt/ciws/etc/passwd)
+do
+
+row_name=$(echo $row | cut -d":" -f1)
+row_path=$(echo $row | cut -d":" -f6)
+row_shell=$(echo $row | cut -d":" -f7)
+row_passwd=$(cat /opt/ciws/etc/shadow | grep "$row_name:" | cut -d":" -f2)
+
+if [[ ! $(cat /etc/passwd | grep "$row_name:") ]]; then
+echo $row_name
+echo $row_path
+echo $row_shell
+echo $row_passwd
+
+for row_g in $(cat /opt/ciws/etc/group | grep $row_name)
+do
+group_name=$(echo $row_g | cut -d":" -f1)
+
+addgroup $group_name $row_name
+done
+
+
+fi
+
+
+done
+
+#Sudoers
+
+
+
+' > /opt/ciws/etc/user_creation.sh
+chmod +x /opt/ciws/etc/user_creation.sh
+
+echo "#!/bin/bash
+
+Users_setup ()
+{
+
+echo -n \" multi-user-setup\"
+
+/opt/ciws/etc/user_creation.sh > /dev/null 2>&1
+}
+
+Users_setup
+" >> /lib/live/config/003-multi-users-setup
+chmod +x /lib/live/config/003-multi-users-setup
+
+
+
+echo "
+cp /etc/passwd /opt/ciws/etc/passwd.tpl
+cp /etc/shadow /opt/ciws/etc/shadow.tpl
+cp /etc/group /opt/ciws/etc/group.tpl
+cp /etc/gshadow /opt/ciws/etc/gshadow.tpl
+
+chmod 700 /opt/ciws/etc/passwd.tpl
+chmod 700 /opt/ciws/etc/shadow.tpl
+chmod 700 /opt/ciws/etc/group.tpl
+chmod 700 /opt/ciws/etc/gshadow.tpl
+
+"> /opt/ciws/etc/cron_user.sh
+
+chmod +x /opt/ciws/etc/cron_user.sh
+
+echo "*/1 * * * * root /opt/ciws/etc/cron_user.sh" > /etc/cron.d/users
+chmod +x /etc/cron.d/users
+
+mv /etc/sudoers.d $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/sudoers.d /etc/sudoers.d
+
+
+echo "#!/bin/bash
+
+
+if [ \"\$1\" = \"\" ]; then
+
+echo \"Usage: sudo ./opt/ciws/usr/share/user_creation.sh \\\"Your_user_name\\\" \"
+
+fi
+
+USERNAME=\$1
+
+adduser \$USERNAME
+
+export LIVE_USERNAME=\$USERNAME
+
+/lib/live/config/003-sudo
+
+" > /opt/ciws/usr/share/user_creation.sh
+
+chmod +x /opt/ciws/usr/share/user_creation.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+
+
+echo "I: Install n2n"
+INSTALL
+
+echo "I: End of install n2n"

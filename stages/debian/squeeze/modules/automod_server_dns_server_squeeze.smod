@@ -97,6 +97,9 @@ chmod +r-w /etc/bind/named.conf.options.tpl
 mv /etc/bind $LAMPP_DIRECTORY/etc/
 ln -s $LAMPP_DIRECTORY/etc/bind /etc/bind
 
+mkdir $LAMPP_DIRECTORY/var/cache
+mv /var/cache/bind $LAMPP_DIRECTORY/var/cache
+ln -s $LAMPP_DIRECTORY/var/cache/bind /var/cache/bind
 
 
 
@@ -112,9 +115,13 @@ ip_address_3=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUN
 ip_address_4=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr' | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f4)
 ip_gateway=\$(route -n | grep UG | sed 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/&*/g'| sed 's/ //g' | cut -d'*'  -f2)
 cp /etc/bind/named.conf.rev.tpl /etc/bind/named.conf.rev
-cp /var/cache/bind/db.$domain.tpl /var/cache/bind/db.$domain
+DOMAIN_LIST=\$(cat /etc/bind/named.conf.local* | grep \"zone\" | cut -d'\"' -f2)
+for domain in \$DOMAIN_LIST
+do
+cp /var/cache/bind/db.\$domain.tpl /var/cache/bind/db.\$domain
+sed -i \"s/ip_address/\$ip_address/g\" /var/cache/bind/db.\$domain
+done
 sed -i \"s/ip_gateway/\$ip_gateway/g\" /etc/bind/named.conf.rev
-sed -i \"s/ip_address/\$ip_address/g\" /var/cache/bind/db.$domain
 sed -i \"s/100.168.192/\$ip_address_3.\$ip_address_2.\$ip_address_1/g\" /etc/bind/named.conf.rev
 #sed -i \"s/nameserver 127.0.0.1/nameserver \$ip_gateway/g\" /etc/resolvconf/run/resolv.conf
 cp /etc/bind/named.conf.options.tpl /etc/bind/named.conf.options 
