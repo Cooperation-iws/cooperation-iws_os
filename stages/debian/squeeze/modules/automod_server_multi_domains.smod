@@ -141,6 +141,32 @@ sed -i \"s/include \\\"\/etc\/bind\/named.conf.local-\$domain\\\";//\" /etc/bind
 
 chmod +x /opt/ciws/usr/share/remove_domain.sh
 
+echo "#!/bin/bash
+
+if [ \"\$1\" = \"\" ] && [ \"\$2\" = \"\" ]; then
+
+echo \"Usage: sudo ./opt/ciws/usr/share/add_domain_virtualhost.sh \\\"Your_domain\\\" \\\"Your_document_root\\\" \"
+
+fi
+
+domain=\$1
+documentroot=\$2
+
+echo \"<VirtualHost *:80>
+	ServerName \$domain
+	ServerAlias wwi.\$domain
+        ServerAdmin support@\$domain
+	DocumentRoot /var/www/\$documentroot
+</VirtualHost>\" > /etc/apache2/sites-available/\$domain
+
+a2ensite \$domain
+/etc/init.d/apache2 reload
+
+
+" > /opt/ciws/usr/share/add_domain_virtualhost.sh
+
+chmod +x /opt/ciws/usr/share/add_domain_virtualhost.sh
+
 
 }
 
