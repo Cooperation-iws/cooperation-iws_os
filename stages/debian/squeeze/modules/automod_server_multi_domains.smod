@@ -77,6 +77,8 @@ if [ \"\$1\" = \"\" ]; then
 
 echo \"Usage: sudo ./opt/ciws/usr/share/add_domain.sh \\\"Your_domain\\\" \"
 
+exit 0
+
 fi
 
 domain=\$1
@@ -112,7 +114,7 @@ EOT_VAR
 chmod +r-w /var/cache/bind/db.\$domain.tpl
 
 
-ip_address=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet addr'| cut -d':' -f2 | cut -d' ' -f1)
+ip_address=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep -m 1 'inet adr'| cut -d':' -f2 | cut -d' ' -f1)
 cp /var/cache/bind/db.\$domain.tpl /var/cache/bind/db.\$domain
 sed -i \"s/ip_address/\$ip_address/g\" /var/cache/bind/db.\$domain
 
@@ -127,6 +129,8 @@ echo "#!/bin/bash
 if [ \"\$1\" = \"\" ]; then
 
 echo \"Usage: sudo ./opt/ciws/usr/share/remove_domain.sh \\\"Your_domain\\\" \"
+
+exit 0
 
 fi
 
@@ -147,16 +151,30 @@ if [ \"\$1\" = \"\" ] && [ \"\$2\" = \"\" ]; then
 
 echo \"Usage: sudo ./opt/ciws/usr/share/add_domain_virtualhost.sh \\\"Your_domain\\\" \\\"Your_document_root\\\" \"
 
+exit 0
+
 fi
 
 domain=\$1
 documentroot=\$2
 
+if [ ! -d \$documentroot ]; then
+
+mkdir \$documentroot
+
+fi
+
 echo \"<VirtualHost *:80>
 	ServerName \$domain
 	ServerAlias wwi.\$domain
         ServerAdmin support@\$domain
-	DocumentRoot /var/www/\$documentroot
+	DocumentRoot \$documentroot
+<Directory \$documentroot>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride All
+		Order allow,deny
+		allow from all
+	</Directory>
 </VirtualHost>\" > /etc/apache2/sites-available/\$domain
 
 a2ensite \$domain
@@ -174,10 +192,6 @@ chmod +x /opt/ciws/usr/share/add_domain_virtualhost.sh
 #________________________________________FIN_INSTALL____________________________________________
 
 
-
-
-
-echo "I: Install n2n"
+echo "I: Install multi-domains"
 INSTALL
-
-echo "I: End of install n2n"
+echo "I: End of install multi-domains"

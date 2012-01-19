@@ -60,16 +60,18 @@ for row in $(sed "s/ //g" /opt/ciws/etc/passwd)
 do
 
 row_name=$(echo $row | cut -d":" -f1)
+row_gecos=$(echo $row | cut -d":" -f5)
 row_path=$(echo $row | cut -d":" -f6)
 row_shell=$(echo $row | cut -d":" -f7)
 row_passwd=$(cat /opt/ciws/etc/shadow | grep "$row_name:" | cut -d":" -f2)
 
 if [[ ! $(cat /etc/passwd | grep "$row_name:") ]]; then
 echo $row_name
+echo $row_gecos
 echo $row_path
 echo $row_shell
 echo $row_passwd
-adduser --home $row_path --shell $row_shell --no-create-home --force-badname --quiet --gecos " " --disabled-password $row_name
+adduser --home $row_path --shell $row_shell --no-create-home --force-badname --quiet --gecos "$row_gecos" --disabled-password $row_name
 echo "$row_name:$row_passwd" | chpasswd -e
 
 for row_g in $(cat /opt/ciws/etc/group | grep $row_name)
