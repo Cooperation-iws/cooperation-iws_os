@@ -28,13 +28,13 @@ function INSTALL
 {
 
 cd $DL_DIR
-wget $URL_CIWS_DEPOT/make_live_usb_1.1.x-120112.tar.gz
+wget $URL_CIWS_DEPOT/make_live_usb-120120.tar.gz
 
-tar -xzf make_live_usb_1.1.x-120112.tar.gz -C /usr/sbin
+tar -xzf make_live_usb-120120.tar.gz -C /usr/sbin
 
 chmod +x /usr/sbin/make_live_usb 
 
-apt-get install --assume-yes --force-yes lilo extlinux
+apt-get install --assume-yes --force-yes lilo extlinux util-linux
 }
 
 #_______________________________________________________________________________________________

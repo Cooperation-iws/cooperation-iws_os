@@ -136,7 +136,7 @@ sudo  /opt/ciws/etc/dhclient-exit-hook.sh &
 
 chmod +x /etc/dhcp/dhclient-exit-hooks.d/dns_local
 
-
+#Hack to avoid ip address change after gateway comes down -DISABLED
 echo "#!/bin/bash
 sleep 15
 ip_address=\$(ifconfig | grep 'RX' --before-context=4 | grep 'UP BROADCAST RUNNING MULTICAST' --before-context=2 | grep 'inet addr' | cut -d':' -f2 | cut -d' ' -f1)
@@ -149,7 +149,7 @@ ifconfig \$network_card \$ip
 \" > /tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card
 chmod +x /tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card
 fi
-bash \"/tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card\"
+#bash \"/tmp/dhclient-exit-hooks.d_ifconfig_local.\$network_card\"
 done
 " > /opt/ciws/etc/dhclient-exit-hooks.d_ifconfig_local
 
