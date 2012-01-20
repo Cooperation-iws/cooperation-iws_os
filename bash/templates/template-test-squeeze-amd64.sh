@@ -52,9 +52,6 @@ replication_db[2]="Letodms_1"
 #A#udacity 0.1
 #K#olab 2.3source
 #I#SPconfig 3.0
-#S#ogo 1.3.8
-sogo_mysql_pwd="$mysql_generic_pwd"
-sogo_admin_email="admin.local@$domain"
 #D#evclient 0.1
 #A#lfresco 3.4
 alfresco_mysql_pwd="$mysql_generic_pwd"
