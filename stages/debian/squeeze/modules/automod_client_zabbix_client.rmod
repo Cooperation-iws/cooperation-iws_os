@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Zabbix client 1.8.5'
+RMOD_NAME='Zabbix client 1.8.2'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Distributed monitoring solution'

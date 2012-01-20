@@ -4,16 +4,15 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Italc-master 1.0.9'
+RMOD_NAME='ntpdate 4.2.6'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
-RMOD_DESCRIPTION='Network management'
-RMOD_DESCRIPTION_FR='Gestion du réseau'
-RMOD_VERBOSE="Ntop is a network sensor. "
-RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+RMOD_DESCRIPTION='Documentation'
+RMOD_DESCRIPTION_FR='Documentation'
+RMOD_VERBOSE="Browse and search manpages "
+RMOD_VERBOSE_FR="Rechercher et naviguer dans les pages de manuels"
 
 RMOD_RUN_IN_CHROOT=True
-RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 
 
@@ -23,7 +22,7 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 . /tmp/app_params
 
 
-NTOP_PWD=$ntop_pwd
+
 
 
 
@@ -34,11 +33,10 @@ NTOP_PWD=$ntop_pwd
 function INSTALL
 {
 
+apt-get install --assume-yes --force-yes ntpdate
 
 
-apt-get install --assume-yes --force-yes italc-master
 
-ica -createkeypair
 
 }
 
@@ -51,7 +49,7 @@ ica -createkeypair
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:3000]]>" "<![CDATA[http://localhost:3000]]>" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/squid-reports" "/squid-reports" 
 
 
 }
@@ -61,7 +59,7 @@ cd /tmp/
 
 
 
-echo "I: Install Ntop"
+echo "I: Install Man2html"
 INSTALL
 CREATE_WUI
-echo "I: End of install Ntop"
+echo "I: End of install Man2html"
