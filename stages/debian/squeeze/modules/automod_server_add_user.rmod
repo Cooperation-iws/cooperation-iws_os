@@ -9,7 +9,7 @@ RMOD_DESCRIPTION='Multimedia streaming portal'
 RMOD_DESCRIPTION_FR='Portail de diffusion multimédia'
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
-RMOD_REQ_APACHE=True
+RMOD_REQ_APACHE=False
 RMOD_VERBOSE="Ampache is a Web-based Audio file manager. It is implemented with MySQL, and PHP. It allows you to view, edit, and play your audio files via the web. It has support for playlists, artist and album views, album art, random play, playback via Http/On the Fly Transcoding and Downsampling, Vote based playback, Mpd and Icecast, Integrated Flash Player, as well as per user themes and song play tracking. You can also Link multiple Ampache servers togeather using XML-RPC. Ampache supports GETTEXT translations and has a full translation of many languages."
 RMOD_VERBOSE_FR="Ampache est un serveur de collections audio."
 
@@ -18,17 +18,29 @@ RMOD_VERBOSE_FR="Ampache est un serveur de collections audio."
 
 . /tmp/app_params
 
-NB_USER=${#user_name[*]}
 
+
+USER_NAME[1]=$LIVEUSER
+USER_FULLNAME[1]=$LIVEUSER
+USER_PWD[1]=$CLEAR_HOST_PWD
+USER_ADMIN[1]="y"
+USER_GROUP[1]="y"
+USER_NX[1]="n"
+
+
+NB_USER=${#user_name[*]}
 for (( count=1; count<=$NB_USER; count++ ))
 do
-USER_NAME[$count]=${user_name[$count]}
-USER_FULLNAME[$count]=${user_fullname[$count]}
-USER_PWD[$count]=${user_pwd[$count]}
-USER_ADMIN[$count]=${user_admin[$count]}
-USER_GROUP[$count]=${user_group[$count]}
-USER_NX[$count]=${user_nx[$count]}
+count_2=$(expr $count + 1)
+USER_NAME[$count_2]=${user_name[$count]}
+USER_FULLNAME[$count_2]=${user_fullname[$count]}
+USER_PWD[$count_2]=${user_pwd[$count]}
+USER_ADMIN[$count_2]=${user_admin[$count]}
+USER_GROUP[$count_2]=${user_group[$count]}
+USER_NX[$count_2]=${user_nx[$count]}
 done
+
+NB_USER=$((++NB_USER))
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_CIWS_DEPOT______________________________________
@@ -50,7 +62,12 @@ cd $DL_DIR
 
 function INSTALL
 {
-echo "I: Download Ampache"
+
+
+touch /var/lib/live/config/user-setup
+touch /var/lib/live/config/sudo
+
+
 
 for (( count=1; count<=$NB_USER; count++ ))
 do
@@ -79,11 +96,12 @@ fi
 
 
 #399 users limit (should be enough for a single system)
-uid=$(expr 600 + $count)
-adduser --disabled-password --uid $uid --gid $uid --gecos "$USERFULLNAME" $USERNAME
+#uid=$(expr 600 + $count)
+adduser --disabled-password --gecos "$USERFULLNAME" $USERNAME
 #usermod -u$uid $USERNAME
 #groupmod -g$uid $USERNAME
 
+sed -i "59s/1000/2000/" /lib/live/config/002-user-setup
 
 echo "$USERNAME:$PASSWORD" | chpasswd
 
@@ -151,17 +169,17 @@ done
 
 function CREATE_WUI
 {
-for (( count=1; count<=$NB_AMPACHE; count++ ))
+for (( count=1; count<=$NB_USER; count++ ))
 do
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+#./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
 done
 }
 #_______________________________________________________________________________________________
 #________________________________________FIN_CREATE_WUI_________________________________________
 
 
-echo "I: Install Ampache"
+echo "I: Install Users"
 INSTALL
 CREATE_WUI
-echo "I: End of install Ampache"
+echo "I: End of install Users"

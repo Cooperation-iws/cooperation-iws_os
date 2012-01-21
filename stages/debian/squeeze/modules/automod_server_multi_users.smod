@@ -12,7 +12,7 @@ RMOD_DESCRIPTION_FR='Documentation'
 RMOD_VERBOSE="Browse and search manpages "
 RMOD_VERBOSE_FR="Rechercher et naviguer dans les pages de manuels"
 
-RMOD_RUN_IN_CHROOT=True
+RMOD_RUN_IN_CHROOT=False
 
 
 
