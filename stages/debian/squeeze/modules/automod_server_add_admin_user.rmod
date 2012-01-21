@@ -2,7 +2,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='AddAdminUser 0.1'
+RMOD_NAME='Addadminuser 0.1'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Multimedia streaming portal'
@@ -91,7 +91,6 @@ adduser --disabled-password --gecos "$USERFULLNAME" $USERNAME
 #usermod -u$uid $USERNAME
 #groupmod -g$uid $USERNAME
 
-sed -i "59s/1000/2000/" /lib/live/config/002-user-setup
 
 echo "$USERNAME:$PASSWORD" | chpasswd
 

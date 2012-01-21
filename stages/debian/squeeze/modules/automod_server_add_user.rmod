@@ -20,12 +20,7 @@ RMOD_VERBOSE_FR="Ampache est un serveur de collections audio."
 
 
 
-USER_NAME[1]=$LIVEUSER
-USER_FULLNAME[1]=$LIVEUSER
-USER_PWD[1]=$CLEAR_HOST_PWD
-USER_ADMIN[1]="y"
-USER_GROUP[1]="y"
-USER_NX[1]="n"
+
 
 
 NB_USER=${#user_name[*]}
@@ -40,7 +35,7 @@ USER_GROUP[$count_2]=${user_group[$count]}
 USER_NX[$count_2]=${user_nx[$count]}
 done
 
-NB_USER=$((++NB_USER))
+
 
 #_______________________________________________________________________________________________
 #________________________________________WGET_CIWS_DEPOT______________________________________
@@ -101,7 +96,6 @@ adduser --disabled-password --gecos "$USERFULLNAME" $USERNAME
 #usermod -u$uid $USERNAME
 #groupmod -g$uid $USERNAME
 
-sed -i "59s/1000/2000/" /lib/live/config/002-user-setup
 
 echo "$USERNAME:$PASSWORD" | chpasswd
 
