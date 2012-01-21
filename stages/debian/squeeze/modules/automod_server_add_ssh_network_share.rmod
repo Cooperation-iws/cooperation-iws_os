@@ -1,0 +1,248 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='SshNetworkShare 0.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Multimedia streaming portal'
+RMOD_DESCRIPTION_FR='Portail de diffusion multimédia'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=False
+RMOD_VERBOSE="Ampache is a Web-based Audio file manager. It is implemented with MySQL, and PHP. It allows you to view, edit, and play your audio files via the web. It has support for playlists, artist and album views, album art, random play, playback via Http/On the Fly Transcoding and Downsampling, Vote based playback, Mpd and Icecast, Integrated Flash Player, as well as per user themes and song play tracking. You can also Link multiple Ampache servers togeather using XML-RPC. Ampache supports GETTEXT translations and has a full translation of many languages."
+RMOD_VERBOSE_FR="Ampache est un serveur de collections audio."
+
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+NB_SHARE=${#share_local_path[*]}
+
+for (( count=1; count<=$NB_SHARE; count++ ))
+do
+SHARE_LOCAL_PATH[$count]=${share_local_path[$count]}
+SHARE_LOCAL_USER[$count]=${share_local_user[$count]}
+SHARE_SERVER[$count]=${share_server[$count]}
+SHARE_SERVER_USER[$count]=${share_server_user[$count]}
+SHARE_SERVER_PWD[$count]=${share_server_pwd[$count]}
+SHARE_SERVER_PATH[$count]=${share_server_path[$count]}
+done
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+apt-get install --assume-yes --force-yes sshfs expect fuse-utils
+
+echo "#!/usr/bin/expect -f
+set timeout 30
+
+#example of getting arguments passed from command line..
+#not necessarily the best practice for passwords though...
+set server_home [lindex \$argv 0]
+set client_address [lindex \$argv 1]
+set pass [lindex \$argv 2]
+set send_human {.1 .3 1 .05 2}
+
+# connect to server via ssh, login, and su to root
+send_user \"connecting \n\"
+spawn ssh-copy-id -i \$server_home/.ssh/id_dsa \$client_address
+
+#login handles cases:
+#   login with keys (no user/pass)
+#   user/pass
+#   login with keys (first time verification)
+expect {
+  \"> \" { }
+  \"$ \" { }
+  \"assword: \" { 
+	sleep 3
+        send -h \"\$pass\n\" 
+        expect {
+          \"> \" { }
+          \"$ \" { }
+        }
+  }
+  \"(yes/no)? \" { 
+        send \"yes\n\"
+        expect {
+          \"assword: \" { 
+	sleep 3
+        send -h \"\$pass\n\" 
+        expect {
+          \"> \" { }
+          \"$ \" { }
+        }
+  }
+        }
+  }
+  default {
+        send_user \"Login failed\n\"
+        exit
+  }
+}
+
+sleep 5
+
+
+send_user \"finished\n\"
+" > /opt/ciws/usr/share/expect_ssh_copy_id_command
+
+chmod +x /opt/ciws/usr/share/expect_ssh_copy_id_command
+
+
+echo "#!/bin/bash
+
+client_home=\"/home/\$1\"
+
+server_user_pwd=\"\$3\"
+
+server_address=\"\$2@\$4\"
+
+
+if [ \"\$1\" = \"\" ] || [ \"\$2\" = \"\" ] || [ \"\$3\" = \"\" ] || [ \"\$4\" = \"\" ]; then
+
+echo \"Usage: sudo ./opt/ciws/usr/share/create_ssh_key \\\"User_local_account\\\" \\\"User_share_server_account\\\" \\\"User_share_server_password\\\" \\\"share_server_url\\\"  \"
+
+exit 0
+
+fi
+
+if [ ! -e \$client_home/.ssh/id_dsa ] ; then
+
+ssh-keygen -t dsa -q -f \$client_home/.ssh/id_dsa -P \"\"
+
+fi
+
+clear
+
+/opt/ciws/usr/share/expect_ssh_copy_id_command \"\$client_home\" \"\$server_address\" \"\$server_user_pwd\"
+" > /opt/ciws/usr/share/create_ssh_key
+
+chmod +x /opt/ciws/usr/share/create_ssh_key
+
+
+echo "#!/bin/bash
+#Install SSH Network share 
+
+SHARE_LOCAL_USER=\$1
+SHARE_SERVER_USER=\$2
+SHARE_SERVER_PWD=\$3
+SHARE_SERVER=\$4
+SHARE_LOCAL_PATH=\$5
+SHARE_SERVER_PATH=\$6
+
+
+if [ \"\$1\" = \"\" ] || [ \"\$2\" = \"\" ] || [ \"\$3\" = \"\" ] || [ \"\$4\" = \"\" ] || [ \"\$5\" = \"\" ] || [ \"\$6\" = \"\" ]; then
+
+echo \"Usage: sudo ./opt/ciws/usr/share/mount_sshfs \\\"User_local_account\\\" \\\"User_share_server_account\\\" \\\"User_share_server_password\\\" \\\"share_server_url\\\" \\\"share_local_path\\\" \\\"share_server_path\\\" \"
+
+exit 0
+
+fi
+
+
+if [ ! \"\$(sudo -u \${SHARE_LOCAL_USER} ssh -q -o \\\"BatchMode=yes\\\" \${SHARE_SERVER_USER}@\${SHARE_SERVER} \\\"ls /\\\" | grep \\\"root\\\")\" ] ; then
+
+sudo -u \${SHARE_LOCAL_USER} /opt/ciws/usr/share/create_ssh_key \"\${SHARE_LOCAL_USER}\" \"\${SHARE_SERVER_USER}\" \"\${SHARE_SERVER_PWD}\" \"\${SHARE_SERVER}\" 
+
+
+fi
+
+
+mkdir \${SHARE_LOCAL_PATH}
+chown -R \${SHARE_LOCAL_USER} \${SHARE_LOCAL_PATH}
+sudo -u \${SHARE_LOCAL_USER} sshfs -o idmap=user \${SHARE_SERVER_USER}@\${SHARE_SERVER}:\${SHARE_SERVER_PATH} \${SHARE_LOCAL_PATH} 
+
+" > /opt/ciws/usr/share/mount_sshfs
+
+chmod +x /opt/ciws/usr/share/mount_sshfs
+
+echo "#!/bin/bash
+#Umount sshfs
+
+SHARE_LOCAL_PATH=\$1
+
+if [ \"\$1\" = \"\" ] ; then
+
+echo \"Usage: sudo ./opt/ciws/usr/share/umount_sshfs \\\"share_local_path\\\" 
+
+exit 0
+
+fi
+
+fusermount -u \${SHARE_LOCAL_PATH}
+
+" > /opt/ciws/usr/share/umount_sshfs
+
+chmod +x /opt/ciws/usr/share/umount_sshfs
+
+
+
+for (( count=1; count<=$NB_SHARE; count++ ))
+do
+
+
+
+echo "#!/bin/bash
+#Install SSH Network share 
+
+/opt/ciws/usr/share/mount_sshfs \"${SHARE_LOCAL_USER[$count]}\" \"${SHARE_SERVER_USER[$count]}\" \"${SHARE_SERVER_PWD[$count]}\" \"${SHARE_SERVER[$count]}\" \"${SHARE_LOCAL_PATH[$count]}\" \"${SHARE_SERVER_PATH[$count]}\"
+
+" > /opt/ciws/etc/sshfs_mount_point_$count
+
+chmod +x /opt/ciws/etc/sshfs_mount_point_$count
+
+
+
+echo "
+/opt/ciws/etc/sshfs_mount_point_$count
+" >> /opt/ciws/etc/rc.ciws
+
+
+
+
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_SHARE; count++ ))
+do
+cd /tmp/
+#./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Ssh Network Share"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ssh Network Share"

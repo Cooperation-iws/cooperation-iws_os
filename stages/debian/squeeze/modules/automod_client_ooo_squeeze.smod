@@ -13,7 +13,7 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 echo "I: installing liveusb installer"
 
-aptitude install -y openoffice.org openoffice.org-l10n-fr openoffice.org-l10n-en openoffice.org-help-fr openoffice.org-help-en openoffice.org-thesaurus-fr unixodbc cupsys-bsd libsane libxrender1 libgl1 openclipart-openoffice.org pstoedit imagemagick libpaper-utils flpsed zip unzip
+aptitude install -y openoffice.org openoffice.org-l10n-fr openoffice.org-help-fr openoffice.org-thesaurus-fr unixodbc cupsys-bsd libsane libxrender1 libgl1 openclipart-openoffice.org pstoedit imagemagick libpaper-utils flpsed zip unzip
 
 if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
 #apt-get install --assume-yes --force-yes gnome-icon-theme* human-icon-theme* hplip gdm-themes brasero

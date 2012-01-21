@@ -11,6 +11,11 @@
 . /tmp/app_params
 
 
+echo "I:CREATING PACKAGES LIST"
+
+dpkg -l | cut -d' ' -f3 > /opt/ciws/usr/lib/packages.list
+
+
 echo "I:SHUTTING DOWN ALL SERVER"
 
 #ENDING XML WEB DESC FILES
@@ -158,11 +163,6 @@ killall -9 mongrel_rails 1>&2 2>/dev/null
 
 echo "I: config rc.local"
 
-echo "#!/bin/bash
-
-" > $LAMPP_DIRECTORY/etc/rc.ciws > /dev/null 2>&1 
-
-chmod +x $LAMPP_DIRECTORY/etc/rc.ciws > /dev/null 2>&1 
 
 echo "
 

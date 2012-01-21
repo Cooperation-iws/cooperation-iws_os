@@ -19,6 +19,11 @@ umount $WORK_DIR/chroot/proc/
 mv -f $WORK_DIR/chroot/etc/hosts.orig $WORK_DIR/chroot/etc/hosts
 #mv -f $WORK_DIR/chroot/etc/hostname.orig $WORK_DIR/chroot/etc/hostname
 
+echo "I:COPYING PACKAGES LIST"
+
+cp $WORK_DIR/chroot/opt/ciws/usr/lib/packages.list $WORK_DIR/.
+
+
 echo "I:BUILDING SQUASHFS FROM CHROOT"
 
 cd $WORK_DIR

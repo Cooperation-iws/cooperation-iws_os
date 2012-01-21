@@ -122,6 +122,7 @@ mkdir $LAMPP_DIRECTORY/etc
 mkdir $LAMPP_DIRECTORY/etc/ciws-content
 mkdir $LAMPP_DIRECTORY/usr
 mkdir $LAMPP_DIRECTORY/usr/share
+mkdir $LAMPP_DIRECTORY/usr/lib
 mkdir $LAMPP_DIRECTORY/opt
 mkdir $LAMPP_DIRECTORY/var/
 mkdir  $LAMPP_DIRECTORY/var/lib
@@ -162,4 +163,13 @@ echo "<?xml version=\"1.0\"?>
 <items>" > $LAMPP_DIRECTORY/etc/ciws-content/cooperation-wui-$lang.xml
 chmod 777 $LAMPP_DIRECTORY/etc/ciws-content/cooperation-wui-$lang.xml
 done
+
+echo "I: creating rc.ciws"
+
+
+echo "#!/bin/bash
+
+" > $LAMPP_DIRECTORY/etc/rc.ciws > /dev/null 2>&1 
+
+chmod +x $LAMPP_DIRECTORY/etc/rc.ciws > /dev/null 2>&1 
 
