@@ -73,7 +73,7 @@ tar -xzf python_babel_0.9.6.tar.gz -C /
 
 sudo -u postgres createuser openerp --no-superuser --createdb --no-createrole 
  /usr/sbin/adduser --quiet --system openerp
-usermod -u601 openerp
+usermod -u521 openerp
 
 
 #echo "
