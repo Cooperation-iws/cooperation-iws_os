@@ -1,0 +1,141 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Ciwscrawlwui 0.5.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Multimedia streaming portal'
+RMOD_DESCRIPTION_FR='Portail de diffusion multimédia'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+RMOD_VERBOSE="Ampache is a Web-based Audio file manager. It is implemented with MySQL, and PHP. It allows you to view, edit, and play your audio files via the web. It has support for playlists, artist and album views, album art, random play, playback via Http/On the Fly Transcoding and Downsampling, Vote based playback, Mpd and Icecast, Integrated Flash Player, as well as per user themes and song play tracking. You can also Link multiple Ampache servers togeather using XML-RPC. Ampache supports GETTEXT translations and has a full translation of many languages."
+RMOD_VERBOSE_FR="Ampache est un serveur de collections audio."
+
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+NB_CIWSCRAWL=${#ciwscrawl_name[*]}
+
+for (( count=1; count<=$NB_CIWSCRAWL; count++ ))
+do
+CIWSCRAWL_PORT_MYSQL_PWD[$count]=${ciwscrawl_port_mysql_pwd[$count]}
+CIWSCRAWL_PORT_MYSQL_USER[$count]=${ciwscrawl_port_name[$count]}
+CIWSCRAWL_PORT_MYSQL_DB[$count]=${ciwscrawl_port_name[$count]}
+
+CIWSCRAWL_MYSQL_PWD[$count]=${ciwscrawl_mysql_pwd[$count]}
+CIWSCRAWL_MYSQL_USER[$count]=${ciwscrawl_name[$count]}
+
+
+MOD_NAME[$count]=${ciwscrawl_name[$count]}
+done
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/ciws-unified-portal-php-0.5.2-120122.tar.gz
+tar -xzf ciws-unified-portal-php-0.5.2-120122.tar.gz
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Ciwsphp"
+WGET_CIWS_DEPOT
+for (( count=1; count<=$NB_CIWSCRAWL; count++ ))
+do
+##CIWSCRAWL
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
+cp -Rf ciws-crawl-1/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
+
+
+mkdir $LAMPP_DIRECTORY/etc/ciws-unified-portal
+cp $WWW_DIRECTORY/${MOD_NAME[$count]}/configuration.php-dist $LAMPP_DIRECTORY/etc/ciws-unified-portal/configuration-joomla.php
+sed -i "45s/''/'${CIWSCRAWL_PORT_MYSQL_USER[$count]}'/" $LAMPP_DIRECTORY/etc/ciws-unified-portal/configuration-joomla.php 
+sed -i "46s/''/'${CIWSCRAWL_PORT_MYSQL_PWD[$count]}'/" $LAMPP_DIRECTORY/etc/ciws-unified-portal/configuration-joomla.php 
+sed -i "47s/''/'${CIWSCRAWL_PORT_MYSQL_DB[$count]}'/" $LAMPP_DIRECTORY/etc/ciws-unified-portal/configuration-joomla.php 
+sed -i "s/\/home\/esmalif\/app\/ciws-lib-trunk/\/opt\/ciws\/usr\/lib\/ciws-lib-trunk/" $WWW_DIRECTORY/${MOD_NAME[$count]}/ciws/app/global-include.php
+
+sed -i "s/\/home\/esmalif\/app\//\/opt\/ciws\/etc\//" /opt/ciws/usr/lib/ciws-lib-trunk/install/install_wui.sh
+sed -i "s/ciws-live-1/${MOD_NAME[$count]}/" /opt/ciws/usr/lib/ciws-lib-trunk/install/install_wui.sh
+sed -i "10s/dev_pwd//" /opt/ciws/usr/lib/ciws-lib-trunk/wui/modules/ciws-scripts/install/install_module.sh
+sed -i "s/-p\$mysql_pwd//g" /opt/ciws/usr/lib/ciws-lib-trunk/wui/modules/ciws-scripts/install/install_module.sh
+
+cd /opt/ciws/usr/lib/ciws-lib-trunk/install
+chmod +x install_wui.sh
+./install_wui.sh
+
+echo "
+grant all on \`${MOD_NAME[$count]}-data\`.* to ${MOD_NAME[$count]}@localhost identified by '${CIWSCRAWL_MYSQL_PWD[$count]}';
+flush privileges;" > CIWSDB_db.sql
+
+$BIN_MYSQL -u root < CIWSDB_db.sql mysql
+rm CIWSDB_db.sql
+
+sed -i "s/\/home\/esmalif\/app\/ciws-live-1\/wui-conf/\/opt\/ciws\/etc\/${MOD_NAME[$count]}\/wui-conf/" $WWW_DIRECTORY/${MOD_NAME[$count]}/ciws/app/global-include.php
+
+sed -i "7s/ciws-tv-1/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/global-configuration.inc.php
+sed -i "10s/\/home\/amenokal\/app\/ciws-lib-trunk\//\/opt\/ciws\/usr\/lib\/ciws-lib-trunk/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/global-configuration.inc.php
+sed -i "19s/newhorizon/${ciwscrawl_template[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/global-configuration.inc.php
+sed -i "60s/ciws-tv-1/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/global-configuration.inc.php
+
+sed -i "8s/ciws-plan-1-data/${MOD_NAME[$count]}-data/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-scripts-configuration.inc.php
+sed -i "9s/root/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-scripts-configuration.inc.php
+sed -i "10s/mysql_root/${CIWSCRAWL_MYSQL_PWD[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-scripts-configuration.inc.php
+sed -i "39s/ciws-plan-1/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-scripts-configuration.inc.php
+
+sed -i "17s/\/opt\/ciws\/server\/var\/ciws-plan-1/\/opt\/ciws\/server\/var\/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-crawl-plugin-configuration.inc.php
+sed -i "23s/ciws-plan-1/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-crawl-plugin-configuration.inc.php
+sed -i "32s/ciws-plan-1/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-crawl-plugin-configuration.inc.php
+url_for_sed=$(echo ${ciwscrawl_download_url[$count]} | sed 's/\//\\\//g')
+sed -i "38s/http:\/\/wwi.redmine-forge.intra\/plan_dir\//${url_for_sed}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-crawl-plugin-configuration.inc.php
+
+mkdir /opt/ciws/server/var/${MOD_NAME[$count]}
+
+chown -R www-data $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}
+chown -R www-data $LAMPP_DIRECTORY/etc/ciws-unified-portal
+chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
+chown -R www-data $LAMPP_DIRECTORY/server/var/${MOD_NAME[$count]}
+
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_CIWSCRAWL; count++ ))
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Ampache"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ampache"

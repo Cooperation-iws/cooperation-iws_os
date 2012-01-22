@@ -1,0 +1,101 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Ciwsunifiedportaldb 0.5.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Multimedia streaming portal'
+RMOD_DESCRIPTION_FR='Portail de diffusion multimédia'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+RMOD_VERBOSE="Ampache is a Web-based Audio file manager. It is implemented with MySQL, and PHP. It allows you to view, edit, and play your audio files via the web. It has support for playlists, artist and album views, album art, random play, playback via Http/On the Fly Transcoding and Downsampling, Vote based playback, Mpd and Icecast, Integrated Flash Player, as well as per user themes and song play tracking. You can also Link multiple Ampache servers togeather using XML-RPC. Ampache supports GETTEXT translations and has a full translation of many languages."
+RMOD_VERBOSE_FR="Ampache est un serveur de collections audio."
+
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+NB_CIWSDB=${#ciws_db_name[*]}
+
+for (( count=1; count<=$NB_CIWSDB; count++ ))
+do
+CIWSDB_MYSQL_PWD[$count]=${ciws_db_mysql_pwd[$count]}
+MOD_NAME[$count]=${ciws_db_name[$count]}
+done
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/ciws-unified-portal-db-0.5.2-120122.tar.gz
+tar -xzf ciws-unified-portal-db-0.5.2-120122.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Ciwsdb"
+WGET_CIWS_DEPOT
+for (( count=1; count<=$NB_CIWSDB; count++ ))
+do
+##CIWSDB
+cd $DL_DIR
+
+echo "Create database ${MOD_NAME[$count]}; " > ciwsdb_db_cr.sql
+
+$BIN_MYSQL -u root < ciwsdb_db_cr.sql
+
+sed -i "s/admin.local@lokaleskif.intra/${ciws_portal_admin_email[$count]}/g" ciws-unified-portal-db.sql
+sed -i "s/ls_manager@lokaleskif.intra/${ciws_portal_manager_email[$count]}/g" ciws-unified-portal-db.sql
+sed -i "s/ls_user@lokaleskif.intra/${ciws_portal_user_email[$count]}/g" ciws-unified-portal-db.sql
+
+$BIN_MYSQL -u root ${MOD_NAME[$count]} < ciws-unified-portal-db.sql
+
+echo "
+grant all on ${MOD_NAME[$count]}.* to ${MOD_NAME[$count]}@localhost identified by '${CIWSDB_MYSQL_PWD[$count]}';
+flush privileges;" > CIWSDB_db.sql
+
+$BIN_MYSQL -u root < CIWSDB_db.sql mysql
+rm CIWSDB_db.sql
+
+
+
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_CIWSDB; count++ ))
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Ampache"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ampache"

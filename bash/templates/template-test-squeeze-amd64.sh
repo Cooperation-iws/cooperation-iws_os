@@ -42,7 +42,7 @@ replication_db[2]="Letodms_1"
 #F#lashplayer Squeeze
 #G#imp 2.6
 #I#ceweasel 0.1
-#Openoffice Squeeze
+#O#penoffice Squeeze
 #M#ixxx 1.9source
 #S#ecure delete 0.1
 #S#ound juicer 0.1
@@ -54,7 +54,7 @@ replication_db[2]="Letodms_1"
 #A#udacity 0.1
 #K#olab 2.3source
 #I#SPconfig 3.0
-#D#evclient 0.1
+#Devclient 0.1
 #A#lfresco 3.4
 alfresco_mysql_pwd="$mysql_generic_pwd"
 #A#mpache 3.5.4
@@ -314,3 +314,32 @@ share_server[1]="wwi.my-desktop5.intra"
 share_server_user[1]="esmalif"
 share_server_pwd[1]="Lokkir11"
 share_server_path[1]="/home/esmalif/Documents"
+#Ciwsunifiedportaldb 0.5.2
+ciws_db_name[1]="Ciwsuniport"
+ciws_db_mysql_pwd[1]="$mysql_generic_pwd"
+ciws_portal_admin_email[1]="admin.local@$domain"
+ciws_portal_manager_email[1]="admin.local@$domain"
+ciws_portal_user_email[1]="admin.local@$domain"
+#Ciwscrawlwui 0.5.2
+ciwscrawl_port_mysql_pwd[1]=${ciws_db_mysql_pwd[1]}
+ciwscrawl_port_name[1]=${ciws_db_name[1]}
+ciwscrawl_mysql_pwd[1]="$mysql_generic_pwd"
+ciwscrawl_name[1]="Ciws_crawl_1"
+ciwscrawl_download_url[1]="http://$domain/DL/"
+ciwscrawl_template[1]="ciws-digg"
+#Ciwslibscripts 0.5.2
+#Ciwscrawlserver 0.5.2
+ciwscrawlserver_id[1]=1
+ciwscrawlserver_instance_nb[1]="3"
+ciwscrawlserver_wui_user[1]="ciwsadmin"
+ciwscrawlserver_wui_pwd[1]="cooperation"
+ciwscrawlserver_wui_domain[1]="localhost"
+ciwscrawlserver_wui_name[1]=${ciwscrawl_name[1]}
+ciwscrawlserver_download_user[1]="ciwsadmin"
+ciwscrawlserver_download_pwd[1]="cooperation"
+ciwscrawlserver_download_domain[1]="localhost"
+ciwscrawlserver_download_path[1]="/opt/ciws/server/download"
+#Ciwsdownloadserver 0.5.2
+download_server_name[1]="DL"
+download_server_folder[1]="/opt/ciws/server/download"
+

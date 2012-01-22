@@ -1,0 +1,246 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Ciwscrawlserver 0.5.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=False
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+NB_CIWSCRAWL=${#ciwscrawlserver_id[*]}
+
+for (( count=1; count<=$NB_CIWSCRAWL; count++ ))
+do
+MOD_NAME[$count]="ciws-crawl-server-$count"
+
+
+
+done
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+
+wget $URL_CIWS_DEPOT/ciws-server-install-trunk-0.5.2-120122.tar.gz
+tar -xzf ciws-server-install-trunk-0.5.2-120122.tar.gz
+
+
+wget $URL_CIWS_DEPOT/ciws-server-lib-trunk-0.5.2-120122.tar.gz
+tar -xzf ciws-server-lib-trunk-0.5.2-120122.tar.gz
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+WGET_CIWS_DEPOT
+
+apt-get install --assume-yes --force-yes rsync httrack libhttrack-dev expect
+
+
+for (( count=1; count<=$NB_CIWSCRAWL; count++ ))
+do
+
+cd $DL_DIR
+mkdir $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}
+cp -Rf ciws-server-install-trunk/conf/* $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/.
+cp -Rf ciws-server-install-trunk/install/* $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/.
+cp -Rf ciws-server-lib-trunk/scripts/* $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/.
+rm $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/copy_conf.sh
+rm $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/install_server_backend_dev.sh
+
+mkdir $LAMPP_DIRECTORY/var/lib/${MOD_NAME[$count]}
+
+sed -i "s/\.\.\/conf\/conf_install.sh/conf/g" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/install_server_backend.sh
+sed -i "s/\.\.\/conf\/conf_install.sh/conf/g" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/install_ssh.sh
+sed -i "s/\.\.\/conf\/conf_install.sh/conf/g" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/launch_cron.sh
+sed -i "s/\.\.\/conf\/conf_install.sh/conf/g" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/start_server.sh
+sed -i "s/\.\.\/conf\/conf_install.sh/conf/g" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/stop_server.sh
+sed -i "s/\.\.\/conf\/conf_install.sh/conf/g" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/stop_cron.sh
+
+
+sed -i "5s/6/${ciwscrawlserver_id[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "7s/esmalif/$LIVEUSER/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "8s/esmalif/${ciwscrawlserver_wui_user[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "12s/cooperation/${ciwscrawlserver_wui_pwd[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "18s/\/etc\/ciws-live-1-server/\/opt\/ciws\/etc\/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "11s/esmalif@wwi.lokaleskif-b.intra/${ciwscrawlserver_wui_user[$count]}@${ciwscrawlserver_wui_domain[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "14s/\/opt\/ciws\/server\/var\/ciws-live-1/\/opt\/ciws\/server\/var\/${ciwscrawlserver_wui_name[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "16s/esmalif/$LIVEUSER/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "21s/\/home\/esmalif\/livescript/\/opt\/ciws\/var\/lib\/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "30s/\/home\/esmalif\/livescript\/ciws-live-1\/tmp\//\/opt\/ciws\/var\/lib\/${MOD_NAME[$count]}\/tmp\//" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "33s/\/home\/esmalif\/livescript\/ciws-live-1\/log/\/opt\/ciws\/var\/lib\/${MOD_NAME[$count]}\/log/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "39s/\/home\/esmalif\/livescript\/ciws-live-1\/tmp\//\/opt\/ciws\/var\/lib\/${MOD_NAME[$count]}\/tmp/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "46s/esmalif@wwi.lokaleskif-b.intra/${ciwscrawlserver_download_user[$count]}@${ciwscrawlserver_download_domain[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "47s/\/home\/esmalif/\/home\/${ciwscrawlserver_download_user[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+download_path_for_sed=$(echo ${ciwscrawlserver_download_path[$count]} | sed 's/\//\\\//g')
+sed -i "45s/\/var\/www\/iso/${download_path_for_sed}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "48s/cooperation/${ciwscrawlserver_download_pwd[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+
+sed -i "51s/1/${ciwscrawlserver_instance_nb[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "66s/wwi.lokaleskif-b.intra/${ciwscrawlserver_download_domain[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "66s/ciws-live-1/${ciwscrawlserver_wui_name[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+
+
+sed -i "77s/live/crawl/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "85s/ciws-live-1/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+
+mv $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf-backup
+cp $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf-backup $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf
+cp $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/default /etc/default/${MOD_NAME[$count]}-server
+
+chmod +x /etc/default/${MOD_NAME[$count]}-server
+
+chmod -R +x $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}
+
+cd  $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}
+./install_server_backend.sh
+
+echo "
+#Cleaning ciws-crawl ${MOD_NAME[$count]} temporary directory
+rm -r /opt/ciws/var/lib/${MOD_NAME[$count]}/tmp/*
+cd /opt/ciws/etc/${MOD_NAME[$count]}
+./install_server_backend.sh
+" >> /opt/ciws/etc/rc.ciws
+
+echo "#!/usr/bin/expect -f
+set timeout 30
+
+#example of getting arguments passed from command line..
+#not necessarily the best practice for passwords though...
+set server_home [lindex \$argv 0]
+set client_address [lindex \$argv 1]
+set pass [lindex \$argv 2]
+set send_human {.1 .3 1 .05 2}
+
+# connect to server via ssh, login, and su to root
+send_user \"connecting \n\"
+spawn ssh-copy-id -i \$server_home/.ssh/id_dsa \$client_address
+
+#login handles cases:
+#   login with keys (no user/pass)
+#   user/pass
+#   login with keys (first time verification)
+expect {
+  \"> \" { }
+  \"$ \" { }
+  \"assword: \" { 
+	sleep 3
+        send -h \"\$pass\n\" 
+        expect {
+          \"> \" { }
+          \"$ \" { }
+        }
+  }
+  \"(yes/no)? \" { 
+        send \"yes\n\"
+        expect {
+          \"assword: \" { 
+	sleep 3
+        send -h \"\$pass\n\" 
+        expect {
+          \"> \" { }
+          \"$ \" { }
+        }
+  }
+        }
+  }
+  default {
+        send_user \"Login failed\n\"
+        exit
+  }
+}
+
+sleep 5
+
+
+send_user \"finished\n\"
+" > /opt/ciws/usr/share/expect_ssh_copy_id_command
+
+chmod +x /opt/ciws/usr/share/expect_ssh_copy_id_command
+
+
+echo "#!/bin/bash
+
+client_home=\"/home/\$1\"
+
+server_user_pwd=\"\$3\"
+
+server_address=\"\$2@\$4\"
+
+
+if [ \"\$1\" = \"\" ] || [ \"\$2\" = \"\" ] || [ \"\$3\" = \"\" ] || [ \"\$4\" = \"\" ]; then
+
+echo \"Usage: sudo ./opt/ciws/usr/share/create_ssh_key \\\"User_local_account\\\" \\\"User_share_server_account\\\" \\\"User_share_server_password\\\" \\\"share_server_url\\\"  \"
+
+exit 0
+
+fi
+
+if [ ! -e \$client_home/.ssh/id_dsa ] ; then
+
+ssh-keygen -t dsa -q -f \$client_home/.ssh/id_dsa -P \"\"
+
+fi
+
+clear
+
+/opt/ciws/usr/share/expect_ssh_copy_id_command \"\$client_home\" \"\$server_address\" \"\$server_user_pwd\"
+" > /opt/ciws/usr/share/create_ssh_key
+
+chmod +x /opt/ciws/usr/share/create_ssh_key
+
+
+
+done
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ntop"

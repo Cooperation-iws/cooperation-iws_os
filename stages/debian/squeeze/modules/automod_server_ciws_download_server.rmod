@@ -1,0 +1,108 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Ciwsdownloadserver 0.5.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+NB_CIWSCRAWL=${#download_server_folder[*]}
+
+for (( count=1; count<=$NB_CIWSCRAWL; count++ ))
+do
+MOD_NAME[$count]=${download_server_name[$count]}
+
+
+
+done
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+for (( count=1; count<=$NB_CIWSCRAWL; count++ ))
+do
+mkdir ${download_server_folder[$count]}
+chmod -R 755 ${download_server_folder[$count]}
+
+echo "
+Alias /${MOD_NAME[$count]} ${download_server_folder[$count]}
+
+<Directory \"${download_server_folder[$count]}\">
+    Options Indexes FollowSymLinks MultiViews
+		AllowOverride All
+		Order allow,deny
+		allow from all
+</Directory>
+
+" > /etc/apache2/conf.d/${MOD_NAME[$count]}
+
+echo "
+#Chown appropriate user for ${download_server_folder[$count]}
+if [ ! $(ls -l ${download_server_folder[$count]} | grep  $LIVEUSER) ]; then
+chown -R $LIVEUSER:www-data ${download_server_folder[$count]}
+
+fi
+" >> /etc/rc.local
+
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_CIWSCRAWL; count++ ))
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ntop"
