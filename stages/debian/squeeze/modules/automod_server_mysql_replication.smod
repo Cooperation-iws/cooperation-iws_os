@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Mysql 5.0'
+RMOD_NAME='Mysqlreplication 0.1'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='database'
@@ -24,34 +24,62 @@ RMOD_REQ_APACHE=True
 function INSTALL
 {
 
-mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.mysql
 
 
-apt-get install --yes --force-yes mysql-server 
-/etc/init.d/mysql stop
+if [ "$mysql_replication_master" == "y" ]; then
 
 
-echo "I: config mysql"
+sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf
+sed -i "s/#server-id/server-id/" /etc/mysql/my.cnf
+sed -i "s/#log_bin/log_bin/" /etc/mysql/my.cnf
 
-sed -i "61s/#/default-character-set=utf8/" /etc/mysql/my.cnf
-
-
-mv /var/lib/mysql $LAMPP_DIRECTORY/var/lib
-ln -s $LAMPP_DIRECTORY/var/lib/mysql /var/lib/mysql
-
-
-
-mv /etc/mysql $LAMPP_DIRECTORY/etc
-
-ln -s $LAMPP_DIRECTORY/etc/mysql /etc/mysql
+NB_DB=${#replication_db[*]}
+for (( count=1; count<=$NB_DB; count++ ))
+do
+sed -i "91G" /etc/mysql/my.cnf
+sed -i "92s/^/binlog_do_db=${replication_db[$count]}/" /etc/mysql/my.cnf
+done
 
 
-/etc/init.d/mysql start
+cd $DL_DIR
+echo "GRANT REPLICATION SLAVE ON *.* TO '$mysql_master_user'@'%' IDENTIFIED BY '$mysql_master_password';
+FLUSH PRIVILEGES;
+" > DB_mysql_replication.sql
 
+$BIN_MYSQL -u root <  DB_mysql_replication.sql
 
-mv /usr/sbin/policy-rc.d.mysql /usr/sbin/policy-rc.d 
+fi
 
+if [ "$mysql_replication_slave" == "y" ]; then
+sed -i "s/#server-id		= 1/server-id		= 2/" /etc/mysql/my.cnf
+sed -i "91G" /etc/mysql/my.cnf
+sed -i "92s/^/master-connect-retry=60/" /etc/mysql/my.cnf
 
+NB_DB=${#replication_db[*]}
+for (( count=1; count<=$NB_DB; count++ ))
+do
+sed -i "91G" /etc/mysql/my.cnf
+sed -i "92s/^/replicate-wild-do-table=${replication_db[$count]}.%/" /etc/mysql/my.cnf
+sed -i "91G" /etc/mysql/my.cnf
+sed -i "92s/^/replicate-do-db=${replication_db[$count]}/" /etc/mysql/my.cnf
+
+#echo "Create database ${replication_db[$count]};" >> mysql_slave_db.sql
+done
+
+#$BIN_MYSQL -u root <  mysql_slave_db.sql
+echo "
+echo \"CHANGE MASTER TO MASTER_HOST='$mysql_master_domain', MASTER_USER='$mysql_master_user' , MASTER_PASSWORD='$mysql_master_password', MASTER_LOG_FILE='mysql-bin.000001', MASTER_LOG_POS=106;
+start slave;
+\" > /tmp/mysql_slave_init_master.sql
+
+$BIN_MYSQL -u root -p$mysql_root_password <  /tmp/mysql_slave_init_master.sql
+" > /opt/ciws/etc/mysql/mysql_slave_init_master.sh
+chmod 700 /opt/ciws/etc/mysql/mysql_slave_init_master.sh
+echo "
+/opt/ciws/etc/mysql/mysql_slave_init_master.sh
+" >> /etc/rc.local
+
+fi
 
 }
 
@@ -79,25 +107,7 @@ cd /tmp/
 
 function INSTALL_SCRIPT
 {
-if [ "$(echo $secure_mysql | awk  '{print $1}')" != "n" ]; then
-	
-echo "
-echo \"I: Securing Mysql Server\"
-echo \"UPDATE mysql.user SET Password=PASSWORD('$mysql_root_password') WHERE User='root';
-DELETE FROM mysql.user WHERE User='';
-DELETE FROM mysql.user WHERE User='root' AND Host!='localhost';
-FLUSH PRIVILEGES;
-\" > /tmp/mysql_secure.sql
-$BIN_MYSQL -u root < /tmp/mysql_secure.sql
-
-" >> /opt/ciws/share/lampp/config_post_install.sh
-
-fi
-
-echo "
-echo \"I: Stopping Mysql Server\"
-/etc/init.d/mysql stop
-" >> /opt/ciws/share/lampp/config_post_install.sh
+cd /tmp/
 }
 
 #_______________________________________________________________________________________________

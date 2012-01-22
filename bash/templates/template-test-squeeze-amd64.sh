@@ -14,7 +14,7 @@ keep_local_apt_parameters="y"
 kernel="2.6.32-5-amd64"
 #update live-initramfs Squeeze
 #DNS server Squeeze
-#C#iwscms 0.9.2
+#Ciwscms 0.9.2
 #NX server 0.2
 #Openssh server 0.2
 deactivate_ssh_root_login="y"
@@ -25,7 +25,7 @@ root_psgsql_pwd="$mysql_root_password"
 wordpress_name[1]="Wordpress_1"
 wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"
-#M#ysql 5.0
+#Mysql 5.0
 mysql_replication_master="n"
 mysql_replication_slave="n"
 mysql_master_domain="my-erp2.intra"
@@ -35,7 +35,7 @@ mysql_slave_user="mysql_slave_user"
 mysql_slave_password="$mysql_generic_pwd"
 replication_db[1]="Ampache_1"
 replication_db[2]="Letodms_1"
-#P#hpmyadmin 3.3.7
+#Phpmyadmin 3.3.7
 #C#lamtk 4.27
 #C#odecs Squeeze
 #F#ilezilla 0.1
@@ -300,14 +300,14 @@ dolibarr_admin_email[1]="admin.local@$domain"
 #V#irtualmin 0.9
 #M#ulti-domains 0.1
 #M#ulti-users 0.1
-#Adduser 0.1
+#A#dduser 0.1
 user_name[1]="test"
 user_fullname[1]="Mr test"
 user_pwd[1]="test"
 user_admin[1]="y"
 user_group[1]="y"
 user_nx[1]="y"
-#SshNetworkShare 0.1
+#S#shNetworkShare 0.1
 share_local_path[1]="/media/network"
 share_local_user[1]="ciwsadmin"
 share_server[1]="wwi.my-desktop5.intra"
