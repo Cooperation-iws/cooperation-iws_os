@@ -72,7 +72,7 @@ Alias /${MOD_NAME[$count]} ${download_server_folder[$count]}
 
 echo "
 #Chown appropriate user for ${download_server_folder[$count]}
-if [ ! $(ls -l ${download_server_folder[$count]} | grep  $LIVEUSER) ]; then
+if [ ! \$(ls -l ${download_server_folder[$count]} | grep  $LIVEUSER) ]; then
 chown -R $LIVEUSER:www-data ${download_server_folder[$count]}
 
 fi

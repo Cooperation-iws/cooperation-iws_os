@@ -119,6 +119,16 @@ chmod +x /etc/default/${MOD_NAME[$count]}-server
 
 chmod -R +x $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}
 
+echo "
+#Chown appropriate user for $LAMPP_DIRECTORY/var/lib/${MOD_NAME[$count]}/tmp
+if [ ! \$(ls -l $LAMPP_DIRECTORY/var/lib/${MOD_NAME[$count]}/tmp | grep  $LIVEUSER) ]; then
+chown -R $LIVEUSER $LAMPP_DIRECTORY/var/lib/${MOD_NAME[$count]}/tmp
+
+fi
+" >> /etc/rc.local
+
+
+
 cd  $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}
 ./install_server_backend.sh
 
