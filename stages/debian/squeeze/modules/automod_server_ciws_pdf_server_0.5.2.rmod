@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Ciwscrawlserver 0.5.2'
+RMOD_NAME='Ciwspdfserver 0.5.2'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Network management'
@@ -22,11 +22,11 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 . /tmp/app_params
 
-NB_CIWSCRAWL=${#ciwscrawlserver_id[*]}
+NB_CIWSCRAWL=${#ciwspdfserver_id[*]}
 
 for (( count=1; count<=$NB_CIWSCRAWL; count++ ))
 do
-MOD_NAME[$count]=${ciwscrawlserver_name[$count]}
+MOD_NAME[$count]=${ciwspdfserver_name[$count]}
 
 
 
@@ -61,7 +61,7 @@ function INSTALL
 {
 WGET_CIWS_DEPOT
 
-apt-get install --assume-yes --force-yes rsync httrack libhttrack-dev expect
+apt-get install --assume-yes --force-yes rsync htmldoc expect
 
 
 for (( count=1; count<=$NB_CIWSCRAWL; count++ ))
@@ -85,30 +85,30 @@ sed -i "s/\.\.\/conf\/conf_install.sh/conf/g" $LAMPP_DIRECTORY/etc/${MOD_NAME[$c
 sed -i "s/\.\.\/conf\/conf_install.sh/conf/g" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/stop_cron.sh
 
 
-sed -i "5s/6/${ciwscrawlserver_id[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "5s/6/${ciwspdfserver_id[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 sed -i "7s/esmalif/$LIVEUSER/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
-sed -i "8s/esmalif/${ciwscrawlserver_wui_user[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
-sed -i "12s/cooperation/${ciwscrawlserver_wui_pwd[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "8s/esmalif/${ciwspdfserver_wui_user[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "12s/cooperation/${ciwspdfserver_wui_pwd[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 sed -i "18s/\/etc\/ciws-live-1-server/\/opt\/ciws\/etc\/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
-sed -i "11s/esmalif@wwi.lokaleskif-b.intra/${ciwscrawlserver_wui_user[$count]}@${ciwscrawlserver_wui_domain[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
-sed -i "14s/\/opt\/ciws\/server\/var\/ciws-live-1/\/opt\/ciws\/server\/var\/${ciwscrawlserver_wui_name[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "11s/esmalif@wwi.lokaleskif-b.intra/${ciwspdfserver_wui_user[$count]}@${ciwspdfserver_wui_domain[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "14s/\/opt\/ciws\/server\/var\/ciws-live-1/\/opt\/ciws\/server\/var\/${ciwspdfserver_wui_name[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 sed -i "16s/esmalif/$LIVEUSER/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 sed -i "21s/\/home\/esmalif\/livescript/\/opt\/ciws\/var\/lib\/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 sed -i "30s/\/home\/esmalif\/livescript\/ciws-live-1\/tmp\//\/opt\/ciws\/var\/lib\/${MOD_NAME[$count]}\/tmp\//" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 sed -i "33s/\/home\/esmalif\/livescript\/ciws-live-1\/log/\/opt\/ciws\/var\/lib\/${MOD_NAME[$count]}\/log/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 sed -i "39s/\/home\/esmalif\/livescript\/ciws-live-1\/tmp\//\/opt\/ciws\/var\/lib\/${MOD_NAME[$count]}\/tmp/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
-sed -i "46s/esmalif@wwi.lokaleskif-b.intra/${ciwscrawlserver_download_user[$count]}@${ciwscrawlserver_download_domain[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
-sed -i "47s/\/home\/esmalif/\/home\/${ciwscrawlserver_download_user[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
-download_path_for_sed=$(echo ${ciwscrawlserver_download_path[$count]} | sed 's/\//\\\//g')
+sed -i "46s/esmalif@wwi.lokaleskif-b.intra/${ciwspdfserver_download_user[$count]}@${ciwspdfserver_download_domain[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "47s/\/home\/esmalif/\/home\/${ciwspdfserver_download_user[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+download_path_for_sed=$(echo ${ciwspdfserver_download_path[$count]} | sed 's/\//\\\//g')
 sed -i "45s/\/var\/www\/iso/${download_path_for_sed}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
-sed -i "48s/cooperation/${ciwscrawlserver_download_pwd[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "48s/cooperation/${ciwspdfserver_download_pwd[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 
-sed -i "51s/1/${ciwscrawlserver_instance_nb[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
-sed -i "66s/wwi.lokaleskif-b.intra/${ciwscrawlserver_download_domain[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
-sed -i "66s/ciws-live-1/${ciwscrawlserver_wui_name[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "51s/1/${ciwspdfserver_instance_nb[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "66s/wwi.lokaleskif-b.intra/${ciwspdfserver_download_domain[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "66s/ciws-live-1/${ciwspdfserver_wui_name[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 
 
-sed -i "77s/live/crawl/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "77s/live/htmldoc/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 sed -i "85s/ciws-live-1/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 
 mv $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf-backup

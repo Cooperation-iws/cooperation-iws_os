@@ -123,7 +123,7 @@ echo "I: proceeding to last customizations"
 #shutdown script
 chmod +x /opt/ciws/share/lampp/config_post_install.sh
 /opt/ciws/share/lampp/config_post_install.sh
-
+rm -r /opt/ciws/share
 
 
 echo "I: shuting down servers"

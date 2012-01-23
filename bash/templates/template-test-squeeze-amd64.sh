@@ -327,9 +327,11 @@ ciwscrawl_mysql_pwd[1]="$mysql_generic_pwd"
 ciwscrawl_name[1]="Ciws_crawl_1"
 ciwscrawl_download_url[1]="http://$domain/DL/"
 ciwscrawl_template[1]="ciws-digg"
+ciwscrawl_server_name[1]="Ciws_crawl_1"
 #Ciwslibscripts 0.5.2
 #Ciwscrawlserver 0.5.2
 ciwscrawlserver_id[1]=1
+ciwscrawlserver_name[1]="Ciws_crawl_1"
 ciwscrawlserver_instance_nb[1]="3"
 ciwscrawlserver_wui_user[1]="ciwsadmin"
 ciwscrawlserver_wui_pwd[1]="cooperation"
@@ -342,4 +344,71 @@ ciwscrawlserver_download_path[1]="/opt/ciws/server/download"
 #Ciwsdownloadserver 0.5.2
 download_server_name[1]="DL"
 download_server_folder[1]="/opt/ciws/server/download"
+download_server_name[2]="DL2"
+download_server_folder[2]="/opt/ciws/server/download2"
+download_server_name[3]="DL3"
+download_server_folder[3]="/opt/ciws/server/download3"
+download_server_name[4]="DL4"
+download_server_folder[4]="/opt/ciws/server/download4"
+
+#Ciwspdfwui 0.5.2
+ciwspdf_port_mysql_pwd[1]=${ciws_db_mysql_pwd[1]}
+ciwspdf_port_name[1]=${ciws_db_name[1]}
+ciwspdf_mysql_pwd[1]="$mysql_generic_pwd"
+ciwspdf_name[1]="Ciws_pdf_1"
+ciwspdf_download_url[1]="http://$domain/DL2/"
+ciwspdf_template[1]="ciws-digg"
+ciwspdf_server_name[1]="Ciws_pdf_1"
+#Ciwspdfserver 0.5.2
+ciwspdfserver_id[1]=1
+ciwspdfserver_name[1]="Ciws_pdf_1"
+ciwspdfserver_instance_nb[1]="3"
+ciwspdfserver_wui_user[1]="ciwsadmin"
+ciwspdfserver_wui_pwd[1]="cooperation"
+ciwspdfserver_wui_domain[1]="localhost"
+ciwspdfserver_wui_name[1]=${ciwspdf_name[1]}
+ciwspdfserver_download_user[1]="ciwsadmin"
+ciwspdfserver_download_pwd[1]="cooperation"
+ciwspdfserver_download_domain[1]="localhost"
+ciwspdfserver_download_path[1]="/opt/ciws/server/download2"
+#Ciwstvwui 0.5.2
+ciwstv_port_mysql_pwd[1]=${ciws_db_mysql_pwd[1]}
+ciwstv_port_name[1]=${ciws_db_name[1]}
+ciwstv_mysql_pwd[1]="$mysql_generic_pwd"
+ciwstv_name[1]="Ciws_tv_1"
+ciwstv_download_url[1]="http://$domain/DL3/"
+ciwstv_template[1]="ciws-digg"
+ciwstv_server_name[1]="Ciws_tv_1"
+#Ciwstvserver 0.5.2
+ciwstvserver_id[1]=1
+ciwstvserver_name[1]="Ciws_tv_1"
+ciwstvserver_instance_nb[1]="3"
+ciwstvserver_wui_user[1]="ciwsadmin"
+ciwstvserver_wui_pwd[1]="cooperation"
+ciwstvserver_wui_domain[1]="localhost"
+ciwstvserver_wui_name[1]=${ciwstv_name[1]}
+ciwstvserver_download_user[1]="ciwsadmin"
+ciwstvserver_download_pwd[1]="cooperation"
+ciwstvserver_download_domain[1]="localhost"
+ciwstvserver_download_path[1]="/opt/ciws/server/download3"
+#Ciwsmakingofwui 0.5.2
+ciwsmakingof_port_mysql_pwd[1]=${ciws_db_mysql_pwd[1]}
+ciwsmakingof_port_name[1]=${ciws_db_name[1]}
+ciwsmakingof_mysql_pwd[1]="$mysql_generic_pwd"
+ciwsmakingof_name[1]="Ciws_making_of_1"
+ciwsmakingof_download_url[1]="http://$domain/DL4/"
+ciwsmakingof_template[1]="ciws-digg"
+ciwsmakingof_server_name[1]="Ciws_making_of_1"
+#Ciwsmakingofserver 0.5.2
+ciwsmakingofserver_id[1]=1
+ciwsmakingofserver_name[1]="Ciws_making_of_1"
+ciwsmakingofserver_instance_nb[1]="3"
+ciwsmakingofserver_wui_user[1]="ciwsadmin"
+ciwsmakingofserver_wui_pwd[1]="cooperation"
+ciwsmakingofserver_wui_domain[1]="localhost"
+ciwsmakingofserver_wui_name[1]=${ciwsmakingof_name[1]}
+ciwsmakingofserver_download_user[1]="ciwsadmin"
+ciwsmakingofserver_download_pwd[1]="cooperation"
+ciwsmakingofserver_download_domain[1]="localhost"
+ciwsmakingofserver_download_path[1]="/opt/ciws/server/download4"
 

@@ -2,7 +2,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Ciwscrawlwui 0.5.2'
+RMOD_NAME='Ciwspdfwui 0.5.2'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='Multimedia streaming portal'
@@ -18,20 +18,20 @@ RMOD_VERBOSE_FR="Ampache est un serveur de collections audio."
 
 . /tmp/app_params
 
-NB_CIWSCRAWL=${#ciwscrawl_name[*]}
+NB_CIWSCRAWL=${#ciwspdf_name[*]}
 
 for (( count=1; count<=$NB_CIWSCRAWL; count++ ))
 do
-CIWSCRAWL_PORT_MYSQL_PWD[$count]=${ciwscrawl_port_mysql_pwd[$count]}
-CIWSCRAWL_PORT_MYSQL_USER[$count]=${ciwscrawl_port_name[$count]}
-CIWSCRAWL_PORT_MYSQL_DB[$count]=${ciwscrawl_port_name[$count]}
+CIWSCRAWL_PORT_MYSQL_PWD[$count]=${ciwspdf_port_mysql_pwd[$count]}
+CIWSCRAWL_PORT_MYSQL_USER[$count]=${ciwspdf_port_name[$count]}
+CIWSCRAWL_PORT_MYSQL_DB[$count]=${ciwspdf_port_name[$count]}
 
-CIWSCRAWL_MYSQL_PWD[$count]=${ciwscrawl_mysql_pwd[$count]}
-CIWSCRAWL_MYSQL_USER[$count]=${ciwscrawl_name[$count]}
-CIWSCRAWL_SERVER_NAME[$count]=${ciwscrawl_server_name[$count]}
+CIWSCRAWL_MYSQL_PWD[$count]=${ciwspdf_mysql_pwd[$count]}
+CIWSCRAWL_MYSQL_USER[$count]=${ciwspdf_name[$count]}
+CIWSCRAWL_SERVER_NAME[$count]=${ciwspdf_server_name[$count]}
 
 
-MOD_NAME[$count]=${ciwscrawl_name[$count]}
+MOD_NAME[$count]=${ciwspdf_name[$count]}
 done
 
 #_______________________________________________________________________________________________
@@ -65,20 +65,21 @@ do
 cd $DL_DIR
 mkdir $WWW_DIRECTORY/${MOD_NAME[$count]}
 cp -Rf ciws-crawl-1/* $WWW_DIRECTORY/${MOD_NAME[$count]}/.
-
-
+rm -r ciws-crawl-1
 cd $LAMPP_DIRECTORY/usr/lib/ciws-lib-trunk
 cp install/install_wui.back install/install_wui.sh
 cp wui/modules/ciws-scripts/install/install_module.back wui/modules/ciws-scripts/install/install_module.sh
 
+
+
 sed -i "s/\/home\/esmalif\/app\//\/opt\/ciws\/etc\//" /opt/ciws/usr/lib/ciws-lib-trunk/install/install_wui.sh
 sed -i "s/ciws-live-1/${MOD_NAME[$count]}/" /opt/ciws/usr/lib/ciws-lib-trunk/install/install_wui.sh
+sed -i "10s/ciws-crawl/ciws-pdf/" /opt/ciws/usr/lib/ciws-lib-trunk/install/install_wui.sh
 sed -i "10s/dev_pwd//" /opt/ciws/usr/lib/ciws-lib-trunk/wui/modules/ciws-scripts/install/install_module.sh
 sed -i "s/-p\$mysql_pwd//g" /opt/ciws/usr/lib/ciws-lib-trunk/wui/modules/ciws-scripts/install/install_module.sh
 
 chmod +x wui/modules/ciws-scripts/install/install_module.sh
 chmod +x install/install_wui.sh
-
 
 cd /opt/ciws/usr/lib/ciws-lib-trunk/install
 chmod +x install_wui.sh
@@ -102,20 +103,22 @@ sed -i "s/\/home\/esmalif\/app\/ciws-lib-trunk/\/opt\/ciws\/usr\/lib\/ciws-lib-t
 
 sed -i "7s/ciws-tv-1/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/global-configuration.inc.php
 sed -i "10s/\/home\/amenokal\/app\/ciws-lib-trunk\//\/opt\/ciws\/usr\/lib\/ciws-lib-trunk/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/global-configuration.inc.php
-sed -i "19s/newhorizon/${ciwscrawl_template[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/global-configuration.inc.php
+sed -i "19s/newhorizon/${ciwspdf_template[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/global-configuration.inc.php
 sed -i "60s/ciws-tv-1/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/global-configuration.inc.php
 
 sed -i "8s/ciws-plan-1-data/${MOD_NAME[$count]}-data/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-scripts-configuration.inc.php
 sed -i "9s/root/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-scripts-configuration.inc.php
 sed -i "10s/mysql_root/${CIWSCRAWL_MYSQL_PWD[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-scripts-configuration.inc.php
 sed -i "39s/ciws-plan-1/${CIWSCRAWL_SERVER_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-scripts-configuration.inc.php
+sed -i "42s/ciws-crawl/ciws-pdf/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-scripts-configuration.inc.php
+sed -i "44s/ciws-crawl/ciws-pdf/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-scripts-configuration.inc.php
 
-sed -i "17s/\/opt\/ciws\/server\/var\/ciws-plan-1/\/opt\/ciws\/server\/var\/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-crawl-plugin-configuration.inc.php
-sed -i "23s/ciws-plan-1/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-crawl-plugin-configuration.inc.php
-sed -i "32s/ciws-plan-1/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-crawl-plugin-configuration.inc.php
-url_for_sed=$(echo ${ciwscrawl_download_url[$count]} | sed 's/\//\\\//g')
-sed -i "38s/http:\/\/wwi.redmine-forge.intra\/plan_dir\//${url_for_sed}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-crawl-plugin-configuration.inc.php
-sed -i "41s/\/etc\/ciws-plan-1-server/\/opt\/ciws\/etc\/${CIWSCRAWL_SERVER_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-crawl-plugin-configuration.inc.php
+sed -i "17s/\/opt\/ciws\/server\/var\/ciws-pdf-1/\/opt\/ciws\/server\/var\/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-pdf-plugin-configuration.inc.php
+sed -i "23s/ciws-pdf-1/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-pdf-plugin-configuration.inc.php
+sed -i "32s/ciws-pdf-1/${MOD_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-pdf-plugin-configuration.inc.php
+url_for_sed=$(echo ${ciwspdf_download_url[$count]} | sed 's/\//\\\//g')
+sed -i "38s/http:\/\/wwi.redmine-forge.intra\/plan_dir\//${url_for_sed}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-pdf-plugin-configuration.inc.php
+sed -i "41s/\/etc\/ciws-pdf-1-server/\/opt\/ciws\/etc\/${CIWSCRAWL_SERVER_NAME[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf/ciws-pdf-plugin-configuration.inc.php
 
 mkdir /opt/ciws/server/var/${MOD_NAME[$count]}
 
@@ -145,7 +148,7 @@ done
 #________________________________________FIN_CREATE_WUI_________________________________________
 
 
-echo "I: Install Ampache"
+echo "I: Install Ciws-pdf"
 INSTALL
 CREATE_WUI
-echo "I: End of install Ampache"
+echo "I: End of install Ciws-pdf"
