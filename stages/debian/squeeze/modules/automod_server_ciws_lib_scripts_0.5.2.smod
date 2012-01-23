@@ -51,7 +51,12 @@ cp -Rf ciws-lib-trunk $LAMPP_DIRECTORY/usr/lib/.
 cd $LAMPP_DIRECTORY/usr/lib/ciws-lib-trunk
 cp install/install_wui.sh install/install_wui.back
 cp wui/modules/ciws-scripts/install/install_module.sh wui/modules/ciws-scripts/install/install_module.back
+
+#Dirty upgrade hack to squeeze
 sed -i "130s/^/#/" wui/modules/ciws-scripts/app/administration.php
+sed -i "54s/-/[-.]/g" wui/modules/ciws-scripts/app/class/content-check-class.php 
+sed -i "59s/(-)/(-) and the dot sign (.)/g" wui/modules/ciws-scripts/app/class/content-check-class.php 
+
 }
 
 #_______________________________________________________________________________________________

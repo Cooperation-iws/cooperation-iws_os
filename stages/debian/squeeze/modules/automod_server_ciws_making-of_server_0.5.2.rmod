@@ -75,6 +75,14 @@ cp -Rf ciws-server-lib-trunk/scripts/* $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/
 rm $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/copy_conf.sh
 rm $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/install_server_backend_dev.sh
 
+#Dirty upgrade hack to squeeze
+sed -i "5s/^/cd \/tmp/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/ls_cron_user.sh
+sed -i "9s/^/rm -r $templates_dir\/*/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/ls_cron_user.sh
+sed -i "34s/cat \$cron_file/echo \"\$(cat \$cron_file)\"/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/ls_cron_root.sh
+sed -i "35s/^/#/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/ls_cron_root.sh
+
+
+
 mkdir $LAMPP_DIRECTORY/var/lib/${MOD_NAME[$count]}
 
 sed -i "s/\.\.\/conf\/conf_install.sh/conf/g" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/install_server_backend.sh
@@ -122,7 +130,8 @@ chmod -R +x $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}
 echo "
 #Chown appropriate user for $LAMPP_DIRECTORY/var/lib/${MOD_NAME[$count]}/tmp
 if [ ! \$(ls -l $LAMPP_DIRECTORY/var/lib/${MOD_NAME[$count]}/tmp | grep  $LIVEUSER) ]; then
-chown -R $LIVEUSER $LAMPP_DIRECTORY/var/lib/${MOD_NAME[$count]}/tmp
+chown -R $LIVEUSER:root $LAMPP_DIRECTORY/var/lib/${MOD_NAME[$count]}/tmp
+chmod -R 775 $LAMPP_DIRECTORY/var/lib/${MOD_NAME[$count]}/tmp
 
 fi
 " >> /etc/rc.local

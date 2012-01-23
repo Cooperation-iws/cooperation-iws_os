@@ -119,8 +119,8 @@ sed -i "41s/\/etc\/ciws-plan-1-server/\/opt\/ciws\/etc\/${CIWSCRAWL_SERVER_NAME[
 
 mkdir /opt/ciws/server/var/${MOD_NAME[$count]}
 
-chown -R www-data $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}
-chown -R www-data $LAMPP_DIRECTORY/etc/ciws-unified-portal
+chown -R www-data $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/wui-conf
+chmod -R 575 $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}
 chown -R www-data $WWW_DIRECTORY/${MOD_NAME[$count]}/
 chown -R www-data $LAMPP_DIRECTORY/server/var/${MOD_NAME[$count]}
 
