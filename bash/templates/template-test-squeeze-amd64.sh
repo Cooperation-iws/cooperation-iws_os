@@ -42,7 +42,7 @@ replication_db[2]="Letodms_1"
 #F#lashplayer Squeeze
 #G#imp 2.6
 #I#ceweasel 0.1
-#O#penoffice Squeeze
+#Openoffice Squeeze
 #M#ixxx 1.9source
 #S#ecure delete 0.1
 #S#ound juicer 0.1
@@ -314,13 +314,13 @@ share_server[1]="wwi.my-desktop5.intra"
 share_server_user[1]="esmalif"
 share_server_pwd[1]="Lokkir11"
 share_server_path[1]="/home/esmalif/Documents"
-#Ciwsunifiedportaldb 0.5.2
+#C#iwsunifiedportaldb 0.5.2
 ciws_db_name[1]="Ciwsuniport"
 ciws_db_mysql_pwd[1]="$mysql_generic_pwd"
 ciws_portal_admin_email[1]="admin.local@$domain"
 ciws_portal_manager_email[1]="admin.local@$domain"
 ciws_portal_user_email[1]="admin.local@$domain"
-#Ciwscrawlwui 0.5.2
+#C#iwscrawlwui 0.5.2
 ciwscrawl_port_mysql_pwd[1]=${ciws_db_mysql_pwd[1]}
 ciwscrawl_port_name[1]=${ciws_db_name[1]}
 ciwscrawl_mysql_pwd[1]="$mysql_generic_pwd"
@@ -328,8 +328,8 @@ ciwscrawl_name[1]="Ciws_crawl_1"
 ciwscrawl_download_url[1]="http://$domain/DL/"
 ciwscrawl_template[1]="ciws-digg"
 ciwscrawl_server_name[1]="Ciws_crawl_1"
-#Ciwslibscripts 0.5.2
-#Ciwscrawlserver 0.5.2
+#C#iwslibscripts 0.5.2
+#C#iwscrawlserver 0.5.2
 ciwscrawlserver_id[1]=1
 ciwscrawlserver_name[1]="Ciws_crawl_1"
 ciwscrawlserver_instance_nb[1]="3"
@@ -341,7 +341,7 @@ ciwscrawlserver_download_user[1]="ciwsadmin"
 ciwscrawlserver_download_pwd[1]="cooperation"
 ciwscrawlserver_download_domain[1]="localhost"
 ciwscrawlserver_download_path[1]="/opt/ciws/server/download"
-#Ciwsdownloadserver 0.5.2
+#C#iwsdownloadserver 0.5.2
 download_server_name[1]="DL"
 download_server_folder[1]="/opt/ciws/server/download"
 download_server_name[2]="DL2"
@@ -351,7 +351,7 @@ download_server_folder[3]="/opt/ciws/server/download3"
 download_server_name[4]="DL4"
 download_server_folder[4]="/opt/ciws/server/download4"
 
-#Ciwspdfwui 0.5.2
+#C#iwspdfwui 0.5.2
 ciwspdf_port_mysql_pwd[1]=${ciws_db_mysql_pwd[1]}
 ciwspdf_port_name[1]=${ciws_db_name[1]}
 ciwspdf_mysql_pwd[1]="$mysql_generic_pwd"
@@ -359,7 +359,7 @@ ciwspdf_name[1]="Ciws_pdf_1"
 ciwspdf_download_url[1]="http://$domain/DL2/"
 ciwspdf_template[1]="ciws-digg"
 ciwspdf_server_name[1]="Ciws_pdf_1"
-#Ciwspdfserver 0.5.2
+#C#iwspdfserver 0.5.2
 ciwspdfserver_id[1]=1
 ciwspdfserver_name[1]="Ciws_pdf_1"
 ciwspdfserver_instance_nb[1]="3"
@@ -371,7 +371,7 @@ ciwspdfserver_download_user[1]="ciwsadmin"
 ciwspdfserver_download_pwd[1]="cooperation"
 ciwspdfserver_download_domain[1]="localhost"
 ciwspdfserver_download_path[1]="/opt/ciws/server/download2"
-#Ciwstvwui 0.5.2
+#C#iwstvwui 0.5.2
 ciwstv_port_mysql_pwd[1]=${ciws_db_mysql_pwd[1]}
 ciwstv_port_name[1]=${ciws_db_name[1]}
 ciwstv_mysql_pwd[1]="$mysql_generic_pwd"
@@ -379,7 +379,7 @@ ciwstv_name[1]="Ciws_tv_1"
 ciwstv_download_url[1]="http://$domain/DL3/"
 ciwstv_template[1]="ciws-digg"
 ciwstv_server_name[1]="Ciws_tv_1"
-#Ciwstvserver 0.5.2
+#C#iwstvserver 0.5.2
 ciwstvserver_id[1]=1
 ciwstvserver_name[1]="Ciws_tv_1"
 ciwstvserver_instance_nb[1]="3"
@@ -391,7 +391,7 @@ ciwstvserver_download_user[1]="ciwsadmin"
 ciwstvserver_download_pwd[1]="cooperation"
 ciwstvserver_download_domain[1]="localhost"
 ciwstvserver_download_path[1]="/opt/ciws/server/download3"
-#Ciwsmakingofwui 0.5.2
+#C#iwsmakingofwui 0.5.2
 ciwsmakingof_port_mysql_pwd[1]=${ciws_db_mysql_pwd[1]}
 ciwsmakingof_port_name[1]=${ciws_db_name[1]}
 ciwsmakingof_mysql_pwd[1]="$mysql_generic_pwd"
@@ -399,7 +399,7 @@ ciwsmakingof_name[1]="Ciws_making_of_1"
 ciwsmakingof_download_url[1]="http://$domain/DL4/"
 ciwsmakingof_template[1]="ciws-digg"
 ciwsmakingof_server_name[1]="Ciws_making_of_1"
-#Ciwsmakingofserver 0.5.2
+#C#iwsmakingofserver 0.5.2
 ciwsmakingofserver_id[1]=1
 ciwsmakingofserver_name[1]="Ciws_making_of_1"
 ciwsmakingofserver_instance_nb[1]="3"

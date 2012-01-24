@@ -63,8 +63,11 @@ deb-src $DEB_MIRROR_PATH/ $DEB_DIST main contrib
 deb $DEBNONFREE_MIRROR_PATH $DEB_DIST main 
 deb-src $DEBNONFREE_MIRROR_PATH $DEB_DIST main 
 #Security
-#deb $DEB_MIRROR_SECURITY_PATH $DEB_DIST/updates main contrib non-free
-#deb-src $DEB_MIRROR_SECURITY_PATH $DEB_DIST/updates main contrib 
+deb $DEB_MIRROR_PATH $DEB_DIST/updates main contrib non-free
+#deb-src $DEB_MIRROR_PATH_PATH $DEB_DIST/updates main contrib 
+#Updates
+deb $DEB_MIRROR_SECURITY_PATH $DEB_DIST-updates main contrib non-free
+deb-src $DEB_MIRROR_SECURITY_PATH $DEB_DIST-updates main contrib 
 " > /etc/apt/sources.list
 #export DEBIAN_FRONTEND="dialog"
 fi
@@ -86,6 +89,9 @@ else
 echo "
 deb ftp://ftp.debian.org/debian/ $DEB_DIST main contrib non-free
 deb-src ftp://ftp.debian.org/debian/ $DEB_DIST main contrib 
+#Updates
+deb ftp://ftp.debian.org/debian/ $DEB_DIST-updates main contrib non-free
+deb-src ftp://ftp.debian.org/debian/ $DEB_DIST-updates main contrib 
 #Multimedia
 deb http://www.debian-multimedia.org $DEB_DIST main 
 deb-src http://www.debian-multimedia.org $DEB_DIST main 
