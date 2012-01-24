@@ -68,7 +68,6 @@ sed -i "59s/(-)/(-) and the dot sign (.)/g" wui/modules/ciws-scripts/app/class/c
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:3000]]>" "<![CDATA[http://localhost:3000]]>" 
 
 
 }
@@ -78,7 +77,7 @@ cd /tmp/
 
 
 
-echo "I: Install Ntop"
+echo "I: Install Ciwslib"
 INSTALL
 CREATE_WUI
-echo "I: End of install Ntop"
+echo "I: End of install Ciwslib"
