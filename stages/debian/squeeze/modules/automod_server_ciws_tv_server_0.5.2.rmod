@@ -106,7 +106,7 @@ sed -i "45s/\/var\/www\/iso/${download_path_for_sed}/" $LAMPP_DIRECTORY/etc/${MO
 sed -i "48s/cooperation/${ciwstvserver_download_pwd[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 
 sed -i "51s/1/${ciwstvserver_instance_nb[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
-sed -i "66s/wwi.lokaleskif-b.intra/${ciwstvserver_download_domain[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
+sed -i "66s/wwi.lokaleskif-b.intra/${ciwstvserver_wui_domain[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 sed -i "66s/ciws-live-1/${ciwstvserver_wui_name[$count]}/" $LAMPP_DIRECTORY/etc/${MOD_NAME[$count]}/conf_install.sh
 
 
