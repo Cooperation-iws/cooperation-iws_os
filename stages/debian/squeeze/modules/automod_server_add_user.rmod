@@ -18,6 +18,12 @@ RMOD_VERBOSE_FR="Ampache est un serveur de collections audio."
 
 . /tmp/app_params
 
+USER_NAME[1]=$LIVEUSER
+USER_FULLNAME[1]=$LIVEUSER
+USER_PWD[1]=$CLEAR_HOST_PWD
+USER_ADMIN[1]="y"
+USER_GROUP[1]="y"
+USER_NX[1]="n"
 
 
 

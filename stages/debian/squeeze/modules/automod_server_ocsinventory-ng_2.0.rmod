@@ -31,7 +31,7 @@ function INSTALL
 
 
 
-apt-get install --assume-yes --force-yes libxml-simple-perl libcompress-zlib-perl libdbi-perl libdbd-mysql-perl libapache-dbi-perl libnet-ip-perl libsoap-lite-perl libphp-pclzip 
+apt-get install --assume-yes --force-yes libxml-simple-perl libcompress-zlib-perl libdbi-perl libdbd-mysql-perl libapache-dbi-perl libnet-ip-perl libsoap-lite-perl libphp-pclzip build-essential
 
 cd $DL_DIR
 wget $URL_CIWS_DEPOT/OCSNG_UNIX_SERVER-2.0.tar.gz

@@ -3291,7 +3291,7 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 
 <item>
 	<item_name>Phpmyadmin</item_name>
-	<item_version>4.3.4.3</item_version>
+	<item_version>3.3.7</item_version>
 	<item_desc>Interface Web d'administration de Mysql</item_desc>
 	<item_web>http://phpmyadmin.org/</item_web>
 	<item_verbose>Interface Web d'administration de Mysql</item_verbose>
@@ -4136,7 +4136,7 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 </item>
 <item>
 	<item_name>Zabbix server</item_name>
-	<item_version>1.8.5</item_version>
+	<item_version>1.8.2</item_version>
 	<item_desc>Network monitoring</item_desc>
 	<item_web>http://www.zabbix.com/</item_web>
 	<item_verbose>Zabbix is an enterprise-class open source distributed monitoring solution. This module install Zabbix server.</item_verbose>
@@ -4969,7 +4969,7 @@ Dotclear is a free software primarily designed for its users and regularly impro
 </item>
 <item>
 	<item_name>Darkstat</item_name>
-	<item_version>3.0.714</item_version>
+	<item_version>3.0.713</item_version>
 	<item_desc>Network monitoring</item_desc>
 	<item_web>http://darkstat.org/</item_web>
 	<item_verbose>Sogo is a groupware solution.</item_verbose>

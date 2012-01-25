@@ -300,10 +300,10 @@ dolibarr_admin_email[1]="admin.local@$domain"
 #V#irtualmin 0.9
 #M#ulti-domains 0.1
 #M#ulti-users 0.1
-#A#dduser 0.1
-user_name[1]="test"
-user_fullname[1]="Mr test"
-user_pwd[1]="test"
+#Adduser 0.1
+user_name[1]="ciwsuser"
+user_fullname[1]="ciwsuser"
+user_pwd[1]="cooperation"
 user_admin[1]="y"
 user_group[1]="y"
 user_nx[1]="y"
