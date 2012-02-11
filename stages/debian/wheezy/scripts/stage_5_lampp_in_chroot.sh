@@ -37,6 +37,14 @@ apt-get install --yes --force-yes unzip
 echo "I: config apache"
 echo "EnableSendfile off" >> /etc/apache2/apache2.conf
 sed -i "31s/#/AddType image\/svg+xml .svg/" /etc/apache2/mods-available/mime.conf
+sed -i "245G" /etc/apache2/mods-available/mime.conf
+sed -i "245G" /etc/apache2/mods-available/mime.conf
+
+sed -i "246s/#/AddType text\/html .asp/" /etc/apache2/mods-available/mime.conf
+sed -i "247s/#/AddType text\/html .jsp/" /etc/apache2/mods-available/mime.conf
+
+
+
 sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/sites-available/default
 sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/sites-available/default-ssl
 
