@@ -47,6 +47,11 @@ fi
 
 /etc/init.d/postgresql start
 
+sudo -u postgres pg_dropcluster --stop 8.4 main
+
+sudo -u postgres pg_createcluster --start -e UTF-8 8.4 main
+
+
 }
 
 #_______________________________________________________________________________________________
