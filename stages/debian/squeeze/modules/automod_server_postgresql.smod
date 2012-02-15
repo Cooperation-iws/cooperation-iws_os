@@ -88,6 +88,9 @@ ALTER USER postgres WITH PASSWORD '$ROOT_PSGSQL_PWD';
 \"  > openerp_db.sql
 
 sudo -u postgres psql postgres < openerp_db.sql
+
+#echo \"postgres:$ROOT_PSGSQL_PWD\" | chpasswd
+
 echo \"I: Stopping Postgresql Server\"
 /etc/init.d/postgresql stop
 " >> /opt/ciws/share/lampp/config_post_install.sh

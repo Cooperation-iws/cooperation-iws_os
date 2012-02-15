@@ -25,7 +25,7 @@ root_psgsql_pwd="$mysql_root_password"
 wordpress_name[1]="Wordpress_1"
 wordpress_admin_email[1]="admin.local@$domain"
 wordpress_mysql_pwd[1]="$mysql_generic_pwd"
-#Mysql 5.0
+#M#ysql 5.0
 mysql_replication_master="n"
 mysql_replication_slave="n"
 mysql_master_domain="my-erp2.intra"
@@ -35,7 +35,7 @@ mysql_slave_user="mysql_slave_user"
 mysql_slave_password="$mysql_generic_pwd"
 replication_db[1]="Ampache_1"
 replication_db[2]="Letodms_1"
-#Phpmyadmin 3.3.7
+#P#hpmyadmin 3.3.7
 #C#lamtk 4.27
 #C#odecs Squeeze
 #F#ilezilla 0.1
@@ -54,7 +54,7 @@ replication_db[2]="Letodms_1"
 #A#udacity 0.1
 #K#olab 2.3source
 #I#SPconfig 3.0
-#Devclient 0.1
+#D#evclient 0.1
 #A#lfresco 3.4
 alfresco_mysql_pwd="$mysql_generic_pwd"
 #A#mpache 3.5.4
@@ -271,7 +271,7 @@ ntop_pwd=$gen_login_pwd
 #O#penvpn 2.2
 #F#reeradius 2.1.10
 #F#reeradius-dialupadmin 2.1.10
-#Liveusb 1.1.x
+#L#iveusb 1.1.x
 #G#ateway DNS 1.1.x
 gateway_nb_machine=20
 gateway_net_iface="eth0"
@@ -300,7 +300,7 @@ dolibarr_admin_email[1]="admin.local@$domain"
 #V#irtualmin 0.9
 #M#ulti-domains 0.1
 #M#ulti-users 0.1
-#Adduser 0.1
+#A#dduser 0.1
 user_name[1]="ciwsuser"
 user_fullname[1]="ciwsuser"
 user_pwd[1]="cooperation"
