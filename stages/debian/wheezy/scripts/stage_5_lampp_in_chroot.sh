@@ -56,8 +56,19 @@ echo "I: config php"
 sed -i -e  "s/post_max_size = 8M/post_max_size = 200M/" /etc/php5/apache2/php.ini
 sed -i -e  "s/upload_max_filesize = 2M/upload_max_filesize = 200M/" /etc/php5/apache2/php.ini
 
+echo "I: install bompiler"
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/bcompiler-0.9.3.tgz
+
+apt-get install --assume-yes --force-yes libbz2-dev php5-dev make
+
+pecl install bcompiler-0.9.3.tgz
+
+echo "extension=bcompiler.so" > /etc/php5/conf.d/bcompiler.ini
 
 
+echo "I: config directory"
 
 mkdir $WWW_DIRECTORY/admin/
 rm $WWW_DIRECTORY/index.html
