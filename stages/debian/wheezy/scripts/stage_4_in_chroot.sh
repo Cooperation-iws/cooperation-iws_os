@@ -22,6 +22,9 @@ sed -i "44s/auth_admin_keep/yes/" /usr/share/polkit-1/actions/org.freedesktop.co
 	fi
 
 
+#Disabling consolekit-daemon (eats too much cpu)
+
+rm /usr/share/dbus-1/system-services/org.freedesktop.ConsoleKit.service
 
 
 #disable by gdm12
