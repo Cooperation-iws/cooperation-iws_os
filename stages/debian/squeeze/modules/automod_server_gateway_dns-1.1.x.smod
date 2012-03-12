@@ -244,6 +244,10 @@ sed -i "20G" /etc/shorewall/rules
 sed -i "20G" /etc/shorewall/rules
 sed -i "21s/^/DNS(ACCEPT)  loc   \$FW/" /etc/shorewall/rules
 sed -i "22s/^/DNS(ACCEPT)  \$FW   loc/" /etc/shorewall/rules
+sed -i "20G" /etc/shorewall/rules
+sed -i "20G" /etc/shorewall/rules
+sed -i "21s/^/ACCEPT  \$FW   loc   tcp 67,68/" /etc/shorewall/rules
+sed -i "22s/^/ACCEPT  \$FW   loc   udp 67,68/" /etc/shorewall/rules
 
 
 if [ "$gateway_local_bridge" = "y" ]; then
