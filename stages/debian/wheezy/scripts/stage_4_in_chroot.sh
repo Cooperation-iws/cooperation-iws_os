@@ -10,6 +10,12 @@
 . /tmp/app_params
 
 
+#Upgrading to latest depot
+
+apt-get upgrade --assume-yes --force-yes
+
+
+
 #Preventing shutdown prevention
 
 if [ "$DEB_DIST" == "squeeze" ] ; then

@@ -62,9 +62,8 @@ deb-src $DEB_MIRROR_PATH/ $DEB_DIST main contrib
 #Multimedia
 deb $DEBNONFREE_MIRROR_PATH $DEB_DIST main 
 deb-src $DEBNONFREE_MIRROR_PATH $DEB_DIST main 
-#Security
-deb $DEB_MIRROR_PATH $DEB_DIST/updates main contrib non-free
-#deb-src $DEB_MIRROR_PATH_PATH $DEB_DIST/updates main contrib 
+#Backports
+deb $DEB_MIRROR_PATH-backports $DEB_DIST-backports main 
 #Updates
 deb $DEB_MIRROR_SECURITY_PATH $DEB_DIST-updates main contrib non-free
 deb-src $DEB_MIRROR_SECURITY_PATH $DEB_DIST-updates main contrib 
