@@ -19,11 +19,11 @@ echo "I: install codec"
 
 apt-get install --assume-yes --force-yes gstreamer0.10-ffmpeg gstreamer0.10-plugins-base gstreamer0.10-plugins-good gstreamer0.10-plugins-bad gstreamer0.10-plugins-ugly 
 
-apt-get install --assume-yes --force-yes nvidia-kernel-dkms nvidia-settings nvidia-xconfig
+#apt-get install --assume-yes --force-yes nvidia-kernel-dkms nvidia-settings nvidia-xconfig
 
-apt-get install --assume-yes --force-yes fglrx-modules-dkms fglrx-control fglrx-glx fglrx-driver fglrx-atieventsd
+#apt-get install --assume-yes --force-yes fglrx-modules-dkms fglrx-control fglrx-glx fglrx-driver fglrx-atieventsd
 
-apt-get install --assume-yes --force-yes fglrx-glx-ia32
+#apt-get install --assume-yes --force-yes fglrx-glx-ia32
 
 apt-get install --assume-yes --force-yes wireless-tools
 

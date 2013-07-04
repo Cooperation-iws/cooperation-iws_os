@@ -19,9 +19,9 @@ echo "I: install codec"
 
 apt-get install --assume-yes --force-yes gstreamer0.10-ffmpeg gstreamer0.10-plugins-base gstreamer0.10-plugins-good gstreamer0.10-plugins-bad gstreamer0.10-plugins-ugly network-manager-openvpn
 
-apt-get install --assume-yes --force-yes nvidia-kernel-dkms nvidia-settings nvidia-xconfig
+#apt-get install --assume-yes --force-yes nvidia-kernel-dkms nvidia-settings nvidia-xconfig
 
-apt-get install --assume-yes --force-yes fglrx-modules-dkms fglrx-control fglrx-glx fglrx-driver fglrx-glx-ia32 fglrx-atieventsd
+#apt-get install --assume-yes --force-yes fglrx-modules-dkms fglrx-control fglrx-glx fglrx-driver fglrx-glx-ia32 fglrx-atieventsd
 
 if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
 #apt-get install --assume-yes --force-yes gnome-icon-theme* human-icon-theme* hplip gdm-themes brasero
