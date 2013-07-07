@@ -152,10 +152,10 @@ EOT_REVERSE
 
 
 
-sed -i "13s/\/\///" /etc/bind/named.conf.options 
-sed -i "14s/\/\///" /etc/bind/named.conf.options 
+#sed -i "13s/\/\///" /etc/bind/named.conf.options 
+#sed -i "14s/\/\///" /etc/bind/named.conf.options 
 sed -i "14s/0.0.0.0/DNS_1/" /etc/bind/named.conf.options 
-sed -i "15s/\/\///" /etc/bind/named.conf.options 
+#sed -i "15s/\/\///" /etc/bind/named.conf.options 
 sed -i "18s/^/\/\//" /etc/bind/named.conf.options 
 sed -i "3s/^/dnssec-enable yes;/" /etc/bind/named.conf.options 
 
