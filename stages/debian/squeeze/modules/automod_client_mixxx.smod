@@ -13,23 +13,17 @@ LIVEUSER=$LIVEUSER
 . /tmp/scripts_params
 
 cd $DL_DIR
-sudo apt-get install  --assume-yes --force-yes portaudio19-dev debhelper docbook-to-man imagemagick libaudiofile-dev libexpat-dev libgl1-mesa-dev libglu1-mesa-dev libid3tag0-dev libjack-dev libmad0-dev libogg-dev libqt4-opengl-dev libsndfile1-dev libsoundtouch-dev libvorbis-dev pkg-config quilt scons bzr libfftw3-dev libtaglib-ocaml-dev libportmidi-dev libshout3-dev
+sudo apt-get install  --assume-yes --force-yes portaudio19-dev debhelper docbook-to-man imagemagick libaudiofile-dev libexpat-dev libgl1-mesa-dev libglu1-mesa-dev libid3tag0-dev libjack-dev libmad0-dev libogg-dev libqt4-opengl-dev libsndfile1-dev libsoundtouch-dev libvorbis-dev pkg-config quilt scons bzr libfftw3-dev libtaglib-ocaml-dev libportmidi-dev libshout3-dev git scons libqt4-dev libqt4-sql-sqlite libportmidi-dev libshout-dev libtag1-dev libprotobuf-dev protobuf-compiler libvamp-hostsdk3 libusb-1.0-0-dev libfftw3-dev libfaad-dev libshout3-dev libprotobuf-dev libsndfile1-dev portaudio19-dev libtag1-dev libportmidi-dev scons libqt4-dev libfftw3-dev libid3tag0-dev libmad0-dev libogg-dev libvorbis-dev libvorbisfile3
+#apt-get build-dep --assume-yes --force-yes mixxx 
+
 
 
 cd $DL_DIR
-wget $URL_CIWS_DEPOT/mixxx-1.9.0-src.tar.gz
-sudo tar xzf mixxx-1.9.0-src.tar.gz 
-rm mixxx-1.9.0-src.tar.gz 
+wget $URL_CIWS_DEPOT/mixxx-1.11.0-src.tar.gz
+sudo tar xzf mixxx-1.11.0-src.tar.gz
+rm mixxx-1.11.0-src.tar.gz 
 cd mixxx*
-scons prefix=/usr
-scons prefix=/usr install
+scons 
+scons install
 
-wget $URL_CIWS_DEPOT/hdjmod-dkms_1.28_all.deb
-dpkg -i hdjmod-dkms_1.28_all.deb
 
-wget $URL_CIWS_DEPOT/hdjcpl_1.09-1_i386.deb
-dpkg -i hdjcpl_1.09-1_i386.deb
-
-apt-get -f install --assume-yes --force-yes
-
-sudo apt-get install  --assume-yes --force-yes libjack-jackd2-0

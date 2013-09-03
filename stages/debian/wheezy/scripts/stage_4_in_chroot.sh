@@ -12,7 +12,7 @@
 
 #Upgrading to latest depot
 
-apt-get upgrade --assume-yes --force-yes
+#apt-get upgrade --assume-yes --force-yes
 
 
 
