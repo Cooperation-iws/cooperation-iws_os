@@ -1,0 +1,37 @@
+#!/bin/bash
+
+local_path=`dirname $0`
+cd $local_path
+local_path=$(pwd)
+
+
+CHROOT_DIR=$1
+
+
+
+. $CHROOT_DIR/scripts_params
+
+
+
+#COPYING ARTWORK
+rm -r $CHROOT_DIR/remaster/isolinux
+cp -r $local_path/jessie_console/isolinux $CHROOT_DIR/remaster/.
+
+echo "I: Configuring host"
+#sed -i "s/username=ciwsadmin/username=$LIVEUSER/g" $CHROOT_DIR/remaster/isolinux/live.cfg
+#sed -i "s/user-fullname=ciwsuser/user-fullname=$LIVEUSER_FULL/g" $CHROOT_DIR/remaster/isolinux/live.cfg
+#sed -i "s/hostname=ciws-server/hostname=$HOSTNAME/g" $CHROOT_DIR/remaster/isolinux/live.cfg
+
+
+
+sed -i "s/locales=fr/locales=$LANG/g" $CHROOT_DIR/remaster/isolinux/live.cfg
+sed -i "s/keyboard-layouts=fr/keyboard-layouts=$KEYB/g" $CHROOT_DIR/remaster/isolinux/live.cfg
+TZ=$(echo $TZ | sed 's/\//\\\//')
+sed -i "s/timezone=Europe\/Paris/timezone=$TZ/g" $CHROOT_DIR/remaster/isolinux/live.cfg
+
+
+
+#Setting up isolinux
+if [ "$ENCRYPTION" ]; then
+sed -i "s/boot=live/boot=live encryption=$ENCRYPTION/g" $CHROOT_DIR/remaster/isolinux/live.cfg
+fi

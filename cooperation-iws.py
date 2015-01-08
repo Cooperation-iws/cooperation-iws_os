@@ -99,6 +99,7 @@ class Cooperationiws:
 	self.lucidStagesScriptsDir="wheezy"	
 	self.squeezeStagesScriptsDir="wheezy"	
 	self.wheezyStagesScriptsDir="wheezy"	
+	self.jessieStagesScriptsDir="jessie"	
 	
         APPDOMAIN='cooperationiws'
         LANGDIR='lang'
@@ -110,7 +111,7 @@ class Cooperationiws:
 
  	# print copyright
         print " "
-        print self.appName + " -- (c) Cooperation-iws Team, 2011"
+        print self.appName + " -- (c) Cooperation-iws Team, 2014"
         print "       Version: " + self.appVersion
         print "        http://www.cooperation-iws.eu"
         print " "
@@ -314,6 +315,8 @@ class Cooperationiws:
 		self.stagesScriptsDir=self.wheezyStagesScriptsDir
 	if self.distVers == "lucid":
 		self.stagesScriptsDir=self.lucidStagesScriptsDir
+	if self.distVers == "jessie":
+		self.stagesScriptsDir=self.jessieStagesScriptsDir
 
 
 # ---------- Check dependencies ---------- #
@@ -815,7 +818,7 @@ class Cooperationiws:
 
 	modExecAfterChroot = '#!/bin/bash\n\n'
         if self.artwork != "":
-		modExecAfterChroot += 'bash \"' + os.path.join(self.ciwsRootDir, self.artworkDir + "/" + self.artwork + ".artscript") + '\" \"' + self.customDir + '\" ' + ' ;\n '
+		modExecAfterChroot += 'bash \"' + os.path.join(self.ciwsRootDir, self.artworkDir + "/" + self.artwork + ".artscript") + '\" \"' + self.customDir + '\" \"' + self.moduleFilename + '\"' + ' ;\n '
 		modExecAfterChroot += 'bash \"' + os.path.join( self.scriptDir, self.distType + "/" + self.stagesScriptsDir + "/scripts/stage_8_out_of_chroot.sh") + '\" \"' + self.customDir + '\" ' + ' ;\n '
 
 	if self.execModulesEnabled == True:
@@ -925,7 +928,7 @@ class Cooperationiws:
 		print " "
 		print _("RUN STAGE 10...")
 		print " "
-		os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.stagesScriptsDir + "/scripts/stage_10_after_chroot.sh") + '\" \"' + self.customDir + '\" ')
+		os.system('bash \"' + os.path.join(self.scriptDir, self.distType + "/" + self.stagesScriptsDir + "/scripts/stage_10_after_chroot.sh") + '\" \"' + self.customDir + '\" \"' + self.moduleFilename + '\"')
 		print " "
 		print _("STAGE 10 COMPLETED")
 		print " "
