@@ -1,0 +1,269 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='update live-initramfs Jessie'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Office tools for client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+echo "I: updating live-boot-initramfs"
+
+apt-get install --assume-yes --force-yes console-data
+
+
+echo "
+modprobe -q loop max_loop=255" >> /usr/share/initramfs-tools/scripts/local-premount/modules
+
+chmod +x /usr/share/initramfs-tools/scripts/local-premount/modules
+
+echo '#!/bin/sh
+
+STATEFILE=/var/lib/live/config/serialconsole
+
+Serialconsole ()
+{
+	# Checking that we haven t already run
+	if [ -e ${STATEFILE} ]
+	then
+		return
+	fi
+	
+	echo -n " serial console"
+	
+	Configure_serialconsole
+}
+
+Configure_serialconsole ()
+{
+	# Note unusual delimiters
+	sed -i -e "s|#\(T0:.*\?/dev/\)\(tty\)\(.*\?/dev/\)\(tty\)\(.*\)|\1\2S0\3\4S0\5|" /etc/inittab
+	init q
+
+	# Creating state file
+	touch ${STATEFILE}
+}
+
+Serialconsole
+' >> /lib/live/config/1018-serial_console
+
+chmod +x /lib/live/config/1018-serial_console
+
+rm /lib/live/config/1160-openssh-server
+rm /lib/live/config/9990-hooks
+
+
+
+sed -i "s/LIVE_USER_FULLNAME=\"Debian Live user\"/LIVE_USER_FULLNAME=\"$LIVEUSER_FULL\"/" /bin/live-config
+
+
+sed -i "s/LIVE_USERNAME=\"user\"/LIVE_USERNAME=\"$LIVEUSER\"/"  /bin/live-config
+
+
+sed -i "s/LIVE_HOSTNAME=\"debian\"/LIVE_HOSTNAME=\"$HOSTNAME\"/" /bin/live-config
+
+sed -i "s/8Ab05sVQ4LLps/$CRYPT_HOST_PWD/" /lib/live/config/0030-user-setup
+
+sed -i "s/NOPASSWD: //" /lib/live/config/0040-sudo
+
+
+sed -i "17s/^/ [[ ! -d \/root\/etc\/fstab.d\/ ]] \&\& mkdir \/root\/etc\/fstab.d\//" /lib/live/boot/9990-fstab.sh
+
+
+#Fix loop modules in initramfs
+echo "loop" >> /etc/initramfs-tools/modules
+
+#Fix blacklisted device
+sed -i "1022s/black_listed_devices=\"\"/black_listed_devices=\"\/dev\/sr0 \/dev\/dm-0\"/" /lib/live/boot/9990-misc-helpers.sh
+
+#Fix console keyboard 
+sed -i '42s/^/mkdir ${DESTDIR}\/usr ; mkdir ${DESTDIR}\/usr\/share ; cp -r  \/usr\/share\/keymaps ${DESTDIR}\/usr\/share\/./' /usr/share/initramfs-tools/hooks/keymap
+sed -i '572s/^/#/' /lib/live/boot/9990-misc-helpers.sh
+sed -i "572G" /lib/live/boot/9990-misc-helpers.sh
+sed -i '573s/^/loadkeys $(cat \/proc\/cmdline | grep -o keyboard-layouts=[[:alpha:]][[:alpha:]] | cut -d"=" -f2) > \/dev\/null 2>\&1/' /lib/live/boot/9990-misc-helpers.sh
+
+
+if [ "$DISABLE_AUTOLOGIN" ]; then
+echo "todo"
+
+fi
+
+if [ "$ENCRYPTION" == "aes256" ]; then
+
+apt-get install --assume-yes --force-yes aespipe
+apt-get install --assume-yes --force-yes aufs-tools
+
+#building from source
+apt-get install --assume-yes --force-yes linux-image-$kernel linux-headers-$kernel
+
+apt-get install --assume-yes --force-yes build-essential debhelper module-assistant
+
+
+apt-get install --assume-yes --force-yes build-essential libncurses5-dev fakeroot sharutils autoconf libtool pkg-config gnupg
+
+
+m-a -k /usr/src/linux-headers-$kernel fakesource
+
+
+
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/loop-AES-latest.tar.bz2
+
+tar -xjf loop-AES-latest.tar.bz2
+
+cd loop-AES-*
+
+make clean 
+
+make LINUX_SOURCE=/usr/src/linux-headers-$kernel
+
+mv /lib/modules/$kernel/kernel/drivers/block/loop.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko-old
+cp loop.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko
+
+#building from already compiled
+#cd $DL_DIR
+#wget $URL_CIWS_DEPOT/loop-$kernel.ko
+#mv /lib/modules/$kernel/kernel/drivers/block/loop.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko-old
+#cp loop-$kernel.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko
+
+
+
+fi
+
+if [ "$ENCRYPTION" == "luks" ]; then
+
+apt-get install --assume-yes --force-yes cryptsetup 
+
+
+sed -i "629s/^/#/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "629G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "629G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "629G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "629G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "629G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "630s/^/losetup \"\$dev\" \"\$fspath\"/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "631s/^/cryptsetup luksOpen \"\$dev\" luksloop --key-file=\/tmp\/passphrase/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "632s/^/[[ ! -d \/mnt ]] \&\& mkdir \/mnt ; mount -t ext3 \/dev\/mapper\/luksloop \/mnt/" /lib/live/boot/9990-misc-helpers.sh
+
+sed -i "633s/^/dev_2=\"\$(losetup -f)\"/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "634s/^/losetup \"\$dev_2\" \/mnt\/filesystem.squashfs/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "644s/^/losetup -d \"\$dev\" ; umount \/mnt ; cryptsetup luksClose  luksloop ; losetup -d \"\$dev_2\"/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "641G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "642s/^/dev=\$dev_2/" /lib/live/boot/9990-misc-helpers.sh
+
+
+echo "export CRYPTSETUP=y" > /usr/share/initramfs-tools/conf-hooks.d/forcecryptsetup
+
+
+
+#Fix passphrase prompt
+sed -i "836s/^/#/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "837s/^/#/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "838G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "838G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "838G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "838G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "838G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "838s/^/echo -n \"Enter passphrase for ciws-sn filesystem: \" >\&6/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "839s/^/read -s passphrase/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "840s/^/echo \"\${passphrase}\" > \/tmp\/passphrase/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "841s/^/unset passphrase/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "842s/^/\/sbin\/cryptsetup luksOpen \${dev} \${name} --key-file=\/tmp\/passphrase/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "843s/^/rm -f \/tmp\/passphrase/" /lib/live/boot/9990-misc-helpers.sh
+ 
+#Fix skipping root no luks device check
+sed -i "1059s/^/#/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "1060s/^/#/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "1062s/^/#/" /lib/live/boot/9990-misc-helpers.sh
+
+
+fi
+
+
+
+debug_live_boot=0
+if [ "$debug_live_boot" == "1" ]; then
+
+#Add debug display
+echo '#!/bin/sh
+Debug_display()
+{
+cat /tmp/DEBUG_live_boot
+
+read answer
+}
+' >  /lib/live/boot/9991-debug-liveboot.sh 
+chmod +x /lib/live/boot/9991-debug-liveboot.sh 
+
+
+sed -i "129s/^/Debug_display/" /lib/live/boot/9990-main.sh
+
+if [ "$ENCRYPTION" == "luks" ]; then
+
+sed -i "1020s/^/ echo \"DEBUGfind_persistence_media31:\${overlays}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+
+sed -i "1075s/^/ echo \"DEBUGencrypt:\${PERSISTENCE_ENCRYPTION}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "1083G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "1084s/^/ echo \"DEBUGencrypt2:\${loopdevice}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "389s/^/ echo  \"DEBUGstorage_devices2:\${fulldevname}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "401s/^/ echo \"DEBUGstorage_devices3:\${devname}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+
+sed -i "1037s/^/ echo  \"DEBUGstorage_devices4:\${dev}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "215s/^/ echo \"DEBUGfind_persistence_media3:\${overlays}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-overlay.sh
+sed -i "223s/^/ echo \"DEBUGfind_persistence_media4:\${media}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-overlay.sh
+#sed -i "831s/^/ echo \"\/sbin\/cryptsetup -T 1 luksOpen \${dev} \${name} \${opts}\" /" /lib/live/boot/9990-misc-helpers.sh
+
+else
+
+#DEBUG
+sed -i "384s/\&\&/\&\& mkdir \/lib\/live\/mount \&\& mkdir \/lib\/live\/mount\/persistence \&\&/" /lib/live/boot/9990-overlay.sh
+
+sed -i "1386s/\/live\/persistence/\/lib\/live\/mount\/persistence/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "1386s/cp/mkdir \/lib\/live\/mount \&\& mkdir \/lib\/live\/mount\/persistence \&\& cp/" /lib/live/boot/9990-misc-helpers.sh
+
+sed -i "389s/^/ echo  \"DEBUGstorage_devices2:\${fulldevname}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "401s/^/ echo \"DEBUGstorage_devices3:\${devname}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+
+sed -i "1032s/^/ echo  \"DEBUGstorage_devices4:\${dev}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "1070s/^/ echo \"DEBUGinit:\${PERSISTENCE_STORAGE}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+
+
+
+sed -i "713s/^/ echo  \"DEBUGmount_persistent2:\${backing}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+
+
+sed -i "65s/^/ echo \"DEBUGsetup_unionfs\">> \/tmp\/DEBUG_live_boot /" /lib/live/boot/9990-misc-helpers.sh
+sed -i "932G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "933s/^/echo  \":DEBUG_probeforfilename:\${backing}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "940G" /lib/live/boot/9990-misc-helpers.sh
+sed -i "941s/^/echo \":DEBUG_path_setup_loop0:\${path}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "950s/^/echo \":DEBUG_path_setup_loop1:\${ret}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+
+sed -i "1378s/^/echo \":DEBUGget_custom_mounts1:\${backing}\/\${persistence_list}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "1398s/^/echo \":DEBUGget_custom_mounts1:\${dir}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "16363s/^/echo \":DEBUGPERSISTENCE_IS_ON:\${PERSISTENCE_IS_ON}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+
+
+
+
+
+#sed -i "120s/^/ echo \-n \"DEBUGmount_images_in_directory\"/" /lib/live/boot/9990-main.sh
+#sed -i "160s/^/ echo \-n \"DEBUGfind_persistence_media0\"/" /lib/live/boot/9990-overlay.sh
+#sed -i "164s/^/ echo \-n \"DEBUGfind_persistence_media1\"/" /lib/live/boot/9990-overlay.sh
+#sed -i "210s/^/ echo \-n \"DEBUGfind_persistence_media2\"/" /lib/live/boot/9990-overlay.sh
+#sed -i "215s/^/ echo \-n \"DEBUGfind_persistence_media3:\"\${whitelistdev}\":\"\${overlays}/" /lib/live/boot/9990-overlay.sh
+sed -i "223s/^/ echo \"DEBUGfind_persistence_media4:\${media}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-overlay.sh
+sed -i "373s/^/ echo \"DEBUGfind_persistence_media5:\${overlay_devices}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-overlay.sh
+sed -i "380s/^/ echo  \"DEBUGfind_persistence_media6:\${overlay_devices}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-overlay.sh
+sed -i "391s/^/ echo  \"DEBUGfind_persistence_media7:\${used_overlays}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-overlay.sh
+fi
+fi
+
