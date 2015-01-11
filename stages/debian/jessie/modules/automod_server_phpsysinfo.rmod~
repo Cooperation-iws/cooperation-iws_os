@@ -4,17 +4,18 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Console Mode'
+RMOD_NAME='Phpsysinfo 3.0'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
-RMOD_DESCRIPTION='Documentation'
-RMOD_DESCRIPTION_FR='Documentation'
-RMOD_VERBOSE="Browse and search manpages "
-RMOD_VERBOSE_FR="Rechercher et naviguer dans les pages de manuels"
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
 
 RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
-
+RMOD_REQ_APACHE=True
 
 . /tmp/scripts_params
 
@@ -22,7 +23,7 @@ RMOD_RUN_IN_CHROOT=True
 . /tmp/app_params
 
 
-
+NTOP_PWD=$docbookwiki_pwd
 
 
 
@@ -33,39 +34,11 @@ RMOD_RUN_IN_CHROOT=True
 function INSTALL
 {
 
-echo "Install Console boot mode"
 
-echo '#!/bin/sh
+apt-get install --assume-yes --force-yes phpsysinfo
 
-STATEFILE=/var/lib/live/config/serialconsole
+ln -s /usr/share/phpsysinfo /var/www/phpsysinfo
 
-Serialconsole ()
-{
-	# Checking that we haven t already run
-	if [ -e ${STATEFILE} ]
-	then
-		return
-	fi
-	
-	echo -n " serial console"
-	
-	Configure_serialconsole
-}
-
-Configure_serialconsole ()
-{
-	# Note unusual delimiters
-	sed -i -e "s|#\(T0:.*\?/dev/\)\(tty\)\(.*\?/dev/\)\(tty\)\(.*\)|\1\2S0\3\4S0\5|" /etc/inittab
-	init q
-
-	# Creating state file
-	touch ${STATEFILE}
-}
-
-Serialconsole
-' >> /lib/live/config/1018-serial_console
-
-chmod +x /lib/live/config/1018-serial_console
 
 
 }
@@ -79,6 +52,7 @@ chmod +x /lib/live/config/1018-serial_console
 function CREATE_WUI
 {
 cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/phpsysinfo/" "/phpsysinfo/" 
 
 
 }
@@ -88,7 +62,7 @@ cd /tmp/
 
 
 
-echo "I: Install Console boot mode"
+echo "I: Install Ntop"
 INSTALL
 CREATE_WUI
-echo "I: End of install Console boot mode"
+echo "I: End of install Ntop"

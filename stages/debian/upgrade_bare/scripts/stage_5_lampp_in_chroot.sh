@@ -45,7 +45,8 @@ sed -i "247s/^/AddType text\/html .jsp/" /etc/apache2/mods-available/mime.conf
 
 
 
-sed -i "s/var\/www\/html/var\/www/" /etc/apache2/sites-available/000-default.conf
+sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/sites-available/default
+sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/sites-available/default-ssl
 
 
 

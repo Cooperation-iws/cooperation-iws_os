@@ -1,0 +1,557 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Wheezy'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='eMails administration'
+RMOD_DESCRIPTION_FR='Administration des eMails'
+RMOD_VERBOSE_FR="Postfix est un logiciel d'envoi d'e-mails (SMTP entre autre). Dovecot est un logiciel de réception d'email POP3 et IMAP."
+RMOD_VERBOSE="What is Postfix? It is Wietse Venema's mailer that started life at IBM research as an alternative to the widely-used Sendmail program. Postfix attempts to be fast, easy to administer, and secure. The outside has a definite Sendmail-ish flavor, but the inside is completely different. Dovecot is an open source IMAP and POP3 server for Linux/UNIX-like systems, written with security primarily in mind. Dovecot is an excellent choice for both small and large installations. It's fast, simple to set up, requires no special administration and it uses very little memory. "
+
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_REQ_APACHE=True
+. /tmp/app_params
+
+. /tmp/scripts_params
+
+
+
+#VARIABLES
+
+MAILSERVER_MYSQL_PWD=$postfixadmin_mysql_pwd
+NOM_MAILSERVER=$postfixadmin_name
+HOSTNAME=$HOSTNAME
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/postfixadmin_081101.tar.gz
+tar -xzf postfixadmin_081101.tar.gz
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/webmin-module-1.1-4.wbm
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/mailscanner_4.79.11-2.2_all.deb 
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+WGET_CIWS_DEPOT
+echo "
+Name: postfix/main_mailer_type
+Template: postfix/main_mailer_type
+Value: No configuration
+Owners: postfix
+Flags: seen
+" >> /var/cache/debconf/config.dat
+
+
+cat << EOT > MAILSERVER_db.sql
+GRANT ALL PRIVILEGES ON $NOM_MAILSERVER.* TO $NOM_MAILSERVER@'localhost' IDENTIFIED BY '$MAILSERVER_MYSQL_PWD';
+EOT
+
+$BIN_MYSQL -u root < MAILSERVER_db.sql mysql
+
+cd $DL_DIR
+
+MOD_NAME="Postfixadmin"
+mkdir $WWW_DIRECTORY/admin/$MOD_NAME/
+cp -r Postfixadmin/* $WWW_DIRECTORY/admin/$MOD_NAME/.
+#user
+sed -i "52s/Mail/$NOM_MAILSERVER/" $WWW_DIRECTORY/admin/$MOD_NAME/config.inc.php
+#password
+sed -i "53s/MAILSERVER_MYSQL_PWD/$MAILSERVER_MYSQL_PWD/" $WWW_DIRECTORY/admin/$MOD_NAME/config.inc.php
+#databasename
+sed -i "54s/Mail/$NOM_MAILSERVER/" $WWW_DIRECTORY/admin/$MOD_NAME/config.inc.php
+
+sed -i "15s/Mail/$NOM_MAILSERVER/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+sed -i "16s/Mail/$NOM_MAILSERVER/" $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/admin/$MOD_NAME/database.sql
+
+echo "
+UPDATE $NOM_MAILSERVER.domain SET domain = '$mail_domain' WHERE CONVERT( domain.domain USING utf8 ) = 'ciws.com' LIMIT 1 ;
+UPDATE $NOM_MAILSERVER.admin SET username = '$postfix_admin_email' WHERE CONVERT( admin.username USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
+UPDATE $NOM_MAILSERVER.mailbox SET username = '$postfix_admin_email',
+maildir = '$postfix_admin_email/',
+domain = '$mail_domain' WHERE CONVERT( mailbox.username USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
+UPDATE $NOM_MAILSERVER.alias SET address = '$postfix_admin_email',
+goto = '$postfix_admin_email',
+domain = '$mail_domain' WHERE CONVERT( alias.address USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
+UPDATE $NOM_MAILSERVER.domain_admins SET username = '$postfix_admin_email' WHERE CONVERT( domain_admins.username USING utf8 ) = 'admin@ciws.com' AND CONVERT( domain_admins.domain USING utf8 ) = 'ALL' AND domain_admins.created = '2008-11-01 15:17:31' AND domain_admins.active=1 LIMIT 1 ;
+" > /tmp/update_mail_domain
+$BIN_MYSQL -u root < /tmp/update_mail_domain $NOM_MAILSERVER
+
+apt-get install -f --assume-yes --force-yes postfix postfix-mysql libdate-manip-perl tnef unrar unzip pyzor razor mailutils clamav clamav-daemon clamav-freshclam libsasl2-2 sasl2-bin libsasl2-modules libsasl2-modules-sql 
+
+sed -i "7s/no/yes/" /etc/default/saslauthd
+
+
+apt-get install --assume-yes --force-yes mailscanner 
+
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "wheezy" ]; then
+cd $DL_DIR
+dpkg -i mailscanner_4.79.11-2.2_all.deb 
+apt-get -f install --assume-yes --force-yes
+fi
+
+if [ "$(echo $public_mail | awk  '{print $1}')" == "y" ]; then
+cat << EOT_PUBLIC > /etc/postfix/main.cf
+smtpd_banner = \$myhostname ESMTP \$mail_name 
+biff = no
+append_dot_mydomain = no
+#delay_warning_time = 4h
+myhostname = $HOSTNAME
+relayhost = $smtp_relay
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+# Virtual mailbox settings
+virtual_mailbox_domains = proxy:mysql:/etc/postfix/mysql_virtual_domains_maps.cf
+virtual_mailbox_base = $LAMPP_DIRECTORY/var/vmail
+virtual_mailbox_maps = proxy:mysql:/etc/postfix/mysql_virtual_mailbox_maps.cf
+virtual_alias_maps = proxy:mysql:/etc/postfix/mysql_virtual_alias_maps.cf
+virtual_minimum_uid = 150
+virtual_uid_maps = static:150
+virtual_gid_maps = static:8
+virtual_transport = dovecot
+dovecot_destination_recipient_limit = 1
+alias_maps = hash:/etc/aliases
+EOT_PUBLIC
+
+if [ "$postfix_relay_authentication_name" != "" ]; then
+
+echo "
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+" >> /etc/postfix/main.cf
+
+echo "$smtp_postfix_client_relay $postfix_relay_authentication_name:$postfix_relay_authentication_password" >> /etc/postfix/sasl_passwd
+chown root:root /etc/postfix/sasl_passwd && chmod 600 /etc/postfix/sasl_passwd
+postmap hash:/etc/postfix/sasl_passwd
+
+fi
+
+else
+cat << EOT_PRIVATE > /etc/postfix/main.cf
+smtpd_banner = \$myhostname ESMTP \$mail_name 
+biff = no
+append_dot_mydomain = no
+#delay_warning_time = 4h
+myhostname = localhost
+myorigin = localhost
+mydestination = localhost
+relayhost =
+mynetworks = 127.0.0.0/8
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+# Virtual mailbox settings
+virtual_mailbox_domains = proxy:mysql:/etc/postfix/mysql_virtual_domains_maps.cf
+virtual_mailbox_base = $LAMPP_DIRECTORY/var/vmail
+virtual_mailbox_maps = proxy:mysql:/etc/postfix/mysql_virtual_mailbox_maps.cf
+virtual_alias_maps = proxy:mysql:/etc/postfix/mysql_virtual_alias_maps.cf
+virtual_minimum_uid = 150
+virtual_uid_maps = static:150
+virtual_gid_maps = static:8
+virtual_transport = dovecot
+dovecot_destination_recipient_limit = 1
+# SASL Authentication
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_exceptions_networks = \$mynetworks
+smtpd_sasl_security_options = noanonymous
+broken_sasl_auth_clients = yes
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination, permit
+alias_maps = hash:/etc/aliases
+EOT_PRIVATE
+fi
+
+
+#echo "
+#header_checks = regexp:/etc/postfix/header_checks" >> /etc/postfix/main.cf
+
+#echo "/^Received:/ HOLD " > /etc/postfix/header_checks
+
+
+
+useradd -r -u 150 -g mail -d $LAMPP_DIRECTORY/var/vmail -s /sbin/nologin -c "Virtual mailbox" vmail
+mkdir $LAMPP_DIRECTORY/var/vmail
+chmod 770 $LAMPP_DIRECTORY/var/vmail/
+chown vmail:mail $LAMPP_DIRECTORY/var/vmail/
+
+cat << EOT > /etc/postfix/mysql_virtual_alias_maps.cf
+user = $NOM_MAILSERVER
+password = $MAILSERVER_MYSQL_PWD
+hosts = localhost
+dbname = $NOM_MAILSERVER
+table = alias
+select_field = goto
+where_field = address
+additional_conditions = and active = '1'
+#query = SELECT goto FROM alias WHERE address=%s AND active = 1?
+EOT
+
+cat << EOT > /etc/postfix/mysql_virtual_domains_maps.cf
+user = $NOM_MAILSERVER
+password = $MAILSERVER_MYSQL_PWD
+hosts = localhost
+dbname = $NOM_MAILSERVER
+table = domain
+select_field = domain
+where_field = domain
+additional_conditions = and backupmx = '0' and active = '1'
+#query = SELECT domain FROM domain WHERE domain=%s AND backupmx = 0? AND active = 1?
+EOT
+
+cat << EOT > /etc/postfix/mysql_virtual_mailbox_limit_maps.cf
+user = $NOM_MAILSERVER
+password = $MAILSERVER_MYSQL_PWD
+hosts = localhost
+dbname = $NOM_MAILSERVER
+table = mailbox
+select_field = quota
+where_field = username
+additional_conditions = and active = '1'
+#query = SELECT quota FROM mailbox WHERE username=%s AND active = 1?
+EOT
+
+cat << EOT > /etc/postfix/mysql_virtual_mailbox_maps.cf
+user = $NOM_MAILSERVER
+password = $MAILSERVER_MYSQL_PWD
+hosts = localhost
+dbname = $NOM_MAILSERVER
+table = mailbox
+select_field = CONCAT(domain,'/',maildir)
+where_field = username
+additional_conditions = and active = '1'
+#query = SELECT CONCAT(domain,/',maildir) FROM mailbox WHERE username=%s AND active = 1?
+
+EOT
+
+cat << EOT >> /etc/postfix/master.cf
+dovecot unix - n n - - pipe
+ flags=DRhu user=vmail:mail argv=/usr/lib/dovecot/deliver -d \${recipient}
+
+EOT
+
+apt-get install --assume-yes --force-yes dovecot-imapd dovecot-pop3d dovecot-mysql dovecot-sieve dovecot-managesieved
+
+
+
+
+
+mkdir $LAMPP_DIRECTORY/var/sieve-scripts
+cd $LAMPP_DIRECTORY/var
+apt-get install -f --assume-yes --force-yes curl python-mysqldb
+wget  $URL_CIWS_DEPOT/pysieved-090317.tar.gz
+tar -xzf pysieved-090317.tar.gz
+rm pysieved-090317.tar.gz
+sed -i "s/dbuser = user/dbuser = $NOM_MAILSERVER/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
+sed -i "s/dbname = db/dbname = $NOM_MAILSERVER/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
+sed -i "s/dbpass = pass/dbpass = $MAILSERVER_MYSQL_PWD/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
+sed -i "s/FROM users/FROM mailbox/g" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
+sed -i "s/userdb  = passwd/userdb  = Dovecot/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
+sed -i "60s/#//" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
+sed -i "63s/#//" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
+sed -i "s/mux = \/var\/spool\/postfix\/auth\/dovecot/mux = \/var\/spool\/postfix\/private\/auth/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
+sed -i "3s/SASL/Dovecot/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
+sed -i "s/user_query = SELECT homedir FROM mailbox WHERE username = \"%(username)s\" AND (active = \"1\")/user_query = SELECT maildir AS homedir FROM mailbox WHERE username = \"%(username)s\" AND (active = \"1\")/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
+echo '#!/bin/bash
+# Antoine Reversat, 2008-10-20
+# Script to stop and start pySieved managesieve server
+
+PIDFILE=/var/run/pysieved.pid
+PYS_HOME=/opt/ciws/var/pysieved
+
+if [ $# -ne 1 ]
+then
+        echo "usage : pysieved stop|start|restart"
+        exit 1
+fi
+
+case $1 in
+        "start")
+                echo -n "Starting ManageSieve server pysieved... "
+                python ${PYS_HOME}/pysieved.py -c ${PYS_HOME}/pysieved.ini
+                if [ $? -eq 0 ]
+                then
+                        echo "[OK]"
+                else
+                        echo "[Failed]"
+                fi
+                ;;
+        "stop")
+                echo -n "Stopping ManageSieve server pysieved..."
+                kill `cat $PIDFILE`
+                ps -p `cat /var/run/pysieved.pid` | grep -v PID | grep python
+                if [ $? -ne 0 ]
+                then
+                  echo "[OK]"
+                else
+                  echo "[Failed]"
+                fi
+                ;;
+        "restart")
+                $0 stop
+                sleep 1
+                $0 start
+                ;;
+        "*")
+                echo "Usage : pysieved stop|start|restart"
+                exit 1
+                ;;
+esac
+' > /etc/init.d/pysieved
+chmod +x /etc/init.d/pysieved
+
+mv /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf-back
+
+cat << EOT > /etc/dovecot/dovecot.conf
+base_dir = /var/run/dovecot/
+first_valid_uid = 150
+last_valid_uid = 150
+log_timestamp = "%Y-%m-%d %H:%M:%S "
+mail_access_groups = mail
+mail_location = maildir:$LAMPP_DIRECTORY/var/vmail/%d/%u
+passdb {
+  args = /etc/dovecot/dovecot-sql.conf.ext
+  driver = sql
+}
+#plugin {
+#  sieve = $LAMPP_DIRECTORY/var/sieve-scripts/%u.sieve
+#}
+protocols = imap pop3
+service auth {
+  unix_listener /var/spool/postfix/private/auth {
+    group = postfix
+    mode = 0660
+    user = postfix
+  }
+  unix_listener auth-master {
+    group = mail
+    mode = 0660
+    user = vmail
+  }
+  
+}
+service imap-login {
+  executable = /usr/lib/dovecot/imap-login
+  inet_listener imap {
+    address = *
+    port = 143
+  }
+}
+service imap {
+  executable = /usr/lib/dovecot/imap
+}
+service pop3-login {
+  executable = /usr/lib/dovecot/pop3-login
+  inet_listener pop3 {
+    address = *
+    port = 110
+  }
+}
+service pop3 {
+  executable = /usr/lib/dovecot/pop3
+}
+ssl = no
+userdb {
+  args = /etc/dovecot/dovecot-sql.conf.ext
+  driver = sql
+}
+protocol imap {
+  imap_max_line_length = 64 k
+}
+protocol pop3 {
+  pop3_uidl_format = %08Xu%08Xv
+}
+protocol lda {
+  auth_socket_path = /var/run/dovecot/auth-master
+#  mail_plugins = cmusieve
+  postmaster_address = postmaster@mydomain.com
+  sendmail_path = /usr/lib/sendmail
+}
+EOT
+
+
+
+
+LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
+sed -i "29s/#driver =/driver = mysql/" /etc/dovecot/dovecot-sql.conf.ext
+sed -i "66s/#connect =/connect = host=localhost dbname=$NOM_MAILSERVER user=$NOM_MAILSERVER password=$MAILSERVER_MYSQL_PWD/" /etc/dovecot/dovecot-sql.conf.ext
+sed -i "73s/#default_pass_scheme = MD5/default_pass_scheme = MD5-CRYPT/" /etc/dovecot/dovecot-sql.conf.ext
+
+sed -i "125s/^/user_query = SELECT '$LAMPP_DIRECTORY_FOR_SED\/var\/vmail\/%d\/%n' as home, 'maildir:$LAMPP_DIRECTORY_FOR_SED\/var\/vmail\/%d\/%n' as mail, 150 AS uid, 8 AS gid, concat('dirsize:storage=', quota) AS quota FROM mailbox WHERE username = '%u' AND active = '1'/" /etc/dovecot/dovecot-sql.conf.ext
+sed -i "105s/^/password_query = SELECT username as user, password FROM mailbox WHERE username = '%u' AND active = '1'/" /etc/dovecot/dovecot-sql.conf.ext
+chmod -R 755 /etc/dovecot/
+chown -R vmail /etc/dovecot/
+sudo ln -s /opt/ciws/var/vmail/ /var/vmail
+
+
+postalias /etc/aliases
+
+echo "
+#Postfix hack
+postalias /etc/aliases
+rm /var/vmail/*/*/dovecot.index.log 1>&2 2>/dev/null
+rm /var/vmail/*/*/.INBOX.Trash/dovecot.index.log 1>&2 2>/dev/null
+rm /var/vmail/*/*/.INBOX.Sent/dovecot.index.log 1>&2 2>/dev/null
+rm /var/vmail/*/*/.INBOX.Drafts/dovecot.index.log 1>&2 2>/dev/null
+/etc/init.d/postfix restart
+/etc/init.d/mailscanner restart
+/etc/init.d/dovecot restart
+
+" >> /etc/rc.local
+
+
+
+
+
+
+
+
+sed -i "133s/#//" /etc/MailScanner/MailScanner.conf
+sed -i "134s/^/#/" /etc/MailScanner/MailScanner.conf
+sed -i "138s/#//" /etc/MailScanner/MailScanner.conf
+sed -i "139s/^/#/" /etc/MailScanner/MailScanner.conf
+sed -i "168s/^/#/" /etc/MailScanner/MailScanner.conf
+sed -i "169s/^/Incoming Queue Dir = \/var\/spool\/postfix\/hold/" /etc/MailScanner/MailScanner.conf
+sed -i "172s/^/#/" /etc/MailScanner/MailScanner.conf
+sed -i "173s/^/Outgoing Queue Dir = \/var\/spool\/postfix\/incoming/" /etc/MailScanner/MailScanner.conf
+sed -i "199s/exim/postfix/" /etc/MailScanner/MailScanner.conf
+
+
+
+
+
+
+
+sed -i "s/#run_mailscanner=1/run_mailscanner=1/" /etc/default/mailscanner
+
+chown postfix:postfix /var/spool/MailScanner/incoming
+chown postfix:postfix /var/spool/MailScanner/quarantine
+
+##Webmin configuration
+
+if [ -e /usr/share/webmin/install-module.pl ]; then
+
+cd $DL_DIR
+/usr/share/webmin/install-module.pl webmin-module-1.1-4.wbm 
+rm /etc/webmin/module.infos.cache
+echo "mailscanner " >> /etc/webmin/webmin.acl
+
+
+
+mkdir /etc/webmin/mailscanner
+cat << EOT > /etc/webmin/mailscanner/config
+start_cmd=/etc/init.d/MailScanner start
+pidfile=/var/run/MailScanner.pid
+bindir=/usr/sbin/
+mailscanner_config=/etc/MailScanner/MailScanner.conf
+mailscanner_path=/usr/sbin/MailScanner
+stop_cmd=/etc/init.d/mailscanner stop
+EOT
+fi
+
+/etc/init.d/clamav-daemon stop
+/etc/init.d/dovecot stop
+/etc/init.d/postfix stop
+/etc/init.d/mailscanner stop
+
+mv /etc/MailScanner $LAMPP_DIRECTORY/etc/
+
+ln -s $LAMPP_DIRECTORY/etc/MailScanner /etc/MailScanner
+
+mv /etc/postfix $LAMPP_DIRECTORY/etc/
+
+ln -s $LAMPP_DIRECTORY/etc/postfix /etc/postfix
+
+mv /etc/dovecot $LAMPP_DIRECTORY/etc/
+
+ln -s $LAMPP_DIRECTORY/etc/dovecot /etc/dovecot
+
+if [ ! -d $LAMPP_DIRECTORY/var/lib/clamav ]; then
+mv /var/lib/clamav $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/clamav /var/lib/clamav
+fi
+
+
+cd $DL_DIR
+#wget $URL_CIWS_DEPOT/latest_clamav_updates.tar.gz
+#tar -xzf latest_clamav_updates.tar.gz -C /var/lib/clamav/.
+
+
+
+
+sed -i "s/ENABLED=0/ENABLED=1/" /etc/default/spamassassin
+
+#Fix time move backwards error
+apt-get remove --assume-yes --force-yes ntpdate
+apt-get install --assume-yes --force-yes ntp
+
+
+
+
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/admin/$MOD_NAME" "/admin/$MOD_NAME" 
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+function INSTALL_SCRIPT
+{
+
+echo "
+echo \"I: Stopping Mail Server\"
+/etc/init.d/clamav-daemon stop
+/etc/init.d/dovecot stop
+/etc/init.d/postfix stop
+/etc/init.d/mailscanner stop
+" >> /opt/ciws/share/lampp/config_post_install.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+echo "I: Install Mail server"
+INSTALL
+CREATE_WUI
+echo "I: End of install Mail server"

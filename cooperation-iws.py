@@ -100,6 +100,7 @@ class Cooperationiws:
 	self.squeezeStagesScriptsDir="wheezy"	
 	self.wheezyStagesScriptsDir="wheezy"	
 	self.jessieStagesScriptsDir="jessie"	
+	self.upgradeBareStagesScriptsDir="upgrade_bare"	
 	
         APPDOMAIN='cooperationiws'
         LANGDIR='lang'
@@ -317,7 +318,9 @@ class Cooperationiws:
 		self.stagesScriptsDir=self.lucidStagesScriptsDir
 	if self.distVers == "jessie":
 		self.stagesScriptsDir=self.jessieStagesScriptsDir
-
+	if self.distVers == "upgrade_bare":
+		self.stagesScriptsDir=self.upgradeBareStagesScriptsDir
+		self.distVers="jessie"
 
 # ---------- Check dependencies ---------- #
 

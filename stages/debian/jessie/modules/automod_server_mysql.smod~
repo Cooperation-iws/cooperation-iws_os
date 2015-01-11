@@ -1,0 +1,111 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Mysql 5.0'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='database'
+RMOD_DESCRIPTION_FR='database'
+RMOD_VERBOSE="Postgresql is a database software server"
+RMOD_VERBOSE_FR="Postgresql est un serveur de base de données"
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_REQ_APACHE=True
+. /tmp/app_params
+. /tmp/scripts_params
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+function INSTALL
+{
+
+mv /usr/sbin/policy-rc.d /usr/sbin/policy-rc.d.mysql
+
+
+apt-get install --yes --force-yes mysql-server 
+/etc/init.d/mysql stop
+
+
+echo "I: config mysql"
+
+sed -i "61s/#/default-character-set=utf8/" /etc/mysql/my.cnf
+
+
+mv /var/lib/mysql $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/mysql /var/lib/mysql
+
+
+
+mv /etc/mysql $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/mysql /etc/mysql
+
+
+/etc/init.d/mysql start
+
+
+mv /usr/sbin/policy-rc.d.mysql /usr/sbin/policy-rc.d 
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+cd /tmp/
+#./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/phppgadmin" "/phppgadmin" 
+
+
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+function INSTALL_SCRIPT
+{
+if [ "$(echo $secure_mysql | awk  '{print $1}')" != "n" ]; then
+	
+echo "
+echo \"I: Securing Mysql Server\"
+echo \"UPDATE mysql.user SET Password=PASSWORD('$mysql_root_password') WHERE User='root';
+DELETE FROM mysql.user WHERE User='';
+DELETE FROM mysql.user WHERE User='root' AND Host!='localhost';
+FLUSH PRIVILEGES;
+\" > /tmp/mysql_secure.sql
+$BIN_MYSQL -u root < /tmp/mysql_secure.sql
+
+" >> /opt/ciws/share/lampp/config_post_install.sh
+
+fi
+
+echo "
+echo \"I: Stopping Mysql Server\"
+/etc/init.d/mysql stop
+" >> /opt/ciws/share/lampp/config_post_install.sh
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+
+echo "I: Install Mysql Server"
+INSTALL
+CREATE_WUI
+INSTALL_SCRIPT
+echo "I: End of install Mysql Server"

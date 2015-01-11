@@ -1,0 +1,26 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Gnome 0.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Gnome desktop environment'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+. /tmp/app_params
+. /tmp/scripts_params
+
+
+echo "I: install Audacity"
+#apt-get install --assume-yes --force-yes filezilla-locales 
+apt-get install --assume-yes --force-yes audacity libavcodec52 libavformat52
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/lame_3.98.4+repack2-3~bpo60+1_amd64.deb 
+dpkg -i lame_3.98.4+repack2-3~bpo60+1_amd64.deb 
+
+apt-get -f install --assume-yes --force-yes
+

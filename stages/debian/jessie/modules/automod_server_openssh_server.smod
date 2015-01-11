@@ -1,0 +1,59 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Server'
+RMOD_NAME='Openssh server 0.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Secure Shell server'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+
+function INSTALL
+{
+#mount -t sysfs none /sys
+#cd /dev
+#MAKEDEV generic
+#mount -t devpts none /dev/pts
+#/etc/init.d/hal start
+#/etc/init.d/dbus start
+
+
+apt-get install --assume-yes --force-yes openssh-server
+/etc/init.d/ssh stop
+#apt-get remove --purge --assume-yes --force-yes openbsd-inetd
+if [ "$deactivate_ssh_root_login"  == "y" ] ; then
+sed -i "s/PermitRootLogin yes/PermitRootLogin no/" /etc/ssh/sshd_config
+fi
+
+#/etc/init.d/dbus stop
+#/etc/init.d/hal stop
+#umount /dev/pts
+
+mv /etc/ssh /opt/ciws/etc/.
+ln -s /opt/ciws/etc/ssh /etc/ssh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+echo "I: Install SSH"
+INSTALL
+echo "I: End of Install SSH"

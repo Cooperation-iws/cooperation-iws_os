@@ -1,0 +1,122 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='update live-initramfs Squeeze'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Office tools for client'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+echo "I: updating live-boot-initramfs"
+
+
+
+echo "
+modprobe -q loop max_loop=255" >> /lib/live/config/0160-loop
+
+
+
+
+sed -i "s/LIVE_USER_FULLNAME=\"Debian Live user\"/LIVE_USER_FULLNAME= \"$LIVEUSER_FULL\"/" /bin/live-config
+
+#sed -i "s/HOSTNAME=\"host\"/HOSTNAME=\"$HOSTNAME\"/" /usr/share/initramfs-tools/scripts/live
+
+sed -i "s/LIVE_USERNAME=\"user\"/LIVE_USERNAME=\"$LIVEUSER\"/"  /bin/live-config
+
+#sed -i "s/LIVE_USER_FULLNAME=\"Debian Live user\"/LIVE_USER_FULLNAME==\"$LIVEUSER_FULL\"/" /lib/live/config.sh
+
+sed -i "s/LIVE_HOSTNAME=\"debian\"/LIVE_HOSTNAME=\"$HOSTNAME\"/" /bin/live-config
+
+sed -i "s/8Ab05sVQ4LLps/$CRYPT_HOST_PWD/" /lib/live/config/0030-user-setup
+
+sed -i "s/NOPASSWD: //" /lib/live/config/0040-sudo
+
+
+if [ "$DISABLE_AUTOLOGIN" ]; then
+#Gdm3
+sed -i "36s/true/false/g" /lib/live/config/007-gdm3
+sed -i "41s/true/false/g" /lib/live/config/007-gdm3
+sed -i "43s/true/false/g" /lib/live/config/007-gdm3
+
+#Gdm
+sed -i "41s/true/false/g" /lib/live/config/006-gdm
+sed -i "43s/true/false/g" /lib/live/config/006-gdm
+
+#kdm
+sed -i "41s/true/false/g" /lib/live/config/008-kdm
+sed -i "42s/true/false/g" /lib/live/config/008-kdm
+
+
+fi
+
+if [ "$ENCRYPTION" ]; then
+
+apt-get install --assume-yes --force-yes aespipe
+apt-get install --assume-yes --force-yes loop-aes-utils aufs-tools
+
+cd $DL_DIR
+#building from source
+apt-get install --assume-yes --force-yes linux-image-$kernel linux-headers-$kernel
+
+
+apt-get install --assume-yes --force-yes build-essential debhelper module-assistant
+
+
+apt-get install --assume-yes --force-yes linux-source-2.6 loop-aes-source
+
+apt-get build-dep --assume-yes --force-yes linux-source-2.6 loop-aes
+
+
+
+m-a -k /usr/src/linux-headers-$kernel fakesource
+
+
+m-a -k /usr/src/linux-headers-$kernel build loop-aes
+
+
+cd /usr/src
+
+
+dpkg -i loop-aes-modules-*.deb
+
+#building from already compiled
+#wget $URL_CIWS_DEPOT/loop-$kernel.ko
+#mv /lib/modules/$kernel/kernel/drivers/block/loop.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko-old
+#cp loop-$kernel.ko /lib/modules/$kernel/kernel/drivers/block/loop.ko
+
+
+
+fi
+
+
+
+
+sed -i -e "1513s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/live
+sed -i -e "1522s/\/home/\/opt\/ciws/" /usr/share/initramfs-tools/scripts/live
+sed -i -e "15s/home-rw/ciws-rw/" /usr/share/initramfs-tools/scripts/live
+sed -i -e "17s/home-sn/ciws-sn/" /usr/share/initramfs-tools/scripts/live
+sed -i '1088s/do_snap_copy "${dev}" "${snap_mount}" "${snap_type}"/mount -o rw,noatime "${dev}" "${rootmnt}\/opt\/ciws"/' /usr/share/initramfs-tools/scripts/live
+sed -i '219s/root/$(basename ${fspath})/' /usr/share/initramfs-tools/scripts/live-helpers
+
+#keyboard
+sed -i '32s/^/mkdir ${DESTDIR}\/usr ; mkdir ${DESTDIR}\/usr\/share ; cp -r  \/usr\/share\/keymaps ${DESTDIR}\/usr\/share\/./' /usr/share/initramfs-tools/hooks/keymap
+sed -i '166G' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '167s/^/loadkeys $(cat \/proc\/cmdline | grep -o keyboard-layouts=[[:alpha:]][[:alpha:]] | cut -d"=" -f2) > \/dev\/null 2>\&1/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '168s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '169s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '170s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
+sed -i '171s/^/#/' /usr/share/initramfs-tools/scripts/live-helpers
+
+
+
+#Debug
+#sed -i '1087s/^/log_warning_msg "${dev} _ ${snap_mount} _ ${snap_type}"/' /usr/share/initramfs-tools/scripts/live
+#sed -i '1283s/^/echo "walk through losetup" ; sleep 10/' /usr/share/initramfs-tools/scripts/live
+

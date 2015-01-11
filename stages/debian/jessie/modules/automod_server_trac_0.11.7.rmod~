@@ -1,0 +1,186 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Trac Subversion jessie'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='SCM'
+RMOD_DESCRIPTION_FR='SCM'
+RMOD_VERBOSE="Subversion is a free/open-source version control system. That is, Subversion manages files and directories, and the changes made to them, over time. This allows you to recover older versions of your data, or examine the history of how your data changed. In this regard, many people think of a version control system as a sort of “time machine”. Trac is an enhanced wiki and issue tracking system for software development projects. Trac uses a minimalistic approach to web-based software project management. Our mission is to help developers write great software while staying out of the way. Trac should impose as little as possible on a team's established development process and policies. "
+RMOD_VERBOSE_FR="Subversion (en abrégé svn) est un système de gestion de versions, distribué sous licence Apache et BSD. Il a été conçu pour remplacer CVS. Ses auteurs s'appuient volontairement sur les mêmes concepts (notamment sur le principe du dépôt centralisé et unique) et considèrent que le modèle de CVS est le bon, et que seule son implémentation est en cause. Le projet a été lancé en février 2000 par CollabNet, avec l'embauche par Jim Blandy de Karl Fogel, qui travaillait déjà sur un nouveau gestionnaire de version. Trac est un système Open Source de gestion complète de projet par Internet, développé en Python."
+
+RMOD_RUN_IN_CHROOT=True
+
+RMOD_REQ_APACHE=True
+
+. /tmp/app_params
+. /tmp/scripts_params
+
+export LC_ALL=C
+LC_ALL=C
+
+
+
+NB_SVN=${#svn_name[*]}
+TRAC_NAME=$trac_name
+for (( count=1; count<=$NB_SVN; count++ ))
+do
+SVN_NAME[$count]=${svn_name[$count]}
+done
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL_________________________________________________
+
+
+function INSTALL 
+{
+echo "I: Install SVN"
+
+apt-get install --yes --force-yes subversion subversion-tools
+apt-get install --yes --force-yes libapache2-svn
+apt-get install --yes --force-yes trac trac-accountmanager trac-announcer trac-authopenid trac-bitten trac-customfieldadmin trac-email2trac trac-graphviz trac-mastertickets trac-wysiwyg trac-codecomments trac-diavisview trac-includemacro trac-jsgantt trac-roadmap trac-sensitivetickets trac-subcomponents trac-subtickets trac-tags trac-translatedpages trac-virtualticketpermissions trac-xmlrpc 
+apt-get install --yes --force-yes python-pygments enscript
+mkdir $LAMPP_DIRECTORY/var/trac
+mkdir $LAMPP_DIRECTORY/var/private/
+
+mv /usr/bin/svnserve /usr/bin/svnserve.bin
+
+echo "#!/bin/sh
+# wrap in order to put root in by default
+# Script implemented by Adrian Robert <arobert@cogsci.ucsd.edu>
+" > /usr/bin/svnserve
+
+for (( count=1; count<=$NB_SVN; count++ ))
+do
+mkdir $LAMPP_DIRECTORY/var/svn$count
+
+
+svnadmin create $LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}
+
+
+
+
+echo "
+  <location /svn$count>
+       # Chargement du module subversion
+       DAV svn
+       # On indique le chemin complet vers le dépôt subversion
+       SVNParentPath  $LAMPP_DIRECTORY/var/svn$count
+
+       #Ici on demande une identification avec mot de passe
+       #utilisez htpasswd2 pour créer le fichier
+       AuthType Basic
+       AuthName \"Cooperation-iws : svn_${SVN_NAME[$count]}\"
+       AuthUserFile $LAMPP_DIRECTORY/var/private/svn_${SVN_NAME[$count]}.htpasswd
+       Require valid-user
+
+       # On indique ici le fichier de configuration des permissions d'accès au dépot subversion
+       AuthzSVNAccessFile $LAMPP_DIRECTORY/var/private/svnperm_${SVN_NAME[$count]}
+   </location>
+
+" >> /etc/apache2/conf-available/svn_$count
+
+a2enconf svn_$count
+
+cd $LAMPP_DIRECTORY/var/private/
+
+htpasswd -cm -b svn_${SVN_NAME[$count]}.htpasswd admin ${svn_admin_pwd[$count]}
+htpasswd -m -b svn_${SVN_NAME[$count]}.htpasswd anonymous ${svn_anonymous_pwd[$count]}
+echo "
+[/]
+anonymous = r
+admin = rw
+" > $LAMPP_DIRECTORY/var/private/svnperm_${SVN_NAME[$count]}
+
+chown -R www-data $LAMPP_DIRECTORY/var/svn$count
+chmod -R 775 $LAMPP_DIRECTORY/var/svn$count
+
+
+
+#echo "
+#-------------------------Cooperation-iws SVN------------------------------
+#----------Login into the svn repository with admin password---------------"
+
+#svn mkdir http://localhost/svn/project/trunk http://localhost/svn/project/branches http://localhost/svn/project/tags -m "Création des répertoires d'archivage Subversion."  --username=admin
+echo "
+exec /usr/bin/svnserve.bin -r $LAMPP_DIRECTORY/var/svn$count \"\$@\"
+" >> /usr/bin/svnserve
+
+chmod +x /usr/bin/svnserve
+
+sed -i '19s/#//' $LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}/conf/svnserve.conf
+sed -i '20s/#//' $LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}/conf/svnserve.conf
+
+
+echo "I: End of Install SVN"
+echo "I: Install Trac"
+
+
+cd $LAMPP_DIRECTORY/var/trac
+trac-admin ${SVN_NAME[$count]} initenv  "My Project" "sqlite:db/trac.db" "svn" "$LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}" 
+
+
+
+echo "
+<Location /trac_${SVN_NAME[$count]}>
+  SetHandler mod_python
+  PythonHandler trac.web.modpython_frontend
+  PythonInterpreter main
+  PythonOption TracEnv $LAMPP_DIRECTORY/var/trac/${SVN_NAME[$count]}
+  PythonOption TracUriRoot /trac_${SVN_NAME[$count]}
+  SetEnv PYTHON_EGG_CACHE /tmp
+</Location>
+" >> /etc/apache2/conf-available/trac_$count
+
+a2enconf trac_$count
+
+chown -R www-data $LAMPP_DIRECTORY/var/trac
+chmod -R 775 $LAMPP_DIRECTORY/var/trac
+
+cd $LAMPP_DIRECTORY/var/private/
+
+htpasswd -cm -b trac.htpasswd_${SVN_NAME[$count]} admin ${trac_admin_pwd[$count]}
+
+echo "
+<Location \"/trac_${SVN_NAME[$count]}/login\">
+        AuthType Basic
+        AuthName \"trac\"
+        AuthUserFile $LAMPP_DIRECTORY/var/private/trac.htpasswd_${SVN_NAME[$count]}
+        Require valid-user
+</Location>
+" >> /etc/apache2/conf-available/trac_admin_$count
+
+a2enconf trac_admin_$count
+
+trac-admin $LAMPP_DIRECTORY/var/trac/${SVN_NAME[$count]} permission add admin TRAC_ADMIN
+done
+echo "I: End of install Trac"
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_SVN; count++ ))
+do
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/svn$count/${SVN_NAME[$count]}" "/svn$count/${SVN_NAME[$count]}" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/trac_${SVN_NAME[$count]}" "/trac_${SVN_NAME[$count]}" 
+done
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+INSTALL
+CREATE_WUI
+

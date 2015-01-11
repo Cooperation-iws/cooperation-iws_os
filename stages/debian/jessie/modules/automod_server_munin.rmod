@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Console Mode'
+RMOD_NAME='Munin Jessie'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Documentation'
@@ -13,7 +13,7 @@ RMOD_VERBOSE="Browse and search manpages "
 RMOD_VERBOSE_FR="Rechercher et naviguer dans les pages de manuels"
 
 RMOD_RUN_IN_CHROOT=True
-
+RMOD_REQ_APACHE=True
 
 
 . /tmp/scripts_params
@@ -33,39 +33,33 @@ RMOD_RUN_IN_CHROOT=True
 function INSTALL
 {
 
-echo "Install Console boot mode"
+apt-get install --assume-yes --force-yes munin munin-node
 
-echo '#!/bin/sh
+sed -e 's/host \*/host 127.0.0.1/' -i /etc/munin/munin-node.conf
 
-STATEFILE=/var/lib/live/config/serialconsole
 
-Serialconsole ()
-{
-	# Checking that we haven t already run
-	if [ -e ${STATEFILE} ]
-	then
-		return
-	fi
-	
-	echo -n " serial console"
-	
-	Configure_serialconsole
-}
+rm /etc/apache2/conf.d/munin
 
-Configure_serialconsole ()
-{
-	# Note unusual delimiters
-	sed -i -e "s|#\(T0:.*\?/dev/\)\(tty\)\(.*\?/dev/\)\(tty\)\(.*\)|\1\2S0\3\4S0\5|" /etc/inittab
-	init q
+ln -s /etc/munin/apache.conf /etc/apache2/conf.d/munin
 
-	# Creating state file
-	touch ${STATEFILE}
-}
+sed -i "s/Require local/Require all granted/" /etc/apache2/conf.available/munin.conf
 
-Serialconsole
-' >> /lib/live/config/1018-serial_console
+echo "AuthType Basic
+AuthName \"Munin Graphs\"
+AuthUserFile /var/lib/munin/.htpasswd
+require user admin" > /var/cache/munin/www/.htaccess
 
-chmod +x /lib/live/config/1018-serial_console
+htpasswd -m -b -c /var/lib/munin/.htpasswd admin $munin_password
+
+a2enconf munin
+
+mv /etc/munin $LAMPP_DIRECTORY/etc
+
+ln -s $LAMPP_DIRECTORY/etc/munin  /etc/munin
+
+mv /var/lib/munin $LAMPP_DIRECTORY/var/lib
+
+ln -s $LAMPP_DIRECTORY/var/lib/munin  /var/lib/munin
 
 
 }
@@ -79,6 +73,7 @@ chmod +x /lib/live/config/1018-serial_console
 function CREATE_WUI
 {
 cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/munin/" "/munin/" 
 
 
 }
@@ -88,7 +83,7 @@ cd /tmp/
 
 
 
-echo "I: Install Console boot mode"
+echo "I: Install Munin"
 INSTALL
 CREATE_WUI
-echo "I: End of install Console boot mode"
+echo "I: End of install Munin"

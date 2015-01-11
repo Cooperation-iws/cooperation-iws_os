@@ -67,9 +67,6 @@ sed -i "28s/^/#/" /lib/live/config/1130-login
 #GDM3 login
 sed -i "46s/true/false/" /lib/live/config/0080-gdm3
 sed -i "48s/true/false/" /lib/live/config/0080-gdm3
-#KDM login
-sed -i "48s/true/false/" /lib/live/config/0090-kdm
-sed -i "49s/true/false/" /lib/live/config/0090-kdm
 #LXDM login
 sed -i "43s/^/#/" /lib/live/config/0110-lxdm
 
