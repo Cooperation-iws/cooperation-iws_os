@@ -1,0 +1,92 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Ossec 2.8 standalone'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+if [ $ARCH == "686" ]; then
+wget $URL_CIWS_DEPOT/ossec-hids_2.8.1-1jessie_i386.deb
+else
+wget $URL_CIWS_DEPOT/ossec-hids_2.8.1-1jessie_amd64.deb
+
+fi 
+wget $URL_CIWS_DEPOT/ossec-wui-0.8.tar.gz
+tar -zxf ossec-wui-0.8.tar.gz
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+WGET_CIWS_DEPOT
+
+cd $DL_DIR
+dpkg -i ossec-hids_2.8.1-1jessie_*
+apt-get -f install --assume-yes --force-yes
+cp -r ossec-wui-0.8 /var/www/admin/ossec-wui
+usermod -u501 ossec
+usermod -u502 ossecm
+usermod -u503 ossecr
+usermod -a -G ossec www-data
+
+mv /var/ossec $LAMPP_DIRECTORY/var
+ln -s $LAMPP_DIRECTORY/var/ossec /var/ossec
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/admin/ossec-wui" "/admin/ossec-wui" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ntop"

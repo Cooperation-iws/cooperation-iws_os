@@ -38,11 +38,8 @@ apt-get install --assume-yes --force-yes munin munin-node
 sed -e 's/host \*/host 127.0.0.1/' -i /etc/munin/munin-node.conf
 
 
-rm /etc/apache2/conf.d/munin
 
-ln -s /etc/munin/apache.conf /etc/apache2/conf.d/munin
-
-sed -i "s/Require local/Require all granted/" /etc/apache2/conf.available/munin.conf
+sed -i "s/Require local/Require all granted/" /etc/apache2/conf-available/munin.conf
 
 echo "AuthType Basic
 AuthName \"Munin Graphs\"
@@ -51,6 +48,7 @@ require user admin" > /var/cache/munin/www/.htaccess
 
 htpasswd -m -b -c /var/lib/munin/.htpasswd admin $munin_password
 
+a2enconf munin
 
 mv /etc/munin $LAMPP_DIRECTORY/etc
 

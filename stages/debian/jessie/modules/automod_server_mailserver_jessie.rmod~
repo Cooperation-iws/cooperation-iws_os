@@ -91,7 +91,11 @@ sed -i "7s/no/yes/" /etc/default/saslauthd
 
 apt-get install --assume-yes --force-yes mailscanner 
 
-
+if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "wheezy" ]; then
+cd $DL_DIR
+dpkg -i mailscanner_4.79.11-2.2_all.deb 
+apt-get -f install --assume-yes --force-yes
+fi
 
 if [ "$(echo $public_mail | awk  '{print $1}')" == "y" ]; then
 cat << EOT_PUBLIC > /etc/postfix/main.cf

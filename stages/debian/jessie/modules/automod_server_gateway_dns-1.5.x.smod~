@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Server'
-RMOD_NAME='Gateway DNS 1.1.x'
+RMOD_NAME='Gateway DNS 1.5.x'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Firewall / Gateway'
@@ -57,13 +57,12 @@ apt-get install --assume-yes --force-yes firmware-ralink
 gunzip -c /usr/share/doc/hostapd/examples/hostapd.conf.gz > /etc/hostapd/hostapd.conf
 
 sed -i "6s/wlan0/$AP_interface/" /etc/hostapd/hostapd.conf
-sed -i "17s/# driver=hostap/driver=nl80211/" /etc/hostapd/hostapd.conf
-sed -i "78s/test/$AP_ssid/" /etc/hostapd/hostapd.conf
-sed -i "94s/hw_mode=a/hw_mode=g/" /etc/hostapd/hostapd.conf
-sed -i "s/channel=60/channel=6/" /etc/hostapd/hostapd.conf
-sed -i "678s/#wpa=1/wpa=1/" /etc/hostapd/hostapd.conf
-sed -i "687s/#wpa_passphrase=secret passphrase/wpa_passphrase=$AP_wpa_passphrase/" /etc/hostapd/hostapd.conf
-sed -i "699s/#wpa_key_mgmt=WPA-PSK WPA-EAP/wpa_key_mgmt=WPA-PSK/" /etc/hostapd/hostapd.conf
+sed -i "25s/# driver=hostap/driver=nl80211/" /etc/hostapd/hostapd.conf
+sed -i "83s/test/$AP_ssid/" /etc/hostapd/hostapd.conf
+sed -i "129s/hw_mode=g/hw_mode=g/" /etc/hostapd/hostapd.conf
+sed -i "1018s/#wpa=1/wpa=1/" /etc/hostapd/hostapd.conf
+sed -i "1027s/#wpa_passphrase=secret passphrase/wpa_passphrase=$AP_wpa_passphrase/" /etc/hostapd/hostapd.conf
+sed -i "1048s/#wpa_key_mgmt=WPA-PSK WPA-EAP/wpa_key_mgmt=WPA-PSK WPA-EAP/" /etc/hostapd/hostapd.conf
 sed -i 's/#DAEMON_CONF=""/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/' /etc/default/hostapd
 if [ "$gateway_local_bridge" = "y" ]; then
 sed -i "11s/#//" /etc/hostapd/hostapd.conf
@@ -81,7 +80,7 @@ fi
 
 
 
-apt-get install -f --assume-yes --force-yes shorewall dnsmasq dhcp3-server bind9 dnsutils 
+apt-get install -f --assume-yes --force-yes shorewall dnsmasq isc-dhcp-server bind9 dnsutils 
 #bind9 config
 
 
@@ -170,7 +169,7 @@ ln -s $LAMPP_DIRECTORY/etc/bind /etc/bind
 
 chmod +r /etc/bind/rndc.key
 
-#dhcp3-server config
+#isc-dhcp-server  config
 echo "#dhcp3-server config"
 echo "
 server-identifier           server;
@@ -226,7 +225,7 @@ cp /usr/share/doc/shorewall/examples/two-interfaces/* /etc/shorewall
 sed -i "s/eth0/NET_IFACE/" /etc/shorewall/interfaces
 sed -i "s/eth1/LOCAL_IFACE/" /etc/shorewall/interfaces
 sed -i "16s/detect/192.168.$range.255/" /etc/shorewall/interfaces
-sed -i "s/eth1/LOCAL_IFACE/" /etc/shorewall/routestopped
+sed -i "s/eth1/LOCAL_IFACE/" /etc/shorewall/stoppedrules
 sed -i "s/eth0/NET_IFACE/" /etc/shorewall/masq
 sed -i "s/10.0.0.0\/8,\\\/192.168.$range.0\/24/" /etc/shorewall/masq
 sed -i "s/169.254.0.0\/16,\\\//" /etc/shorewall/masq
@@ -234,21 +233,17 @@ sed -i "s/172.16.0.0\/12,\\\//" /etc/shorewall/masq
 sed -i "s/192.168.0.0\/16//" /etc/shorewall/masq
 sed -i "s/NET_IFACE/$NET_IFACE/" /etc/shorewall/interfaces
 sed -i "s/LOCAL_IFACE/$LOCAL_IFACE/" /etc/shorewall/interfaces
-sed -i "s/LOCAL_IFACE/$LOCAL_IFACE/" /etc/shorewall/routestopped
+sed -i "s/LOCAL_IFACE/$LOCAL_IFACE/" /etc/shorewall/stoppedrules
 sed -i "s/NET_IFACE/$NET_IFACE/" /etc/shorewall/masq
 sed -i "s/LOCAL_IFACE/$LOCAL_IFACE/" /etc/shorewall/masq
 sed -i "s/STARTUP_ENABLED=No/STARTUP_ENABLED=Yes/" /etc/shorewall/shorewall.conf
-sed -i "32G" /etc/shorewall/rules
-sed -i "33s/^/ACCEPT  \$FW   loc   tcp 886/" /etc/shorewall/rules
-sed -i "20G" /etc/shorewall/rules
-sed -i "20G" /etc/shorewall/rules
-sed -i "21s/^/DNS(ACCEPT)  loc   \$FW/" /etc/shorewall/rules
-sed -i "22s/^/DNS(ACCEPT)  \$FW   loc/" /etc/shorewall/rules
-sed -i "20G" /etc/shorewall/rules
-sed -i "20G" /etc/shorewall/rules
-sed -i "21s/^/ACCEPT  \$FW   loc   tcp 67,68/" /etc/shorewall/rules
-sed -i "22s/^/ACCEPT  \$FW   loc   udp 67,68/" /etc/shorewall/rules
-
+echo " 
+ACCEPT  \$FW   loc   tcp 886
+DNS(ACCEPT)  loc   \$FW
+DNS(ACCEPT)  \$FW   loc
+ACCEPT  \$FW   loc   tcp 67,68
+ACCEPT  \$FW   loc   udp 67,68
+#" >> /etc/shorewall/rules
 
 if [ "$gateway_local_bridge" = "y" ]; then
 
