@@ -44,8 +44,8 @@ function INSTALL
 
 apt-get install --assume-yes --force-yes roundcube-mysql roundcube-plugins roundcube-plugins-extra
 
-sed -i "3s/#//" /etc/apache2/conf.d/roundcube
-sed -i "4s/#//" /etc/apache2/conf.d/roundcube
+sed -i "3s/#//" /etc/apache2/conf-available/roundcube.conf
+sed -i "4s/#//" /etc/apache2/conf-available/roundcube.conf
 
 
 mv /etc/roundcube $LAMPP_DIRECTORY/etc

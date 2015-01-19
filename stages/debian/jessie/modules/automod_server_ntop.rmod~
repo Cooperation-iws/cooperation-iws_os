@@ -14,6 +14,7 @@ RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différe
 
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
 
 
 
@@ -37,40 +38,89 @@ function INSTALL
 
 apt-get install --assume-yes --force-yes ntopng ntopng-data
 
+md5_pass=$(echo -n "$ntop_pwd" | md5sum )
+redis-cli SET user.admin.password $md5_pass 
 
 apt-get install --assume-yes --force-yes libapache2-mod-proxy-http
 
-echo "
-ProxyPass        /admin/network/   http://127.0.0.1:3000/
-ProxyPassReverse /admin/network/   http://127.0.0.1:3000/
+if [ "$domain" ] && [ -d /etc/bind ]; then
 
-<Location /admin/network/>
-  SetOutputFilter     proxy-html
-  ProxyHTMLLogVerbose On
-  ProxyHTMLExtended   On
-  ProxyHTMLBufSize    16384
+echo "<VirtualHost *:443>
+	ServerName ntop.$domain
+        
+	DocumentRoot /var/www/
+	SSLEngine on
+	SSLCertificateFile	/etc/ssl/certs/ssl-cert-snakeoil.pem
+	SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:3000/
+	ProxyPassReverse /   http://127.0.0.1:3000/
 
-  ProxyHTMLURLMap     /                            /admin/network/
-  ProxyHTMLURLMap     /admin/network/plugins/ntop/ /admin/network/plugins/
-  ProxyHTMLURLMap     url\\(\"/    url\\(\"/admin/network/   Re
+        RequestHeader set \"X-Forwarded-Proto\" \"https\"
 
-# otherwise the server sends in that encoding => big mess
-  RequestHeader    unset  Accept-Encoding
-</Location>
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
 
-ProxyHTMLExtended On
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /etc/apache2/sites-available/ntop-ssl.conf
+chown root.root /etc/apache2/sites-available/ntop-ssl.conf
+chmod 644 /etc/apache2/sites-available/ntop-ssl.conf
 
-RewriteCond %{HTTP_REFERER} /admin/network/
-RewriteRule    ^/(spacer.gif)$             http://127.0.0.1:3000/$1         [P]
-RewriteCond %{HTTP_REFERER} /admin/network/
-RewriteRule    ^/(arrow.gif)$              http://127.0.0.1:3000/$1         [P]
-RewriteCond %{HTTP_REFERER} /admin/network/
-RewriteRule    ^/(blank.gif)$              http://127.0.0.1:3000/$1         [P]
+echo "<VirtualHost *:80>
+	ServerName ntop.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:3000/
+	ProxyPassReverse /   http://127.0.0.1:3000/
 
-" > /etc/apache2/conf-available/ntopng.conf
+        
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
 
-a2enmod proxy proxy_http proxy_html headers 
-a2enconf ntopng
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /etc/apache2/sites-available/ntop.conf
+chown root.root /etc/apache2/sites-available/ntop.conf
+chmod 644 /etc/apache2/sites-available/ntop.conf
+
+a2ensite ntop
+a2ensite ntop-ssl
+a2enmod rewrite
+a2enmod suexec
+a2enmod include
+a2enmod proxy
+a2enmod proxy_http
+a2enmod proxy_connect
+a2enmod proxy_ftp
+a2enmod headers
+a2enmod ssl
+
+NTOP_URL="http://ntop.$domain"
+echo "ntop    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+
+else
+NTOP_URL="<![CDATA[http://localhost:3000]]>"
+fi
+
+
 
 }
 
@@ -83,8 +133,7 @@ a2enconf ntopng
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:3000]]>" "<![CDATA[http://localhost:3000]]>" 
-
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$NTOP_URL" "$REDMINE_URL" 
 
 }
 #_______________________________________________________________________________________________

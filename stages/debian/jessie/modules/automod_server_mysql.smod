@@ -32,8 +32,10 @@ apt-get install --yes --force-yes mysql-server
 
 
 echo "I: config mysql"
+sed -i "109s/^/character-set-server=utf8/" /etc/mysql/my.cnf
+sed -i "110s/^/collation-server=utf8_general_ci/" /etc/mysql/my.cnf
 
-sed -i "61s/#/default-character-set=utf8/" /etc/mysql/my.cnf
+
 
 
 mv /var/lib/mysql $LAMPP_DIRECTORY/var/lib

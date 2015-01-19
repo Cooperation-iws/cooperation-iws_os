@@ -27,7 +27,7 @@ RMOD_RUN_IN_CHROOT=True
 function INSTALL()
 {
 
-apt-get install --assume-yes --force-yes lighttpd
+apt-get install --assume-yes --force-yes lighttpd php5-cgi
 /etc/init.d/lighttpd stop
 
 killall lighttpd

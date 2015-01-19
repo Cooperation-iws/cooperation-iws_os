@@ -2,7 +2,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Wheezy'
+RMOD_NAME='Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Jessie'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.1
 RMOD_DESCRIPTION='eMails administration'
@@ -33,6 +33,7 @@ function WGET_CIWS_DEPOT
 {
 cd $DL_DIR
 wget $URL_CIWS_DEPOT/postfixadmin_2.92-1_all.deb
+wget $URL_CIWS_DEPOT/postfixadmin_2.92-1.sql
 
 
 }
@@ -58,29 +59,266 @@ Owners: postfix
 Flags: seen
 " >> /var/cache/debconf/config.dat
 
+echo "
+Name: postfixadmin/database-type
+Template: dbconfig-common/database-type
+Value: mysql
+Owners: postfixadmin
+Flags: seen
+Variables:
+ database_types = mysql, pgsql
+ dbvendor = MySQL
+ pkg = postfixadmin
 
-cat << EOT > MAILSERVER_db.sql
-GRANT ALL PRIVILEGES ON $NOM_MAILSERVER.* TO $NOM_MAILSERVER@'localhost' IDENTIFIED BY '$MAILSERVER_MYSQL_PWD';
-EOT
+Name: postfixadmin/db/app-user
+Template: dbconfig-common/db/app-user
+Value: postfixadmin
+Owners: postfixadmin
+Flags: seen
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
 
-$BIN_MYSQL -u root < MAILSERVER_db.sql mysql
+Name: postfixadmin/db/basepath
+Template: dbconfig-common/db/basepath
+Owners: postfixadmin
+Variables:
+ pkg = postfixadmin
+
+Name: postfixadmin/db/dbname
+Template: dbconfig-common/db/dbname
+Value: $NOM_MAILSERVER
+Owners: postfixadmin
+Flags: seen
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/dbconfig-install
+Template: dbconfig-common/dbconfig-install
+Value: true
+Owners: postfixadmin
+Flags: seen
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/dbconfig-reinstall
+Template: dbconfig-common/dbconfig-reinstall
+Value: false
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/dbconfig-remove
+Template: dbconfig-common/dbconfig-remove
+Value: 
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/dbconfig-upgrade
+Template: dbconfig-common/dbconfig-upgrade
+Value: true
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/install-error
+Template: dbconfig-common/install-error
+Value: retry
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ error = ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
+ pkg = postfixadmin
+
+Name: postfixadmin/internal/reconfiguring
+Template: dbconfig-common/internal/reconfiguring
+Value: false
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/internal/skip-preseed
+Template: dbconfig-common/internal/skip-preseed
+Value: false
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/missing-db-package-error
+Template: dbconfig-common/missing-db-package-error
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/mysql/admin-user
+Template: dbconfig-common/mysql/admin-user
+Value: root
+Owners: postfixadmin
+Flags: seen
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/mysql/method
+Template: dbconfig-common/mysql/method
+Value: unix socket
+Owners: postfixadmin
+Flags: seen
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/passwords-do-not-match
+Template: dbconfig-common/passwords-do-not-match
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/pgsql/admin-user
+Template: dbconfig-common/pgsql/admin-user
+Owners: postfixadmin
+Variables:
+ pkg = postfixadmin
+
+Name: postfixadmin/pgsql/authmethod-admin
+Template: dbconfig-common/pgsql/authmethod-admin
+Value: ident
+Owners: postfixadmin
+Variables:
+ pkg = postfixadmin
+
+Name: postfixadmin/pgsql/authmethod-user
+Template: dbconfig-common/pgsql/authmethod-user
+Owners: postfixadmin
+Variables:
+ pkg = postfixadmin
+
+Name: postfixadmin/pgsql/changeconf
+Template: dbconfig-common/pgsql/changeconf
+Owners: postfixadmin
+Variables:
+ pkg = postfixadmin
+
+Name: postfixadmin/pgsql/manualconf
+Template: dbconfig-common/pgsql/manualconf
+Owners: postfixadmin
+Variables:
+ pkg = postfixadmin
+
+Name: postfixadmin/pgsql/method
+Template: dbconfig-common/pgsql/method
+Owners: postfixadmin
+Variables:
+ pkg = postfixadmin
+
+Name: postfixadmin/pgsql/no-empty-passwords
+Template: dbconfig-common/pgsql/no-empty-passwords
+Owners: postfixadmin
+Variables:
+ pkg = postfixadmin
+
+Name: postfixadmin/purge
+Template: dbconfig-common/purge
+Value: false
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/reconfigure-webserver
+Template: postfixadmin/reconfigure-webserver
+Value: apache2
+Owners: postfixadmin
+Flags: seen
+
+Name: postfixadmin/remote/host
+Template: dbconfig-common/remote/host
+Value: 
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/remote/newhost
+Template: dbconfig-common/remote/newhost
+Value: 
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/remote/port
+Template: dbconfig-common/remote/port
+Value: 
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/remove-error
+Template: dbconfig-common/remove-error
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/upgrade-backup
+Template: dbconfig-common/upgrade-backup
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+
+Name: postfixadmin/upgrade-error
+Template: dbconfig-common/upgrade-error
+Owners: postfixadmin
+Variables:
+ dbvendor = MySQL
+ pkg = postfixadmin
+" >> /var/cache/debconf/config.dat
+
 
 cd $DL_DIR
 
 dpkg -i postfixadmin_2.92-1_all.deb
 
+apt-get -f install --assume-yes --force-yes
+
+
+mv /etc/postfixadmin $LAMPP_DIRECTORY/etc/postfixadmin
+ln -s $LAMPP_DIRECTORY/etc/postfixadmin /etc/postfixadmin
+ln -s /etc/postfixadmin/apache.conf /etc/apache2/conf-available/postfixadmin.conf
+a2enconf postfixadmin
+
+$BIN_MYSQL -u root < postfixadmin_2.92-1.sql mysql
+
+cat << EOT > MAILSERVER_db.sql
+GRANT ALL PRIVILEGES ON postfixadmin.* TO $NOM_MAILSERVER@'localhost' IDENTIFIED BY '$MAILSERVER_MYSQL_PWD';
+EOT
+
+$BIN_MYSQL -u root < MAILSERVER_db.sql mysql
 
 
 echo "
-UPDATE $NOM_MAILSERVER.domain SET domain = '$mail_domain' WHERE CONVERT( domain.domain USING utf8 ) = 'ciws.com' LIMIT 1 ;
-UPDATE $NOM_MAILSERVER.admin SET username = '$postfix_admin_email' WHERE CONVERT( admin.username USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
-UPDATE $NOM_MAILSERVER.mailbox SET username = '$postfix_admin_email',
+UPDATE postfixadmin.domain SET domain = '$mail_domain' WHERE CONVERT( domain.domain USING utf8 ) = 'testjessie3.intra' LIMIT 1 ;
+UPDATE postfixadmin.admin SET username = '$postfix_admin_email' WHERE CONVERT( admin.username USING utf8 ) = 'admin.local@testjessie3.intra' LIMIT 1 ;
+UPDATE postfixadmin.mailbox SET username = '$postfix_admin_email',
 maildir = '$postfix_admin_email/',
-domain = '$mail_domain' WHERE CONVERT( mailbox.username USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
-UPDATE $NOM_MAILSERVER.alias SET address = '$postfix_admin_email',
+domain = '$mail_domain' WHERE CONVERT( mailbox.username USING utf8 ) = 'admin.local@testjessie3.intra' LIMIT 1 ;
+UPDATE postfixadmin.alias SET address = '$postfix_admin_email',
 goto = '$postfix_admin_email',
-domain = '$mail_domain' WHERE CONVERT( alias.address USING utf8 ) = 'admin@ciws.com' LIMIT 1 ;
-UPDATE $NOM_MAILSERVER.domain_admins SET username = '$postfix_admin_email' WHERE CONVERT( domain_admins.username USING utf8 ) = 'admin@ciws.com' AND CONVERT( domain_admins.domain USING utf8 ) = 'ALL' AND domain_admins.created = '2008-11-01 15:17:31' AND domain_admins.active=1 LIMIT 1 ;
+domain = '$mail_domain' WHERE CONVERT( alias.address USING utf8 ) = 'admin.local@testjessie3.intra' LIMIT 1 ;
+UPDATE postfixadmin.domain_admins SET username = '$postfix_admin_email' WHERE CONVERT( domain_admins.username USING utf8 ) = 'admin.local@testjessie3.intra' AND CONVERT( domain_admins.domain USING utf8 ) = 'ALL' AND domain_admins.active=1 LIMIT 1 ;
 " > /tmp/update_mail_domain
 $BIN_MYSQL -u root < /tmp/update_mail_domain $NOM_MAILSERVER
 
@@ -89,13 +327,8 @@ apt-get install -f --assume-yes --force-yes postfix postfix-mysql libdate-manip-
 sed -i "7s/no/yes/" /etc/default/saslauthd
 
 
-apt-get install --assume-yes --force-yes mailscanner 
 
-if [ "$(echo "$DEB_DIST" | awk  '{print $1}')" == "wheezy" ]; then
-cd $DL_DIR
-dpkg -i mailscanner_4.79.11-2.2_all.deb 
-apt-get -f install --assume-yes --force-yes
-fi
+
 
 if [ "$(echo $public_mail | awk  '{print $1}')" == "y" ]; then
 cat << EOT_PUBLIC > /etc/postfix/main.cf
@@ -188,7 +421,7 @@ cat << EOT > /etc/postfix/mysql_virtual_alias_maps.cf
 user = $NOM_MAILSERVER
 password = $MAILSERVER_MYSQL_PWD
 hosts = localhost
-dbname = $NOM_MAILSERVER
+dbname = postfixadmin
 table = alias
 select_field = goto
 where_field = address
@@ -200,7 +433,7 @@ cat << EOT > /etc/postfix/mysql_virtual_domains_maps.cf
 user = $NOM_MAILSERVER
 password = $MAILSERVER_MYSQL_PWD
 hosts = localhost
-dbname = $NOM_MAILSERVER
+dbname = postfixadmin
 table = domain
 select_field = domain
 where_field = domain
@@ -212,7 +445,7 @@ cat << EOT > /etc/postfix/mysql_virtual_mailbox_limit_maps.cf
 user = $NOM_MAILSERVER
 password = $MAILSERVER_MYSQL_PWD
 hosts = localhost
-dbname = $NOM_MAILSERVER
+dbname = postfixadmin
 table = mailbox
 select_field = quota
 where_field = username
@@ -224,7 +457,7 @@ cat << EOT > /etc/postfix/mysql_virtual_mailbox_maps.cf
 user = $NOM_MAILSERVER
 password = $MAILSERVER_MYSQL_PWD
 hosts = localhost
-dbname = $NOM_MAILSERVER
+dbname = postfixadmin
 table = mailbox
 select_field = CONCAT(domain,'/',maildir)
 where_field = username
@@ -245,69 +478,7 @@ apt-get install --assume-yes --force-yes dovecot-imapd dovecot-pop3d dovecot-mys
 
 
 
-mkdir $LAMPP_DIRECTORY/var/sieve-scripts
-cd $LAMPP_DIRECTORY/var
-apt-get install -f --assume-yes --force-yes curl python-mysqldb
-wget  $URL_CIWS_DEPOT/pysieved-090317.tar.gz
-tar -xzf pysieved-090317.tar.gz
-rm pysieved-090317.tar.gz
-sed -i "s/dbuser = user/dbuser = $NOM_MAILSERVER/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
-sed -i "s/dbname = db/dbname = $NOM_MAILSERVER/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
-sed -i "s/dbpass = pass/dbpass = $MAILSERVER_MYSQL_PWD/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
-sed -i "s/FROM users/FROM mailbox/g" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
-sed -i "s/userdb  = passwd/userdb  = Dovecot/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
-sed -i "60s/#//" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
-sed -i "63s/#//" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
-sed -i "s/mux = \/var\/spool\/postfix\/auth\/dovecot/mux = \/var\/spool\/postfix\/private\/auth/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
-sed -i "3s/SASL/Dovecot/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
-sed -i "s/user_query = SELECT homedir FROM mailbox WHERE username = \"%(username)s\" AND (active = \"1\")/user_query = SELECT maildir AS homedir FROM mailbox WHERE username = \"%(username)s\" AND (active = \"1\")/" $LAMPP_DIRECTORY/var/pysieved/pysieved.ini
-echo '#!/bin/bash
-# Antoine Reversat, 2008-10-20
-# Script to stop and start pySieved managesieve server
 
-PIDFILE=/var/run/pysieved.pid
-PYS_HOME=/opt/ciws/var/pysieved
-
-if [ $# -ne 1 ]
-then
-        echo "usage : pysieved stop|start|restart"
-        exit 1
-fi
-
-case $1 in
-        "start")
-                echo -n "Starting ManageSieve server pysieved... "
-                python ${PYS_HOME}/pysieved.py -c ${PYS_HOME}/pysieved.ini
-                if [ $? -eq 0 ]
-                then
-                        echo "[OK]"
-                else
-                        echo "[Failed]"
-                fi
-                ;;
-        "stop")
-                echo -n "Stopping ManageSieve server pysieved..."
-                kill `cat $PIDFILE`
-                ps -p `cat /var/run/pysieved.pid` | grep -v PID | grep python
-                if [ $? -ne 0 ]
-                then
-                  echo "[OK]"
-                else
-                  echo "[Failed]"
-                fi
-                ;;
-        "restart")
-                $0 stop
-                sleep 1
-                $0 start
-                ;;
-        "*")
-                echo "Usage : pysieved stop|start|restart"
-                exit 1
-                ;;
-esac
-' > /etc/init.d/pysieved
-chmod +x /etc/init.d/pysieved
 
 mv /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf-back
 
@@ -383,7 +554,7 @@ EOT
 
 LAMPP_DIRECTORY_FOR_SED=$(echo $LAMPP_DIRECTORY | sed 's/\//\\\//g')
 sed -i "29s/#driver =/driver = mysql/" /etc/dovecot/dovecot-sql.conf.ext
-sed -i "66s/#connect =/connect = host=localhost dbname=$NOM_MAILSERVER user=$NOM_MAILSERVER password=$MAILSERVER_MYSQL_PWD/" /etc/dovecot/dovecot-sql.conf.ext
+sed -i "66s/#connect =/connect = host=localhost dbname=postfixadmin user=$NOM_MAILSERVER password=$MAILSERVER_MYSQL_PWD/" /etc/dovecot/dovecot-sql.conf.ext
 sed -i "73s/#default_pass_scheme = MD5/default_pass_scheme = MD5-CRYPT/" /etc/dovecot/dovecot-sql.conf.ext
 
 sed -i "125s/^/user_query = SELECT '$LAMPP_DIRECTORY_FOR_SED\/var\/vmail\/%d\/%n' as home, 'maildir:$LAMPP_DIRECTORY_FOR_SED\/var\/vmail\/%d\/%n' as mail, 150 AS uid, 8 AS gid, concat('dirsize:storage=', quota) AS quota FROM mailbox WHERE username = '%u' AND active = '1'/" /etc/dovecot/dovecot-sql.conf.ext
@@ -415,57 +586,13 @@ rm /var/vmail/*/*/.INBOX.Drafts/dovecot.index.log 1>&2 2>/dev/null
 
 
 
-sed -i "133s/#//" /etc/MailScanner/MailScanner.conf
-sed -i "134s/^/#/" /etc/MailScanner/MailScanner.conf
-sed -i "138s/#//" /etc/MailScanner/MailScanner.conf
-sed -i "139s/^/#/" /etc/MailScanner/MailScanner.conf
-sed -i "168s/^/#/" /etc/MailScanner/MailScanner.conf
-sed -i "169s/^/Incoming Queue Dir = \/var\/spool\/postfix\/hold/" /etc/MailScanner/MailScanner.conf
-sed -i "172s/^/#/" /etc/MailScanner/MailScanner.conf
-sed -i "173s/^/Outgoing Queue Dir = \/var\/spool\/postfix\/incoming/" /etc/MailScanner/MailScanner.conf
-sed -i "199s/exim/postfix/" /etc/MailScanner/MailScanner.conf
 
-
-
-
-
-
-
-sed -i "s/#run_mailscanner=1/run_mailscanner=1/" /etc/default/mailscanner
-
-chown postfix:postfix /var/spool/MailScanner/incoming
-chown postfix:postfix /var/spool/MailScanner/quarantine
-
-##Webmin configuration
-
-if [ -e /usr/share/webmin/install-module.pl ]; then
-
-cd $DL_DIR
-/usr/share/webmin/install-module.pl webmin-module-1.1-4.wbm 
-rm /etc/webmin/module.infos.cache
-echo "mailscanner " >> /etc/webmin/webmin.acl
-
-
-
-mkdir /etc/webmin/mailscanner
-cat << EOT > /etc/webmin/mailscanner/config
-start_cmd=/etc/init.d/MailScanner start
-pidfile=/var/run/MailScanner.pid
-bindir=/usr/sbin/
-mailscanner_config=/etc/MailScanner/MailScanner.conf
-mailscanner_path=/usr/sbin/MailScanner
-stop_cmd=/etc/init.d/mailscanner stop
-EOT
-fi
 
 /etc/init.d/clamav-daemon stop
 /etc/init.d/dovecot stop
 /etc/init.d/postfix stop
 /etc/init.d/mailscanner stop
 
-mv /etc/MailScanner $LAMPP_DIRECTORY/etc/
-
-ln -s $LAMPP_DIRECTORY/etc/MailScanner /etc/MailScanner
 
 mv /etc/postfix $LAMPP_DIRECTORY/etc/
 
@@ -490,9 +617,6 @@ cd $DL_DIR
 
 sed -i "s/ENABLED=0/ENABLED=1/" /etc/default/spamassassin
 
-#Fix time move backwards error
-apt-get remove --assume-yes --force-yes ntpdate
-apt-get install --assume-yes --force-yes ntp
 
 
 

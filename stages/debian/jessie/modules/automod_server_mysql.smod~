@@ -12,7 +12,7 @@ RMOD_VERBOSE="Postgresql is a database software server"
 RMOD_VERBOSE_FR="Postgresql est un serveur de base de données"
 
 RMOD_RUN_IN_CHROOT=True
-RMOD_REQ_APACHE=True
+
 . /tmp/app_params
 . /tmp/scripts_params
 
@@ -32,8 +32,10 @@ apt-get install --yes --force-yes mysql-server
 
 
 echo "I: config mysql"
+sed -i "61s/#/character-set-server=utf8/" /etc/mysql/my.cnf
+sed -i "61s/#/collation-server=utf8_general_ci/" /etc/mysql/my.cnf
 
-sed -i "61s/#/default-character-set=utf8/" /etc/mysql/my.cnf
+
 
 
 mv /var/lib/mysql $LAMPP_DIRECTORY/var/lib

@@ -23,7 +23,7 @@ console_mode="n"
 #N#X Client Jessie
 #Openssh server 0.2
 #W#inswitch Jessie
-#Munin Jessie
+#M#unin Jessie
 munin_password=$gen_login_pwd
 #T#rac Subversion jessie
 svn_name[1]="Project_1"
@@ -45,5 +45,19 @@ hostapd="y"
 AP_interface=$gateway_local_iface
 AP_ssid="test78"
 AP_wpa_passphrase="0123456789"
-#Ntopng
-#Ossec 2.8 standalone
+#N#topng
+ntop_pwd="$gen_login_pwd"
+#O#ssec 2.8 standalone
+#Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Jessie
+postfixadmin_name="Mail_1"
+mail_domain="$domain"
+postfix_admin_email="admin.local@$domain"
+postfixadmin_mysql_pwd="$mysql_generic_pwd"
+public_mail="n"
+smtp_relay="my.smtp.my-extension"
+postfix_relay_authentication_name=""
+postfix_relay_authentication_password=""
+mailbox_quota="0"
+#Roundcube 0.5.6
+#Mysql 5.0
+#Phpmyadmin 3.3.7

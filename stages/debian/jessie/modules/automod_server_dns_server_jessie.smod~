@@ -36,7 +36,7 @@ killall lighttpd
 
 sed -i "9s/\/var\/www\/html/\/opt\/ciws\/var\/identity\//" /etc/lighttpd/lighttpd.conf
 mkdir /opt/ciws/var/identity
-sed -i "15s/80/886/" /etc/thttpd/thttpd.conf
+sed -i "15s/80/886/" /etc/lighttpd/lighttpd.conf
 echo "" > /opt/ciws/var/identity/index.html
 echo "$HOSTNAME" > /opt/ciws/var/identity/hostname.txt
 echo "$domain" > /opt/ciws/var/identity/domain.txt

@@ -41,6 +41,7 @@ ln -s $LAMPP_DIRECTORY/var/lib/phpmyadmin /var/lib/phpmyadmin
 mv /etc/phpmyadmin $LAMPP_DIRECTORY/etc
 ln -s $LAMPP_DIRECTORY/etc/phpmyadmin /etc/phpmyadmin
 
+ln -s $LAMPP_DIRECTORY/etc/phpmyadmin/apache.conf $LAMPP_DIRECTORY/etc/apache2/conf-available/phpmyadmin.conf
 
 
 
