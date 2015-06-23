@@ -37,7 +37,8 @@ apt-get install --assume-yes --force-yes munin munin-node
 
 sed -e 's/host \*/host 127.0.0.1/' -i /etc/munin/munin-node.conf
 
-
+sudo rm /etc/apache2/conf-available/munin.conf
+sudo cp /etc/munin/apache24.conf /etc/apache2/conf-available/munin.conf
 
 sed -i "s/Require local/Require all granted/" /etc/apache2/conf-available/munin.conf
 
@@ -70,6 +71,7 @@ ln -s $LAMPP_DIRECTORY/var/lib/munin  /var/lib/munin
 function CREATE_WUI
 {
 cd /tmp/
+apt-get install --yes --force-yes php5-cli
 ./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/munin/" "/munin/" 
 
 

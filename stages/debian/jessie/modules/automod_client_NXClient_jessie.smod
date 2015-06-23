@@ -16,16 +16,12 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 echo "I: config nx"
 if [ $ARCH == "686" ]; then
-wget $URL_CIWS_DEPOT/nomachine_4.4.1_1_i386.deb
-dpkg -i nomachine_4.4.1_1_i386.deb
+wget $URL_CIWS_DEPOT/nxclient_3.5.0-7_i386.deb
+dpkg -i nxclient_3.5.0-7_i386.deb
 else
-wget $URL_CIWS_DEPOT/nomachine_4.4.1_1_amd64.deb
-dpkg -i nomachine_4.4.1_1_amd64.deb
+wget $URL_CIWS_DEPOT/nxclient_3.5.0-7_amd64.deb
+dpkg -i nxclient_3.5.0-7_amd64.deb
 
 fi 
 apt-get -f install --assume-yes --force-yes
-
-groupmod -g301 nx
-usermod -u301 -g301 nx
-
 

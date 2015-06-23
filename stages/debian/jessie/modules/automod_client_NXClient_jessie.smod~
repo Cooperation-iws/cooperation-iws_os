@@ -25,6 +25,7 @@ dpkg -i nomachine_4.4.1_1_amd64.deb
 fi 
 apt-get -f install --assume-yes --force-yes
 
+groupmod -g301 nx
 usermod -u301 -g301 nx
 
 

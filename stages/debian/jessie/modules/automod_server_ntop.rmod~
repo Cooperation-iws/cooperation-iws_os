@@ -39,9 +39,12 @@ function INSTALL
 apt-get install --assume-yes --force-yes ntopng ntopng-data
 
 md5_pass=$(echo -n "$ntop_pwd" | md5sum )
-redis-cli SET user.admin.password $md5_pass 
 
-apt-get install --assume-yes --force-yes libapache2-mod-proxy-http
+/etc/init.d/ntopng start
+redis-cli SET user.admin.password $md5_pass 
+/etc/init.d/ntopng stop
+
+apt-get install --assume-yes --force-yes libapache2-mod-proxy-html
 
 if [ "$domain" ] && [ -d /etc/bind ]; then
 
@@ -133,7 +136,7 @@ fi
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$NTOP_URL" "$REDMINE_URL" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$NTOP_URL" "$NTOP_URL" 
 
 }
 #_______________________________________________________________________________________________

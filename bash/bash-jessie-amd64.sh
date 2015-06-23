@@ -4,12 +4,12 @@ working_path="/home/ciwsadmin/app/work/"
 iso_path="/home/ciwsadmin/app/iso/"
 template="/home/ciwsadmin/app/livescripts-trunk/bash/templates/template-test-jessie-amd64.sh"
 webappmirror="http://localhost:8888/"
-#debian_deb_mirror="http://wwi.my-desktop-kvm.intra/ftp.local.debian.org//debian"
-#debian_deb_mirror_nonfree="http://wwi.my-desktop-kvm.intra/ftp.local.debian.org/debian_multimedia/"
-#debian_deb_mirror_security="http://wwi.my-desktop-kvm.intra/ftp.local.debian.org/debian/"
-debian_deb_mirror="http://192.168.22.19/ftp.local.debian.org//debian"
-debian_deb_mirror_nonfree="http://192.168.22.19/ftp.local.debian.org/debian_multimedia/"
-debian_deb_mirror_security="http://192.168.22.19/ftp.local.debian.org/debian/"
+debian_deb_mirror="http://wwi.my-desktop-kvm.intra/ftp.local.debian.org//debian"
+debian_deb_mirror_nonfree="http://wwi.my-desktop-kvm.intra/ftp.local.debian.org/debian_multimedia/"
+debian_deb_mirror_security="http://wwi.my-desktop-kvm.intra/ftp.local.debian.org/debian_updates/"
+#debian_deb_mirror="http://192.168.22.19/ftp.local.debian.org//debian"
+#debian_deb_mirror_nonfree="http://192.168.22.19/ftp.local.debian.org/debian_multimedia/"
+#debian_deb_mirror_security="http://192.168.22.19/ftp.local.debian.org/debian/"
 log_path="/home/ciwsadmin/app/log/"
 mirror_domain="localhost"
 
@@ -36,7 +36,9 @@ cd /home/ciwsadmin/app/livescripts-trunk
 
 #--encryption luks --encryptionpassphrase 01234567890123456789
 
-sudo ./cooperation-iws.py -c --createdirectories --dist debian --directory $working_path/test203 --outputisoname cooperation-iws-1c42e1d9b8024c0552ffd8c8ca2ab760-2011-02-22-10-24-21.iso --username ciwsadmin --userfullname ciws-user --password cooperation --host desk-server-5 --isofile $iso_path/jessie-xfce4-amd64-150110.iso --distvers jessie --modulesfile $template --webappmirror $webappmirror --debmirror $debian_deb_mirror --debmirrornonfree $debian_deb_mirror_nonfree --arch amd64 --debmirrorsecurity $debian_deb_mirror_security --artwork jessie --locale fr --keyblang fr --disautologin --silent 
+sudo ./cooperation-iws.py -c --createdirectories --dist debian --directory $working_path/test248 --outputisoname cooperation-iws-1c42e1d9b8024c0552ffd8c8ca2ab760-2011-02-22-10-24-21.iso --username ciwsadmin --userfullname ciws-user --password cooperation --host desk-server-6 --isofile $iso_path/jessie-gnome-amd64-150622.iso --distvers jessie --modulesfile $template --webappmirror $webappmirror --debmirror $debian_deb_mirror --debmirrornonfree $debian_deb_mirror_nonfree --arch amd64 --debmirrorsecurity $debian_deb_mirror_security --artwork jessie --locale fr_FR.UTF-8 --keyblang fr --disautologin  --silent
 
-#sudo ./cooperation-iws.py -c --createdirectories --dist debian --directory $working_path/test160 --outputisoname cooperation-iws-1c42e1d9b8024c0552ffd8c8ca2ab760-2011-02-22-10-24-21.iso --username ciwsadmin --userfullname ciws-user --password cooperation --host desk-server-5 --isofile $iso_path/jessie-bare-amd64-141214.iso --distvers upgrade_bare --modulesfile $template --webappmirror $webappmirror --debmirror $debian_deb_mirror --debmirrornonfree $debian_deb_mirror_nonfree --arch amd64 --debmirrorsecurity $debian_deb_mirror_security --artwork jessie --locale fr --keyblang fr --disautologin --silent 
+#sudo ./cooperation-iws.py -c --createdirectories --dist debian --directory $working_path/test240 --outputisoname cooperation-iws-1c42e1d9b8024c0552ffd8c8ca2ab760-2011-02-22-10-24-21.iso --username esmalif --userfullname ciws-user --password Lokkir11 --host desk-server-11 --isofile $iso_path/jessie-gnome-amd64-150622.iso --distvers jessie --modulesfile $template --webappmirror $webappmirror --debmirror $debian_deb_mirror --debmirrornonfree $debian_deb_mirror_nonfree --arch amd64 --debmirrorsecurity $debian_deb_mirror_security --artwork jessie --locale fr_FR.UTF-8 --keyblang fr --disautologin --silent --encryption luks --encryptionpassphrase 04qwerty07197604121942* 
+
+#sudo ./cooperation-iws.py -c --createdirectories --dist debian --directory $working_path/test232 --outputisoname cooperation-iws-1c42e1d9b8024c0552ffd8c8ca2ab760-2011-02-22-10-24-21.iso --username esmalif --userfullname ciws-user --password Lokkir11 --host desk-server-6 --isofile $iso_path/jessie-gnome-amd64-150503.iso --distvers jessie --modulesfile $template --webappmirror $webappmirror --debmirror $debian_deb_mirror --debmirrornonfree $debian_deb_mirror_nonfree --arch amd64 --debmirrorsecurity $debian_deb_mirror_security --artwork jessie --locale fr --keyblang fr --disautologin --silent --encryption luks --encryptionpassphrase 04qwerty07197604121942*
 

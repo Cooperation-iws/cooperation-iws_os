@@ -61,6 +61,10 @@ usermod -u501 ossec
 usermod -u502 ossecm
 usermod -u503 ossecr
 usermod -a -G ossec www-data
+
+mv /var/ossec $LAMPP_DIRECTORY/var
+ln -s $LAMPP_DIRECTORY/var/ossec /var/ossec
+
 }
 
 #_______________________________________________________________________________________________

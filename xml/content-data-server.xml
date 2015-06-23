@@ -1211,6 +1211,32 @@ ProFTPD is not a hack based on any other server, it's an independent source tree
 	
 </item>
 <item>
+	<item_name>Ossec standalone</item_name>
+	<item_version>2.8.1</item_version>
+	<item_desc>Host based Intrusion Detection System</item_desc>
+	<item_web>http://www.ossec.net/main/</item_web>
+	<item_verbose>Ossec is an HIDS (Host Based Intrusion Detection System).</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Security</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie</field_OS>
+	<param>	
+		<field_1_name>Report email address</field_1_name>
+		<field_1_id>report_address</field_1_id>
+		<field_1_value>ossec_report_address</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	
+	
+	
+</item>
+<item>
 	<item_name>Lifetype</item_name>
 	<item_version>1.2b</item_version>
 	<item_desc>Content management system</item_desc>
@@ -3144,6 +3170,32 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 	
 </item>
 <item>
+	<item_name>Ntopng</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Network sensor</item_desc>
+	<item_web>http://www.ntop.org/</item_web>
+	<item_verbose>Ntop is a network sensor.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie</field_OS>
+
+	<param>	
+		<field_1_name>Default password</field_1_name>
+		<field_1_id>ntop_pwd</field_1_id>
+		<field_1_value>ntop_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</item>
+<item>
 	<item_name>Promethee</item_name>
 	<item_version>7.6</item_version>
 	<item_desc>Virtual Learning Environment</item_desc>
@@ -3304,6 +3356,27 @@ Trac allows wiki markup in issue descriptions and commit messages, creating link
 	<field_exclude></field_exclude>
 	<field_include></field_include>
 	<field_OS>Wheezy</field_OS>
+	<param>	
+		
+	</param>
+	
+	
+</item>
+<item>
+	<item_name>Phpmyadmin</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Interface Web d'administration de Mysql</item_desc>
+	<item_web>http://phpmyadmin.org/</item_web>
+	<item_verbose>Interface Web d'administration de Mysql</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Jessie</field_OS>
 	<param>	
 		
 	</param>
@@ -4805,6 +4878,31 @@ Dotclear is a free software primarily designed for its users and regularly impro
 	<field_exclude></field_exclude>
 	<field_include></field_include>
 	<field_OS>Wheezy</field_OS>
+	
+	<param>	
+		<field_1_name>Default password</field_1_name>
+		<field_1_id>munin_password</field_1_id>
+		<field_1_value>munin_password</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+</item>
+<item>
+	<item_name>Munin</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Host monitoring</item_desc>
+	<item_web>http://munin-monitoring.org/</item_web>
+	<item_verbose>Munin is host monitoring solution.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Jessie</field_OS>
 	
 	<param>	
 		<field_1_name>Default password</field_1_name>

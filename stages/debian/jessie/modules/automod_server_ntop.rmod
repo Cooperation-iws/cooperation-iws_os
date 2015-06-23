@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Ntopng'
+RMOD_NAME='Ntopng Jessie'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Network management'
@@ -44,7 +44,7 @@ md5_pass=$(echo -n "$ntop_pwd" | md5sum )
 redis-cli SET user.admin.password $md5_pass 
 /etc/init.d/ntopng stop
 
-apt-get install --assume-yes --force-yes libapache2-mod-proxy-http
+apt-get install --assume-yes --force-yes libapache2-mod-proxy-html
 
 if [ "$domain" ] && [ -d /etc/bind ]; then
 
@@ -136,7 +136,7 @@ fi
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$NTOP_URL" "$REDMINE_URL" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$NTOP_URL" "$NTOP_URL" 
 
 }
 #_______________________________________________________________________________________________

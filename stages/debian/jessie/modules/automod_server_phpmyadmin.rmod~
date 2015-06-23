@@ -43,6 +43,7 @@ ln -s $LAMPP_DIRECTORY/etc/phpmyadmin /etc/phpmyadmin
 
 ln -s $LAMPP_DIRECTORY/etc/phpmyadmin/apache.conf $LAMPP_DIRECTORY/etc/apache2/conf-available/phpmyadmin.conf
 
+a2enconf phpmyadmin
 
 
 }

@@ -71,6 +71,7 @@ ln -s $LAMPP_DIRECTORY/var/lib/munin  /var/lib/munin
 function CREATE_WUI
 {
 cd /tmp/
+
 ./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/munin/" "/munin/" 
 
 

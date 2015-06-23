@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='Gnome 0.1'
+RMOD_NAME='Gnome 3.14'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Gnome desktop environment'
@@ -14,13 +14,14 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 . /tmp/scripts_params
 
 
-echo "I: install Audacity"
-#apt-get install --assume-yes --force-yes filezilla-locales 
-apt-get install --assume-yes --force-yes audacity libavcodec52 libavformat52
+echo "I: install Gnome"
 
-cd $DL_DIR
-wget $URL_CIWS_DEPOT/lame_3.98.4+repack2-3~bpo60+1_amd64.deb 
-dpkg -i lame_3.98.4+repack2-3~bpo60+1_amd64.deb 
+apt-get install --assume-yes --force-yes gnome
+if [ $ARCH == "686" ]; then
+wget $URL_CIWS_DEPOT/gnome-terminal_3.16.2-1_i386.deb
+dpkg -i gnome-terminal_3.16.2-1_i386.deb
+else
+wget $URL_CIWS_DEPOT/gnome-terminal_3.16.2-1_amd64.deb
+dpkg -i gnome-terminal_3.16.2-1_amd64.deb
 
-apt-get -f install --assume-yes --force-yes
 

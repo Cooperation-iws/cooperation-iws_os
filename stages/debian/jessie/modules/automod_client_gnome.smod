@@ -18,4 +18,3 @@ echo "I: install Gnome"
 
 apt-get install --assume-yes --force-yes gnome
 
-
