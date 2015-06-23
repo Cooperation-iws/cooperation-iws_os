@@ -1,0 +1,42 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Flashplayer Squeeze'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION=''
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+
+. /tmp/scripts_params
+
+
+
+cd $DL_DIR
+
+if [ "$ARCH" == "686" ] ; then
+
+wget $URL_CIWS_DEPOT/libflashplayer_11.2_i386.so
+
+
+cp libflashplayer_11.2_i386.so /usr/lib/flashplugin-nonfree/libflashplayer.so
+chown root:root /usr/lib/flashplugin-nonfree/libflashplayer.so
+chmod 644 /usr/lib/flashplugin-nonfree/libflashplayer.so
+update-alternatives --quiet --install /usr/lib/mozilla/plugins/flash-mozilla.so flash-mozilla.so /usr/lib/flashplugin-nonfree/libflashplayer.so 50 
+
+
+else
+
+wget $URL_CIWS_DEPOT/libflashplayer_11.2_amd64.so
+
+
+mkdir /usr/lib/flashplugin-nonfree
+cp libflashplayer_11.2_amd64.so /usr/lib/flashplugin-nonfree/libflashplayer.so
+
+#rm -r /usr/lib/flashplugin-nonfree/usr
+chown root:root /usr/lib/flashplugin-nonfree/libflashplayer.so
+chmod 644 /usr/lib/flashplugin-nonfree/libflashplayer.so
+update-alternatives --quiet --install /usr/lib/mozilla/plugins/flash-mozilla.so flash-mozilla.so /usr/lib/flashplugin-nonfree/libflashplayer.so 50 
+fi

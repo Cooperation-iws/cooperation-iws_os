@@ -1,0 +1,151 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Ntopng'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Network management'
+RMOD_DESCRIPTION_FR='Gestion du réseau'
+RMOD_VERBOSE="Ntop is a network sensor. "
+RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différents protocoles qui transitent sur le réseau. "
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+NTOP_PWD=$ntop_pwd
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+
+apt-get install --assume-yes --force-yes ntopng ntopng-data
+
+md5_pass=$(echo -n "$ntop_pwd" | md5sum )
+
+/etc/init.d/ntopng start
+redis-cli SET user.admin.password $md5_pass 
+/etc/init.d/ntopng stop
+
+apt-get install --assume-yes --force-yes libapache2-mod-proxy-http
+
+if [ "$domain" ] && [ -d /etc/bind ]; then
+
+echo "<VirtualHost *:443>
+	ServerName ntop.$domain
+        
+	DocumentRoot /var/www/
+	SSLEngine on
+	SSLCertificateFile	/etc/ssl/certs/ssl-cert-snakeoil.pem
+	SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:3000/
+	ProxyPassReverse /   http://127.0.0.1:3000/
+
+        RequestHeader set \"X-Forwarded-Proto\" \"https\"
+
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /etc/apache2/sites-available/ntop-ssl.conf
+chown root.root /etc/apache2/sites-available/ntop-ssl.conf
+chmod 644 /etc/apache2/sites-available/ntop-ssl.conf
+
+echo "<VirtualHost *:80>
+	ServerName ntop.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:3000/
+	ProxyPassReverse /   http://127.0.0.1:3000/
+
+        
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /etc/apache2/sites-available/ntop.conf
+chown root.root /etc/apache2/sites-available/ntop.conf
+chmod 644 /etc/apache2/sites-available/ntop.conf
+
+a2ensite ntop
+a2ensite ntop-ssl
+a2enmod rewrite
+a2enmod suexec
+a2enmod include
+a2enmod proxy
+a2enmod proxy_http
+a2enmod proxy_connect
+a2enmod proxy_ftp
+a2enmod headers
+a2enmod ssl
+
+NTOP_URL="http://ntop.$domain"
+echo "ntop    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+
+else
+NTOP_URL="<![CDATA[http://localhost:3000]]>"
+fi
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$NTOP_URL" "$NTOP_URL" 
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+echo "I: Install Ntop"
+INSTALL
+CREATE_WUI
+echo "I: End of install Ntop"

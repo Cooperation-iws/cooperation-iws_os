@@ -1,0 +1,174 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Addadminuser 0.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Multimedia streaming portal'
+RMOD_DESCRIPTION_FR='Portail de diffusion multimédia'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=False
+RMOD_VERBOSE="Ampache is a Web-based Audio file manager. It is implemented with MySQL, and PHP. It allows you to view, edit, and play your audio files via the web. It has support for playlists, artist and album views, album art, random play, playback via Http/On the Fly Transcoding and Downsampling, Vote based playback, Mpd and Icecast, Integrated Flash Player, as well as per user themes and song play tracking. You can also Link multiple Ampache servers togeather using XML-RPC. Ampache supports GETTEXT translations and has a full translation of many languages."
+RMOD_VERBOSE_FR="Ampache est un serveur de collections audio."
+
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+
+
+USER_NAME[1]=$LIVEUSER
+USER_FULLNAME[1]=$LIVEUSER
+USER_PWD[1]=$CLEAR_HOST_PWD
+USER_ADMIN[1]="y"
+USER_GROUP[1]="y"
+USER_NX[1]="n"
+
+
+
+
+NB_USER=1
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+
+touch /var/lib/live/config/user-setup
+touch /var/lib/live/config/sudo
+
+
+
+for (( count=1; count<=$NB_USER; count++ ))
+do
+
+USERNAME=${USER_NAME[$count]}
+PASSWORD=${USER_PWD[$count]}
+USERFULLNAME=${USER_FULLNAME[$count]}
+
+if  [ "${USER_ADMIN[$count]}" = "y" ]; then
+
+SUDO="Sudo"
+
+fi
+
+if  [ "${USER_GROUP[$count]}" = "y" ]; then
+
+GROUP="Group"
+
+fi
+
+if  [ "${USER_NX[$count]}" = "y" ]; then
+
+NX="Nx"
+
+fi
+
+
+#399 users limit (should be enough for a single system)
+#uid=$(expr 600 + $count)
+adduser --disabled-password --gecos "$USERFULLNAME" $USERNAME
+#usermod -u$uid $USERNAME
+#groupmod -g$uid $USERNAME
+
+
+echo "$USERNAME:$PASSWORD" | chpasswd
+
+if [ "$SUDO" = "Sudo" ]; then
+
+	LIVE_USERNAME=$USERNAME
+	export LIVE_USERNAME=$USERNAME
+
+	if grep -qs "^${LIVE_USERNAME}" /etc/sudoers.d/live
+		then
+			return
+		fi
+
+		echo "${LIVE_USERNAME} ALL=(ALL) ALL" >> /etc/sudoers.d/${LIVE_USERNAME}
+		chmod 0440 /etc/sudoers.d/${LIVE_USERNAME}
+
+		sudo -u "${LIVE_USERNAME}" sh -c "echo 'SU_TO_ROOT_SU=sudo' >> /home/${LIVE_USERNAME}/.su-to-rootrc"
+
+		if [ -x /usr/bin/gconftool-2 ]
+		then
+			sudo -u "${LIVE_USERNAME}" gconftool-2 -s -t bool /apps/gksu/sudo-mode true
+			sudo -u "${LIVE_USERNAME}" gconftool-2 -s -t bool /apps/gksu/display-no-pass-info false
+		fi
+
+		
+
+		if [ -e /usr/share/apps/konsole/sumc.desktop ]
+		then
+			sudo -u "${LIVE_USERNAME}" sh -c "umask 0077 && mkdir -p /home/${LIVE_USERNAME}/.kde/share/apps/konsole && sed -e's/Exec=su.*$/Exec=sudo mc -c/' /usr/share/apps/konsole/sumc.desktop > /home/${LIVE_USERNAME}/.kde/share/apps/konsole/sumc.desktop"
+		fi
+
+		if [ -e /usr/share/apps/konsole/su.desktop ]
+		then
+			sudo -u "${LIVE_USERNAME}" sh -c "umask 0077 && mkdir -p /home/${LIVE_USERNAME}/.kde/share/apps/konsole && sed -e's/Exec=su.*$/Exec=sudo -i/' /usr/share/apps/konsole/su.desktop > /home/${LIVE_USERNAME}/.kde/share/apps/konsole/su.desktop"
+		fi
+
+fi
+
+
+if [ "$GROUP" = "Group" ]; then
+
+group_list="cdrom floppy audio dip dialout fax video plugdev netdev bluetooth fuse"
+
+for group in $group_list
+do
+
+addgroup ${USERNAME} $group
+
+done
+fi
+
+if [ "$NX" = "Nx" ] && [ -e /usr/NX/bin/nxserver ] ; then
+
+(echo $PASSWORD; echo $PASSWORD) | /usr/NX/bin/nxserver --useradd ${USERNAME} --passwd --system --administrator
+
+fi
+done
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+for (( count=1; count<=$NB_USER; count++ ))
+do
+cd /tmp/
+#./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME[$count]}" "/${MOD_NAME[$count]}" 
+done
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Users"
+INSTALL
+CREATE_WUI
+echo "I: End of install Users"

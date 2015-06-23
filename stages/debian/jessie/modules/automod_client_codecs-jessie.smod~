@@ -1,0 +1,58 @@
+#!/bin/sh
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Client'
+RMOD_NAME='Codecs Jessie'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Ubuntu Multimedia Codecs'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+. /tmp/scripts_params
+
+. /tmp/app_params
+
+echo "I: install codec"
+
+apt-get install --assume-yes --force-yes firmware-linux
+
+#apt-get install --assume-yes --force-yes ttf-freefont ttf-mscorefonts-installer ttf-bitstream-vera ttf-dejavu ttf-liberation
+
+#apt-get install --assume-yes --force-yes pepperflashplugin-nonfree
+#apt-get install --assume-yes --force-yes flashplugin-nonfree
+
+#apt-get install --assume-yes --force-yes libavcodec-extra
+
+apt-get install --assume-yes --force-yes gstreamer0.10-plugins-ugly gstreamer0.10-plugins-bad gstreamer0.10-fluendo-mp3 gstreamer0.10-pulseaudio
+
+apt-get install --assume-yes --force-yes libgstreamer-perl libgstreamer-interfaces-perl
+
+#apt-get install --assume-yes --force-yes nvidia-kernel-dkms nvidia-settings nvidia-xconfig
+
+#apt-get install --assume-yes --force-yes fglrx-modules-dkms fglrx-control fglrx-glx fglrx-driver fglrx-atieventsd
+
+#apt-get install --assume-yes --force-yes fglrx-glx-ia32
+
+apt-get install --assume-yes --force-yes wireless-tools
+
+apt-get install --assume-yes --force-yes sshfs
+
+apt-get install --assume-yes --force-yes firmware-ralink firmware-realtek firmware-brcm80211 firmware-atheros firmware-libertas firmware-iwlwifi firmware-ti-connectivity firmware-adi firmware-ipw2x00
+
+
+if [ $(cat /etc/X11/default-display-manager | grep gdm) ]; then 
+#apt-get install --assume-yes --force-yes gnome-icon-theme* human-icon-theme* hplip gdm-themes brasero
+apt-get install --assume-yes --force-yes gnome-icon-theme* human-icon-theme* hplip brasero
+fi
+
+if [ $(cat /etc/X11/default-display-manager | grep kdm) ]; then 
+apt-get install --assume-yes --force-yes kdeartwork-theme-icon kdeartwork-theme-window hplip brasero
+fi
+
+
+#if [ -d /usr/share/xfce4 ]; then 
+
+#apt-get install --assume-yes --force-yes xfce4-artwork xfce4-goodies
+
+#fi

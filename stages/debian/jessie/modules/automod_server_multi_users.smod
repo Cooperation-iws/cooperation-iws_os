@@ -1,0 +1,272 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Multi-users 0.1'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Documentation'
+RMOD_DESCRIPTION_FR='Documentation'
+RMOD_VERBOSE="Browse and search manpages "
+RMOD_VERBOSE_FR="Rechercher et naviguer dans les pages de manuels"
+
+RMOD_RUN_IN_CHROOT=False
+
+
+
+. /tmp/scripts_params
+
+
+. /tmp/app_params
+
+
+
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo '#!/bin/bash
+##UPDATING USER
+mkdir /opt/ciws/etc/passwd.back
+mkdir  /opt/ciws/etc/passwd.back/$(date --rfc-3339 date)
+cp /opt/ciws/etc/passwd.tpl /opt/ciws/etc/passwd.back/$(date --rfc-3339 date)/passwd.$(date --rfc-3339 seconds | sed "s/ /_/")
+cp /opt/ciws/etc/shadow.tpl /opt/ciws/etc/passwd.back/$(date --rfc-3339 date)/shadow.$(date --rfc-3339 seconds | sed "s/ /_/")
+cp /opt/ciws/etc/group.tpl /opt/ciws/etc/passwd.back/$(date --rfc-3339 date)/group.$(date --rfc-3339 seconds | sed "s/ /_/")
+cp /opt/ciws/etc/gshadow.tpl /opt/ciws/etc/passwd.back/$(date --rfc-3339 date)/gshadow.$(date --rfc-3339 seconds | sed "s/ /_/")
+chmod -R 700 /opt/ciws/etc/passwd.back
+
+
+cp /opt/ciws/etc/passwd.tpl /opt/ciws/etc/passwd
+cp /opt/ciws/etc/shadow.tpl /opt/ciws/etc/shadow
+cp /opt/ciws/etc/group.tpl /opt/ciws/etc/group
+cp /opt/ciws/etc/gshadow.tpl /opt/ciws/etc/gshadow
+chmod 700 /opt/ciws/etc/passwd
+chmod 700 /opt/ciws/etc/shadow
+chmod 700 /opt/ciws/etc/group
+chmod 700 /opt/ciws/etc/gshadow
+
+
+
+#Adduser
+for row in $(sed "s/ //g" /opt/ciws/etc/passwd)
+do
+
+row_name=$(echo $row | cut -d":" -f1)
+row_gecos=$(echo $row | cut -d":" -f5)
+row_path=$(echo $row | cut -d":" -f6)
+row_shell=$(echo $row | cut -d":" -f7)
+row_passwd=$(cat /opt/ciws/etc/shadow | grep "$row_name:" | cut -d":" -f2)
+
+if [[ ! $(cat /etc/passwd | grep "$row_name:") ]]; then
+echo $row_name
+echo $row_gecos
+echo $row_path
+echo $row_shell
+echo $row_passwd
+adduser --home $row_path --shell $row_shell --no-create-home --force-badname --quiet --gecos "$row_gecos" --disabled-password $row_name
+echo "$row_name:$row_passwd" | chpasswd -e
+
+
+fi
+
+
+done
+
+#Addgroup
+
+for row in $(sed "s/ //g" /opt/ciws/etc/group)
+do
+
+row_name=$(echo $row | cut -d":" -f1)
+row_x=$(echo $row | cut -d":" -f2)
+row_gid=$(echo $row | cut -d":" -f3)
+row_passwd=$(cat /opt/ciws/etc/gshadow | grep "$row_name:" | cut -d":" -f2)
+
+if [[ ! $(cat /etc/group | grep "$row_name:") ]]; then
+echo $row_name
+echo $row_x
+echo $row_gid
+echo $row_passwd
+addgroup -gid $row_gid $row_name
+fi
+
+
+done
+
+
+#Add user to group
+
+for row in $(sed "s/ //g" /opt/ciws/etc/passwd)
+do
+
+row_name=$(echo $row | cut -d":" -f1)
+row_path=$(echo $row | cut -d":" -f6)
+row_shell=$(echo $row | cut -d":" -f7)
+row_passwd=$(cat /opt/ciws/etc/shadow | grep "$row_name:" | cut -d":" -f2)
+
+
+
+for row_g in $(cat /opt/ciws/etc/group | grep $row_name)
+do
+group_name=$(echo $row_g | cut -d":" -f1)
+
+echo $row_name
+echo $group_name
+
+if [[ $(cat /opt/ciws/etc/group | grep "$group_name:" | grep "[:,]$row_name") ]] && [[ ! $(cat /etc/group | grep "$group_name:" | grep "[:,]$row_name") ]]; then
+echo "Adding group"
+addgroup $row_name $group_name 
+fi
+
+done
+
+
+
+
+
+done
+
+#Sudoers
+
+
+
+' > /opt/ciws/etc/user_creation.sh
+chmod +x /opt/ciws/etc/user_creation.sh
+
+echo "#!/bin/bash
+
+Users_setup ()
+{
+
+echo -n \" multi-user-setup\"
+
+/opt/ciws/etc/user_creation.sh > /dev/null 2>&1
+}
+
+Users_setup
+" >> /lib/live/config/003-multi-users-setup
+chmod +x /lib/live/config/003-multi-users-setup
+
+
+
+echo "
+cp /etc/passwd /opt/ciws/etc/passwd.tpl
+cp /etc/shadow /opt/ciws/etc/shadow.tpl
+cp /etc/group /opt/ciws/etc/group.tpl
+cp /etc/gshadow /opt/ciws/etc/gshadow.tpl
+
+chmod 700 /opt/ciws/etc/passwd.tpl
+chmod 700 /opt/ciws/etc/shadow.tpl
+chmod 700 /opt/ciws/etc/group.tpl
+chmod 700 /opt/ciws/etc/gshadow.tpl
+
+"> /opt/ciws/etc/cron_user.sh
+
+chmod +x /opt/ciws/etc/cron_user.sh
+
+echo "*/1 * * * * root /opt/ciws/etc/cron_user.sh" > /etc/cron.d/multiusers
+chmod +x /etc/cron.d/multiusers
+
+mv /etc/sudoers.d $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/sudoers.d /etc/sudoers.d
+
+
+echo "#!/bin/bash
+
+
+if [ \"\$1\" = \"\" ]; then
+
+echo \"Usage: sudo ./opt/ciws/usr/share/user_creation.sh \\\"Your_user_name\\\" \\\"Your_user_password\\\" \\\"Your_user_fullname\\\" \\\"Sudo\\\" \\\"Group\\\" \\\"Nx\\\" \"
+
+exit 0
+
+fi
+
+USERNAME=\$1
+PASSWORD=\$2
+USERFULLNAME=\$3
+SUDO=\$4
+GROUP=\$5
+NX=\$6
+adduser --disabled-password --gecos \"\$USERFULLNAME\" \$USERNAME
+echo \"\$USERNAME:\$PASSWORD\" | chpasswd
+
+if [ \"\$SUDO\" = \"Sudo\" ]; then
+
+	LIVE_USERNAME=\$USERNAME
+	export LIVE_USERNAME=\$USERNAME
+
+	if grep -qs \"^\${LIVE_USERNAME}\" /etc/sudoers.d/live
+		then
+			return
+		fi
+
+		echo \"\${LIVE_USERNAME} ALL=(ALL) ALL\" >> /etc/sudoers.d/\${LIVE_USERNAME}
+		chmod 0440 /etc/sudoers.d/\${LIVE_USERNAME}
+
+		sudo -u \"\${LIVE_USERNAME}\" sh -c \"echo 'SU_TO_ROOT_SU=sudo' >> /home/\${LIVE_USERNAME}/.su-to-rootrc\"
+
+		if [ -x /usr/bin/gconftool-2 ]
+		then
+			sudo -u \"\${LIVE_USERNAME}\" gconftool-2 -s -t bool /apps/gksu/sudo-mode true
+			sudo -u \"\${LIVE_USERNAME}\" gconftool-2 -s -t bool /apps/gksu/display-no-pass-info false
+		fi
+
+		
+
+		if [ -e /usr/share/apps/konsole/sumc.desktop ]
+		then
+			sudo -u \"\${LIVE_USERNAME}\" sh -c \"umask 0077 && mkdir -p /home/\${LIVE_USERNAME}/.kde/share/apps/konsole && sed -e's/Exec=su.*$/Exec=sudo mc -c/' /usr/share/apps/konsole/sumc.desktop > /home/\${LIVE_USERNAME}/.kde/share/apps/konsole/sumc.desktop\"
+		fi
+
+		if [ -e /usr/share/apps/konsole/su.desktop ]
+		then
+			sudo -u \"\${LIVE_USERNAME}\" sh -c \"umask 0077 && mkdir -p /home/\${LIVE_USERNAME}/.kde/share/apps/konsole && sed -e's/Exec=su.*$/Exec=sudo -i/' /usr/share/apps/konsole/su.desktop > /home/\${LIVE_USERNAME}/.kde/share/apps/konsole/su.desktop\"
+		fi
+
+fi
+
+
+if [ \"\$GROUP\" = \"Group\" ]; then
+
+group_list=\"cdrom floppy audio dip dialout fax video plugdev netdev bluetooth fuse\"
+
+for group in \$group_list
+do
+
+addgroup \${USERNAME} \$group
+
+done
+fi
+
+if [ \"\$NX\" = \"Nx\" ] && [ -e /usr/NX/bin/nxserver ] ; then
+
+(echo \$PASSWORD; echo \$PASSWORD) | /usr/NX/bin/nxserver --useradd \${USERNAME} --passwd --system --administrator
+
+fi
+
+" > /opt/ciws/usr/share/add_user.sh
+
+chmod +x /opt/ciws/usr/share/add_user.sh
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+
+
+
+
+echo "I: Install n2n"
+INSTALL
+
+echo "I: End of install n2n"
