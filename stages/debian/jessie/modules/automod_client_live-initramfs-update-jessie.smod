@@ -188,18 +188,21 @@ sed -i "129s/^/Debug_display/" /lib/live/boot/9990-main.sh
 
 if [ "$ENCRYPTION" == "luks" ]; then
 
-sed -i "1020s/^/ echo \"DEBUGfind_persistence_media31:\${overlays}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "1022s/^/ echo \"DEBUGfind_persistence_media31:\${overlays}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
 
-sed -i "1075s/^/ echo \"DEBUGencrypt:\${PERSISTENCE_ENCRYPTION}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "1082s/^/ echo \"DEBUGencrypt:\${PERSISTENCE_ENCRYPTION}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
 sed -i "1083G" /lib/live/boot/9990-misc-helpers.sh
 sed -i "1084s/^/ echo \"DEBUGencrypt2:\${loopdevice}\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
 sed -i "389s/^/ echo  \"DEBUGstorage_devices2:\${fulldevname}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
 sed -i "401s/^/ echo \"DEBUGstorage_devices3:\${devname}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
 
-sed -i "1037s/^/ echo  \"DEBUGstorage_devices4:\${dev}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
+sed -i "1039s/^/ echo  \"DEBUGstorage_devices4:\${dev}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-misc-helpers.sh
 sed -i "215s/^/ echo \"DEBUGfind_persistence_media3:\${overlays}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-overlay.sh
 sed -i "223s/^/ echo \"DEBUGfind_persistence_media4:\${media}:\" >> \/tmp\/DEBUG_live_boot/" /lib/live/boot/9990-overlay.sh
 #sed -i "831s/^/ echo \"\/sbin\/cryptsetup -T 1 luksOpen \${dev} \${name} \${opts}\" /" /lib/live/boot/9990-misc-helpers.sh
+
+
+
 
 else
 

@@ -42,7 +42,7 @@ cd $DL_DIR
 function INSTALL
 {
 
-apt-get install --assume-yes --force-yes roundcube-mysql roundcube-plugins roundcube-plugins-extra
+apt-get install --assume-yes --force-yes roundcube-mysql roundcube-plugins
 
 sed -i "3s/#//" /etc/apache2/conf-available/roundcube.conf
 sed -i "4s/#//" /etc/apache2/conf-available/roundcube.conf

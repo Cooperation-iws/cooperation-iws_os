@@ -6,7 +6,7 @@ gen_login_pwd="cooperation"
 apache_admin_pwd="$gen_login_pwd"
 mysql_root_password="mysql_root"
 mysql_generic_pwd="mysql_pwd"
-domain="testjessie5.intra"
+domain="dev-portable-1.intra"
 #domain="testsqueeze-2.intra"
 keep_local_apt_parameters="y"
 #kernel jessie upgrade
@@ -23,7 +23,7 @@ console_mode="n"
 #NX Client Jessie
 #Openssh server 0.2
 #W#inswitch Jessie
-#Munin Jessie
+#M#unin Jessie
 munin_password=$gen_login_pwd
 #T#rac Subversion jessie
 svn_name[1]="Project_1"
@@ -45,9 +45,9 @@ hostapd="y"
 AP_interface=$gateway_local_iface
 AP_ssid="test78"
 AP_wpa_passphrase="0123456789"
-#Ntopng Jessie
+#N#topng Jessie
 ntop_pwd="$gen_login_pwd"
-#Ossec standalone 2.8.1
+#O#ssec standalone 2.8.1
 #P#ostfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Jessie
 postfixadmin_name="Mail_1"
 mail_domain="$domain"
@@ -59,8 +59,8 @@ postfix_relay_authentication_name=""
 postfix_relay_authentication_password=""
 mailbox_quota="0"
 #R#oundcube 0.5.6
-#Mysql 5.0
-#Phpmyadmin Jessie
+#M#ysql 5.0
+#P#hpmyadmin Jessie
 #F#reeradius
 #D#olibarr 3.5
 dolibarr_mysql_pwd="$mysql_generic_pwd"
@@ -68,20 +68,20 @@ dolibarr_mysql_user="dolibarr_1"
 #Devclient 0.2
 #Codecs Jessie
 #Vlc 0.1
-#M#ixxx Jessie
+#Mixxx Jessie
 #Gimp Jessie
 #Flashplayer Jessie
 #Kvm Jessie
-#Ciwscms 0.9.2
-#Ciwsdownloadserver 0.5.2
+#C#iwscms 0.9.2
+#C#iwsdownloadserver 0.5.2
 download_server_name[1]="DL"
 download_server_folder[1]="/opt/ciws/server/download"
 download_server_name[2]="DL2"
 download_server_folder[2]="/opt/ciws/server/download2"
-download_server_name[3]="DL3"
-download_server_folder[3]="/opt/ciws/server/download3"
-download_server_name[4]="DL4"
-download_server_folder[4]="/opt/ciws/server/download4"
+#download_server_name[3]="DL3"
+#download_server_folder[3]="/opt/ciws/server/download3"
+#download_server_name[4]="DL4"
+#download_server_folder[4]="/opt/ciws/server/download4"
 #A#dduser 0.1
 user_name[1]="ciwsuser"
 user_fullname[1]="ciwsuser"
@@ -97,3 +97,5 @@ share_server_user[1]="esmalif"
 share_server_pwd[1]="Lokkir11"
 share_server_path[1]="/home/esmalif/Documents"
 #H#ordegroupware jessie
+#NX server 0.2
+#Ntpdate 4.2.6

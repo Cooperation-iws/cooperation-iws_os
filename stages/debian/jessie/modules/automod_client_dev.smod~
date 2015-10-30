@@ -3,7 +3,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Client'
-RMOD_NAME='Devclient 0.1'
+RMOD_NAME='Devclient 0.2'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Multimedia softs for client'
@@ -16,4 +16,6 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 echo "I: install Devclient"
 apt-get install --assume-yes --force-yes subversion bzr darcs mercurial cvs git 
+
+apt-get install --assume-yes --force-yes squashfs-tools
 

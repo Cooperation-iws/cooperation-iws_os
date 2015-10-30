@@ -27,6 +27,8 @@ import gettext
 import re
 import commands
 import urllib
+import codecs
+
 try:
      import pygtk
      pygtk.require("2.0")
@@ -49,7 +51,7 @@ class Cooperationiws:
     def __init__(self):
         # vars
  	self.appName = "Cooperation-iws"
-        self.appVersion = "1.1.2"
+        self.appVersion = "1.3.1"
         self.scriptDir = os.getcwd() + '/stages/'
 	self.xmlDir = os.getcwd() + '/xml/'
 	self.phpDir = os.getcwd() + '/lib/php/'
@@ -105,6 +107,7 @@ class Cooperationiws:
         APPDOMAIN='cooperationiws'
         LANGDIR='lang'
         # locale
+	sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
         locale.setlocale(locale.LC_ALL, '')
         gettext.bindtextdomain(APPDOMAIN, LANGDIR)
         gettext.textdomain(APPDOMAIN)

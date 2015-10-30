@@ -300,6 +300,14 @@ ln -s $LAMPP_DIRECTORY/etc/postfixadmin /etc/postfixadmin
 ln -s /etc/postfixadmin/apache.conf /etc/apache2/conf-available/postfixadmin.conf
 a2enconf postfixadmin
 
+sed -i "s/admin.local@testjessie3.intra/admin.local@$mail_domain/g" postfixadmin_2.92-1.sql 
+
+sed -i "s/testjessie3.intra/$mail_domain/g" postfixadmin_2.92-1.sql 
+sed -i 's/$1$2f782e9c$DQNnOystS686S9V9ISxr5\//$1$12da931a$gLUWsw5RbucAXutgoLqZb1/g' postfixadmin_2.92-1.sql 
+sed -i 's/$1$5580d22a$9YZK7Q3VdUYT3Fcm0kGq21/$1$b77ac038$8VY9Ui.ebfy9o.AeKqm\/U./g' postfixadmin_2.92-1.sql 
+
+
+
 $BIN_MYSQL -u root < postfixadmin_2.92-1.sql mysql
 
 cat << EOT > MAILSERVER_db.sql

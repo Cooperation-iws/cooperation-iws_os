@@ -28,9 +28,6 @@ function INSTALL()
 {
 
 apt-get install --assume-yes --force-yes lighttpd php5-cgi
-/etc/init.d/lighttpd stop
-
-killall lighttpd
 
 
 

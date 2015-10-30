@@ -15,5 +15,8 @@ RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
 
 
 echo "I: install Devclient"
+
 apt-get install --assume-yes --force-yes subversion bzr darcs mercurial cvs git 
+
+apt-get install --assume-yes --force-yes squashfs-tools
 

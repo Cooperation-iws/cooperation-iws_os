@@ -85,7 +85,7 @@ kernel="$(cat /tmp/kernel)"
 fi
 echo "building kernel $kernel"
 
-update-initramfs -k all -t -u
+/usr/sbin/update-initramfs.orig.initramfs-tools -k all -t -c
 rm /initrd.img
 ln -s /boot/initrd.img-$kernel /initrd.img
 rm /vmlinuz

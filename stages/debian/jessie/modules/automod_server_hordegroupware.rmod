@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Hordegroupware jessie'
+RMOD_NAME='Hordegroupware Jessie'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Groupware management'
@@ -24,7 +24,23 @@ RMOD_REQ_APACHE=True
 . /tmp/app_params
 
 
-NTOP_PWD=$ntop_pwd
+HORDE_MYSQL_PWD=$horde_mysql_pwd
+NOM_HORDE=$horde_name
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_CIWS_DEPOT______________________________________
+
+function WGET_CIWS_DEPOT
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/horde-151025.tar.gz
+wget $URL_CIWS_DEPOT/horde-151025.sql
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_CIWS_DEPOT__________________________________
 
 
 
@@ -34,12 +50,32 @@ NTOP_PWD=$ntop_pwd
 
 function INSTALL
 {
+WGET_CIWS_DEPOT
+cd $DL_DIR
 
+cat << EOT > HORDE_db.sql
+CREATE DATABASE horde;
+EOT
 
-apt-get install --assume-yes --force-yes php-horde-groupware 
+$BIN_MYSQL -u root < HORDE_db.sql mysql
 
+$BIN_MYSQL -u root < horde-151025.sql horde
 
+cat << EOT > HORDE_db.sql
+GRANT ALL PRIVILEGES ON horde.* TO $NOM_HORDE@'localhost' IDENTIFIED BY '$HORDE_MYSQL_PWD';
+EOT
 
+$BIN_MYSQL -u root < HORDE_db.sql mysql
+
+apt-get install --assume-yes --force-yes php-horde-webmail 
+apt-get install --assume-yes --force-yes php-horde-javascriptminify-jsmin php-horde-text-filter-jsmin phpunit-dbunit phpunit-selenium 
+
+mv /etc/horde $LAMPP_DIRECTORY/etc/
+
+ln -s $LAMPP_DIRECTORY/etc/horde /etc/horde
+
+cd $DL_DIR
+tar -xzf horde-151025.tar.gz -c /etc/horde
 
 }
 
@@ -52,7 +88,7 @@ apt-get install --assume-yes --force-yes php-horde-groupware
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$NTOP_URL" "$NTOP_URL" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/horde" "/horde" 
 
 }
 #_______________________________________________________________________________________________
