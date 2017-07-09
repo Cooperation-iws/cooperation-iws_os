@@ -5380,4 +5380,1346 @@ Dotclear is a free software primarily designed for its users and regularly impro
 	
 	
 </item>
+
+<item>
+	<item_name>Codecs</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Multimedia Codec for Audio and Video</item_desc>
+	<item_web></item_web>
+	<item_verbose>Debian Multimedia Codecs make audio and video content browsing and editing in various open source and propriatary formats. They are usually necessary to have a full use of the operating system but it could be illegal in some countries due to patent software restrictions.</item_verbose>
+	<item_type>Client</item_type>
+	<item_license>GPLv2, EUAL_MS, unrar_license</item_license>
+	<item_category>Multimedia</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+
+<app_instance>	<param>	
+		<field_1_name></field_1_name>
+		<field_1_id></field_1_id>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+</app_instance>	
+</item>
+<item>
+	<item_name>The Gimp</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Image manipulation program</item_desc>
+	<item_web>http://www.gimp.org/</item_web>
+	<item_verbose>GIMP (GNU Image Manipulation Program) is a free software raster graphics editor. GIMPs developers product vision sees GIMP as a high end program for the editing and creation of Original Images, icons, graphical elements of web pages and art for user interface elements. The developers of Gimp also aim for GIMP to be a platform for the development of cutting edge scientific image processing algorithms.</item_verbose>
+	<item_type>Client</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Graphics</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+<app_instance>
+	<param>	
+		<field_1_name></field_1_name>
+		<field_1_id></field_1_id>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+</app_instance>	
+</item>
+<item>
+	<item_name>Mixxx</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Dj'ing</item_desc>
+	<item_web>http://www.mixxx.org/</item_web>
+	<item_verbose>Mixxx is open source digital DJ’ing software that allows an individual to mix music together using a personal computer, as a DJ would with a pair of physical turntables. This module install Hercules Dj Control consoles drivers as well.</item_verbose>
+	<item_type>Client</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Multimedia</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+<app_instance>
+	<param>	
+		<field_1_name></field_1_name>
+		<field_1_id></field_1_id>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+</app_instance>	
+</item>
+<item>
+	<item_name>Devclient</item_name>
+	<item_version>0.2</item_version>
+	<item_desc>Development client</item_desc>
+	<item_web></item_web>
+	<item_verbose>Development client (subversion, git, mercurial, bzr, dacs, cvs)</item_verbose>
+	<item_type>Client</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+
+<app_instance>	<param>	
+		<field_1_name></field_1_name>
+		<field_1_id></field_1_id>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+</app_instance>	
+</item>
+<item>
+	<item_name>Trac Subversion</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Data management</item_desc>
+	<item_web>http://trac.edgewall.org/</item_web>
+	<item_verbose>Trac is an enhanced wiki and issue tracking system for software development projects. Trac uses a minimalistic approach to web-based software project management. Our mission is to help developers write great software while staying out of the way. Trac should impose as little as possible on a team's established development process and policies.
+
+It provides an interface to Subversion, an integrated Wiki and convenient reporting facilities.
+
+Trac allows wiki markup in issue descriptions and commit messages, creating links and seamless references between bugs, tasks, changesets, files and wiki pages. A timeline shows all current and past project events in order, making the acquisition of an overview of the project and tracking progress very easy. The roadmap shows the road ahead, listing the upcoming milestones.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>BSD</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>Default admin password</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_name>Subversion project name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>svn_name</field_1_value>
+		<field_1_def_content>Project</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>svn_admin_pwd</field_1_id>
+		<field_1_name>Subversion default admin password</field_1_name>
+		<field_1_value>svn_admin_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>svn_anonymous_pwd</field_1_id>
+		<field_1_name>Subversion default anonymous password</field_1_name>
+		<field_1_value>svn_anonymous_pwd</field_1_value>
+		<field_1_def_content>anonymous</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>trac_admin_pwd</field_1_id>
+		<field_1_name>Trac default admin password</field_1_name>
+		<field_1_value>trac_admin_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>DNS server</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Domain Name Server</item_desc>
+	<item_web>https://www.isc.org/software/bind</item_web>
+	<item_verbose>BIND (pronounced /bʌɪnd/), for Berkeley Internet Name Domain, or named (pronounced /ˈneɪmˌdiː/), is the most commonly used DNS server on the Internet, especially on Unix-like systems, where it is a de facto standard. Supported by Internet Systems Consortium, BIND was originally created by four graduate students with CSRG at the University of California, Berkeley and first released with 4.3BSD. Paul Vixie started maintaining it in 1988 while working for DEC.The development of BIND 9 was done with a combination of commercial and military contracts. Most of the features of BIND 9 were funded by UNIX vendors who wanted to ensure that BIND stayed competitive with Microsoft's DNS offerings; the DNSSEC features were funded by the US military who felt that DNS security was important.</item_verbose>
+	<item_type>DNS server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Networking</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>Gateway DNS</field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		
+	</param>
+	
+
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Dolibarr</item_name>
+	<item_version>3.5</item_version>
+	<item_desc>ERP</item_desc>
+	<item_web>http://www.dolibarr.fr/</item_web>
+	<item_verbose>Dolibarr est un PGI/GRC (Progiciel de gestion intégré/Gestion de la relation client) destiné aux petites et moyennes entreprises.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>AGPL</item_license>
+	<item_category>ERP</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include>Mysql Jessie</field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+<app_instance>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>dolibarr_name</field_1_value>
+		<field_1_def_content>Dolibarr</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>dolibarr_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>dolibarr_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	</app_instance>
+</item>
+<item>
+	<item_name>Gateway DNS</item_name>
+	<item_version>1.5.x</item_version>
+	<item_desc>Firewall / Gateway All Features</item_desc>
+	<item_web>http://www.cooperation-iws.org/</item_web>
+	<item_verbose>This version of the Gateway offer all complete features (AP,multi ISP, bridge).</item_verbose>
+	<item_type>Gateway server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Networking</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>DNS server Squeeze</field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_id>gateway_nb_machine</field_1_id>
+		<field_1_name>Quantity of machines for the LAN</field_1_name>
+		<field_1_value>gateway_nb_machine</field_1_value>
+		<field_1_def_content>10</field_1_def_content>
+		<field_1_content_check>[^0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_net_iface</field_1_id>
+		<field_1_name>External Network Interface (connected to the net)</field_1_name>
+		<field_1_value>gateway_net_iface</field_1_value>
+		<field_1_def_content>eth0</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_local_iface</field_1_id>
+		<field_1_name>Internal Network Interface (connected to the lan)</field_1_name>
+		<field_1_value>gateway_local_iface</field_1_value>
+		<field_1_def_content>eth1</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>range</field_1_id>
+		<field_1_name>Internal Subnet Declaration Range [0-254]</field_1_name>
+		<field_1_value>range</field_1_value>
+		<field_1_def_content>020</field_1_def_content>
+		<field_1_content_check>M((^2[0-4]{1}[0-9]{1})|(^25[0-4]{1})|(^1[0-9]{1}[0-9]{1})|(^0[0-9]{1}[0-9]{1}))</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_recursion</field_1_id>
+		<field_1_name>Disable recursion (no internet connection)</field_1_name>
+		<field_1_value>gateway_recursion</field_1_value>
+		<field_1_def_content>off</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_local_bridge</field_1_id>
+		<field_1_name>Enable multiple network cards for local network</field_1_name>
+		<field_1_value>gateway_local_bridge</field_1_value>
+		<field_1_def_content>off</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_local_iface_2</field_1_id>
+		<field_1_name>Internal Network Interface (connected to the lan) number 2 for the bridge</field_1_name>
+		<field_1_value>gateway_local_iface_2</field_1_value>
+		<field_1_def_content>eth3</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_multiple_isp</field_1_id>
+		<field_1_name>Enable multiple isp (Internet Service Providers) for internet network</field_1_name>
+		<field_1_value>gateway_multiple_isp</field_1_value>
+		<field_1_def_content>off</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_net_iface_2</field_1_id>
+		<field_1_name>External Network Interface (connected to the net) number 2 for the other isp</field_1_name>
+		<field_1_value>gateway_net_iface_2</field_1_value>
+		<field_1_def_content>eth2</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>hostapd</field_1_id>
+		<field_1_name>Enable wifi AP mode for the local interface</field_1_name>
+		<field_1_value>hostapd</field_1_value>
+		<field_1_def_content>off</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>AP_interface</field_1_id>
+		<field_1_name>Wifi Internal Network Interface (connected to the lan)</field_1_name>
+		<field_1_value>AP_interface</field_1_value>
+		<field_1_def_content>$gateway_local_iface</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>AP_ssid</field_1_id>
+		<field_1_name>SSID to broadcast for the wifi lan</field_1_name>
+		<field_1_value>AP_ssid</field_1_value>
+		<field_1_def_content>test</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>AP_wpa_passphrase</field_1_id>
+		<field_1_name>AP passphrase for the wifi lan</field_1_name>
+		<field_1_value>AP_wpa_passphrase</field_1_value>
+		<field_1_def_content>1234567890</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	</app_instance>
+	
+</item>
+
+<item>
+	<item_name>Gateway DNS</item_name>
+	<item_version>1.5.x</item_version>
+	<item_desc>Firewall / Gateway Multi ISP</item_desc>
+	<item_web>http://www.cooperation-iws.org/</item_web>
+	<item_verbose>This version of the Gateway offer all multi ISP feature.</item_verbose>
+	<item_type>Gateway server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Networking</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>DNS server Squeeze</field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_id>gateway_nb_machine</field_1_id>
+		<field_1_name>Quantity of machines for the LAN</field_1_name>
+		<field_1_value>gateway_nb_machine</field_1_value>
+		<field_1_def_content>10</field_1_def_content>
+		<field_1_content_check>[^0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_net_iface</field_1_id>
+		<field_1_name>External Network Interface (connected to the net)</field_1_name>
+		<field_1_value>gateway_net_iface</field_1_value>
+		<field_1_def_content>eth0</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_local_iface</field_1_id>
+		<field_1_name>Internal Network Interface (connected to the lan)</field_1_name>
+		<field_1_value>gateway_local_iface</field_1_value>
+		<field_1_def_content>eth1</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>range</field_1_id>
+		<field_1_name>Internal Subnet Declaration Range [0-254]</field_1_name>
+		<field_1_value>range</field_1_value>
+		<field_1_def_content>020</field_1_def_content>
+		<field_1_content_check>M((^2[0-4]{1}[0-9]{1})|(^25[0-4]{1})|(^1[0-9]{1}[0-9]{1})|(^0[0-9]{1}[0-9]{1}))</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_recursion</field_1_id>
+		<field_1_name>Disable recursion (no internet connection)</field_1_name>
+		<field_1_value>gateway_recursion</field_1_value>
+		<field_1_def_content>off</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	
+	<param>	
+		<field_1_id>gateway_multiple_isp</field_1_id>
+		<field_1_name>Enable multiple isp (Internet Service Providers) for internet network</field_1_name>
+		<field_1_value>gateway_multiple_isp</field_1_value>
+		<field_1_def_content>off</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_net_iface_2</field_1_id>
+		<field_1_name>External Network Interface (connected to the net) number 2 for the other isp</field_1_name>
+		<field_1_value>gateway_net_iface_2</field_1_value>
+		<field_1_def_content>eth2</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	
+	</app_instance>
+	
+</item>
+
+<item>
+	<item_name>Gateway DNS</item_name>
+	<item_version>1.5.x</item_version>
+	<item_desc>Firewall / Gateway Local Bridge</item_desc>
+	<item_web>http://www.cooperation-iws.org/</item_web>
+	<item_verbose>This version of the Gateway offer local network bridge feature.</item_verbose>
+	<item_type>Gateway server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Networking</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>DNS server Squeeze</field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_id>gateway_nb_machine</field_1_id>
+		<field_1_name>Quantity of machines for the LAN</field_1_name>
+		<field_1_value>gateway_nb_machine</field_1_value>
+		<field_1_def_content>10</field_1_def_content>
+		<field_1_content_check>[^0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_net_iface</field_1_id>
+		<field_1_name>External Network Interface (connected to the net)</field_1_name>
+		<field_1_value>gateway_net_iface</field_1_value>
+		<field_1_def_content>eth0</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_local_iface</field_1_id>
+		<field_1_name>Internal Network Interface (connected to the lan)</field_1_name>
+		<field_1_value>gateway_local_iface</field_1_value>
+		<field_1_def_content>eth1</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>range</field_1_id>
+		<field_1_name>Internal Subnet Declaration Range [0-254]</field_1_name>
+		<field_1_value>range</field_1_value>
+		<field_1_def_content>020</field_1_def_content>
+		<field_1_content_check>M((^2[0-4]{1}[0-9]{1})|(^25[0-4]{1})|(^1[0-9]{1}[0-9]{1})|(^0[0-9]{1}[0-9]{1}))</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_recursion</field_1_id>
+		<field_1_name>Disable recursion (no internet connection)</field_1_name>
+		<field_1_value>gateway_recursion</field_1_value>
+		<field_1_def_content>off</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_local_bridge</field_1_id>
+		<field_1_name>Enable multiple network cards for local network</field_1_name>
+		<field_1_value>gateway_local_bridge</field_1_value>
+		<field_1_def_content>off</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_local_iface_2</field_1_id>
+		<field_1_name>Internal Network Interface (connected to the lan) number 2 for the bridge</field_1_name>
+		<field_1_value>gateway_local_iface_2</field_1_value>
+		<field_1_def_content>eth3</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Gateway DNS</item_name>
+	<item_version>1.5.x</item_version>
+	<item_desc>Firewall / Gateway AP Wifi </item_desc>
+	<item_web>http://www.cooperation-iws.org/</item_web>
+	<item_verbose>This version of the Gateway offer a wifi connection for the LAN</item_verbose>
+	<item_type>Gateway server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Networking</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>DNS server Squeeze</field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_id>gateway_nb_machine</field_1_id>
+		<field_1_name>Quantity of machines for the LAN</field_1_name>
+		<field_1_value>gateway_nb_machine</field_1_value>
+		<field_1_def_content>10</field_1_def_content>
+		<field_1_content_check>[^0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_net_iface</field_1_id>
+		<field_1_name>External Network Interface (connected to the net)</field_1_name>
+		<field_1_value>gateway_net_iface</field_1_value>
+		<field_1_def_content>eth0</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_local_iface</field_1_id>
+		<field_1_name>Internal Network Interface (connected to the lan)</field_1_name>
+		<field_1_value>gateway_local_iface</field_1_value>
+		<field_1_def_content>wlan0</field_1_def_content>
+		<field_1_content_check>[^a-z0-9]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>range</field_1_id>
+		<field_1_name>Internal Subnet Declaration Range [0-254]</field_1_name>
+		<field_1_value>range</field_1_value>
+		<field_1_def_content>020</field_1_def_content>
+		<field_1_content_check>M((^2[0-4]{1}[0-9]{1})|(^25[0-4]{1})|(^1[0-9]{1}[0-9]{1})|(^0[0-9]{1}[0-9]{1}))</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>gateway_recursion</field_1_id>
+		<field_1_name>Disable recursion (no internet connection)</field_1_name>
+		<field_1_value>gateway_recursion</field_1_value>
+		<field_1_def_content>off</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	
+	<param>	
+		<field_1_id>hostapd</field_1_id>
+		<field_1_name>Enable wifi AP mode for the local interface</field_1_name>
+		<field_1_value>hostapd</field_1_value>
+		<field_1_def_content>checked</field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>AP_interface</field_1_id>
+		<field_1_name>Wifi Internal Network Interface (connected to the lan)</field_1_name>
+		<field_1_value>AP_interface</field_1_value>
+		<field_1_def_content>$gateway_local_iface</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>AP_ssid</field_1_id>
+		<field_1_name>SSID to broadcast for the wifi lan</field_1_name>
+		<field_1_value>AP_ssid</field_1_value>
+		<field_1_def_content>test</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>AP_wpa_passphrase</field_1_id>
+		<field_1_name>AP passphrase for the wifi lan</field_1_name>
+		<field_1_value>AP_wpa_passphrase</field_1_value>
+		<field_1_def_content>1234567890</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Kvm</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Virtualization software</item_desc>
+	<item_web></item_web>
+	<item_verbose></item_verbose>
+	<item_type>Client</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Virtualization</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_name></field_1_name>
+		<field_1_id></field_1_id>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Emails server</item_desc>
+	<item_web>http://postfixadmin.sourceforge.net/</item_web>
+	<item_verbose>Email solution for administration purpose or standalone server.</item_verbose>
+	<item_type>Emails server, Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Emails</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>Default admin email</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include>Mysql Jessie</field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>postfixadmin_name</field_1_value>
+		<field_1_def_content>Mail</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>mail_domain</field_1_id>
+		<field_1_name>Mail domain</field_1_name>
+		<field_1_value>mail_domain</field_1_value>
+		<field_1_def_content>$domain</field_1_def_content>
+		<field_1_content_check>[^a-z0-9$_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>postfix_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>postfixadmin_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>public_mail</field_1_id>
+		<field_1_name>Public email</field_1_name>
+		<field_1_value>public_mail</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>checkbox</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>smtp_relay</field_1_id>
+		<field_1_name>Smtp Relay</field_1_name>
+		<field_1_value>smtp_relay</field_1_value>
+		<field_1_def_content>my.smtp.my-extension</field_1_def_content>
+		<field_1_content_check>[^a-z0-9$_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_name>External smtp authentication login</field_1_name>
+		<field_1_id>postfix_relay_authentication_name</field_1_id>
+		<field_1_value>postfix_relay_authentication_name</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_name>External smtp authentication password</field_1_name>
+		<field_1_id>postfix_relay_authentication_password</field_1_id>
+		<field_1_value>postfix_relay_authentication_password</field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check>[^a-z0-9_.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>mailbox_quota</field_1_id>
+		<field_1_name>Mailbox quota (Mb, 0 for unlimited)</field_1_name>
+		<field_1_value>mailbox_quota</field_1_value>
+		<field_1_def_content>0</field_1_def_content>
+		<field_1_content_check>[^0-9]+</field_1_content_check>
+	</param>
+	
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Munin</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Network monitoring</item_desc>
+	<item_web>http://munin-monitoring.org/</item_web>
+	<item_verbose>Munin is a system monitoring solution.</item_verbose>
+	<item_type>Web server</item_type>
+        <item_license>GPLv2</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+	<field_include></field_include>
+	<field_OS>Jessie_686,Jessie_64</field_OS>
+<app_instance>
+	
+	<param>	
+		<field_1_name>Default password</field_1_name>
+		<field_1_id>munin_password</field_1_id>
+		<field_1_value>munin_password</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+</app_instance>
+	
+</item>
+<item>
+	<item_name>Ntopng</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Network sensor</item_desc>
+	<item_web>http://www.ntop.org/</item_web>
+	<item_verbose>Ntop is a network sensor.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Monitoring</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_name>Default password</field_1_name>
+		<field_1_id>ntop_pwd</field_1_id>
+		<field_1_value>ntop_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id></field_1_id>
+		<field_1_name></field_1_name>
+		<field_1_value></field_1_value>
+		<field_1_def_content></field_1_def_content>
+		<field_1_content_check></field_1_content_check>
+	</param>
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Ossec standalone</item_name>
+	<item_version>2.8.1</item_version>
+	<item_desc>Host based Intrusion Detection System</item_desc>
+	<item_web>http://www.ossec.net/main/</item_web>
+	<item_verbose>Ossec is an HIDS (Host Based Intrusion Detection System).</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Security</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_name>Report email address</field_1_name>
+		<field_1_id>report_address</field_1_id>
+		<field_1_value>ossec_report_address</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	
+	
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Phpmyadmin</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Database manager</item_desc>
+	<item_web>http://www.phpmyadmin.net/</item_web>
+	<item_verbose>Web interface for mysql written in php</item_verbose>
+	<item_type>Database manager</item_type>
+	<item_license>BSD</item_license>
+	<item_category>Database management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>root</field_default_login>
+	<field_default_pwd>mysql root password</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include>Mysql Jessie</field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		
+	</param>
+	
+	
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Roundcube</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Webmail</item_desc>
+	<item_web>http://roundcube.net/</item_web>
+	<item_verbose>RoundCube Webmail is a browser-based multilingual IMAP client with an application-like user interface. It provides full functionality you expect from an e-mail client, including MIME support, address book, folder manipulation, message searching and spell checking. RoundCube Webmail is written in PHP and requires a MySQL or Postgres database. The user interface is fully skinnable using XHTML and CSS 2.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Emails</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>Default admin email</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include>Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Jessie</field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>roundcube_name</field_1_value>
+		<field_1_def_content>Roundcube</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>roundcube_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Hordegroupware</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Webmail</item_desc>
+	<item_web>http://roundcube.net/</item_web>
+	<item_verbose>Groupware management</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Emails</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>Default admin email</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include>Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Jessie</field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>horde_name</field_1_value>
+		<field_1_def_content>Horde</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>horde_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Gnome</item_name>
+	<item_version>3.14</item_version>
+	<item_desc></item_desc>
+	<item_web>https://www.gnome.org/</item_web>
+	<item_verbose>Gnome Desktop environment</item_verbose>
+	<item_type>Desktop, graphical interface</item_type>
+	<item_license>BSD</item_license>
+	<item_category>Desktop</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		
+	</param>
+	
+	
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Kde</item_name>
+	<item_version>4.11.3</item_version>
+	<item_desc></item_desc>
+	<item_web>https://www.kde.org/</item_web>
+	<item_verbose>Kde Desktop environment</item_verbose>
+	<item_type>Desktop, graphical interface</item_type>
+	<item_license>BSD</item_license>
+	<item_category>Desktop</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		
+	</param>
+	
+	
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Lxde</item_name>
+	<item_version>0.1</item_version>
+	<item_desc></item_desc>
+	<item_web>http://lxde.org/</item_web>
+	<item_verbose>Lxde Desktop environment</item_verbose>
+	<item_type>Desktop, graphical interface</item_type>
+	<item_license>BSD</item_license>
+	<item_category>Desktop</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		
+	</param>
+	
+	
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Xfce</item_name>
+	<item_version>4.10</item_version>
+	<item_desc></item_desc>
+	<item_web>http://www.xfce.org/</item_web>
+	<item_verbose>Lxde Desktop environment</item_verbose>
+	<item_type>Desktop, graphical interface</item_type>
+	<item_license>BSD</item_license>
+	<item_category>Desktop</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		
+	</param>
+	
+	
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Horde</item_name>
+	<item_version>3.3source</item_version>
+	<item_desc>Webmail</item_desc>
+	<item_web>http://www.horde.org/webmail/</item_web>
+	<item_verbose>Horde Groupware Webmail Edition is a free, enterprise ready, browser based communication suite. Users can read, send and organize email messages and manage and share calendars, contacts, tasks and notes with the standards compliant components from the Horde Project. Horde Groupware Webmail Edition bundles the separately available applications IMP, Ingo, Kronolith, Turba, Nag and Mnemo.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv3</item_license>
+	<item_category>Emails</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>Default admin email</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include>Mysql Jessie,Postfix, Dovecot, PostfixAdmin, Clamav, Mailscanner Jessie</field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>horde_name</field_1_value>
+		<field_1_def_content>Horde</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>horde_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Mediawiki</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Wiki</item_desc>
+	<item_web>http://www.mediawiki.org/wiki/MediaWiki</item_web>
+	<item_verbose>MediaWiki is a free software wiki package originally written for Wikipedia. It is now used by several other projects of the non-profit Wikimedia Foundation and by many other wikis.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include>Mysql Jessie</field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+<app_instance>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>mediawiki_name</field_1_value>
+		<field_1_def_content>my_wiki</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>mediawiki_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>mediawiki_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+<param>	
+		<field_1_id>def_lang</field_1_id>
+		<field_1_name>Default language</field_1_name>
+		<field_1_value>mediawiki_lang</field_1_value>
+		<field_1_def_content>fr</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	
+</app_instance>
+	
+</item>
+<item>
+	<item_name>Postgresql</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Database server</item_desc>
+	<item_web>http://www.postgresql.org</item_web>
+	<item_verbose>Web interface for postgresql database server written in php</item_verbose>
+	<item_type>Database server</item_type>
+	<item_license>Postgresql copyright</item_license>
+	<item_category>Database management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login>root</field_default_login>
+	<field_default_pwd>Postgresql root password</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		
+	</param>
+	
+	
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Mysql</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Database server</item_desc>
+	<item_web>http://dev.mysql.com</item_web>
+	<item_verbose>The mysql database has become the world's most popular open source database because of its high performance, high reliability and ease of use.</item_verbose>
+	<item_type>Database server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Database management</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_64,Jessie_686</field_OS>
+	<app_instance>
+		
+	
+		
+		
+
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Wordpress</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Content management system</item_desc>
+	<item_web>http://wordpress.org/</item_web>
+	<item_verbose>Wordpress is a Content Management system (Blog).</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include>Mysql Jessie</field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>wordpress_name</field_1_value>
+		<field_1_def_content>Wordpress</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>wordpress_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>wordpress_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Wordpress</item_name>
+	<item_version>4.3-install</item_version>
+	<item_desc>Content management system</item_desc>
+	<item_web>http://wordpress.org/</item_web>
+	<item_verbose>Wordpress is a Content Management system (Blog).</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Publishing</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include>Mysql Jessie</field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>wordpress_name</field_1_value>
+		<field_1_def_content>Wordpress</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>wordpress_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>wordpress_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Trac Subversion</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Data management</item_desc>
+	<item_web>http://trac.edgewall.org/</item_web>
+	<item_verbose>Trac is an enhanced wiki and issue tracking system for software development projects. Trac uses a minimalistic approach to web-based software project management. Our mission is to help developers write great software while staying out of the way. Trac should impose as little as possible on a team's established development process and policies.
+
+It provides an interface to Subversion, an integrated Wiki and convenient reporting facilities.
+
+Trac allows wiki markup in issue descriptions and commit messages, creating links and seamless references between bugs, tasks, changesets, files and wiki pages. A timeline shows all current and past project events in order, making the acquisition of an overview of the project and tracking progress very easy. The roadmap shows the road ahead, listing the upcoming milestones.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>BSD</item_license>
+	<item_category>Data management</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>Default admin password</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		<field_1_name>Subversion project name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>svn_name</field_1_value>
+		<field_1_def_content>Project</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>svn_admin_pwd</field_1_id>
+		<field_1_name>Subversion default admin password</field_1_name>
+		<field_1_value>svn_admin_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>svn_anonymous_pwd</field_1_id>
+		<field_1_name>Subversion default anonymous password</field_1_name>
+		<field_1_value>svn_anonymous_pwd</field_1_value>
+		<field_1_def_content>anonymous</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>trac_admin_pwd</field_1_id>
+		<field_1_name>Trac default admin password</field_1_name>
+		<field_1_value>trac_admin_pwd</field_1_value>
+		<field_1_def_content>$gen_login_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>DNS server</item_name>
+	<item_version>Jessie</item_version>
+	<item_desc>Domain Name Server</item_desc>
+	<item_web>https://www.isc.org/software/bind</item_web>
+	<item_verbose>BIND (pronounced /bʌɪnd/), for Berkeley Internet Name Domain, or named (pronounced /ˈneɪmˌdiː/), is the most commonly used DNS server on the Internet, especially on Unix-like systems, where it is a de facto standard. Supported by Internet Systems Consortium, BIND was originally created by four graduate students with CSRG at the University of California, Berkeley and first released with 4.3BSD. Paul Vixie started maintaining it in 1988 while working for DEC.The development of BIND 9 was done with a combination of commercial and military contracts. Most of the features of BIND 9 were funded by UNIX vendors who wanted to ensure that BIND stayed competitive with Microsoft's DNS offerings; the DNSSEC features were funded by the US military who felt that DNS security was important.</item_verbose>
+	<item_type>DNS server</item_type>
+	<item_license>GPLv2</item_license>
+	<item_category>Networking</item_category>
+	<field_quantity>N</field_quantity>
+	<field_default_login></field_default_login>
+	<field_default_pwd></field_default_pwd>
+	<field_exclude>Gateway DNS</field_exclude>
+        <field_include></field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+	<app_instance>
+	<param>	
+		
+	</param>
+	
+
+	</app_instance>
+	
+</item>
+<item>
+	<item_name>Dolibarr</item_name>
+	<item_version>3.5</item_version>
+	<item_desc>ERP</item_desc>
+	<item_web>http://www.dolibarr.fr/</item_web>
+	<item_verbose>Dolibarr est un PGI/GRC (Progiciel de gestion intégré/Gestion de la relation client) destiné aux petites et moyennes entreprises.</item_verbose>
+	<item_type>Web server</item_type>
+	<item_license>AGPL</item_license>
+	<item_category>ERP</item_category>
+	<field_quantity>Y</field_quantity>
+	<field_default_login>admin</field_default_login>
+	<field_default_pwd>cooperation</field_default_pwd>
+	<field_exclude></field_exclude>
+        <field_include>Mysql Jessie</field_include>
+        <field_OS>Jessie_686,Jessie_64</field_OS>
+<app_instance>
+	<param>	
+		<field_1_name>Application name</field_1_name>
+		<field_1_id>app_name</field_1_id>
+		<field_1_value>dolibarr_name</field_1_value>
+		<field_1_def_content>Dolibarr</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_email</field_1_id>
+		<field_1_name>Default admin email</field_1_name>
+		<field_1_value>dolibarr_admin_email</field_1_value>
+		<field_1_def_content>admin.local@$domain</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_@$.-]+</field_1_content_check>
+	</param>
+	<param>	
+		<field_1_id>def_mysql_pwd</field_1_id>
+		<field_1_name>Default mysql password</field_1_name>
+		<field_1_value>dolibarr_mysql_pwd</field_1_value>
+		<field_1_def_content>$mysql_generic_pwd</field_1_def_content>
+		<field_1_content_check>[^a-zA-Z0-9_$.-]+</field_1_content_check>
+	</param>
+	
+	</app_instance>
+</item>
 </items>
