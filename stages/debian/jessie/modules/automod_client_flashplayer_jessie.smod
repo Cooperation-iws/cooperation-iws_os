@@ -40,3 +40,6 @@ chown root:root /usr/lib/flashplugin-nonfree/libflashplayer.so
 chmod 644 /usr/lib/flashplugin-nonfree/libflashplayer.so
 update-alternatives --quiet --install /usr/lib/mozilla/plugins/flash-mozilla.so flash-mozilla.so /usr/lib/flashplugin-nonfree/libflashplayer.so 50 
 fi
+
+
+update-flashplugin-nonfree --install

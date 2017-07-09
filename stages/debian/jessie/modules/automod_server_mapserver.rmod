@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Mapserver 5.6.6'
+RMOD_NAME='Mapserver Jessie'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='Network management'
@@ -14,6 +14,7 @@ RMOD_VERBOSE_FR="Ntop est une sonde réseau. Elle permet d'analyser les différe
 
 RMOD_RUN_IN_CHROOT=True
 RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_REQ_APACHE=True
 
 
 
@@ -37,12 +38,27 @@ function INSTALL
 
 apt-get install --assume-yes --force-yes cgi-mapserver mapserver-bin mapserver-doc php5-mapscript
 
-apt-get install --assume-yes --force-yes postgresql postgis postgresql-8.4-postgis 
+apt-get install --assume-yes --force-yes postgresql postgis postgresql-9.4-postgis-2.1
 
 
-apt-get install php5-pgsql
+apt-get install --assume-yes --force-yes php5-pgsql libmapnik2-2.0 mapnik-utils osm2pgsql
+
+a2enmod cgi
+
+/etc/init.d/postgresql stop
+if [ ! -d $LAMPP_DIRECTORY/etc/postgresql ]; then
+mv /etc/postgresql $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/postgresql /etc/postgresql
+
+mv /etc/postgresql-common $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/postgresql-common /etc/postgresql-common
+
+mv /var/lib/postgresql $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/postgresql /var/lib/postgresql
 
 
+
+fi
 }
 
 #_______________________________________________________________________________________________
@@ -54,7 +70,7 @@ apt-get install php5-pgsql
 function CREATE_WUI
 {
 cd /tmp/
-./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "<![CDATA[http://localhost:3000]]>" "<![CDATA[http://localhost:3000]]>" 
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/cgi-bin/mapserv" "/cgi-bin/mapserv" 
 
 
 }

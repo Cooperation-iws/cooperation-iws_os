@@ -54,15 +54,14 @@ WGET_CIWS_DEPOT
 cd $DL_DIR
 
 cat << EOT > HORDE_db.sql
-CREATE DATABASE horde;
+CREATE DATABASE $NOM_HORDE;
 EOT
 
 $BIN_MYSQL -u root < HORDE_db.sql mysql
 
-$BIN_MYSQL -u root < horde-151025.sql horde
 
 cat << EOT > HORDE_db.sql
-GRANT ALL PRIVILEGES ON horde.* TO $NOM_HORDE@'localhost' IDENTIFIED BY '$HORDE_MYSQL_PWD';
+GRANT ALL PRIVILEGES ON $NOM_HORDE.* TO $NOM_HORDE@'localhost' IDENTIFIED BY '$HORDE_MYSQL_PWD';
 EOT
 
 $BIN_MYSQL -u root < HORDE_db.sql mysql
@@ -74,8 +73,10 @@ mv /etc/horde $LAMPP_DIRECTORY/etc/
 
 ln -s $LAMPP_DIRECTORY/etc/horde /etc/horde
 
-cd $DL_DIR
-tar -xzf horde-151025.tar.gz -c /etc/horde
+mv /usr/share/horde $LAMPP_DIRECTORY/usr/share/horde
+
+ln -s $LAMPP_DIRECTORY/usr/share/horde /usr/share/horde
+
 
 }
 

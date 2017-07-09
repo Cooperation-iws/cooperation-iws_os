@@ -4,7 +4,7 @@
 RMOD_ENGINE=1.0
 RMOD_CATEGORY='Software'
 RMOD_SUBCATEGORY='Servers'
-RMOD_NAME='Trac Subversion jessie'
+RMOD_NAME='Trac Subversion Jessie'
 RMOD_AUTHOR='Oliv'
 RMOD_VERSION=0.2
 RMOD_DESCRIPTION='SCM'
@@ -42,7 +42,7 @@ echo "I: Install SVN"
 apt-get install --yes --force-yes subversion subversion-tools
 apt-get install --yes --force-yes libapache2-svn
 apt-get install --yes --force-yes trac trac-accountmanager trac-announcer trac-authopenid trac-bitten trac-customfieldadmin trac-email2trac trac-graphviz trac-mastertickets trac-wysiwyg trac-codecomments trac-diavisview trac-includemacro trac-jsgantt trac-roadmap trac-sensitivetickets trac-subcomponents trac-subtickets trac-tags trac-translatedpages trac-virtualticketpermissions trac-xmlrpc 
-apt-get install --yes --force-yes python-pygments enscript
+apt-get install --yes --force-yes python-pygments enscript python-subversion
 mkdir $LAMPP_DIRECTORY/var/trac
 mkdir $LAMPP_DIRECTORY/var/private/
 
@@ -95,7 +95,7 @@ anonymous = r
 admin = rw
 " > $LAMPP_DIRECTORY/var/private/svnperm_${SVN_NAME[$count]}
 
-chown -R www-data $LAMPP_DIRECTORY/var/svn$count
+chown -R www-data:$LIVEUSER $LAMPP_DIRECTORY/var/svn$count
 chmod -R 775 $LAMPP_DIRECTORY/var/svn$count
 
 
@@ -111,8 +111,8 @@ exec /usr/bin/svnserve.bin -r $LAMPP_DIRECTORY/var/svn$count \"\$@\"
 
 chmod +x /usr/bin/svnserve
 
-sed -i '19s/#//' $LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}/conf/svnserve.conf
-sed -i '20s/#//' $LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}/conf/svnserve.conf
+sed -i '19s/# //' $LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}/conf/svnserve.conf
+sed -i '20s/# //' $LAMPP_DIRECTORY/var/svn$count/${SVN_NAME[$count]}/conf/svnserve.conf
 
 
 echo "I: End of Install SVN"

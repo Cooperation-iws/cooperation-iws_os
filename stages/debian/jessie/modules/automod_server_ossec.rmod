@@ -57,6 +57,9 @@ cd $DL_DIR
 dpkg -i ossec-hids_2.8.1-1jessie_*
 apt-get -f install --assume-yes --force-yes
 cp -r ossec-wui-0.8 /var/www/admin/ossec-wui
+mkdir /var/www/admin/ossec-wui/tmp
+chmod -R 770 /var/www/admin/ossec-wui/tmp
+chown -R www-data:ossec /var/www/admin/ossec-wui/
 usermod -u501 ossec
 usermod -u502 ossecm
 usermod -u503 ossecr

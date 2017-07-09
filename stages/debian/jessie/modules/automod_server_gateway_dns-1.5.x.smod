@@ -243,6 +243,7 @@ DNS(ACCEPT)  loc   \$FW
 DNS(ACCEPT)  \$FW   loc
 ACCEPT  \$FW   loc   tcp 67,68
 ACCEPT  \$FW   loc   udp 67,68
+Web(ACCEPT)  loc   \$FW
 #" >> /etc/shorewall/rules
 
 if [ "$host_web_server" = "y" ]; then
