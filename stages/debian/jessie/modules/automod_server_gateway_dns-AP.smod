@@ -1,0 +1,516 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Server'
+RMOD_NAME='Gateway DNS AP'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.2
+RMOD_DESCRIPTION='Firewall / Gateway'
+RMOD_DESCRIPTION_FR='Pare feu / Passerelle'
+RMOD_VERBOSE=""
+RMOD_VERBOSE_FR=""
+
+
+RMOD_RUN_IN_CHROOT=True
+. /tmp/app_params
+. /tmp/scripts_params
+
+range_AP=$((range + 10)
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL()
+{
+
+
+
+NB_MACHINE=$gateway_nb_machine
+
+NET_IFACE=$gateway_net_iface
+
+LOCAL_IFACE=$gateway_local_iface
+
+#if [ "$gateway_local_bridge" = "y" ]; then
+
+#LOCAL_IFACE="br0"
+
+#sudo apt-get install --assume-yes --force-yes bridge-utils uml-utilities
+
+#fi
+
+if [ "$gateway_multiple_isp" = "y" ]; then
+
+NET_IFACE_2=$gateway_net_iface_2
+
+
+fi
+
+if [ "$hostapd" = "y" ]; then
+
+sudo apt-get install --assume-yes --force-yes hostapd wireless-tools
+
+apt-get install --assume-yes --force-yes firmware-ralink
+
+gunzip -c /usr/share/doc/hostapd/examples/hostapd.conf.gz > /etc/hostapd/hostapd.conf
+
+sed -i "6s/wlan0/$AP_interface/" /etc/hostapd/hostapd.conf
+sed -i "25s/# driver=hostap/driver=nl80211/" /etc/hostapd/hostapd.conf
+sed -i "83s/test/$AP_ssid/" /etc/hostapd/hostapd.conf
+sed -i "129s/hw_mode=g/hw_mode=g/" /etc/hostapd/hostapd.conf
+sed -i "1018s/#wpa=1/wpa=1/" /etc/hostapd/hostapd.conf
+sed -i "1027s/#wpa_passphrase=secret passphrase/wpa_passphrase=$AP_wpa_passphrase/" /etc/hostapd/hostapd.conf
+sed -i "1048s/#wpa_key_mgmt=WPA-PSK WPA-EAP/wpa_key_mgmt=WPA-PSK WPA-EAP/" /etc/hostapd/hostapd.conf
+sed -i 's/#DAEMON_CONF=""/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/' /etc/default/hostapd
+#if [ "$gateway_local_bridge" = "y" ]; then
+#sed -i "11s/#//" /etc/hostapd/hostapd.conf
+#fi
+
+mv /etc/hostapd $LAMPP_DIRECTORY/etc/hostapd
+ln -s $LAMPP_DIRECTORY/etc/hostapd /etc/hostapd
+
+
+fi
+
+
+
+
+
+
+
+apt-get install -f --assume-yes --force-yes shorewall dnsmasq isc-dhcp-server bind9 dnsutils 
+#bind9 config
+
+
+
+
+
+echo "controls {
+        inet 127.0.0.1 allow {localhost; } keys { \"rndc-key\"; };
+};
+" >> /etc/bind/named.conf
+
+cat << EOT_LOCAL > /etc/bind/named.conf.local.tpl
+
+include "/etc/bind/rndc.key";
+
+controls {
+        inet 127.0.0.1 allow { localhost; } keys { "rndc-key"; };
+};
+
+
+zone "$domain" {
+        type master;
+        file "/var/cache/bind/db.$domain";
+	allow-update { key "rndc-key"; };
+ 	notify yes;
+
+
+};
+
+zone "$range.168.192.in-addr.arpa" {
+        type master;
+        file "/var/cache/bind/db.192.168.$range";
+	allow-update { key "rndc-key"; };
+	notify yes;
+
+
+};
+EOT_LOCAL
+
+cat << EOT_VAR > /var/cache/bind/db.$domain
+\$TTL 604800
+@ IN SOA $domain. $HOSTNAME.$domain. (
+                2008080101      ;serial
+                04800           ;refresh
+                86400           ;retry        
+                2419200         ;expire
+                604800          ;negative cache TTL
+                )
+@      IN      NS      $HOSTNAME.$domain.
+@      IN      A       192.168.$range.254
+$HOSTNAME    IN      A       192.168.$range.254
+wwi CNAME $HOSTNAME
+EOT_VAR
+
+cat << EOT_REVERSE > /var/cache/bind/db.192.168.$range.tpl
+\$TTL 604800
+@ IN SOA $domain. $HOSTNAME.$domain.  (
+                2008080101      ;serial
+                604800          ;refresh
+                86400           ;retry
+                2419200         ;expire
+                604800          ;negative cache TTL
+                )
+@     IN      NS      $HOSTNAME.$domain.
+@     IN      A       192.168.$range.254
+254.$range.168.192.in-addr.arpa.      IN      PTR     $HOSTNAME.$domain.
+EOT_REVERSE
+
+
+
+#sed -i "13s/\/\///" /etc/bind/named.conf.options 
+#sed -i "14s/\/\///" /etc/bind/named.conf.options 
+sed -i "14s/0.0.0.0/DNS_1/" /etc/bind/named.conf.options 
+#sed -i "15s/\/\///" /etc/bind/named.conf.options 
+sed -i "18s/^/\/\//" /etc/bind/named.conf.options 
+sed -i "3s/^/dnssec-enable yes;/" /etc/bind/named.conf.options 
+
+if [ "$gateway_recursion" == "y" ]; then
+sed -i "16s/^/recursion no;/" /etc/bind/named.conf.options 
+fi
+
+cp /etc/bind/named.conf.options  /etc/bind/named.conf.options.tpl
+mv /etc/bind $LAMPP_DIRECTORY/etc/
+ln -s $LAMPP_DIRECTORY/etc/bind /etc/bind
+
+
+chmod +r /etc/bind/rndc.key
+
+#isc-dhcp-server  config
+echo "#dhcp3-server config"
+echo "
+server-identifier           server;
+ddns-updates                on;
+ddns-update-style       interim;
+ddns-domainname             \"$domain.\";
+ddns-rev-domainname         \"in-addr.arpa.\";
+ignore                  client-updates;
+authoritative;
+log-facility local7;
+include \"/etc/bind/rndc.key\";
+
+zone $domain. {
+        primary 127.0.0.1;
+        key     \"rndc-key\";
+}
+
+subnet 192.168.$range.0 netmask 255.255.255.0 {
+      range 192.168.$range.1 192.168.$range.$NB_MACHINE;
+      option domain-name-servers 192.168.$range.254;
+      option domain-name \"$domain\";
+      option routers 192.168.$range.254;
+      option broadcast-address 192.168.$range.255;
+      default-lease-time 72000;
+      max-lease-time 7200;
+	zone $HOSTNAME.$domain. {
+                primary 192.168.$range.254;
+                key \"rndc-key\";
+        }
+
+        zone 1.168.192.in-addr.arpa. {
+                primary 192.168.$range.254;
+                key \"rndc-key\";
+        }
+
+}
+subnet 192.168.$range_AP.0 netmask 255.255.255.0 {
+      range 192.168.$range.1 192.168.$range_AP.$NB_MACHINE;
+      option domain-name-servers 192.168.$range_AP.254;
+      option domain-name \"$domain\";
+      option routers 192.168.$range_AP.254;
+      option broadcast-address 192.168.$range_AP.255;
+      default-lease-time 72000;
+      max-lease-time 7200;
+	zone $HOSTNAME.$domain. {
+                primary 192.168.$range_AP.254;
+                key \"rndc-key\";
+        }
+
+        zone 1.168.192.in-addr.arpa. {
+                primary 192.168.$range_AP.254;
+                key \"rndc-key\";
+        }
+
+}
+" > /etc/dhcp/dhcpd.conf
+
+
+sed -i "s/INTERFACES=\"\"/INTERFACES=\"$LOCAL_IFACE $AP_interface\"/" /etc/default/isc-dhcp-server
+chmod +r /etc/default/isc-dhcp-server
+
+
+mv /etc/dhcp $LAMPP_DIRECTORY/etc/
+ln -s $LAMPP_DIRECTORY/etc/dhcp /etc/dhcp
+
+#shorewall config
+echo "#shorewall config"
+
+cp /usr/share/doc/shorewall/examples/three-interfaces/* /etc/shorewall
+
+
+sed -i "s/eth0/NET_IFACE/" /etc/shorewall/interfaces
+sed -i "s/eth1/LOCAL_IFACE/" /etc/shorewall/interfaces
+sed -i "s/eth2/AP_interface/" /etc/shorewall/interfaces
+sed -i "16s/detect/192.168.$range.255/" /etc/shorewall/interfaces
+sed -i "s/eth1/LOCAL_IFACE/" /etc/shorewall/stoppedrules
+sed -i "s/eth2/AP_interface/" /etc/shorewall/stoppedrules
+sed -i "s/eth0/NET_IFACE/" /etc/shorewall/masq
+sed -i "s/eth2/AP_interface/" /etc/shorewall/masq
+sed -i "s/10.0.0.0\/8,\\\/192.168.$range.0\/24/" /etc/shorewall/masq
+sed -i "s/169.254.0.0\/16,\\\//" /etc/shorewall/masq
+sed -i "s/172.16.0.0\/12,\\\//" /etc/shorewall/masq
+sed -i "s/192.168.0.0\/16//" /etc/shorewall/masq
+sed -i "s/NET_IFACE/$NET_IFACE/" /etc/shorewall/interfaces
+sed -i "s/AP_interface/$AP_interface/" /etc/shorewall/interfaces
+sed -i "s/LOCAL_IFACE/$LOCAL_IFACE/" /etc/shorewall/interfaces
+sed -i "s/LOCAL_IFACE/$LOCAL_IFACE/" /etc/shorewall/stoppedrules
+sed -i "s/AP_interface/$AP_interface/" /etc/shorewall/stoppedrules
+sed -i "s/NET_IFACE/$NET_IFACE/" /etc/shorewall/masq
+sed -i "s/LOCAL_IFACE/$LOCAL_IFACE/" /etc/shorewall/masq
+sed -i "s/AP_interface/$AP_interface/" /etc/shorewall/masq
+sed -i "s/STARTUP_ENABLED=No/STARTUP_ENABLED=Yes/" /etc/shorewall/shorewall.conf
+echo " 
+ACCEPT  \$FW   loc   tcp 886
+DNS(ACCEPT)  loc   \$FW
+DNS(ACCEPT)  \$FW   loc
+DNS(ACCEPT) dmz       \$FW 
+DNS(ACCEPT)  \$FW   dmz
+  
+ACCEPT  \$FW   loc   tcp 67,68
+ACCEPT  \$FW   loc   udp 67,68
+#" >> /etc/shorewall/rules
+
+if [ "$host_web_server" = "y" ]; then
+
+echo "
+Web(ACCEPT) loc \$FW
+#
+" >> /etc/shorewall/rules
+
+fi
+
+#if [ "$gateway_local_bridge" = "y" ]; then
+
+#sed -i "16s/tcpflags/routeback,bridge,tcpflags/" /etc/shorewall/interfaces
+
+#fi
+
+#if [ "$gateway_multiple_isp" = "y" ]; then
+
+#echo "#NAME	NUMBER	MARK	DUPLICATE	INTERFACE	GATEWAY	OPTIONS	COPY
+#ISP1	1	1	main	$NET_IFACE	detect	track,balance	$LOCAL_IFACE
+#ISP2	2	2	main	$NET_IFACE_2	detect	track,balance	$LOCAL_IFACE
+#" > /etc/shorewall/providers
+
+#sed -i "15G" /etc/shorewall/interfaces
+#sed -i "16s/^/net     $NET_IFACE_2            detect          #dhcp,tcpflags,nosmurfs,routefilter,logmartians/" /etc/shorewall/interfaces
+
+#sed -i "16G" /etc/shorewall/policy
+#sed -i "17s/^/net     net	DROP/" /etc/shorewall/policy
+
+#sed -i "16s/^/$NET_IFACE_2     192.168.$range.0\/24/" /etc/shorewall/masq
+
+
+#fi
+
+
+chmod -R +r /etc/shorewall
+
+mv /etc/shorewall $LAMPP_DIRECTORY/etc/
+ln -s $LAMPP_DIRECTORY/etc/shorewall /etc/shorewall
+
+
+sed -i "s/startup=0/startup=1/" /etc/default/shorewall
+
+#configuring dns scripts
+
+
+mkdir /var/cache/dns
+echo "" > /var/cache/dns/IP_list
+echo "" > /var/cache/dns/identity_array
+mkdir /var/cache/dns/tmp/
+chmod -R 755 /var/cache/dns
+
+cat << EOT_CRON > /opt/ciws/etc/bind.cron.sh
+#!/bin/bash
+
+#Cleaning existing IP database
+IP_LIST_STOR=\$(cat /var/cache/dns/IP_list)
+for IP_STOR in \$IP_LIST_STOR
+do
+HOSTNAME=\$(cat /var/cache/dns/identity_array | grep \$IP_STOR | cut -d':' -f2)
+DOMAIN_LIST=\$(cat /var/cache/dns/identity_array | grep \$IP_STOR | cut -d':' -f3)
+IP_DOWN=\$(ping -c 4 \$IP_STOR | grep "0 received")
+if [ "\$IP_DOWN" ]; then
+for DOMAIN in \$DOMAIN_LIST
+do
+logger "removing \$IP_STOR:\$HOSTNAME:\$DOMAIN"
+sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.$range
+sed -i "/\$DOMAIN/d"  /etc/bind/named.conf.local
+sed -i "/\$IP_STOR/d"  /var/cache/dns/IP_list
+sed -i "/\$IP_STOR/d"  /var/cache/dns/identity_array
+rm /var/cache/dns/domain_\$IP_STOR.txt
+rm /var/cache/dns/hostname_\$IP_STOR.txt
+done
+
+else
+cd /var/cache/dns
+wget http://\$IP_STOR:886/domain.txt -O /var/cache/dns/tmp/domain_\$IP_STOR.txt
+UPDT_DOMAIN_LIST=\$(cat /var/cache/dns/tmp/domain_\$IP_STOR.txt)
+wget http://\$IP_STOR:886/hostname.txt -O /var/cache/dns/tmp/hostname_\$IP_STOR.txt
+UPDT_HOSTNAME=\$(cat /var/cache/dns/tmp/hostname_\$IP_STOR.txt)
+if [ "\$UPDT_DOMAIN" != "\$DOMAIN" ] || [ "\$UPDT_HOSTNAME" != "\$HOSTNAME" ]; then
+logger "removing \$IP_STOR:\$HOSTNAME:\$DOMAIN"
+sed -i "/\$HOSTNAME/d"  /var/cache/bind/db.192.168.$range
+sed -i "/\$IP_STOR/d"  /var/cache/dns/IP_list
+sed -i "/\$IP_STOR/d"  /var/cache/dns/identity_array
+rm /var/cache/dns/domain_\$IP_STOR.txt
+rm /var/cache/dns/hostname_\$IP_STOR.txt
+fi
+
+fi
+done
+
+#Adding new IP in Database
+/etc/init.d/dhcp-server restart
+/etc/init.d/bind9 reload
+IP_LIST=\$(cat /var/lib/dhcp/dhcpd.leases | grep 'lease' | grep "[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}" | cut -d' ' -f2)
+#IP_LIST=(${IP_LIST[@]})
+NB_IP=\$(cat /var/lib/dhcp/dhcpd.leases | grep 'lease' | grep "[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}" | cut -d' ' -f2 | wc -l)
+sleep 60
+for IP in \$IP_LIST 
+do
+cd /var/cache/dns
+wget -t 3 -T 8 http://\$IP:886/domain.txt -O /var/cache/dns/domain_\$IP.txt
+DOMAIN_LIST=\$(cat /var/cache/dns/domain_\$IP.txt)
+wget -t 3 -T 8 http://\$IP:886/hostname.txt -O /var/cache/dns/hostname_\$IP.txt
+HOSTNAME=\$(cat /var/cache/dns/hostname_\$IP.txt)
+for DOMAIN in \$DOMAIN_LIST
+do
+if [ "\$(cat /var/cache/dns/identity_array | grep \$DOMAIN | grep \$HOSTNAME )" ]; then
+if [ -z "\$(cat /var/cache/dns/identity_array | grep \$IP | grep \$HOSTNAME | grep \$DOMAIN)" ]; then
+sed -i "/\$HOSTNAME:\$DOMAIN/d"  /var/cache/dns/IP_list
+sed -i "/\$HOSTNAME:\$DOMAIN/d"  /var/cache/dns/identity_array
+fi
+fi
+if [ -z "\$(cat /var/cache/dns/identity_array | grep \$IP | grep \$HOSTNAME | grep \$DOMAIN)" ]; then
+if [ -z "\$(cat /var/cache/dns/IP_list | grep \$IP)" ]; then
+echo "\$IP" >> /var/cache/dns/IP_list
+fi
+echo "\$IP:\$HOSTNAME:\$DOMAIN" >> /var/cache/dns/identity_array
+fi
+
+if [ -z "\$(cat /etc/bind/named.conf.local | grep \$DOMAIN)" ]; then
+logger "adding \$IP:\$HOSTNAME:\$DOMAIN"
+echo "include \"/etc/bind/named.conf.\$DOMAIN\";" >> /etc/bind/named.conf.local
+ip_address_4=\$(echo \$IP | cut -d':' -f2 | cut -d' ' -f1| cut -d'.' -f4)
+logger "removing old entries for $HOSTNAME"
+sed -i "/\$HOSTNAME.$domain/d"  /var/cache/bind/db.192.168.1
+if [ -z "\$(cat /var/cache/bind/db.192.168.$range | grep \$HOSTNAME)" ]; then
+echo "\$ip_address_4	PTR  \$HOSTNAME.\$DOMAIN." >> /var/cache/bind/db.192.168.1
+fi
+logger "adding new zone for \$DOMAIN"
+cat << EOT_DOMAIN > /etc/bind/named.conf.\$DOMAIN
+zone "\$DOMAIN" {
+        type slave;
+        file "/var/cache/bind/db.slave_\$DOMAIN";
+	masters {\$IP;};
+	allow-notify {\$IP;};
+};
+EOT_DOMAIN
+#sed -i "/$HOSTNAME.cooperation-iws.intra/d" /var/cache/bind/db.192.168.100
+chmod +w /var/cache/bind/db.slave_*
+rm /var/cache/bind/db.slave_*
+/etc/init.d/bind9 reload
+fi
+done
+
+done
+
+EOT_CRON
+
+chmod +x /opt/ciws/etc/bind.cron.sh
+
+echo "*/4 * * * * root /opt/ciws/etc/bind.cron.sh > /dev/null 2>&1" >> /etc/cron.d/bind_auto
+chmod +x /etc/cron.d/bind_auto
+
+#if [ "$gateway_local_bridge" = "y" ]; then
+
+#echo "#!/bin/bash
+#ifconfig $gateway_local_iface 0.0.0.0 promisc up
+#ifconfig $gateway_local_iface_2 0.0.0.0 promisc up
+#brctl addbr $LOCAL_IFACE
+#brctl addif $LOCAL_IFACE $gateway_local_iface
+#brctl addif $LOCAL_IFACE $gateway_local_iface_2
+#" > $LAMPP_DIRECTORY/etc/rc.local_local_bridge
+#chmod +x $LAMPP_DIRECTORY/etc/rc.local_local_bridge
+#echo "#!/bin/bash
+#ifconfig $gateway_local_iface 0.0.0.0 promisc up" > /etc/dhcp3/dhclient-exit-hooks.d/#zzzz_virt_local_interface_1
+#chmod +x  /etc/dhcp3/dhclient-exit-hooks.d/zzzz_virt_local_interface_1
+#echo "#!/bin/bash
+#ifconfig $gateway_local_iface_2 0.0.0.0 promisc up" > /etc/dhcp3/dhclient-exit-hooks.d/#zzzz_virt_local_interface_2
+#chmod +x  /etc/dhcp3/dhclient-exit-hooks.d/zzzz_virt_local_interface_2
+
+#fi
+
+
+
+echo "
+#!/bin/bash
+#Gateway
+dhclient $NET_IFACE
+ip_gateway=\$(route -n | grep UG | sed 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/&*/g'| sed 's/ //g' | cut -d'*'  -f2)
+cp /etc/bind/named.conf.options.tpl /etc/bind/named.conf.options 
+sed -i \"s/DNS_1/\$ip_gateway/\" /etc/bind/named.conf.options 
+cp /etc/bind/named.conf.local.tpl /etc/bind/named.conf.local
+cp /var/cache/bind/db.192.168.$range.tpl /var/cache/bind/db.192.168.$range
+sudo ifconfig $LOCAL_IFACE 192.168.$range.254 
+sleep 2
+/etc/init.d/shorewall stop
+/etc/init.d/isc-dhcp-server stop
+/etc/init.d/shorewall start
+sudo ifconfig $LOCAL_IFACE 192.168.$range.254 
+sleep 2
+sudo /etc/init.d/bind9 reload
+sudo /etc/init.d/isc-dhcp-server restart
+" > $LAMPP_DIRECTORY/etc/rc.local_gateway
+
+chmod +x $LAMPP_DIRECTORY/etc/rc.local_gateway
+
+echo "
+/opt/ciws/etc/rc.local_local_bridge
+/opt/ciws/etc/rc.local_gateway
+" >> /etc/rc.local
+echo "
+reject 192.168.$range.254;
+reject 192.168.$range_AP.254;
+" >> /etc/dhcp/dhclient.conf
+
+
+
+echo "
+ifconfig $LOCAL_IFACE 192.168.$range.254
+ifconfig $AP_interface 192.168.$range_AP.254
+" > /etc/dhcp/dhclient-exit-hooks.d/ifconfig_local
+
+chmod +x /etc/dhcp/dhclient-exit-hooks.d/ifconfig_local
+
+
+mv /var/lib/dhcp $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/dhcp /var/lib/dhcp
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "" "" 
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+
+
+INSTALL
+CREATE_WUI
+

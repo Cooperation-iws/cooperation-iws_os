@@ -1,0 +1,85 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Mediawiki Jessie'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Wiki portal'
+RMOD_DESCRIPTION_FR='Portail de wiki'
+RMOD_VERBOSE="Mediawiki is a content management system software from the wiki type. This is the software used by Wikipedia.  "
+RMOD_VERBOSE_FR="Mediawiki est un logiciel de gestion de contenu de type Wiki. C'est le logiciel qui est utilisé par Wikipedia.  "
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+
+MOD_NAME=$mediawiki_name
+MEDIAWIKI_MYSQL_PWD=$mediawiki_mysql_pwd
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo "I: Download Mediawiki"
+
+
+apt-get install --yes --force-yes mediawiki mediawiki-extensions-math mediawiki-extensions
+
+
+
+sed -i "3s/#//" /etc/mediawiki/apache.conf
+
+a2enconf mediawiki
+
+
+cd $DL_DIR
+
+echo "
+Create database ${MOD_NAME} ;
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '${MEDIAWIKI_MYSQL_PWD}';
+flush privileges;" > MEDIAWIKI_db.sql
+
+$BIN_MYSQL -u root < MEDIAWIKI_db.sql 
+rm MEDIAWIKI_db.sql
+
+
+mv /var/lib/mediawiki $LAMPP_DIRECTORY/var/lib
+ln -s $LAMPP_DIRECTORY/var/lib/mediawiki /var/lib/mediawiki
+mv /etc/mediawiki $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/mediawiki /etc/mediawiki
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/mediawiki" "/mediawiki" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install Mediawiki"
+INSTALL
+CREATE_WUI
+echo "I: End of install Mediawiki"

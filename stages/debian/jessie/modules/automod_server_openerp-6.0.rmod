@@ -1,0 +1,320 @@
+#!/bin/bash
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='OpenERP 6.0.2'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='ERP'
+RMOD_DESCRIPTION_FR='ERP'
+RMOD_VERBOSE="OpenERP is a complete Enterprise Resources Planning solution."
+RMOD_VERBOSE_FR="Open Erp est une solution complète de gestion intégrée."
+
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_RUN_IN_CHROOT=True
+RMOD_REQ_APACHE=True
+. /tmp/app_params
+. /tmp/scripts_params
+
+OPENERP_PSGSQL_PWD=$openerp_psgsql_pwd
+MOD_NAME=$openerp_name
+
+mkdir $DL_DIR
+
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_FREE______________________________________
+
+function WGET_MIRROIR_FREE
+{
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/openerp-web-6.0.2.tar.gz 
+tar -xzf openerp-web-6.0.2.tar.gz 
+
+#cd $DL_DIR
+#wget $URL_CIWS_DEPOT/openerp_ciws_sa.dump
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/openerp-server-6.0.2-0_all.deb 
+
+
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/python_babel_0.9.6.tar.gz
+
+#cd $DL_DIR
+#wget $URL_CIWS_DEPOT/open_erp_missing_pagkage.tar.gz
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_FREE__________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+function INSTALL
+{
+echo "I: Download Openerp"
+
+WGET_MIRROIR_FREE
+
+cd $DL_DIR
+
+dpkg -i openerp-server*.deb
+apt-get -f install --assume-yes --force-yes
+
+sudo apt-get install --assume-yes --force-yes python python-dev build-essential
+sudo apt-get install --assume-yes --force-yes python-setuptools
+sudo apt-get install --assume-yes --force-yes python-simplejson python-formencode python-cherrypy3
+
+cd $DL_DIR
+tar -xzf python_babel_0.9.6.tar.gz -C /
+
+sudo -u postgres createuser openerp --no-superuser --createdb --no-createrole 
+ /usr/sbin/adduser --quiet --system openerp
+usermod -u521 openerp
+
+
+#echo "
+#SET client_encoding = 'UTF8';
+#CREATE DATABASE ciws_sa OWNER openerp ENCODING 'UTF8';
+#"  > openerp_db.sql
+#sudo -u postgres psql postgres < openerp_db.sql
+
+cd $DL_DIR
+#sudo -u openerp pg_restore -d ciws_sa openerp_ciws_sa.dump
+sudo -u postgres psql template1 -U postgres -c "alter user openerp with password '$OPENERP_PSGSQL_PWD'"
+
+
+cd $DL_DIR
+
+echo "#######INSTALLING WEB###########"
+cd $DL_DIR/openerp-web-6.0.2
+python setup.py install >> /dev/null
+
+ 
+sed -i "s/db_password = False/db_password ='$OPENERP_PSGSQL_PWD'/" /etc/openerp-server.conf
+
+
+
+chmod -R 775 /usr/share/pyshared/openerp-server/
+
+mkdir $LAMPP_DIRECTORY/usr
+mkdir $LAMPP_DIRECTORY/usr/share
+mkdir $LAMPP_DIRECTORY/usr/share/pyshared
+mv /usr/share/pyshared/openerp-server $LAMPP_DIRECTORY/usr/share/pyshared
+
+ln -s  $LAMPP_DIRECTORY/usr/share/pyshared/openerp-server /usr/share/pyshared/openerp-server
+ 
+mkdir $LAMPP_DIRECTORY/usr/lib
+mkdir $LAMPP_DIRECTORY/usr/lib/pymodules
+mkdir $LAMPP_DIRECTORY/usr/lib/pymodules/python2.6
+
+mv /usr/lib/pymodules/python2.6/openerp-server $LAMPP_DIRECTORY/usr/lib/pymodules/python2.6
+
+ln -s $LAMPP_DIRECTORY/usr/lib/pymodules/python2.6/openerp-server /usr/lib/pymodules/python2.6/openerp-server
+
+cp /usr/local/lib/python2.6/dist-packages/openerp_web-6.0.2-py2.6.egg/doc/openerp-web.cfg  $LAMPP_DIRECTORY/etc/
+
+ln -s $LAMPP_DIRECTORY/etc/openerp-web.cfg /etc/openerp-web.cfg
+
+sed -i "24s/#//" $LAMPP_DIRECTORY/etc/openerp-web.cfg
+
+chown openerp.root /etc/openerp-web.cfg
+chmod 640 /etc/openerp-web.cfg
+
+#####################################################################################
+# openerp-web init script
+#####################################################################################
+cat > /tmp/openerp-web <<"EOF"
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:		openerp-web
+# Required-Start:	$syslog
+# Required-Stop:	$syslog
+# Should-Start:		$network
+# Should-Stop:		$network
+# Default-Start:	2 3 4 5
+# Default-Stop:		0 1 6
+# Short-Description:	Enterprise Resource Management software
+# Description:		OpenERP is a complete ERP and CRM software.
+### END INIT INFO
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/local/bin/openerp-web
+NAME=openerp-web
+DESC=openerp-web
+USER=openerp
+
+test -x ${DAEMON} || exit 0
+
+set -e
+
+case "${1}" in
+	start)
+		echo -n "Starting ${DESC}: "
+
+		sudo -u $USER /usr/local/bin/openerp-web >> /var/log/openerp-web.log &
+		echo $! > /var/run/${NAME}.pid
+
+		echo "${NAME}."
+		;;
+
+	stop)
+		echo -n "Stopping ${DESC}: "
+
+		kill -9 $(cat /var/run/${NAME}.pid)
+		echo "${NAME}."
+		;;
+
+	restart|force-reload)
+		echo -n "Restarting ${DESC}: "
+
+		kill -9 $(cat /var/run/${NAME}.pid)
+
+		sleep 1
+
+		sudo -u $USER /usr/local/bin/openerp-web >> /var/log/openerp-web.log &
+		echo $! > /var/run/${NAME}.pid
+
+		echo "${NAME}."
+		;;
+
+	*)
+		N=/etc/init.d/${NAME}
+		echo "Usage: ${NAME} {start|stop|restart|force-reload}" >&2
+		exit 1
+		;;
+esac
+
+exit 0
+
+EOF
+
+cp /tmp/openerp-web /etc/init.d/
+chmod +x /etc/init.d/openerp-web
+#Create /var/log/openerp with proper ownership:
+touch /var/log/openerp-web.log
+chown -R openerp.root /var/log/openerp-web.log
+
+
+if [ "$domain" ] && [ -d /etc/bind ]; then
+
+echo "<VirtualHost *:443>
+	ServerName openerp.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	SSLEngine on
+	SSLCertificateFile /etc/apache2/ssl/apache.pem
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:8080/
+	ProxyPassReverse /   http://127.0.0.1:8080/
+
+        RequestHeader set \"X-Forwarded-Proto\" \"https\"
+
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /etc/apache2/sites-available/openerp-ssl
+chown root.root /etc/apache2/sites-available/openerp-ssl
+chmod 644 /etc/apache2/sites-available/openerp-ssl
+
+echo "<VirtualHost *:80>
+	ServerName openerp.$domain
+        ServerAdmin support@$domain
+	#DocumentRoot /var/www/
+	<Proxy *>
+	  Order deny,allow
+	  Allow from all
+	</Proxy>
+	ProxyRequests Off
+	ProxyPass        /   http://127.0.0.1:8080/
+	ProxyPassReverse /   http://127.0.0.1:8080/
+
+        
+        # Fix IE problem (http error 408/409)
+        SetEnv proxy-nokeepalive 1
+
+        ErrorLog /var/log/apache2/error-ssl.log
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+        CustomLog /var/log/apache2/access-ssl.log combined
+        ServerSignature On
+</VirtualHost>" > /etc/apache2/sites-available/openerp
+chown root.root /etc/apache2/sites-available/openerp
+chmod 644 /etc/apache2/sites-available/openerp
+
+sed -i "9s/Order deny,allow/Order allow,deny/" /etc/apache2/mods-available/proxy.conf
+sed -i "10s/Deny/Allow/" /etc/apache2/mods-available/proxy.conf
+a2dissite default-ssl
+a2ensite openerp
+#a2ensite openerp-ssl
+a2enmod rewrite
+a2enmod suexec
+a2enmod include
+a2enmod proxy
+a2enmod proxy_http
+a2enmod proxy_connect
+a2enmod proxy_ftp
+a2enmod headers
+#a2enmod ssl
+
+REDMINE_URL="http://openerp.$domain"
+echo "openerp    IN      A       ip_address" >> /var/cache/bind/db.$domain.tpl
+
+else
+REDMINE_URL="<![CDATA[http://localhost:8080]]>"
+fi
+
+
+update-rc.d openerp-web start 70 2 3 4 5 . stop 20 0 1 6 .
+
+############################################################################################
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "$REDMINE_URL" "$REDMINE_URL" 
+
+
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_INSTALL_SCRIPT__________________________________
+
+
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_INSTALL_SCRIPT______________________________
+
+
+echo "I: Install Openerp"
+INSTALL
+CREATE_WUI
+echo "I: End of install Openerp"

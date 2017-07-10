@@ -1,0 +1,96 @@
+#!/bin/bash
+
+
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Wordpress Jessie'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Content Management System portal'
+RMOD_DESCRIPTION_FR='Portail de gestion de contenu'
+RMOD_VERBOSE_FR="Wordpress est un CMS (Content Management System) de type Blog.   "
+RMOD_VERBOSE="Wordpress is a Content Management system (Blog). "
+
+
+RMOD_RUN_IN_CHROOT=True
+RMOD_REQ_APACHE=True
+
+
+. /tmp/scripts_params
+. /tmp/app_params
+
+
+MOD_NAME="wordpress"
+wordpress_MYSQL_PWD=$wordpress_mysql_pwd
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+
+echo "I: Download wordpress"
+
+
+apt-get install --yes --force-yes wordpress wordpress-l10n
+
+cd /usr/share/wordpress/examples
+
+echo "Alias /blog /usr/share/wordpress
+
+<Directory "/usr/share/wordpress">
+    Options Indexes FollowSymLinks
+    AllowOverride None
+    Require all granted
+</Directory>
+
+
+" > /etc/apache2/conf-available/wordpress.conf
+
+a2enconf wordpress
+
+
+cd $DL_DIR
+
+echo "
+Create database ${MOD_NAME} ;
+grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '${wordpress_MYSQL_PWD}';
+flush privileges;" > wordpress_db.sql
+
+$BIN_MYSQL -u root < wordpress_db.sql 
+rm wordpress_db.sql
+
+
+mv /usr/share/wordpress $LAMPP_DIRECTORY/usr/share
+ln -s $LAMPP_DIRECTORY/usr/share/wordpress /usr/share/wordpress
+mv /etc/wordpress $LAMPP_DIRECTORY/etc
+ln -s $LAMPP_DIRECTORY/etc/wordpress /etc/wordpress
+
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME}" "/${MOD_NAME}" 
+
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+
+echo "I: Install wordpress"
+INSTALL
+CREATE_WUI
+echo "I: End of install wordpress"

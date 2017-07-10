@@ -1,0 +1,241 @@
+#!/bin/bash
+RMOD_ENGINE=1.0
+RMOD_CATEGORY='Software'
+RMOD_SUBCATEGORY='Servers'
+RMOD_NAME='Horde 3.3source'
+RMOD_AUTHOR='Oliv'
+RMOD_VERSION=0.1
+RMOD_DESCRIPTION='Groupware'
+RMOD_DESCRIPTION_FR='Travail collaboratif'
+RMOD_RUN_IN_CHROOT=True
+RMOD_UPDATE_URL='http://cooperation-iws.gensys-net.eu/update/modules/'
+RMOD_VERBOSE="Horde Groupware is a free, enterprise ready, browser based collaboration suite. Users can manage and share calendars, contacts, tasks and notes with the standards compliant components from the Horde Project. Horde Groupware bundles the separately available applications Kronolith, Turba, Nag and Mnemo. "
+RMOD_VERBOSE_FR="Horde Groupware est une suite d'outils collaboratifs en ligne destiné aux entreprises. Les utilisateurs peuvent gérer et partager calendriers, contacts, activité, notes. "
+
+
+RMOD_REQ_APACHE=True
+
+. /tmp/scripts_params
+
+. /tmp/app_params
+MOD_NAME=$horde_name
+HORDE_MYSQL_PWD=$horde_mysql_pwd
+
+#_______________________________________________________________________________________________
+#________________________________________WGET_MIRROIR_WEB_______________________________________
+
+
+function WGET_MIRROIR_WEB
+{
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/Horde_ciws.tar.gz
+tar -xzf Horde_ciws.tar.gz
+
+#rm moodle-latest-19.zip
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_WGET_MIRROIR_WEB___________________________________
+
+
+#_______________________________________________________________________________________________
+#________________________________________INSTALL________________________________________________
+
+
+function INSTALL
+{
+echo "I: Download Horde"
+WGET_MIRROIR_WEB
+
+##HORDE
+cd $DL_DIR
+mkdir $WWW_DIRECTORY/$MOD_NAME
+cp -Rf Horde/* $WWW_DIRECTORY/$MOD_NAME/.
+
+sed -i "15s/Horde_1/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/scripts/sql/Horde_ciws.sql 
+sed -i "16s/Horde_1/$MOD_NAME/" $WWW_DIRECTORY/$MOD_NAME/scripts/sql/Horde_ciws.sql 
+
+
+$BIN_MYSQL -u root --default_character_set utf8 < $WWW_DIRECTORY/$MOD_NAME/scripts/sql/Horde_ciws.sql 
+
+echo "grant all on ${MOD_NAME}.* to ${MOD_NAME}@localhost identified by '$HORDE_MYSQL_PWD';
+flush privileges;" > HORDE_db.sql
+
+$BIN_MYSQL -u root < HORDE_db.sql mysql 
+
+#sed -i "28s/horde/$HORDE_MYSQL_PWD/" $WWW_DIRECTORY/$MOD_NAME/scripts/sql/create.mysql.sql
+
+#$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/sql/create.mysql.sql 
+
+
+#$BIN_MYSQL -u root < $WWW_DIRECTORY/$MOD_NAME/scripts/sql/script.initial_horde_user.sql horde
+
+
+apt-get install --assume-yes --force-yes php-pear php5-dev imagemagick libmagic-dev make 
+
+#pear install --onlyreqdeps Log Mail Mail_Mime DB File Date 
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/pear_horde.tar.gz
+tar -xzf pear_horde.tar.gz -C /usr/share/php/.
+cd $DL_DIR
+wget $URL_CIWS_DEPOT/pecl_fileinfo.tar.gz
+tar -xzf pecl_fileinfo.tar.gz -C /usr/lib/php5/.
+
+#pecl install -s fileinfo
+#pecl install -s memcache
+
+echo "
+extension=fileinfo.so
+extension=memcache.so
+" >> /etc/php5/apache2/php.ini
+
+#php $WWW_DIRECTORY/$MOD_NAME/scripts/setup.php
+
+cat << EOC_CONFIG > $WWW_DIRECTORY/$MOD_NAME/config/conf.php
+<?php
+/* CONFIG START. DO NOT CHANGE ANYTHING IN OR AFTER THIS LINE. */
+// \$Horde: horde/config/conf.xml,v 1.74.2.78 2008/09/12 10:01:41 jan Exp $
+\$conf['vhosts'] = false;
+\$conf['debug_level'] = E_ALL & ~E_NOTICE;
+\$conf['max_exec_time'] = 0;
+\$conf['compress_pages'] = true;
+\$conf['secret_key'] = 'a0683ec88681a09200375935b610f0929927a2a9';
+\$conf['umask'] = 077;
+\$conf['use_ssl'] = 2;
+\$conf['server']['name'] = \$_SERVER['SERVER_NAME'];
+\$conf['server']['port'] = \$_SERVER['SERVER_PORT'];
+\$conf['urls']['token_lifetime'] = 30;
+\$conf['urls']['hmac_lifetime'] = 30;
+\$conf['urls']['pretty'] = false;
+\$conf['safe_ips'] = array();
+\$conf['session']['name'] = "$MOD_NAME";
+\$conf['session']['use_only_cookies'] = false;
+\$conf['session']['cache_limiter'] = 'nocache';
+\$conf['session']['timeout'] = 0;
+\$conf['cookie']['domain'] = \$_SERVER['SERVER_NAME'];
+\$conf['cookie']['path'] = "/$MOD_NAME";
+\$conf['sql']['persistent'] = true;
+\$conf['sql']['username'] = "$MOD_NAME";
+\$conf['sql']['password'] = "$HORDE_MYSQL_PWD";
+\$conf['sql']['protocol'] = 'unix';
+\$conf['sql']['database'] = "$MOD_NAME";
+\$conf['sql']['charset'] = 'utf-8';
+\$conf['sql']['phptype'] = 'mysql';
+\$conf['auth']['admins'] = array('admin@ciws.com');
+\$conf['auth']['checkip'] = true;
+\$conf['auth']['checkbrowser'] = true;
+\$conf['auth']['alternate_login'] = false;
+\$conf['auth']['redirect_on_logout'] = false;
+\$conf['auth']['params']['app'] = 'imp';
+\$conf['auth']['driver'] = 'application';
+\$conf['signup']['allow'] = false;
+\$conf['log']['priority'] = PEAR_LOG_NOTICE;
+\$conf['log']['ident'] = 'HORDE';
+\$conf['log']['params'] = array();
+\$conf['log']['name'] = '/tmp/horde.log';
+\$conf['log']['params']['append'] = true;
+\$conf['log']['type'] = 'file';
+\$conf['log']['enabled'] = true;
+\$conf['log_accesskeys'] = false;
+\$conf['prefs']['params']['driverconfig'] = 'horde';
+\$conf['prefs']['driver'] = 'sql';
+\$conf['alarms']['params']['driverconfig'] = 'horde';
+\$conf['alarms']['params']['ttl'] = 300;
+\$conf['alarms']['driver'] = 'sql';
+\$conf['datatree']['params']['driverconfig'] = 'horde';
+\$conf['datatree']['driver'] = 'sql';
+\$conf['group']['driverconfig'] = 'horde';
+\$conf['group']['driver'] = 'sql';
+\$conf['group']['cache'] = false;
+\$conf['perms']['driverconfig'] = 'horde';
+\$conf['perms']['driver'] = 'sql';
+\$conf['share']['no_sharing'] = false;
+\$conf['share']['any_group'] = false;
+\$conf['share']['cache'] = false;
+\$conf['share']['driver'] = 'sql';
+\$conf['cache']['default_lifetime'] = 86400;
+\$conf['cache']['params']['sub'] = 0;
+\$conf['cache']['driver'] = 'file';
+\$conf['lock']['params']['driverconfig'] = 'horde';
+\$conf['lock']['driver'] = 'sql';
+\$conf['token']['params']['driverconfig'] = 'horde';
+\$conf['token']['driver'] = 'sql';
+\$conf['mailer']['params']['sendmail_path'] = '/usr/lib/sendmail';
+\$conf['mailer']['params']['sendmail_args'] = '-oi';
+\$conf['mailer']['type'] = 'sendmail';
+\$conf['mailformat']['brokenrfc2231'] = false;
+\$conf['vfs']['params']['driverconfig'] = 'horde';
+\$conf['vfs']['type'] = 'sql';
+\$conf['sessionhandler']['type'] = 'none';
+\$conf['sessionhandler']['memcache'] = false;
+\$conf['problems']['email'] = 'webmaster@example.com';
+\$conf['problems']['maildomain'] = 'example.com';
+\$conf['problems']['tickets'] = false;
+\$conf['problems']['attachments'] = true;
+\$conf['menu']['apps'] = array();
+\$conf['menu']['always'] = false;
+\$conf['menu']['links']['help'] = 'all';
+\$conf['menu']['links']['options'] = 'authenticated';
+\$conf['menu']['links']['problem'] = 'all';
+\$conf['menu']['links']['login'] = 'all';
+\$conf['menu']['links']['logout'] = 'authenticated';
+\$conf['hooks']['permsdenied'] = false;
+\$conf['hooks']['username'] = false;
+\$conf['hooks']['preauthenticate'] = false;
+\$conf['hooks']['postauthenticate'] = false;
+\$conf['hooks']['authldap'] = false;
+\$conf['hooks']['groupldap'] = false;
+\$conf['portal']['fixed_blocks'] = array();
+\$conf['accounts']['driver'] = 'null';
+\$conf['user']['verify_from_addr'] = false;
+\$conf['imsp']['enabled'] = false;
+\$conf['kolab']['enabled'] = false;
+\$conf['memcache']['enabled'] = false;
+/* CONFIG END. DO NOT CHANGE ANYTHING IN OR BEFORE THIS LINE. */
+?>
+EOC_CONFIG
+
+
+#cp $WWW_DIRECTORY/$MOD_NAME/config/hooks.php.dist $WWW_DIRECTORY/$MOD_NAME/config/hooks.php
+
+#cp $WWW_DIRECTORY/$MOD_NAME/config/mime_drivers.php.dist $WWW_DIRECTORY/$MOD_NAME/config/mime_drivers.php
+
+#cp $WWW_DIRECTORY/$MOD_NAME/config/motd.php.dist $WWW_DIRECTORY/$MOD_NAME/config/motd.php
+
+#cp $WWW_DIRECTORY/$MOD_NAME/config/nls.php.dist $WWW_DIRECTORY/$MOD_NAME/config/nls.php
+
+#cp $WWW_DIRECTORY/$MOD_NAME/config/prefs.php.dist $WWW_DIRECTORY/$MOD_NAME/config/prefs.php
+
+#cp $WWW_DIRECTORY/$MOD_NAME/config/registry.php.dist $WWW_DIRECTORY/$MOD_NAME/config/registry.php
+
+
+
+sed -i "263s/_(\"Sent\")/\"Sent\"/" $WWW_DIRECTORY/$MOD_NAME/imp/config/prefs.php
+sed -i "264s/false/true/" $WWW_DIRECTORY/$MOD_NAME/imp/config/prefs.php
+
+chown -R www-data $WWW_DIRECTORY/$MOD_NAME/
+
+
+}
+
+#_______________________________________________________________________________________________
+#________________________________________FIN_INSTALL____________________________________________
+
+#_______________________________________________________________________________________________
+#________________________________________CREATE_WUI_____________________________________________
+
+function CREATE_WUI
+{
+
+cd /tmp/
+./generate_xml_server_desc.php "$LAMPP_DIRECTORY/etc/ciws-content" "$RMOD_NAME" "/${MOD_NAME}" "/${MOD_NAME}" 
+
+}
+#_______________________________________________________________________________________________
+#________________________________________FIN_CREATE_WUI_________________________________________
+
+echo "I: Install Horde"
+INSTALL
+CREATE_WUI
+echo "I: End of install Horde"
