@@ -1,0 +1,610 @@
+#!/bin/bash
+
+
+version="0.1"
+fs_type="ext3"
+
+usage() {
+    echo "Usage:"
+    echo "  $0         (require options)"
+    echo
+    echo "Options:"
+    echo
+    echo
+    echo "  -d DEV     (Dev device on which you will install live usb distribution e.g /dev/sdc1 for hardware, /dev/loop9 for virtual mounted image, )"
+    echo
+    echo "  -i ISO_PATH     (ISO image path from which you will install distribution e.g ~/Downloads/cooperation-iws.iso)"
+    echo
+    echo "  -a LOCAL_PATH   (alternate path to build distribution from, for example on current operating system e.g /live/image/)"
+    echo
+    echo "  -l y    (use lilo to fix master boot record on your real disk)"
+    echo
+    echo "  -e ENC    (encryption, currently support only aes256 value)"
+    echo
+    echo "  -p PASS_PHRASE    (encryption passphrase e.g 20 characters for aes256)"
+    echo
+    echo "  -k PART_SIZE   (persistent partition size in ko e.g 2000000 for a 2Go partition)"
+    echo
+    echo "  -s SILENT   (Silent mode, do not ask questions)"
+    echo
+    echo
+    echo "  -h         (display this help)"
+}
+
+
+
+#DEPENDENCIES CHECK (BEGIN)
+
+dependencies_check()
+{
+
+#Checking syslinux
+
+if [ "$(which extlinux)" == "" ]; then
+
+	echo
+	echo	
+	echo "#Warning#"
+	echo
+	echo " Extlinux not installed (apt-get install extlinux). exiting."
+	echo
+	echo "  "
+
+	exit 0
+
+fi
+
+#checking lilo for master boot records on real device
+
+if [ "$(which lilo)" == "" ] && [ "$(which sfdisk)" == "" ] && [ "$LILO" == "y" ]; then
+
+	echo
+	echo	
+	echo "#Warning#"
+	echo
+	echo " Lilo or sfdisk not installed (apt-get install lilo sfdisk). exiting."
+	echo
+	echo "  "
+
+	exit 0
+
+fi
+
+}
+
+#DEPENDENCIES CHECK (END)
+
+#VARIABLES CHECK (BEGIN)
+
+variables_check()
+{
+
+if [ "$DEV" == "" ]; then
+	echo
+	echo	
+	echo "#Warning#"
+	echo
+	echo " No device specified ( -d /dev/sdc1). exiting."
+	echo
+	echo "  "
+
+	exit 0
+fi
+
+if [ "$LOCAL_PATH" == "" ] && [ "$ISO_PATH" == "" ]; then
+	echo
+	echo	
+	echo "#Warning#"
+	echo
+	echo " No iso image specified ( ~/Downloads/cooperation-iws.iso)."
+	echo
+	echo " Either No path specified ( /live/image/)."
+	echo
+	echo " Exiting."
+	echo
+	echo "  "
+
+	exit 0
+fi
+
+if [ "$ENC" == "aes256" ] && [ $(echo $PASS_PHRASE | wc -m) -lt 20  ]; then
+	echo
+	echo
+	echo "#Warning#"
+	echo
+	echo " Passphrase for encryption is lower than 20 characters"
+	echo
+	echo " Exiting."
+	echo
+	echo "  "
+
+	exit 0
+fi
+}
+
+#VARIABLES CHECK (END)
+
+#MOUNT CHECK (BEGIN)
+
+
+mount_check()
+{
+
+if [ "$(mount | grep $DEV)" != "" ]; then
+	echo
+	echo
+	echo "#Warning#"
+	echo
+	echo " DEV device $DEV is mounted, can not create file system. exiting."
+	echo
+	echo " Be sure to choose the right device everything will be erase."
+	echo
+	echo "  "
+
+	exit 0
+fi
+
+
+}
+
+#MOUNT CHECK (END)
+
+#SUMMARY (BEGIN)
+
+summary()
+{
+
+echo "You will make a persistent live usb:"
+echo
+echo "on device $DEV"
+echo
+
+if [ "$ISO_PATH" != "" ]; then
+
+	echo
+	echo "With the ISO image $ISO_PATH"
+	echo
+
+else
+	echo
+	echo "With the local path $LOCAL_PATH"
+	echo
+fi
+
+echo
+if [ "$ENC" == "aes256" ]; then
+
+	echo
+	echo "With aes256 encryption."
+	echo
+
+fi
+
+if [ "$SILENT" != "y" ]; then
+
+	echo
+	echo "Is this ok ? (yes/no) no"
+	echo
+
+	 read ANSWER < /dev/tty
+
+	if [ "$ANSWER" != "yes" ] ; then
+
+		echo "I: Installation Aborted"
+
+		exit 0
+
+	fi
+
+fi
+
+}
+
+#SUMMARY (END)
+
+#MAKE FS (BEGIN)
+
+make_fs()
+{
+
+echo "Creating $fs_type filesystem on $DEV"
+
+if [ "$fs_type" == "ext3" ] ; then
+
+	BIN_MK_FS="mkfs.ext3"
+
+fi
+
+
+if [ "$fs_type" == "ext2" ] ; then
+
+	BIN_MK_FS="mkfs.ext2"
+
+fi
+
+$BIN_MK_FS -b 4096 $DEV
+
+}
+
+#MAKE FS (END)
+
+#INSTALL LILO (BEGIN)
+
+install_lilo()
+{
+
+if [ "$LILO" == "y" ]; then
+
+lilo -M $(echo "$DEV" | sed "s/[0-9]//")
+
+sfdisk -A1 $(echo "$DEV" | sed "s/1//")
+
+fi
+
+
+
+}
+
+#INSTALL LILO (END)
+
+#MOUNT DEV (BEGIN)
+
+mount_dev()
+{
+
+
+while [ 'y' == 'y' ]
+
+	do
+
+		MOUNT_POINT_DEV="/mnt/tmp_liveusb_$RANDOM"
+
+		if [ ! -d $MOUNT_POINT_DEV ] ; then
+
+			echo "Mounting $DEV on $MOUNT_POINT_DEV"		
+					
+			mkdir $MOUNT_POINT_DEV
+
+			mount $DEV $MOUNT_POINT_DEV
+
+			break;
+
+		fi
+
+	done
+
+
+}
+
+#MOUNT DEV (END)
+
+#MOUNT ISO (BEGIN)
+
+mount_iso()
+{
+
+if [ "$ISO_PATH" != "" ]; then
+
+while [ 'y' == 'y' ]
+
+	do
+
+		MOUNT_POINT_ISO="/mnt/tmp_iso_$RANDOM"
+
+		if [ ! -d $MOUNT_POINT_ISO ] ; then
+
+			echo "Mounting $ISO_PATH on $MOUNT_POINT_ISO"		
+					
+			mkdir $MOUNT_POINT_ISO
+
+			mount -o loop $ISO_PATH $MOUNT_POINT_ISO
+
+			break;
+
+		fi
+
+	done
+
+ORIGINAL_PATH=$MOUNT_POINT_ISO
+
+elif [ "$LOCAL_PATH" != "" ] ; then
+
+ORIGINAL_PATH=$LOCAL_PATH
+
+fi
+}
+
+#MOUNT ISO (END)
+
+#CP ORIGINAL LIVE DIR (BEGIN)
+
+cp_original_live_dir()
+{
+
+if [ -d "$ORIGINAL_PATH" ] && [ -d "$MOUNT_POINT_DEV" ]; then
+
+	if [ ! -d $MOUNT_POINT_DEV/live/ ] ; then
+
+		mkdir $MOUNT_POINT_DEV/live
+
+	fi
+
+	echo "copying original to device $DEV"
+
+	cp -r $ORIGINAL_PATH/live/* $MOUNT_POINT_DEV/live/.
+
+fi
+}
+
+#CP ORIGINAL LIVE DIR (END)
+
+
+#CREATE PERSISTENT WITH ENCRYPTION (BEGIN)
+
+create_persistent_enc()
+{
+
+cd $MOUNT_POINT_DEV
+
+dd of=ciws-sn-tmp.ext3 bs=1024 seek=$PART_SIZE count=0
+
+mkfs.ext3 -b 4096 -F ciws-sn-tmp.ext3
+
+echo $PASS_PHRASE > /tmp/passphrase
+
+aespipe -e aes256 -p 3 < ciws-sn-tmp.ext3 > ciws-sn.ext3 3< /tmp/passphrase
+
+exec 3<&-
+
+rm -f /tmp/passphrase
+
+rm ciws-sn-tmp.ext3
+
+
+
+}
+
+#CREATE PERSISTENT WITH ENCRYPTION (END)
+
+#CREATE PERSISTENT WITH NO ENCRYPTION (BEGIN)
+
+create_persistent_no_enc()
+{
+
+cd $MOUNT_POINT_DEV
+
+dd of=ciws-sn.ext3 bs=1024 seek=$PART_SIZE count=0
+
+mkfs.ext3 -b 4096 -F ciws-sn.ext3
+
+
+}
+
+#CREATE PERSISTENT WITH NO ENCRYPTION (END)
+
+#CREATE PERSISTENT FILE SYSTEM (BEGIN)
+
+create_persistent_file_system()
+{
+
+FREE_SPACE=$( df -P $DEV | grep $DEV | awk '{ print $4}')
+
+if [ -z $PART_SIZE ]; then
+
+PART_SIZE=$(expr $FREE_SPACE - $(($FREE_SPACE*10/100)))
+
+fi
+
+if [ $FREE_SPACE -lt $PART_SIZE ]; then
+	
+	        echo
+	        echo
+	        echo "#Warning#"
+	        echo
+	        echo " Persistent part size: $PART_SIZE ko is greater "
+	        echo
+	        echo " than device free space: $FREE_SPACE ko."
+	        echo
+	        echo " Choose a smaller size."
+	        echo
+	        echo " Exiting"
+	
+	        umount_all
+	
+	        exit 0
+	
+fi
+
+if [ "$ENC" == "aes256" ] ; then
+
+	create_persistent_enc
+
+else
+
+	create_persistent_no_enc
+
+fi
+}
+
+#CREATE PERSISTENT FILE SYSTEM (END)
+
+#INSTALL EXTLINUX (BEGIN)
+
+install_extlinux()
+{
+
+if [ "$ENC" = "aes256" ]; then
+
+enc="encryption=aes256"
+
+fi
+
+echo "DEFAULT /live/vmlinuz
+append initrd=/live/initrd.gz boot=live config $enc quiet locales=fr keyboard-layouts=fr timezone=Europe/Paris noprompt persistent
+" > $MOUNT_POINT_DEV/extlinux.conf
+
+echo "DEFAULT /live/vmlinuz
+append initrd=/live/initrd.gz boot=live config $enc quiet locales=fr keyboard-layouts=fr timezone=Europe/Paris noprompt persistent console=ttyS0,9600,n8 --
+" > $MOUNT_POINT_DEV/extlinux.tty
+
+
+extlinux -i $MOUNT_POINT_DEV
+
+
+}
+
+#INSTALL EXTLINUX (END)
+
+#UMOUNT ALL (BEGIN)
+
+umount_all()
+{
+
+umount -l $MOUNT_POINT_DEV
+
+if [ "$ISO_PATH" != "" ]; then
+
+	umount -l $MOUNT_POINT_ISO
+
+fi
+
+}
+
+#UMOUNT ALL (END)
+
+
+#MAIN
+
+echo
+echo
+echo " Cooperation-iws Live usb installer"
+echo
+echo " Command line version $version "
+echo 
+echo " Cooperation-iws team 2011"
+echo
+
+while getopts d:h:k:i:p:l:e:a:s: ARGS; do
+    case $ARGS in
+        h) # Display help
+            usage
+            exit 0
+            ;;
+	l) # use lilo
+            LILO=$OPTARG
+	    if [ "$LILO" != "y" ]; then
+		LILO="n"
+	    fi
+            ;;
+        d) # Dev device
+            DEV="$OPTARG"
+            ;;
+        i) # iso path
+            ISO_PATH="$OPTARG"
+            ;;
+        a) # local path
+            LOCAL_PATH="$OPTARG"
+            ;;
+        
+        e) # encryption
+            ENC="$OPTARG"
+	    if [ "$ENC" != "aes256" ]; then
+		ENC=""
+	    fi
+            ;;
+	p) # passphrase
+            PASS_PHRASE="$OPTARG"
+            ;;
+        k) # persistent partition size
+            PART_SIZE="$OPTARG"
+            ;;
+        s) # silent feature
+            SILENT="$OPTARG"
+	    if [ "$SILENT" != "y" ]; then
+		SILENT="n"
+	    fi
+            ;;
+        *) # Unknown Option
+            echo
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+
+echo
+echo "I: Verifying dependencies"
+echo
+
+dependencies_check
+
+echo
+echo "I: Verifying commandline arguments"
+echo
+
+variables_check
+
+echo
+echo "I: Verifying if $DEV device is not mounted"
+echo
+
+mount_check
+
+echo
+echo "I: Summary"
+echo
+
+summary
+
+echo
+echo "I: Making filesystem on $DEV device"
+echo
+
+make_fs
+
+echo
+echo "I: Installing mbr with lilo on $DEV device"
+echo
+
+install_lilo
+
+echo
+echo "I: Mounting $DEV device"
+echo
+
+mount_dev
+
+echo
+echo "I: Mounting $ISO_PATH device"
+echo
+
+mount_iso
+
+echo
+echo "I: Copying data from original to device $DEV"
+echo
+
+cp_original_live_dir
+
+echo
+echo "I: Creating persistent file filesystem"
+echo
+
+create_persistent_file_system
+
+echo
+echo "I: Installing extlinux"
+echo
+
+install_extlinux
+
+echo
+echo "I: Unmounting all temporary partitions"
+echo
+
+umount_all
+
+echo
+echo "I: Finished"
+echo
