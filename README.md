@@ -17,5 +17,5 @@ Source code developper is Olivier Avenel (oa-ciws)
 
 Licence GPLv2
 
-Contact: contact@gensys-net.eu
+Contact: cooperationiwseu@gmail.com
 
